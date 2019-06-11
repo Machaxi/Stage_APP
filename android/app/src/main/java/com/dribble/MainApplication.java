@@ -10,9 +10,11 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 
 import java.util.Arrays;
 import java.util.List;
+import com.google.firebase.FirebaseApp;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -28,7 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new VectorIconsPackage(),
             new RNGestureHandlerPackage(),
-            new RNFirebasePackage()
+            new RNFirebasePackage(),
+             new RNFirebaseAuthPackage()
       );
     }
 
@@ -46,6 +49,11 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+     try {
+          FirebaseApp.initializeApp(this);
+      }
+      catch (Exception e) {
+      }
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

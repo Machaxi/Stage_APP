@@ -33,9 +33,9 @@ export default class PhoneAuth extends Component {
                 });
             }
         });
-        firebase.auth().currentUser.getIdToken(true).then((token) => {
-            console.log("token", token)
-        })
+        // firebase.auth().currentUser.getIdToken(true).then((token) => {
+        //     console.log("token", token)
+        // })
     }
 
     componentWillUnmount() {
