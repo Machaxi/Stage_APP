@@ -184,7 +184,7 @@ class  UserHome extends React.Component {
 
                 <View style={{margin:10}}>
                     <Card style={{margin:5}}>
-                        <FlatList></FlatList>
+                        {/*<FlatList></FlatList>*/}
                     </Card>
                 </View>
 
