@@ -4,8 +4,11 @@ import {
     createAppContainer,
     createBottomTabNavigator,
     createStackNavigator,
-    createSwitchNavigator
+    createSwitchNavigator,
+    TabBarBottom
 } from "react-navigation";
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import welcome from '../containers/welcome/welcome'
@@ -79,12 +82,46 @@ const userHomeModule = createStackNavigator({
             screen: userhome,
             navigationOptions: {
                 title: "Sign In",
-                // headerStyle,
-                // header:null
+                headerStyle: {display:"none"},
+                 //header:null
             }
         },
     }
 );
+const tabOptions = {
+    tabBarOptions: {
+        activeTintColor:'white',
+        inactiveTintColor:'#D3D3D3',
+        style:{
+            backgroundColor:'green',
+            borderTopWidth:1,
+            borderTopColor:'#D3D3D3'
+        },
+        indicatorStyle: {
+            backgroundColor: 'red',
+        },
+    },
+}
+
+
+// const tabBarController= createMaterialBottomTabNavigator({
+//     Home: { screen: userHomeModule },
+//     Player: { screen: userHomeModule },
+//     // History: { screen: History },
+//     // Cart: { screen: Cart },
+// }, {
+//     initialRouteName: 'Home',
+//     activeColor: '#f0edf6',
+//     inactiveColor: '#3e2465',
+//     barStyle: { backgroundColor: '#694fad' },
+//     indicatorStyle: {
+//         backgroundColor: 'red',
+//     },
+//     underlineBottomPosition:0,
+//                     underlineColor:'red',
+//                     underlineHeight:5,
+//     tabOptions
+// });
 
 const tabBarController =createBottomTabNavigator(
     {
@@ -93,13 +130,30 @@ const tabBarController =createBottomTabNavigator(
             navigationOptions: {
                 tabBarLabel: "Home",
                 tabBarIcon: ({tintColor}) => (
-                    <Icon
-                        name="home"
-                        color={tintColor}
-                        size={24}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Home.png')}
+                        tintColor={tintColor}
                     />
-                )
-            }
+
+
+                ),
+                // tabBarSelectedItemStyle: {
+                //     underlineColor:'red',
+                //     underlineHeight:5,
+                //     borderBottomWidth: 5,
+                //     borderBottomColor: 'red',
+                //     underlineBottomPosition:0,
+                // },
+                // indicatorStyle: {
+                //     underlineBottomPosition:0,
+                //     underlineColor:'red',
+                //     underlineHeight:5,
+                //     backgroundColor: 'red',
+                //     borderBottomWidth: 5,
+                // },
+            },
+
 
         },
         Player: {
@@ -116,6 +170,7 @@ const tabBarController =createBottomTabNavigator(
             }
 
         },
+
     })
 
 const coachHomeModule = createStackNavigator({

@@ -33,6 +33,9 @@ export default class PhoneAuth extends Component {
                 });
             }
         });
+        firebase.auth().currentUser.getIdToken(true).then((token) => {
+            console.log("token", token)
+        })
     }
 
     componentWillUnmount() {
@@ -56,6 +59,15 @@ export default class PhoneAuth extends Component {
                 .then((user) => {
                     console.log(user)
                     this.setState({ message: 'Code Confirmed!' });
+                    firebase.auth().currentUser.getIdToken(true).then((token) => {
+                        console.log("token",token)
+                        if (!token) {
+                            //Helpers.logout(false);
+                        }
+                        else {
+                            // init rest of app, send user to primary navigation component, etc...
+                        }
+                    })
                 })
                 .catch(error => this.setState({ message: `Code Confirm Error: ${error.message}` }));
         }
