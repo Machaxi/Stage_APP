@@ -82,7 +82,7 @@ export default class PhoneAuth extends Component {
 
         return (
             <View style={{ padding: 25 }}>
-                <Text>Enter phone number:</Text>
+                <Text>Enter Phone number:</Text>
                 <TextInput
                     autoFocus
                     style={{ height: 40, marginTop: 15, marginBottom: 15 }}
