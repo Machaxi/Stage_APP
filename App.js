@@ -38,16 +38,16 @@ const instructions = Platform.select({
 });
 const ModifiedDefaultTheme = {
     ...DefaultTheme,
-    // fonts: {
-    //     thin: 'Lato-Regular',
-    //     light: 'Lato-Regular',
-    //     regular: 'Lato-Regular',
-    //     medium: 'Lato-Regular',
-    // }
+    fonts: {
+        thin: 'Quicksand-Regular',
+        light: 'Quicksand-Regular',
+        regular: 'Quicksand-Regular',
+        medium: 'Quicksand-Regular',
+        bold:'Quicksand-Bold'
+    }
 }
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
   render() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#e6e6e6" }}>
@@ -62,21 +62,3 @@ export default class App extends Component<Props> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
