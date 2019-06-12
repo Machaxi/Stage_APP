@@ -21,7 +21,7 @@ const placeholder = {
 };
 var deviceWidth = Dimensions.get('window').width -20;
 
-class  UserHome extends React.Component {
+class  ParentHome extends React.Component {
 
     constructor(props) {
         super(props)
@@ -536,7 +536,7 @@ class  UserHome extends React.Component {
         </View>;
     }
 }
-export default UserHome;
+export default ParentHome;
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {

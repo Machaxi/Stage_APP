@@ -280,7 +280,7 @@ class  UserHome extends React.Component {
 
                 </View>
                 <View style={{margin: 10}}>
-                    <Card style={{margin: 5}}>
+                    <Card style={{margin: 5,borderRadius:10}}>
                         <View style={{margin: 5}}>
                             <Text>Next Session:</Text>
                         </View>
@@ -297,7 +297,7 @@ class  UserHome extends React.Component {
                 </View>
 
                 <View style={{margin: 10}}>
-                    <Card style={{margin: 5}}>
+                    <Card style={{margin: 5,borderRadius:10}}>
                         <Text style={{fontSize: 14, margin: 5}}>My Stats </Text>
                         <FlatList
                             data={this.state.strenthList}
@@ -309,7 +309,7 @@ class  UserHome extends React.Component {
                     </Card>
                 </View>
                 <View style={{margin: 5}}>
-                    <Card style={{margin: 5}}>
+                    <Card style={{margin: 5,borderRadius:10}}>
                         <TouchableOpacity onPress={() => {
 
                             console.warn("Touch Press")
@@ -352,7 +352,7 @@ class  UserHome extends React.Component {
                     </Card>
                 </View>
                 <View style={{margin: 5}}>
-                    <Card style={{margin: 5}}>
+                    <Card style={{margin: 5,borderRadius:10}}>
                         <TouchableOpacity onPress={() => {
 
                             console.warn("Touch Press")
@@ -395,7 +395,7 @@ class  UserHome extends React.Component {
                     </Card>
                 </View>
                 <View style={{margin: 5}}>
-                    <Card style={{margin: 5}}>
+                    <Card style={{margin: 5,borderRadius:10}}>
                         <TouchableOpacity onPress={() => {
 
                             console.warn("Touch Press")
@@ -438,7 +438,7 @@ class  UserHome extends React.Component {
                     </Card>
                 </View>
                 <View style={{margin:5}}>
-                    <Card style={{margin:5,elevation:5}}>
+                    <Card style={{margin:5,elevation:1,borderRadius:10}}>
                         <View style={{margin:5}}>
                         <Text>Academy Feedback</Text>
                         </View>
@@ -451,17 +451,84 @@ class  UserHome extends React.Component {
                         <View>
 
                             <View style={{margin:5}}>
-                                <Text>Top rating</Text>
-                            <Text> Manish A.</Text>
-                               <Text>Vestibulum rutrum quam vitae fringilla tincidunt.
+                                <Text style={{ marginTop:5
+
+                                }}>Top rating</Text>
+                            <Text style={{ marginTop:5
+
+                            }}> Manish A.</Text>
+                               <Text style={{ marginTop:5
+
+                               }}>Vestibulum rutrum quam vitae fringilla tincidunt.
                                    Suspendisse nec tortor urna.
                                    Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                    Donec …….</Text>
 
                             </View>
+                            <TouchableOpacity style={styles.buttomButton} onPress={() => {
+                                // this.setState({
+                                //     isShowAddress: true
+                                // })
+
+
+                                //this.props.navigation.navigate('RegisterScreen')
+                            }}>
+                                <Text
+                                    style={{textAlign:'center',flex:1}}>
+
+                                    View Academy
+                                </Text>
+
+                            </TouchableOpacity>
                         </View>
 
+
+
                     </View>
+                    </Card>
+                </View>
+                <View style={{margin:5}}>
+                    <Card style={{margin:5,elevation:5,borderRadius:10}}>
+                        <View style={{margin:5}}>
+                            <Text>Coach Feedback</Text>
+                        </View>
+                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 5}}/>
+                        <View style={{margin:5}}>
+                            <View style={{flexDirection:'row',}}>
+                                <Text>Suman Kumar</Text>
+                                <Text>Feather Academy</Text>
+                            </View>
+                            <View>
+
+                                <View style={{margin:5}}>
+                                    <Text>Top rating</Text>
+                                    <Text> Manish A.</Text>
+                                    <Text>Vestibulum rutrum quam vitae fringilla tincidunt.
+                                        Suspendisse nec tortor urna.
+                                        Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                        Donec …….</Text>
+
+                                </View>
+                                <TouchableOpacity style={styles.buttomButton} onPress={() => {
+                                    // this.setState({
+                                    //     isShowAddress: true
+                                    // })
+
+
+                                    //this.props.navigation.navigate('RegisterScreen')
+                                }}>
+                                    <Text
+                                        style={{textAlign:'center',flex:1}}>
+
+                                        View Coach
+                                    </Text>
+
+                                </TouchableOpacity>
+                            </View>
+
+
+
+                        </View>
                     </Card>
                 </View>
 
@@ -536,6 +603,21 @@ const styles = StyleSheet.create({
         color:'white',
         marginRight:20,
         textAlign:'right',fontSize:24,fontWeight:'bold'
+    },
+    buttomButton:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        height:45,
+
+        backgroundColor: 'white',
+        marginTop:10,
+        marginBottom:-5,
+        marginLeft:-5,
+        marginRight:-5,
+        shadowColor:'black',
+        shadowOpacity: 0.5,
+        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+
     }
 
 
