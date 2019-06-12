@@ -1,12 +1,12 @@
 import React from 'react'
 
-import {View,ImageBackground} from 'react-native'
-import {  Button } from 'react-native-paper';
+import { View, ImageBackground } from 'react-native'
+import { Button } from 'react-native-paper';
 
-class  welcome extends React.Component{
+class welcome extends React.Component {
 
-    render(){
-        return(
+    render() {
+        return (
             <ImageBackground
                 source={require('../../images/login-back.png')}
                 style={{
@@ -26,17 +26,17 @@ class  welcome extends React.Component{
                     }}
                 >
 
-                    <Button 
-                    uppercase={false}
-                    theme={{ fonts: { regular: 'Lato-Regular' } }}
-                    titleStyle = {{fontFamily: 'Lato-Regular',fontWeight:400}}
-                    style = {style.buttonStyle} color="#ffffff" onPress={()=>this.props.navigation.navigate('UHome')}>
+                    <Button
+                        uppercase={false}
+                        theme={{ fonts: { regular: 'Lato-Regular' } }}
+                        titleStyle={{ fontFamily: 'Lato-Regular', fontWeight: 400 }}
+                        style={style.buttonStyle} color="#ffffff" onPress={() => this.props.navigation.navigate('UHome')}>
                         Register </Button>
-                    <Button 
-                    uppercase={false}
-                    style = {style.buttonStyleLogin} color="#ffffff" onPress={()=>this.props.navigation.navigate('Login',{
-                        isNormalFlow: true
-                    })}>
+                    <Button
+                        uppercase={false}
+                        style={style.buttonStyleLogin} color="#ffffff" onPress={() => this.props.navigation.navigate('Login', {
+                            isNormalFlow: true
+                        })}>
                         Login
                     </Button>
 
@@ -44,7 +44,7 @@ class  welcome extends React.Component{
                 <Button
                     uppercase={false}
                     //PhoneAuth
-                    color="#ffffff" onPress={()=> this.props.navigation.navigate('CHome')}>
+                    color="#ffffff" onPress={() => this.props.navigation.navigate('AcademyListing')}>
                     Skip Login
                 </Button>
 
@@ -55,36 +55,36 @@ class  welcome extends React.Component{
 }
 export default welcome
 
-const style={
-    buttonStyle:{
+const style = {
+    buttonStyle: {
 
-        backgroundColor:'#FF7860',
-        borderRadius:5,
-        height:50,
-        width:150,
-        justifyContent: 'center',
-        alignItems: 'center',
-         fontFamily: 'Lato-Regular',
-
-    },
-    buttonStyleLogin:{
-
-        backgroundColor:'#00B4C4',
-        borderRadius:5,
-        height:50,
-        width:150,
+        backgroundColor: '#FF7860',
+        borderRadius: 5,
+        height: 50,
+        width: 150,
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily: 'Lato-Regular',
 
     },
-    textStyle:{
-        alignSelf:'center' ,
-        color:'#ffffff',
-        fontSize:16,
-        fontWeight:'600',
-        paddingBottom:10,
-        paddingTop:10
+    buttonStyleLogin: {
+
+        backgroundColor: '#00B4C4',
+        borderRadius: 5,
+        height: 50,
+        width: 150,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: 'Lato-Regular',
+
+    },
+    textStyle: {
+        alignSelf: 'center',
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: '600',
+        paddingBottom: 10,
+        paddingTop: 10
 
     }
 }

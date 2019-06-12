@@ -60,7 +60,7 @@ export default class PhoneAuth extends Component {
                     console.log(user)
                     this.setState({ message: 'Code Confirmed!' });
                     firebase.auth().currentUser.getIdToken(true).then((token) => {
-                        console.log("token",token)
+                        console.log("token", token)
                         if (!token) {
                             //Helpers.logout(false);
                         }
@@ -82,7 +82,7 @@ export default class PhoneAuth extends Component {
 
         return (
             <View style={{ padding: 25 }}>
-                <Text>Enter phone number:</Text>
+                <Text>Enter Phone number:</Text>
                 <TextInput
                     autoFocus
                     style={{ height: 40, marginTop: 15, marginBottom: 15 }}
@@ -117,6 +117,8 @@ export default class PhoneAuth extends Component {
                     onChangeText={value => this.setState({ codeInput: value })}
                     placeholder={'Code ... '}
                     value={codeInput}
+                    autoCorrect={false}
+                    keyboardType='number-pad'
                 />
                 <Button title="Confirm Code" color="#841584" onPress={this.confirmCode} />
             </View>

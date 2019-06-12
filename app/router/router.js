@@ -17,7 +17,15 @@ import guesthome from '../containers/GuestScreen/GuestHome'
 import guestdetails from '../containers/GuestScreen/GuestDetails'
 import parenthome from '../containers/ParentsScreen/ParentHome'
 import userhome from '../containers/UserScreen/UserHome'
+import AcademyListing from '../containers/GuestScreen/AcademyListing'
+import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
+import CoachListing from '../containers/GuestScreen/CoachListing'
+import PlayersListing from '../containers/GuestScreen/PlayersListing'
+import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
+import CustomHeader from '../components/custom/CustomHeader'
+
 import phoneauth from '../containers/Login/PhoneAuth'
+
 
 const loginModule = createStackNavigator({
 
@@ -78,24 +86,24 @@ const loginModule = createStackNavigator({
 const userHomeModule = createStackNavigator({
 
 
-        UserHome: {
-            screen: userhome,
-            navigationOptions: {
-                title: "Sign In",
-                headerStyle: {display:"none"},
-                 //header:null
-            }
-        },
-    }
+    UserHome: {
+        screen: userhome,
+        navigationOptions: {
+            title: "Sign In",
+            headerStyle: { display: "none" },
+            //header:null
+        }
+    },
+}
 );
 const tabOptions = {
     tabBarOptions: {
-        activeTintColor:'white',
-        inactiveTintColor:'#D3D3D3',
-        style:{
-            backgroundColor:'green',
-            borderTopWidth:1,
-            borderTopColor:'#D3D3D3'
+        activeTintColor: 'white',
+        inactiveTintColor: '#D3D3D3',
+        style: {
+            backgroundColor: 'green',
+            borderTopWidth: 1,
+            borderTopColor: '#D3D3D3'
         },
         indicatorStyle: {
             backgroundColor: 'red',
@@ -123,13 +131,13 @@ const tabOptions = {
 //     tabOptions
 // });
 
-const tabBarController =createBottomTabNavigator(
+const tabBarController = createBottomTabNavigator(
     {
         Home: {
             screen: userHomeModule,
             navigationOptions: {
                 tabBarLabel:'Home1',
-                tabBarIcon: ({tintColor}) => (
+                tabBarIcon: ({ tintColor }) => (
 
                     <Image
                         //focused={focused}
@@ -157,7 +165,7 @@ const tabBarController =createBottomTabNavigator(
             navigationOptions: {
                 tabBarLabel:'Home',
                 showLabel: false,
-                tabBarIcon: ({tintColor}) => (
+                tabBarIcon: ({ tintColor }) => (
                     <Icon
                         name="home"
                         color={tintColor}
@@ -179,54 +187,83 @@ const tabBarController =createBottomTabNavigator(
 const coachHomeModule = createStackNavigator({
 
 
-        CoachHome: {
-            screen: coachhome,
-            navigationOptions: {
-                title: "Sign In",
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
-
-            }
-        },
-    }
-);
-const GuestHomeModule = createStackNavigator({
-
-
-        GuestHome: {
-            screen: guesthome,
-            navigationOptions: {
-                title: "Sign In",
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
-
-            }
-        },
-    GuestDe: {
-    screen: guestdetails,
+    CoachHome: {
+        screen: coachhome,
         navigationOptions: {
-        title: "Sign In",
+            title: "Sign In",
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
-    }
-},
-    }
+        }
+    },
+}
+);
+const GuestHomeModule = createStackNavigator({
+
+
+    AcademyListing: {
+        screen: AcademyListing,
+        navigationOptions: {
+            header: <CustomHeader title="Academy" />,
+        }
+    },
+    AcademyProfile: {
+        screen: AcademyProfile,
+        navigationOptions: {
+            header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
+            //title: "Sign In",
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        }
+    },
+    CoachListing: {
+        screen: CoachListing,
+        navigationOptions: {
+            title: "Sign In",
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        }
+    },
+    PlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: {
+            title: "Sign In",
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        }
+    },
+    CoachProfileDetail: {
+        screen: CoachProfileDetail,
+        navigationOptions: {
+            title: "Sign In",
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        }
+    },
+
+    GuestDe: {
+        screen: guestdetails,
+        navigationOptions: {
+            title: "Sign In",
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        }
+    },
+}
 );
 const parentHomeModule = createStackNavigator({
 
 
-        ParentHome: {
-            screen: parenthome,
-            navigationOptions: {
-                 title: "Sign In",
-                // headerStyle,
-                // header: null
-            }
-        },
     ParentHome: {
         screen: parenthome,
         navigationOptions: {
@@ -235,7 +272,15 @@ const parentHomeModule = createStackNavigator({
             // header: null
         }
     },
-    }
+    ParentHome: {
+        screen: parenthome,
+        navigationOptions: {
+            title: "Sign In",
+            // headerStyle,
+            // header: null
+        }
+    },
+}
 );
 const BaseNavigator = createSwitchNavigator({
     // Main: {
