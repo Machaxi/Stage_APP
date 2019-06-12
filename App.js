@@ -50,7 +50,7 @@ type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#e6e6e6" }}>
+        <SafeAreaView style={{ flex: 1,marginBottom:0, backgroundColor: "#e6e6e6" }}>
             <PaperProvider theme={ModifiedDefaultTheme}>
 
                 <Provider store={store}>

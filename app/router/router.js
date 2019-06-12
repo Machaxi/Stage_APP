@@ -128,30 +128,26 @@ const tabBarController =createBottomTabNavigator(
         Home: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel: "Home",
+                tabBarLabel:'Home1',
                 tabBarIcon: ({tintColor}) => (
+
                     <Image
                         //focused={focused}
                         source={require('../images/Home.png')}
                         tintColor={tintColor}
+                        size={24}
                     />
 
 
                 ),
-                // tabBarSelectedItemStyle: {
-                //     underlineColor:'red',
-                //     underlineHeight:5,
-                //     borderBottomWidth: 5,
-                //     borderBottomColor: 'red',
-                //     underlineBottomPosition:0,
-                // },
-                // indicatorStyle: {
-                //     underlineBottomPosition:0,
-                //     underlineColor:'red',
-                //     underlineHeight:5,
-                //     backgroundColor: 'red',
-                //     borderBottomWidth: 5,
-                // },
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    underlineBottomPosition:1,
+                    underlineColor:'red',
+                    underlineHeight:5
+                },
+
             },
 
 
@@ -159,14 +155,21 @@ const tabBarController =createBottomTabNavigator(
         Player: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel: "Home",
+                tabBarLabel:'Home',
+                showLabel: false,
                 tabBarIcon: ({tintColor}) => (
                     <Icon
                         name="home"
                         color={tintColor}
                         size={24}
                     />
-                )
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
             }
 
         },
