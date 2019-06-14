@@ -30,7 +30,7 @@ class welcome extends React.Component {
                         uppercase={false}
                         theme={{ fonts: { regular: 'Lato-Regular' } }}
                         titleStyle={{ fontFamily: 'Lato-Regular', fontWeight: 400 }}
-                        style={style.buttonStyle} color="#ffffff" onPress={() => this.props.navigation.navigate('UHome')}>
+                        style={style.buttonStyle} color="#ffffff" onPress={() => this.props.navigation.navigate('CHome')}>
                         Register </Button>
                     <Button
                         uppercase={false}

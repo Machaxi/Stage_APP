@@ -41,20 +41,20 @@ class  UserHome extends React.Component {
                     score:80,
                 },{
                     progress_parameter: 'India1',
-                    id: '0',
+                    id: '1',
                     score:80,
                 },{
                     progress_parameter: 'India1',
-                    id: '0',
+                    id: '2',
                     score:60,
                 }
                 ,{
                     progress_parameter: 'India1',
-                    id: '0',
+                    id: '3',
                     score:60,
                 },{
                     progress_parameter: 'India1',
-                    id: '0',
+                    id: '4',
                     score:60,
                 }]
         }
@@ -62,7 +62,7 @@ class  UserHome extends React.Component {
 
 
     renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => {
+        <TouchableOpacity key={item} onPress={() => {
 
             console.warn("Touch Press")
 
@@ -302,9 +302,7 @@ class  UserHome extends React.Component {
                         <FlatList
                             data={this.state.strenthList}
                             renderItem={this.renderItem}
-                            keyExtractor={item => {
-                                item
-                            }}
+                            keyExtractor={(item, index) => item.id}
                         />
                     </Card>
                 </View>
@@ -515,7 +513,9 @@ class  UserHome extends React.Component {
                                     // })
 
 
-                                    //this.props.navigation.navigate('RegisterScreen')
+                                    this.props.navigation.navigate('SwitchPlayer',{
+                                    userType:'player'
+                                })
                                 }}>
                                     <Text
                                         style={{textAlign:'center',flex:1}}>
