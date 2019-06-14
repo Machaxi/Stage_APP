@@ -24,11 +24,14 @@ import CoachListing from '../containers/GuestScreen/CoachListing'
 import PlayersListing from '../containers/GuestScreen/PlayersListing'
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import CustomHeader from '../components/custom/CustomHeader'
-import CoachMenuDrawer from './CoachMenuDrawer'
+
 
 import phoneauth from '../containers/Login/PhoneAuth'
-
-
+import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
+import CoachMenuDrawer from './CoachMenuDrawer'
+const headerStyle = {
+    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+};
 const loginModule = createStackNavigator({
 
 
@@ -36,7 +39,7 @@ const loginModule = createStackNavigator({
         screen: welcome,
         navigationOptions: {
             // title: "Sign In",
-            // headerStyle,
+             headerStyle,
             header: null
         }
     },
@@ -85,6 +88,25 @@ const loginModule = createStackNavigator({
     // }
 
 })
+const Switcher = createStackNavigator({
+
+    SwitchPlayer1: {
+            screen: switchplayer,
+            navigationOptions: {
+                title: "Switch Player",
+                 headerStyle
+                // : {
+                //     backgroundColor: '#FFFFFF',
+                //
+                // },
+                //header:null
+            }
+
+        },
+
+    }
+);
+
 const userHomeModule = createStackNavigator({
 
 
@@ -92,10 +114,21 @@ const userHomeModule = createStackNavigator({
         screen: userhome,
         navigationOptions: {
             title: "Sign In",
-            headerStyle: { display: "none" },
-            //header:null
+
+            header:null,
+            headerStyle:{display:'none',}
         }
     },
+        // SwitchPlayer: {
+        //     screen: switchplayer,
+        //     navigationOptions: {
+        //         title: "Switch Player",
+        //         headerStyle: { display: "none" },
+        //         //header:null
+        //     }
+        //
+        // },
+
 }
 );
 const tabOptions = {
@@ -138,45 +171,111 @@ const tabBarController = createBottomTabNavigator(
         Home: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel: "Home",
+                tabBarLabel:'Home1',
                 tabBarIcon: ({ tintColor }) => (
+
                     <Image
                         //focused={focused}
                         source={require('../images/Home.png')}
                         tintColor={tintColor}
+                        size={24}
                     />
 
 
                 ),
-                // tabBarSelectedItemStyle: {
-                //     underlineColor:'red',
-                //     underlineHeight:5,
-                //     borderBottomWidth: 5,
-                //     borderBottomColor: 'red',
-                //     underlineBottomPosition:0,
-                // },
-                // indicatorStyle: {
-                //     underlineBottomPosition:0,
-                //     underlineColor:'red',
-                //     underlineHeight:5,
-                //     backgroundColor: 'red',
-                //     borderBottomWidth: 5,
-                // },
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    underlineBottomPosition:1,
+                    underlineColor:'red',
+                    underlineHeight:5
+                },
+
             },
 
 
         },
-        Player: {
+        Batch: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel: "Home",
+                tabBarLabel:'Batch',
+                showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
-                        name="home"
+                        name="group"
                         color={tintColor}
                         size={24}
                     />
-                )
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        Tournament: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Tournament',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="Tournament"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        Challenge: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Challenge',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="Challenge"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        BookandPlay: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Book and Play',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="Book and Play"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
             }
 
         },
@@ -186,18 +285,139 @@ const tabBarController = createBottomTabNavigator(
 const coachHomeModule = createStackNavigator({
 
 
-    CoachHome: {
-        screen: coachhome,
-        navigationOptions: {
-            title: "Sign In",
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
+        CoachHome: {
+            screen: coachhome,
+            navigationOptions: {
+                title: "Sign In",
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            }
+        },
+    }
+);
+
+
+
+const tabBarControllerCoach = createBottomTabNavigator(
+    {
+        Home: {
+            screen: coachHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Home1',
+                tabBarIcon: ({ tintColor }) => (
+
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Home.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+
+
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    underlineBottomPosition:1,
+                    underlineColor:'red',
+                    underlineHeight:5
+                },
+
             },
 
-        }
-    },
-}
-);
+
+        },
+        Batch: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Batch',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="group"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        Tournament: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Tournament',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="Tournament"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        Challenge: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Challenge',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="Challenge"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        BookandPlay: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel:'Book and Play',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Icon
+                        name="Book and Play"
+                        color={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+
+    })
+
+
+
 
 const AcademyListingStack = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
@@ -342,13 +562,16 @@ const BaseNavigator = createSwitchNavigator({
 
     },
     CHome: {
-        screen: coachHomeModule,
+        screen: tabBarControllerCoach,
 
     },
     UHome: {
         screen: tabBarController,
 
     },
+    SwitchPlayer: {
+        screen: Switcher,
+    }
     // Home:{
     //     screen: HomeModule
     // },

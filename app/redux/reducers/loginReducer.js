@@ -86,3 +86,16 @@ export function doFBLogin(name, email, quote_id,timeNow,gcmid) {
     };
 
 }
+export function doFBLoginAce() {
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                //customer/create/sallu@gmail.com?code=custom&email=&fname=salman&lname=khan&oauth_token=&password=123456789&
+                url: `/global/academy/all`
+            }
+        }
+    };
+
+}
+

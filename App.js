@@ -18,7 +18,7 @@ import thunk from "redux-thunk";
 import AppMain from './app/router/router';
 import { SafeAreaView } from 'react-navigation'
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import { NativeEventEmitter, NativeModules,StatusBar } from 'react-native';
 
 const client = axios.create({
     baseURL: 'http://13.233.124.189:8080/api/',
@@ -50,7 +50,9 @@ const ModifiedDefaultTheme = {
 export default class App extends Component {
   render() {
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#e6e6e6" }}>
+
+        <SafeAreaView forceInset={{ top: 'always' }} style={{ flex: 1, backgroundColor: "#e6e6e6"}}>
+            <StatusBar translucent={true} backgroundColor={'transparent'} />
             <PaperProvider theme={ModifiedDefaultTheme}>
 
                 <Provider store={store}>
