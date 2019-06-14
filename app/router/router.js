@@ -39,7 +39,7 @@ const loginModule = createStackNavigator({
         screen: welcome,
         navigationOptions: {
             // title: "Sign In",
-             headerStyle,
+            headerStyle,
             header: null
         }
     },
@@ -91,20 +91,20 @@ const loginModule = createStackNavigator({
 const Switcher = createStackNavigator({
 
     SwitchPlayer1: {
-            screen: switchplayer,
-            navigationOptions: {
-                title: "Switch Player",
-                 headerStyle
-                // : {
-                //     backgroundColor: '#FFFFFF',
-                //
-                // },
-                //header:null
-            }
+        screen: switchplayer,
+        navigationOptions: {
+            title: "Switch Player",
+            headerStyle
+            // : {
+            //     backgroundColor: '#FFFFFF',
+            //
+            // },
+            //header:null
+        }
 
-        },
+    },
 
-    }
+}
 );
 
 const userHomeModule = createStackNavigator({
@@ -115,19 +115,19 @@ const userHomeModule = createStackNavigator({
         navigationOptions: {
             title: "Sign In",
 
-            header:null,
-            headerStyle:{display:'none',}
+            header: null,
+            headerStyle: { display: 'none', }
         }
     },
-        // SwitchPlayer: {
-        //     screen: switchplayer,
-        //     navigationOptions: {
-        //         title: "Switch Player",
-        //         headerStyle: { display: "none" },
-        //         //header:null
-        //     }
-        //
-        // },
+    // SwitchPlayer: {
+    //     screen: switchplayer,
+    //     navigationOptions: {
+    //         title: "Switch Player",
+    //         headerStyle: { display: "none" },
+    //         //header:null
+    //     }
+    //
+    // },
 
 }
 );
@@ -147,31 +147,13 @@ const tabOptions = {
 }
 
 
-// const tabBarController= createMaterialBottomTabNavigator({
-//     Home: { screen: userHomeModule },
-//     Player: { screen: userHomeModule },
-//     // History: { screen: History },
-//     // Cart: { screen: Cart },
-// }, {
-//     initialRouteName: 'Home',
-//     activeColor: '#f0edf6',
-//     inactiveColor: '#3e2465',
-//     barStyle: { backgroundColor: '#694fad' },
-//     indicatorStyle: {
-//         backgroundColor: 'red',
-//     },
-//     underlineBottomPosition:0,
-//                     underlineColor:'red',
-//                     underlineHeight:5,
-//     tabOptions
-// });
 
 const tabBarController = createBottomTabNavigator(
     {
         Home: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Home1',
+                tabBarLabel: 'Home1',
                 tabBarIcon: ({ tintColor }) => (
 
                     <Image
@@ -186,9 +168,9 @@ const tabBarController = createBottomTabNavigator(
                 tabBarOptions: {
                     showLabel: true,
                     showIcon: true,
-                    underlineBottomPosition:1,
-                    underlineColor:'red',
-                    underlineHeight:5
+                    underlineBottomPosition: 1,
+                    underlineColor: 'red',
+                    underlineHeight: 5
                 },
 
             },
@@ -198,7 +180,7 @@ const tabBarController = createBottomTabNavigator(
         Batch: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Batch',
+                tabBarLabel: 'Batch',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -219,7 +201,7 @@ const tabBarController = createBottomTabNavigator(
         Tournament: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Tournament',
+                tabBarLabel: 'Tournament',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -240,7 +222,7 @@ const tabBarController = createBottomTabNavigator(
         Challenge: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Challenge',
+                tabBarLabel: 'Challenge',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -261,7 +243,7 @@ const tabBarController = createBottomTabNavigator(
         BookandPlay: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Book and Play',
+                tabBarLabel: 'Book and Play',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -285,17 +267,17 @@ const tabBarController = createBottomTabNavigator(
 const coachHomeModule = createStackNavigator({
 
 
-        CoachHome: {
-            screen: coachhome,
-            navigationOptions: {
-                title: "Sign In",
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
+    CoachHome: {
+        screen: coachhome,
+        navigationOptions: {
+            title: "Sign In",
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-            }
-        },
-    }
+        }
+    },
+}
 );
 
 
@@ -305,7 +287,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         Home: {
             screen: coachHomeModule,
             navigationOptions: {
-                tabBarLabel:'Home1',
+                tabBarLabel: 'Home1',
                 tabBarIcon: ({ tintColor }) => (
 
                     <Image
@@ -320,9 +302,9 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarOptions: {
                     showLabel: true,
                     showIcon: true,
-                    underlineBottomPosition:1,
-                    underlineColor:'red',
-                    underlineHeight:5
+                    underlineBottomPosition: 1,
+                    underlineColor: 'red',
+                    underlineHeight: 5
                 },
 
             },
@@ -332,7 +314,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         Batch: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Batch',
+                tabBarLabel: 'Batch',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -353,7 +335,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         Tournament: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Tournament',
+                tabBarLabel: 'Tournament',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -374,7 +356,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         Challenge: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Challenge',
+                tabBarLabel: 'Challenge',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -395,7 +377,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         BookandPlay: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel:'Book and Play',
+                tabBarLabel: 'Book and Play',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Icon
@@ -417,6 +399,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
     })
 
 
+    
 
 
 const AcademyListingStack = createStackNavigator({
@@ -430,10 +413,10 @@ const AcademyListingStack = createStackNavigator({
                 fontFamily: 'Quicksand-Bold',
                 fontWeight: '400',
                 textAlign: 'center',
-                fontSize:16,
+                fontSize: 16,
                 alignSelf: 'center',
             },
-           
+
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RigitMenuToolbar navigationProps={navigation}
                 navigation={navigation} />,
@@ -495,7 +478,7 @@ const GuestHomeModule = createDrawerNavigator({
         //     header: <CustomHeader title="Academy" />,
         // }
     },
-    
+
 
     GuestDe: {
         screen: guestdetails,
@@ -507,12 +490,12 @@ const GuestHomeModule = createDrawerNavigator({
 
         }
     },
-},{
-    contentComponent: ({ navigation }) => {
-        return (<CoachMenuDrawer navigation={navigation} />)
-    },
-    drawerWidth: Dimensions.get('window').width * 0.83,
-}
+}, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+    }
 );
 
 const WIDTH = Dimensions.get('window').width;

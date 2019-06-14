@@ -13,7 +13,7 @@ export default function AcademyReducer(state = initialState, action) {
             console.log("sucesss", action.payload.data);
             return { ...state, loading: false, res: action.payload.data };
         case types.DO_LOGIN_FAIL:
-            console.log("fails", action.payload.data);
+            console.log("fails", action.payload);
             return {
                 ...state,
                 loading: false,
@@ -70,6 +70,20 @@ export function search_auto_suggest(search_query) {
 export function coachListing() {
 
     let url = `global/coach/list`
+    console.log("search => " + url)
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: url
+            }
+        }
+    }
+};
+
+export function coachDetail() {
+
+    let url = `global/coach/details`
     console.log("search => " + url)
     return {
         type: types.DO_LOGIN,

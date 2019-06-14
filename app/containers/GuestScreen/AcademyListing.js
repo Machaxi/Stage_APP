@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard } from 'react-native';
-import { Card, Text, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
@@ -11,11 +11,16 @@ class AcademyListing extends Component {
 
     constructor(props) {
         super(props)
+        this.secondTextInputRef = React.createRef();
+
+
         this.state = {
             academies: [],
             query: '',
             autodata: [],
-            isAutoSuggest: false
+            suggestionResult: [],
+            isAutoSuggest: false,
+
         }
     }
 
@@ -37,8 +42,21 @@ class AcademyListing extends Component {
         })
     }
 
+    find(query) {
+        if (query === '') {
+            return [];
+        }
+        const { suggestionResult } = this.state;
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        console.log('regex ', regex)
+        return suggestionResult.filter(item => item.name.search(regex) >= 0);
+    }
+
+
+
     getAutoSuggestion() {
 
+        this.secondTextInputRef.current.focus();
         this.state.isAutoSuggest = true;
         let search_query = this.state.query
 
@@ -56,9 +74,45 @@ class AcademyListing extends Component {
         axios.get(addCart)
             .then((response) => {
 
-                let res = JSON.stringify(response.data)
-                console.warn("response " + res);
+                let res = JSON.stringify(response.data.data.localities)
+                //console.warn("response " + res);
+                let isFirst = true
+                let data = []
+                let count = 0
+                for (let i = 0; i < response.data.data.localities.length; i++) {
+                    let obj = response.data.data.localities[i]
+                    if (isFirst) {
+                        obj['is_first'] = true
+                        isFirst = false;
+                    } else {
+                        obj['is_first'] = false
+                    }
+                    obj['is_academy'] = false
+                    console.log(obj)
+                    data[count] = obj
+                    count = count + 1
+                }
+                isFirst = true
+                for (let i = 0; i < response.data.data.academies.length; i++) {
+                    let obj = response.data.data.academies[i]
+                    if (isFirst) {
+                        obj['is_first'] = true
+                        isFirst = false;
+                    } else {
+                        obj['is_first'] = false
+                    }
+                    obj['is_academy'] = true
+                    console.log(obj)
+                    data[count] = obj
+                    count = count + 1
+                }
 
+                //console.warn(data)
+                this.state.suggestionResult = data
+                this.setState({
+                    suggestionResult: data
+                })
+                this.secondTextInputRef.current.focus();
             })
             .catch((error) => {
                 // handle error
@@ -68,16 +122,18 @@ class AcademyListing extends Component {
 
     getAcademicSearchResult(hardSearch) {
 
-        this.state.isAutoSuggest = false
+        this.state.isAutoSuggest = true
         let locality_id = ""
         let search_query = ""
         console.warn(this.state.query)
         if (hardSearch) {
             search_query = this.state.query
+        } else {
+            locality_id = this.state.query
         }
 
         this.props.search(search_query, locality_id).then(() => {
-            //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
+            console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
                 let list = this.props.data.res.data.academies
@@ -87,6 +143,7 @@ class AcademyListing extends Component {
                 })
             }
 
+
         }).catch((response) => {
             console.log(response);
         })
@@ -95,6 +152,9 @@ class AcademyListing extends Component {
 
 
     listHeader() {
+
+        const autoData = this.find(this.state.query);
+
         return (
             <View
                 style={{
@@ -114,6 +174,7 @@ class AcademyListing extends Component {
                     }} placeholder="Search"></TextInput> */}
 
                     <Autocomplete
+                        ref={this.secondTextInputRef}
                         inputContainerStyle={{
                             marginLeft: 8,
                             marginRight: 8,
@@ -127,7 +188,7 @@ class AcademyListing extends Component {
                         style={{
                             fontFamily: 'Quicksand-Regular'
                         }}
-                        data={this.state.autodata}
+                        data={autoData}
                         defaultValue={this.state.query}
                         onChangeText={text => {
                             this.state.query = text
@@ -135,23 +196,54 @@ class AcademyListing extends Component {
                             this.getAutoSuggestion()
                         }}
                         onSubmitEditing={() => {
+                            this.state.suggestionResult = []
                             this.getAcademicSearchResult(true)
                         }}
                         placeholder="Search"
                         onKeyPress={this.handleKeyDown}
                         returnKeyType='search'
-                        renderItem={({ item, i }) => (
-                            <TouchableOpacity onPress={() => this.setState({ query: item })}>
-                                <Text>{item}</Text>
-                            </TouchableOpacity>
-                        )}
+                        renderItem={({ item, i }) =>
+                            (
+                                <View>
+                                    {item.is_first ?
+                                        <Text
+                                            style={{
+                                                backgroundColor: '#f7f7f7', color: 'black', padding: 4
+                                                , fontWeight: 'bold', fontFamily: 'Quicksand-Regular'
+                                            }}
+                                        >{item.is_academy ? "Academies" : "Localities"}</Text>
+                                        :
+                                        null
+                                    }
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            {
+                                                this.state.suggestionResult = []
+                                                if (!item.is_academy) {
+                                                    this.state.query = item.name
+                                                    this.getAcademicSearchResult(false)
+                                                } else {
+                                                    this.props.navigation.navigate('AcademyProfile')
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        <Text style={{ fontSize: 12, padding: 2, fontFamily: 'Quicksand-Regular' }}>{item.name}</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+
+                            )}
                     />
+
                 </Card>
 
                 <Text style={{
                     marginTop: 8, marginBottom: 4,
                     textAlign: 'right',
-                    color: '#404040', fontSize: 12
+                    color: '#404040', fontSize: 12,
+                    fontFamily: 'Quicksand-Regular'
                 }} >Filter</Text>
 
                 <View style={{ width: '100%', height: 1, backgroundColor: '#d7d7d7' }}></View>
@@ -182,7 +274,10 @@ class AcademyListing extends Component {
 
                     </Image>
 
-                    <Text style={{ paddingTop: 12, paddingLeft: 12, fontSize: 16, color: '#707070' }}>
+                    <Text style={{ paddingTop: 12, paddingLeft: 12, fontSize: 16, 
+                        color: '#707070',
+                        fontFamily: 'Quicksand-Regular'
+                        }}>
                         {item.name}
                     </Text>
 
@@ -204,6 +299,7 @@ class AcademyListing extends Component {
                             color: '#707070',
                             paddingTop: 2,
                             borderRadius: 12,
+                            fontFamily: 'Quicksand-Regular'
                         }}>{item.ratings}</Text>
 
                     </View>
@@ -283,7 +379,9 @@ const styles = StyleSheet.create({
         marginRight: 4,
         borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
-        color: 'white', textAlign: 'center'
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular'
     },
 });
 

@@ -1,122 +1,179 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { coachDetail } from '../../redux/reducers/AcademyReducer'
 
-export default class CoachProfileDetail extends Component {
+class CoachProfileDetail extends Component {
 
     constructor(props) {
         super(props)
+
+        this.state = {
+            coachData: {}
+        }
     }
 
     componentDidMount() {
 
+        this.props.coachDetail().then(() => {
+            //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
+            let status = this.props.data.res.success
+            if (status) {
+                let coach = this.props.data.res.data.coach
+                console.warn(coach)
+
+                this.setState({
+                    coachData: coach
+                })
+            }
+
+        }).catch((response) => {
+            console.log(response);
+        })
+
     }
 
     render() {
-        return (
-            <ScrollView style={styles.chartContainer}>
 
-                <View>
+        if (this.state.coachData != null) {
 
-                    <View style={{ padding: 16 }}>
+            return (
+                <ScrollView style={styles.chartContainer}>
 
-                        <View style={{ flexDirection: 'row' }}>
+                    <View>
 
-                            <Image style={{ height: 200, width: 150, borderRadius: 16 }}
-                                source={require('../../images/coach_photo.png')}
-                            >
+                        <View style={{ padding: 16 }}>
 
-                            </Image>
+                            <View style={{ flexDirection: 'row' }}>
 
-                            <View style={{ paddingLeft: 10, paddingTop: 40 }}>
+                                <Image style={{ height: 129, width: 129, borderRadius: 16 }}
+                                    source={require('../../images/coach_photo.png')}
+                                >
 
-                                <Text style={{
-                                    width: 70,
-                                    padding: 4,
-                                    backgroundColor: '#667DDB',
-                                    color: 'white',
-                                    borderRadius: 4,
-                                    textAlign: 'center',
-                                    justifyContent: 'center',
-                                    alignItem: 'center',
-                                    fontSize: 12
-                                }}> My Coach</Text>
+                                </Image>
 
-                                <Text style={{ paddingTop: 12, color: '#707070' }}>Sumar Kumar</Text>
+                                <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-end' }}>
 
-                                <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+                                    {/* <Text style={{
+                                        //width: 70,
+                                        padding: 4,
+                                        backgroundColor: '#667DDB',
+                                        color: 'white',
+                                        borderRadius: 4,
+                                        textAlign: 'center',
+                                        justifyContent: 'center',
+                                        alignItem: 'center',
+                                        fontSize: 12
+                                    }}> My Coach</Text> */}
 
-                                    <Rating
-                                        type='custom'
-                                        ratingColor='#F4FC9A'
-                                        ratingBackgroundColor='#D7D7D7'
-                                        ratingCount={5}
-                                        imageSize={14}
-                                        style={{ height: 30, width: 80 }}
-                                    />
+                                    <Text style={{ paddingTop: 12, color: '#707070' }}>{this.state.coachData.name}</Text>
 
-                                    <Text style={{
-                                        backgroundColor: '#ddd', height: 20, width: 36, textAlign: 'center',
-                                        fontSize: 14,
-                                        color: 'gray',
-                                        borderRadius: 12,
-                                    }}>4.5</Text>
+                                    <View style={{ paddingTop: 8, flex: 1, flexDirection: 'row' }}>
 
-                                </View>
+                                        <Rating
+                                            type='custom'
+                                            ratingColor='#F4FC9A'
+                                            ratingBackgroundColor='#D7D7D7'
+                                            backgroundColor="#F7F7F7"
+                                            ratingCount={5}
+                                            imageSize={14}
+                                            style={{ height: 30, width: 80 }}
+                                        />
 
-                                <Text style={{ paddingTop: 12, fontSize: 12, color: '#A3A5AE' }}>Experience</Text>
-                                <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1, }}>
+                                        <Text style={{
+                                            backgroundColor: '#ddd', height: 20, width: 36, textAlign: 'center',
+                                            fontSize: 14,
+                                            color: 'gray',
+                                            borderRadius: 12,
+                                        }}>{this.state.coachData.ratings}</Text>
 
+                                    </View>
 
-                                    <Text style={{
-                                        color: '#404040', justifyContent: 'space-between',
+                                    <Text style={{ fontSize: 12, color: '#A3A5AE', marginTop: 10 }}>Experience</Text>
+                                    <View style={{
+                                        paddingTop: 8, flexDirection: 'row',
+                                        flex: 1,
+                                        justifyContent: 'space-between',
                                         alignItems: 'center',
-                                    }}>2 yr 4 m</Text>
+
+                                    }}>
 
 
-                                    <Text style={{
-                                        color: '#667DDB', fontSize: 10, justifyContent: 'flex-end',
-                                        alignItems: 'center',
-                                    }}>View Other Coaches</Text>
+                                        <Text style={{
+                                            color: '#404040',
+                                            fontSize: 14,
+                                        }}>{this.state.coachData.ratings} yr</Text>
+
+
+                                        <Text style={{
+                                            color: '#667DDB',
+                                            fontSize: 10,
+                                            textAlign: 'right',
+                                            marginLeft: 24,
+                                        }}>View Other Coaches</Text>
+
+                                    </View>
 
                                 </View>
 
                             </View>
 
+                            <View style={{ paddingTop: 16 }}>
+
+                                <Text style={{ fontSize: 12, color: '#A3A5AE', paddingTop: 8 }}>Certifications</Text>
+                                <Text style={{ color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                            </View>
+
+
                         </View>
 
-                        <View style={{ paddingTop: 16 }}>
+                        <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
 
-                            <Text style={{ fontSize: 12, color: '#A3A5AE', paddingTop: 8 }}>Certifications</Text>
-                            <Text style={{ color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                            <Text
+                                style={styles.filled_button}
+                            >
+                                Give Feedback
+                        </Text>
+
                         </View>
 
-
                     </View>
+                </ScrollView>
 
-                    <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+            );
+        }
 
-                        <Text
-                            style={styles.filled_button}
-                        >
-                            Give Feedback
-                    </Text>
-
-                    </View>
-
+        else {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
-            </ScrollView>
+            )
+        }
 
-        );
     }
 }
+
+
+const mapStateToProps = state => {
+    return {
+        data: state.AcademyReducer,
+    };
+};
+const mapDispatchToProps = {
+    coachDetail
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CoachProfileDetail);
+
 
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        backgroundColor: '#F7F7F7'
+        backgroundColor: '#F7F7F7',
+        paddingTop: 8
     },
     rounded_button: {
         width: '48%',

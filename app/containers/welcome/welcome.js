@@ -2,8 +2,13 @@ import React from 'react'
 
 import { View, ImageBackground } from 'react-native'
 import { Button } from 'react-native-paper';
+import BaseComponent from '../BaseComponent';
 
-class welcome extends React.Component {
+class welcome extends BaseComponent {
+
+    constructor(props) {
+        super(props)
+    }
 
     render() {
         return (
