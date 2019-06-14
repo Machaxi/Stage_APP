@@ -5,6 +5,7 @@ import {
     createBottomTabNavigator,
     createStackNavigator,
     createSwitchNavigator,
+    createDrawerNavigator,
     TabBarBottom
 } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
@@ -23,6 +24,7 @@ import CoachListing from '../containers/GuestScreen/CoachListing'
 import PlayersListing from '../containers/GuestScreen/PlayersListing'
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import CustomHeader from '../components/custom/CustomHeader'
+import CoachMenuDrawer from './CoachMenuDrawer'
 
 import phoneauth from '../containers/Login/PhoneAuth'
 
@@ -196,14 +198,32 @@ const coachHomeModule = createStackNavigator({
     },
 }
 );
-const GuestHomeModule = createStackNavigator({
 
-
+const AcademyListingStack = createStackNavigator({
+    //All the screen from the Screen1 will be indexed here
     AcademyListing: {
         screen: AcademyListing,
-        navigationOptions: {
-            header: <CustomHeader title="Academy" />,
-        }
+        navigationOptions: ({ navigation }) => ({
+            title: 'Dribble Diaries',
+            headerTitleStyle: {
+                color: '#191919',
+                fontFamily: 'Quicksand-Bold',
+                fontWeight: '400',
+                textAlign: 'center',
+                fontSize:16,
+                alignSelf: 'center',
+            },
+           
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} />,
+            //header: <CustomHeader title="Academy" />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
     },
     AcademyProfile: {
         screen: AcademyProfile,
@@ -245,6 +265,17 @@ const GuestHomeModule = createStackNavigator({
 
         }
     },
+})
+const GuestHomeModule = createDrawerNavigator({
+
+
+    AcademyListing: {
+        screen: AcademyListingStack,
+        // navigationOptions: {
+        //     header: <CustomHeader title="Academy" />,
+        // }
+    },
+    
 
     GuestDe: {
         screen: guestdetails,
@@ -256,8 +287,22 @@ const GuestHomeModule = createStackNavigator({
 
         }
     },
+},{
+    contentComponent: ({ navigation }) => {
+        return (<CoachMenuDrawer navigation={navigation} />)
+    },
+    drawerWidth: Dimensions.get('window').width * 0.83,
 }
 );
+
+const WIDTH = Dimensions.get('window').width;
+
+const DrawerConfig = {
+    drawerWidth: WIDTH * 0.83,
+    contentComponent: ({ navigation }) => {
+        return (<CoachMenuDrawer navigation={navigation} />)
+    }
+}
 const parentHomeModule = createStackNavigator({
 
 
@@ -314,5 +359,77 @@ const BaseNavigator = createSwitchNavigator({
 
 
 });
+
+
+class RigitMenuToolbar extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    componentDidMount() {
+    }
+
+    render() {
+
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+
+                <TouchableOpacity
+                    activeOpacity={.8}
+                    onPress={() => { }}>
+
+                    <Image
+                        source={require('../images/ic_notifications.png')}
+                        style={{ width: 20, height: 20, marginRight: 12 }}
+                    />
+                </TouchableOpacity>
+
+            </View>
+        );
+    }
+}
+
+class NavigationDrawerStructure extends React.Component {
+
+
+    //Structure for the navigatin Drawer
+    toggleDrawer = () => {
+        //Props to open/close the drawer
+        this.props.navigationProps.toggleDrawer();
+        //this.props.navigation.dispatch(DrawerActions.toggleDrawer())
+        //this.props.navigationProps.toggleDrawer();
+    };
+
+    toggleToHome = () => {
+        //Props to open/close the drawer
+        this.props.navigationProps.navigate('First');
+        //this.props.navigation.dispatch(DrawerActions.toggleDrawer())
+        //this.props.navigationProps.toggleDrawer();
+    };
+
+    render() {
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+                    {/*Donute Button Image */}
+                    <Image
+                        source={require('../images/hamburger.png')}
+                        style={{ width: 24, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+
+                {/* <TouchableOpacity onPress={this.toggleToHome.bind(this)}>
+                <Image
+                        source={require('../images/header_icon.png')}
+                        style={{ width: 55, height: 50,marginLeft:-15}}
+                    />
+                    </TouchableOpacity> */}
+            </View>
+        );
+    }
+}
+
 const AppMain = createAppContainer(BaseNavigator);
 export default AppMain;

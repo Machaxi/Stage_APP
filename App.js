@@ -21,7 +21,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 const client = axios.create({
-    baseURL: 'http://www.dev.amydus.com/api/rest/mobile/',
+    baseURL: 'http://13.233.124.189:8080/api/',
     responseType: 'json'
 });
 
