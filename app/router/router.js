@@ -24,7 +24,7 @@ import CoachListing from '../containers/GuestScreen/CoachListing'
 import PlayersListing from '../containers/GuestScreen/PlayersListing'
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import CustomHeader from '../components/custom/CustomHeader'
-
+import spalsh from '../containers/welcome/SplashScreen'
 
 import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
@@ -34,7 +34,14 @@ const headerStyle = {
 };
 const loginModule = createStackNavigator({
 
-
+    Splash: {
+        screen: spalsh,
+        navigationOptions: {
+            // title: "Sign In",
+            headerStyle,
+            header: null
+        }
+    },
     Welcome: {
         screen: welcome,
         navigationOptions: {

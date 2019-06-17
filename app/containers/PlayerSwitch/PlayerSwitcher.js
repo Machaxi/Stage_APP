@@ -5,6 +5,7 @@ import * as Progress from 'react-native-progress';
 import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,FlatList,ScrollView} from 'react-native';
 import {Card} from 'react-native-paper'
 import { Rating } from 'react-native-ratings';
+import {getData} from "../../components/auth";
 const acedemicList = [
     {
         label: 'India',
@@ -30,7 +31,7 @@ class  ParentHome extends React.Component {
         };
         this.state = {
 
-
+            userData:null,
             country: undefined,
             strenthList : [
                 {
@@ -58,6 +59,22 @@ class  ParentHome extends React.Component {
 
         }
     }
+
+    componentDidMount(){
+        var userData;
+        getData('userInfo',(value) => {
+            userData: value,
+                this.setState({
+                    userData: JSON.parse(value)
+                });
+        });
+
+        const { navigation } = this.props;
+        const otherParam = navigation.getParam('userType');
+
+    }
+
+
 
     renderItemAcedemic = ({ item }) => (
         <Card style={{marginTop:20,borderRadius:10,margin:10}}>
@@ -257,19 +274,25 @@ class  ParentHome extends React.Component {
 
     );
     render() {
-        const { navigation } = this.props;
-        const otherParam = navigation.getParam('userType');
-        return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-            <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
 
-                { (otherParam == 'player') ? null :  <View style={{marginTop:15,marginBottom:0,flex:1,alignItems:'center'}}><Text>Select Academy</Text></View> }
+        const { userData } = this.state;
+        console.log("userData",userData)
+        const otherParam = null
+        if(userData) {
+            const otherParam = userData.user['user_type'];
+            console.log("otherParam", otherParam)
+        }
+        return  <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+            { userData ? <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+
+                { (otherParam == 'PLAYER' || otherParam == 'PARENT' ) ? null :  <View style={{marginTop:15,marginBottom:0,flex:1,alignItems:'center'}}><Text>Select Academy</Text></View> }
 
            <View>
 
 
                         <FlatList
                             data={this.state.strenthList}
-                            renderItem={(otherParam == 'player') ? this.renderItem : this.renderItemAcedemic}
+                            renderItem={(otherParam == 'PLAYER' || otherParam == 'PARENT' ) ? this.renderItem : this.renderItemAcedemic}
                             keyExtractor={(item, index) => item.id}
                         />
            </View>
@@ -406,8 +429,8 @@ class  ParentHome extends React.Component {
                 </View>
 
 
-            </ScrollView>
-        </View>;
+            </ScrollView> : null }
+        </View>
     }
 }
 export default ParentHome;
