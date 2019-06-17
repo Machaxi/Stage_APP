@@ -1,4 +1,5 @@
 import * as types from '../../actions/actionTypes';
+import {getData,storeData} from '../../components/auth'
 
 const initialState = {
     loading: false,
@@ -11,9 +12,11 @@ export default function loginReducer(state = initialState, action) {
             return { ...state, loading: true };
         case types.DO_LOGIN_SUCCESS:
             console.log("sucesss",action.payload.data);
+            console.log("sucesss Paly",action.payload.headers['x-authorization']);
+            storeData('header',action.payload.headers['x-authorization'])
             return { ...state, loading: false, user: action.payload.data };
         case types.DO_LOGIN_FAIL:
-           // console.log("fails",action.payload.data);
+            console.log("fails",action.payload);
             return {
                 ...state,
                 loading: false,
@@ -24,12 +27,23 @@ export default function loginReducer(state = initialState, action) {
     }
 }
 
-export function doLogin(email, password) {
+export function doLogin(postdata) {
+    console.log("postdata",postdata)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `/customer/login/${email}/${password}`
+                url: `login`,
+                method: 'POST',
+                data: postdata,
+                // headers: {
+                //     'x-authorization': header
+                //
+                // },
             }
         }
     };
@@ -81,18 +95,6 @@ export function doFBLogin(name, email, quote_id,timeNow,gcmid) {
             request: {
                 //customer/create/sallu@gmail.com?code=custom&email=&fname=salman&lname=khan&oauth_token=&password=123456789&
                 url: `/customer/create/${email}?code=customlogin&email=${email}&name=${name}&quote_id=${quote_id}&timeNow=${timeNow}&gcmid=${gcmid}`
-            }
-        }
-    };
-
-}
-export function doFBLoginAce() {
-    return {
-        type: types.DO_LOGIN,
-        payload: {
-            request: {
-                //customer/create/sallu@gmail.com?code=custom&email=&fname=salman&lname=khan&oauth_token=&password=123456789&
-                url: `/global/academy/all`
             }
         }
     };
