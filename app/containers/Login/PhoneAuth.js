@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image } from 'react-native';
 import { doLogin,doFBLogin } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
-import {getData,storeData} from '../../components/auth'
+import {getData, onSignOut, storeData} from '../../components/auth'
 
 import firebase from 'react-native-firebase';
 import {PARENT} from "../../components/Constants";
@@ -41,13 +41,13 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
                 });
             }
         });
-        firebase.auth().currentUser.getIdToken(true).then((token) => {
-            this.setState({
-                token:token,
-            },
-                console.log("token", token))
-           // this.signIn11(this.state.user)
-        })
+        // firebase.auth().currentUser.getIdToken(true).then((token) => {
+        //     this.setState({
+        //         token:token,
+        //     },
+        //         console.log("token", token))
+        //    // this.signIn11(this.state.user)
+        // })
 
 
     }
@@ -78,7 +78,7 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
                         this.setState({
                             token:token,
 
-                        },this.signIn11(this.state.user))
+                        },this.signIn11(this.state.user,token))
 
                         if (!token) {
                             //Helpers.logout(false);
@@ -94,9 +94,12 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
 
     signOut = () => {
         firebase.auth().signOut();
+        onSignOut()
+       // removeItem()
+
     }
 
-     signIn11 = (user) => {
+     signIn11 = (user,token) => {
 
 this.setState({
     isCall:false
@@ -104,7 +107,7 @@ this.setState({
          var dataDic ={};
          var dict = {};
          dict['phone_number'] = user.phoneNumber;
-         dict['firebase_token'] = this.state.token;
+         dict['firebase_token'] = token;
          dict['device_type'] = "IOS";
          dict['app_version'] = '1.1.0';
          dict['fcm_token'] = 'xyzabcdcc';
@@ -248,32 +251,32 @@ this.setState({
 
                 {!user && confirmResult && this.renderVerificationCodeInput()}
 
-                {/*{user && (*/}
-                    {/*<View*/}
-                        {/*style={{*/}
-                            {/*padding: 15,*/}
-                            {/*justifyContent: 'center',*/}
-                            {/*alignItems: 'center',*/}
-                            {/*backgroundColor: '#77dd77',*/}
-                            {/*flex: 1,*/}
-                        {/*}}*/}
-                    {/*>*/}
+              {/*  {user && (
+                    <View
+                        style={{
+                            padding: 15,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: '#77dd77',
+                            flex: 1,
+                        }}
+                    >
 
 
 
 
-                        {/*<Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />*/}
-                        {/*<Text style={{ fontSize: 25 }}>Signed In!</Text>*/}
-                        {/*<Text>{JSON.stringify(user)}</Text>*/}
-                        {/*<Button title="Sign Out" color="red" onPress={this.signOut} />*/}
-                    {/*</View>*/}
-                {/*)}*/}
+                        <Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />
+                        <Text style={{ fontSize: 25 }}>Signed In!</Text>
+                        <Text>{JSON.stringify(user)}</Text>
+                        <Button title="Sign Out" color="red" onPress={this.signOut} />
+                    </View>
+                )}*/}
 
 
 
 
 
-                { (user  && token && isCall) ? this.signIn11(this.state.user):null }
+             {/*//   { (user  && token && isCall) ? this.signIn11(this.state.user):null }*/}
 
             </View>
 

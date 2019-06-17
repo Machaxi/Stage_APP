@@ -16,17 +16,16 @@ class Splash extends React.Component {
     }
 
     componentDidMount() {
-        // this.props.navigation.navigate('Dashboard')
+// this.props.navigation.navigate('Dashboard')
         var userData;
-        getData('userInfo',(value) => {
-            console.log("value",value)
-            userData = (JSON.parse(value))
-           // onSignIn()
-            console.log(userData);
+        getData('userInfo', (value) => {
+            console.log("value", value)
+        })
         isSignedIn()
             .then(res => {
                 console.log(res);
-                this.setState({ signedIn: res, checkedSignIn: true })})
+                this.setState({ signedIn: res, checkedSignIn: true })
+            })
             .catch(err => alert("An error occurred"));
 
 
@@ -38,27 +37,35 @@ class Splash extends React.Component {
                 return;
             }
             if (signedIn !== true) {
+
                 this.props.navigation.navigate('Welcome')//'SignedOut')
+
+
             } else {
-                if(userData.user['user_type'] == GUEST)
-                {
-                    this.props.navigation.navigate('AcademyListing')
-                }else  if(userData.user['user_type'] == PLAYER){
-                    this.props.navigation.navigate('UHome')
+                getData('userInfo', (value) => {
+                    console.log("value", value)
+                    userData = (JSON.parse(value))
+// onSignIn()
+                    console.log(userData);
+                    if (userData.user['user_type'] == GUEST) {
+                        this.props.navigation.navigate('AcademyListing')
+                    } else if (userData.user['user_type'] == PLAYER) {
+                        this.props.navigation.navigate('UHome')
 
-                }else  if(userData.user['user_type'] == COACH){
-                    this.props.navigation.navigate('CHome')
+                    } else if (userData.user['user_type'] == COACH) {
+                        this.props.navigation.navigate('CHome')
 
-                }
-                else  if(userData.user['user_type'] == PARENT){
-                    this.props.navigation.navigate('PHome')
+                    }
+                    else if (userData.user['user_type'] == PARENT) {
+                        this.props.navigation.navigate('PHome')
 
-                }
+                    }
+
+                });
 
             }
 
         }, 1000)
-        });
 
         if (Platform.OS === 'android') {
             Linking.getInitialURL().then(url => {
