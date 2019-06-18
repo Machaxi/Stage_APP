@@ -19,7 +19,7 @@ export default function loginReducer(state = initialState, action) {
             }
             return { ...state, loading: false, user: action.payload.data };
         case types.DO_LOGIN_FAIL:
-            console.log("fails",action.payload);
+            console.log("fails",action.payload.data);
             return {
                 ...state,
                 loading: false,

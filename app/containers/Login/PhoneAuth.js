@@ -107,7 +107,7 @@ this.setState({
 })
          var dataDic ={};
          var dict = {};
-         dict['phone_number'] = "+911111111111"//user.phoneNumber;
+         dict['phone_number'] = "+912222222222"//user.phoneNumber;
          dict['firebase_token'] = token;
          dict['device_type'] = "IOS";
          dict['app_version'] = '1.1.0';
@@ -137,7 +137,7 @@ this.setState({
 
                        }else if(userInfoData.user_type == PLAYER)
                        {
-                         if( userData.has_multiple_acadmies )
+                         if(!userData.has_multiple_acadmies  )
                          {
                              this.props.navigation.navigate('UHome')
 

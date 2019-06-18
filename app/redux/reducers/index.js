@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import LoginReducer from './loginReducer'
 import AcademyReducer from './AcademyReducer'
 import SwitchReducer from './switchReducer'
-// import MyOrderReducer from './myOrderReducer'
+import DashboardReducer from './dashboardReducer'
 // import CartReducer from './cartReducer'
 // import AddressReducer from './addressReducer'
 // import ShippingReducer from './shippingReducer'
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
      LoginReducer,
      AcademyReducer,
      SwitchReducer,
-    // MyOrderReducer,
+    DashboardReducer,
     // homeSliderReducer,
     // homeInstaReducer,
     // productListReducer,
