@@ -3,7 +3,7 @@ import React from 'react'
 import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,FlatList,ScrollView} from 'react-native';
 import {Card} from 'react-native-paper'
 import { Rating } from 'react-native-ratings';
-import {getData} from "../../components/auth";
+import {getData, storeData} from "../../components/auth";
 import {getPlayerSWitcher,getCoachSWitcher} from "../../redux/reducers/switchReducer";
 import { connect } from 'react-redux';
 
@@ -119,7 +119,10 @@ class  PlayerSwitcher extends React.Component {
         <TouchableOpacity onPress={() => {
 
             console.warn("Touch Press")
-
+            var tempuserData = this.state.userData;
+            tempuserData['academy_id'] = item.academy_id;
+            console.log('tempuserData',tempuserData)
+            storeData("userInfo", JSON.stringify(tempuserData))
             this.props.navigation.navigate('CHome')
 
         }}>
@@ -169,7 +172,12 @@ class  PlayerSwitcher extends React.Component {
 
             console.warn("Touch Press")
 
-             this.props.navigation.navigate('UHome')
+            var tempuserData = this.state.userData;
+             tempuserData['academy_id'] = item.academy_id;
+             console.log('tempuserData',tempuserData)
+            storeData("userInfo", JSON.stringify(tempuserData))
+            this.props.navigation.navigate('UHome')
+
 
         }}>
             <View style={{margin:10,marginTop:20,marginBottom:20}}><Text>{item.academy_name} </Text></View>
