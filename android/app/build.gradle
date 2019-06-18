@@ -107,6 +107,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+
+
     }
     splits {
         abi {
@@ -146,7 +149,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation "com.google.firebase:firebase-auth:+"
+    implementation "com.google.firebase:firebase-auth:17.0.0"
 }
 apply plugin: 'com.google.gms.google-services'
 

@@ -10,7 +10,9 @@ class CoachListing extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            coaches: []
+            coaches: [],
+            filter: [],
+            query: '',
         }
     }
 
@@ -23,7 +25,8 @@ class CoachListing extends Component {
                 let list = this.props.data.res.data.coaches
 
                 this.setState({
-                    coaches: list
+                    coaches: list,
+                    filter: list
                 })
             }
 
@@ -50,7 +53,17 @@ class CoachListing extends Component {
                         marginLeft: 8,
                         backgroundColor: 'white',
                         borderRadius: 16,
-                    }} placeholder="Search"></TextInput>
+                    }} placeholder="Search"
+                        onChangeText={text => {
+                            this.state.query = text
+                            console.warn(text)
+                            const data = this.find(this.state.query);
+                            this.state.filter = data;
+                            this.setState({
+                                filter: data
+                            })
+                        }}
+                    ></TextInput>
                 </Card>
 
                 <Text style={{
@@ -79,9 +92,11 @@ class CoachListing extends Component {
         >
             <View style={{}}>
 
-                <View style={{ paddingBottom: 8,paddingTop:8,
-                     paddingLeft:16,paddingRight:16, 
-                     flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                <View style={{
+                    paddingBottom: 8, paddingTop: 8,
+                    paddingLeft: 16, paddingRight: 16,
+                    flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                }}>
 
                     <Text style={{ color: '#707070' }}>
                         {item.name}
@@ -118,11 +133,11 @@ class CoachListing extends Component {
                         style={{
                             borderColor: '#D8D8D8',
                             borderRadius: 12,
-                            borderWidth:1,
-                            paddingLeft:4,
-                            paddingRight:4,
-                            paddingTop:2,
-                            paddingBottom:2,
+                            borderWidth: 1,
+                            paddingLeft: 4,
+                            paddingRight: 4,
+                            paddingTop: 2,
+                            paddingBottom: 2,
                             flexDirection: 'row'
                         }}>
 
@@ -135,7 +150,7 @@ class CoachListing extends Component {
                         }}>{item.ratings}</Text>
 
                         <Image
-                            style={{ width: 13, height: 13, marginLeft: 2, marginTop:2 }}
+                            style={{ width: 13, height: 13, marginLeft: 2, marginTop: 2 }}
                             source={require('../../images/single_star.png')}
                         >
 
@@ -150,6 +165,17 @@ class CoachListing extends Component {
 
     );
 
+    find(query) {
+        const { coaches } = this.state;
+
+        if (query === '') {
+            return coaches;
+        }
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        console.log('regex ', regex)
+        return coaches.filter(item => item.name.search(regex) >= 0);
+    }
+
     render() {
 
         if (this.props.data.loading) {
@@ -160,13 +186,14 @@ class CoachListing extends Component {
             )
         }
 
+
         return (
             <View style={styles.chartContainer}>
 
                 <FlatList
                     ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.coaches}
-                    extraData={this.state.coaches}
+                    data={this.state.filter}
+                    extraData={this.state.filter}
                     renderItem={this._renderItem}
                 />
 
