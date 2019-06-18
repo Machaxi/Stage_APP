@@ -18,9 +18,9 @@ class Splash extends React.Component {
     componentDidMount() {
 // this.props.navigation.navigate('Dashboard')
         var userData;
-        getData('userInfo', (value) => {
-            console.log("value", value)
-        })
+        // getData('userInfo', (value) => {
+        //     console.log("value", value)
+        // })
         isSignedIn()
             .then(res => {
                 console.log(res);
@@ -33,7 +33,7 @@ class Splash extends React.Component {
             const { checkedSignIn, signedIn } = this.state;
             console.log("signedIn", signedIn)
             if (!checkedSignIn) {
-                this.props.navigation.navigate('SignedOut')
+                this.props.navigation.navigate('Welcome')
                 return;
             }
             if (signedIn !== true) {

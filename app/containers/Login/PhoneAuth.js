@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image } from 'react-native';
 import { doLogin,doFBLogin } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
-import {getData, onSignOut, storeData} from '../../components/auth'
+import {getData, onSignOut, storeData,onSignIn} from '../../components/auth'
 
 import firebase from 'react-native-firebase';
 import {PARENT} from "../../components/Constants";
-import {GUEST,PLAYER } from "../../components/Constants";
+import {GUEST,PLAYER,COACH } from "../../components/Constants";
 
 const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803718_1280.png';
 
@@ -15,7 +15,7 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
         super(props);
         this.unsubscribe = null;
         this.state = {
-            user: null,
+            user1: null,
             message: '',
             codeInput: '',
             phoneNumber: '+91',
@@ -25,14 +25,15 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
     }
 
     componentDidMount() {
+      // this.signOut()
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.setState({ user: user.toJSON()});
+                this.setState({ user1: user.toJSON()});
 
             } else {
                 // User has been signed out, reset the state
                 this.setState({
-                    user: null,
+                    user1: null,
                     message: '',
                     codeInput: '',
                     phoneNumber: '+91',
@@ -41,13 +42,13 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
                 });
             }
         });
-        // firebase.auth().currentUser.getIdToken(true).then((token) => {
-        //     this.setState({
-        //         token:token,
-        //     },
-        //         console.log("token", token))
-        //    // this.signIn11(this.state.user)
-        // })
+        firebase.auth().currentUser.getIdToken(true).then((token) => {
+            // this.setState({
+            //     token:token,
+            // },
+              // console.log("token", token))
+           this.signIn11(this.state.user1,token)
+        })
 
 
     }
@@ -70,15 +71,15 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
 
         if (confirmResult && codeInput.length) {
             confirmResult.confirm(codeInput)
-                .then((user) => {
-                    console.log(user)
-                   // this.setState({ message: 'Code Confirmed!' });
+                .then((user1) => {
+                    console.log(user1)
+                    this.setState({ message: 'Code Confirmed!' });
                     firebase.auth().currentUser.getIdToken(true).then((token) => {
                         console.log("token", token)
                         this.setState({
                             token:token,
 
-                        },this.signIn11(this.state.user,token))
+                        },this.signIn11(this.state.user1,token))
 
                         if (!token) {
                             //Helpers.logout(false);
@@ -99,22 +100,27 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
 
     }
 
-     signIn11 = (user,token) => {
+     signIn11 = (user1,token) => {
 
 this.setState({
     isCall:false
 })
          var dataDic ={};
          var dict = {};
-         dict['phone_number'] = user.phoneNumber;
+         dict['phone_number'] = "+911111111111"//user.phoneNumber;
          dict['firebase_token'] = token;
          dict['device_type'] = "IOS";
          dict['app_version'] = '1.1.0';
          dict['fcm_token'] = 'xyzabcdcc';
+         dict['has_firebase_check'] = false;
+
+
 
          dataDic['data']= dict;
          console.log("dicttttc ",dict)
              this.props.doLogin(dataDic).then(() => {
+               //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
+                 //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
                  let user = JSON.stringify(this.props.data.user);
                  console.log(' user response payload ' + user);
                  let user1 = JSON.parse(user)
@@ -212,7 +218,7 @@ this.setState({
 
     renderMessage() {
         const { message } = this.state;
-
+console.warn("message",message)
         if (!message.length) return null;
 
         return (
@@ -241,42 +247,55 @@ this.setState({
     }
 
     render() {
-        const { user, confirmResult,token,isCall } = this.state;
+        const { user1, confirmResult,token,isCall } = this.state;
         return (
             <View style={{ flex: 1 }}>
 
-                {!user && !confirmResult && this.renderPhoneNumberInput()}
+                {!user1 && !confirmResult && this.renderPhoneNumberInput()}
 
                 {this.renderMessage()}
 
-                {!user && confirmResult && this.renderVerificationCodeInput()}
+                {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
-              {/*  {user && (
-                    <View
-                        style={{
-                            padding: 15,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: '#77dd77',
-                            flex: 1,
-                        }}
-                    >
-
-
-
-
-                        <Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />
-                        <Text style={{ fontSize: 25 }}>Signed In!</Text>
-                        <Text>{JSON.stringify(user)}</Text>
-                        <Button title="Sign Out" color="red" onPress={this.signOut} />
-                    </View>
-                )}*/}
+                {/*{user1 && (*/}
+                    {/*<View*/}
+                        {/*style={{*/}
+                            {/*padding: 15,*/}
+                            {/*justifyContent: 'center',*/}
+                            {/*alignItems: 'center',*/}
+                            {/*backgroundColor: '#77dd77',*/}
+                            {/*flex: 1,*/}
+                        {/*}}*/}
+                    {/*>*/}
 
 
 
 
+                        {/*<Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />*/}
+                        {/*<Text style={{ fontSize: 25 }}>Signed In!</Text>*/}
+                        {/*<Text>{JSON.stringify(user1)}</Text>*/}
+                        {/*<Button title="Sign Out" color="red" onPress={this.signOut} />*/}
+                    {/*</View>*/}
+                {/*)}*/}
 
-             {/*//   { (user  && token && isCall) ? this.signIn11(this.state.user):null }*/}
+
+
+
+
+               {/*{ (user && isCall) ? firebase.auth().currentUser.getIdToken(true).then((token) => {*/}
+                   {/*console.log("token", token)*/}
+                   {/*this.setState({*/}
+                       {/*token:token,*/}
+
+                   {/*},this.signIn11(user,token))*/}
+
+                   {/*if (!token) {*/}
+                       {/*//Helpers.logout(false);*/}
+                   {/*}*/}
+                   {/*else {*/}
+                       {/*// init rest of app, send user to primary navigation component, etc...*/}
+                   {/*}*/}
+               {/*}):null }*/}
 
             </View>
 

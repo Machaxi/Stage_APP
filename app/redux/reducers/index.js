@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import LoginReducer from './loginReducer'
 import AcademyReducer from './AcademyReducer'
-// import ProfileReducer from './userProfileReducer'
+import SwitchReducer from './switchReducer'
 // import MyOrderReducer from './myOrderReducer'
 // import CartReducer from './cartReducer'
 // import AddressReducer from './addressReducer'
@@ -16,8 +16,8 @@ import AcademyReducer from './AcademyReducer'
 
 const rootReducer = combineReducers({
      LoginReducer,
-     AcademyReducer
-    // ProfileReducer,
+     AcademyReducer,
+     SwitchReducer,
     // MyOrderReducer,
     // homeSliderReducer,
     // homeInstaReducer,

@@ -1,6 +1,10 @@
 export const DO_LOGIN = 'user/LOAD';
 export const DO_ADD_TO_CART = 'user/LOAD_START';
 
+export const GET_SWITCHING = 'user/LOAD';
+export const DO_SWITCHING_SUCCESS = 'user/LOAD_SUCCESS';
+export const DO_SWITCHING_FAIL = 'user/LOAD_FAIL';
+
 
 export const DO_ACADEMY_START = 'user/LOAD_START';
 export const DO_ACADEMY_SUCCESS = 'user/LOAD_SUCCESS';
@@ -9,6 +13,7 @@ export const DO_ACADEMY_FAIL = 'user/LOAD_FAIL';
 export const DO_LOGIN_START = 'user/LOAD_START';
 export const DO_LOGIN_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_LOGIN_FAIL = 'user/LOAD_FAIL';
+
 
 export const GET_PRODUCT = 'product/LOAD';
 export const GET_PRODUCT_SUCCESS = 'product/LOAD_SUCCESS';

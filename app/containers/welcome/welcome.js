@@ -3,7 +3,9 @@ import React from 'react'
 import { View, ImageBackground } from 'react-native'
 import { Button } from 'react-native-paper';
 import BaseComponent from '../BaseComponent';
-
+import firebase from "react-native-firebase";
+import {onSignOut} from "../../components/auth";
+//import firebase from 'react-native-firebase';
 class welcome extends BaseComponent {
 
     constructor(props) {
@@ -39,9 +41,15 @@ class welcome extends BaseComponent {
                         Register </Button>
                     <Button
                         uppercase={false}
-                        style={style.buttonStyleLogin} color="#ffffff" onPress={() => this.props.navigation.navigate('Login', {
+                        style={style.buttonStyleLogin} color="#ffffff" onPress={() => {
+
+                            // firebase.auth().signOut();
+                            // onSignOut()
+                            // removeItem()
+                            this.props.navigation.navigate('Login', {
                             isNormalFlow: true
-                        })}>
+                        })
+                    }}>
                         Login
                     </Button>
 

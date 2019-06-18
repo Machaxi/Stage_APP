@@ -1,5 +1,5 @@
 
-export const  GUEST =  '1';
-export const  PLAYER =  'GUEST';
+export const  GUEST =  'GUEST';
+export const  PLAYER =  'PLAYER';
 export const  PARENT =  'PARENT';
-export const COACH = 'COACH'
+export const COACH = 'COACH';

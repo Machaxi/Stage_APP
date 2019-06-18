@@ -12,8 +12,11 @@ export default function loginReducer(state = initialState, action) {
             return { ...state, loading: true };
         case types.DO_LOGIN_SUCCESS:
             console.log("sucesss",action.payload.data);
-            console.log("sucesss Paly",action.payload.headers['x-authorization']);
-            storeData('header',action.payload.headers['x-authorization'])
+          //  console.log("sucesss Paly",action.payload.headers['x-authorization']);
+            if(action.payload.headers['x-authorization']) {
+                console.log("sucesss Paly")
+                storeData('header', action.payload.headers['x-authorization']);
+            }
             return { ...state, loading: false, user: action.payload.data };
         case types.DO_LOGIN_FAIL:
             console.log("fails",action.payload);

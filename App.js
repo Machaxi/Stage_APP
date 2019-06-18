@@ -52,7 +52,7 @@ export default class App extends Component {
     return (
 
         <SafeAreaView forceInset={{ top: 'always' }} style={{ flex: 1, backgroundColor: "#e6e6e6"}}>
-            <StatusBar translucent={true} backgroundColor={'transparent'} />
+
             <PaperProvider theme={ModifiedDefaultTheme}>
 
                 <Provider store={store}>

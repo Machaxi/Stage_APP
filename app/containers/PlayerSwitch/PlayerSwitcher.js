@@ -1,79 +1,117 @@
 import React from 'react'
-import RNPickerSelect from 'react-native-picker-select';
-import * as Progress from 'react-native-progress';
 
 import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,FlatList,ScrollView} from 'react-native';
 import {Card} from 'react-native-paper'
 import { Rating } from 'react-native-ratings';
 import {getData} from "../../components/auth";
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import {getPlayerSWitcher,getCoachSWitcher} from "../../redux/reducers/switchReducer";
+import { connect } from 'react-redux';
 
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
 var deviceWidth = Dimensions.get('window').width -20;
-class  ParentHome extends React.Component {
+class  PlayerSwitcher extends React.Component {
 
     constructor(props) {
         super(props)
-        this.inputRefs = {
 
-            acedemic: null
-
-        };
         this.state = {
 
             userData:null,
-            country: undefined,
-            strenthList : [
-                {
-                    progress_parameter: 'India',
-                    id: '0',
-                    score:80,
-                },{
-                    progress_parameter: 'India1',
-                    id: '0',
-                    score:80,
-                },{
-                    progress_parameter: 'India1',
-                    id: '0',
-                    score:60,
-                }
-                ,{
-                    progress_parameter: 'India1',
-                    id: '0',
-                    score:60,
-                },{
-                    progress_parameter: 'India1',
-                    id: '0',
-                    score:60,
-                }]
+            itemList:null,
+
 
         }
     }
 
     componentDidMount(){
         var userData;
+
+        getData('header',(value)=>{
+            console.log("header",value);
+        });
+
+        console.log("PlayerSwitcher");
         getData('userInfo',(value) => {
-            userData: value,
+            userData = JSON.parse(value)
                 this.setState({
                     userData: JSON.parse(value)
                 });
+        console.log("userData.user",userData.user['user_type'])
+            if(userData.user['user_type'] =='PLAYER'){
+                this.getPlayerSwitchingData()
+
+            }else if(userData.user['user_type']=='PARENT'){
+                this.getParentSwitchingData();
+
+            }if(userData.user['user_type']=='COACH'){
+
+                this.getCoatchSwitchingData();
+            }
+
+
+
         });
 
-        const { navigation } = this.props;
-        const otherParam = navigation.getParam('userType');
+        // const { navigation } = this.props;
+        // const otherParam = navigation.getParam('userType');
 
     }
 
+    getPlayerSwitchingData()
+    {
+        console.log("hererererre");
+
+        getData('header',(value)=>{
+            console.log("header",value);
+            this.props.getPlayerSWitcher(value).then(() => {
+                // console.log(' user response payload ' + JSON.stringify(this.props.data));
+                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                let user = JSON.stringify(this.props.data.switherlist);
+                console.log(' user response payload ' + user);
+                 let user1 = JSON.parse(user)
+
+                if(user1.success == true){
+                     this.setState({
+                         itemList:user1.data['players']
+                     })
+                }
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
+
+        });
+
+    }
+    getParentSwitchingData()
+    {
+
+    }
+    getCoatchSwitchingData()
+    {
+
+        getData('header',(value)=>{
+            console.log("header",value);
+            this.props.getCoachSWitcher(value).then(() => {
+                // console.log(' user response payload ' + JSON.stringify(this.props.data));
+                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                let user = JSON.stringify(this.props.data.switherlist);
+                console.log(' user response payload ' + user);
+                let user1 = JSON.parse(user)
+
+                if(user1.success == true){
+                    this.setState({
+                        itemList:user1.data['academies']
+                    })
+                }
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
+
+        });
+    }
 
 
     renderItemAcedemic = ({ item }) => (
@@ -82,12 +120,12 @@ class  ParentHome extends React.Component {
 
             console.warn("Touch Press")
 
-            this.props.navigation.navigate('UHome')
+            this.props.navigation.navigate('CHome')
 
         }}>
 
             <View style={{margin:10,marginTop:20,marginBottom:10}}>
-                <Text style={{fontSize:16}}> Acedmic Page </Text>
+                <Text style={{fontSize:16}}> {item.academy_name}</Text>
             </View>
             <View style={{ paddingLeft: 12, paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
@@ -106,7 +144,7 @@ class  ParentHome extends React.Component {
                     color: '#707070',
                     paddingTop:2,
                     borderRadius: 12,
-                }}>4.5</Text>
+                }}>{item.academy_rating}</Text>
 
             </View>
 
@@ -115,14 +153,17 @@ class  ParentHome extends React.Component {
                 <View style={{ margin: 5}}>
                     <Text style={{fontSize:10,marginRight: 20}}>Next Session</Text>
 
-                    <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>Wensday 12 April’19</Text>
-                    <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>09:30 PM   -   10:30 PM</Text>
+                    <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>{item.next_session.next_sessions[0].session_date}</Text>
+                    <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>{item.next_session.next_sessions[0].start_time + "  -   " + item.next_session.next_sessions[0].end_time}</Text>
                 </View>
 
             </View>
         </TouchableOpacity>
     </Card>);
     renderItem = ({ item }) => (
+
+
+
         <Card style={{marginTop:20,borderRadius:10}}>
         <TouchableOpacity onPress={() => {
 
@@ -131,124 +172,124 @@ class  ParentHome extends React.Component {
              this.props.navigation.navigate('UHome')
 
         }}>
-            <View style={{margin:10,marginTop:20,marginBottom:20}}><Text>{item.progress_parameter} </Text></View>
-            <View style={{width: '100%', height: 300,}}>
+            <View style={{margin:10,marginTop:20,marginBottom:20}}><Text>{item.academy_name} </Text></View>
+            <View style={{width: '100%',marginTop:0, height: 300,}}>
                 <ImageBackground
                     source={require('../../images/RectangleImg.png')}
                     style={{
                         width: '100%',
-                        height: '100%',
+                        height: '100%',borderRadius:20
                     }}>
-                     <View style={{marginTop:20,flex:1,height: '100%'}}>
+                    <View style={{marginTop:20,flex:1,height: '100%'}}>
 
-                    <View style={{position: 'relative'}}>
-                        <View style={{flexDirection: 'row'}}>
-                            <Image source={require('../../images/playerimg.png')}
-                                   style={{
-                                       width: 201,
-                                       height: 238, marginRight: 20, marginTop: 0, display: 'flex'
-                                   }}>
-
-                            </Image>
-                            <View style={{display: 'flex', flex: 1, marginBottom: 100}}>
-                                <Text style={{
-                                    color: 'white',
-                                    marginRight: 20,
-                                    textAlign: 'center', fontSize: 26, fontWeight: 'bold'
-                                }}>Niranjan K</Text>
-                                <Image source={require('../../images/Rank.png')}
+                        <View style={{position: 'relative'}}>
+                            <View style={{flexDirection: 'row'}}>
+                                <Image source={require('../../images/playerimg.png')}
                                        style={{
-                                           width: 119,
-                                           height: 84,
-                                           alignItems: 'center',
-                                           display: 'flex',
-                                           marginBottom: 20,
-                                           marginTop: 20
+                                           width: 201,
+                                           height: 238, marginRight: 20, marginTop: 0, display: 'flex'
                                        }}>
 
                                 </Image>
-                                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                                <View style={{display: 'flex', flex: 1, marginBottom: 100}}>
                                     <Text style={{
                                         color: 'white',
-                                        marginRight: 10,
-                                        textAlign: 'center',
-                                        fontSize: 12,
-                                        fontWeight: 'bold'
-                                    }}>State Player</Text>
-                                    <View
-                                        style={{backgroundColor: 'red', width: 60, marginRight: 20, marginTop: -5}}>
+                                        marginRight: 0,
+                                        textAlign: 'center', fontSize: 22, fontWeight: 'bold'
+                                    }}>{item.name}</Text>
+                                    <Image source={require('../../images/Rank.png')}
+                                           style={{
+                                               width: 119,
+                                               height: 84,
+                                               alignItems: 'center',
+                                               display: 'flex',
+                                               marginBottom: 20,
+                                               marginTop: 20
+                                           }}>
+
+                                    </Image>
+                                    <View style={{flexDirection: 'row', marginBottom: 10}}>
                                         <Text style={{
                                             color: 'white',
-                                            marginRight: 0,
+                                            marginRight: 10,
                                             textAlign: 'center',
                                             fontSize: 12,
-                                            fontWeight: 'bold',
-                                            marginTop: 5,
-                                            marginBottom: 5
-                                        }}> U-13 </Text>
+                                            fontWeight: 'bold'
+                                        }}>{item.player_level}</Text>
+                                        <View
+                                            style={{backgroundColor: 'red', width: 60, marginRight: 20, marginTop: -5}}>
+                                            <Text style={{
+                                                color: 'white',
+                                                marginRight: 0,
+                                                textAlign: 'center',
+                                                fontSize: 12,
+                                                fontWeight: 'bold',
+                                                marginTop: 5,
+                                                marginBottom: 5
+                                            }}>{item.player_category} </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-                        </View>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            position: 'absolute',
-                            bottom: 20,
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            selfAlign: 'center'
-                        }}>
-                            {console.log("width", deviceWidth / 3)}
                             <View style={{
-                                width: deviceWidth / 3,
-                                height: 80, marginLeft: 10
+                                flex: 1,
+                                flexDirection: 'row',
+                                position: 'absolute',
+                                bottom: 20,
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                selfAlign: 'center'
                             }}>
+                                {console.log("width", deviceWidth / 3)}
+                                <View style={{
+                                    width: deviceWidth / 3,
+                                    height: 80, marginLeft: 10
+                                }}>
 
+                                    <ImageBackground source={require('../../images/box.png')}
+                                                     style={{
+                                                         width: '100%',
+                                                         height: 80,
+                                                     }}>
+
+                                        <Text style={{margin: 15, color: 'white'}}>Rank</Text>
+                                        { item.rank ? <Text style={styles.scoreBox}>{item.rank }</Text>  : <Text style={styles.scoreBox}>00</Text>}
+
+
+                                    </ImageBackground>
+
+                                </View>
                                 <ImageBackground source={require('../../images/box.png')}
                                                  style={{
-                                                     width: '100%',
+                                                     width: deviceWidth / 3,
                                                      height: 80,
                                                  }}>
-
-                                    <Text style={{margin: 15, color: 'white'}}>Reward</Text>
-                                    <Text style={styles.scoreBox}>00</Text>
-
+                                    <Text style={{margin: 15, color: 'white'}}>Score</Text>
+                                    <Text style={styles.scoreBox}>{item.score}</Text>
 
                                 </ImageBackground>
+                                <View style={{
+                                    width: deviceWidth / 3,
+                                    height: 80, marginRight: 0
+                                }}>
+                                    <ImageBackground source={require('../../images/box.png')}
+                                                     style={{
+                                                         width: '100%',
+                                                         height: 80,
+                                                     }}>
+
+                                        <Text style={{margin: 15, color: 'white'}}>Reward</Text>
+                                        <Text style={styles.scoreBox}>{item.reward_point}</Text>
+
+
+                                    </ImageBackground>
+
+                                </View>
+
 
                             </View>
-                            <ImageBackground source={require('../../images/box.png')}
-                                             style={{
-                                                 width: deviceWidth / 3,
-                                                 height: 80,
-                                             }}>
-                                <Text style={{margin: 15, color: 'white'}}>Score</Text>
-                                <Text style={styles.scoreBox}>00</Text>
-
-                            </ImageBackground>
-                            <View style={{
-                                width: deviceWidth / 3,
-                                height: 80, marginRight: 0
-                            }}>
-                                <ImageBackground source={require('../../images/box.png')}
-                                                 style={{
-                                                     width: '100%',
-                                                     height: 80,
-                                                 }}>
-
-                                    <Text style={{margin: 15, color: 'white'}}>Reward</Text>
-                                    <Text style={styles.scoreBox}>00</Text>
-
-
-                                </ImageBackground>
-
-                            </View>
-
 
                         </View>
-
-                    </View>
                     </View>
                 </ImageBackground>
 
@@ -256,17 +297,17 @@ class  ParentHome extends React.Component {
             <View style={{margin: 10,height:80,flexDirection:'row'}}>
 
 
-                    <View style={{margin: 5}}>
-                        <Text style={{fontSize:10}}>Attendance</Text>
-                        <Text style={{fontSize:14,marginTop:10}}>80%(JUL)</Text>
-                    </View>
-                    <View style={{width: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                <View style={{margin: 5}}>
+                    <Text style={{fontSize:10}}>Attendance</Text>
+                    <Text style={{fontSize:14,marginTop:10}}>{item.operations.attendance['attendance'] +'%'+ '(' + item.operations.attendance.month + ')' }</Text>
+                </View>
+                <View style={{width: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
                 <View style={{ margin: 5}}>
                     <Text style={{fontSize:10,marginRight: 20}}>Next Session</Text>
 
-                        <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>Fitness</Text>
-                        <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>Fitness</Text>
-                    </View>
+                    <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>{item.operations.next_sessions[0].session_date}</Text>
+                    <Text style={{marginRight: 20,fontSize:14,marginTop:10}}>{item.operations.next_sessions[0].start_time + "  -   " + item.operations.next_sessions[0].end_time}</Text>
+                </View>
 
             </View>
         </TouchableOpacity>
@@ -285,14 +326,14 @@ class  ParentHome extends React.Component {
         return  <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
             { userData ? <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
 
-                { (otherParam == 'PLAYER' || otherParam == 'PARENT' ) ? null :  <View style={{marginTop:15,marginBottom:0,flex:1,alignItems:'center'}}><Text>Select Academy</Text></View> }
+                { ( userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') ? null :  <View style={{marginTop:15,marginBottom:0,flex:1,alignItems:'center'}}><Text>Select Academy</Text></View> }
 
            <View>
 
 
                         <FlatList
-                            data={this.state.strenthList}
-                            renderItem={(otherParam == 'PLAYER' || otherParam == 'PARENT' ) ? this.renderItem : this.renderItemAcedemic}
+                            data={this.state.itemList}
+                            renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT' ) ? this.renderItem : this.renderItemAcedemic}
                             keyExtractor={(item, index) => item.id}
                         />
            </View>
@@ -433,7 +474,17 @@ class  ParentHome extends React.Component {
         </View>
     }
 }
-export default ParentHome;
+
+const mapStateToProps = state => {
+    return {
+        data: state.SwitchReducer,
+    };
+};
+const mapDispatchToProps = {
+    getPlayerSWitcher,getCoachSWitcher
+};
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerSwitcher);
+
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
