@@ -277,7 +277,7 @@ const coachHomeModule = createStackNavigator({
     CoachHome: {
         screen: coachhome,
         navigationOptions: {
-            title: "Sign In",
+            title: "Dribble",
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
