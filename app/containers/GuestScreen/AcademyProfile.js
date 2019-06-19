@@ -278,11 +278,11 @@ class AcademyProfile extends Component {
                                 alignItems: 'center',
                             }}>
 
-                                {/* <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
+                                <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
                                     source={require('../../images/best_player_temp.png')}
                                 >
-                                </Image> */}
-                                {this._renderPlayerItem(academy.top_player)}
+                                </Image>
+                                {/* {this._renderPlayerItem(academy.top_player)} */}
 
 
                             </View>
