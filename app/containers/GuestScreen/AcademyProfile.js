@@ -6,8 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 
 import { getAcademyDetail } from '../../redux/reducers/AcademyReducer'
+import BaseComponent from '../BaseComponent';
 
-class AcademyProfile extends Component {
+class AcademyProfile extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -21,7 +22,7 @@ class AcademyProfile extends Component {
     componentDidMount() {
 
         this.props.getAcademyDetail(this.state.id).then(() => {
-            console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
                 let academy = this.props.data.res.data.academy
@@ -36,8 +37,71 @@ class AcademyProfile extends Component {
         })
     }
 
-    _renderPlayerItem = ({ item }) =>
-        (
+    _renderRatingItem = ({ item }) => (
+
+        <View
+            style={{ margin: 12 }}
+        >
+
+            <View style={{
+                flexDirection: 'row',
+                flex: 1,
+                justifyContent: 'space-between',
+
+            }}>
+
+                <Text
+                    style={{ color: '#707070', fontSize: 14, flex: 1 }}
+                >
+                    {item.name}
+                </Text>
+
+
+                <View style={{
+                    flexDirection: 'row',
+
+                }}>
+
+                    <Rating
+                        type='custom'
+                        ratingColor='#F4FC9A'
+                        ratingBackgroundColor='#D7D7D7'
+                        ratingCount={5}
+                        imageSize={14}
+                        readonly={true}
+                        startingValue={item.ratings}
+                        style={{ height: 30, width: 80 }}
+                    />
+
+                    <Text style={{
+                        backgroundColor: '#D6D6D6', height: 19,
+                        width: 30,
+                        textAlign: 'center',
+                        fontSize: 12,
+                        paddingTop: 2,
+                        color: '#707070',
+                        borderRadius: 12,
+                    }}>{item.ratings}</Text>
+
+                </View>
+
+            </View>
+
+            <Text style={{
+                fontSize: 12,
+                color: '#707070',
+            }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</Text>
+
+        </View>
+
+
+
+    );
+
+
+    _renderPlayerItem(top_player) {
+
+        return (
 
             <View style={{ overflow: 'hidden', height: 190, width: 120, paddingRight: 4 }}>
 
@@ -45,7 +109,7 @@ class AcademyProfile extends Component {
                     source={require('../../images/batch_card.png')}
                 >
                     <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
-                    <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{item.score}</Text>
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{top_player.score}</Text>
 
                     <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
@@ -64,7 +128,7 @@ class AcademyProfile extends Component {
                                 fontSize: 8,
                                 paddingTop: 1
                             }}
-                        >U-13</Text>
+                        >{top_player.player_category}</Text>
                         <Image
                             style={{
                                 height: 80, width: 50,
@@ -84,7 +148,7 @@ class AcademyProfile extends Component {
                                 marginLeft: 4,
                                 marginTop: 16,
                             }}
-                        >State{"\n"}Player</Text>
+                        >{top_player.player_level.split(" ").join("\n")}</Text>
                     </View>
 
                     <View style={{
@@ -99,7 +163,7 @@ class AcademyProfile extends Component {
                             fontWeight: 16,
                             fontWeight: '500',
                             textAlign: 'center'
-                        }}>{item.name}</Text>
+                        }}>{top_player.name}</Text>
                     </View>
 
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
@@ -111,7 +175,6 @@ class AcademyProfile extends Component {
                             }}
                             source={require('../../images/batch_pink.png')}>
 
-
                             <View style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -121,7 +184,7 @@ class AcademyProfile extends Component {
                                 <Image style={{ height: 7, width: 12, marginLeft: -12 }}
                                     source={require('../../images/left_batch_arrow.png')}></Image>
 
-                                <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>GOODLIKE</Text>
+                                <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{top_player.badge}</Text>
                                 <Image style={{ height: 7, width: 12, marginRight: -12 }}
                                     source={require('../../images/right_batch_arrow.png')}></Image>
 
@@ -130,14 +193,13 @@ class AcademyProfile extends Component {
 
 
 
-
                     </View>
 
                 </ImageBackground>
 
-            </View>
+            </View>)
 
-        );
+    }
 
 
     render() {
@@ -152,6 +214,7 @@ class AcademyProfile extends Component {
 
 
         const academy = this.state.academy
+        const academy_reviews = this.state.academy.academy_reviews
         return (
 
             <ScrollView style={styles.chartContainer}>
@@ -182,6 +245,7 @@ class AcademyProfile extends Component {
                                     ratingCount={5}
                                     imageSize={14}
                                     readonly={true}
+                                    startingValue={academy.ratings}
                                     style={{ height: 30, width: 80 }}
                                 />
 
@@ -278,11 +342,11 @@ class AcademyProfile extends Component {
                                 alignItems: 'center',
                             }}>
 
-                                <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
+                                {/* <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
                                     source={require('../../images/best_player_temp.png')}
                                 >
-                                </Image>
-                                {/* {this._renderPlayerItem(academy.top_player)} */}
+                                </Image> */}
+                                {this._renderPlayerItem(academy.top_player)}
 
 
                             </View>
@@ -293,7 +357,7 @@ class AcademyProfile extends Component {
                     <TouchableOpacity
                         activeOpacity={.8}
                         onPress={() => {
-                            this.props.navigation.navigate('PlayersListing')
+                            this.props.navigation.navigate('PlayersListing', { id: academy.id })
                         }}
                     >
                         <Card
@@ -309,7 +373,6 @@ class AcademyProfile extends Component {
 
                         </Card>
                     </TouchableOpacity>
-
 
                     <TouchableOpacity
                         activeOpacity={.8}
@@ -332,7 +395,6 @@ class AcademyProfile extends Component {
                         </Card>
                     </TouchableOpacity>
 
-
                     <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
 
                         <Text
@@ -343,6 +405,57 @@ class AcademyProfile extends Component {
 
                     </View>
 
+                    <Card
+                        style={{
+                            elevation: 2,
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                            marginTop: 10,
+                        }}
+                    >
+                        <View
+                            style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
+                        >
+
+                            <View style={{
+
+                                flexDirection: 'row',
+                                flex: 1,
+                                justifyContent: 'space-between',
+                            }}>
+                                <Text
+                                    style={{ fontSize: 14, color: '#707070' }}
+                                >
+                                    Reviews ({academy_reviews.length})
+                            </Text>
+
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text
+                                        style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
+                                    >Latest</Text>
+                                    <Image
+                                        style={{ width: 24, height: 15, }}
+                                        source={require('../../images/filter_rating.png')}
+                                    ></Image>
+
+                                </View>
+
+                            </View>
+
+                            <View
+                                style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
+                            ></View>
+
+
+                        </View>
+
+                        <FlatList
+                            extraData={academy_reviews}
+                            data={academy_reviews}
+                            renderItem={this._renderRatingItem}
+                        />
+
+                    </Card>
 
                 </View>
             </ScrollView>

@@ -4,8 +4,9 @@ import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { coachListing } from '../../redux/reducers/AcademyReducer'
+import BaseComponent from '../BaseComponent';
 
-class CoachListing extends Component {
+class CoachListing extends BaseComponent {
 
     constructor(props) {
         super(props)

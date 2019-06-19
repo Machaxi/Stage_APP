@@ -48,9 +48,17 @@ export function getAcademyDetail(id) {
             }
         }
     };
+}
 
-
-
+export function getAcademyPlayersList(id) {
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `global/academy/${id}/players`
+            }
+        }
+    };
 }
 
 export function search(search_query, locality_id) {
