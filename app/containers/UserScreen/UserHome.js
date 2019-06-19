@@ -159,7 +159,65 @@ class  UserHome extends React.Component {
         }
         if (this.state.player_profile) {
             const {name,academy_name,badge,rank,score,player_level,reward_point,player_category } = this.state.player_profile
-            const {routine_name,session_date,is_canceled,end_time,start_time } = this.state.player_profile.operations.next_sessions[0]
+            sessionArray = [];
+            for (let i = 0; i < operations.next_sessions.length; i++)
+            {
+                const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
+
+                if( is_canceled == true ){
+                    sessionArray.push(
+                        <View>
+                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                                <Text style={{
+                                    margin: 10, textDecorationLine: 'line-through'
+                                }}>{routine_name}</Text>
+                                <View style={{backgroundColor:'#FF7373',margin:0,borderRadius:10}}>
+                                    <Text style={{
+                                        margin: 10,color:'white'
+                                    }}>Canceled</Text>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', margin: 10}}>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+                                    textDecorationLine: 'line-through'
+                                }}>{session_date}</Text>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+                                    textDecorationLine: 'line-through'
+                                }}>{start_time + "  -   " + end_time}</Text>
+
+                            </View>
+
+                        </View>
+                    );
+                }else{
+                    sessionArray.push(
+                        <View>
+
+                            <Text style={{
+                                margin: 10,
+                            }}>{routine_name}</Text>
+                            <View style={{flexDirection: 'row', margin: 10}}>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+
+                                }}>{session_date}</Text>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+
+                                }}>{start_time + "  -   " + end_time}</Text>
+
+                            </View>
+
+                        </View>
+                    );
+                }
+            }
 
             return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                 <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
@@ -331,14 +389,7 @@ class  UserHome extends React.Component {
                             </View>
                             <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
-                            <Text style={{
-                                margin: 10
-                            }}>{routine_name}</Text>
-                            <View style={{flexDirection: 'row', margin: 10}}>
-                                <Text style={{marginRight: 20,fontSize:14,}}>{session_date}</Text>
-                                <Text style={{marginRight: 20,fontSize:14}}>{start_time + "  -   " + end_time}</Text>
-
-                            </View>
+                            {sessionArray}
                         </CustomeCard>
                     </View>
 

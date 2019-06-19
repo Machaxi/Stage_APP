@@ -99,9 +99,100 @@ class  CoachHome extends React.Component {
             )
         }
         if (this.state.coach_profile) {
-            const {name, academy_name, badge, rank, score, player_level, reward_point, player_category} = this.state.coach_profile
-            //const {routine_name, session_date, is_canceled, end_time, start_time} = this.state.player_profile.operations.next_sessions[0]
+            const {is_attandence_due, is_performance_due, is_reward_point_due, is_scorer,operations,tournaments,attandence_batch} = this.state.coach_profile
+            const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
+            const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 
+            attendenceArray = [];
+            for (let i = 0; i < attandence_batch.length; i++)
+            {
+                const {routine_name, batch_name, batch_category,batch_id,session} = this.state.coach_profile.attandence_batch[i]
+                const {is_canceled, end_time,session_date, start_time} = session
+
+                attendenceArray.push(
+                    <View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={{
+                margin: 10, fontSize: 14, fontWeight: 'bold'
+            }}>{batch_name +' : ' + routine_name}</Text>
+            <Text style={{
+                margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
+            }}>{batch_category}</Text>
+            </View>
+
+                        { is_canceled ?  <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
+                    <Text style={{marginRight: 20, fontSize: 14,textDecorationLine: 'line-through'}}>{session_date}</Text>
+                    <Text style={{fontSize: 14,textDecorationLine: 'line-through'}}>{start_time + "  -   " + end_time}</Text>
+                </View> : <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
+                            <Text style={{marginRight: 20, fontSize: 14}}>{session_date}</Text>
+                            <Text style={{fontSize: 14}}>{start_time + "  -   " + end_time}</Text>
+                        </View> }
+
+
+                    </View>
+            );
+            }
+
+            sessionArray = [];
+            for (let i = 0; i < operations.next_sessions.length; i++)
+            {
+                const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
+                console.log("is_canceled",{is_canceled})
+                if( is_canceled == true ){
+                    sessionArray.push(
+                        <View>
+                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                                <Text style={{
+                                    margin: 10, textDecorationLine: 'line-through'
+                                }}>{routine_name}</Text>
+                                <View style={{backgroundColor:'#FF7373',margin:0,borderRadius:10}}>
+                                    <Text style={{
+                                        margin: 10,color:'white'
+                                    }}>Canceled</Text>
+                                </View>
+                            </View>
+
+                            <View style={{flexDirection: 'row', margin: 10}}>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+                                    textDecorationLine: 'line-through'
+                                }}>{session_date}</Text>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+                                    textDecorationLine: 'line-through'
+                                }}>{start_time + "  -   " + end_time}</Text>
+
+                            </View>
+
+                        </View>
+                    );
+                }else{
+                    sessionArray.push(
+                        <View>
+
+                            <Text style={{
+                                margin: 10,
+                            }}>{routine_name}</Text>
+                            <View style={{flexDirection: 'row', margin: 10}}>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+
+                                }}>{session_date}</Text>
+                                <Text style={{
+                                    marginRight: 20,
+                                    fontSize: 14,
+
+                                }}>{start_time + "  -   " + end_time}</Text>
+
+                            </View>
+
+                        </View>
+                    );
+                }
+            }
             return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                 <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                     <View style={{margin: 10, marginTop: 20}}>
@@ -113,22 +204,22 @@ class  CoachHome extends React.Component {
                         </SwitchButton>
                     </View>
                     <CustomeCard>
-                        <View style={{margin: 10, marginTop: 20}}>
+                        <View style={{margin: 10, marginTop: 20,flexDirection:'row'}}>
                             <Text>Attendance</Text>
+                            {is_attandence_due ? <View
+                                style={{backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5}}>
+                                <Text style={{
+                                    margin: 5,
+                                    fontSize: 10,
+                                    color: 'white',
+                                    marginRight: 10,
+                                    marginLeft: 10,
+                                }}>Due</Text>
+                            </View> :null}
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={{
-                                margin: 10, fontSize: 14, fontWeight: 'bold'
-                            }}>Batch 1 : Fitness</Text>
-                            <Text style={{
-                                margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
-                            }}>U-13</Text>
-                        </View>
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>Wensday 12 April’19</Text>
-                            <Text style={{fontSize: 14}}>09:30 PM - 10:30 PM</Text>
-                        </View>
+
+                        {attendenceArray}
                         <CustomeButtonB onPress={() => console.log("title")}>
                             Mark Attendance</CustomeButtonB>
                     </CustomeCard>
@@ -138,21 +229,15 @@ class  CoachHome extends React.Component {
                         <View
                             style={{margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text>Next Session:</Text>
-                            <Text style={{color: '#667DDB'}}>Attendance - 80% (Jul)</Text>
+                            <Text style={{color: '#667DDB'}}>{'Attendance  - '+ operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                        {sessionArray}
 
-                        <Text style={{
-                            margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>Fitness</Text>
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>Wensday 12 April’19</Text>
-                            <Text style={{marginRight: 20, fontSize: 14,}}>09:30 PM - 10:30 PM</Text>
-                        </View>
                     </CustomeCard>
 
 
-                    <CustomeCard>
+                    {is_performance_due ? <CustomeCard>
                         <View style={{margin: 10, marginTop: 20, flexDirection: 'row'}}>
                             <Text>Update Player Performance</Text>
                             <View
@@ -175,10 +260,10 @@ class  CoachHome extends React.Component {
                         </View>
                         <CustomeButtonB onPress={() => console.log("title")}>
                             Mark Attendance</CustomeButtonB>
-                    </CustomeCard>
+                    </CustomeCard>:null}
 
 
-                    <CustomeCard>
+                    {is_scorer ? <CustomeCard>
                         <View
                             style={{margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text>Scorer</Text>
@@ -188,16 +273,16 @@ class  CoachHome extends React.Component {
 
                         <Text style={{
                             margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>Feather academy tournament</Text>
+                        }}>{tournaments[0].name}</Text>
                         <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>10 - 12th May 19</Text>
-                            <Text style={{marginRight: 20, fontSize: 14,}}>09:30 AM - 04:30 PM</Text>
+                            <Text style={{marginRight: 20, fontSize: 14}}>{tournaments[0].start_date + ' - ' + tournaments[0].end_date}</Text>
+                            <Text style={{marginRight: 20, fontSize: 14,}}>{tournaments[0].start_time + ' - ' + tournaments[0].end_time}</Text>
                         </View>
                         <CustomeButtonB onPress={() => console.log("title")}>
                             View Fixtures</CustomeButtonB>
-                    </CustomeCard>
+                    </CustomeCard>:null}
 
-                    <CustomeCard>
+                    {is_reward_point_due ?  <CustomeCard>
                         <View style={{margin: 10, marginTop: 20, flexDirection: 'row'}}>
                             <Text>Reward Point</Text>
                             <View
@@ -219,7 +304,7 @@ class  CoachHome extends React.Component {
                         </View>
                         <CustomeButtonB onPress={() => console.log("title")}>
                             Reward Players</CustomeButtonB>
-                    </CustomeCard>
+                    </CustomeCard>:null}
 
                     <View style={{margin: 5}}>
                         <Card style={{margin: 5, borderRadius: 10}}>

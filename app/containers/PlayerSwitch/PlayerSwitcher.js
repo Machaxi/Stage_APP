@@ -39,8 +39,8 @@ class  PlayerSwitcher extends React.Component {
             if(userData.user['user_type'] =='PLAYER'){
                 this.getPlayerSwitchingData()
 
-            }else if(userData.user['user_type']=='PARENT'){
-                this.getParentSwitchingData();
+            }else if(userData.user['user_type']=='FAMILY'){
+                this.getPlayerSwitchingData()
 
             }if(userData.user['user_type']=='COACH'){
 
@@ -83,10 +83,7 @@ class  PlayerSwitcher extends React.Component {
         });
 
     }
-    getParentSwitchingData()
-    {
 
-    }
     getCoatchSwitchingData()
     {
 
@@ -174,9 +171,15 @@ class  PlayerSwitcher extends React.Component {
 
             var tempuserData = this.state.userData;
              tempuserData['academy_id'] = item.academy_id;
+             tempuserData['player_id'] = item.id;
              console.log('tempuserData',tempuserData)
             storeData("userInfo", JSON.stringify(tempuserData))
-            this.props.navigation.navigate('UHome')
+
+            if(tempuserData.user['user_type']=='PLAYER'){
+            this.props.navigation.navigate('UHome')}else
+            {
+                this.props.navigation.navigate('PHome')
+            }
 
 
         }}>
@@ -334,14 +337,14 @@ class  PlayerSwitcher extends React.Component {
         return  <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
             { userData ? <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
 
-                { ( userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') ? null :  <View style={{marginTop:15,marginBottom:0,flex:1,alignItems:'center'}}><Text>Select Academy</Text></View> }
+                { ( userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? null :  <View style={{marginTop:15,marginBottom:0,flex:1,alignItems:'center'}}><Text>Select Academy</Text></View> }
 
            <View>
 
 
                         <FlatList
                             data={this.state.itemList}
-                            renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT' ) ? this.renderItem : this.renderItemAcedemic}
+                            renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY' ) ? this.renderItem : this.renderItemAcedemic}
                             keyExtractor={(item, index) => item.id}
                         />
            </View>
