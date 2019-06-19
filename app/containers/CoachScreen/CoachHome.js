@@ -90,6 +90,131 @@ class  CoachHome extends React.Component {
         });
 
     }
+
+    attedenceMangement(attandence_batch)
+    {
+
+        attendenceArray = [];
+        for (let i = 0; i < attandence_batch.length; i++)
+        {
+            const {routine_name, batch_name, batch_category,batch_id,session} = this.state.coach_profile.attandence_batch[i]
+            const {is_canceled, end_time,session_date, start_time} = session
+
+            attendenceArray.push(
+                <View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{
+                            margin: 10, fontSize: 14, fontWeight: 'bold'
+                        }}>{batch_name +' : ' + routine_name}</Text>
+                        <Text style={{
+                            margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
+                        }}>{batch_category}</Text>
+                    </View>
+
+                    { is_canceled ?  <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
+                        <Text style={{marginRight: 20, fontSize: 14,textDecorationLine: 'line-through'}}>{session_date}</Text>
+                        <Text style={{fontSize: 14,textDecorationLine: 'line-through'}}>{start_time + "  -   " + end_time}</Text>
+                    </View> : <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
+                        <Text style={{marginRight: 20, fontSize: 14}}>{session_date}</Text>
+                        <Text style={{fontSize: 14}}>{start_time + "  -   " + end_time}</Text>
+                    </View> }
+
+
+                </View>
+            );
+        }
+    }
+
+    sessionMangement(operations)
+    {
+
+        sessionArray = [];
+        for (let i = 0; i < operations.next_sessions.length; i++)
+        {
+            const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
+            console.log("is_canceled",{is_canceled})
+            if( is_canceled == true ){
+                sessionArray.push(
+                    <View>
+                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                            <Text style={{
+                                margin: 10, textDecorationLine: 'line-through'
+                            }}>{routine_name}</Text>
+                            <View style={{backgroundColor:'#FF7373',margin:0,borderRadius:10}}>
+                                <Text style={{
+                                    margin: 10,color:'white'
+                                }}>Canceled</Text>
+                            </View>
+                        </View>
+
+                        <View style={{flexDirection: 'row', margin: 10}}>
+                            <Text style={{
+                                marginRight: 20,
+                                fontSize: 14,
+                                textDecorationLine: 'line-through'
+                            }}>{session_date}</Text>
+                            <Text style={{
+                                marginRight: 20,
+                                fontSize: 14,
+                                textDecorationLine: 'line-through'
+                            }}>{start_time + "  -   " + end_time}</Text>
+
+                        </View>
+
+                    </View>
+                );
+            }else{
+                sessionArray.push(
+                    <View>
+
+                        <Text style={{
+                            margin: 10,
+                        }}>{routine_name}</Text>
+                        <View style={{flexDirection: 'row', margin: 10}}>
+                            <Text style={{
+                                marginRight: 20,
+                                fontSize: 14,
+
+                            }}>{session_date}</Text>
+                            <Text style={{
+                                marginRight: 20,
+                                fontSize: 14,
+
+                            }}>{start_time + "  -   " + end_time}</Text>
+
+                        </View>
+
+                    </View>
+                );
+            }
+        }
+    }
+
+    scoreMangement(tournaments)
+    {
+
+        scoreArray = [];
+        for (let i = 0; i < tournaments.length; i++)
+        {
+            const {name,start_date,end_date,is_canceled,end_time,start_time } = tournaments[i]
+            console.log("is_canceled",{is_canceled})
+
+                scoreArray.push(
+                    <View>
+                        <Text style={{
+                            margin: 10, fontSize: 14, fontWeight: 'bold'
+                        }}>{name}</Text>
+                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
+                            <Text style={{marginRight: 20, fontSize: 14}}>{start_date + ' - ' + end_date}</Text>
+                            <Text style={{marginRight: 20, fontSize: 14,}}>{start_time + ' - ' + end_time}</Text>
+                        </View>
+
+                    </View>
+                );
+
+        }
+    }
+
     render() {
         if (this.props.data.loading && !this.state.player_profile) {
             return (
@@ -103,96 +228,11 @@ class  CoachHome extends React.Component {
             const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
             const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 
-            attendenceArray = [];
-            for (let i = 0; i < attandence_batch.length; i++)
-            {
-                const {routine_name, batch_name, batch_category,batch_id,session} = this.state.coach_profile.attandence_batch[i]
-                const {is_canceled, end_time,session_date, start_time} = session
+            this.attedenceMangement(attandence_batch)
 
-                attendenceArray.push(
-                    <View>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={{
-                margin: 10, fontSize: 14, fontWeight: 'bold'
-            }}>{batch_name +' : ' + routine_name}</Text>
-            <Text style={{
-                margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
-            }}>{batch_category}</Text>
-            </View>
+            this.sessionMangement(operations)
+            this.scoreMangement(tournaments)
 
-                        { is_canceled ?  <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                    <Text style={{marginRight: 20, fontSize: 14,textDecorationLine: 'line-through'}}>{session_date}</Text>
-                    <Text style={{fontSize: 14,textDecorationLine: 'line-through'}}>{start_time + "  -   " + end_time}</Text>
-                </View> : <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>{session_date}</Text>
-                            <Text style={{fontSize: 14}}>{start_time + "  -   " + end_time}</Text>
-                        </View> }
-
-
-                    </View>
-            );
-            }
-
-            sessionArray = [];
-            for (let i = 0; i < operations.next_sessions.length; i++)
-            {
-                const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
-                console.log("is_canceled",{is_canceled})
-                if( is_canceled == true ){
-                    sessionArray.push(
-                        <View>
-                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                                <Text style={{
-                                    margin: 10, textDecorationLine: 'line-through'
-                                }}>{routine_name}</Text>
-                                <View style={{backgroundColor:'#FF7373',margin:0,borderRadius:10}}>
-                                    <Text style={{
-                                        margin: 10,color:'white'
-                                    }}>Canceled</Text>
-                                </View>
-                            </View>
-
-                            <View style={{flexDirection: 'row', margin: 10}}>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-                                    textDecorationLine: 'line-through'
-                                }}>{session_date}</Text>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-                                    textDecorationLine: 'line-through'
-                                }}>{start_time + "  -   " + end_time}</Text>
-
-                            </View>
-
-                        </View>
-                    );
-                }else{
-                    sessionArray.push(
-                        <View>
-
-                            <Text style={{
-                                margin: 10,
-                            }}>{routine_name}</Text>
-                            <View style={{flexDirection: 'row', margin: 10}}>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-
-                                }}>{session_date}</Text>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-
-                                }}>{start_time + "  -   " + end_time}</Text>
-
-                            </View>
-
-                        </View>
-                    );
-                }
-            }
             return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                 <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                     <View style={{margin: 10, marginTop: 20}}>
@@ -220,7 +260,7 @@ class  CoachHome extends React.Component {
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
                         {attendenceArray}
-                        <CustomeButtonB onPress={() => console.log("title")}>
+                        <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
                             Mark Attendance</CustomeButtonB>
                     </CustomeCard>
 
@@ -271,13 +311,7 @@ class  CoachHome extends React.Component {
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
-                        <Text style={{
-                            margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>{tournaments[0].name}</Text>
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>{tournaments[0].start_date + ' - ' + tournaments[0].end_date}</Text>
-                            <Text style={{marginRight: 20, fontSize: 14,}}>{tournaments[0].start_time + ' - ' + tournaments[0].end_time}</Text>
-                        </View>
+                        {scoreArray}
                         <CustomeButtonB onPress={() => console.log("title")}>
                             View Fixtures</CustomeButtonB>
                     </CustomeCard>:null}

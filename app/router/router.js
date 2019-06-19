@@ -191,9 +191,10 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Batch',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="group"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/groupicon.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -212,9 +213,10 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Tournament',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="Tournament"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Tournamenticon.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -233,9 +235,10 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Challenge',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="Challenge"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Challengeiocn.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -254,9 +257,10 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Book and Play',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="Book and Play"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Bookingicon.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -272,20 +276,49 @@ const tabBarController = createBottomTabNavigator(
 
     })
 
+
+
 const coachHomeModule = createStackNavigator({
 
 
     CoachHome: {
         screen: coachhome,
-        navigationOptions: {
+        navigationOptions: ({navigation}) => ({
             title: "Dribble",
+            headerLeft:<NavigationDrawerStructure navigationProps={navigation}
+                                                  showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={false}/>,
+            headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
-        }
+        })
+
+
     },
-}
+        EditProfile: {
+            screen: EditProfile,
+            navigationOptions: ({navigation}) => ({
+                title: "Edit Profile",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation}/>,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false}/>,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            })
+        },
+}, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+    }
 );
 
 
@@ -324,11 +357,15 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Batch',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="group"
-                        color={tintColor}
+
+                    <Image
+                        //focused={focused}
+                        source={require('../images/groupicon.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
+
+
                 ),
                 tabBarOptions: {
                     showLabel: true,
@@ -345,9 +382,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Tournament',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="Tournament"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Tournamenticon.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -366,9 +404,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Challenge',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="Challenge"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Challengeiocn.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -387,9 +426,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Book and Play',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
-                    <Icon
-                        name="Book and Play"
-                        color={tintColor}
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Bookingicon.png')}
+                        tintColor={tintColor}
                         size={24}
                     />
                 ),
@@ -407,9 +447,25 @@ const tabBarControllerCoach = createBottomTabNavigator(
 
 
 
+const coachDrawer = createDrawerNavigator({
 
 
-const AcademyListingStack = createStackNavigator({
+        coachfirst: {
+            screen: tabBarControllerCoach,
+            // navigationOptions: {
+            //     header: <CustomHeader title="Academy" />,
+            // }
+        },
+
+    }, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+    }
+);
+
+const GuestHomeModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
     AcademyListing: {
         screen: AcademyListing,
@@ -501,28 +557,99 @@ const AcademyListingStack = createStackNavigator({
 
     },
 })
-const GuestHomeModule = createDrawerNavigator({
 
 
-    AcademyListing: {
-        screen: AcademyListingStack,
-        // navigationOptions: {
-        //     header: <CustomHeader title="Academy" />,
-        // }
-    },
+
+const tabBarControllerGuest = createBottomTabNavigator(
+    {
+        Home: {
+            screen: GuestHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Home1',
+                tabBarIcon: ({ tintColor }) => (
+
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Home.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
 
 
-    GuestDe: {
-        screen: guestdetails,
-        navigationOptions: {
-            title: "Sign In",
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    underlineBottomPosition: 1,
+                    underlineColor: 'red',
+                    underlineHeight: 5
+                },
+
             },
 
-        }
-    },
-}, {
+
+        },
+
+        Tournament: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Tournament',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Tournamenticon.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+
+        BookandPlay: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Book and Play',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Bookingicon.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+
+    })
+
+
+const guestDrawer = createDrawerNavigator({
+
+
+        Guestfirst: {
+            screen: tabBarControllerGuest,
+            // navigationOptions: {
+            //     header: <CustomHeader title="Academy" />,
+            // }
+        },
+
+    }, {
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
         },
@@ -586,11 +713,11 @@ const BaseNavigator = createSwitchNavigator({
         screen: parentHomeModule
     },
     GHome: {
-        screen: GuestHomeModule,
+        screen: guestDrawer,
 
     },
     CHome: {
-        screen: tabBarControllerCoach,
+        screen: coachDrawer,
 
     },
     UHome: {

@@ -158,7 +158,7 @@ class  UserHome extends React.Component {
             )
         }
         if (this.state.player_profile) {
-            const {name,academy_name,badge,rank,score,player_level,reward_point,player_category } = this.state.player_profile
+            const {name,academy_name,badge,rank,score,player_level,reward_point,player_category,operations } = this.state.player_profile
             sessionArray = [];
             for (let i = 0; i < operations.next_sessions.length; i++)
             {

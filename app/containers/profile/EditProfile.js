@@ -9,6 +9,11 @@ class EditProfile extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.state = {
+            birthdate:"2016-05-15",
+            txtname:'Niranjan',
+            txtphone:'8291088636',
+        }
     }
 
     render() {
@@ -31,14 +36,10 @@ class EditProfile extends BaseComponent {
 
                     <View style={{
                         flex: 1,
-                        justifyContent: 'flex-end',
+                        justifyContent: 'flex-end',marginBottom:-20,
                     }}>
 
-                        <Text
-                            style={style.rounded_button}
-                        >
-                            Change Image
-                                </Text>
+                        <CustomeButtonB> Change Image</CustomeButtonB>
                     </View>
 
 
@@ -54,11 +55,16 @@ class EditProfile extends BaseComponent {
                     <Text style={style.text}>
                         Name
                     </Text>
-
                     <TextInput
-                        style={style.textinput}>
-                        Prithviraj
-                    </TextInput>
+                        style={style.textinput}
+                        // mode='outlined'
+                        label='name'
+
+                        // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
+                        value={this.state.txtname}
+                        onChangeText={(txtname) => this.setState({ txtname: txtname })}
+                    />
+
                 </View>
 
                 <View
