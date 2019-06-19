@@ -1,22 +1,159 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, ImageBackground } from 'react-native';
+import { Card, Text, ActivityIndicator } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 
-export default class AcademyProfile extends Component {
+import { getAcademyDetail } from '../../redux/reducers/AcademyReducer'
+
+class AcademyProfile extends Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            id: '',
+            academy: null
+        }
+        this.state.id = this.props.navigation.getParam('id', '');
     }
 
     componentDidMount() {
 
+        this.props.getAcademyDetail(this.state.id).then(() => {
+            console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            let status = this.props.data.res.success
+            if (status) {
+                let academy = this.props.data.res.data.academy
+                this.setState({
+                    academy: academy
+                })
+            }
+
+
+        }).catch((response) => {
+            console.log(response);
+        })
     }
+
+    _renderPlayerItem = ({ item }) =>
+        (
+
+            <View style={{ overflow: 'hidden', height: 190, width: 120, paddingRight: 4 }}>
+
+                <ImageBackground style={{ height: 190, width: '100%' }}
+                    source={require('../../images/batch_card.png')}
+                >
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{item.score}</Text>
+
+                    <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
+
+                        <Text
+                            style={{
+                                width: 26,
+                                height: 12,
+                                color: 'white',
+                                marginRight: 4,
+                                marginTop: 16,
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                backgroundColor: 'red',
+                                borderRadius: 4,
+                                fontSize: 8,
+                                paddingTop: 1
+                            }}
+                        >U-13</Text>
+                        <Image
+                            style={{
+                                height: 80, width: 50,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}
+                            source={require('../../images/player_small.png')}></Image>
+
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode="tail"
+                            style={{
+                                color: 'white',
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                fontSize: 8,
+                                marginLeft: 4,
+                                marginTop: 16,
+                            }}
+                        >State{"\n"}Player</Text>
+                    </View>
+
+                    <View style={{
+                        position: 'absolute',
+
+                        marginTop: 116,
+                        width: "100%", height: 20, backgroundColor: 'white'
+                    }}>
+
+                        <Text style={{
+                            color: '#404040',
+                            fontWeight: 16,
+                            fontWeight: '500',
+                            textAlign: 'center'
+                        }}>{item.name}</Text>
+                    </View>
+
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+
+                        <ImageBackground
+                            style={{
+                                height: 38, width: 25, justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            source={require('../../images/batch_pink.png')}>
+
+
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                backgroundColor: '#485FA0', height: 6, width: '120%'
+                            }}>
+                                <Image style={{ height: 7, width: 12, marginLeft: -12 }}
+                                    source={require('../../images/left_batch_arrow.png')}></Image>
+
+                                <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>GOODLIKE</Text>
+                                <Image style={{ height: 7, width: 12, marginRight: -12 }}
+                                    source={require('../../images/right_batch_arrow.png')}></Image>
+
+                            </View>
+                        </ImageBackground>
+
+
+
+
+                    </View>
+
+                </ImageBackground>
+
+            </View>
+
+        );
 
 
     render() {
+
+        if (this.props.data.loading || this.state.academy == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
+
+
+        const academy = this.state.academy
         return (
+
             <ScrollView style={styles.chartContainer}>
 
                 <View>
@@ -29,12 +166,12 @@ export default class AcademyProfile extends Component {
                         <View style={{ marginLeft: 8, marginRight: 8, marginTop: 4 }}>
 
                             <Image style={{ height: 130, width: "100%", }}
-                                source={require('../../images/academy_img.png')}
+                                source={{ uri: academy.cover_pic }}
                             >
 
                             </Image>
 
-                            <Text style={{ paddingTop: 12, fontSize: 18, color: 'gray' }}> Feather Academy</Text>
+                            <Text style={{ paddingTop: 12, fontSize: 18, color: 'gray' }}> {academy.name}</Text>
 
                             <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
@@ -44,16 +181,17 @@ export default class AcademyProfile extends Component {
                                     ratingBackgroundColor='#D7D7D7'
                                     ratingCount={5}
                                     imageSize={14}
+                                    readonly={true}
                                     style={{ height: 30, width: 80 }}
                                 />
 
                                 <Text style={{
                                     backgroundColor: '#D6D6D6', height: 19, width: 30, textAlign: 'center',
                                     fontSize: 12,
-                                    paddingTop:2,
+                                    paddingTop: 2,
                                     color: '#707070',
                                     borderRadius: 12,
-                                }}>4.5</Text>
+                                }}>{academy.ratings}</Text>
 
                             </View>
 
@@ -96,7 +234,7 @@ export default class AcademyProfile extends Component {
 
                             <Text style={{ fontSize: 10, color: '#404040' }}>Offering</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                            <Text style={{ fontSize: 14, color: '#404040' }}>{academy.offering} </Text>
                         </View>
 
                     </Card>
@@ -109,7 +247,7 @@ export default class AcademyProfile extends Component {
 
                             <Text style={{ fontSize: 10, color: '#404040' }}>Address</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                            <Text style={{ fontSize: 14, color: '#404040' }}>{academy.locality} </Text>
                         </View>
 
                     </Card>
@@ -140,10 +278,13 @@ export default class AcademyProfile extends Component {
                                 alignItems: 'center',
                             }}>
 
-                                <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
+                                {/* <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
                                     source={require('../../images/best_player_temp.png')}
                                 >
-                                </Image>
+                                </Image> */}
+                                {this._renderPlayerItem(academy.top_player)}
+
+
                             </View>
                         </View>
 
@@ -210,6 +351,18 @@ export default class AcademyProfile extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        data: state.AcademyReducer,
+    };
+};
+const mapDispatchToProps = {
+    getAcademyDetail
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AcademyProfile);
+
+
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
@@ -223,7 +376,7 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',
-        backgroundColor:'#67BAF5',
+        backgroundColor: '#67BAF5',
         color: 'white', textAlign: 'center'
     },
     filled_button: {

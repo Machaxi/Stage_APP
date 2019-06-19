@@ -674,6 +674,7 @@ const styles = StyleSheet.create({
     scoreBox:{
         color:'white',
         marginRight:20,
+        marginBottom:20,
         textAlign:'right',fontSize:24,fontWeight:'bold'
     },
     buttomButton:{

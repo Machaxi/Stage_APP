@@ -29,6 +29,7 @@ import spalsh from '../containers/welcome/SplashScreen'
 import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
+import EditProfile from '../containers/profile/EditProfile'
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
 };
@@ -288,7 +289,6 @@ const coachHomeModule = createStackNavigator({
 );
 
 
-
 const tabBarControllerCoach = createBottomTabNavigator(
     {
         Home: {
@@ -406,7 +406,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
     })
 
 
-    
+
 
 
 const AcademyListingStack = createStackNavigator({
@@ -415,19 +415,12 @@ const AcademyListingStack = createStackNavigator({
         screen: AcademyListing,
         navigationOptions: ({ navigation }) => ({
             title: 'Dribble Diaries',
-            headerTitleStyle: {
-                color: '#191919',
-                fontFamily: 'Quicksand-Bold',
-                fontWeight: '400',
-                textAlign: 'center',
-                fontSize: 16,
-                alignSelf: 'center',
-            },
-
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+            />,
             headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} />,
-            //header: <CustomHeader title="Academy" />,
+                navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -437,43 +430,75 @@ const AcademyListingStack = createStackNavigator({
     },
     AcademyProfile: {
         screen: AcademyProfile,
-        navigationOptions: {
-            header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
-            //title: "Sign In",
+        navigationOptions: ({ navigation }) => ({
+            //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
+            title: "Academy Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
-        }
+        })
     },
     CoachListing: {
         screen: CoachListing,
-        navigationOptions: {
-            title: "Sign In",
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
-        }
+        })
     },
     PlayersListing: {
         screen: PlayersListing,
-        navigationOptions: {
-            title: "Sign In",
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
-        }
+        })
     },
     CoachProfileDetail: {
         screen: CoachProfileDetail,
-        navigationOptions: {
-            title: "Sign In",
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
-        }
+        })
+
+    },
+    EditProfile: {
+        screen: EditProfile,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
     },
 })
 const GuestHomeModule = createDrawerNavigator({
@@ -513,6 +538,19 @@ const DrawerConfig = {
         return (<CoachMenuDrawer navigation={navigation} />)
     }
 }
+const style = StyleSheet.create({
+    headerStyle: {
+        color: '#191919',
+        fontFamily: 'Quicksand-Bold',
+        fontWeight: '400',
+        textAlign: 'center',
+        fontSize: 16,
+        flexGrow: 1,
+        alignSelf: 'center',
+    }
+})
+
+
 const parentHomeModule = createStackNavigator({
 
 
@@ -576,9 +614,13 @@ const BaseNavigator = createSwitchNavigator({
 
 class RigitMenuToolbar extends React.Component {
 
+    //==================================================================
+    //          showNotification = true/false (show/hide)
+    //          showHome 
+    //==================================================================
+
     constructor(props) {
         super(props);
-
     }
 
     componentDidMount() {
@@ -586,10 +628,20 @@ class RigitMenuToolbar extends React.Component {
 
     render() {
 
+        //showNotification={false} showHome={true}
+        let showNotification = false
+        let showHome = false
+        if (this.props.showNotification != undefined)
+            showNotification = this.props.showNotification
+
+        if (this.props.showHome != undefined)
+            showHome = this.props.showHome
+
+
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
 
-                <TouchableOpacity
+                {showNotification ? <TouchableOpacity
                     activeOpacity={.8}
                     onPress={() => { }}>
 
@@ -597,7 +649,19 @@ class RigitMenuToolbar extends React.Component {
                         source={require('../images/ic_notifications.png')}
                         style={{ width: 20, height: 20, marginRight: 12 }}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> : null}
+
+
+                {showHome ? <TouchableOpacity
+                    activeOpacity={.8}
+                    onPress={() => { }}>
+
+                    <Image
+                        source={require('../images/ic_home.png')}
+                        style={{ width: 20, height: 20, marginRight: 12 }}
+                    />
+                </TouchableOpacity> : null}
+
 
             </View>
         );
@@ -606,25 +670,45 @@ class RigitMenuToolbar extends React.Component {
 
 class NavigationDrawerStructure extends React.Component {
 
+    //==================================================================
+    //          showBackAction = true/false (show/hide)
+    //           
+    //==================================================================
+
 
     //Structure for the navigatin Drawer
     toggleDrawer = () => {
         //Props to open/close the drawer
         this.props.navigationProps.toggleDrawer();
-        //this.props.navigation.dispatch(DrawerActions.toggleDrawer())
-        //this.props.navigationProps.toggleDrawer();
     };
 
     toggleToHome = () => {
-        //Props to open/close the drawer
-        this.props.navigationProps.navigate('First');
-        //this.props.navigation.dispatch(DrawerActions.toggleDrawer())
-        //this.props.navigationProps.toggleDrawer();
+        this.props.navigationProps.goBack(null);
     };
 
     render() {
+
+        let showBackAction = true
+        if (this.props.showBackAction != undefined)
+            showBackAction = this.props.showBackAction
+
+
         return (
             <View style={{ flexDirection: 'row' }}>
+                {showBackAction ?
+                    <TouchableOpacity
+                        activeOpacity={.8}
+                        onPress={this.toggleToHome.bind(this)}>
+
+                        <Image
+                            source={require('../images/go_back_arrow.png')}
+                            style={{ width: 20, height: 16, marginLeft: 12 }}
+                        />
+                    </TouchableOpacity>
+                    : null
+                }
+
+
                 <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
                     {/*Donute Button Image */}
                     <Image

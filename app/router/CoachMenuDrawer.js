@@ -65,6 +65,10 @@ export default class CoachMenuDrawer extends React.Component {
 							</Text>
 
 
+							<TouchableOpacity activeOpacity={.8} onPress={()=>{
+								this.props.navigation.navigate('EditProfile')
+							}}>
+
 							<View style={{ marginTop: 8, flexDirection: 'row', }}>
 								<Image
 									style={{ width: 12, height: 12, borderRadius: 8 }}
@@ -77,7 +81,8 @@ export default class CoachMenuDrawer extends React.Component {
 									Edit
 								</Text>
 							</View>
-
+							</TouchableOpacity>
+							
 
 						</View>
 

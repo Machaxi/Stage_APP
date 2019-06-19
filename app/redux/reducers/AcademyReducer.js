@@ -38,6 +38,21 @@ export function getAllAcademy() {
 
 
 }
+
+export function getAcademyDetail(id) {
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `global/academy/${id}`
+            }
+        }
+    };
+
+
+
+}
+
 export function search(search_query, locality_id) {
 
     let url = `global/academy/search?search_query=${search_query}&locality_id=${locality_id}`

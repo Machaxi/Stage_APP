@@ -254,7 +254,7 @@ class AcademyListing extends Component {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                this.props.navigation.navigate('AcademyProfile')
+                this.props.navigation.navigate('AcademyProfile', { id: item.id })
             }}>
 
             <Card
@@ -274,10 +274,11 @@ class AcademyListing extends Component {
 
                     </Image>
 
-                    <Text style={{ paddingTop: 12, paddingLeft: 12, fontSize: 16, 
+                    <Text style={{
+                        paddingTop: 12, paddingLeft: 12, fontSize: 16,
                         color: '#707070',
                         fontFamily: 'Quicksand-Regular'
-                        }}>
+                    }}>
                         {item.name}
                     </Text>
 
