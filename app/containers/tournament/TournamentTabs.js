@@ -52,11 +52,24 @@ export default class TournamentTabs extends React.Component {
     );
   };
 
-  _renderScene = SceneMap({
-    first: UpcomingRoute,
-    second: RegisteredRoute,
-    third: ResultsRoute,
-  });
+  // _renderScene = SceneMap({
+  //   //first: UpcomingRoute,
+  //   first: () => <UpcomingRoute navigation={this.props.navigation}/>,
+  //   second: () => <RegisteredRoute navigation={this.props.navigation}/>,
+
+  //   //second: RegisteredRoute,
+  //   third: ResultsRoute,
+  // });
+  _renderScene = ({ route, jumpTo }) => {
+    switch (route.key) {
+      case 'first':
+        return <UpcomingRoute navigation={this.props.navigation} />
+      case 'second':
+        return <RegisteredRoute navigation={this.props.navigation} />
+      case 'third':
+        return <ResultsRoute navigation={this.props.navigation} />
+    }
+  };
 
   render() {
     return (

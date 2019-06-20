@@ -65,7 +65,7 @@ export default class UpcomingRoute extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                //this.props.navigation.navigate('AcademyProfile', { id: item.id })
+                this.props.navigation.navigate('UpcomingTournamentDetail')
             }}>
 
             <Card
@@ -92,8 +92,10 @@ export default class UpcomingRoute extends BaseComponent {
                     }}>
 
 
-                        <View style={{ paddingTop: 12, paddingRight: 12, 
-                            flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                        <View style={{
+                            paddingTop: 12, paddingRight: 12,
+                            flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                        }}>
 
                             <Text style={{
                                 fontSize: 14,
@@ -179,8 +181,9 @@ export default class UpcomingRoute extends BaseComponent {
 
             <View style={styles.chartContainer}>
 
+                {this.listHeader()}
                 <FlatList
-                    ListHeaderComponent={() => this.listHeader()}
+                    //ListHeaderComponent={() => }
                     data={this.state.data}
                     extraData={this.state.data}
                     renderItem={this._renderItem}

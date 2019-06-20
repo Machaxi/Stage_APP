@@ -6,8 +6,8 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux'
 import logger from 'redux-logger'
 import { Provider } from 'react-redux'
@@ -18,7 +18,7 @@ import thunk from "redux-thunk";
 import AppMain from './app/router/router';
 import { SafeAreaView } from 'react-navigation'
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { NativeEventEmitter, NativeModules,StatusBar } from 'react-native';
+import { NativeEventEmitter, NativeModules, StatusBar } from 'react-native';
 
 const client = axios.create({
     baseURL: 'http://13.233.124.189:8080/api/',
@@ -31,10 +31,10 @@ const store = createStore(reducer, middleware);
 
 
 const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+    ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
+    android:
+        'Double tap R on your keyboard to reload,\n' +
+        'Shake or press menu button for dev menu',
 });
 const ModifiedDefaultTheme = {
     ...DefaultTheme,
@@ -43,24 +43,24 @@ const ModifiedDefaultTheme = {
         light: 'Quicksand-Regular',
         regular: 'Quicksand-Regular',
         medium: 'Quicksand-Regular',
-        bold:'Quicksand-Bold'
+        bold: 'Quicksand-Bold'
     }
 }
 
 export default class App extends Component {
-  render() {
-    return (
+    render() {
+        return (
 
-        <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#e6e6e6",marginTop:-44,marginBottom:0}}>
+            <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#e6e6e6", marginTop: 0, marginBottom: 0 }}>
 
-            <PaperProvider theme={ModifiedDefaultTheme}>
+                <PaperProvider theme={ModifiedDefaultTheme}>
 
-                <Provider store={store}>
-                    <AppMain />
-                </Provider>
-           </PaperProvider>
-        </SafeAreaView>
-    );
-  }
+                    <Provider store={store}>
+                        <AppMain />
+                    </Provider>
+                </PaperProvider>
+            </SafeAreaView>
+        );
+    }
 }
 

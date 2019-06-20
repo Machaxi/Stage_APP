@@ -33,7 +33,8 @@ import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
 import mybatch from '../containers/MyBatch/MyBatch'
 import TournamentTabs from '../containers/tournament/TournamentTabs'
-
+import TournamentFixture from '../containers/tournament/TournamentFixture'
+import UpcomingTournamentDetail from '../containers/tournament/UpcomingTournamentDetail'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
@@ -601,7 +602,43 @@ const TournamentModule = createStackNavigator({
 
             headerTintColor: '#000',
         }),
-    }
+    },
+    UpcomingTournamentDetail: {
+        screen: UpcomingTournamentDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
+    TournamentFixture: {
+        screen: TournamentFixture,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Fixture',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
 })
 
 

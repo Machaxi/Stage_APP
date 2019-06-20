@@ -179,19 +179,26 @@ export default class UpcomingRoute extends BaseComponent {
                             Prithiviraj P | Prithiviraj P | Prithiviraj P
                     </Text>
 
-                        <View style={{
-                            width: '100%',
-                            marginTop: 12,
-                            marginBottom:8,
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
+                        <TouchableOpacity activeOpacity={.8}
+                            onPress={() => {
+                                //this.props.navigation.navigate('TournamentFixture')
+                            }}
+                        >
 
-                            <Text style={styles.rounded_button}>
-                                View Fixtures
+                            <View style={{
+                                width: '100%',
+                                marginTop: 12,
+                                marginBottom: 8,
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+
+                                <Text style={styles.rounded_button}>
+                                    View Fixtures
                                 </Text>
-                        </View>
+                            </View>
+                        </TouchableOpacity>
 
                     </View>
                 </View>
@@ -241,7 +248,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#67BAF5',
         color: 'white',
-        fontWeight:'500',
+        fontWeight: '500',
         textAlign: 'center',
         fontFamily: 'Quicksand-Regular'
     },
