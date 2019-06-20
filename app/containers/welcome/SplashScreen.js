@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { View, Image, Linking, Platform } from 'react-native'
-import {getData, isSignedIn,onSignIn, storeData} from "../../components/auth";
-import {COACH, GUEST, PARENT, PLAYER} from "../../components/Constants";
+import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
+import { COACH, GUEST, PARENT, PLAYER } from "../../components/Constants";
 
 class Splash extends React.Component {
 
@@ -16,7 +16,7 @@ class Splash extends React.Component {
     }
 
     componentDidMount() {
-// this.props.navigation.navigate('Dashboard')
+        // this.props.navigation.navigate('Dashboard')
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
@@ -45,7 +45,7 @@ class Splash extends React.Component {
                 getData('userInfo', (value) => {
                     console.log("value", value)
                     userData = (JSON.parse(value))
-// onSignIn()
+                    // onSignIn()
                     console.log(userData);
                     if (userData.user['user_type'] == GUEST) {
                         this.props.navigation.navigate('AcademyListing')
@@ -84,7 +84,7 @@ class Splash extends React.Component {
 
     navigate = (url) => { // E
         this.state.deepUrl = url
-        storeData('deepUrl',this.state.deepUrl)
+        storeData('deepUrl', this.state.deepUrl)
 
     }
 

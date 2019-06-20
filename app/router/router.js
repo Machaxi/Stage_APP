@@ -30,6 +30,8 @@ import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
+import TournamentTabs from '../containers/tournament/TournamentTabs'
+
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
 };
@@ -559,6 +561,27 @@ const GuestHomeModule = createStackNavigator({
 })
 
 
+const TournamentModule = createStackNavigator({
+    //All the screen from the Screen1 will be indexed here
+    TournamentTabs: {
+        screen: TournamentTabs,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    }
+})
+
 
 const tabBarControllerGuest = createBottomTabNavigator(
     {
@@ -591,7 +614,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
         },
 
         Tournament: {
-            screen: userHomeModule,
+            screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
                 showLabel: false,

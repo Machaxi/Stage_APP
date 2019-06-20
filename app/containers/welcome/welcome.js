@@ -57,7 +57,7 @@ class welcome extends BaseComponent {
                 <Button
                     uppercase={false}
                     //PhoneAuth
-                    color="#ffffff" onPress={() => this.props.navigation.navigate('AcademyListing')}>
+                    color="#ffffff" onPress={() => this.props.navigation.navigate('TournamentTabs')}>
                     Skip Login
                 </Button>
 
