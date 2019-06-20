@@ -46,19 +46,24 @@ class Splash extends React.Component {
                     console.log("value", value)
                     userData = (JSON.parse(value))
 // onSignIn()
-                    console.log(userData);
-                    if (userData.user['user_type'] == GUEST) {
-                        this.props.navigation.navigate('AcademyListing')
-                    } else if (userData.user['user_type'] == PLAYER) {
-                        this.props.navigation.navigate('UHome')
+                    if(userData.academy_id != null) {
+                        console.log(userData);
+                        if (userData.user['user_type'] == GUEST) {
+                            this.props.navigation.navigate('AcademyListing')
+                        } else if (userData.user['user_type'] == PLAYER) {
+                            this.props.navigation.navigate('UHome')
 
-                    } else if (userData.user['user_type'] == COACH) {
-                        this.props.navigation.navigate('CHome')
+                        } else if (userData.user['user_type'] == COACH) {
+                            this.props.navigation.navigate('CHome')
 
-                    }
-                    else if (userData.user['user_type'] == PARENT) {
-                        this.props.navigation.navigate('PHome')
+                        }
+                        else if (userData.user['user_type'] == PARENT) {
+                            this.props.navigation.navigate('PHome')
 
+                        }
+                    }else
+                    {
+                        this.props.navigation.navigate('SwitchPlayer')
                     }
 
                 });

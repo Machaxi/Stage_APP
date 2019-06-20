@@ -11,6 +11,7 @@ import {
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import LinearGradient from 'react-native-linear-gradient';
 
 import welcome from '../containers/welcome/welcome'
 import coachhome from '../containers/CoachScreen/CoachHome'
@@ -30,6 +31,7 @@ import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
+import mybatch from '../containers/MyBatch/MyBatch'
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
 };
@@ -61,39 +63,21 @@ const loginModule = createStackNavigator({
             //header:null
         }
     },
-    //
-    // SignUp: {
-    //     screen: signup,
-    //     navigationOptions: {
-    //         title: "Register",
-    //         headerStyle,
-    //         //header:null
-    //     }
-    // },
-    // ForgotPass: {
-    //     screen: forgotPassword,
-    //     navigationOptions: {
-    //         title: "Forgot Password",
-    //         headerStyle,
-    //         //header:null
-    //     }
-    // },
-    // PhoneAuth: {
-    //     screen: phoneAuth,
-    //     navigationOptions: {
-    //         title: "Phone Number Login",
-    //         headerStyle,
-    //         //header:null
-    //     }
-    // },
-    // ResetPassword: {
-    //     screen: resetPassword,
-    //     navigationOptions: {
-    //         title: "Reset Password",
-    //         headerStyle,
-    //         //header:null
-    //     }
-    // }
+    EditProfile: {
+        screen: EditProfile,
+        navigationOptions: ({navigation}) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false}/>,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={false}/>,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
 
 })
 const Switcher = createStackNavigator({
@@ -120,41 +104,156 @@ const userHomeModule = createStackNavigator({
 
     UserHome: {
         screen: userhome,
-        navigationOptions: {
-            title: "Sign In",
+        navigationOptions: ({navigation}) => ({
+            title: "Dribble",
+            headerLeft:<NavigationDrawerStructure navigationProps={navigation}
+                                                  showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={false}/>,
+            headerTitleStyle:{
+               color: 'white'
+            } ,
+            headerStyle: {
+                elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
 
-            header: null,
-            headerStyle: { display: 'none', }
-        }
+            },
+            headerBackground: (
+                <LinearGradient
+                    colors={['#262051', '#24262A']}
+                    style={{ flex: 1 }}
+                    start={{x: 0, y: 0}}
+                    end={{x: 2.5, y: 0}}
+                />
+            ),
+
+        })
     },
-    // SwitchPlayer: {
-    //     screen: switchplayer,
-    //     navigationOptions: {
-    //         title: "Switch Player",
-    //         headerStyle: { display: "none" },
-    //         //header:null
-    //     }
-    //
-    // },
+
 
 }
 );
-const tabOptions = {
-    tabBarOptions: {
-        activeTintColor: 'white',
-        inactiveTintColor: '#D3D3D3',
-        style: {
-            backgroundColor: 'green',
-            borderTopWidth: 1,
-            borderTopColor: '#D3D3D3'
+
+const userBatchModule = createStackNavigator({
+
+
+        UserHome: {
+            screen: mybatch,
+            navigationOptions: ({navigation}) => ({
+                title: "My Batch",
+                headerLeft:<NavigationDrawerStructure navigationProps={navigation}
+                                                      showBackAction={false}
+                />,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false}/>,
+                headerTitleStyle:{
+                    color: 'black'
+                } ,
+                // headerStyle: {
+                //     elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+                //
+                // },
+
+
+            })
         },
-        indicatorStyle: {
-            backgroundColor: 'red',
-        },
+
+
+    }
+);
+
+const GuestHomeModule = createStackNavigator({
+    //All the screen from the Screen1 will be indexed here
+    AcademyListing: {
+        screen: AcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Dribble Diaries',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
     },
-}
+    AcademyProfile: {
+        screen: AcademyProfile,
+        navigationOptions: ({ navigation }) => ({
+            //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
+            title: "Academy Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        })
+    },
+    CoachListing: {
+        screen: CoachListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+    },
+    PlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+    },
+    CoachProfileDetail: {
+        screen: CoachProfileDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    EditProfile: {
+        screen: EditProfile,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+})
 
 const tabBarController = createBottomTabNavigator(
     {
@@ -186,7 +285,7 @@ const tabBarController = createBottomTabNavigator(
 
         },
         Batch: {
-            screen: userHomeModule,
+            screen: userBatchModule,
             navigationOptions: {
                 tabBarLabel: 'Batch',
                 showLabel: false,
@@ -252,7 +351,7 @@ const tabBarController = createBottomTabNavigator(
 
         },
         BookandPlay: {
-            screen: userHomeModule,
+            screen: GuestHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 showLabel: false,
@@ -276,7 +375,23 @@ const tabBarController = createBottomTabNavigator(
 
     })
 
+const playerDrawer = createDrawerNavigator({
 
+
+        playerfirst: {
+            screen: tabBarController,
+            // navigationOptions: {
+            //     header: <CustomHeader title="Academy" />,
+            // }
+        },
+
+    }, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+    }
+);
 
 const coachHomeModule = createStackNavigator({
 
@@ -465,98 +580,6 @@ const coachDrawer = createDrawerNavigator({
     }
 );
 
-const GuestHomeModule = createStackNavigator({
-    //All the screen from the Screen1 will be indexed here
-    AcademyListing: {
-        screen: AcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Dribble Diaries',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    AcademyProfile: {
-        screen: AcademyProfile,
-        navigationOptions: ({ navigation }) => ({
-            //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
-            title: "Academy Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-        })
-    },
-    CoachListing: {
-        screen: CoachListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "Coach Listing",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-    PlayersListing: {
-        screen: PlayersListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-    CoachProfileDetail: {
-        screen: CoachProfileDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: "Coach Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
-    },
-    EditProfile: {
-        screen: EditProfile,
-        navigationOptions: ({ navigation }) => ({
-            title: "Edit Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
-    },
-})
 
 
 
@@ -721,7 +744,7 @@ const BaseNavigator = createSwitchNavigator({
 
     },
     UHome: {
-        screen: tabBarController,
+        screen: playerDrawer,
 
     },
     SwitchPlayer: {

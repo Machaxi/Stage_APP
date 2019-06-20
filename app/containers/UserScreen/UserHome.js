@@ -9,6 +9,7 @@ import {getData, storeData} from "../../components/auth";
 import {getCoachSWitcher, getPlayerSWitcher} from "../../redux/reducers/switchReducer";
 import {getPlayerDashboard} from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
+import LinearGradient from 'react-native-linear-gradient';
 
 const acedemicList = [
     {

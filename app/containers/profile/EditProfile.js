@@ -2,7 +2,7 @@ import React from 'react'
 
 import { View, ImageBackground, Text, TextInput } from 'react-native'
 import BaseComponent from '../BaseComponent';
-import { CustomeButtonB, } from '../../components/Home/SwitchButton'
+import {CustomeButtonB, SwitchButton,} from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 
 class EditProfile extends BaseComponent {
@@ -24,7 +24,8 @@ class EditProfile extends BaseComponent {
                 style={{
                     margin: 16,
                     flex: 1,
-                    justifyContent: 'center',
+                    marginTop: 30,
+                   // justifyContent: 'center',
                     alignItems: 'center'
                 }}
             >
@@ -99,6 +100,12 @@ class EditProfile extends BaseComponent {
                         style={style.textinput}>
                         08/03/2019
                     </TextInput>
+                </View>
+                <View style={{flex:1,margin:20,width:'80%'}}>
+                 <CustomeButtonB onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Update </CustomeButtonB>
+                </View>
+                <View style={{flex:1,marginTop:-20,width:'80%'}}>
+                    <SwitchButton  onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Skip </SwitchButton>
                 </View>
 
             </View>
