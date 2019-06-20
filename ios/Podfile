@@ -7,13 +7,17 @@ target 'Dribble' do
  pod 'Firebase/Core'
    pod 'Firebase/Auth'
    pod 'Firebase/Messaging'
+   # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
 
   # Pods for Dribble
 
   target 'Dribble-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
-    pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+    # pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+    # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
   end
 

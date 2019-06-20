@@ -131,6 +131,8 @@ this.setState({
                       var userData = user1['data'];
                       var userInfoData = userData['user'];
                       storeData("userInfo", JSON.stringify(userData))
+                     onSignIn()
+                     if(userData.is_existing_user == true){
                        if(userInfoData.user_type == GUEST){
 
                            this.props.navigation.navigate('AcademyListing')
@@ -176,7 +178,7 @@ this.setState({
 
                        }
 
-                     onSignIn()
+
 
                      //
                      // if(otherParam == true){
@@ -185,7 +187,12 @@ this.setState({
                      // else
                      // {
                      //     this.props.navigation.goBack();
-                     // }
+
+                      }
+                      else
+                     {
+                         this.props.navigation.navigate('EditProfile')
+                     }
                  } else {
                      alert('Invalid credentials')
                  }
