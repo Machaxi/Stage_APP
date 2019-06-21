@@ -4,6 +4,7 @@ import { View, ImageBackground, Text, TextInput } from 'react-native'
 import BaseComponent from '../BaseComponent';
 import {CustomeButtonB, SwitchButton,} from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
+import DatePicker from 'react-native-datepicker'
 
 class EditProfile extends BaseComponent {
 
@@ -96,10 +97,26 @@ class EditProfile extends BaseComponent {
                         Birth Date
                     </Text>
 
-                    <TextInput
-                        style={style.textinput}>
-                        08/03/2019
-                    </TextInput>
+                    <DatePicker
+                        style={{width: 200,borderWidth:0}}
+                        date={this.state.birthdate}
+                        mode="date"
+                        placeholder="select date"
+                        format="DD-MMM-YYYY"
+                        minDate="2016-05-01"
+                        maxDate = {Date.now()}
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+
+                            dateInput: {
+                                marginLeft: 36,
+                                borderWidth:0
+                            }
+                            // ... You can check the source to find the other keys.
+                        }}
+                        onDateChange={(birthdate) => {this.setState({birthdate: birthdate})}}
+                    />
                 </View>
                 <View style={{flex:1,margin:20,width:'80%'}}>
                  <CustomeButtonB onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Update </CustomeButtonB>

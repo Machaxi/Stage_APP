@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground } from 'react-native';
+import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground,TouchableOpacity } from 'react-native';
 import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -67,8 +67,11 @@ class PlayersListing extends BaseComponent {
     _renderItem = ({ item }) => (
 
 
-        <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
 
+        <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
+            <TouchableOpacity onPress={()=>{
+                this.props.navigation.navigate('OtherPlayerDeatils')
+            }}>
             <ImageBackground style={{ height: 200, width: '100%' }}
                 source={require('../../images/batch_card.png')}
             >
@@ -162,8 +165,9 @@ class PlayersListing extends BaseComponent {
                 </View>
 
             </ImageBackground>
-
+            </TouchableOpacity>
         </View>
+
 
     );
 

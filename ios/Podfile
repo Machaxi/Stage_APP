@@ -19,6 +19,8 @@ target 'Dribble' do
 
     # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+    pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
   end
 
   target 'DribbleTests' do
