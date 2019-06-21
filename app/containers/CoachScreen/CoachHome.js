@@ -260,7 +260,7 @@ class  CoachHome extends React.Component {
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
                         {attendenceArray}
-                        <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
+                        <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence')}>
                             Mark Attendance</CustomeButtonB>
                     </CustomeCard>
 
@@ -312,7 +312,7 @@ class  CoachHome extends React.Component {
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
                         {scoreArray}
-                        <CustomeButtonB onPress={() => console.log("title")}>
+                        <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
                             View Fixtures</CustomeButtonB>
                     </CustomeCard>:null}
 
@@ -345,7 +345,8 @@ class  CoachHome extends React.Component {
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
-
+                                this.props.navigation.navigate('PlayersListing')
+                              //
 
                             }}>
                                 <View style={{margin: 10, flexDirection: 'row', height: 40}}>
@@ -366,7 +367,7 @@ class  CoachHome extends React.Component {
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={{fontSize: 14}}>
-                                                Book and Play
+                                                View Academy Players
                                             </Text>
 
                                             <Image source={require('../../images/forwardArrow.png')}
@@ -409,7 +410,7 @@ class  CoachHome extends React.Component {
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={{fontSize: 14}}>
-                                                View other Players Progress
+                                                View my Feedback
                                             </Text>
 
                                             <Image source={require('../../images/forwardArrow.png')}
@@ -452,7 +453,50 @@ class  CoachHome extends React.Component {
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={{fontSize: 14}}>
-                                                Browse other Academies
+                                                Job vacancies
+                                            </Text>
+
+                                            <Image source={require('../../images/forwardArrow.png')}
+                                                   style={{
+                                                       width: 19,
+                                                       height: 13, marginRight: 0, marginTop: 5
+                                                   }}/>
+
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
+                    <View style={{margin: 5}}>
+                        <Card style={{margin: 5, borderRadius: 10}}>
+                            <TouchableOpacity onPress={() => {
+
+                                console.warn("Touch Press")
+
+
+                            }}>
+                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+
+                                    <Image source={require('../../images/booking.png')}
+                                           style={{
+                                               width: 30,
+                                               height: 30, marginRight: 20, marginTop: 5
+                                           }}/>
+                                    <View style={{flex: 1}}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={{fontSize: 14}}>
+                                                Browse Academies
                                             </Text>
 
                                             <Image source={require('../../images/forwardArrow.png')}

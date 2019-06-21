@@ -49,8 +49,11 @@ export default class PlayerListing extends Component {
 
 
 
-        <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
 
+        <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
+            <TouchableOpacity onPress={()=>{
+                this.props.navigation.navigate('OtherPlayerDeatils')
+            }}>
             <ImageBackground style={{ height: 200, width: '100%' }}
                 source={require('../../images/batch_card.png')}
             >
@@ -144,8 +147,9 @@ export default class PlayerListing extends Component {
                 </View>
 
             </ImageBackground>
-
+            </TouchableOpacity>
         </View>
+
 
     );
 

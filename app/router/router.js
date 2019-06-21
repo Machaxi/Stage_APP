@@ -32,6 +32,8 @@ import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
 import mybatch from '../containers/MyBatch/MyBatch'
+import markAttendence from '../containers/CoachScreen/MarkAttendence'
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
 };
@@ -414,10 +416,10 @@ const coachHomeModule = createStackNavigator({
 
 
     },
-        EditProfile: {
-            screen: EditProfile,
+        MarkAttendence: {
+            screen: markAttendence,
             navigationOptions: ({navigation}) => ({
-                title: "Edit Profile",
+                title: "Mark Attendence",
                 headerLeft: <NavigationDrawerStructure navigationProps={navigation}/>,
                 headerRight: <RigitMenuToolbar navigationProps={navigation}
                                                navigation={navigation} showHome={false}/>,
@@ -428,6 +430,48 @@ const coachHomeModule = createStackNavigator({
 
             })
         },
+        EditProfile: {
+            screen: EditProfile,
+            navigationOptions: ({navigation}) => ({
+                title: "Edit Profile",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false}/>,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false}/>,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            })
+        },
+        PlayersListing: {
+            screen: PlayersListing,
+            navigationOptions: ({ navigation }) => ({
+                title: "Players Listing",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={true} />,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            })
+        },
+    OtherPlayerDeatils: {
+    screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+        title: "Players Listing",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                       navigation={navigation} showHome={true} />,
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+            backgroundColor: '#FFFFFF',
+        },
+
+    })
+},
 }, {
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)

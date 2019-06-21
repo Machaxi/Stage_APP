@@ -621,7 +621,7 @@ class  UserHome extends React.Component {
                                         //     isShowAddress: true
                                         // })
 
-
+                                        this.props.navigation.navigate('EditProfile')
                                         // this.props.navigation.navigate('SwitchPlayer', {
                                         //     userType: 'player'
                                         // })
