@@ -211,6 +211,57 @@ class  BatchDetails extends React.Component {
                         </View>
 
                     </CustomeCard>
+                    <CustomeCard>
+                        <View
+                            style={{margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text>Coach</Text>
+
+                        </View>
+                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+
+                        <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
+                            <View style={{marginRight:20,flexDirection:'row',height:50}}>
+
+                                <Image source={require('../../../images/Mysatus.png')}
+                                       style={{
+                                           width: 50,
+                                           height: 50,marginRight:10}}/>
+                                <Text style={{fontSize:14,marginBottom:10,marginTop:10}}>Niranjan</Text>
+                                <View style={{backgroundColor:'#CDB473',borderRadius:10,marginBottom:20,marginTop:5,marginRight:10,marginLeft:10,alignItems:'center',justifyContent:'center'}}>
+                                    <Text style={{fontSize:10,color:'white',marginRight:10,marginLeft:10,textAlign:'center'}}>Head Coach</Text>
+
+                                </View>
+                            </View>
+                            <View style={{borderColor:'#DFDFDF',borderWidth:1,borderRadius:20,marginBottom:20,marginTop:5,marginRight:10,marginLeft:10,alignItems:'center',justifyContent:'center'}}>
+                                <Text style={{fontSize:14,color:'#A3A5AE',marginBottom:0,marginRight:10,marginLeft:10}}>4.5</Text>
+
+                            </View>
+
+                        </View>
+                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+
+                        <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
+                            <View style={{marginRight:20,flexDirection:'row',height:50}}>
+
+                                <Image source={require('../../../images/Mysatus.png')}
+                                       style={{
+                                           width: 50,
+                                           height: 50,marginRight:10}}/>
+                                <Text style={{fontSize:14,marginBottom:10,marginTop:10}}>Niranjan</Text>
+                                <View style={{backgroundColor:'#CDB473',borderRadius:10,marginBottom:20,marginTop:5,marginRight:10,marginLeft:10,alignItems:'center',justifyContent:'center'}}>
+                                    <Text style={{fontSize:10,color:'white',marginRight:10,marginLeft:10,textAlign:'center'}}>Head Coach</Text>
+
+                                </View>
+                            </View>
+                            <View style={{borderColor:'#DFDFDF',borderWidth:1,borderRadius:20,marginBottom:20,marginTop:5,marginRight:10,marginLeft:10,alignItems:'center',justifyContent:'center'}}>
+                                <Text style={{fontSize:14,color:'#A3A5AE',marginBottom:0,marginRight:10,marginLeft:10}}>4.5</Text>
+
+                            </View>
+
+                        </View>
+
+
+                    </CustomeCard>
 
                 </ScrollView>
             </View>;
