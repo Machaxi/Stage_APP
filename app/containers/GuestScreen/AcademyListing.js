@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
+import BaseComponent from './../BaseComponent'
 
-class AcademyListing extends Component {
+class AcademyListing extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -291,6 +292,7 @@ class AcademyListing extends Component {
                             ratingCount={5}
                             imageSize={14}
                             readonly={true}
+                            startingValue={item.ratings}
                             style={{ height: 30, width: 80 }}
                         />
 

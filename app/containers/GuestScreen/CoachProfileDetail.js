@@ -5,8 +5,9 @@ import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { coachDetail } from '../../redux/reducers/AcademyReducer'
+import BaseComponent from '../BaseComponent';
 
-class CoachProfileDetail extends Component {
+class CoachProfileDetail extends BaseComponent {
 
     constructor(props) {
         super(props)

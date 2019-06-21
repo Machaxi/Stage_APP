@@ -1,19 +1,38 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, ImageBackground } from 'react-native';
-import { Card, Text, } from 'react-native-paper';
-import { Rating } from 'react-native-ratings';
+import React from 'react';
+import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground,TouchableOpacity } from 'react-native';
+import { Card, Text, ActivityIndicator, } from 'react-native-paper';
+import { connect } from 'react-redux';
 
-export default class PlayerListing extends Component {
+import { getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
+import BaseComponent from '../BaseComponent';
+
+class PlayersListing extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
-            data: ["test", "test", "test", "test", "test", "test", "test", "test"]
+            players: null,
+            id: '',
         }
+        this.state.id = this.props.navigation.getParam('id', '');
     }
 
     componentDidMount() {
 
+        this.props.getAcademyPlayersList(this.state.id).then(() => {
+            //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            let status = this.props.data.res.success
+            if (status) {
+                let players = this.props.data.res.data.players
+                this.setState({
+                    players: players
+                })
+            }
+
+
+        }).catch((response) => {
+            console.log(response);
+        })
     }
 
     listHeader() {
@@ -49,7 +68,6 @@ export default class PlayerListing extends Component {
 
 
 
-
         <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
             <TouchableOpacity onPress={()=>{
                 this.props.navigation.navigate('OtherPlayerDeatils')
@@ -58,7 +76,7 @@ export default class PlayerListing extends Component {
                 source={require('../../images/batch_card.png')}
             >
                 <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
-                <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>90</Text>
+                <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{item.score}</Text>
 
                 <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
@@ -77,7 +95,7 @@ export default class PlayerListing extends Component {
                             fontSize: 8,
                             paddingTop: 1
                         }}
-                    >U-13</Text>
+                    >{item.player_category}</Text>
                     <Image
                         style={{
                             height: 80, width: 50,
@@ -97,7 +115,7 @@ export default class PlayerListing extends Component {
                             marginLeft: 4,
                             marginTop: 16,
                         }}
-                    >State{"\n"}Player</Text>
+                    >{item.player_level.split(" ").join("\n")}</Text>
                 </View>
 
                 <View style={{
@@ -112,7 +130,7 @@ export default class PlayerListing extends Component {
                         fontWeight: 16,
                         fontWeight: '500',
                         textAlign: 'center'
-                    }}>Prithviraj P</Text>
+                    }}>{item.name}</Text>
                 </View>
 
                 <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
@@ -134,7 +152,7 @@ export default class PlayerListing extends Component {
                             <Image style={{ height: 7, width: 12, marginLeft: -12 }}
                                 source={require('../../images/left_batch_arrow.png')}></Image>
 
-                            <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>GOODLIKE</Text>
+                            <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{item.badge}</Text>
                             <Image style={{ height: 7, width: 12, marginRight: -12 }}
                                 source={require('../../images/right_batch_arrow.png')}></Image>
 
@@ -154,14 +172,22 @@ export default class PlayerListing extends Component {
     );
 
     render() {
+
+        if (this.props.data.loading || this.state.players == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
+
         return (
             <View style={styles.chartContainer}>
-
 
                 <FlatList
                     style={{ padding: 8 }}
                     ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.data}
+                    data={this.state.players}
                     numColumns={3}
                     renderItem={this._renderItem}
                 />
@@ -171,6 +197,18 @@ export default class PlayerListing extends Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        data: state.AcademyReducer,
+    };
+};
+const mapDispatchToProps = {
+    getAcademyPlayersList
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayersListing);
+
 
 const styles = StyleSheet.create({
     chartContainer: {

@@ -38,7 +38,9 @@ class  CoachHome extends React.Component {
 
             coach_profile:null,
             country: undefined,
-            strenthList : null
+            strenthList : null,
+            userData:null
+
         }
     }
 
@@ -345,7 +347,8 @@ class  CoachHome extends React.Component {
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
-                                this.props.navigation.navigate('PlayersListing')
+                               // this.props.navigation.navigate('PlayersListing')
+                                this.props.navigation.navigate('PlayersListing', { id: this.state.userData.academy_id })
                               //
 
                             }}>

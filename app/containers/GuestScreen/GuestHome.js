@@ -2,8 +2,9 @@ import React from 'react'
 import roter from '../../router/router'
 import {View,ImageBackground,Text,Card} from 'react-native'
 import {  Button } from 'react-native-paper';
+import BaseComponent from '../BaseComponent';
 
-class  GuestHome extends React.Component {
+class  GuestHome extends BaseComponent {
 
     render() {
         return (
