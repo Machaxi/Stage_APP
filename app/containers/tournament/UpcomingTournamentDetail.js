@@ -282,11 +282,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
                                     </View>
 
-
                                 </View>
-
-
-
 
                             </View>
 
