@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image } from 'react-native';
-import { doLogin,doFBLogin } from '../../redux/reducers/loginReducer';
+import { doLogin, doFBLogin } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
-import {getData, onSignOut, storeData,onSignIn} from '../../components/auth'
+import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
 
 import firebase from 'react-native-firebase';
-import {PARENT} from "../../components/Constants";
-import {GUEST,PLAYER,COACH } from "../../components/Constants";
+import { PARENT } from "../../components/Constants";
+import { GUEST, PLAYER, COACH } from "../../components/Constants";
 
 const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803718_1280.png';
 
- class PhoneAuth extends Component {
+class PhoneAuth extends Component {
     constructor(props) {
         super(props);
         this.unsubscribe = null;
@@ -20,15 +20,15 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
             codeInput: '',
             phoneNumber: '+91',
             confirmResult: null,
-            isCall:true,
+            isCall: true,
         };
     }
 
     componentDidMount() {
-      // this.signOut()
+        // this.signOut()
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.setState({ user1: user.toJSON()});
+                this.setState({ user1: user.toJSON() });
 
             } else {
                 // User has been signed out, reset the state
@@ -38,7 +38,7 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
                     codeInput: '',
                     phoneNumber: '+91',
                     confirmResult: null,
-                    token:'',
+                    token: '',
                 });
             }
         });
@@ -46,8 +46,8 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
             // this.setState({
             //     token:token,
             // },
-              // console.log("token", token))
-           this.signIn11(this.state.user1,token)
+            // console.log("token", token))
+            this.signIn11(this.state.user1, token)
         })
 
 
@@ -77,9 +77,9 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
                     firebase.auth().currentUser.getIdToken(true).then((token) => {
                         console.log("token", token)
                         this.setState({
-                            token:token,
+                            token: token,
 
-                        },this.signIn11(this.state.user1,token))
+                        }, this.signIn11(this.state.user1, token))
 
                         if (!token) {
                             //Helpers.logout(false);
@@ -96,114 +96,104 @@ const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803
     signOut = () => {
         firebase.auth().signOut();
         onSignOut()
-       // removeItem()
+        // removeItem()
 
     }
 
-     signIn11 = (user1,token) => {
+    signIn11 = (user1, token) => {
 
-this.setState({
-    isCall:false
-})
-         var dataDic ={};
-         var dict = {};
-         dict['phone_number'] = "+912222222222"//user.phoneNumber;
-         dict['firebase_token'] = token;
-         dict['device_type'] = "IOS";
-         dict['app_version'] = '1.1.0';
-         dict['fcm_token'] = 'xyzabcdcc';
-         dict['has_firebase_check'] = false;
-
-
-
-         dataDic['data']= dict;
-         console.log("dicttttc ",dict)
-             this.props.doLogin(dataDic).then(() => {
-               //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
-                 //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
-                 let user = JSON.stringify(this.props.data.user);
-                 console.log(' user response payload ' + user);
-                 let user1 = JSON.parse(user)
-
-                 if (user1.success == true) {
-                     console.log(' user response  ' + user1.success_message);
-
-                      var userData = user1['data'];
-                      var userInfoData = userData['user'];
-                      storeData("userInfo", JSON.stringify(userData))
-                     onSignIn()
-                     if(userData.is_existing_user == true){
-                       if(userInfoData.user_type == GUEST){
-
-                           this.props.navigation.navigate('AcademyListing')
-
-                       }else if(userInfoData.user_type == PLAYER)
-                       {
-                         if(!userData.has_multiple_acadmies  )
-                         {
-                             this.props.navigation.navigate('UHome')
-
-                         }else
-                         {
-                             this.props.navigation.navigate('SwitchPlayer',{
-                                 userType:'PLAYER'
-                             })
-                         }
-
-                     }else if(userInfoData.user_type == PARENT)
-                     {
-                         if(userData.has_multiple_acadmies == false)
-                         {
-                             this.props.navigation.navigate('PHome')
-
-                         }else
-                         {
-                             this.props.navigation.navigate('SwitchPlayer',{
-                                 userType:PLAYER
-                             })
-                         }
-
-                     }
-                       else if(userInfoData.user_type == COACH)
-                       {
-                           if(userData.has_multiple_acadmies == false)
-                           {
-                               this.props.navigation.navigate('CHome')
-                           }else
-                           {
-                               this.props.navigation.navigate('SwitchPlayer',{
-                                   userType:COACH
-                               })
-                           }
-
-                       }
+        this.setState({
+            isCall: false
+        })
+        var dataDic = {};
+        var dict = {};
+        dict['phone_number'] = "+911111111111"//user.phoneNumber;
+        dict['firebase_token'] = token;
+        dict['device_type'] = "IOS";
+        dict['app_version'] = '1.1.0';
+        dict['fcm_token'] = 'xyzabcdcc';
+        dict['has_firebase_check'] = false;
 
 
 
-                     //
-                     // if(otherParam == true){
-                     //     this.props.navigation.navigate('DrawerNavigator')
-                     // }
-                     // else
-                     // {
-                     //     this.props.navigation.goBack();
+        dataDic['data'] = dict;
+        console.log("dicttttc ", dict)
+        this.props.doLogin(dataDic).then(() => {
+            //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
+            //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
+            let user = JSON.stringify(this.props.data.user);
+            console.log(' user response payload ' + user);
+            let user1 = JSON.parse(user)
 
-                      }
-                      else
-                     {
-                         this.props.navigation.navigate('EditProfile')
-                     }
-                 } else {
-                     alert('Invalid credentials')
-                 }
+            if (user1.success == true) {
+                console.log(' user response  ' + user1.success_message);
+
+                var userData = user1['data'];
+                var userInfoData = userData['user'];
+                storeData("userInfo", JSON.stringify(userData))
+                onSignIn()
+                if (userData.is_existing_user == true) {
+                    if (userInfoData.user_type == GUEST) {
+
+                        this.props.navigation.navigate('AcademyListing')
+
+                    } else if (userInfoData.user_type == PLAYER) {
+                        if (!userData.has_multiple_acadmies) {
+                            this.props.navigation.navigate('UHome')
+
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: 'PLAYER'
+                            })
+                        }
+
+                    } else if (userInfoData.user_type == PARENT) {
+                        if (userData.has_multiple_acadmies == false) {
+                            this.props.navigation.navigate('PHome')
+
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: PLAYER
+                            })
+                        }
+
+                    }
+                    else if (userInfoData.user_type == COACH) {
+                        if (userData.has_multiple_acadmies == false) {
+                            this.props.navigation.navigate('CHome')
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
+                        }
+
+                    }
 
 
-             }).catch((response) => {
-                 //handle form errors
-                 console.log(response);
-             })
 
-     }
+                    //
+                    // if(otherParam == true){
+                    //     this.props.navigation.navigate('DrawerNavigator')
+                    // }
+                    // else
+                    // {
+                    //     this.props.navigation.goBack();
+
+                }
+                else {
+                    this.props.navigation.navigate('EditProfile')
+                }
+            } else {
+                alert('Invalid credentials')
+            }
+
+
+        }).catch((response) => {
+            //handle form errors
+            console.log(response);
+        })
+
+    }
 
     renderPhoneNumberInput() {
         const { phoneNumber } = this.state;
@@ -225,7 +215,7 @@ this.setState({
 
     renderMessage() {
         const { message } = this.state;
-console.warn("message",message)
+        console.warn("message", message)
         if (!message.length) return null;
 
         return (
@@ -254,7 +244,7 @@ console.warn("message",message)
     }
 
     render() {
-        const { user1, confirmResult,token,isCall } = this.state;
+        const { user1, confirmResult, token, isCall } = this.state;
         return (
             <View style={{ flex: 1 }}>
 
@@ -265,44 +255,44 @@ console.warn("message",message)
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
                 {/*{user1 && (*/}
-                    {/*<View*/}
-                        {/*style={{*/}
-                            {/*padding: 15,*/}
-                            {/*justifyContent: 'center',*/}
-                            {/*alignItems: 'center',*/}
-                            {/*backgroundColor: '#77dd77',*/}
-                            {/*flex: 1,*/}
-                        {/*}}*/}
-                    {/*>*/}
+                {/*<View*/}
+                {/*style={{*/}
+                {/*padding: 15,*/}
+                {/*justifyContent: 'center',*/}
+                {/*alignItems: 'center',*/}
+                {/*backgroundColor: '#77dd77',*/}
+                {/*flex: 1,*/}
+                {/*}}*/}
+                {/*>*/}
 
 
 
 
-                        {/*<Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />*/}
-                        {/*<Text style={{ fontSize: 25 }}>Signed In!</Text>*/}
-                        {/*<Text>{JSON.stringify(user1)}</Text>*/}
-                        {/*<Button title="Sign Out" color="red" onPress={this.signOut} />*/}
-                    {/*</View>*/}
+                {/*<Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />*/}
+                {/*<Text style={{ fontSize: 25 }}>Signed In!</Text>*/}
+                {/*<Text>{JSON.stringify(user1)}</Text>*/}
+                {/*<Button title="Sign Out" color="red" onPress={this.signOut} />*/}
+                {/*</View>*/}
                 {/*)}*/}
 
 
 
 
 
-               {/*{ (user && isCall) ? firebase.auth().currentUser.getIdToken(true).then((token) => {*/}
-                   {/*console.log("token", token)*/}
-                   {/*this.setState({*/}
-                       {/*token:token,*/}
+                {/*{ (user && isCall) ? firebase.auth().currentUser.getIdToken(true).then((token) => {*/}
+                {/*console.log("token", token)*/}
+                {/*this.setState({*/}
+                {/*token:token,*/}
 
-                   {/*},this.signIn11(user,token))*/}
+                {/*},this.signIn11(user,token))*/}
 
-                   {/*if (!token) {*/}
-                       {/*//Helpers.logout(false);*/}
-                   {/*}*/}
-                   {/*else {*/}
-                       {/*// init rest of app, send user to primary navigation component, etc...*/}
-                   {/*}*/}
-               {/*}):null }*/}
+                {/*if (!token) {*/}
+                {/*//Helpers.logout(false);*/}
+                {/*}*/}
+                {/*else {*/}
+                {/*// init rest of app, send user to primary navigation component, etc...*/}
+                {/*}*/}
+                {/*}):null }*/}
 
             </View>
 
@@ -322,7 +312,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    doLogin,doFBLogin
+    doLogin, doFBLogin
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhoneAuth);

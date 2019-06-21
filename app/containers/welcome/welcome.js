@@ -6,6 +6,7 @@ import BaseComponent from '../BaseComponent';
 import firebase from "react-native-firebase";
 import {onSignOut} from "../../components/auth";
 //import firebase from 'react-native-firebase';
+
 class welcome extends BaseComponent {
 
     constructor(props) {
@@ -20,7 +21,6 @@ class welcome extends BaseComponent {
                     width: '100%',
                     height: '100%',
                 }}>
-
 
                 <View
                     style={{
@@ -57,14 +57,15 @@ class welcome extends BaseComponent {
                 <Button
                     uppercase={false}
                     //PhoneAuth
-                    color="#ffffff" onPress={() => this.props.navigation.navigate('UpcomingTournamentDetail')}>
+                    color="#ffffff" onPress={() => 
+                   this.props.navigation.navigate('AcademyListing')
+                }>
                     Skip Login
                 </Button>
 
             </ImageBackground>
         );
     }
-
 }
 export default welcome
 
