@@ -3,8 +3,9 @@ import React from 'react'
 import { View, Image, Linking, Platform } from 'react-native'
 import {getData, isSignedIn,onSignIn, storeData} from "../../components/auth";
 import {COACH, GUEST, PARENT, PLAYER} from "../../components/Constants";
+import BaseComponent from '../BaseComponent';
 
-class Splash extends React.Component {
+class Splash extends BaseComponent {
 
     constructor(props) {
         super(props);

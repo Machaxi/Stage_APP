@@ -114,27 +114,30 @@ const userHomeModule = createStackNavigator({
     UserHome: {
         screen: userhome,
         navigationOptions: ({ navigation }) => ({
-            title: "Dribble",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: {
-                color: 'white'
-            },
-            headerStyle: {
-                elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+            //title: "Dribble",
 
-            },
-            headerBackground: (
-                <LinearGradient
-                    colors={['#262051', '#24262A']}
-                    style={{ flex: 1 }}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 2.5, y: 0 }}
-                />
-            ),
+            // headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+            //     showBackAction={false}
+            // />,
+            // headerRight: <RigitMenuToolbar navigationProps={navigation}
+            //     navigation={navigation} showHome={false} />,
+            // headerTitleStyle: {
+            //     color: 'white'
+            // },
+            // headerStyle: {
+            //     elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+
+            // },
+             header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+            navigation={navigation} />,
+            // headerBackground: (
+            //     <LinearGradient
+            //         colors={['#262051', '#24262A']}
+            //         style={{ flex: 1 }}
+            //         start={{ x: 0, y: 0 }}
+            //         end={{ x: 2.5, y: 0 }}
+            //     />
+           //  ),
 
         })
     },
