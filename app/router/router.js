@@ -37,6 +37,8 @@ import TournamentFixture from '../containers/tournament/TournamentFixture'
 import UpcomingTournamentDetail from '../containers/tournament/UpcomingTournamentDetail'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
+import coachBatch from '../containers/CoachScreen/Batch/BatchScreen'
+import batchDeatails from '../containers/CoachScreen/Batch/BatchDetails'
 
 
 const headerStyle = {
@@ -262,6 +264,64 @@ const GuestHomeModule = createStackNavigator({
     },
 })
 
+const TournamentModule = createStackNavigator({
+    //All the screen from the Screen1 will be indexed here
+    TournamentTabs: {
+        screen: TournamentTabs,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    UpcomingTournamentDetail: {
+        screen: UpcomingTournamentDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
+    TournamentFixture: {
+        screen: TournamentFixture,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Fixture',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
+})
+
+
 const tabBarController = createBottomTabNavigator(
     {
         Home: {
@@ -314,7 +374,7 @@ const tabBarController = createBottomTabNavigator(
 
         },
         Tournament: {
-            screen: userHomeModule,
+            screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
                 showLabel: false,
@@ -485,6 +545,50 @@ const coachHomeModule = createStackNavigator({
     }
 );
 
+const coachBatchModule = createStackNavigator({
+
+
+    CoachBatch: {
+        screen: coachBatch,
+        navigationOptions: ({navigation}) => ({
+            title: "My Batch",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showHome={false}/>,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+        BatchDetails: {
+            screen: batchDeatails,
+            navigationOptions: ({navigation}) => ({
+                title: "Batch Details",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                       showBackAction={true}
+                />,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false}/>,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            })
+
+        },
+},{
+    contentComponent: ({ navigation }) => {
+        return (<CoachMenuDrawer navigation={navigation} />)
+    },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+}
+);
 
 const tabBarControllerCoach = createBottomTabNavigator(
     {
@@ -516,7 +620,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
 
         },
         Batch: {
-            screen: userHomeModule,
+            screen: coachBatchModule,
             navigationOptions: {
                 tabBarLabel: 'Batch',
                 showLabel: false,
@@ -541,7 +645,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
 
         },
         Tournament: {
-            screen: userHomeModule,
+            screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
                 showLabel: false,
@@ -585,7 +689,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
 
         },
         BookandPlay: {
-            screen: userHomeModule,
+            screen: GuestHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 showLabel: false,
@@ -629,62 +733,6 @@ const coachDrawer = createDrawerNavigator({
     }
 );
 
-const TournamentModule = createStackNavigator({
-    //All the screen from the Screen1 will be indexed here
-    TournamentTabs: {
-        screen: TournamentTabs,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    UpcomingTournamentDetail: {
-        screen: UpcomingTournamentDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
-    TournamentFixture: {
-        screen: TournamentFixture,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Fixture',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
-})
 
 
 const tabBarControllerGuest = createBottomTabNavigator(
