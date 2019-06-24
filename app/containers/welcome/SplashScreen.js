@@ -44,7 +44,6 @@ class Splash extends BaseComponent {
 
             } else {
                 getData('userInfo', (value) => {
-                    console.log("value", value)
                     userData = (JSON.parse(value))
 // onSignIn()
                     if(userData.academy_id != null) {

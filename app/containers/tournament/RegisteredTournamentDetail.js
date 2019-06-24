@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
-import { Rating } from 'react-native-ratings';
+import React from 'react';
+import { StyleSheet, View, Image, Text } from 'react-native';
+import { Card, } from 'react-native-paper';
 import BaseComponent from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-export default class UpcomingTournamentDetail extends BaseComponent {
+export default class RegisteredTournamentDetail extends BaseComponent {
 
     constructor(props) {
         super(props)
-
     }
-
 
 
     render() {
@@ -113,16 +110,6 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                     Last Date of Registration <Text style={{ color: '#404040' }}>05 May 19</Text>
                                 </Text>
 
-
-
-                                <Text style={{
-                                    paddingTop: 6, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
-                                </Text>
-
                                 <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
                                 <View style={{ marginBottom: 8, marginRight: 12 }}>
@@ -138,7 +125,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                             width: "33.33%",
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
-                                            Registration Fees
+                                            Fees Paid
                         </Text>
 
                                         <Text style={{
@@ -168,7 +155,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                             width: "33.33%",
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
-                                            Rs. 500/-
+                                            Rs. 1100/-
                                     </Text>
                                         <Text style={{
                                             paddingTop: 10, fontSize: 14,
@@ -219,6 +206,63 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                  </Text>
                                     </View>
 
+
+                                    <View style={{
+                                        marginTop: 12,
+                                    }}>
+
+                                        <Text style={{
+                                            fontSize: 10,
+                                            color: '#A3A5AE',
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}>
+                                            Registered Players
+                                    </Text>
+                                        <View style={{ flexDirection: 'row', flex:1,justifyContent: 'space-between' }}>
+
+                                            <Text style={{
+                                                paddingTop: 10, fontSize: 14,
+                                                color: '#404040',
+                                                width: "30%",
+                                                fontWeight:'400',
+                                                fontFamily: 'Quicksand-Bold'
+                                            }}>
+                                                Prithiviraj P
+                                            </Text>
+                                            <Text style={{
+                                                paddingTop: 10, fontSize: 14,
+                                                color: '#404040',
+                                                width: "15%",
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                U-13
+                                            </Text>
+                                            <Text style={{
+                                                paddingTop: 10, fontSize: 14,
+                                                color: '#404040',
+                                                width: "35%",
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Singles,Doubles
+                                            </Text>
+                                            <Text style={{
+                                                paddingTop: 10, fontSize: 10,
+                                                color: '#667DDB',
+                                                width: "20%",
+                                                textAlign:'center',
+                                                marginTop:2,
+                                                alignItems:'center',
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Edit Partner
+                                            </Text>
+
+
+                                        </View>
+                                    </View>
+
+
+
                                     <View style={{ marginTop: 12, marginBottom: 12, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
 
@@ -266,40 +310,39 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                     </View>
 
 
+                                    <View style={{
+                                        marginTop: 10,
+                                    }}>
 
-                                    <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 16, marginLeft: 8, marginRight: 8 }}>
+                                        <Text style={{
+                                            fontSize: 10,
+                                            color: '#A3A5AE',
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}>
+                                            Venue
+                                    </Text>
 
-                                        <TouchableOpacity activeOpacity={.8}
-                                            style={styles.rounded_button_white}
-                                            onPress={() => {
-                                                this.props.navigation.navigate('Registration')
-                                            }}>
-                                            <Text
-                                                style={{
-                                                    color: '#67BAF5',
-                                                    textAlign: 'center',
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}
-                                            >
-                                                Close
-        </Text>
-                                        </TouchableOpacity>
+                                        <Text style={{
+                                            paddingTop: 6, fontSize: 14,
+                                            color: '#404040',
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}>
+                                            Cras quis nulla commodo, aliquam lectus sed, blandit augue.
+                                 </Text>
+                                    </View>
 
-                                        <TouchableOpacity activeOpacity={.8}
+
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        marginTop: 16, marginBottom: 16, marginLeft: 8, marginRight: 8
+                                    }}>
+
+                                        <Text
                                             style={styles.rounded_button}
-                                            onPress={() => {
-                                                this.props.navigation.navigate('Registration')
-                                            }}>
-                                            <Text
-                                                style={{
-                                                    color: 'white',
-                                                    textAlign: 'center',
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}
-                                            >
-                                                Register
-                                            </Text>
-                                        </TouchableOpacity>
+                                        >
+                                            View Fixture
+        </Text>
 
                                     </View>
 
@@ -329,7 +372,9 @@ const styles = StyleSheet.create({
         marginRight: 4,
         borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
-
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular'
     },
     rounded_button_white: {
         width: '48%',

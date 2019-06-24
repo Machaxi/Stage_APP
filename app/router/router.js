@@ -35,6 +35,10 @@ import mybatch from '../containers/MyBatch/MyBatch'
 import TournamentTabs from '../containers/tournament/TournamentTabs'
 import TournamentFixture from '../containers/tournament/TournamentFixture'
 import UpcomingTournamentDetail from '../containers/tournament/UpcomingTournamentDetail'
+import RegisteredTournamentDetail from '../containers/tournament/RegisteredTournamentDetail'
+import ResultsTournamentDetail from '../containers/tournament/ResultsTournamentDetail'
+import Registration from '../containers/tournament/Registration'
+
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import coachBatch from '../containers/CoachScreen/Batch/BatchScreen'
@@ -292,7 +296,25 @@ const TournamentModule = createStackNavigator({
             title: 'Tournament',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={false}
+                                                   showBackAction={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    }
+    ,
+    RegisteredTournamentDetail: {
+        screen: RegisteredTournamentDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Registered Tournament',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={true}
             />,
             headerRight: <RigitMenuToolbar navigationProps={navigation}
                                            navigation={navigation} showNotification={true} />,
@@ -303,6 +325,25 @@ const TournamentModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
+    ResultsTournamentDetail: {
+        screen: ResultsTournamentDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Featther accademy Tournament',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} 
+                                           showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
 
     TournamentFixture: {
         screen: TournamentFixture,
@@ -310,7 +351,7 @@ const TournamentModule = createStackNavigator({
             title: 'Fixture',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={false}
+                                                   showBackAction={true}
             />,
             headerRight: <RigitMenuToolbar navigationProps={navigation}
                                            navigation={navigation} showNotification={true} />,
@@ -321,6 +362,24 @@ const TournamentModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
+    Registration: {
+        screen: Registration,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Registration',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                   showBackAction={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                           navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
 
 })
 

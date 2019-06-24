@@ -66,7 +66,7 @@ export default class UpcomingRoute extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                //this.props.navigation.navigate('AcademyProfile', { id: item.id })
+                this.props.navigation.navigate('RegisteredTournamentDetail')
             }}>
 
             <Card
@@ -181,7 +181,7 @@ export default class UpcomingRoute extends BaseComponent {
 
                         <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
-                                //this.props.navigation.navigate('TournamentFixture')
+                               this.props.navigation.navigate('TournamentFixture')
                             }}
                         >
 
