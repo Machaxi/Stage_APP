@@ -117,3 +117,26 @@ export function coachDetail() {
         }
     }
 };
+
+export function getBatchPlayersList(header,batch_id) {
+    console.log("getBatchPlayersList",header,batch_id)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `batch/${batch_id}/players`,
+                method: 'GET',
+                // data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}

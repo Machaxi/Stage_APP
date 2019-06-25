@@ -6,7 +6,7 @@ import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,A
 import {Card} from 'react-native-paper'
 
 import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachDashboard} from "../../../redux/reducers/dashboardReducer";
+import {getCoachBatchDetails} from "../../../redux/reducers/BatchReducer";
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 const acedemicList = [
@@ -30,13 +30,8 @@ class  BatchDetails extends React.Component {
         super(props)
 
         this.state = {
-
-            batchList :[{batch_name:'XYZ',id:1 },
-                {batch_name:'XYZ',id:2},
-                {batch_name:'XYZ',id:3},
-                {batch_name:'XYZ',id:4},
-                {batch_name:'XYZ',id:5},
-               ],
+            batchDetails:null,
+            coactList :null,
             userData:null
 
         }
@@ -54,9 +49,10 @@ class  BatchDetails extends React.Component {
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
+            console.log("userData.user",this.props.navigation.getParam('batch_id'))
             if(userData.user['user_type'] =='COACH'){
-              //  this.getCoachBatchList(userData['academy_id'],userData['coach_id'])
+              //  this.state.id = this.props.navigation.getParam('batch_id', '');
+                this.getCoachBatch(this.props.navigation.getParam('batch_id'))
 
             }
 
@@ -64,19 +60,20 @@ class  BatchDetails extends React.Component {
         });
     }
 
-    getCoachBatchList(academy_id,player_id,){
+    getCoachBatch(batch_id){
         getData('header',(value)=>{
-            console.log("header",value,academy_id,player_id);
-            this.props.getCoachBatchList(value,player_id,academy_id).then(() => {
+            console.log("header",value,batch_id);
+            this.props.getCoachBatchDetails(value,batch_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.dashboardData);
+                let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
                     this.setState({
-                        coach_profile:user1.data['coach_profile'],
+                        batchDetails:user1.data['batch'],
+                        coactList:user1.data['batch'].coaches
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -91,13 +88,15 @@ class  BatchDetails extends React.Component {
 
     }
 
-    sessionMangement(operations)
+    sessionMangement(session)
     {
 
-        sessionArray = [];
-        for (let i = 0; i < operations.next_sessions.length; i++)
-        {
-            const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
+        console.log(session)
+         sessionArray = [];
+        // for (let i = 0; i < operations.next_sessions.length; i++)
+        // {
+            const {routine_name,session_date,is_canceled,end_time,start_time } = session
+
             console.log("is_canceled",{is_canceled})
             if( is_canceled == true ){
                 sessionArray.push(
@@ -153,21 +152,58 @@ class  BatchDetails extends React.Component {
                     </View>
                 );
             }
-        }
+       // }
     }
+
+
+    renderItem = ({ item }) => (
+        <TouchableOpacity key={item} onPress={() => {
+
+            console.warn("Touch Press")
+
+            // this.props.navigation.navigate('OrderTracking', {
+            //     order_id: item.increment_id
+            // })
+
+        }}>
+            <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
+                <View style={{marginRight:20,flexDirection:'row',height:50}}>
+
+                    <Image source={require('../../../images/Mysatus.png')}
+                           style={{
+                               width: 50,
+                               height: 50,marginRight:10}}/>
+                    <Text style={{fontSize:14,marginBottom:10,marginTop:10}}>{item.name}</Text>
+                    <View style={{backgroundColor:'#CDB473',borderRadius:10,marginBottom:20,marginTop:5,marginRight:10,marginLeft:10,alignItems:'center',justifyContent:'center'}}>
+                        { item.is_head ? <Text style={{fontSize:10,color:'white',marginRight:10,marginLeft:10,textAlign:'center'}}>Head Coach</Text> : null}
+
+                    </View>
+                </View>
+                <View style={{borderColor:'#DFDFDF',borderWidth:1,borderRadius:20,marginBottom:20,marginTop:5,marginRight:10,marginLeft:10,alignItems:'center',justifyContent:'center'}}>
+                    <Text style={{fontSize:14,color:'#A3A5AE',marginBottom:0,marginRight:10,marginLeft:10}}>{item.ratings}</Text>
+
+                </View>
+
+            </View>
+
+        </TouchableOpacity>
+
+    );
+
+
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (this.props.data.loading && !this.state.batchDetails) {
             return (
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <ActivityIndicator size="large" color="#67BAF5"/>
                 </View>
             )
         }
-       // if (this.state.coach_profile) {
+       if (this.state.batchDetails) {
 
-       // const {is_attandence_due, is_performance_due, is_reward_point_due, is_scorer,operations,tournaments,attandence_batch} = this.state.coach_profile
+        const {is_attandence_due, is_performance_due, is_reward_point_due, is_scorer,operations,tournaments,session} = this.state.batchDetails
 
-
+                this.sessionMangement(session);
             return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                 <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                     <View style={{margin: 10, marginTop: 20}}>
@@ -180,7 +216,7 @@ class  BatchDetails extends React.Component {
 
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
-                        {/*{sessionArray}*/}
+                        {sessionArray}
 
                     </CustomeCard>
 
@@ -193,43 +229,174 @@ class  BatchDetails extends React.Component {
 
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
-                        {/*{sessionArray}*/}
+
                         <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
                             <View  style={{width:'50%'}}>
                                 <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Weekdays</Text>
-                                <Text style={{fontSize:14,marginBottom:10}}>08:30 AM  -  10:30 AM</Text>
+                                <Text style={{fontSize:14,marginBottom:10}}>{operations.weekday.days.join(' ')}</Text>
+                                <Text style={{fontSize:14,marginBottom:10}}>{operations.weekday.start_time + ' - ' + operations.weekday.end_time}</Text>
                             </View>
                             <View style={{width:'50%'}}>
                                 <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Weekend</Text>
-                                <Text style={{fontSize:14,marginBottom:10}}>08:30 PM  -  10:30 PM</Text>
+                                <Text style={{fontSize:14,marginBottom:10}}>{operations.weekend.days.join(' ')}</Text>
+                                <Text style={{fontSize:14,marginBottom:10}}>{operations.weekend.start_time + ' - ' + operations.weekend.end_time}</Text>
+
                             </View>
 
                         </View>
-                        <View style={{margin:10}}>
-                            <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Operational days</Text>
-                            <Text style={{fontSize:14,marginBottom:10}}>MON TUE WED THUS</Text>
-                        </View>
+
 
                     </CustomeCard>
+                    <CustomeCard>
+                        <View
+                            style={{margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text>Coach</Text>
+
+                        </View>
+                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+
+                        <FlatList
+                            data={this.state.coactList}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => item.id}
+                        />
+
+                    </CustomeCard>
+                    <View style={{margin: 5}}>
+                        <CustomeCard>
+                            <TouchableOpacity onPress={() => {
+
+                                console.warn("Touch Press")
+                                this.props.navigation.navigate('PlayersListing',{batch_id: this.props.navigation.getParam('batch_id'),List_type:'BATCH'})
+
+                            }}>
+                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+
+                                    <View style={{flex: 1}}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={{fontSize: 14}}>
+                                                View Players
+                                            </Text>
+
+                                            <Image source={require('../../../images/forwardArrow.png')}
+                                                   style={{
+                                                       width: 19,
+                                                       height: 13, marginRight: 0, marginTop: 5
+                                                   }}/>
+
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        </CustomeCard>
+                    </View>
+                    <View style={{margin: 5}}>
+                        <CustomeCard>
+                            <TouchableOpacity onPress={() => {
+
+                                console.warn("Touch Press")
+
+
+                            }}>
+                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+
+
+                                    <View style={{flex: 1}}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={{fontSize: 14}}>
+                                                Update Player Progress
+                                            </Text>
+
+                                            <Image source={require('../../../images/forwardArrow.png')}
+                                                   style={{
+                                                       width: 19,
+                                                       height: 13, marginRight: 0, marginTop: 5
+                                                   }}/>
+
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        </CustomeCard>
+                    </View>
+                    <View style={{margin: 5}}>
+                        <CustomeCard>
+                            <TouchableOpacity onPress={() => {
+
+                                console.warn("Touch Press")
+
+
+                            }}>
+                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+
+
+                                    <View style={{flex: 1}}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={{fontSize: 14}}>
+                                                Attendance Book
+                                            </Text>
+
+                                            <Image source={require('../../../images/forwardArrow.png')}
+                                                   style={{
+                                                       width: 19,
+                                                       height: 13, marginRight: 0, marginTop: 5
+                                                   }}/>
+
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        </CustomeCard>
+                    </View>
 
                 </ScrollView>
             </View>;
-        // }else{
-        //     return (
-        //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        //
-        //         </View>
-        //     )
-      //  }
+        }else{
+            return (
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+
+                </View>
+            )
+       }
     }
 }
 const mapStateToProps = state => {
     return {
-        data: state.DashboardReducer,
+        data: state.BatchReducer,
     };
 };
 const mapDispatchToProps = {
-    getCoachDashboard
+    getCoachBatchDetails
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BatchDetails);
 

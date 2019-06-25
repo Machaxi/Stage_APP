@@ -103,6 +103,7 @@ class  CoachHome extends React.Component {
             const {is_canceled, end_time,session_date, start_time} = session
 
             attendenceArray.push(
+
                 <View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{
@@ -111,14 +112,21 @@ class  CoachHome extends React.Component {
                         <Text style={{
                             margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
                         }}>{batch_category}</Text>
+
                     </View>
+
+
 
                     { is_canceled ?  <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
                         <Text style={{marginRight: 20, fontSize: 14,textDecorationLine: 'line-through'}}>{session_date}</Text>
                         <Text style={{fontSize: 14,textDecorationLine: 'line-through'}}>{start_time + "  -   " + end_time}</Text>
-                    </View> : <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                        <Text style={{marginRight: 20, fontSize: 14}}>{session_date}</Text>
-                        <Text style={{fontSize: 14}}>{start_time + "  -   " + end_time}</Text>
+                    </View> : <View>
+                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
+                            <Text style={{marginRight: 20, fontSize: 14}}>{session_date}</Text>
+                            <Text style={{fontSize: 14}}>{start_time + "  -   " + end_time}</Text>
+                        </View>
+                        <CustomeButtonB onPress={() =>   this.props.navigation.navigate('MarkAttendence',{batch_id:batch_id})}>
+                            Mark Attendance</CustomeButtonB>
                     </View> }
 
 
@@ -227,10 +235,9 @@ class  CoachHome extends React.Component {
         }
         if (this.state.coach_profile) {
             const {is_attandence_due, is_performance_due, is_reward_point_due, is_scorer,operations,tournaments,attandence_batch} = this.state.coach_profile
-            const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
-            const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
-
-            this.attedenceMangement(attandence_batch)
+            // const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
+            // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
+            { is_attandence_due ? this.attedenceMangement(attandence_batch):null}
 
             this.sessionMangement(operations)
             this.scoreMangement(tournaments)
@@ -245,7 +252,7 @@ class  CoachHome extends React.Component {
                             Switch Acedemi
                         </SwitchButton>
                     </View>
-                    <CustomeCard>
+                    {is_attandence_due ?  <CustomeCard>
                         <View style={{margin: 10, marginTop: 20,flexDirection:'row'}}>
                             <Text>Attendance</Text>
                             {is_attandence_due ? <View
@@ -261,10 +268,9 @@ class  CoachHome extends React.Component {
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
-                        {attendenceArray}
-                        <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence')}>
-                            Mark Attendance</CustomeButtonB>
-                    </CustomeCard>
+                        {is_attandence_due ? {attendenceArray} : null}
+
+                    </CustomeCard> : null}
 
 
                     <CustomeCard>
@@ -300,7 +306,7 @@ class  CoachHome extends React.Component {
                                 players.</Text>
 
                         </View>
-                        <CustomeButtonB onPress={() => console.log("title")}>
+                        <CustomeButtonB onPress={() =>  this.props.navigation.navigate('EditProfile')}>
                             Mark Attendance</CustomeButtonB>
                     </CustomeCard>:null}
 

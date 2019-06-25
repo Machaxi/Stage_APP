@@ -7,10 +7,11 @@ import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,A
 import {Card} from 'react-native-paper'
 import {SwitchButton ,CustomeButtonB} from  '../../components/Home/SwitchButton'
 import {CustomeCard } from  '../../components/Home/Card'
-import {getCoachDashboard} from "../../redux/reducers/dashboardReducer";
+import {getCoachBatchAttendence,saveCoachBatchAttendence} from "../../redux/reducers/BatchReducer";
 import {getData} from "../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
+import moment from 'moment';
 const acedemicList = [
     {
         label: 'India',
@@ -40,12 +41,8 @@ class  MarkAttendence extends React.Component {
           //  coach_profile:null,
             country: undefined,
             billingchecked:false,
-            playerList : [{name:'Niranjan',id:1,isPresent:false},
-                {name:'Niranjan',id:2,isPresent:false},
-                {name:'AJay',id:3,isPresent:false},
-                {name:'Ashish',id:4,isPresent:false},
-                {name:'Lokesh',id:5,isPresent:false},
-                {name:'Vijay',id:6,isPresent:false}]
+            playerList : null,
+            batchDetails:null,
         }
     }
 
@@ -63,7 +60,8 @@ class  MarkAttendence extends React.Component {
             });
             console.log("userData.user",userData.user['user_type'])
             if(userData.user['user_type'] =='COACH'){
-              //  this.getCoachDashboardData(userData['academy_id'],userData['coach_id'])
+
+                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'))
 
             }
 
@@ -71,20 +69,20 @@ class  MarkAttendence extends React.Component {
         });
     }
 
-    getCoachDashboardData(academy_id,player_id,){
+    getCoachAttendencedData(btach_id){
         getData('header',(value)=>{
-            console.log("header",value,academy_id,player_id);
-            this.props.getCoachDashboard(value,player_id,academy_id).then(() => {
+            console.log("header",value,btach_id);
+            this.props.getCoachBatchAttendence(value,btach_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.dashboardData);
+                let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
                     this.setState({
-                        coach_profile:user1.data['coach_profile'],
-                        // strenthList:user1.data.player_profile['stats']
+                        playerList:user1.data['players'],
+                        batchDetails:user1.data['batch']
 
                     })
                 }
@@ -155,41 +153,86 @@ class  MarkAttendence extends React.Component {
 
     );
 
+
+
+    savePlayerAttendence()
+    {
+
+        getData('header',(value)=>{
+            console.log("savePlayerAttendence header",value);
+            const yourDate = Date()
+            console.log("savePlaye",yourDate)
+            const NewDate = moment(yourDate).format('YYYY-MM-DD')
+            console.log("savePlayerAttendence",NewDate);
+            var dataDic = {};
+            var dict = {};
+            dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
+            dict['attendance_date'] = NewDate;
+            dict['players'] = this.state.playerList
+
+
+
+            dataDic['data'] = dict;
+            console.log("dicttttc ", dict)
+
+            this.props.saveCoachBatchAttendence(value,this.props.navigation.getParam('batch_id'),dataDic).then(() => {
+                // console.log(' user response payload ' + JSON.stringify(this.props.data));
+                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                let user = JSON.stringify(this.props.data.batchdata);
+                console.log(' user response payload ' + user);
+                let user1 = JSON.parse(user)
+
+                if(user1.success == true){
+                    // this.setState({
+                    //     // playerList:user1.data['players'],
+                    //     // batchDetails:user1.data['batch']
+                    //
+                    // })
+                }
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
+
+        });
+    }
+
+
+
     render() {
-        // if (this.props.data.loading && !this.state.player_profile) {
-        //     return (
-        //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        //             <ActivityIndicator size="large" color="#67BAF5"/>
-        //         </View>
-        //     )
-        // }
-        // if (this.state.coach_profile) {
-        //     const {is_attandence_due, is_performance_due, is_reward_point_due, is_scorer,operations,tournaments,attandence_batch} = this.state.coach_profile
-        //     const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
-        //     const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
-        //
-        //     this.attedenceMangement(attandence_batch)
-        //
-        //     this.sessionMangement(operations)
-        //     this.scoreMangement(tournaments)
+        if (this.props.data.loading && !this.state.player_profile) {
+            return (
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <ActivityIndicator size="large" color="#67BAF5"/>
+                </View>
+            )
+        }
+        if (this.state.batchDetails) {
+            const {batch_name, batch_category, batch_id, session} = this.state.batchDetails
+
+            // this.attedenceMangement(attandence_batch)
+            //
+            // this.sessionMangement(operations)
+            // this.scoreMangement(tournaments)
 
             return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
 
 
                     <View style={{backgroundColor:'white'}}>
                         <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
-                        <Text style={{fontSize:14,fontWeight:'bold'}}>Batch 1 : Fitness </Text>
-                        <Text style={{fontSize:14,fontWeight:'bold'}}>U-15 </Text>
+                        <Text style={{fontSize:14,fontWeight:'bold'}}>Batch 1 : {batch_name} </Text>
+                        <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_category} </Text>
                         </View>
                         <View style={{flexDirection:'row',justifyContent:'space-between',margin:20,marginTop:-10,}}>
                         <View style={{margin:5}}>
                             <Text style={{fontSize:10,marginBottom:10}}>Date </Text>
-                            <Text style={{fontSize:14}}>Wensday 12 April’19 </Text>
+                            <Text style={{fontSize:14}}>{session.session_date } </Text>
 
                         </View>
                         <View style={{margin:5}}>
                             <Text style={{fontSize:10,marginBottom:10}}>Time slot </Text>
-                            <Text style={{fontSize:14}}>09:30 PM - 10 :30 PM </Text>
+                            <Text style={{fontSize:14}}>{session.start_time + ' - ' + session.end_time}</Text>
                         </View>
                         </View>
                     </View>
@@ -213,7 +256,7 @@ class  MarkAttendence extends React.Component {
 
                     <View style={{flex:1, marginBottom: 30,marginRight:20,marginLeft:20,justifyContent:'flex-end'}}>
 
-                           <CustomeButtonB>
+                           <CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>
                               Update
                            </CustomeButtonB>
 
@@ -231,22 +274,22 @@ class  MarkAttendence extends React.Component {
 
 
             </View>;
-        // }else{
-        //     return (
-        //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        //
-        //         </View>
-        //     )
-        // }
+        }else{
+            return (
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+
+                </View>
+            )
+        }
     }
 }
 const mapStateToProps = state => {
     return {
-        data: state.DashboardReducer,
+        data: state.BatchReducer,
     };
 };
 const mapDispatchToProps = {
-    getCoachDashboard
+    getCoachBatchAttendence,saveCoachBatchAttendence
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MarkAttendence);
 

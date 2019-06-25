@@ -51,7 +51,7 @@ export default class App extends Component {
     render() {
         return (
 
-            <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#e6e6e6", marginTop: 0, marginBottom: 0 }}>
+          //  <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#e6e6e6", marginTop: 0, marginBottom: 0 }}>
 
                 <PaperProvider theme={ModifiedDefaultTheme}>
 
@@ -59,7 +59,7 @@ export default class App extends Component {
                         <AppMain />
                     </Provider>
                 </PaperProvider>
-            </SafeAreaView>
+           // </SafeAreaView>
         );
     }
 }

@@ -28,6 +28,77 @@ const placeholder = {
 var deviceWidth = Dimensions.get('window').width -20;
 
 class  ParentHome extends React.Component {
+; acedemy_name= ''
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle:(
+                <TouchableOpacity
+
+                    onPress={() => {
+                        navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Quicksand-Bold',
+                            fontSize: 14,
+                            color: 'white'
+                        }}
+                    >{this.state.acedemy_name + ' ▼'}</Text>
+                </TouchableOpacity>
+
+            ),
+            headerTitleStyle: {
+                color: 'white'
+            },
+            headerStyle: {
+                elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+
+            },
+            //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+            // navigation={navigation} />,
+            headerBackground: (
+                <LinearGradient
+                    colors={['#262051', '#24262A']}
+                    style={{ flex: 1 }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 2.5, y: 0 }}
+                />
+            ),
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={()=>{
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}
+                >
+
+                    <Image
+
+                        source={require('../../images/hamburger_white.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={()=>{
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}
+                >
+
+                    <Image
+
+                        source={require('../../images/ic_notifications.png')}
+                        style={{ width: 20, height: 20, marginRight: 12 }}
+                    />
+                </TouchableOpacity>
+            )
+        };
+    };
 
     constructor(props) {
         super(props)
@@ -41,7 +112,8 @@ class  ParentHome extends React.Component {
             userData:null,
             country: undefined,
             player_profile:null,
-            strenthList : null
+            strenthList : null,
+            acedemy_name:''
         }
     }
 
@@ -86,7 +158,8 @@ class  ParentHome extends React.Component {
                 if(user1.success == true){
                     this.setState({
                         player_profile:user1.data['player_profile'],
-                        strenthList:user1.data.player_profile['stats']
+                        strenthList:user1.data.player_profile['stats'],
+                        acedemy_name:user1.data['player_profile'].academy_name
 
                     })
                 }
@@ -226,7 +299,7 @@ class  ParentHome extends React.Component {
             return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                 <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
 
-                    <View style={{width: '100%', height: 335,}}>
+                    <View style={{ width: '100%', height: 300, }}>
                         <ImageBackground
                             source={require('../../images/RectangleImg.png')}
                             style={{
@@ -234,43 +307,11 @@ class  ParentHome extends React.Component {
                                 height: '100%',
                             }}>
 
-                            <View style={styles.navBar}>
-                                <View style={styles.leftContainer}>
-                                    {/*<Text style={[styles.text, {textAlign: 'left'}]}>*/}
-                                    {/*{'<'}*/}
-                                    {/*</Text>*/}
-                                </View>
-                                <TouchableOpacity onPress={() => {
-                                    this.props.navigation.navigate('SwitchPlayer')
+                            {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+                                navigation={this.props.navigation} /> */}
 
-
-                                }}>
-                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                        <Text style={{color:'white',fontSize:14,marginRight:5}}>{academy_name}</Text>
-                                        <Image source={require('../../images/dropdown.png')}
-                                               style={{
-                                                   width: 8,
-                                                   height: 6, marginRight: 20
-                                               }}>
-                                        </Image>
-                                    </View>
-                                </TouchableOpacity>
-                                <View style={styles.rightContainer}>
-
-                                    <TouchableOpacity style={styles.rightIcon}>
-                                        <Image source={require('../../images/bellicon.png')}
-                                               style={{
-                                                   width: 25,
-                                                   height: 25, marginRight: 20
-                                               }}>
-
-                                        </Image>
-                                    </TouchableOpacity>
-
-                                </View>
-                            </View>
-                            <View style={{position: 'relative'}}>
-                                <View style={{flexDirection: 'row'}}>
+                            <View style={{ position: 'relative',marginTop:30 }}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <Image source={require('../../images/playerimg.png')}
                                            style={{
                                                width: 201,
@@ -278,23 +319,56 @@ class  ParentHome extends React.Component {
                                            }}>
 
                                     </Image>
-                                    <View style={{display: 'flex', flex: 1, marginBottom: 100}}>
+                                    <View style={{ display: 'flex', flex: 1, marginBottom: 100 }}>
                                         <Text style={{
                                             color: 'white',
                                             marginRight: 0,
+                                            fontFamily: 'Quicksand-Bold',
                                             textAlign: 'center', fontSize: 22, fontWeight: 'bold'
                                         }}>{name}</Text>
-                                        <Image source={require('../../images/Rank.png')}
-                                               style={{
-                                                   width: 119,
-                                                   height: 84,
-                                                   alignItems: 'center',
-                                                   display: 'flex',
-                                                   marginBottom: 20,
-                                                   marginTop: 20
-                                               }}>
 
-                                        </Image>
+                                        <View style={{
+                                            width: 119,
+                                            height: 84,
+                                            alignItems: 'center',
+                                            display: 'flex',
+                                            marginBottom: 20,
+                                            marginTop: 20,
+                                            justifyContent: 'center', alignItems: 'center',
+                                        }}>
+
+                                            <ImageBackground
+                                                style={{
+                                                    height: 85, width: 57, justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                }}
+                                                source={require('../../images/batch_pink.png')}>
+
+
+                                                <View style={{
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    flexDirection: 'row',
+                                                    borderRadius: 2,
+                                                    backgroundColor: '#485FA0', height: 26, width: '110%'
+                                                }}>
+                                                    <Image style={{ height: 18, width: 20, }}
+                                                           source={require('../../images/left_batch_arrow.png')}></Image>
+
+                                                    <Text style={{
+                                                        width: '100%',
+                                                        fontSize: 10, color: 'white', textAlign: 'center'
+                                                    }}>{badge}</Text>
+                                                    <Image style={{ height: 18, width: 20, }}
+                                                           source={require('../../images/right_batch_arrow.png')}></Image>
+
+                                                </View>
+                                            </ImageBackground>
+
+
+
+
+                                        </View>
                                         <View style={{flexDirection: 'row', marginBottom: 10}}>
                                             <Text style={{
                                                 color: 'white',
