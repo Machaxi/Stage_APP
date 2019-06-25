@@ -4,7 +4,7 @@ import { View, ImageBackground } from 'react-native'
 import { Button } from 'react-native-paper';
 import BaseComponent from '../BaseComponent';
 import firebase from "react-native-firebase";
-import {onSignOut} from "../../components/auth";
+import { onSignOut } from "../../components/auth";
 //import firebase from 'react-native-firebase';
 
 class welcome extends BaseComponent {
@@ -47,9 +47,9 @@ class welcome extends BaseComponent {
                             // onSignOut()
                             // removeItem()
                             this.props.navigation.navigate('Login', {
-                            isNormalFlow: true
-                        })
-                    }}>
+                                isNormalFlow: true
+                            })
+                        }}>
                         Login
                     </Button>
 
@@ -57,9 +57,9 @@ class welcome extends BaseComponent {
                 <Button
                     uppercase={false}
                     //PhoneAuth
-                    color="#ffffff" onPress={() => 
-                   this.props.navigation.navigate('AcademyListing')
-                }>
+                    color="#ffffff" onPress={() =>
+                        this.props.navigation.navigate('AcademyListing')
+                    }>
                     Skip Login
                 </Button>
 
