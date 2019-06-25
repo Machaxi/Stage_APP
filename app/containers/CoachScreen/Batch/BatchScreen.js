@@ -6,7 +6,7 @@ import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,A
 import {Card} from 'react-native-paper'
 
 import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachDashboard} from "../../../redux/reducers/dashboardReducer";
+import {getCoachBatch} from "../../../redux/reducers/BatchReducer";
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 const acedemicList = [
@@ -31,12 +31,7 @@ class  BatchScreen extends React.Component {
 
         this.state = {
 
-            batchList :[{batch_name:'XYZ',id:1 },
-                {batch_name:'XYZ',id:2},
-                {batch_name:'XYZ',id:3},
-                {batch_name:'XYZ',id:4},
-                {batch_name:'XYZ',id:5},
-               ],
+            batchList :null,
             userData:null
 
         }
@@ -56,7 +51,7 @@ class  BatchScreen extends React.Component {
             });
             console.log("userData.user",userData.user['user_type'])
             if(userData.user['user_type'] =='COACH'){
-              //  this.getCoachBatchList(userData['academy_id'],userData['coach_id'])
+                this.getCoachBatchList(userData['academy_id'],userData['coach_id'])
 
             }
 
@@ -67,16 +62,16 @@ class  BatchScreen extends React.Component {
     getCoachBatchList(academy_id,player_id,){
         getData('header',(value)=>{
             console.log("header",value,academy_id,player_id);
-            this.props.getCoachBatchList(value,player_id,academy_id).then(() => {
+            this.props.getCoachBatch(value,academy_id,player_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.dashboardData);
+                let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
                     this.setState({
-                        coach_profile:user1.data['coach_profile'],
+                        batchList:user1.data['coach_batches'],
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -94,9 +89,9 @@ class  BatchScreen extends React.Component {
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
+            console.warn("Touch Press",item.batch_id)
 
-            this.props.navigation.navigate('BatchDetails')
+            this.props.navigation.navigate('BatchDetails',{batch_id:item.batch_id})
 
         }}>
            <CustomeCard>
@@ -123,17 +118,17 @@ class  BatchScreen extends React.Component {
                 </View>
                <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10,marginTop:0}}/>
                <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
-                   <View>
-                       <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>
-                       <Text style={{fontSize:14,marginBottom:10}}>80%</Text>
-                   </View>
+                   {/*<View>*/}
+                       {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
+                       {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
+                   {/*</View>*/}
                    <View>
                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Level</Text>
-                       <Text style={{fontSize:14,marginBottom:10}}>Novice</Text>
+                       <Text style={{fontSize:14,marginBottom:10}}>{item.level}</Text>
                    </View>
                    <View>
                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Player</Text>
-                       <Text style={{fontSize:14,marginBottom:10}}>20</Text>
+                       <Text style={{fontSize:14,marginBottom:10}}>{item.total_players}</Text>
                    </View>
                </View>
 
@@ -187,11 +182,11 @@ class  BatchScreen extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        data: state.DashboardReducer,
+        data: state.BatchReducer,
     };
 };
 const mapDispatchToProps = {
-    getCoachDashboard
+    getCoachBatch
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BatchScreen);
 

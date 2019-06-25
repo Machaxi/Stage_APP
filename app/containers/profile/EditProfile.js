@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput } from 'react-native'
+import { View, ImageBackground, Text, TextInput,Image } from 'react-native'
 import BaseComponent from '../BaseComponent';
 import {CustomeButtonB, SwitchButton,} from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
+import PhotoUpload from 'react-native-photo-upload'
 
 class EditProfile extends BaseComponent {
 
@@ -25,27 +26,70 @@ class EditProfile extends BaseComponent {
                 style={{
                     margin: 16,
                     flex: 1,
-                    marginTop: 30,
+                    marginTop: 50,
                    // justifyContent: 'center',
                     alignItems: 'center'
+
                 }}
             >
-
-                <ImageBackground
-                    style={{ width: 180, height: 240 }}
-                    source={require('../../images/edit_profile_holder.png')}
+                <PhotoUpload containerStyle={{margin:60}}
+                    onPhotoSelect={avatar => {
+                        console.log('Image base64 string: ')
+                        if (avatar) {
+                            console.log('Image base64 string: ', avatar)
+                        }
+                    }}
                 >
-
+                    <Image
+                        style={{
+                            paddingVertical: 0,
+                            width: 180,
+                            height: 240,
+                            margin:20
+                           // borderRadius: 75
+                        }}
+                      //  resizeMode='cover'
+                        source={require('../../images/edit_profile_holder.png')}
+                    />
                     <View style={{
                         flex: 1,
-                        justifyContent: 'flex-end',marginBottom:-20,
+                        justifyContent: 'flex-end',marginBottom:30,
                     }}>
 
-                        <CustomeButtonB> Change Image</CustomeButtonB>
+                       <View style ={{
+                           padding:10,
+                            backgroundColor: '#67BAF5',
+                           height:46,
+                           //borderWidth:1,
+                           //borderColor:'#67BAF5',
+
+                           borderRadius:23,
+                           marginBottom:10,
+                       }} >
+                           <Text style={{
+                               fontSize:14,
+                               color: '#FFFFFF',
+                               textAlign: 'center',
+                               marginTop:5
+                           }}  > Change Image</Text>
+                       </View>
                     </View>
+                </PhotoUpload>
+                {/*<ImageBackground*/}
+                    {/*style={{ width: 180, height: 240 }}*/}
+                    {/*source={require('../../images/edit_profile_holder.png')}*/}
+                {/*>*/}
+
+                    {/*<View style={{*/}
+                        {/*flex: 1,*/}
+                        {/*justifyContent: 'flex-end',marginBottom:-20,*/}
+                    {/*}}>*/}
+
+                        {/*<CustomeButtonB> Change Image</CustomeButtonB>*/}
+                    {/*</View>*/}
 
 
-                </ImageBackground>
+                {/*</ImageBackground>*/}
 
                 <View
                     style={{

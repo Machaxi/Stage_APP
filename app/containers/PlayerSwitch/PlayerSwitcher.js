@@ -170,6 +170,7 @@ class PlayerSwitcher extends React.Component {
                 var tempuserData = this.state.userData;
                 tempuserData['academy_id'] = item.academy_id;
                 tempuserData['player_id'] = item.id;
+                tempuserData['academy_name'] = item.academy_name;
                 console.log('tempuserData', tempuserData)
                 storeData("userInfo", JSON.stringify(tempuserData))
 

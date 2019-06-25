@@ -3,8 +3,10 @@ import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground,Touchable
 import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
-import { getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
+import { getBatchPlayersList } from '../../redux/reducers/AcademyReducer'
+import { getAcademyPlayersList } from '../../redux/reducers/BatchReducer'
 import BaseComponent from '../BaseComponent';
+import {getData} from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
 
@@ -14,12 +16,38 @@ class PlayersListing extends BaseComponent {
             players: null,
             id: '',
         }
-        this.state.id = this.props.navigation.getParam('id', '');
+       // this.state.id = this.props.navigation.getParam('id', '');
     }
 
     componentDidMount() {
+        console.log(this.props.navigation.getParam('List_type'))
 
-        this.props.getAcademyPlayersList(this.state.id).then(() => {
+        if(this.props.navigation.getParam('List_type') == 'BATCH')
+        {
+           this.getBtachPlayer(this.props.navigation.getParam('batch_id'))
+        }else {
+            this.props.getAcademyPlayersList(this.state.id).then(() => {
+                //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+                let status = this.props.data.res.success
+                if (status) {
+                    let players = this.props.data.res.data.players
+                    this.setState({
+                        players: players
+                    })
+                }
+
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        }
+    }
+
+    getBtachPlayer(batch_id)
+    {
+        getData('header',(value)=>{
+            console.log("header",value,batch_id);
+        this.props.getBatchPlayersList(value,batch_id).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
@@ -33,7 +61,11 @@ class PlayersListing extends BaseComponent {
         }).catch((response) => {
             console.log(response);
         })
+        });
     }
+
+
+
 
     listHeader() {
         return (
@@ -201,10 +233,12 @@ class PlayersListing extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.AcademyReducer,
+
     };
 };
+
 const mapDispatchToProps = {
-    getAcademyPlayersList
+    getAcademyPlayersList,getBatchPlayersList
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayersListing);

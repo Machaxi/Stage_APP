@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../../components/custom/CustomHeader';
 import BaseComponent from '../BaseComponent';
+import {NavigationDrawerStructure} from '../../router/router'
 
 const acedemicList = [
     {
@@ -30,6 +31,81 @@ var deviceWidth = Dimensions.get('window').width - 20;
 
 class UserHome extends BaseComponent {
 
+
+
+    static navigationOptions = ({ navigation }) => {
+
+            return {
+                headerTitle: (
+                    <TouchableOpacity
+
+                        onPress={() => {
+                            navigation.navigate('SwitchPlayer')
+                        }}
+                        activeOpacity={.8}
+                    >
+                        <Text
+                            style={{
+                                fontFamily: 'Quicksand-Bold',
+                                fontSize: 14,
+                                color: 'white'
+                            }}
+                        >{navigation.getParam('Title', 'Default Title') + ' ▼'}</Text>
+                    </TouchableOpacity>
+
+                ),
+                headerTitleStyle: {
+                    color: 'white'
+                },
+                headerStyle: {
+                    elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+
+                },
+                //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+                // navigation={navigation} />,
+                headerBackground: (
+                    <LinearGradient
+                        colors={['#262051', '#24262A']}
+                        style={{flex: 1}}
+                        start={{x: 0, y: 0}}
+                        end={{x: 2.5, y: 0}}
+                    />
+                ),
+                headerLeft: (
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.toggleDrawer();
+                        }}
+                        activeOpacity={.8}
+                    >
+
+                        <Image
+
+                            source={require('../../images/hamburger_white.png')}
+                            style={{width: 20, height: 16, marginLeft: 12}}
+                        />
+                    </TouchableOpacity>
+                ),
+                headerRight: (
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.toggleDrawer();
+                        }}
+                        activeOpacity={.8}
+                    >
+
+                        <Image
+
+                            source={require('../../images/ic_notifications.png')}
+                            style={{width: 20, height: 20, marginRight: 12}}
+                        />
+                    </TouchableOpacity>
+                )
+            };
+
+    };
+
+
     constructor(props) {
         super(props)
         this.inputRefs = {
@@ -42,7 +118,8 @@ class UserHome extends BaseComponent {
             userData: null,
             country: undefined,
             player_profile: null,
-            strenthList: null
+            strenthList: null,
+            acedemy_name:''
         }
     }
 
@@ -56,6 +133,7 @@ class UserHome extends BaseComponent {
         console.log("PlayerDashboard");
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
+            this.props.navigation.setParams({Title: userData.academy_name });
             this.setState({
                 userData: JSON.parse(value)
             });
@@ -76,8 +154,10 @@ class UserHome extends BaseComponent {
 
 
     getPlayerDashboardData(academy_id, player_id, ) {
+
         getData('header', (value) => {
             console.log("header", value, academy_id, player_id);
+
             this.props.getPlayerDashboard(value, player_id, academy_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
@@ -88,9 +168,14 @@ class UserHome extends BaseComponent {
                 if (user1.success == true) {
                     this.setState({
                         player_profile: user1.data['player_profile'],
-                        strenthList: user1.data.player_profile['stats']
+                        strenthList: user1.data.player_profile['stats'],
+                        acedemy_name:user1.data['player_profile'].academy_name,
+
 
                     })
+                    acedemy_name =  user1.data['player_profile'].academy_name
+                    navigation.title = user1.data['player_profile'].academy_name
+
                 }
 
             }).catch((response) => {
@@ -227,7 +312,7 @@ class UserHome extends BaseComponent {
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                    <View style={{ width: '100%', height: 335, }}>
+                    <View style={{ width: '100%', height: 300, }}>
                         <ImageBackground
                             source={require('../../images/RectangleImg.png')}
                             style={{
@@ -238,7 +323,7 @@ class UserHome extends BaseComponent {
                             {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
                                 navigation={this.props.navigation} /> */}
 
-                            <View style={{ position: 'relative' }}>
+                            <View style={{ position: 'relative',marginTop:30 }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image source={require('../../images/playerimg.png')}
                                         style={{
@@ -287,7 +372,7 @@ class UserHome extends BaseComponent {
                                                     <Text style={{
                                                         width: '100%',
                                                         fontSize: 10, color: 'white', textAlign: 'center'
-                                                    }}>GOOKLIKE</Text>
+                                                    }}>{badge}</Text>
                                                     <Image style={{ height: 18, width: 20, }}
                                                         source={require('../../images/right_batch_arrow.png')}></Image>
 

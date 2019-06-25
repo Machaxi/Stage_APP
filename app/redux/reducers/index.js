@@ -3,7 +3,7 @@ import LoginReducer from './loginReducer'
 import AcademyReducer from './AcademyReducer'
 import SwitchReducer from './switchReducer'
 import DashboardReducer from './dashboardReducer'
-// import CartReducer from './cartReducer'
+import BatchReducer from './BatchReducer'
 // import AddressReducer from './addressReducer'
 // import ShippingReducer from './shippingReducer'
 // import ShippingAddressReducer from './shippingAddressReducer'
@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
      AcademyReducer,
      SwitchReducer,
     DashboardReducer,
-    // homeSliderReducer,
+    BatchReducer,
     // homeInstaReducer,
     // productListReducer,
     // CartReducer,
