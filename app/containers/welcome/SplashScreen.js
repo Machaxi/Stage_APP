@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { View, Image, Linking, Platform } from 'react-native'
-import {getData, isSignedIn,onSignIn, storeData} from "../../components/auth";
-import {COACH, GUEST, PARENT, PLAYER} from "../../components/Constants";
+import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
+import { COACH, GUEST, PARENT, PLAYER } from "../../components/Constants";
 import BaseComponent from '../BaseComponent';
 
 class Splash extends BaseComponent {
@@ -17,7 +17,7 @@ class Splash extends BaseComponent {
     }
 
     componentDidMount() {
-// this.props.navigation.navigate('Dashboard')
+        // this.props.navigation.navigate('Dashboard')
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
@@ -31,6 +31,7 @@ class Splash extends BaseComponent {
 
 
         setTimeout(() => {
+
             const { checkedSignIn, signedIn } = this.state;
             console.log("signedIn", signedIn)
             if (!checkedSignIn) {
@@ -45,8 +46,8 @@ class Splash extends BaseComponent {
             } else {
                 getData('userInfo', (value) => {
                     userData = (JSON.parse(value))
-// onSignIn()
-                    if(userData.academy_id != null) {
+                    // onSignIn()
+                    if (userData.academy_id != null) {
                         console.log(userData);
                         if (userData.user['user_type'] == GUEST) {
                             this.props.navigation.navigate('AcademyListing')
@@ -61,8 +62,7 @@ class Splash extends BaseComponent {
                             this.props.navigation.navigate('PHome')
 
                         }
-                    }else
-                    {
+                    } else {
                         this.props.navigation.navigate('SwitchPlayer')
                     }
 
@@ -89,7 +89,7 @@ class Splash extends BaseComponent {
 
     navigate = (url) => { // E
         this.state.deepUrl = url
-        storeData('deepUrl',this.state.deepUrl)
+        storeData('deepUrl', this.state.deepUrl)
 
     }
 

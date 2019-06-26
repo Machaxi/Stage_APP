@@ -134,7 +134,9 @@ export default class Registration extends BaseComponent {
                     </TextInput>
                     </View>
                 <View style={{ flex: 1, margin: 30, width: '50%' }}>
-                    <CustomeButtonB > Next </CustomeButtonB>
+                    <CustomeButtonB onPress={()=>{
+                        this.props.navigation.navigate('RegistrationSteps')
+                    }}> Next </CustomeButtonB>
                 </View>
             </View>
         );

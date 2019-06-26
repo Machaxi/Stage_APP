@@ -218,13 +218,13 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                         }}>
                                             Registered Players
                                     </Text>
-                                        <View style={{ flexDirection: 'row', flex:1,justifyContent: 'space-between' }}>
+                                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
 
                                             <Text style={{
                                                 paddingTop: 10, fontSize: 14,
                                                 color: '#404040',
                                                 width: "30%",
-                                                fontWeight:'400',
+                                                fontWeight: '400',
                                                 fontFamily: 'Quicksand-Bold'
                                             }}>
                                                 Prithiviraj P
@@ -249,9 +249,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                                 paddingTop: 10, fontSize: 10,
                                                 color: '#667DDB',
                                                 width: "20%",
-                                                textAlign:'center',
-                                                marginTop:2,
-                                                alignItems:'center',
+                                                textAlign: 'center',
+                                                marginTop: 2,
+                                                alignItems: 'center',
                                                 fontFamily: 'Quicksand-Regular'
                                             }}>
                                                 Edit Partner
@@ -332,13 +332,17 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     </View>
 
 
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        justifyContent: 'center',
-                                        marginTop: 16, marginBottom: 16, marginLeft: 8, marginRight: 8
-                                    }}>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            marginTop: 16, marginBottom: 16, marginLeft: 8, marginRight: 8
+                                        }}>
 
                                         <Text
+                                            onPress={() => {
+                                                this.props.navigation.navigate('TournamentFixture')
+                                            }}
                                             style={styles.rounded_button}
                                         >
                                             View Fixture
