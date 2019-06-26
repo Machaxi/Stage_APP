@@ -49,6 +49,8 @@ import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDeta
 import coachBatch from '../containers/CoachScreen/Batch/BatchScreen'
 import batchDeatails from '../containers/CoachScreen/Batch/BatchDetails'
 import coachAttendenceBook from '../containers/CoachScreen/Batch/CoachAttendenceBook'
+import { isSignedIn } from "../components/auth";
+import BaseComponent from '../containers/BaseComponent';
 
 
 const headerStyle = {
@@ -740,23 +742,23 @@ const coachBatchModule = createStackNavigator({
         })
 
     },
-        AttendenceBook: {
-            screen: coachAttendenceBook,
-            navigationOptions: ({ navigation }) => ({
-                title: "Batch Details",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                       showBackAction={true}
-                />,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={false} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
+    AttendenceBook: {
+        screen: coachAttendenceBook,
+        navigationOptions: ({ navigation }) => ({
+            title: "Batch Details",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-            })
+        })
 
-        },
+    },
 
 
 
@@ -1021,12 +1023,16 @@ const guestDrawer = createDrawerNavigator({
         // }
     },
 
-}, {
-        contentComponent: ({ navigation }) => {
-            return (<CoachMenuDrawer navigation={navigation} />)
-        },
-        drawerWidth: Dimensions.get('window').width * 0.83,
-    }
+},
+    BaseComponent.isUserLoggedIn ?
+        {
+            contentComponent: ({ navigation }) => {
+                return (<CoachMenuDrawer navigation={navigation} />)
+            },
+            drawerWidth: Dimensions.get('window').width * 0.83,
+        } : {
+            drawerLockMode: 'locked-closed'
+        }
 );
 
 const WIDTH = Dimensions.get('window').width;
@@ -1174,6 +1180,24 @@ class NavigationDrawerStructure extends React.Component {
     //           showDrawer = true/false
     //==================================================================
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            signedIn: false,
+            checkedSignIn: false,
+        };
+    }
+
+    componentDidMount() {
+
+        isSignedIn()
+            .then(res => {
+                console.log(res);
+                this.setState({ signedIn: res, checkedSignIn: true })
+            })
+            .catch(err => alert("An error occurred"));
+
+    }
 
     //Structure for the navigatin Drawer
     toggleDrawer = () => {
@@ -1191,11 +1215,15 @@ class NavigationDrawerStructure extends React.Component {
         if (this.props.showBackAction != undefined)
             showBackAction = this.props.showBackAction
 
+
         let showDrawer = true
+
         if (this.props.showDrawer != undefined)
             showDrawer = this.props.showDrawer
 
-
+        //if user is not logged in then we will not show drawer to user
+        if (!this.state.signedIn)
+            showDrawer = false
 
         return (
             <View style={{ flexDirection: 'row' }}>

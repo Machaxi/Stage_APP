@@ -15,6 +15,8 @@ var connected = false
 
 export default class BaseComponent extends React.Component {
 
+    static isUserLoggedIn = false
+
     constructor(props) {
         super(props)
 
@@ -27,6 +29,10 @@ export default class BaseComponent extends React.Component {
             connected = isConnected
         });
     }
+
+    static isUserLoggedIn() {
+        return this.isUserLoggedIn;
+      }
 
     getNetworkStatus() {
         if(!connected){

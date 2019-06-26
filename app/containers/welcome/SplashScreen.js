@@ -26,6 +26,7 @@ class Splash extends BaseComponent {
             .then(res => {
                 console.log(res);
                 this.setState({ signedIn: res, checkedSignIn: true })
+                BaseComponent.isUserLoggedIn = true
             })
             .catch(err => alert("An error occurred"));
 
