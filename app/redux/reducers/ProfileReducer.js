@@ -1,0 +1,50 @@
+import * as types from '../../actions/actionTypes';
+import {getData,storeData} from '../../components/auth'
+
+const initialState = {
+    loading: false,
+    profileData: '',
+    error: null,
+};
+export default function ProfileReducer(state = initialState, action) {
+    switch (action.type) {
+        case types.GET_PROFILE:
+            return { ...state, loading: true };
+        case types.DO_PROFILE_SUCCESS:
+            console.log("sucesss PROFILE",action.payload.data);
+            return { ...state, loading: false, profileData: action.payload.data };
+        case types.DO_PROFILE_FAIL:
+            console.log("fails DO_DASHBOARD_FAIL",action.payload);
+            return {
+                ...state,
+                loading: false,
+                error: 'Error while fetching user'
+            };
+        default:
+            return state;
+    }
+}
+
+export function saveUserStartupProfile(header,postdata) {
+    console.log("saveUserStartupProfile ",header,postdata)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_PROFILE,
+        payload: {
+            request: {
+                url: `user/profile`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'multipart/form-data',
+
+                },
+            }
+        }
+    };
+
+}

@@ -119,4 +119,25 @@ export function saveCoachBatchAttendence(header,batch_id,postdata) {
 }
 
 
+export function getCoachBatchAttendenceDetails(header,batch_id) {
+    console.log("postdata",header,batch_id)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_BATCHES,
+        payload: {
+            request: {
+                url: `batch/${batch_id}/attendance-detail`,
+                method: 'GET',
+                // data: postdata,
+                headers: {
+                    'x-authorization': header
 
+                },
+            }
+        }
+    };
+
+}

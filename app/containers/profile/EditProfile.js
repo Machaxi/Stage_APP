@@ -6,7 +6,9 @@ import {CustomeButtonB, SwitchButton,} from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
-
+import {getData} from "../../components/auth";
+import {saveUserStartupProfile} from "../../redux/reducers/ProfileReducer";
+import { connect } from 'react-redux';
 class EditProfile extends BaseComponent {
 
     constructor(props) {
@@ -15,27 +17,70 @@ class EditProfile extends BaseComponent {
             birthdate:"2016-05-15",
             txtname:'Niranjan',
             txtphone:'8291088636',
+            imageData:null,
         }
+    }
+    saveUserProfile()
+    {
+        getData('header',(value)=> {
+           // var data = new FormData();
+            var dataDic = {};
+           // data.append('file', this.state.imageData);
+            var dict = {};
+            dataDic['file'] = this.state.imageData
+            dict['phone_number'] = "+919214088636"//user.phoneNumber;
+            dict['name'] = 'Niranjan';
+            dict['dob'] = "1987-06-28";
+           // data.append('post', dict);
+            dataDic['post'] = dict
+           // console.log("header",value,batch_id);
+            this.props.saveUserStartupProfile(value,dataDic).then(() => {
+                // console.log(' user response payload ' + JSON.stringify(this.props.data));
+                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                let user = JSON.stringify(this.props.data.profileData);
+                console.log(' user response payload ' + user);
+                let user1 = JSON.parse(user)
+
+                if(user1.success == true){
+                    this.setState({
+                        batchDetails:user1.data['batch'],
+                        coactList:user1.data['batch'].coaches
+                        // strenthList:user1.data.player_profile['stats']
+
+                    })
+                }
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
+        })
+
+       // this.props.navigation.navigate('SwitchPlayer')
     }
 
     render() {
         return (
 
-
+            <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+                <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
             <View
                 style={{
                     margin: 16,
                     flex: 1,
-                    marginTop: 50,
+                    marginTop: 10,
                    // justifyContent: 'center',
                     alignItems: 'center'
 
                 }}
             >
-                <PhotoUpload containerStyle={{margin:60}}
+                <PhotoUpload containerStyle={{margin:10}}
                     onPhotoSelect={avatar => {
                         console.log('Image base64 string: ')
                         if (avatar) {
+                            this.setState({
+                                imageData:avatar
+                            })
                             console.log('Image base64 string: ', avatar)
                         }
                     }}
@@ -45,7 +90,7 @@ class EditProfile extends BaseComponent {
                             paddingVertical: 0,
                             width: 180,
                             height: 240,
-                            margin:20
+                            marginBottom:-40
                            // borderRadius: 75
                         }}
                       //  resizeMode='cover'
@@ -53,7 +98,7 @@ class EditProfile extends BaseComponent {
                     />
                     <View style={{
                         flex: 1,
-                        justifyContent: 'flex-end',marginBottom:30,
+                        justifyContent: 'flex-end',marginBottom:0,
                     }}>
 
                        <View style ={{
@@ -64,7 +109,7 @@ class EditProfile extends BaseComponent {
                            //borderColor:'#67BAF5',
 
                            borderRadius:23,
-                           marginBottom:10,
+                           marginBottom:0,
                        }} >
                            <Text style={{
                                fontSize:14,
@@ -163,18 +208,30 @@ class EditProfile extends BaseComponent {
                     />
                 </View>
                 <View style={{flex:1,margin:20,width:'80%'}}>
-                 <CustomeButtonB onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Update </CustomeButtonB>
+                 <CustomeButtonB onPress={() => this.saveUserProfile()}> Update </CustomeButtonB>
                 </View>
                 <View style={{flex:1,marginTop:-20,width:'80%'}}>
                     <SwitchButton  onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Skip </SwitchButton>
                 </View>
 
             </View>
+                </ScrollView>
+            </View>
         );
     }
 
 }
-export default EditProfile
+
+const mapStateToProps = state => {
+    return {
+        data: state.ProfileReducer,
+    };
+};
+const mapDispatchToProps = {
+    saveUserStartupProfile
+};
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
+
 
 const style = {
     rounded_button: {
