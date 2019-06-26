@@ -108,7 +108,7 @@ class  CoachHome extends React.Component {
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{
                             margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>{batch_name +' : ' + routine_name}</Text>
+                        }}>{batch_name }</Text>
                         <Text style={{
                             margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
                         }}>{batch_category}</Text>
@@ -268,7 +268,7 @@ class  CoachHome extends React.Component {
                         </View>
                         <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
 
-                        {is_attandence_due ? {attendenceArray} : null}
+                        {attendenceArray}
 
                     </CustomeCard> : null}
 

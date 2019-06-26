@@ -48,6 +48,7 @@ import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import coachBatch from '../containers/CoachScreen/Batch/BatchScreen'
 import batchDeatails from '../containers/CoachScreen/Batch/BatchDetails'
+import coachAttendenceBook from '../containers/CoachScreen/Batch/CoachAttendenceBook'
 
 
 const headerStyle = {
@@ -739,6 +740,27 @@ const coachBatchModule = createStackNavigator({
         })
 
     },
+        AttendenceBook: {
+            screen: coachAttendenceBook,
+            navigationOptions: ({ navigation }) => ({
+                title: "Batch Details",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                       showBackAction={true}
+                />,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false} />,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            })
+
+        },
+
+
+
+
 }, {
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)

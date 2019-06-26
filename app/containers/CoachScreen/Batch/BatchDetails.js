@@ -344,8 +344,8 @@ class  BatchDetails extends React.Component {
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
-
-
+                               //
+                                this.props.navigation.navigate('AttendenceBook',{batch_id:this.props.navigation.getParam('batch_id')})
                             }}>
                                 <View style={{margin: 10, flexDirection: 'row', height: 40}}>
 
