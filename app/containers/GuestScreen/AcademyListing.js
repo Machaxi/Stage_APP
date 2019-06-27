@@ -163,9 +163,18 @@ class AcademyListing extends BaseComponent {
                     marginRight: 16,
                     marginTop: 16,
                     marginBottom: 8,
-                    borderRadius: 12
+                    borderRadius: 12,
+
                 }}>
-                <Card style={{ borderRadius: 16, elevation: 1 }}>
+                <Card style={{
+                    borderRadius: 16, elevation: 1,
+                    flex: 1,
+                    left: 0,
+                    position: 'absolute',
+                    right: 0,
+                    top: 0,
+                    zIndex: 1
+                }}>
 
                     {/* <TextInput style={{
                         marginLeft: 8,
@@ -175,6 +184,7 @@ class AcademyListing extends BaseComponent {
                     }} placeholder="Search"></TextInput> */}
 
                     <Autocomplete
+                        //containerStyle={styles.autocompleteContainer}
                         ref={this.secondTextInputRef}
                         inputContainerStyle={{
                             marginLeft: 8,
@@ -225,7 +235,7 @@ class AcademyListing extends BaseComponent {
                                                     this.state.query = item.name
                                                     this.getAcademicSearchResult(false)
                                                 } else {
-                                                    this.props.navigation.navigate('AcademyProfile')
+                                                    this.props.navigation.navigate('AcademyProfile', { id: item.id })
                                                 }
                                             }
                                         }}
@@ -241,7 +251,7 @@ class AcademyListing extends BaseComponent {
                 </Card>
 
                 <Text style={{
-                    marginTop: 8, marginBottom: 4,
+                    marginTop: 55, marginBottom: 4,
                     textAlign: 'right',
                     color: '#404040', fontSize: 12,
                     fontFamily: 'Quicksand-Regular'
@@ -342,9 +352,11 @@ class AcademyListing extends BaseComponent {
         return (
 
             <View style={styles.chartContainer}>
-
+                {
+                    this.listHeader()
+                }
                 <FlatList
-                    ListHeaderComponent={() => this.listHeader()}
+                    //ListHeaderComponent={() => this.listHeader()}
                     data={this.state.academies}
                     extraData={this.state.academies}
                     renderItem={this._renderItem}
@@ -372,6 +384,14 @@ const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
         backgroundColor: '#F7F7F7'
+    },
+    autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1
     },
     rounded_button: {
         width: '48%',

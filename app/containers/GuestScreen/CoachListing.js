@@ -46,14 +46,16 @@ class CoachListing extends BaseComponent {
                     marginRight: 16,
                     marginTop: 16,
                     marginBottom: 8,
-                    borderRadius: 12
+                    borderRadius: 12,
+                    elevation:2,
                 }}>
-                <Card style={{ borderRadius: 16, elevation: 1 }}>
+                <Card style={{ borderRadius: 16, elevation: 2 }}>
 
                     <TextInput style={{
                         marginLeft: 8,
                         backgroundColor: 'white',
                         borderRadius: 16,
+                        fontFamily:'Quicksand-Regular'
                     }} placeholder="Search"
                         onChangeText={text => {
                             this.state.query = text
@@ -191,8 +193,9 @@ class CoachListing extends BaseComponent {
         return (
             <View style={styles.chartContainer}>
 
+                {this.listHeader()}
                 <FlatList
-                    ListHeaderComponent={() => this.listHeader()}
+                    //ListHeaderComponent={() => this.listHeader()}
                     data={this.state.filter}
                     extraData={this.state.filter}
                     renderItem={this._renderItem}

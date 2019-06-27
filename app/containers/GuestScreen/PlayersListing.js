@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground,TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
 import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
-import { getBatchPlayersList } from '../../redux/reducers/AcademyReducer'
-import { getAcademyPlayersList } from '../../redux/reducers/BatchReducer'
+import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
 import BaseComponent from '../BaseComponent';
-import {getData} from "../../components/auth";
+import { getData } from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
 
@@ -15,18 +14,39 @@ class PlayersListing extends BaseComponent {
         this.state = {
             players: null,
             id: '',
+            filter: [],
         }
-       // this.state.id = this.props.navigation.getParam('id', '');
+        this.state.id = this.props.navigation.getParam('id', '');
     }
 
     componentDidMount() {
         console.log(this.props.navigation.getParam('List_type'))
 
-        if(this.props.navigation.getParam('List_type') == 'BATCH')
-        {
-           this.getBtachPlayer(this.props.navigation.getParam('batch_id'))
-        }else {
+        if (this.props.navigation.getParam('List_type') == 'BATCH') {
+            this.getBtachPlayer(this.props.navigation.getParam('batch_id'))
+        } else {
             this.props.getAcademyPlayersList(this.state.id).then(() => {
+                //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+                let status = this.props.data.res.success
+                if (status) {
+                    let players = this.props.data.res.data.players
+                    this.setState({
+                        players: players,
+                        filter: players
+                    })
+                }
+
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        }
+    }
+
+    getBtachPlayer(batch_id) {
+        getData('header', (value) => {
+            console.log("header", value, batch_id);
+            this.props.getBatchPlayersList(value, batch_id).then(() => {
                 //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {
@@ -40,27 +60,6 @@ class PlayersListing extends BaseComponent {
             }).catch((response) => {
                 console.log(response);
             })
-        }
-    }
-
-    getBtachPlayer(batch_id)
-    {
-        getData('header',(value)=>{
-            console.log("header",value,batch_id);
-        this.props.getBatchPlayersList(value,batch_id).then(() => {
-            //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
-            let status = this.props.data.res.success
-            if (status) {
-                let players = this.props.data.res.data.players
-                this.setState({
-                    players: players
-                })
-            }
-
-
-        }).catch((response) => {
-            console.log(response);
-        })
         });
     }
 
@@ -84,7 +83,17 @@ class PlayersListing extends BaseComponent {
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'
-                    }} placeholder="Search"></TextInput>
+                    }} placeholder="Search"
+                        onChangeText={text => {
+                            this.state.query = text
+                            const data = this.find(this.state.query);
+                            this.state.filter = data;
+                            console.warn('search ',data)
+                            this.setState({
+                                filter: data
+                            })
+                        }}
+                    ></TextInput>
                 </Card>
 
                 <Text style={{
@@ -101,107 +110,118 @@ class PlayersListing extends BaseComponent {
 
 
         <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
-            <TouchableOpacity onPress={()=>{
+            <TouchableOpacity onPress={() => {
                 this.props.navigation.navigate('OtherPlayerDeatils')
             }}>
-            <ImageBackground style={{ height: 200, width: '100%' }}
-                source={require('../../images/batch_card.png')}
-            >
-                <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
-                <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{item.score}</Text>
+                <ImageBackground style={{ height: 200, width: '100%' }}
+                    source={require('../../images/batch_card.png')}
+                >
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{item.score}</Text>
 
-                <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
+                    <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
-                    <Text
-                        style={{
-                            width: 26,
-                            height: 12,
-                            color: 'white',
-                            marginRight: 4,
-                            marginTop: 16,
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                            textAlign: 'center',
-                            backgroundColor: 'red',
-                            borderRadius: 4,
-                            fontSize: 8,
-                            paddingTop: 1
-                        }}
-                    >{item.player_category}</Text>
-                    <Image
-                        style={{
-                            height: 80, width: 50,
-                            justifyContent: 'center', alignSelf: 'center'
-                        }}
-                        source={require('../../images/player_small.png')}></Image>
+                        <Text
+                            style={{
+                                width: 26,
+                                height: 12,
+                                color: 'white',
+                                marginRight: 4,
+                                marginTop: 16,
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                backgroundColor: 'red',
+                                borderRadius: 4,
+                                fontSize: 8,
+                                paddingTop: 1
+                            }}
+                        >{item.player_category}</Text>
+                        <Image
+                            style={{
+                                height: 80, width: 50,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}
+                            source={require('../../images/player_small.png')}></Image>
 
-                    <Text
-                        numberOfLines={2}
-                        ellipsizeMode="tail"
-                        style={{
-                            color: 'white',
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                            textAlign: 'center',
-                            fontSize: 8,
-                            marginLeft: 4,
-                            marginTop: 16,
-                        }}
-                    >{item.player_level.split(" ").join("\n")}</Text>
-                </View>
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode="tail"
+                            style={{
+                                color: 'white',
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                fontSize: 8,
+                                marginLeft: 4,
+                                marginTop: 16,
+                            }}
+                        >{item.player_level.split(" ").join("\n")}</Text>
+                    </View>
 
-                <View style={{
-                    position: 'absolute',
+                    <View style={{
+                        position: 'absolute',
 
-                    marginTop: 116,
-                    width: "100%", height: 20, backgroundColor: 'white'
-                }}>
+                        marginTop: 116,
+                        width: "100%", height: 20, backgroundColor: 'white'
+                    }}>
 
-                    <Text style={{
-                        color: '#404040',
-                        fontWeight: 16,
-                        fontWeight: '500',
-                        textAlign: 'center'
-                    }}>{item.name}</Text>
-                </View>
+                        <Text style={{
+                            color: '#404040',
+                            fontWeight: 16,
+                            fontWeight: '500',
+                            textAlign: 'center'
+                        }}>{item.name}</Text>
+                    </View>
 
-                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
 
-                    <ImageBackground
-                        style={{
-                            height: 38, width: 25, justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                        source={require('../../images/batch_pink.png')}>
-
-
-                        <View style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            backgroundColor: '#485FA0', height: 6, width: '120%'
-                        }}>
-                            <Image style={{ height: 7, width: 12, marginLeft: -12 }}
-                                source={require('../../images/left_batch_arrow.png')}></Image>
-
-                            <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{item.badge}</Text>
-                            <Image style={{ height: 7, width: 12, marginRight: -12 }}
-                                source={require('../../images/right_batch_arrow.png')}></Image>
-
-                        </View>
-                    </ImageBackground>
+                        <ImageBackground
+                            style={{
+                                height: 38, width: 25, justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            source={require('../../images/batch_pink.png')}>
 
 
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                backgroundColor: '#485FA0', height: 6, width: '120%'
+                            }}>
+                                <Image style={{ height: 7, width: 12, marginLeft: -12 }}
+                                    source={require('../../images/left_batch_arrow.png')}></Image>
+
+                                <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{item.badge}</Text>
+                                <Image style={{ height: 7, width: 12, marginRight: -12 }}
+                                    source={require('../../images/right_batch_arrow.png')}></Image>
+
+                            </View>
+                        </ImageBackground>
 
 
-                </View>
 
-            </ImageBackground>
+
+                    </View>
+
+                </ImageBackground>
             </TouchableOpacity>
         </View>
 
 
     );
+
+    find(query) {
+        const { players } = this.state;
+
+        if (query === '') {
+            return players;
+        }
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        return players.filter(item => item.name.search(regex) >= 0);
+    }
+
 
     render() {
 
@@ -213,13 +233,17 @@ class PlayersListing extends BaseComponent {
             )
         }
 
+
+
         return (
             <View style={styles.chartContainer}>
 
+                {this.listHeader()}
                 <FlatList
                     style={{ padding: 8 }}
-                    ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.players}
+                    //ListHeaderComponent={() => this.listHeader()}
+                    data={this.state.filter}
+                    extraData={this.state.filter}
                     numColumns={3}
                     renderItem={this._renderItem}
                 />
@@ -238,7 +262,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    getAcademyPlayersList,getBatchPlayersList
+    getAcademyPlayersList, getBatchPlayersList
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayersListing);
