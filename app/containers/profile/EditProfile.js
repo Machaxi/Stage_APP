@@ -27,7 +27,7 @@ class EditProfile extends BaseComponent {
             // data.append('file', this.state.imageData);
             var dict = {};
             //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
-            formData.append("file", "storage/emulated/0/Pictures/test.jpg");
+            //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
 
             dict['phone_number'] = "+919214088636"//user.phoneNumber;
             dict['name'] = 'Niranjan';
