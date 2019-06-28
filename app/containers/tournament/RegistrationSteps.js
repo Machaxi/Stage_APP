@@ -2,7 +2,7 @@ import React from 'react'
 
 import { View, Text } from 'react-native'
 import BaseComponent from '../BaseComponent';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
 
@@ -315,49 +315,266 @@ export default class RegistrationSteps extends BaseComponent {
     showStepThree() {
 
         return (
+            <ScrollView>
 
-            <View style={{ elevation: 1 }}>
+                <View style={{ elevation: 1 }}>
 
-                <View
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        margin: 20
-                    }}>
+                    <View
+                        style={{
 
-                    <Text style={{
-                        fontFamily: 'Quicksand-Bold',
-                        fontSize: 14,
-                        color: '#000000'
-                    }}>
-                        Payment
+                            margin: 20
+                        }}>
+
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+
+                            <Text style={{
+
+                                fontFamily: 'Quicksand-Bold',
+                                fontSize: 14,
+                                color: '#000000'
+                            }}>
+                                Payment
+                    </Text>
+                        </View>
+
+
+                        <View style={{
+                            width: "100%",
+                            marginTop: 16,
+                            marginBottom: 10,
+                            height: 1,
+                            backgroundColor: "#E5E5E5"
+                        }}></View>
+
+                        <Text style={{
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#A3A5AE'
+                        }}>
+                            Registered Player
                     </Text>
 
-                    <View style={{
-                        width: "100%",
-                        marginTop: 16,
-                        marginBottom: 10,
-                        height: 1,
-                        backgroundColor: "#E5E5E5"
-                    }}></View>
+                        <View>
 
-                    <Text style={{
-                        fontFamily: 'Quicksand-Regular',
-                        fontSize: 10,
-                        color: '#A3A5AE'
-                    }}>
-                        Registered Player
-                    </Text>
+                            <View style={{
+                                backgroundColor: "#F2F2F2",
+                                marginTop: 12,
+                                padding: 8,
+                                marginBottom: 12
+                            }}>
+
+                                <Text style={{
+
+                                    fontFamily: 'Quicksand-Regular',
+                                    fontSize: 14,
+                                    color: '#A3A5AE'
+                                }}>
+                                    U - 13
+                            </Text>
+
+                                <View style={{ flexDirection: 'row' }}>
+
+                                    <View style={{ marginTop: 12 }}>
+
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 10,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Singles
+                                    </Text>
+                                        <Text style={{
+                                            marginTop: 4,
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Rs 500
+                                    </Text>
+                                    </View>
+
+                                    <View style={{ marginTop: 12, marginLeft: 12 }}>
+
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 10,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Doubles
+                                    </Text>
+                                        <Text style={{
+                                            marginTop: 4,
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Rs 500
+                                    </Text>
+                                    </View>
+                                    <View style={{
+                                        marginTop: 12,
+                                        marginLeft: 12,
+                                        justifyContent: 'flex-end',
+                                        alignItems: 'flex-end',
+                                        flex: 1
+
+                                    }}>
+
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 10,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Total Fees
+                                    </Text>
+                                        <Text style={{
+                                            marginTop: 4,
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Rs 500
+                                    </Text>
+                                    </View>
 
 
-                </View>
+                                </View>
 
-            </View>
+                                <View style={{ flexDirection: 'row' }}>
+
+                                    <View style={{ marginTop: 12 }}>
+
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 10,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Singles
+                                    </Text>
+                                        <Text style={{
+                                            marginTop: 4,
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Rs 500
+                                    </Text>
+                                    </View>
+
+                                    <View style={{ marginTop: 12, marginLeft: 12 }}>
+
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 10,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Doubles
+                                    </Text>
+                                        <Text style={{
+                                            marginTop: 4,
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Rs 500
+                                    </Text>
+                                    </View>
+                                    <View style={{
+                                        marginTop: 12,
+                                        marginLeft: 12,
+                                        justifyContent: 'flex-end',
+                                        alignItems: 'flex-end',
+                                        flex: 1
+
+                                    }}>
+
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 10,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Total Fees
+                                    </Text>
+                                        <Text style={{
+                                            marginTop: 4,
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#A3A5AE'
+                                        }}>
+                                            Rs 500
+                                    </Text>
+                                    </View>
+
+
+                                </View>
+
+
+                            </View>
+
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginTop: 30
+                            }}>
+
+
+                                <Text style={{
+                                    fontFamily: 'Quicksand-Regular',
+                                    fontSize: 10,
+                                    color: '#A3A5AE'
+                                }}>
+                                    Total Fees
+                                    </Text>
+
+                                <Text style={{
+                                    fontFamily: 'Quicksand-Bold',
+                                    fontSize: 16,
+                                    marginTop: 8,
+                                    color: '#404040'
+                                }}>
+                                    Rs 1100
+                                    </Text>
+
+                                <Text style={{
+                                    fontFamily: 'Quicksand-Regular',
+                                    fontSize: 12,
+                                    marginTop: 5,
+                                    marginBottom: 16,
+                                    color: '#404040'
+                                }}>
+                                    Non Refundable
+                                    </Text>
+
+
+
+                                <TouchableOpacity activeOpacity={.8}
+                                    style={style.rounded_button}
+                                    onPress={() => {
+                                       this.props.navigation.navigate('RegistrationSuccessful')
+                                    }}>
+                                    <Text style={style.rounded_button_text}>
+                                        Next</Text>
+                                </TouchableOpacity>
+
+
+                            </View>
+
+                        </View>
+
+
+                    </View>
+
+                </View >
+            </ScrollView>
+
         )
     }
 
     render() {
-        console.warn(this.state.step)
+
         let stepView
         if (this.state.step == 1) {
             stepView = this.showStepOne();
@@ -366,6 +583,8 @@ export default class RegistrationSteps extends BaseComponent {
         } else if (this.state.step == 3) {
             stepView = this.showStepThree()
         }
+
+        let step = this.state.step
 
         return (
 
@@ -390,29 +609,42 @@ export default class RegistrationSteps extends BaseComponent {
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                        <View style={style.circle}><Text style={style.text}>1</Text></View>
-                        <View style={style.line}></View>
-                        <View style={style.circle}><Text style={style.text}>2</Text></View>
-                        <View style={style.line}></View>
-                        <View style={style.circle}><Text style={style.text}>3</Text></View>
+                        <View style={style.circle_colored}><Text style={style.text}>1</Text></View>
+
+                        <View style={step >= 2 ? style.line_colored : style.line}></View>
+
+                        <View style={step >= 2 ? style.circle_colored : style.circle}>
+                            {step >= 2 ? <Text style={style.text}>2</Text> : null}
+                        </View>
+
+                        <View style={step >= 3 ? style.line_colored : style.line}></View>
+
+                        <View style={step >= 3 ? style.circle_colored : style.circle}>
+
+                            {step >= 3 ? <Text style={style.text}>3</Text> : null}
+
+                        </View>
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={style.bottom_text}>Select Player</Text>
 
-                        <Text style={style.bottom_text}>U-13 | U-15</Text>
+                        <Text style={style.bottom_text}>{step >= 1 ? "Select Player" : ""}</Text>
 
-                        <Text style={style.bottom_text}>Payment</Text>
+                        <Text style={style.bottom_text}>{step >= 2 ? "U-13 | U-15" : ""}</Text>
+
+                        <Text style={style.bottom_text}>{step >= 3 ? "Payment" : ""}</Text>
 
                     </View>
 
                 </View>
+
 
                 <Card
                     style={{ height: "100%", width: "100%", elevation: 5, borderRadius: 10 }}
                 >
                     {stepView}
                 </Card>
+
             </View >
         );
     }
@@ -437,6 +669,15 @@ const style = {
         fontFamily: 'Quicksand-Regular'
     },
     circle: {
+        width: 22,
+        height: 22,
+        borderRadius: 22 / 2,
+        textAlign: 'center',
+        backgroundColor: '#C4C4C4',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    circle_colored: {
         width: 22,
         height: 22,
         borderRadius: 22 / 2,
@@ -466,8 +707,13 @@ const style = {
     },
     line: {
         width: 90,
-        height: 5,
+        height: 2,
         backgroundColor: '#C4C4C4'
+    },
+    line_colored: {
+        width: 90,
+        height: 2,
+        backgroundColor: '#667DDB'
     },
     textinput: {
         textAlign: 'center',

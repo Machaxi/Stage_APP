@@ -41,6 +41,8 @@ import Registration from '../containers/tournament/Registration'
 import RegistrationSteps from '../containers/tournament/RegistrationSteps'
 import AddPartner from '../containers/tournament/AddPartner'
 import AddPartnerWithPhone from '../containers/tournament/AddPartnerWithPhone'
+import RegistrationSuccessful from '../containers/tournament/RegistrationSuccessful'
+import TournamentScorer from '../containers/tournament/TournamentScorer'
 
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
@@ -438,7 +440,42 @@ const TournamentModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
+    RegistrationSuccessful: {
+        screen: RegistrationSuccessful,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Registration',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentScorer: {
+        screen: TournamentScorer,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Scorer',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
 
 })
 
@@ -602,20 +639,20 @@ const coachHomeModule = createStackNavigator({
 
 
     },
-        MarkAttendence: {
-            screen: markAttendence,
-            navigationOptions: ({navigation}) => ({
-                title: "Mark Attendence",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation}/>,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={false}/>,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
+    MarkAttendence: {
+        screen: markAttendence,
+        navigationOptions: ({ navigation }) => ({
+            title: "Mark Attendence",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-            })
-        },
+        })
+    },
     EditProfile: {
         screen: EditProfile,
         navigationOptions: ({ navigation }) => ({
@@ -700,7 +737,7 @@ const coachBatchModule = createStackNavigator({
                 backgroundColor: '#FFFFFF',
             },
 
-            })
+        })
 
     },  PlayersListing: {
             screen: PlayersListing,
@@ -747,7 +784,7 @@ const coachBatchModule = createStackNavigator({
                 title: "Players Listing",
                 headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
                 headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={true} />,
+                    navigation={navigation} showHome={true} />,
                 headerTitleStyle: style.headerStyle,
                 headerStyle: {
                     backgroundColor: '#FFFFFF',
@@ -755,12 +792,12 @@ const coachBatchModule = createStackNavigator({
 
             })
         },
-},{
-    contentComponent: ({ navigation }) => {
-        return (<CoachMenuDrawer navigation={navigation} />)
-    },
+    }, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
         drawerWidth: Dimensions.get('window').width * 0.83,
-}
+    }
 );
 
 const tabBarControllerCoach = createBottomTabNavigator(
