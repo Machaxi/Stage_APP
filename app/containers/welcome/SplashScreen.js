@@ -17,7 +17,7 @@ class Splash extends BaseComponent {
     }
 
     componentDidMount() {
-        
+
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)

@@ -51,7 +51,9 @@ import batchDeatails from '../containers/CoachScreen/Batch/BatchDetails'
 import coachAttendenceBook from '../containers/CoachScreen/Batch/CoachAttendenceBook'
 import { isSignedIn } from "../components/auth";
 import BaseComponent from '../containers/BaseComponent';
-
+import CurrentBooking from '../containers/court_booking/CurrentBooking';
+import CourtAcademyListing from '../containers/court_booking/CourtAcademyListing'
+import ChooseTimeDate from '../containers/court_booking/ChooseTimeDate'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
@@ -482,6 +484,66 @@ const TournamentModule = createStackNavigator({
 })
 
 
+const BookPlayModule = createStackNavigator({
+    //All the screen from the Screen1 will be indexed here
+    CurrentBooking: {
+        screen: CurrentBooking,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true}
+                showBackAction={false}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    CourtAcademyListing: {
+        screen: CourtAcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    ChooseTimeDate: {
+        screen: ChooseTimeDate,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
+})
+
+
 const tabBarController = createBottomTabNavigator(
     {
         Home: {
@@ -741,37 +803,37 @@ const coachBatchModule = createStackNavigator({
 
         })
 
-    },  PlayersListing: {
-            screen: PlayersListing,
-            navigationOptions: ({ navigation }) => ({
-                title: "Players Listing",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={true} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
+    }, PlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-            })
-        },
-        AttendenceBook: {
-            screen: coachAttendenceBook,
-            navigationOptions: ({ navigation }) => ({
-                title: "Batch Details",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                       showBackAction={true}
-                />,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={false} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
+        })
+    },
+    AttendenceBook: {
+        screen: coachAttendenceBook,
+        navigationOptions: ({ navigation }) => ({
+            title: "Batch Details",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+            />,
+            headerRight: <RigitMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-            })
+        })
 
-        },
+    },
 
 
 
@@ -1001,7 +1063,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
         },
 
         BookandPlay: {
-            screen: userHomeModule,
+            screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 showLabel: false,

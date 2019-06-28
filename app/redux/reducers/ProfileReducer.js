@@ -31,40 +31,40 @@ export function saveUserStartupProfile(header, postdata) {
     //     getData('header', (value) => {
     //         header  = value
     //     });
-    // return {
-    //     type: types.GET_PROFILE,
-    //     payload: {
-    //         request: {
-    //             url: `user/profile`,
-    //             method: 'POST',
-    //             data: postdata,
-    //             headers: {
-    //                 'x-authorization': header,
-    //                 'Content-Type': 'multipart/form-data',
+    return {
+        type: types.GET_PROFILE,
+        payload: {
+            request: {
+                url: `user/profile`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'multipart/form-data',
 
-    //             },
-    //         }
-    //     }
-    // };
-    let options = {
-        headers: {
-            'x-authorization': header,
-            'Content-Type': 'multipart/form-data',
-        },
-        method: 'POST'
+                },
+            }
+        }
     };
+    // let options = {
+    //     headers: {
+    //         'x-authorization': header,
+    //         'Content-Type': 'multipart/form-data',
+    //     },
+    //     method: 'POST'
+    // };
 
-    options.body =postdata
+    // options.body =postdata
 
-    return fetch("http://13.233.124.189:8080/api/user/profile", options)
-        .then(response => {
-            return response.json()
-                .then(responseJson => {
-                    //You put some checks here
-                    console.warn('Response ',responseJson)
-                    return responseJson;
-                });
-        });
+    // return fetch("http://13.233.124.189:8080/api/user/profile", options)
+    //     .then(response => {
+    //         return response.json()
+    //             .then(responseJson => {
+    //                 //You put some checks here
+    //                 console.warn('Response ',responseJson)
+    //                 return responseJson;
+    //             });
+    //     });
 
 
 }

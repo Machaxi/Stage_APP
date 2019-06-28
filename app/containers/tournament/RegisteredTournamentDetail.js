@@ -346,7 +346,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             style={styles.rounded_button}
                                         >
                                             View Fixture
-        </Text>
+                                        </Text>
 
                                     </View>
 

@@ -32,8 +32,7 @@ class EditProfile extends BaseComponent {
             dict['phone_number'] = "+919214088636"//user.phoneNumber;
             dict['name'] = 'Niranjan';
             dict['dob'] = "1987-06-28";
-             data.append('post', dict);
-            formData.append("post", dict)
+            formData.append('post', dict);
             // console.log("header",value,batch_id);
 
             this.props.saveUserStartupProfile(value, formData).then(() => {

@@ -245,15 +245,19 @@ class PhoneAuth extends Component {
 
     render() {
         const { user1, confirmResult, token, isCall } = this.state;
+        console.warn('confirmResult ' + confirmResult + " User " + user1)
+        console.log("User", JSON.stringify(user1))
+
         return (
             <View style={{ flex: 1 }}>
 
-                {!user1 && !confirmResult && this.renderPhoneNumberInput()}
+                {user1 == null && confirmResult == null && this.renderPhoneNumberInput()}
 
                 {this.renderMessage()}
 
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
+                {user1 && isCall ? this.signIn11(user1, this.state.token) : null}
                 {/*{user1 && (*/}
                 {/*<View*/}
                 {/*style={{*/}
