@@ -7,7 +7,7 @@ const initialState = {
     batchdata: '',
     error: null,
 };
-export default function BatchReducer(state = initialState, action) {
+export default function PlayerBatchReducer(state = initialState, action) {
     switch (action.type) {
         case types.GET_BATCHES:
             return { ...state, loading: true };
@@ -23,13 +23,13 @@ export default function BatchReducer(state = initialState, action) {
                 error: 'Error while fetching user'
             };
         default:
-          //  console.log("fails",action.payload);
+            //  console.log("fails",action.payload);
             return state;
     }
 }
 
-export function getCoachBatch(header,academy_id,coach_id) {
-    console.log("postdata getCoachBatch",header)
+export function getPlayerBatch(header,academy_id,player_id) {
+    console.log("postdata getPlayerBatch",header)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -38,7 +38,7 @@ export function getCoachBatch(header,academy_id,coach_id) {
         type: types.GET_BATCHES,
         payload: {
             request: {
-                url: `coach/batches?academy_id=${academy_id}&coach_id=${coach_id}`,
+                url: `player/batches?academy_id=${academy_id}&player_id=${player_id}`,
                 method: 'GET',
                 // data: postdata,
                 headers: {
@@ -109,7 +109,7 @@ export function saveCoachBatchAttendence(header,batch_id,postdata) {
             request: {
                 url: `batch/${batch_id}/attendance`,
                 method: 'POST',
-                 data: postdata,
+                data: postdata,
                 headers: {
                     'x-authorization': header
 

@@ -12,6 +12,7 @@ import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
+import DatePicker from 'react-native-datepicker'
 const acedemicList = [
     {
         label: 'India',
@@ -43,6 +44,7 @@ class  CoachAttendenceBook extends React.Component {
             billingchecked:false,
             playerList : null,
             batchDetails:null,
+            attendenceDate:'25-JUNE-2019',
         }
     }
 
@@ -125,11 +127,12 @@ class  CoachAttendenceBook extends React.Component {
                     <View style={{backgroundColor:'white',marginTop:-10}}>
                         <CheckBox style={{ height: 30,width: 30, alignItems: 'center', backgroundColor: 'red' }}
                             // title='a'
-                                  checked={item.isPresent}
+                                  checked={item.is_present}
                                   onPress={() => {
+                                      console.log("he;eleleo",item.is_present)
                                       let playerList = [...this.state.playerList];
                                       let index = playerList.findIndex(el => el.id === item.id);
-                                      playerList[index] = {...playerList[index], isPresent: !item.isPresent};
+                                      playerList[index] = {...playerList[index], is_present: !item.is_present};
                                       this.setState({ playerList });
 
                                       //   item.isPresent = !item.isPresent
@@ -137,7 +140,7 @@ class  CoachAttendenceBook extends React.Component {
                                       //     playerList:item
                                       // })
 
-                                      console.log("he;eleleo",item.isPresent)
+                                      console.log("he;eleleo",item.is_present)
                                   }
 
 
@@ -220,16 +223,43 @@ class  CoachAttendenceBook extends React.Component {
 
 
                 <View style={{backgroundColor:'white'}}>
-                    <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
-                        <Text style={{fontSize:14,fontWeight:'bold'}}>Batch 1 : {batch_name} </Text>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',margin:20}}>
+                    <View style={{justifyContent:'space-between'}}>
+                        <Text style={{fontSize:10,marginBottom:5}}>Category</Text>
                         <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_category} </Text>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'space-between',margin:20,marginTop:-10,}}>
-                        <View style={{margin:5}}>
-                            <Text style={{fontSize:10,marginBottom:10}}>Date </Text>
-                            <Text style={{fontSize:14}}>{session.session_date } </Text>
 
+                        <View style={{justifyContent:'space-between'}}>
+                            <Text style={{fontSize:10,marginBottom:5}}>Batch name</Text>
+                            <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_name} </Text>
                         </View>
+                        <View style={{justifyContent:'space-between'}}>
+                            <Text style={{fontSize:10,marginBottom:5}}>Showing for</Text>
+                            <DatePicker
+                                style={{width: 120,borderWidth:0}}
+                                date={this.state.attendenceDate}
+                                mode="date"
+                                placeholder="select date"
+                                format="DD-MMM-YYYY"
+                                minDate="01-01-2019"
+                                maxDate = {Date.now()}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                customStyles={{
+
+                                    dateInput: {
+                                        marginLeft: 10,
+                                        borderWidth:1
+                                    }
+                                    // ... You can check the source to find the other keys.
+                                }}
+                                onDateChange={(attendenceDate) => {this.setState({attendenceDate: attendenceDate})}}
+                            />
+                        </View>
+                    </View>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',margin:20,marginTop:-10,}}>
+
                         <View style={{margin:5}}>
                             <Text style={{fontSize:10,marginBottom:10}}>Time slot </Text>
                             <Text style={{fontSize:14}}>{session.start_time + ' - ' + session.end_time}</Text>
@@ -239,7 +269,8 @@ class  CoachAttendenceBook extends React.Component {
 
                 <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:14,marginBottom:10}}>Player </Text>
-                    <Text style={{fontSize:14}}>Present </Text>
+                    <Text style={{fontSize:14}}>Attendence </Text>
+                    <Text style={{fontSize:14}}>Session </Text>
                 </View>
 
                 <View style={{backgroundColor:'white',marginTop:-10}}>

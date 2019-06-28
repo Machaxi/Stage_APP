@@ -31,7 +31,7 @@ import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
-import mybatch from '../containers/MyBatch/MyBatch'
+import mybatch from '../containers/PlayerBatch/PlayerBatch'
 import TournamentTabs from '../containers/tournament/TournamentTabs'
 import TournamentFixture from '../containers/tournament/TournamentFixture'
 import UpcomingTournamentDetail from '../containers/tournament/UpcomingTournamentDetail'
@@ -741,24 +741,37 @@ const coachBatchModule = createStackNavigator({
 
         })
 
-    },
-    AttendenceBook: {
-        screen: coachAttendenceBook,
-        navigationOptions: ({ navigation }) => ({
-            title: "Batch Details",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+    },  PlayersListing: {
+            screen: PlayersListing,
+            navigationOptions: ({ navigation }) => ({
+                title: "Players Listing",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={true} />,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
 
-        })
+            })
+        },
+        AttendenceBook: {
+            screen: coachAttendenceBook,
+            navigationOptions: ({ navigation }) => ({
+                title: "Batch Details",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                       showBackAction={true}
+                />,
+                headerRight: <RigitMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false} />,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
 
-    },
+            })
+
+        },
 
 
 

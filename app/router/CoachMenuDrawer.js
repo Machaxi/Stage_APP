@@ -7,7 +7,8 @@ import {
 	Image
 } from 'react-native';
 import { Text, Button } from 'react-native-paper'
-
+import {onSignOut,clearData} from "../components/auth";
+import firebase from 'react-native-firebase';
 
 
 export default class CoachMenuDrawer extends React.Component {
@@ -155,7 +156,12 @@ export default class CoachMenuDrawer extends React.Component {
 							</View>
 						</TouchableOpacity>
 
-						<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ContactUs')}>
+						<TouchableOpacity activeOpacity={0.8} onPress={() => {
+							onSignOut()
+                            clearData()
+                            firebase.auth().signOut();
+							this.props.navigation.navigate('Login')}
+						}>
 
 
 							<View style={styles.drawercell}>
