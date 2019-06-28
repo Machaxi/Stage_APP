@@ -125,11 +125,12 @@ class  MarkAttendence extends React.Component {
 <View style={{backgroundColor:'white',marginTop:-10}}>
                             <CheckBox style={{ height: 30,width: 30, alignItems: 'center', backgroundColor: 'red' }}
                                      // title='a'
-                                      checked={item.isPresent}
+                                      checked={item.is_present}
                                       onPress={() => {
+                                          console.log("he;eleleo",item.is_present)
                                           let playerList = [...this.state.playerList];
                                           let index = playerList.findIndex(el => el.id === item.id);
-                                          playerList[index] = {...playerList[index], isPresent: !item.isPresent};
+                                          playerList[index] = {...playerList[index], is_present: !item.is_present};
                                           this.setState({ playerList });
 
                                         //   item.isPresent = !item.isPresent
@@ -137,7 +138,7 @@ class  MarkAttendence extends React.Component {
                                         //     playerList:item
                                         // })
 
-                                      console.log("he;eleleo",item.isPresent)
+                                      console.log("he;eleleo",playerList[0].is_present)
                                       }
 
 
