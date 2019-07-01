@@ -121,7 +121,7 @@ export function saveCoachBatchAttendence(header,batch_id,postdata) {
 }
 
 
-export function getCoachBatchAttendenceDetails(header,batch_id) {
+export function getCoachBatchAttendenceDetails(header,batch_id,date) {
     console.log("postdata",header,batch_id)
     // var header =
     //     getData('header', (value) => {
@@ -131,7 +131,7 @@ export function getCoachBatchAttendenceDetails(header,batch_id) {
         type: types.GET_BATCHES,
         payload: {
             request: {
-                url: `batch/${batch_id}/attendance-detail`,
+                url: `batch/${batch_id}/attendance-detail?attendance_date=${date}`,
                 method: 'GET',
                 // data: postdata,
                 headers: {

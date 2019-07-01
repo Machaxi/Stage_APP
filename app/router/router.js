@@ -31,27 +31,17 @@ import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
-import mybatch from '../containers/PlayerBatch/PlayerBatch'
-import TournamentTabs from '../containers/tournament/TournamentTabs'
-import TournamentFixture from '../containers/tournament/TournamentFixture'
-import UpcomingTournamentDetail from '../containers/tournament/UpcomingTournamentDetail'
-import RegisteredTournamentDetail from '../containers/tournament/RegisteredTournamentDetail'
-import ResultsTournamentDetail from '../containers/tournament/ResultsTournamentDetail'
-import Registration from '../containers/tournament/Registration'
-import RegistrationSteps from '../containers/tournament/RegistrationSteps'
-import AddPartner from '../containers/tournament/AddPartner'
-import AddPartnerWithPhone from '../containers/tournament/AddPartnerWithPhone'
-import RegistrationSuccessful from '../containers/tournament/RegistrationSuccessful'
-import TournamentScorer from '../containers/tournament/TournamentScorer'
-
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
-import coachBatch from '../containers/CoachScreen/Batch/BatchScreen'
-import batchDeatails from '../containers/CoachScreen/Batch/BatchDetails'
-import coachAttendenceBook from '../containers/CoachScreen/Batch/CoachAttendenceBook'
+
 import { isSignedIn } from "../components/auth";
 import BaseComponent from '../containers/BaseComponent';
-
+import TournamentModule from './TournamentRouter'
+import coachBatchModule from './CoachBatchRouter'
+import userBatchModule from './PlayerBatchRouter'
+import NavigationDrawerStructure from './NavigationDrawerStructure'
+import RightMenuToolbar from "./RightMenuToolbar";
+import coachPerfomenceModule from './CoachPerformenceRouter'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
@@ -89,7 +79,7 @@ const loginModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -125,66 +115,14 @@ const userHomeModule = createStackNavigator({
 
     UserHome: {
         screen: userhome,
-        // navigationOptions: ({ navigation }) => ({
-        //     //title: "Dribble",
-        //
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //         showBackAction={false}
-        //     />,
-        //     headerRight: <RigitMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showHome={false} />,
-        //     headerTitleStyle: {
-        //         color: 'white'
-        //     },
-        //     headerStyle: {
-        //         elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
-        //
-        //      },
-        //    // //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
-        //    //  navigation={navigation} />,
-        //     // headerBackground: (
-        //     //     <LinearGradient
-        //     //         colors={['#262051', '#24262A']}
-        //     //         style={{ flex: 1 }}
-        //     //         start={{ x: 0, y: 0 }}
-        //     //         end={{ x: 2.5, y: 0 }}
-        //     //     />
-        //    //  ),
-        //
-        // })
+
     },
 
 
 }
 );
 
-const userBatchModule = createStackNavigator({
 
-
-    UserHome: {
-        screen: mybatch,
-        navigationOptions: ({ navigation }) => ({
-            title: "My Batch",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: {
-                color: 'black'
-            },
-            // headerStyle: {
-            //     elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
-            //
-            // },
-
-
-        })
-    },
-
-
-}
-);
 
 const GuestHomeModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
@@ -196,7 +134,7 @@ const GuestHomeModule = createStackNavigator({
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={false}
             />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -211,7 +149,7 @@ const GuestHomeModule = createStackNavigator({
             //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
             title: "Academy Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -224,7 +162,7 @@ const GuestHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Coach Listing",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -238,7 +176,7 @@ const GuestHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Players Listing",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -252,7 +190,7 @@ const GuestHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Coach Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -267,7 +205,7 @@ const GuestHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -277,208 +215,6 @@ const GuestHomeModule = createStackNavigator({
         })
 
     },
-})
-
-const TournamentModule = createStackNavigator({
-    //All the screen from the Screen1 will be indexed here
-    TournamentTabs: {
-        screen: TournamentTabs,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    UpcomingTournamentDetail: {
-        screen: UpcomingTournamentDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    }
-    ,
-    RegisteredTournamentDetail: {
-        screen: RegisteredTournamentDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Registered Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    ResultsTournamentDetail: {
-        screen: ResultsTournamentDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Featther accademy Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation}
-                showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
-
-    TournamentFixture: {
-        screen: TournamentFixture,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Fixture',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    Registration: {
-        screen: Registration,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Registration',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    RegistrationSteps: {
-        screen: RegistrationSteps,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Registration',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
-    AddPartner: {
-        screen: AddPartner,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Add Partner',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    AddPartnerWithPhone: {
-        screen: AddPartnerWithPhone,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Add Partner',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    RegistrationSuccessful: {
-        screen: RegistrationSuccessful,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Registration',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    TournamentScorer: {
-        screen: TournamentScorer,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Scorer',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
 })
 
 
@@ -630,7 +366,7 @@ const coachHomeModule = createStackNavigator({
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={false}
             />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -646,7 +382,7 @@ const coachHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Mark Attendence",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -660,7 +396,7 @@ const coachHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -674,7 +410,7 @@ const coachHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Players Listing",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -688,7 +424,7 @@ const coachHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Players Listing",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
+            headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
@@ -705,102 +441,6 @@ const coachHomeModule = createStackNavigator({
     }
 );
 
-const coachBatchModule = createStackNavigator({
-
-
-    CoachBatch: {
-        screen: coachBatch,
-        navigationOptions: ({ navigation }) => ({
-            title: "My Batch",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
-    },
-    BatchDetails: {
-        screen: batchDeatails,
-        navigationOptions: ({ navigation }) => ({
-            title: "Batch Details",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RigitMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
-    },  PlayersListing: {
-            screen: PlayersListing,
-            navigationOptions: ({ navigation }) => ({
-                title: "Players Listing",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={true} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
-
-            })
-        },
-        AttendenceBook: {
-            screen: coachAttendenceBook,
-            navigationOptions: ({ navigation }) => ({
-                title: "Batch Details",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                       showBackAction={true}
-                />,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={false} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
-
-            })
-
-        },
-
-
-
-
-}, {
-        contentComponent: ({ navigation }) => {
-            return (<CoachMenuDrawer navigation={navigation} />)
-        },
-        PlayersListing: {
-            screen: PlayersListing,
-            navigationOptions: ({ navigation }) => ({
-                title: "Players Listing",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-                headerRight: <RigitMenuToolbar navigationProps={navigation}
-                    navigation={navigation} showHome={true} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
-
-            })
-        },
-    }, {
-        contentComponent: ({ navigation }) => {
-            return (<CoachMenuDrawer navigation={navigation} />)
-        },
-        drawerWidth: Dimensions.get('window').width * 0.83,
-    }
-);
 
 const tabBarControllerCoach = createBottomTabNavigator(
     {
@@ -878,15 +518,15 @@ const tabBarControllerCoach = createBottomTabNavigator(
             }
 
         },
-        Challenge: {
-            screen: userHomeModule,
+        Performence: {
+            screen: coachPerfomenceModule,
             navigationOptions: {
-                tabBarLabel: 'Challenge',
+                tabBarLabel: 'Performence',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Image
                         //focused={focused}
-                        source={require('../images/Challengeiocn.png')}
+                        source={require('../images/performence.png')}
                         tintColor={tintColor}
                         size={24}
                     />
@@ -1128,150 +768,6 @@ const BaseNavigator = createSwitchNavigator({
 
 
 });
-
-
-class RigitMenuToolbar extends React.Component {
-
-    //==================================================================
-    //          showNotification = true/false (show/hide)
-    //          showHome 
-    //==================================================================
-
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
-
-    render() {
-
-        //showNotification={false} showHome={true}
-        let showNotification = false
-        let showHome = false
-        if (this.props.showNotification != undefined)
-            showNotification = this.props.showNotification
-
-        if (this.props.showHome != undefined)
-            showHome = this.props.showHome
-
-
-        return (
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-
-                {showNotification ? <TouchableOpacity
-                    activeOpacity={.8}
-                    onPress={() => { }}>
-
-                    <Image
-                        source={require('../images/ic_notifications.png')}
-                        style={{ width: 20, height: 20, marginRight: 12 }}
-                    />
-                </TouchableOpacity> : null}
-
-
-                {showHome ? <TouchableOpacity
-                    activeOpacity={.8}
-                    onPress={() => { }}>
-
-                    <Image
-                        source={require('../images/ic_home.png')}
-                        style={{ width: 20, height: 20, marginRight: 12 }}
-                    />
-                </TouchableOpacity> : null}
-
-
-            </View>
-        );
-    }
-}
-
-class NavigationDrawerStructure extends React.Component {
-
-    //==================================================================
-    //          showBackAction = true/false (show/hide)
-    //           showDrawer = true/false
-    //==================================================================
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            signedIn: false,
-            checkedSignIn: false,
-        };
-    }
-
-    componentDidMount() {
-
-        isSignedIn()
-            .then(res => {
-                console.log(res);
-                this.setState({ signedIn: res, checkedSignIn: true })
-            })
-            .catch(err => alert("An error occurred"));
-
-    }
-
-    //Structure for the navigatin Drawer
-    toggleDrawer = () => {
-        //Props to open/close the drawer
-        this.props.navigationProps.toggleDrawer();
-    };
-
-    toggleToHome = () => {
-        this.props.navigationProps.goBack(null);
-    };
-
-    render() {
-
-        let showBackAction = true
-        if (this.props.showBackAction != undefined)
-            showBackAction = this.props.showBackAction
-
-
-        let showDrawer = true
-
-        if (this.props.showDrawer != undefined)
-            showDrawer = this.props.showDrawer
-
-        //if user is not logged in then we will not show drawer to user
-        if (!this.state.signedIn)
-            showDrawer = false
-
-        return (
-            <View style={{ flexDirection: 'row' }}>
-                {showBackAction ?
-                    <TouchableOpacity
-                        activeOpacity={.8}
-                        onPress={this.toggleToHome.bind(this)}>
-
-                        <Image
-                            source={require('../images/go_back_arrow.png')}
-                            style={{ width: 20, height: 16, marginLeft: 12 }}
-                        />
-                    </TouchableOpacity>
-                    : null
-                }
-
-                {showDrawer ? <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-                    {/*Donute Button Image */}
-                    <Image
-                        source={require('../images/hamburger.png')}
-                        style={{ width: 24, height: 16, marginLeft: 12 }}
-                    />
-                </TouchableOpacity>
-                    : null}
-
-                {/* <TouchableOpacity onPress={this.toggleToHome.bind(this)}>
-                <Image
-                        source={require('../images/header_icon.png')}
-                        style={{ width: 55, height: 50,marginLeft:-15}}
-                    />
-                    </TouchableOpacity> */}
-            </View>
-        );
-    }
-}
 
 const AppMain = createAppContainer(BaseNavigator);
 export default AppMain;
