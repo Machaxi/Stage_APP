@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Image } from 'react-native'
+import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
 import BaseComponent from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -21,6 +21,7 @@ class EditProfile extends BaseComponent {
         }
     }
     saveUserProfile() {
+
         getData('header', (value) => {
             var formData = new FormData();
             var dataDic = {};
@@ -29,8 +30,8 @@ class EditProfile extends BaseComponent {
             //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
             //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
 
-            dict['phone_number'] = "+919214088636"//user.phoneNumber;
-            dict['name'] = 'Niranjan';
+            dict['phone_number'] = "+918890633388"//user.phoneNumber;
+            dict['name'] = 'Niranjan1';
             dict['dob'] = "1987-06-28";
             formData.append('post', dict);
             // console.log("header",value,batch_id);
@@ -39,7 +40,7 @@ class EditProfile extends BaseComponent {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
               //  let user = JSON.stringify(this.props.data.profileData);
-                console.log(' user response payload ' + this.props);
+                console.log(' user response payload ' + JSON.stringify(this.props));
                 // let user1 = JSON.parse(user)
 
                 // if (user1.success == true) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image } from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { doLogin, doFBLogin } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
@@ -18,7 +18,7 @@ class PhoneAuth extends Component {
             user1: null,
             message: '',
             codeInput: '',
-            phoneNumber: '+91',
+            phoneNumber: '',
             confirmResult: null,
             isCall: true,
         };
@@ -36,7 +36,7 @@ class PhoneAuth extends Component {
                     user1: null,
                     message: '',
                     codeInput: '',
-                    phoneNumber: '+91',
+                    phoneNumber: '',
                     confirmResult: null,
                     token: '',
                 });
@@ -199,23 +199,48 @@ class PhoneAuth extends Component {
         const { phoneNumber } = this.state;
 
         return (
-            <View style={{ padding: 25 }}>
-                <Text>Enter Phone number:</Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                    style={{ width: 200, height: 60 }}
+                    source={require('../../images/dribble_logo.png')}
+                />
                 <TextInput
                     autoFocus
-                    style={{ height: 40, marginTop: 15, marginBottom: 15 }}
+                    style={{
+                        width: 150,
+                        fontFamily: 'Quicksand-Regular',
+                        height: 40, borderBottomColor: '#BDBDBD',
+                        borderBottomWidth: 1,
+                        marginTop: 100, marginBottom: 15
+                    }}
+                    keyboardType={"phone-pad"}
                     onChangeText={value => this.setState({ phoneNumber: value })}
-                    placeholder={'Phone number ... '}
+                    placeholder={'Enter Phone Number'}
                     value={phoneNumber}
                 />
-                <Button title="Sign In" color="green" onPress={this.signIn} />
+                {/* <Button title="Sign In" color="#67BAF5" style={{ borderRadius: 16 }}
+                    onPress={this.signIn} /> */}
+                <Text style={styles.rounded_button}
+                    onPress={this.signIn}
+                >Login</Text>
+
+                <Text style={{
+                    color: '#67BAF5',
+                    marginTop: 50,
+                    fontFamily: 'Quicksand-Regular'
+                }}
+                    onPress={() => {
+                        this.props.navigation.navigate('AcademyListing')
+                    }}
+                >SKIP</Text>
+
             </View>
         );
     }
 
     renderMessage() {
         const { message } = this.state;
-        console.warn("message", message)
+        //console.warn("message", message)
         if (!message.length) return null;
 
         return (
@@ -245,11 +270,11 @@ class PhoneAuth extends Component {
 
     render() {
         const { user1, confirmResult, token, isCall } = this.state;
-        console.warn('confirmResult ' + confirmResult + " User " + user1)
+        //console.warn('confirmResult ' + confirmResult + " User " + user1)
         console.log("User", JSON.stringify(user1))
 
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
                 {user1 == null && confirmResult == null && this.renderPhoneNumberInput()}
 
@@ -306,7 +331,21 @@ class PhoneAuth extends Component {
         );
     }
 }
-
+const styles = StyleSheet.create({
+    rounded_button: {
+        width: 150,
+        padding: 10,
+        borderRadius: 20,
+        borderWidth: 1,
+        marginLeft: 4,
+        marginRight: 4,
+        borderColor: '#67BAF5',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular'
+    },
+});
 
 
 

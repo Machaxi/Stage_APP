@@ -14,7 +14,7 @@ export default function ProfileReducer(state = initialState, action) {
             console.log("sucesss PROFILE", action.payload.data);
             return { ...state, loading: false, profileData: action.payload.data };
         case types.DO_PROFILE_FAIL:
-            console.log("fails DO_DASHBOARD_FAIL", action.payload);
+            console.log("fails GET_PROFILE", action.payload);
             return {
                 ...state,
                 loading: false,
@@ -40,8 +40,7 @@ export function saveUserStartupProfile(header, postdata) {
                 data: postdata,
                 headers: {
                     'x-authorization': header,
-                    'Content-Type': 'multipart/form-data',
-
+                    'Content-Type': 'application/json',
                 },
             }
         }
