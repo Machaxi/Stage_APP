@@ -46,6 +46,7 @@ import userBatchModule from './PlayerBatchRouter'
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import coachPerfomenceModule from './CoachPerformenceRouter'
+import WriteFeedback from '../containers/feedback/WriteFeedback'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
@@ -213,6 +214,21 @@ const GuestHomeModule = createStackNavigator({
         screen: EditProfile,
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    WriteFeedback: {
+        screen: WriteFeedback,
+        navigationOptions: ({ navigation }) => ({
+            title: "Write Feedbacks",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,

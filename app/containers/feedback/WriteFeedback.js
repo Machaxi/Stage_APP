@@ -1,90 +1,253 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import React from 'react';
+import { StyleSheet, View, TextInput, Text, Modal, Alert, Image, ScrollView } from 'react-native';
+import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import { connect } from 'react-redux';
-import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
-import Autocomplete from 'react-native-autocomplete-input';
-import axios from 'axios'
 import BaseComponent from '../BaseComponent'
 
 export default class WriteFeedback extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.state = {
+            modalVisible: false,
+        };
     }
 
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
 
     render() {
 
         return (
 
-            <View style={styles.chartContainer}>
+            <ScrollView>
 
-                <Card
-                    style={{
-                        borderRadius: 16,
-                        marginLeft: 16,
-                        marginRight: 16,
-                        marginTop: 8,
-                        marginBottom: 8,
-                        elevation: 2
+                <View style={styles.chartContainer}>
 
-                    }}>
-                    <View>
-                        
-                        <Text style={{
-                            paddingTop: 12, paddingLeft: 12, fontSize: 16,
-                            color: '#707070',
-                            fontFamily: 'Quicksand-Regular'
+
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
                         }}>
-                            Name
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            //backgroundColor: '#0E0E0E',
+                            //opacity: 0.56,
+                            backgroundColor: 'rgba(52, 52, 52, 0.8)',
+                            padding: 16
+                        }}>
+                            <View style={{
+                                width: 300,
+                                borderRadius: 16,
+                                backgroundColor: 'white',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: 300,
+                            }}>
+
+                                <Text
+                                    style={{
+                                        fontSize: 16,
+                                        color: 'black',
+                                        fontWeight: "400",
+                                        fontFamily: 'Quicksand-Bold'
+                                    }}
+                                >Success</Text>
+
+                                <Image
+                                    style={{ marginTop: 16, height: 100, width: 100 }}
+                                    source={require('../../images/success_icon.png')}
+                                ></Image>
+
+                                <Text
+                                    style={{
+                                        fontSize: 14,
+                                        marginTop: 16,
+                                        color: 'black',
+                                        fontWeight: "400",
+                                        textAlign: 'center',
+                                        fontFamily: 'Quicksand-Regular'
+                                    }}
+                                >Thank you ! Your feedback has been succesfully submitted.</Text>
+
+                                <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
+                                    onPress={() => {
+                                        this.setModalVisible(false);
+                                    }}>
+                                    OK</Text>
+
+                            </View>
+
+                        </View>
+                    </Modal>
+                    <Card
+                        style={{
+                            borderRadius: 16,
+                            marginLeft: 16,
+                            marginRight: 16,
+                            marginTop: 12,
+                            marginBottom: 12,
+                            elevation: 2
+
+                        }}>
+                        <View style={{ padding: 16 }}>
+
+                            <Text style={{
+                                fontSize: 14,
+                                color: '#404040',
+                                fontWeight: "400",
+                                fontFamily: 'Quicksand-Bold'
+                            }}>
+                                Academy Feedback
                             </Text>
 
-                        <View style={{ paddingLeft: 12, paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+                            <View style={{
+                                width: "100%",
+                                marginTop: 10, marginBottom: 10,
+                                height: 1, backgroundColor: '#DFDFDF'
+                            }}></View>
+
+                            <Text style={{
+                                fontSize: 14,
+                                color: '#404040',
+                                fontWeight: "400",
+                                fontFamily: 'Quicksand-Bold'
+                            }}>
+                                Your Feedback
+                            </Text>
 
                             <Rating
                                 type='custom'
                                 ratingColor='#F4FC9A'
                                 ratingBackgroundColor='#D7D7D7'
                                 ratingCount={5}
-                                imageSize={14}
-                                readonly={true}
-                                startingValue={item.ratings}
-                                style={{ height: 30, width: 80 }}
+                                imageSize={20}
+                                startingValue={0}
+                                style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16, }}
                             />
 
+                            <TextInput
+                                style={{
+                                    borderColor: "#CECECE",
+                                    borderWidth: 1,
+                                    height: 100,
+                                    width: "100%",
+                                    marginTop: 16,
+                                    marginBottom: 16,
+                                    fontSize: 14,
+                                    padding: 4,
+                                    textAlign: 'left',
+                                    justifyContent: 'flex-start',
+                                    borderRadius: 8,
+                                    fontFamily: 'Quicksand-Regular',
+                                    textAlignVertical: 'top'
+                                }}
+                                multiline={true}
+                                placeholder={"What's your feedback?"}
+                            >
+
+                            </TextInput>
+
+
+
+
+                        </View>
+
+                    </Card>
+
+                    <Card
+                        style={{
+                            borderRadius: 16,
+                            marginLeft: 16,
+                            marginRight: 16,
+                            marginTop: 12,
+                            marginBottom: 12,
+                            elevation: 2
+
+                        }}>
+                        <View style={{ padding: 16 }}>
+
                             <Text style={{
-                                backgroundColor: '#DFDFDF', height: 19, width: 30, textAlign: 'center',
-                                fontSize: 12,
-                                color: '#707070',
-                                paddingTop: 2,
-                                borderRadius: 12,
-                                fontFamily: 'Quicksand-Regular'
-                            }}>5</Text>
+                                fontSize: 14,
+                                color: '#404040',
+                                fontWeight: "400",
+                                fontFamily: 'Quicksand-Bold'
+                            }}>
+                                Academy Feedback
+                            </Text>
+
+                            <View style={{
+                                width: "100%",
+                                marginTop: 10, marginBottom: 10,
+                                height: 1, backgroundColor: '#DFDFDF'
+                            }}></View>
+
+                            <Text style={{
+                                fontSize: 14,
+                                color: '#404040',
+                                fontWeight: "400",
+                                fontFamily: 'Quicksand-Bold'
+                            }}>
+                                Your Feedback
+                            </Text>
+
+                            <Rating
+                                type='custom'
+                                ratingColor='#F4FC9A'
+                                ratingBackgroundColor='#D7D7D7'
+                                ratingCount={5}
+                                imageSize={20}
+                                startingValue={0}
+                                style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16, }}
+                            />
+
+                            <TextInput
+                                style={{
+                                    borderColor: "#CECECE",
+                                    borderWidth: 1,
+                                    height: 100,
+                                    width: "100%",
+                                    marginTop: 16,
+                                    marginBottom: 16,
+                                    fontSize: 14,
+                                    padding: 4,
+                                    textAlign: 'left',
+                                    justifyContent: 'flex-start',
+                                    borderRadius: 8,
+                                    fontFamily: 'Quicksand-Regular',
+                                    textAlignVertical: 'top'
+                                }}
+                                multiline={true}
+                                placeholder={"What's your feedback?"}
+                            >
+
+                            </TextInput>
 
                         </View>
 
-                        <View style={{ flexDirection: 'row', margin: 8 }}>
+                    </Card>
 
-                            <Text
-                                style={styles.rounded_button}
-                            >
-                                View Batches
-                                </Text>
-                            <Text
-                                style={styles.rounded_button}
-                            >
-                                Book Court
-                                </Text>
+                    <View style={{
+                        marginTop: 16, marginBottom: 16,
+                        justifyContent: 'center', alignItems: 'center'
+                    }}>
 
-                        </View>
-
+                        <Text style={styles.rounded_button}
+                            onPress={() => {
+                                this.setModalVisible(true);
+                            }}>
+                            Submit</Text>
                     </View>
 
-                </Card>
-
-            </View>
+                </View>
+            </ScrollView >
         );
     }
 }
