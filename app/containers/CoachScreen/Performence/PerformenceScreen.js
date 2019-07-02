@@ -9,6 +9,7 @@ import {CustomeCard } from  '../../../components/Home/Card'
 import {getCoachPerformenceList} from "../../../redux/reducers/PerformenceReducer";
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
+import moment from "moment/moment";
 const acedemicList = [
     {
         label: 'India',
@@ -86,12 +87,28 @@ class  PerformenceScreen extends React.Component {
 
     }
 
-    renderItem = ({ item }) => (
+    renderItemSection = ({ item }) => (
+        <View>
+        <View style={{margin: 10, marginTop: 20}}>
+        <Text>
+            {moment('06-'+item.month +'-'+item.year).format('MMM YY')}
+        </Text>
+        </View>
+            <FlatList
+                data={item.batches}
+                renderItem={this.renderItem}
+                keyExtractor1={(item, index) => item.month}
+            />
+        </View>
+
+    );
+
+    renderItem = ({ item ,index}) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press",item.batch_id)
+            console.warn("Touch Press",index)
 
-            this.props.navigation.navigate('BatchDetails',{batch_id:item.batch_id})
+           // this.props.navigation.navigate('BatchDetails',{batch_id:item.batch_id})
 
         }}>
             <CustomeCard>
@@ -152,18 +169,18 @@ class  PerformenceScreen extends React.Component {
 
         return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
             <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                <View style={{margin: 10, marginTop: 20}}>
+                {/*<View style={{margin: 10, marginTop: 20}}>*/}
 
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('PlayersListing',
-                    {batch_id:'1',month:'6',year:'2019'}
-                    )}>
-                        <Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>
-                    </TouchableOpacity>
-                </View>
+                    {/*<TouchableOpacity onPress={() => this.props.navigation.navigate('PlayersListing',*/}
+                    {/*{batch_id:'1',month:'6',year:'2019'}*/}
+                    {/*)}>*/}
+                        {/*<Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>*/}
+                    {/*</TouchableOpacity>*/}
+                {/*</View>*/}
 
                 <FlatList
                     data={this.state.batchList}
-                    renderItem={this.renderItem}
+                    renderItem={this.renderItemSection}
                     keyExtractor={(item, index) => item.id}
                 />
 
