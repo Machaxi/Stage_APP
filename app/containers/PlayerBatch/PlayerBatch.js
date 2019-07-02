@@ -191,7 +191,7 @@ class  PlayerBatch extends React.Component {
     renderScene = ({ route, jumpTo }) =>
 
     {
-        return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key] } />;
+        return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key]} navigation= {this.props.navigation} />;
      // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
 
     };

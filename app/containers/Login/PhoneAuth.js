@@ -107,7 +107,7 @@ class PhoneAuth extends Component {
         })
         var dataDic = {};
         var dict = {};
-        dict['phone_number'] = "+918290188636"//user.phoneNumber;
+        dict['phone_number'] = "+919214088636"//user.phoneNumber;
         dict['firebase_token'] = token;
         dict['device_type'] = "IOS";
         dict['app_version'] = '1.1.0';

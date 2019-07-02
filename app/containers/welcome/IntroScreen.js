@@ -122,11 +122,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     wrapper: {
-        height: "90%"
+        height: "90%",
     },
     sliderImage: {
         width: '100%',
-        height: "100%"
+        height: "100%",
+        resizeMode:'cover'
     }
 });
 

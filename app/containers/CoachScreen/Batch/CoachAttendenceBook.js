@@ -44,7 +44,7 @@ class  CoachAttendenceBook extends React.Component {
             billingchecked:false,
             playerList : null,
             batchDetails:null,
-            attendenceDate:'25-JUNE-2019',
+            attendenceDate:'26-JUNE-2019',
         }
     }
 
@@ -63,7 +63,11 @@ class  CoachAttendenceBook extends React.Component {
             console.log("userData.user",userData.user['user_type'])
             if(userData.user['user_type'] =='COACH'){
 
-                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'))
+                const yourDate = Date()
+
+                const NewDate = moment(this.state.attendenceDate).format('YYYY-MM-DD')
+                console.log("savePlaye",NewDate)
+                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'),NewDate)
 
             }
 
@@ -71,10 +75,10 @@ class  CoachAttendenceBook extends React.Component {
         });
     }
 
-    getCoachAttendencedData(btach_id){
+    getCoachAttendencedData(btach_id,date){
         getData('header',(value)=>{
             console.log("header",value,btach_id);
-            this.props.getCoachBatchAttendenceDetails(value,btach_id).then(() => {
+            this.props.getCoachBatchAttendenceDetails(value,btach_id,date).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.batchdata);
@@ -124,29 +128,8 @@ class  CoachAttendenceBook extends React.Component {
                     <Text>
                         {item.name}
                     </Text>
-                    <View style={{backgroundColor:'white',marginTop:-10}}>
-                        <CheckBox style={{ height: 30,width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                            // title='a'
-                                  checked={item.is_present}
-                                  onPress={() => {
-                                      console.log("he;eleleo",item.is_present)
-                                      let playerList = [...this.state.playerList];
-                                      let index = playerList.findIndex(el => el.id === item.id);
-                                      playerList[index] = {...playerList[index], is_present: !item.is_present};
-                                      this.setState({ playerList });
-
-                                      //   item.isPresent = !item.isPresent
-                                      // this.setState({
-                                      //     playerList:item
-                                      // })
-
-                                      console.log("he;eleleo",item.is_present)
-                                  }
-
-
-                                  }
-                        />
-                    </View>
+                  <Text> {item.attendance + '%'}</Text>
+                    <Text> {item.is_present ?'P' :'A'}</Text>
 
                 </View>
 
@@ -158,48 +141,6 @@ class  CoachAttendenceBook extends React.Component {
 
 
 
-    savePlayerAttendence()
-    {
-
-        getData('header',(value)=>{
-            console.log("savePlayerAttendence header",value);
-            const yourDate = Date()
-            console.log("savePlaye",yourDate)
-            const NewDate = moment(yourDate).format('YYYY-MM-DD')
-            console.log("savePlayerAttendence",NewDate);
-            var dataDic = {};
-            var dict = {};
-            dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
-            dict['attendance_date'] = NewDate;
-            dict['players'] = this.state.playerList
-
-
-
-            dataDic['data'] = dict;
-            console.log("dicttttc ", dict)
-
-            this.props.saveCoachBatchAttendence(value,this.props.navigation.getParam('batch_id'),dataDic).then(() => {
-                // console.log(' user response payload ' + JSON.stringify(this.props.data));
-                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.batchdata);
-                console.log(' user response payload ' + user);
-                let user1 = JSON.parse(user)
-
-                if(user1.success == true){
-                    // this.setState({
-                    //     // playerList:user1.data['players'],
-                    //     // batchDetails:user1.data['batch']
-                    //
-                    // })
-                }
-
-            }).catch((response) => {
-                //handle form errors
-                console.log(response);
-            })
-
-        });
-    }
 
 
 
@@ -254,7 +195,11 @@ class  CoachAttendenceBook extends React.Component {
                                     }
                                     // ... You can check the source to find the other keys.
                                 }}
-                                onDateChange={(attendenceDate) => {this.setState({attendenceDate: attendenceDate})}}
+                                onDateChange={(attendenceDate) => {
+                                    const NewDate = moment(attendenceDate).format('YYYY-MM-DD')
+                                    console.log("savePlaye",NewDate)
+                                    this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'),NewDate)
+                                    this.setState({attendenceDate: attendenceDate})}}
                             />
                         </View>
                     </View>
@@ -287,21 +232,12 @@ class  CoachAttendenceBook extends React.Component {
 
                 <View style={{flex:1, marginBottom: 30,marginRight:20,marginLeft:20,justifyContent:'flex-end'}}>
 
-                    <CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>
-                        Update
-                    </CustomeButtonB>
+                    {/*<CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>*/}
+                        {/*Update*/}
+                    {/*</CustomeButtonB>*/}
 
 
                 </View>
-
-
-
-
-
-
-
-
-
 
 
             </View>;
