@@ -14,7 +14,7 @@ export default function ProfileReducer(state = initialState, action) {
             console.log("sucesss PROFILE", action.payload.data);
             return { ...state, loading: false, profileData: action.payload.data };
         case types.DO_PROFILE_FAIL:
-            console.log("fails DO_DASHBOARD_FAIL", action.payload);
+            console.log("fails GET_PROFILE", action.payload);
             return {
                 ...state,
                 loading: false,
@@ -31,40 +31,39 @@ export function saveUserStartupProfile(header, postdata) {
     //     getData('header', (value) => {
     //         header  = value
     //     });
-    // return {
-    //     type: types.GET_PROFILE,
-    //     payload: {
-    //         request: {
-    //             url: `user/profile`,
-    //             method: 'POST',
-    //             data: postdata,
-    //             headers: {
-    //                 'x-authorization': header,
-    //                 'Content-Type': 'multipart/form-data',
-
-    //             },
-    //         }
-    //     }
-    // };
-    let options = {
-        headers: {
-            'x-authorization': header,
-            'Content-Type': 'multipart/form-data',
-        },
-        method: 'POST'
+    return {
+        type: types.GET_PROFILE,
+        payload: {
+            request: {
+                url: `user/profile`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
     };
+    // let options = {
+    //     headers: {
+    //         'x-authorization': header,
+    //         'Content-Type': 'multipart/form-data',
+    //     },
+    //     method: 'POST'
+    // };
 
-    options.body =postdata
+    // options.body =postdata
 
-    return fetch("http://13.233.124.189:8080/api/user/profile", options)
-        .then(response => {
-            return response.json()
-                .then(responseJson => {
-                    //You put some checks here
-                    console.warn('Response ',responseJson)
-                    return responseJson;
-                });
-        });
+    // return fetch("http://13.233.124.189:8080/api/user/profile", options)
+    //     .then(response => {
+    //         return response.json()
+    //             .then(responseJson => {
+    //                 //You put some checks here
+    //                 console.warn('Response ',responseJson)
+    //                 return responseJson;
+    //             });
+    //     });
 
 
 }

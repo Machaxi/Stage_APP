@@ -26,6 +26,7 @@ import PlayersListing from '../containers/GuestScreen/PlayersListing'
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import CustomHeader from '../components/custom/CustomHeader'
 import spalsh from '../containers/welcome/SplashScreen'
+import IntroScreen from '../containers/welcome/IntroScreen'
 
 import phoneauth from '../containers/Login/PhoneAuth'
 import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
@@ -33,6 +34,9 @@ import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
+import CurrentBooking from '../containers/court_booking/CurrentBooking';
+import CourtAcademyListing from '../containers/court_booking/CourtAcademyListing'
+import ChooseTimeDate from '../containers/court_booking/ChooseTimeDate'
 
 import { isSignedIn } from "../components/auth";
 import BaseComponent from '../containers/BaseComponent';
@@ -64,13 +68,18 @@ const loginModule = createStackNavigator({
             header: null
         }
     },
+    IntroScreen: {
+        screen: IntroScreen,
+        navigationOptions: {
+            // title: "Sign In",
+            headerStyle,
+            header: null
+        }
+    },
     Login: {
         screen: phoneauth,
         navigationOptions: {
-            title: "Login",
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+            header: null
             //header:null
         }
     },
@@ -585,7 +594,64 @@ const coachDrawer = createDrawerNavigator({
     }
 );
 
+const BookPlayModule = createStackNavigator({
+    //All the screen from the Screen1 will be indexed here
+    CurrentBooking: {
+        screen: CurrentBooking,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true}
+                showBackAction={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+            headerTintColor: '#000',
+        }),
+    },
+    CourtAcademyListing: {
+        screen: CourtAcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    ChooseTimeDate: {
+        screen: ChooseTimeDate,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+
+})
 
 const tabBarControllerGuest = createBottomTabNavigator(
     {
@@ -641,7 +707,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
         },
 
         BookandPlay: {
-            screen: userHomeModule,
+            screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 showLabel: false,
@@ -768,6 +834,8 @@ const BaseNavigator = createSwitchNavigator({
 
 
 });
+
+
 
 const AppMain = createAppContainer(BaseNavigator);
 export default AppMain;

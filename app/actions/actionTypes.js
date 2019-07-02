@@ -17,9 +17,9 @@ export const GET_DASHBOARD = 'user/LOAD';
 export const DO_DASHBOARD_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_DASHBOARD_FAIL = 'user/LOAD_FAIL';
 
-export const GET_PROFILE = 'user/LOAD';
-export const DO_PROFILE_SUCCESS = 'user/LOAD_SUCCESS';
-export const DO_PROFILE_FAIL = 'user/LOAD_FAIL';
+export const GET_PROFILE = 'profile/LOAD';
+export const DO_PROFILE_SUCCESS = 'profile/LOAD_SUCCESS';
+export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
 
 
 export const DO_ACADEMY_START = 'user/LOAD_START';
