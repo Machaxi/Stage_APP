@@ -3,10 +3,11 @@ import React from 'react'
 import coachPerformence from "../containers/CoachScreen/Performence/PerformenceScreen";
 import {createStackNavigator} from "react-navigation";
 
-import PlayersListing from "../containers/GuestScreen/PlayersListing";
+import PlayersListing from "../containers/CoachScreen/Performence/PerformencePlayerList";
 import {Dimensions, StyleSheet} from "react-native";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
+import updatePlayerPerformence from '../containers/CoachScreen/Performence/UpdatePlayerPerformence'
 
 const coachPerformenceModule = createStackNavigator({
 
@@ -28,23 +29,23 @@ const coachPerformenceModule = createStackNavigator({
             })
 
         },
-        // BatchDetails: {
-        //     screen: batchDeatails,
-        //     navigationOptions: ({ navigation }) => ({
-        //         title: "Batch Details",
-        //         headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //                                                showBackAction={true}
-        //         />,
-        //         headerRight: <RightMenuToolbar navigationProps={navigation}
-        //                                        navigation={navigation} showHome={false} />,
-        //         headerTitleStyle: style.headerStyle,
-        //         headerStyle: {
-        //             backgroundColor: '#FFFFFF',
-        //         },
-        //
-        //     })
-        //
-        // },
+    UpdatePlayerPerformence: {
+            screen: updatePlayerPerformence,
+            navigationOptions: ({ navigation }) => ({
+                title: "Batch Details",
+                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                                                       showBackAction={true}
+                />,
+                headerRight: <RightMenuToolbar navigationProps={navigation}
+                                               navigation={navigation} showHome={false} />,
+                headerTitleStyle: style.headerStyle,
+                headerStyle: {
+                    backgroundColor: '#FFFFFF',
+                },
+
+            })
+
+        },
     PlayersListing: {
             screen: PlayersListing,
             navigationOptions: ({ navigation }) => ({

@@ -6,7 +6,7 @@ import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,A
 import {Card} from 'react-native-paper'
 
 import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachBatch} from "../../../redux/reducers/BatchReducer";
+import {getCoachPerformenceList} from "../../../redux/reducers/PerformenceReducer";
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 const acedemicList = [
@@ -24,7 +24,7 @@ const placeholder = {
 };
 var deviceWidth = Dimensions.get('window').width -20;
 
-class  BatchScreen extends React.Component {
+class  PerformenceScreen extends React.Component {
 
     constructor(props) {
         super(props)
@@ -62,16 +62,16 @@ class  BatchScreen extends React.Component {
     getCoachBatchList(academy_id,player_id,){
         getData('header',(value)=>{
             console.log("header",value,academy_id,player_id);
-            this.props.getCoachBatch(value,academy_id,player_id).then(() => {
+            this.props.getCoachPerformenceList(value,academy_id,player_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.batchdata);
+                let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
                     this.setState({
-                        batchList:user1.data['coach_batches'],
+                        batchList:user1.data['dues'],
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -154,9 +154,9 @@ class  BatchScreen extends React.Component {
             <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
                 <View style={{margin: 10, marginTop: 20}}>
 
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SwitchPlayer111', {
-                        userType: 'coach'
-                    })}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('PlayersListing',
+                    {batch_id:'1',month:'6',year:'2019'}
+                    )}>
                         <Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>
                     </TouchableOpacity>
                 </View>
@@ -182,13 +182,13 @@ class  BatchScreen extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        data: state.BatchReducer,
+        data: state.PerformenceReducer,
     };
 };
 const mapDispatchToProps = {
-    getCoachBatch
+    getCoachPerformenceList
 };
-export default connect(mapStateToProps, mapDispatchToProps)(BatchScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(PerformenceScreen);
 
 
 const pickerSelectStyles = StyleSheet.create({

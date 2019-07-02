@@ -6,7 +6,7 @@ import DashboardReducer from './dashboardReducer'
 import BatchReducer from './BatchReducer'
 import ProfileReducer from './ProfileReducer'
  import PlayerBatchReducer from './PlayerBatchReducer'
-// import ShippingAddressReducer from './shippingAddressReducer'
+ import PerformenceReducer from './PerformenceReducer'
 // import CodReducer from './codReducer'
 // import { homeSliderReducer, homeInstaReducer } from './homePage';
 // import productListReducer from './productListing';
@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
     BatchReducer,
     ProfileReducer,
     PlayerBatchReducer,
-    // CartReducer,
+    PerformenceReducer,
     // AddressReducer,
     // ShippingReducer,
     // ShippingAddressReducer,
