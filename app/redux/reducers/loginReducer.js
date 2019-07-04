@@ -31,7 +31,7 @@ export default function loginReducer(state = initialState, action) {
 }
 
 export function doLogin(postdata) {
-    console.log("postdata",postdata)
+    console.log("doLogin postdata",postdata)
     // var header =
     //     getData('header', (value) => {
     //         header  = value

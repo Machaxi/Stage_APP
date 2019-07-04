@@ -47,9 +47,8 @@ class CoachListing extends BaseComponent {
                     marginTop: 16,
                     marginBottom: 8,
                     borderRadius: 12,
-                    elevation:2,
                 }}>
-                <Card style={{ borderRadius: 16, elevation: 2 }}>
+                <Card style={{ borderRadius: 16, elevation: 1 }}>
 
                     <TextInput style={{
                         marginLeft: 8,

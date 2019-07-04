@@ -2,13 +2,14 @@
 import React from 'react'
 
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
+import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView,SectionList} from 'react-native';
 import {Card} from 'react-native-paper'
 
 import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachBatch} from "../../../redux/reducers/BatchReducer";
+import {getCoachPerformenceList} from "../../../redux/reducers/PerformenceReducer";
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
+import moment from "moment/moment";
 const acedemicList = [
     {
         label: 'India',
@@ -24,7 +25,7 @@ const placeholder = {
 };
 var deviceWidth = Dimensions.get('window').width -20;
 
-class  BatchScreen extends React.Component {
+class  PerformenceScreen extends React.Component {
 
     constructor(props) {
         super(props)
@@ -62,16 +63,40 @@ class  BatchScreen extends React.Component {
     getCoachBatchList(academy_id,player_id,){
         getData('header',(value)=>{
             console.log("header",value,academy_id,player_id);
-            this.props.getCoachBatch(value,academy_id,player_id).then(() => {
+            this.props.getCoachPerformenceList(value,academy_id,player_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.batchdata);
+                let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
+                    tempArray = []
+                    for (let i = 0; i < user1.data['dues'].length; i++) {
+
+                        var tempdata = user1.data.dues[i]
+                        var month = user1.data.dues[i].month
+                        var year = user1.data.dues[i].year
+
+                        tempatta1=[]
+                        for (let j = 0; j < user1.data.dues[i].batches.length; j++) {
+
+                          var data =  user1.data.dues[i].batches[j]
+                            data['month'] = month
+                            data['year'] = year
+                            tempatta1[j] = data
+                        }
+                       // tempdata['title'] = moment('06-'+month +'-'+year).format('MMM YY')
+                        tempdata['batches'] = tempatta1
+                        tempArray[i] = tempdata
+                    }
+
+                console.log('tempArray',tempArray)
                     this.setState({
-                        batchList:user1.data['coach_batches'],
+                        batchList:tempArray,
+
+
+
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -86,12 +111,28 @@ class  BatchScreen extends React.Component {
 
     }
 
+    renderItemSection = ({ item }) => (
+        <View>
+        <View style={{margin: 10, marginTop: 20}}>
+        <Text>
+            {moment('06-'+item.month +'-'+item.year).format('MMM YY')}
+        </Text>
+        </View>
+            <FlatList
+                data={item.batches}
+                renderItem={this.renderItem}
+                keyExtractor1={(item, index) => moment('06-'+item.month +'-'+item.year).format('MMM YY')}
+            />
+        </View>
+
+    );
+
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press",item.batch_id)
+           // console.warn("Touch Press",index)
 
-            this.props.navigation.navigate('BatchDetails',{batch_id:item.batch_id})
+            this.props.navigation.navigate('PlayersListing',{batch_id:item.batch_id,month:item.month,year:item.year})
 
         }}>
             <CustomeCard>
@@ -117,18 +158,15 @@ class  BatchScreen extends React.Component {
 
                 </View>
                 <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10,marginTop:0}}/>
-                <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
-                    {/*<View>*/}
-                    {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
-                    {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
-                    {/*</View>*/}
-                    <View>
-                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Level</Text>
-                        <Text style={{fontSize:14,marginBottom:10}}>{item.level}</Text>
+                <View style={{flexDirection:'row',margin:10}}>
+
+                    <View style={{wdith:'50%'}}>
+                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Category</Text>
+                        <Text style={{fontSize:14,marginBottom:10}}>{item.batch_category}</Text>
                     </View>
-                    <View>
-                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Player</Text>
-                        <Text style={{fontSize:14,marginBottom:10}}>{item.total_players}</Text>
+                    <View style={{wdith:'40%',marginLeft:100}}>
+                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}> Players to be updated</Text>
+                        <Text style={{fontSize:14,marginBottom:10}}>{item.remaining_players}</Text>
                     </View>
                 </View>
 
@@ -152,18 +190,18 @@ class  BatchScreen extends React.Component {
 
         return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
             <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                <View style={{margin: 10, marginTop: 20}}>
+                {/*<View style={{margin: 10, marginTop: 20}}>*/}
 
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SwitchPlayer111', {
-                        userType: 'coach'
-                    })}>
-                        <Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>
-                    </TouchableOpacity>
-                </View>
+                    {/*<TouchableOpacity onPress={() => this.props.navigation.navigate('PlayersListing',*/}
+                    {/*{batch_id:'1',month:'6',year:'2019'}*/}
+                    {/*)}>*/}
+                        {/*<Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>*/}
+                    {/*</TouchableOpacity>*/}
+                {/*</View>*/}
 
                 <FlatList
                     data={this.state.batchList}
-                    renderItem={this.renderItem}
+                    renderItem={this.renderItemSection}
                     keyExtractor={(item, index) => item.id}
                 />
 
@@ -182,13 +220,13 @@ class  BatchScreen extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        data: state.BatchReducer,
+        data: state.PerformenceReducer,
     };
 };
 const mapDispatchToProps = {
-    getCoachBatch
+    getCoachPerformenceList
 };
-export default connect(mapStateToProps, mapDispatchToProps)(BatchScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(PerformenceScreen);
 
 
 const pickerSelectStyles = StyleSheet.create({

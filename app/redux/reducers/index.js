@@ -7,6 +7,7 @@ import BatchReducer from './BatchReducer'
 import ProfileReducer from './ProfileReducer'
  import PlayerBatchReducer from './PlayerBatchReducer'
  import TournamentReducer from './TournamentReducer'
+ import PerformenceReducer from './PerformenceReducer'
 // import ShippingAddressReducer from './shippingAddressReducer'
 // import CodReducer from './codReducer'
 // import { homeSliderReducer, homeInstaReducer } from './homePage';
@@ -23,8 +24,7 @@ const rootReducer = combineReducers({
     BatchReducer,
     ProfileReducer,
     PlayerBatchReducer,
-    TournamentReducer
-    // CartReducer,
+    PerformenceReducer,
     // AddressReducer,
     // ShippingReducer,
     // ShippingAddressReducer,

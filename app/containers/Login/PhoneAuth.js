@@ -234,7 +234,7 @@ class PhoneAuth extends Component {
                     fontFamily: 'Quicksand-Regular'
                 }}
                     onPress={() => {
-                        this.props.navigation.navigate('AcademyListing')
+                        this.props.navigation.navigate('GHome')
                     }}
                 >SKIP</Text>
 

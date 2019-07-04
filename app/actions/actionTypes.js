@@ -9,6 +9,10 @@ export const GET_BATCHES = 'user/LOAD';
 export const DO_BATCHES_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_BATCHES_FAIL = 'user/LOAD_FAIL';
 
+export const GET_PERFORMENCE = 'user/LOAD';
+export const DO_PERFORMENCE_SUCCESS = 'user/LOAD_SUCCESS';
+export const DO_PERFORMENCE_FAIL = 'user/LOAD_FAIL';
+
 export const GET_DASHBOARD = 'user/LOAD';
 export const DO_DASHBOARD_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_DASHBOARD_FAIL = 'user/LOAD_FAIL';
