@@ -114,7 +114,7 @@ class  PerformencePlayerList extends React.Component {
             console.warn("Touch Press")
 
             this.props.navigation.navigate('UpdatePlayerPerformence', {
-                 batch_id: '1',date:moment('06-'+this.props.navigation.getParam('month') +'-'+this.props.navigation.getParam('year')).format('MMM YY')
+                 batch_id: '1',player_id:item.id,month:this.props.navigation.getParam('month'),year:this.props.navigation.getParam('year')
             })
 
         }}>

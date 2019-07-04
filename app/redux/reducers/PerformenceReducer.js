@@ -74,6 +74,30 @@ export function getPerformenceDuePlayer(header,batch_id,month,year) {
 
 }
 
+
+export function getPerformenceOption(header,batch_id,player_id,month,year) {
+    console.log("getPerformenceOption",header,batch_id,player_id,month,year)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_PERFORMENCE,
+        payload: {
+            request: {
+                url: `performance/update-player-form?player_id=${player_id}&batch_id=${batch_id}&month=${month}&year=${year}`,
+                method: 'GET',
+                // data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}
+
 export function getCoachBatchAttendence(header,batch_id) {
     console.log("postdata",header,batch_id)
     // var header =

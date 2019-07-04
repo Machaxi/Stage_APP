@@ -2,7 +2,7 @@
 import React from 'react'
 
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
+import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView,SectionList} from 'react-native';
 import {Card} from 'react-native-paper'
 
 import {CustomeCard } from  '../../../components/Home/Card'
@@ -71,8 +71,32 @@ class  PerformenceScreen extends React.Component {
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
+                    tempArray = []
+                    for (let i = 0; i < user1.data['dues'].length; i++) {
+
+                        var tempdata = user1.data.dues[i]
+                        var month = user1.data.dues[i].month
+                        var year = user1.data.dues[i].year
+
+                        tempatta1=[]
+                        for (let j = 0; j < user1.data.dues[i].batches.length; j++) {
+
+                          var data =  user1.data.dues[i].batches[j]
+                            data['month'] = month
+                            data['year'] = year
+                            tempatta1[j] = data
+                        }
+                       // tempdata['title'] = moment('06-'+month +'-'+year).format('MMM YY')
+                        tempdata['batches'] = tempatta1
+                        tempArray[i] = tempdata
+                    }
+
+                console.log('tempArray',tempArray)
                     this.setState({
-                        batchList:user1.data['dues'],
+                        batchList:tempArray,
+
+
+
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -97,18 +121,18 @@ class  PerformenceScreen extends React.Component {
             <FlatList
                 data={item.batches}
                 renderItem={this.renderItem}
-                keyExtractor1={(item, index) => item.month}
+                keyExtractor1={(item, index) => moment('06-'+item.month +'-'+item.year).format('MMM YY')}
             />
         </View>
 
     );
 
-    renderItem = ({ item ,index}) => (
+    renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press",index)
+           // console.warn("Touch Press",index)
 
-           // this.props.navigation.navigate('BatchDetails',{batch_id:item.batch_id})
+            this.props.navigation.navigate('PlayersListing',{batch_id:item.batch_id,month:item.month,year:item.year})
 
         }}>
             <CustomeCard>
@@ -134,18 +158,15 @@ class  PerformenceScreen extends React.Component {
 
                 </View>
                 <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10,marginTop:0}}/>
-                <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
-                    {/*<View>*/}
-                    {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
-                    {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
-                    {/*</View>*/}
-                    <View>
-                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Level</Text>
-                        <Text style={{fontSize:14,marginBottom:10}}>{item.level}</Text>
+                <View style={{flexDirection:'row',margin:10}}>
+
+                    <View style={{wdith:'50%'}}>
+                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Category</Text>
+                        <Text style={{fontSize:14,marginBottom:10}}>{item.batch_category}</Text>
                     </View>
-                    <View>
-                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Player</Text>
-                        <Text style={{fontSize:14,marginBottom:10}}>{item.total_players}</Text>
+                    <View style={{wdith:'40%',marginLeft:100}}>
+                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}> Players to be updated</Text>
+                        <Text style={{fontSize:14,marginBottom:10}}>{item.remaining_players}</Text>
                     </View>
                 </View>
 

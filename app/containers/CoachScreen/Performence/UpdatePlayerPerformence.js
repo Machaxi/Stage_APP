@@ -1,11 +1,11 @@
 
 import React from 'react'
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
+import {View,TextInput,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
 import {Card} from 'react-native-paper'
 import {SwitchButton ,CustomeButtonB} from  '../../../components/Home/SwitchButton'
 import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachBatchAttendence,saveCoachBatchAttendence} from "../../../redux/reducers/BatchReducer";
+import {getPerformenceOption,saveCoachBatchAttendence} from "../../../redux/reducers/PerformenceReducer";
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
@@ -59,7 +59,7 @@ class  UpdatePlayerPerformence extends React.Component {
             console.log("userData.user",userData.user['user_type'])
             if(userData.user['user_type'] =='COACH'){
 
-                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'))
+                this.getCoachPerformenceData(this.props.navigation.getParam('batch_id'),this.props.navigation.getParam('player_id'),this.props.navigation.getParam('month'),this.props.navigation.getParam('year'))
 
             }
 
@@ -67,20 +67,20 @@ class  UpdatePlayerPerformence extends React.Component {
         });
     }
 
-    getCoachAttendencedData(btach_id){
+    getCoachPerformenceData(btach_id,player_id,month,year){
         getData('header',(value)=>{
             console.log("header",value,btach_id);
-            this.props.getCoachBatchAttendence(value,btach_id).then(() => {
+            this.props.getPerformenceOption(value,btach_id,player_id,month,year).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.batchdata);
+                let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
                     this.setState({
-                        playerList:user1.data['players'],
-                        batchDetails:user1.data['batch']
+                        playerList:user1.data['attributes'],
+                        batchDetails:user1.data
 
                     })
                 }
@@ -100,14 +100,14 @@ class  UpdatePlayerPerformence extends React.Component {
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press",this.props.name)
+            console.warn("Touch Press")
 
             // this.props.navigation.navigate('OrderTracking', {
             //     order_id: item.increment_id
             // })
 
         }}>
-            <View style={{marginLeft:0,marginRight:10,flex:1,flexDirection:'row',height:50}}>
+            <View style={{marginLeft:0,marginTop:10,marginRight:10,flex:1,flexDirection:'row',height:50}}>
 
                 <View  style={{
                     flex:1,
@@ -117,31 +117,47 @@ class  UpdatePlayerPerformence extends React.Component {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                 }}>
+                    <View style={{width:'60%'}}>
                     <Text>
                         {item.name}
                     </Text>
-                    <View style={{backgroundColor:'white',marginTop:-10}}>
-                        <CheckBox style={{ height: 30,width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                            // title='a'
-                                  checked={item.is_present}
-                                  onPress={() => {
-                                      console.log("he;eleleo",item.is_present)
-                                      let playerList = [...this.state.playerList];
-                                      let index = playerList.findIndex(el => el.id === item.id);
-                                      playerList[index] = {...playerList[index], is_present: !item.is_present};
-                                      this.setState({ playerList });
+                    </View>
 
-                                      //   item.isPresent = !item.isPresent
-                                      // this.setState({
-                                      //     playerList:item
-                                      // })
+                    <View style={{backgroundColor:'white',marginTop:0,flexDirection:'row',justifyContent:'space-between', width:'35%',marginRight:20,}}>
+                            <View>
+                        <TextInput
+                            style={{borderColor:'#CECECE',borderWidth:0.5,borderRadius:12,height:36,width:70,padding:10}}
+                            // mode='outlined'
+                            label='name'
 
-                                     // console.log("he;eleleo",playerList[0].is_present)
-                                  }
-
-
-                                  }
+                            // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
+                            value={this.state.txtname}
+                            onChangeText={(txtname) => this.setState({ txtname: txtname })}
                         />
+                            </View>
+                        <Text style={{textAlign:'center'}}>{item.prev_month_score}</Text>
+
+                        {/*<CheckBox style={{ height: 30,width: 30, alignItems: 'center', backgroundColor: 'red' }}*/}
+                            {/*// title='a'*/}
+                                  {/*checked={item.is_present}*/}
+                                  {/*onPress={() => {*/}
+                                      {/*console.log("he;eleleo",item.is_present)*/}
+                                      {/*let playerList = [...this.state.playerList];*/}
+                                      {/*let index = playerList.findIndex(el => el.id === item.id);*/}
+                                      {/*playerList[index] = {...playerList[index], is_present: !item.is_present};*/}
+                                      {/*this.setState({ playerList });*/}
+
+                                      {/*//   item.isPresent = !item.isPresent*/}
+                                      {/*// this.setState({*/}
+                                      {/*//     playerList:item*/}
+                                      {/*// })*/}
+
+                                     {/*// console.log("he;eleleo",playerList[0].is_present)*/}
+                                  {/*}*/}
+
+
+                                  {/*}*/}
+                        {/*/>*/}
                     </View>
 
                 </View>
@@ -177,16 +193,16 @@ class  UpdatePlayerPerformence extends React.Component {
             this.props.saveCoachBatchAttendence(value,this.props.navigation.getParam('batch_id'),dataDic).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.batchdata);
+                let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
-                    // this.setState({
-                    //     // playerList:user1.data['players'],
-                    //     // batchDetails:user1.data['batch']
-                    //
-                    // })
+                    this.setState({
+                        playerList:user1.data['attributes'],
+                         batchDetails:user1.data
+
+                    })
                 }
 
             }).catch((response) => {
@@ -197,10 +213,37 @@ class  UpdatePlayerPerformence extends React.Component {
         });
     }
 
+    renderItemSection = ({ item }) => (
+        <View>
+            <View style={{margin: 10, marginTop: 0,marginBottom:0,flexDirection:'row'}}>
+                <View style={{width:'60%'}}>
+                <Text>
+                    {item.name}
+                </Text>
+                </View>
+                <View style={{flexDirection:'row',width:'35%',justifyContent:'space-between',marginRight:20}}>
+                    <Text >
+                        {moment(this.props.navigation.getParam('month')+'-'+this.props.navigation.getParam('month') +'-'+this.props.navigation.getParam('year')).format('MMM')}
+                    </Text>
+                    <Text>
+                        {moment(this.state.batchDetails.prev_month + '-' +this.state.batchDetails.prev_month +'-'+this.state.batchDetails.prev_year).format('MMM')}
+                    </Text>
+                </View>
+            </View>
+            <View style={{backgroundColor:'white',marginTop:10,marginBottom:10}}>
+            <FlatList
+                data={item.parameters}
+                renderItem={this.renderItem}
+                keyExtractor1={(item, parmeterindex) => item.parameter_id}
+            />
+            </View>
+        </View>
+
+    );
 
 
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (this.props.data.loading && !this.state.batchDetails) {
             return (
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <ActivityIndicator size="large" color="#67BAF5"/>
@@ -215,8 +258,8 @@ class  UpdatePlayerPerformence extends React.Component {
             // this.sessionMangement(operations)
             // this.scoreMangement(tournaments)
 
-            return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-
+            return <View style={{flex: 1, marginBottom: 0, backgroundColor: '#F7F7F7'}}>
+                <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
 
                 <View style={{backgroundColor:'white'}}>
                     <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
@@ -227,28 +270,24 @@ class  UpdatePlayerPerformence extends React.Component {
                             <Text style={{fontSize:10,marginBottom:10,color:'#A3A5AE'}}>Month </Text>
                         </View>
                         <View style={{flexDirection:'row',justifyContent:'space-between',marginLeft:0,marginTop:-10,}}>
-                            <Text style={{fontSize:14,marginBottom:10}}> {this.props.navigation.getParam('date')} </Text>
+                            <Text style={{fontSize:14,marginBottom:10}}> {moment('06-'+this.props.navigation.getParam('month') +'-'+this.props.navigation.getParam('year')).format('MMM YY')} </Text>
                             <Text style={{fontSize:14,color:'#A3A5AE'}}>(Enter Percentage)</Text>
                         </View>
                     </View>
                 </View>
 
-                <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:14,marginBottom:10}}>Player </Text>
-                    <Text style={{fontSize:14}}>Present </Text>
-                </View>
 
-                <View style={{backgroundColor:'white',marginTop:-10}}>
-                    <CustomeCard>
+                <View style={{marginTop:10}}>
+
 
                         <FlatList
                             data={this.state.playerList}
 
-                            renderItem={this.renderItem(this.state.playerList,'niranj')}
-                            keyExtractor={(item,index) => item.id}
-                            extraData={{name:'niranj'}}
+                            renderItem={this.renderItemSection}
+                            keyExtractor={(item,index) => item.attribute_id}
+
                         />
-                    </CustomeCard>
+
 
                 </View>
 
@@ -260,16 +299,7 @@ class  UpdatePlayerPerformence extends React.Component {
 
 
                 </View>
-
-
-
-
-
-
-
-
-
-
+                </ScrollView>
 
             </View>;
         }else{
@@ -283,11 +313,11 @@ class  UpdatePlayerPerformence extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        data: state.BatchReducer,
+        data: state.PerformenceReducer,
     };
 };
 const mapDispatchToProps = {
-    getCoachBatchAttendence,saveCoachBatchAttendence
+    getPerformenceOption,saveCoachBatchAttendence
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UpdatePlayerPerformence);
 
