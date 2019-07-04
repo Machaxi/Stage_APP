@@ -2,18 +2,45 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
+import { getData } from "../../components/auth";
+import { getUpcomingTournament } from "../../redux/reducers/TournamentReducer";
+import { connect } from 'react-redux';
+import Moment from 'moment';
 
-
-export default class UpcomingRoute extends BaseComponent {
+class UpcomingRoute extends BaseComponent {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            data: ["", "", ""],
+            tournaments: null,
             query: '',
         }
+    }
+
+    componentDidMount() {
+
+        getData('header', (value) => {
+
+            this.props.getUpcomingTournament(value).then(() => {
+                let data = this.props.data.data
+                console.log(' getUpcomingTournament ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    console.log(' 1getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
+
+                    this.setState({
+                        tournaments: data.data.tournaments
+                    })
+                }
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        })
     }
 
 
@@ -65,7 +92,7 @@ export default class UpcomingRoute extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                this.props.navigation.navigate('UpcomingTournamentDetail')
+                this.props.navigation.navigate('UpcomingTournamentDetail', { data: item })
             }}>
 
             <Card
@@ -80,7 +107,7 @@ export default class UpcomingRoute extends BaseComponent {
                 }}>
                 <View>
                     <Image style={{ height: 150, width: "100%", borderRadius: 16, }}
-                        source={require('../../images/tournament_banner.png')}
+                        source={{ uri: item.cover_pic }}
                     >
 
                     </Image>
@@ -97,13 +124,9 @@ export default class UpcomingRoute extends BaseComponent {
                             flexDirection: 'row', flex: 1, justifyContent: 'space-between'
                         }}>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
-                                Feather Academy Tournament
-                    </Text>
+                            <Text style={defaultStyle.bold_text_14}>
+                                {item.name}
+                            </Text>
 
                             <Image
                                 style={{ width: 5, height: 12, }}
@@ -117,36 +140,23 @@ export default class UpcomingRoute extends BaseComponent {
 
                         <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
-                                May 2019
-                    </Text>
+                            <Text style={defaultStyle.bold_text_14}>
+                                {Moment(item.start_date).format('MMM YYYY')}
+                            </Text>
 
-                            <Text style={{
-                                backgroundColor: '#667DDB',
-                                textAlign: 'center',
-                                fontSize: 12,
-                                marginLeft: 8,
-                                color: 'white',
-                                borderRadius: 4,
-                                paddingLeft: 6,
-                                paddingRight: 6,
-                                paddingTop: 2,
-                                paddingBottom: 2,
-                                fontFamily: 'Quicksand-Regular'
-                            }}>Inter-Academy</Text>
+                            <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
 
                         </View>
 
                         <Text style={{
-                            paddingTop: 6, fontSize: 14,
+                            paddingTop: 6,
+                            fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                            Dates <Text style={defaultStyle.bold_text_14}>
+                                {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
+                            </Text>
                         </Text>
 
                         <Text style={{
@@ -154,7 +164,8 @@ export default class UpcomingRoute extends BaseComponent {
                             color: '#FF7373',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Last Date of Registration <Text style={{ color: '#404040' }}>05 May 19</Text>
+                            Last Date of Registration <Text style={defaultStyle.bold_text_14}>
+                                {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
                         </Text>
 
                     </View>
@@ -169,13 +180,13 @@ export default class UpcomingRoute extends BaseComponent {
 
     render() {
 
-        // if (this.props.data.loading && !this.state.isAutoSuggest) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
+        if (this.props.data.loading || this.state.tournaments == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
 
         return (
 
@@ -184,8 +195,8 @@ export default class UpcomingRoute extends BaseComponent {
                 {this.listHeader()}
                 <FlatList
                     //ListHeaderComponent={() => }
-                    data={this.state.data}
-                    extraData={this.state.data}
+                    data={this.state.tournaments}
+                    extraData={this.state.tournaments}
                     renderItem={this._renderItem}
                 />
 
@@ -194,6 +205,15 @@ export default class UpcomingRoute extends BaseComponent {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        data: state.TournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getUpcomingTournament
+};
+export default connect(mapStateToProps, mapDispatchToProps)(UpcomingRoute);
 
 const styles = StyleSheet.create({
     chartContainer: {

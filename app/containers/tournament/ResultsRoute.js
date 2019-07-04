@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 
 
 export default class UpcomingRoute extends BaseComponent {
@@ -97,11 +97,7 @@ export default class UpcomingRoute extends BaseComponent {
                             flexDirection: 'row', flex: 1, justifyContent: 'space-between'
                         }}>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
+                            <Text style={defaultStyle.bold_text_14}>
                                 Feather Academy Tournament
                     </Text>
 
@@ -117,36 +113,21 @@ export default class UpcomingRoute extends BaseComponent {
 
                         <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
+                            <Text style={defaultStyle.bold_text_14}>
                                 May 2019
                     </Text>
 
-                            <Text style={{
-                                backgroundColor: '#667DDB',
-                                textAlign: 'center',
-                                fontSize: 12,
-                                marginLeft: 8,
-                                color: 'white',
-                                borderRadius: 4,
-                                paddingLeft: 6,
-                                paddingRight: 6,
-                                paddingTop: 2,
-                                paddingBottom: 2,
-                                fontFamily: 'Quicksand-Regular'
-                            }}>Inter-Academy</Text>
+                            <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
 
                         </View>
 
                         <Text style={{
-                            paddingTop: 6, fontSize: 14,
+                            paddingTop: 6, 
+                            fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                            Dates <Text style={defaultStyle.bold_text_14}>05 May 19</Text>
                         </Text>
 
                         <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
@@ -165,21 +146,24 @@ export default class UpcomingRoute extends BaseComponent {
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
 
                                 <Text style={{
-                                    paddingTop: 10, fontSize: 14,
+                                    paddingTop: 10, 
+                                    fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
                                     Prithiviraj
                     </Text>
                                 <Text style={{
-                                    paddingTop: 10, fontSize: 14,
+                                    paddingTop: 10, 
+                                    fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
                                     1st
                     </Text>
                                 <Text style={{
-                                    paddingTop: 10, fontSize: 14,
+                                    paddingTop: 10, 
+                                    fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
@@ -189,7 +173,7 @@ export default class UpcomingRoute extends BaseComponent {
                             </View>
                         </View>
 
-                        <View style={{ marginBottom: 8, marginRight: 12, marginTop:4 }}>
+                        <View style={{ marginBottom: 8, marginRight: 12, marginTop: 4 }}>
 
 
                             <Text style={{
@@ -233,23 +217,46 @@ export default class UpcomingRoute extends BaseComponent {
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
                                     Prithiviraj
-                    </Text>
+                                </Text>
                                 <Text style={{
                                     paddingTop: 10, fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
 
-                    </Text>
+                                </Text>
                                 <Text style={{
-                                    paddingTop: 10, fontSize: 14,
+                                    paddingTop: 10, 
+                                    fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
                                     Feather Academy
-                    </Text>
+                             </Text>
 
                             </View>
+
+                            <TouchableOpacity activeOpacity={.8}
+                                onPress={() => {
+                                    this.props.navigation.navigate('TournamentFixture')
+                                }}
+                            >
+
+                                <View style={{
+                                    width: '100%',
+                                    marginTop: 12,
+                                    marginBottom: 8,
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+
+                                    <Text style={defaultStyle.rounded_button_150}>
+                                        View Fixtures
+                                </Text>
+                                </View>
+                            </TouchableOpacity>
+
                         </View>
 
                     </View>

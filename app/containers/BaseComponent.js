@@ -32,10 +32,10 @@ export default class BaseComponent extends React.Component {
 
     static isUserLoggedIn() {
         return this.isUserLoggedIn;
-      }
+    }
 
     getNetworkStatus() {
-        if(!connected){
+        if (!connected) {
             alert("Oops!! No Internet Connection Available");
         }
         return connected
@@ -58,3 +58,46 @@ export default class BaseComponent extends React.Component {
     }
 }
 
+export const defaultStyle = {
+    bold_text_14: {
+        fontSize: 14,
+        color: '#404040',
+        fontFamily: 'Quicksand-Bold'
+    },
+    regular_text_14: {
+        fontSize: 14,
+        color: '#FF7373',
+        fontFamily: 'Quicksand-Regular'
+    },
+    blue_rounded_4: {
+        backgroundColor: '#667DDB',
+        textAlign: 'center',
+        fontSize: 12,
+        marginLeft: 8,
+        color: 'white',
+        borderRadius: 4,
+        paddingLeft: 6,
+        paddingRight: 6,
+        paddingTop: 2,
+        paddingBottom: 2,
+        fontWeight: '100',
+        fontFamily: 'Quicksand-Bold'
+    },
+    line_style: {
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: '#DFDFDF',
+        height: 1
+    },
+    rounded_button_150: {
+        flex: 1,
+        width: 150,
+        padding: 10,
+        borderRadius: 20,
+        justifyContent: 'center',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Bold'
+    },
+}

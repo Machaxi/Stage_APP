@@ -338,7 +338,9 @@ class UserHome extends BaseComponent {
                                             marginRight: 0,
                                             fontFamily: 'Quicksand-Bold',
                                             textAlign: 'center', fontSize: 22, fontWeight: 'bold'
-                                        }}>{name}</Text>
+                                        }}
+                                        numberOfLines={1}
+                                        >{name}</Text>
 
 
                                         <View style={{

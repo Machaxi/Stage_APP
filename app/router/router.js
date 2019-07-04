@@ -363,6 +363,9 @@ const tabBarController = createBottomTabNavigator(
 
     })
 
+
+
+
 const playerDrawer = createDrawerNavigator({
 
 
@@ -812,6 +815,147 @@ const parentHomeModule = createStackNavigator({
     },
 }
 );
+
+
+const tabBarControllerParent = createBottomTabNavigator(
+    {
+        Home: {
+            screen: parentHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Home1',
+                tabBarIcon: ({ tintColor }) => (
+
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Home.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+
+
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    underlineBottomPosition: 1,
+                    underlineColor: 'red',
+                    underlineHeight: 5
+                },
+
+            },
+
+
+        },
+        Batch: {
+            screen: userBatchModule,
+            navigationOptions: {
+                tabBarLabel: 'Batch',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        //focused={focused}
+                        source={require('../images/groupicon.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        Tournament: {
+            screen: TournamentModule,
+            navigationOptions: {
+                tabBarLabel: 'Tournament',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Tournamenticon.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        Challenge: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Challenge',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Challengeiocn.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+        BookandPlay: {
+            screen: GuestHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Book and Play',
+                showLabel: false,
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        //focused={focused}
+                        source={require('../images/Bookingicon.png')}
+                        tintColor={tintColor}
+                        size={24}
+                    />
+                ),
+                tabBarOptions: {
+                    showLabel: true,
+                    showIcon: true,
+                    // tintColor: '#333',
+                    // activeTintColor: '#aaa',
+                }
+            }
+
+        },
+
+    })
+
+const parentDrawer = createDrawerNavigator({
+
+
+    Guestfirst: {
+        screen: tabBarControllerParent,
+        // navigationOptions: {
+        //     header: <CustomHeader title="Academy" />,
+        // }
+    },
+
+},
+    {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+    }
+);
+
 const BaseNavigator = createSwitchNavigator({
     // Main: {
     //     screen: InitialNavigator
@@ -823,7 +967,7 @@ const BaseNavigator = createSwitchNavigator({
         screen: loginModule
     },
     PHome: {
-        screen: parentHomeModule
+        screen: parentDrawer
     },
     GHome: {
         screen: guestDrawer,

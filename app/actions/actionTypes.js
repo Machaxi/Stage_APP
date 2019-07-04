@@ -17,6 +17,10 @@ export const GET_PROFILE = 'profile/LOAD';
 export const DO_PROFILE_SUCCESS = 'profile/LOAD_SUCCESS';
 export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
 
+export const GET_TOURNAMENT = 'tournament/LOAD';
+export const DO_TOURNAMENT_SUCCESS = 'tournament/LOAD_SUCCESS';
+export const DO_TOURNAMENT_FAIL = 'tournament/LOAD_FAIL';
+
 
 export const DO_ACADEMY_START = 'user/LOAD_START';
 export const DO_ACADEMY_SUCCESS = 'user/LOAD_SUCCESS';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { CustomeButtonB } from '../../components/Home/Card';
 
 
@@ -52,9 +52,11 @@ export default class UpcomingRoute extends BaseComponent {
                 </Card>
 
                 <Text style={{
-                    marginTop: 8, marginBottom: 4,
+                    marginTop: 8,
+                    marginBottom: 4,
                     textAlign: 'right',
-                    color: '#404040', fontSize: 12,
+                    color: '#404040',
+                    fontSize: 12,
                     fontFamily: 'Quicksand-Regular'
                 }} >Filter</Text>
 
@@ -98,11 +100,7 @@ export default class UpcomingRoute extends BaseComponent {
                             flexDirection: 'row', flex: 1, justifyContent: 'space-between'
                         }}>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
+                            <Text style={defaultStyle.bold_text_14}>
                                 Feather Academy Tournament
                     </Text>
 
@@ -118,36 +116,21 @@ export default class UpcomingRoute extends BaseComponent {
 
                         <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
+                            <Text style={defaultStyle.bold_text_14}>
                                 May 2019
                     </Text>
 
-                            <Text style={{
-                                backgroundColor: '#667DDB',
-                                textAlign: 'center',
-                                fontSize: 12,
-                                marginLeft: 8,
-                                color: 'white',
-                                borderRadius: 4,
-                                paddingLeft: 6,
-                                paddingRight: 6,
-                                paddingTop: 2,
-                                paddingBottom: 2,
-                                fontFamily: 'Quicksand-Regular'
-                            }}>Inter-Academy</Text>
+                            <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
 
                         </View>
 
                         <Text style={{
-                            paddingTop: 6, fontSize: 14,
+                            paddingTop: 6,
+                            fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                            Dates <Text style={defaultStyle.bold_text_14}>05 May 19</Text>
                         </Text>
 
                         <Text style={{
@@ -155,7 +138,8 @@ export default class UpcomingRoute extends BaseComponent {
                             color: '#FF7373',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Last Date of Registration <Text style={{ color: '#404040' }}>05 May 19</Text>
+                            Last Date of Registration
+                            <Text style={defaultStyle.bold_text_14}>05 May 19</Text>
                         </Text>
 
 
@@ -170,18 +154,14 @@ export default class UpcomingRoute extends BaseComponent {
                             Registered Players
                     </Text>
 
-                        <Text style={{
-                            paddingTop: 10, fontSize: 14,
-                            color: '#404040',
-                            fontWeight: 'bold',
-                            fontFamily: 'Quicksand-Regular'
-                        }}>
+                        <Text style={
+                            [defaultStyle.bold_text_14, { paddingTop: 10, }]}>
                             Prithiviraj P | Prithiviraj P | Prithiviraj P
                     </Text>
 
                         <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
-                               this.props.navigation.navigate('TournamentFixture')
+                                this.props.navigation.navigate('TournamentFixture')
                             }}
                         >
 
@@ -194,7 +174,7 @@ export default class UpcomingRoute extends BaseComponent {
                                 alignItems: 'center'
                             }}>
 
-                                <Text style={styles.rounded_button}>
+                                <Text style={defaultStyle.rounded_button_150}>
                                     View Fixtures
                                 </Text>
                             </View>
@@ -240,17 +220,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F7F7F7'
     },
-    rounded_button: {
-        flex: 1,
-        width: 150,
-        padding: 10,
-        borderRadius: 20,
-        justifyContent: 'center',
-        backgroundColor: '#67BAF5',
-        color: 'white',
-        fontWeight: '500',
-        textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
-    },
+
 });
 

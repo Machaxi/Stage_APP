@@ -222,14 +222,15 @@ class PlayerSwitcher extends React.Component {
 
                                         </Image> */}
 
-                                        <View style={{ 
-                                             width: 119,
-                                             height: 84,
-                                             alignItems: 'center',
-                                             display: 'flex',
-                                             marginBottom: 20,
-                                             marginTop: 20,
-                                            justifyContent: 'center', alignItems: 'center', }}>
+                                        <View style={{
+                                            width: 119,
+                                            height: 84,
+                                            alignItems: 'center',
+                                            display: 'flex',
+                                            marginBottom: 20,
+                                            marginTop: 20,
+                                            justifyContent: 'center', alignItems: 'center',
+                                        }}>
 
                                             <ImageBackground
                                                 style={{

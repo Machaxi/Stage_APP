@@ -11,6 +11,7 @@ import {getCoachSWitcher, getPlayerSWitcher} from "../../redux/reducers/switchRe
 import {getPlayerDashboard} from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import LinearGradient from 'react-native-linear-gradient';
 
 const acedemicList = [
     {
@@ -28,7 +29,8 @@ const placeholder = {
 var deviceWidth = Dimensions.get('window').width -20;
 
 class  ParentHome extends React.Component {
-; acedemy_name= ''
+
+    acedemy_name= ''
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -46,7 +48,7 @@ class  ParentHome extends React.Component {
                             fontSize: 14,
                             color: 'white'
                         }}
-                    >{this.state.acedemy_name + ' ▼'}</Text>
+                    >{navigation.getParam('Title', 'Default Title') + ' ▼'}</Text>
                 </TouchableOpacity>
 
             ),
@@ -126,6 +128,7 @@ class  ParentHome extends React.Component {
         console.log("PARENTDashboard");
         getData('userInfo',(value) => {
             userData = JSON.parse(value)
+            this.props.navigation.setParams({Title: userData.academy_name });
             this.setState({
                 userData: JSON.parse(value)
             });

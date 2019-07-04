@@ -18,7 +18,7 @@ class Splash extends BaseComponent {
 
     componentDidMount() {
 
-        this.props.navigation.navigate('WriteFeedback')
+        this.props.navigation.navigate('TournamentTabs')
         return;
         var userData;
         // getData('userInfo', (value) => {
@@ -38,12 +38,12 @@ class Splash extends BaseComponent {
             const { checkedSignIn, signedIn } = this.state;
             console.log("signedIn", signedIn)
             if (!checkedSignIn) {
-                this.props.navigation.navigate('Welcome')
+                this.props.navigation.navigate('IntroScreen')
                 return;
             }
             if (signedIn !== true) {
 
-                this.props.navigation.navigate('Welcome')//'SignedOut')
+                this.props.navigation.navigate('IntroScreen')//'SignedOut')
 
 
             } else {
@@ -73,7 +73,7 @@ class Splash extends BaseComponent {
 
             }
 
-        }, 1000)
+        }, 100)
 
         if (Platform.OS === 'android') {
             Linking.getInitialURL().then(url => {
@@ -100,9 +100,9 @@ class Splash extends BaseComponent {
         return (
             <View style={{ flex: 1 }}>
 
-                <Image style={{ width: '100%', height: '100%' }}
+                {/* <Image style={{ width: '100%', height: '100%' }}
                     source={require('../../images/login-back.png')}
-                />
+                /> */}
 
             </View>
         );

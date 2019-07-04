@@ -2,28 +2,26 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
+import Moment from 'moment';
 
 
 export default class UpcomingTournamentDetail extends BaseComponent {
 
     constructor(props) {
         super(props)
-
+        this.state = {
+            data: null
+        }
+        this.state.data = this.props.navigation.getParam('data');
     }
 
 
 
     render() {
 
-        // if (this.props.data.loading && !this.state.isAutoSuggest) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
+        let data = this.state.data
 
         return (
 
@@ -37,7 +35,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                         }}>
                         <View style={{ marginLeft: 8, marginRight: 8, marginTop: 2 }}>
                             <Image style={{ height: 150, width: "100%" }}
-                                source={require('../../images/tournament_banner.png')}
+                                source={{ uri: data.cover_pic }}
                             />
 
 
@@ -53,13 +51,9 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                     justifyContent: 'space-between'
                                 }}>
 
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        Feather Academy Tournament
-                    </Text>
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {data.name}
+                                    </Text>
 
                                     <Image
                                         style={{ width: 16, height: 18, marginRight: 8 }}
@@ -73,64 +67,39 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
                                 <View style={{ paddingTop: 8, flexDirection: 'row' }}>
 
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        May 2019
-                    </Text>
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {Moment(data.start_date).format('MMM YYYY')}
+                                    </Text>
 
-                                    <Text style={{
-                                        backgroundColor: '#667DDB',
-                                        textAlign: 'center',
-                                        fontSize: 12,
-                                        marginLeft: 8,
-                                        color: 'white',
-                                        borderRadius: 4,
-                                        paddingLeft: 6,
-                                        paddingRight: 6,
-                                        paddingTop: 2,
-                                        paddingBottom: 2,
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>Inter-Academy</Text>
+                                    <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
 
                                 </View>
 
                                 <Text style={{
-                                    paddingTop: 6, fontSize: 14,
+                                    paddingTop: 6,
+                                    fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
-                                    Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                    Dates
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {" " + Moment(data.start_date).format('DD') + " - " + Moment(data.end_date).format('DD MMM')}
+                                    </Text>
                                 </Text>
 
-                                <Text style={{
-                                    paddingTop: 6, fontSize: 14,
-                                    color: '#FF7373',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Last Date of Registration <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                <Text style={[defaultStyle.regular_text_14, { paddingTop: 6 }]}>
+                                    Last Date of Registration
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {" " + Moment(data.registration_last_date).format('DD MMM YYYY')}</Text>
                                 </Text>
 
 
-
-                                <Text style={{
-                                    paddingTop: 6, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
-                                </Text>
-
-                                <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
+                                <View style={defaultStyle.line_style}></View>
 
                                 <View style={{ marginBottom: 8, marginRight: 12 }}>
 
 
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-
 
                                         <Text style={{
                                             fontSize: 10,

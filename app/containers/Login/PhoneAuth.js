@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet, Platform } from 'react-native';
 import { doLogin, doFBLogin } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
@@ -18,7 +18,7 @@ class PhoneAuth extends Component {
             user1: null,
             message: '',
             codeInput: '',
-            phoneNumber: '',
+            phoneNumber: '+91',
             confirmResult: null,
             isCall: true,
         };
@@ -36,7 +36,7 @@ class PhoneAuth extends Component {
                     user1: null,
                     message: '',
                     codeInput: '',
-                    phoneNumber: '',
+                    phoneNumber: '+91',
                     confirmResult: null,
                     token: '',
                 });
@@ -102,18 +102,22 @@ class PhoneAuth extends Component {
 
     signIn11 = (user1, token) => {
 
+        let os = "IOS"
+        if (Platform.OS === 'android') {
+            os = "android";
+        }
+
         this.setState({
             isCall: false
         })
         var dataDic = {};
         var dict = {};
-        dict['phone_number'] = "+919214088636"//user.phoneNumber;
+        dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
         dict['firebase_token'] = token;
-        dict['device_type'] = "IOS";
+        dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
         dict['fcm_token'] = 'xyzabcdcc';
         dict['has_firebase_check'] = false;
-
 
 
         dataDic['data'] = dict;
