@@ -2,9 +2,11 @@ import React from 'react'
 
 import { View, Text } from 'react-native'
 import BaseComponent from '../BaseComponent';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
+import { getData } from '../../components/auth';
+
 
 export default class RegistrationSteps extends BaseComponent {
 
@@ -15,113 +17,193 @@ export default class RegistrationSteps extends BaseComponent {
             txtname: '',
             txtphone: '',
             step: 1,
-            checked: false
+            subStep: 0,
+            selected_tour_size: 0,
+            checked: false,
+            data: [],
+            tournament_selection: [],
+            checked_category: [],
+            tournament_types: [],
+            user_selection: []
+
         }
+
+        getData('detail', (value) => {
+
+            this.state.data = JSON.parse(value)
+
+            let array = []
+            for (let i = 0; i < this.state.data.category_types.length; i++) {
+
+                let tournament = this.state.data.category_types[i]
+                let obj = { title: tournament, selected: false }
+                array[i] = obj
+            }
+
+            let tournament_types = []
+            for (let i = 0; i < this.state.data.tournament_types.length; i++) {
+
+                let tournament = this.state.data.tournament_types[i]
+                let obj = { ...tournament, selected: false }
+                tournament_types[i] = obj
+            }
+
+            this.setState({
+                tournament_selection: array,
+                tournament_types: tournament_types
+            })
+            console.log("tournament_types => ", this.state.tournament_types)
+        })
     }
 
     showStepOne() {
         return (
+            <ScrollView>
+                <View style={{ elevation: 1 }}>
 
-            <View style={{ elevation: 1 }}>
-
-                <View
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 20
-                    }}>
-
-                    <Text style={{
-                        fontFamily: 'Quicksand-Bold',
-                        fontSize: 14,
-                        color: '#000000'
-                    }}>
-                        Select Category
-                    </Text>
-
-                    <Text style={{
-                        color: '#404040',
-                        fontSize: 14,
-                        marginTop: 20,
-                        fontFamily: 'Quicksand-Bold',
-                    }}>
-                        Prithviraj P
-                    </Text>
-
-                </View>
-
-                <View
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 30
-                    }}
-                >
-                    <Text style={style.text1}>
-                        Gender
-                    </Text>
-
-                    <Text style={{
-                        color: '#404040',
-                        fontSize: 14,
-                        marginTop: 6,
-                        fontFamily: 'Quicksand-Regular',
-                    }}>
-                        Male
-                    </Text>
-                </View>
-
-                <View
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 20
-                    }}
-                >
-                    <Text style={style.text1}>
-                        Select player to play
-                    </Text>
-
-                    <CheckBox
-                        title='U-13'
-                        containerStyle={{ backgroundColor: 'white', borderWidth: 0 }}
-                        checked={this.state.checked}
-                        style={{ color: '#404040', backgroundColor: 'white' }}
-                    />
-
-                    <CheckBox
-                        title='U-15'
-                        containerStyle={{ backgroundColor: 'white', borderWidth: 0 }}
-                        checked={this.state.checked}
-                        style={{ color: '#404040', backgroundColor: 'white' }}
-                    />
-
-                </View>
-
-
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginTop: 40,
-                }}>
-
-                    <TouchableOpacity activeOpacity={.8}
-                        style={style.rounded_button}
-                        onPress={() => {
-                            this.setState({
-                                step: this.state.step + 1
-                            })
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 20
                         }}>
-                        <Text style={style.rounded_button_text}>
-                            Next</Text>
-                    </TouchableOpacity>
 
+                        <Text style={{
+                            fontFamily: 'Quicksand-Bold',
+                            fontSize: 14,
+                            color: '#000000'
+                        }}>
+                            Select Category
+                    </Text>
+
+                        <Text style={{
+                            color: '#404040',
+                            fontSize: 14,
+                            marginTop: 20,
+                            fontFamily: 'Quicksand-Bold',
+                        }}>
+                            Prithviraj P
+                    </Text>
+
+                    </View>
+
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 30
+                        }}
+                    >
+                        <Text style={style.text1}>
+                            Gender
+                    </Text>
+
+                        <Text style={{
+                            color: '#404040',
+                            fontSize: 14,
+                            marginTop: 6,
+                            fontFamily: 'Quicksand-Regular',
+                        }}>
+                            Male
+                    </Text>
+                    </View>
+
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 20
+                        }}
+                    >
+                        <Text style={style.text1}>
+                            Select player to play
+                    </Text>
+
+
+                        <FlatList
+                            data={this.state.tournament_selection}
+                            renderItem={({ item }) =>
+                                <CheckBox
+                                    checked={item.selected}
+                                    onPress={() => {
+                                        let tournament_selection = [...this.state.tournament_selection];
+                                        let index = tournament_selection.findIndex(el => el.title === item.title);
+                                        tournament_selection[index] = { ...tournament_selection[index], selected: !item.selected };
+                                        this.setState({ tournament_selection });
+
+                                    }
+                                    }
+                                    style={{ marginTop: -4 }}
+                                    title={item.title}
+                                    containerStyle={{
+                                        backgroundColor: 'white',
+                                        borderWidth: 0
+                                    }}
+                                    style={{
+                                        color: '#404040',
+                                        backgroundColor: 'white'
+                                    }}
+                                />
+                            }
+                        />
+
+                    </View>
+
+
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginTop: 40,
+                    }}>
+
+                        <TouchableOpacity activeOpacity={.8}
+                            style={style.rounded_button}
+                            onPress={() => {
+
+                                let tournament = this.state.tournament_selection
+                                let count = 0
+                                let checked_category = []
+                                let template = []
+                                for (let i = 0; i < tournament.length; i++) {
+                                    if (tournament[i].selected) {
+                                        checked_category[count] = tournament[i].title
+                                        let detail = {
+                                            title: tournament[i].title,
+                                            tournament_types: [...this.state.tournament_types]
+                                        }
+                                        template[count++] = detail
+                                    }
+                                }
+                                this.state.checked_category = checked_category;
+                                let size = checked_category.length
+                                this.state.user_selection = template
+
+                                if (size == 0) {
+                                    alert('Please select atleast one category')
+                                } else {
+                                    console.warn('userselection=>', this.state.user_selection)
+                                    this.setState({
+                                        step: this.state.step + 1,
+                                        selected_tour_size: size,
+                                    })
+                                }
+
+
+                            }}>
+                            <Text style={style.rounded_button_text}>
+                                Next</Text>
+                        </TouchableOpacity>
+
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 
-    showStepTwo() {
+    showStepTwo(model) {
+
+        let tournament_types = model.tournament_types
+
 
         return (
 
@@ -139,128 +221,100 @@ export default class RegistrationSteps extends BaseComponent {
                         fontSize: 14,
                         color: '#000000'
                     }}>
-                        Select Tournament Type for U-13
+                        Select Tournament Type for {model.title}
                     </Text>
 
                     <View>
 
-                        <View style={{
-                            flexDirection: 'row',
-                            alignContent: 'center',
-                            marginTop: 30,
-                            alignItems: 'center',
-                        }}>
-
-                            <CheckBox
-                                title='Singles'
-                                containerStyle={{
-                                    backgroundColor: 'white',
-                                    borderWidth: 0,
-                                    width: "60%",
-                                }}
-                                checked={this.state.checked}
-                                style={{
-                                    color: '#404040', backgroundColor: 'white',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}
-                            />
-
-                            <Text style={{
-                                justifyContent: 'center',
-                                fontFamily: 'Quicksand-Regular',
-                                fontSize: 14,
-                                color: '#000000'
-                            }}>
-                                Rs 500
-                             </Text>
-                        </View>
-
-                        <View style={{
-                            flexDirection: 'row',
-                            alignContent: 'center',
-                            alignItems: 'center',
-                        }}>
-
-                            <CheckBox
-                                title='Doubles'
-                                containerStyle={{
-                                    backgroundColor: 'white',
-                                    borderWidth: 0,
-                                    width: "60%",
-                                }}
-                                checked={this.state.checked}
-                                style={{
-                                    color: '#404040', backgroundColor: 'white',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}
-                            />
-
-                            <Text style={{
-                                justifyContent: 'center',
-                                fontFamily: 'Quicksand-Regular',
-                                fontSize: 14,
-                                color: '#000000'
-                            }}>
-                                Rs 500
-                             </Text>
-                        </View>
-
-
-                        <TouchableOpacity activeOpacity={.8}
-
-                            onPress={() => {
-                                this.props.navigation.navigate('AddPartner')
-                            }}
+                        <FlatList
                             style={{
-                                backgroundColor: '#F2F2F2',
-                                borderRadius: 2,
-                                marginLeft: 50,
-                                marginRight: 40
+                                flexGrow: 0,
+                                marginTop: 16
                             }}
-                        >
+                            data={tournament_types}
+                            renderItem={({ item }) =>
 
-                            <Text style={{
-                                justifyContent: 'center',
-                                fontFamily: 'Quicksand-Regular',
-                                fontSize: 14,
-                                padding: 6,
+                                <View>
 
-                                color: '#A3A5AE'
-                            }}>
-                                + Add Partner
-                             </Text>
-                        </TouchableOpacity>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
 
+                                        <CheckBox
+                                            title={item.tournament_type}
+                                            containerStyle={{
+                                                backgroundColor: 'white',
+                                                borderWidth: 0,
+                                                width: "60%",
+                                            }}
+                                            checked={item.selected}
+                                            onPress={() => {
+                                                let user_selection = [...this.state.user_selection];
+                                                let tournament_model = user_selection[this.state.subStep]
 
-                        <View style={{
-                            flexDirection: 'row',
-                            alignContent: 'center',
-                            alignItems: 'center',
-                        }}>
+                                                let index = tournament_model.tournament_types.findIndex(el => el.id === item.id);
+                                                console.log("Tournamen Press =>", index)
+                                                tournament_model.tournament_types[index] =
+                                                    { ...tournament_model.tournament_types[index], selected: !item.selected };
 
-                            <CheckBox
-                                title='Mixed Doubles'
-                                containerStyle={{
-                                    backgroundColor: 'white',
-                                    borderWidth: 0,
-                                    width: "60%",
-                                }}
-                                checked={this.state.checked}
-                                style={{
-                                    color: '#404040', backgroundColor: 'white',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}
-                            />
+                                                console.log("Tournamen Press =>", tournament_model)
+                                                console.log("Tournamen Press whole => ", this.state.user_selection)
+                                                this.setState({ user_selection })
+                                            }}
+                                            style={{
+                                                color: '#404040',
+                                                backgroundColor: 'white',
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}
 
-                            <Text style={{
-                                justifyContent: 'center',
-                                fontFamily: 'Quicksand-Regular',
-                                fontSize: 14,
-                                color: '#000000'
-                            }}>
-                                Rs 800
-                             </Text>
-                        </View>
+                                        />
+
+                                        <Text style={{
+                                            justifyContent: 'center',
+                                            fontFamily: 'Quicksand-Regular',
+                                            fontSize: 14,
+                                            color: '#000000'
+                                        }}>
+                                            Rs {item.fees}
+                                        </Text>
+                                    </View>
+
+                                    {item.is_partner_required && item.selected
+                                        ?
+                                        <TouchableOpacity activeOpacity={.8}
+
+                                            onPress={() => {
+                                                this.props.navigation.navigate('AddPartner')
+                                            }}
+                                            style={{
+                                                backgroundColor: '#F2F2F2',
+                                                borderRadius: 2,
+                                                marginLeft: 50,
+                                                marginRight: 40
+                                            }}>
+
+                                            <Text style={{
+                                                justifyContent: 'center',
+                                                fontFamily: 'Quicksand-Regular',
+                                                fontSize: 14,
+                                                padding: 6,
+
+                                                color: '#A3A5AE'
+                                            }}>
+                                                + Add Partner
+                                            </Text>
+                                        </TouchableOpacity>
+                                        :
+                                        null
+                                    }
+
+                                </View>
+
+                            }
+                        />
+
 
                         <View style={{
                             width: 260,
@@ -295,9 +349,18 @@ export default class RegistrationSteps extends BaseComponent {
                         <TouchableOpacity activeOpacity={.8}
                             style={style.rounded_button}
                             onPress={() => {
-                                this.setState({
-                                    step: this.state.step + 1
-                                })
+
+                                if (this.state.subStep == this.state.selected_tour_size - 1) {
+                                    this.setState({
+                                        step: this.state.step + 1,
+                                        subStep: this.state.subStep + 1
+                                    })
+
+                                } else {
+                                    this.setState({
+                                        subStep: this.state.subStep + 1
+                                    })
+                                }
                             }}>
                             <Text style={style.rounded_button_text}>
                                 Next</Text>
@@ -313,7 +376,8 @@ export default class RegistrationSteps extends BaseComponent {
     }
 
     showStepThree() {
-
+        const user_selection = this.state.user_selection
+        console.log(user_selection)
         return (
             <ScrollView>
 
@@ -359,160 +423,10 @@ export default class RegistrationSteps extends BaseComponent {
 
                         <View>
 
-                            <View style={{
-                                backgroundColor: "#F2F2F2",
-                                marginTop: 12,
-                                padding: 8,
-                                marginBottom: 12
-                            }}>
-
-                                <Text style={{
-
-                                    fontFamily: 'Quicksand-Regular',
-                                    fontSize: 14,
-                                    color: '#A3A5AE'
-                                }}>
-                                    U - 13
-                            </Text>
-
-                                <View style={{ flexDirection: 'row' }}>
-
-                                    <View style={{ marginTop: 12 }}>
-
-                                        <Text style={{
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 10,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Singles
-                                    </Text>
-                                        <Text style={{
-                                            marginTop: 4,
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 14,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Rs 500
-                                    </Text>
-                                    </View>
-
-                                    <View style={{ marginTop: 12, marginLeft: 12 }}>
-
-                                        <Text style={{
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 10,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Doubles
-                                    </Text>
-                                        <Text style={{
-                                            marginTop: 4,
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 14,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Rs 500
-                                    </Text>
-                                    </View>
-                                    <View style={{
-                                        marginTop: 12,
-                                        marginLeft: 12,
-                                        justifyContent: 'flex-end',
-                                        alignItems: 'flex-end',
-                                        flex: 1
-
-                                    }}>
-
-                                        <Text style={{
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 10,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Total Fees
-                                    </Text>
-                                        <Text style={{
-                                            marginTop: 4,
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 14,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Rs 500
-                                    </Text>
-                                    </View>
-
-
-                                </View>
-
-                                <View style={{ flexDirection: 'row' }}>
-
-                                    <View style={{ marginTop: 12 }}>
-
-                                        <Text style={{
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 10,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Singles
-                                    </Text>
-                                        <Text style={{
-                                            marginTop: 4,
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 14,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Rs 500
-                                    </Text>
-                                    </View>
-
-                                    <View style={{ marginTop: 12, marginLeft: 12 }}>
-
-                                        <Text style={{
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 10,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Doubles
-                                    </Text>
-                                        <Text style={{
-                                            marginTop: 4,
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 14,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Rs 500
-                                    </Text>
-                                    </View>
-                                    <View style={{
-                                        marginTop: 12,
-                                        marginLeft: 12,
-                                        justifyContent: 'flex-end',
-                                        alignItems: 'flex-end',
-                                        flex: 1
-
-                                    }}>
-
-                                        <Text style={{
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 10,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Total Fees
-                                    </Text>
-                                        <Text style={{
-                                            marginTop: 4,
-                                            fontFamily: 'Quicksand-Regular',
-                                            fontSize: 14,
-                                            color: '#A3A5AE'
-                                        }}>
-                                            Rs 500
-                                    </Text>
-                                    </View>
-
-
-                                </View>
-
-
-                            </View>
+                            <FlatList
+                                data={user_selection}
+                                renderItem={this.renderItem_tournament}
+                            />
 
                             <View style={{
                                 justifyContent: 'center',
@@ -553,7 +467,7 @@ export default class RegistrationSteps extends BaseComponent {
                                 <TouchableOpacity activeOpacity={.8}
                                     style={style.rounded_button}
                                     onPress={() => {
-                                       this.props.navigation.navigate('RegistrationSuccessful')
+                                        this.props.navigation.navigate('RegistrationSuccessful')
                                     }}>
                                     <Text style={style.rounded_button_text}>
                                         Next</Text>
@@ -573,20 +487,118 @@ export default class RegistrationSteps extends BaseComponent {
         )
     }
 
+    renderItem_tournament = ({ item }) => (
+        <View style={{
+            backgroundColor: "white",
+            marginBottom: 6,
+            marginTop: 10
+        }}>
+
+            <Text style={{
+
+                fontFamily: 'Quicksand-Regular',
+                fontSize: 14,
+                color: '#404040'
+            }}>
+                {item.title}
+            </Text>
+
+            <View style={{ flexDirection: 'row' }}>
+                <FlatList
+                    horizontal={true}
+                    data={item.tournament_types}
+                    renderItem={this.renderItem_sub_tournament}
+                />
+
+                <View style={{
+                    marginTop: 8,
+                    marginLeft: 12,
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
+                    flex: 1
+
+                }}>
+
+                    <Text style={{
+                        fontFamily: 'Quicksand-Regular',
+                        fontSize: 10,
+                        color: '#A3A5AE'
+                    }}>
+                        Total Fees
+            </Text>
+                    <Text style={{
+                        marginTop: 4,
+                        fontFamily: 'Quicksand-Regular',
+                        fontSize: 14,
+                        color: '#404040'
+                    }}>
+                        Rs 500
+            </Text>
+                </View>
+
+
+            </View>
+
+        </View>
+    );
+
+    renderItem_sub_tournament = ({ item }) => (
+
+        <View>
+            {item.selected ? <View style={{ marginTop: 8, marginRight: 12 }}>
+
+                <Text style={{
+                    fontFamily: 'Quicksand-Regular',
+                    fontSize: 10,
+                    color: '#A3A5AE'
+                }}>
+                    {item.tournament_type}</Text>
+                <Text style={{
+                    marginTop: 4,
+                    fontFamily: 'Quicksand-Regular',
+                    fontSize: 14,
+                    color: '#404040'
+                }}>
+                    {item.fees}</Text>
+            </View>
+                : null}
+        </View>
+
+    )
+
     render() {
 
         let stepView
         if (this.state.step == 1) {
             stepView = this.showStepOne();
-        } else if (this.state.step == 2) {
-            stepView = this.showStepTwo()
+        } else if (this.state.step == 2 && this.state.subStep < this.state.selected_tour_size) {
+
+            let model = this.state.user_selection[this.state.subStep]
+            stepView = this.showStepTwo(model)
+
         } else if (this.state.step == 3) {
             stepView = this.showStepThree()
         }
 
         let step = this.state.step
+        let subStep = this.state.subStep
+        let checked_category = this.state.checked_category
+
+        if (step == 2) {
+            let string = ""
+            this.state.checked_category.map((item) => {
+                string = string + item + " | "
+            });
+            string = string.substring(0, string.length - 2)
+            console.log(string)
+
+            let selected_cat = ""
+        }
+
 
         return (
+
+
 
             <View
                 style={{
@@ -630,7 +642,37 @@ export default class RegistrationSteps extends BaseComponent {
 
                         <Text style={style.bottom_text}>{step >= 1 ? "Select Player" : ""}</Text>
 
-                        <Text style={style.bottom_text}>{step >= 2 ? "U-13 | U-15" : ""}</Text>
+
+                        <FlatList
+                            style={{
+                                alignSelf: 'center',
+                                marginTop: 6,
+                            }}
+                            contentContainerStyle={{
+                                flex: 1,
+                                justifyContent: 'center',
+                            }}
+                            horizontal={true}
+                            data={step >= 2 ? checked_category : null}
+                            renderItem={({ item, index }) =>
+                                <Text
+                                    style={index < subStep ? {
+                                        fontSize: 10,
+                                        color: "#667DDB",
+                                        fontFamily: 'Quicksand-Regular'
+                                    } : {
+                                            fontSize: 10,
+                                            color: "#A3A5AE",
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}
+                                >{item} <Text style={{
+                                    fontSize: 10,
+                                    color: "#A3A5AE",
+                                    fontFamily: 'Quicksand-Regular'
+                                }}>{index != checked_category.length - 1 ? " | " : ""}</Text></Text>
+                            }
+                        />
+                        {/* <Text style={style.bottom_text}>{step >= 2 ? "U-13 | U-15" : ""}</Text> */}
 
                         <Text style={style.bottom_text}>{step >= 3 ? "Payment" : ""}</Text>
 
@@ -638,12 +680,14 @@ export default class RegistrationSteps extends BaseComponent {
 
                 </View>
 
+                <ScrollView>
+                    <Card
+                        style={{ height: "100%", width: "100%", elevation: 5, borderRadius: 10 }}
+                    >
+                        {stepView}
 
-                <Card
-                    style={{ height: "100%", width: "100%", elevation: 5, borderRadius: 10 }}
-                >
-                    {stepView}
-                </Card>
+                    </Card>
+                </ScrollView>
 
             </View >
         );

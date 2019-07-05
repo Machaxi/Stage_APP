@@ -5,6 +5,7 @@ import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
+import { storeData } from '../../components/auth';
 
 
 export default class UpcomingTournamentDetail extends BaseComponent {
@@ -15,6 +16,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
             data: null
         }
         this.state.data = this.props.navigation.getParam('data');
+        storeData("detail", JSON.stringify(this.state.data))
     }
 
 

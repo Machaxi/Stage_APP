@@ -25,6 +25,7 @@ const rootReducer = combineReducers({
     ProfileReducer,
     PlayerBatchReducer,
     PerformenceReducer,
+    TournamentReducer
     // AddressReducer,
     // ShippingReducer,
     // ShippingAddressReducer,
