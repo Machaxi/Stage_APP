@@ -13,19 +13,20 @@ class CoachProfileDetail extends BaseComponent {
         super(props)
 
         this.state = {
-            coachData: {}
+            coachData: {},
+            academy_id: '',
+            coach_id: ''
         }
+        this.state.academy_id = this.props.navigation.getParam('academy_id', '');
+        this.state.coach_id = this.props.navigation.getParam('coach_id', '')
     }
 
     componentDidMount() {
 
         this.props.coachDetail().then(() => {
-            //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
                 let coach = this.props.data.res.data.coach
-                console.warn(coach)
-
                 this.setState({
                     coachData: coach
                 })
@@ -128,19 +129,30 @@ class CoachProfileDetail extends BaseComponent {
                                 <Text style={{ color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
                             </View>
 
-
                         </View>
 
-                        <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+                        <TouchableOpacity
+                            activeOpacity={.8}
+                            onPress={() => {
+                                this.props.navigation.navigate('WriteAcademyFeedback',
+                                    {
+                                        academy_id: this.state.academy_id,
+                                        target_id: this.state.coach_id,
+                                        is_coach: true
+                                    })
+                            }}>
 
-                            <Text
-                                style={styles.filled_button}
-                            >
-                                Give Feedback
+
+                            <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+
+                                <Text
+                                    style={styles.filled_button}
+                                >
+                                    Give Feedback
                         </Text>
 
-                        </View>
-
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
 

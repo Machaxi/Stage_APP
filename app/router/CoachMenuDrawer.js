@@ -7,7 +7,7 @@ import {
 	Image
 } from 'react-native';
 import { Text, Button } from 'react-native-paper'
-import {onSignOut,clearData} from "../components/auth";
+import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
 
 
@@ -66,24 +66,24 @@ export default class CoachMenuDrawer extends React.Component {
 							</Text>
 
 
-							<TouchableOpacity activeOpacity={.8} onPress={()=>{
+							<TouchableOpacity activeOpacity={.8} onPress={() => {
 								this.props.navigation.navigate('EditProfile')
 							}}>
 
-							<View style={{ marginTop: 8, flexDirection: 'row', }}>
-								<Image
-									style={{ width: 12, height: 12, borderRadius: 8 }}
-									source={require('../images/edit_profile.png')}
-								></Image>
+								<View style={{ marginTop: 8, flexDirection: 'row', }}>
+									<Image
+										style={{ width: 12, height: 12, borderRadius: 8 }}
+										source={require('../images/edit_profile.png')}
+									></Image>
 
-								<Text
-									style={{ color: '#667DDB', fontSize: 14, marginLeft: 4 }}
-								>
-									Edit
+									<Text
+										style={{ color: '#667DDB', fontSize: 14, marginLeft: 4 }}
+									>
+										Edit
 								</Text>
-							</View>
+								</View>
 							</TouchableOpacity>
-							
+
 
 						</View>
 
@@ -144,7 +144,7 @@ export default class CoachMenuDrawer extends React.Component {
 
 								<Text style={styles.menu}>
 									Contact Us
-</Text>
+								</Text>
 
 								<Image
 									style={{ height: 16, width: 7 }}
@@ -158,9 +158,10 @@ export default class CoachMenuDrawer extends React.Component {
 
 						<TouchableOpacity activeOpacity={0.8} onPress={() => {
 							onSignOut()
-                            clearData()
-                            firebase.auth().signOut();
-							this.props.navigation.navigate('Login')}
+							clearData()
+							firebase.auth().signOut();
+							this.props.navigation.navigate('Login')
+						}
 						}>
 
 
@@ -197,7 +198,17 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 
 	},
-
+	filled_button: {
+		width: '90%',
+		padding: 12,
+		borderRadius: 22,
+		marginLeft: 4,
+		marginRight: 4,
+		marginTop: 8,
+		backgroundColor: '#67BAF5',
+		color: 'white',
+		textAlign: 'center',
+	},
 	drawercell: {
 		padding: 16,
 		alignItems: 'center',

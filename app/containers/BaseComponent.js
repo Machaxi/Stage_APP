@@ -15,6 +15,7 @@ var connected = false
 
 export default class BaseComponent extends React.Component {
 
+
     static isUserLoggedIn = false
 
     constructor(props) {
@@ -58,7 +59,11 @@ export default class BaseComponent extends React.Component {
     }
 }
 
+
 export const defaultStyle = {
+    spinnerTextStyle: {
+        color: '#FFF'
+      },
     bold_text_14: {
         fontSize: 14,
         color: '#404040',
@@ -66,7 +71,7 @@ export const defaultStyle = {
     },
     regular_text_14: {
         fontSize: 14,
-        color: '#FF7373',
+        color: '#404040',
         fontFamily: 'Quicksand-Regular'
     },
     blue_rounded_4: {

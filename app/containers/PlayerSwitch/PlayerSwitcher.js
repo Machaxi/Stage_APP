@@ -6,9 +6,10 @@ import { Rating } from 'react-native-ratings';
 import { getData, storeData } from "../../components/auth";
 import { getPlayerSWitcher, getCoachSWitcher } from "../../redux/reducers/switchReducer";
 import { connect } from 'react-redux';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 
 var deviceWidth = Dimensions.get('window').width - 20;
-class PlayerSwitcher extends React.Component {
+class PlayerSwitcher extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -380,7 +381,8 @@ class PlayerSwitcher extends React.Component {
         return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
             {userData ? <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? null : <View style={{ marginTop: 15, marginBottom: 0, flex: 1, alignItems: 'center' }}><Text>Select Academy</Text></View>}
+                {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? null : <View style={{ marginTop: 15, marginBottom: 0, flex: 1, alignItems: 'center' }}>
+                    <Text style={defaultStyle.regular_text_14}>Select Academy</Text></View>}
 
                 <View>
 
@@ -395,13 +397,13 @@ class PlayerSwitcher extends React.Component {
                     <Card style={{ margin: 5, borderRadius: 10 }}>
                         <TouchableOpacity onPress={() => {
 
-                            console.warn("Touch Press")
-
+                            //console.warn("Touch Press")
+                            this.props.navigation.navigate('CurrentBooking')
 
                         }}>
                             <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                <Image source={require('../../images/booking.png')}
+                                <Image source={require('../../images/book_play.png')}
                                     style={{
                                         width: 30,
                                         height: 30, marginRight: 20, marginTop: 5
@@ -416,11 +418,11 @@ class PlayerSwitcher extends React.Component {
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
                                     }}>
-                                        <Text style={{ fontSize: 14 }}>
+                                        <Text style={defaultStyle.bold_text_14}>
                                             Book and Play
                                         </Text>
 
-                                        <Image source={require('../../images/forwardArrow.png')}
+                                        <Image source={require('../../images/path.png')}
                                             style={{
                                                 width: 19,
                                                 height: 13, marginRight: 0, marginTop: 5
@@ -459,11 +461,11 @@ class PlayerSwitcher extends React.Component {
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
                                     }}>
-                                        <Text style={{ fontSize: 14 }}>
+                                        <Text style={defaultStyle.bold_text_14}>
                                             View other Players Progress
                                         </Text>
 
-                                        <Image source={require('../../images/forwardArrow.png')}
+                                        <Image source={require('../../images/path.png')}
                                             style={{
                                                 width: 19,
                                                 height: 13, marginRight: 0, marginTop: 5
@@ -489,7 +491,7 @@ class PlayerSwitcher extends React.Component {
 
                             <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                <Image source={require('../../images/booking.png')}
+                                <Image source={require('../../images/browse_academy.png')}
                                     style={{
                                         width: 30,
                                         height: 30, marginRight: 20, marginTop: 5
@@ -504,11 +506,11 @@ class PlayerSwitcher extends React.Component {
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
                                     }}>
-                                        <Text style={{ fontSize: 14 }}>
+                                        <Text style={defaultStyle.bold_text_14}>
                                             Browse other Academies
                                         </Text>
 
-                                        <Image source={require('../../images/forwardArrow.png')}
+                                        <Image source={require('../../images/path.png')}
                                             style={{
                                                 width: 19,
                                                 height: 13, marginRight: 0, marginTop: 5

@@ -9,6 +9,12 @@ export const GET_BATCHES = 'user/LOAD';
 export const DO_BATCHES_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_BATCHES_FAIL = 'user/LOAD_FAIL';
 
+export const GET_COACH = 'coach/LOAD';
+export const DO_COACH_SUCCESS = 'coach/LOAD_SUCCESS';
+export const DO_COACH_FAIL = 'coach/LOAD_FAIL';
+
+
+
 export const GET_PERFORMENCE = 'user/LOAD';
 export const DO_PERFORMENCE_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_PERFORMENCE_FAIL = 'user/LOAD_FAIL';
@@ -24,6 +30,10 @@ export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
 export const GET_TOURNAMENT = 'tournament/LOAD';
 export const DO_TOURNAMENT_SUCCESS = 'tournament/LOAD_SUCCESS';
 export const DO_TOURNAMENT_FAIL = 'tournament/LOAD_FAIL';
+
+export const GET_FEEDBACK = 'feedback/LOAD';
+export const DO_FEEDBACK_SUCCESS = 'feedback/LOAD_SUCCESS';
+export const DO_FEEDBACK_FAIL = 'feedback/LOAD_FAIL';
 
 
 export const DO_ACADEMY_START = 'user/LOAD_START';

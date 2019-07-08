@@ -14,12 +14,16 @@ class CoachListing extends BaseComponent {
             coaches: [],
             filter: [],
             query: '',
+            academy_id: ''
         }
+        this.state.academy_id = this.props.navigation.getParam('academy_id', '');
     }
 
     componentDidMount() {
 
-        this.props.coachListing().then(() => {
+        let academy_id = this.state.academy_id
+
+        this.props.coachListing(academy_id).then(() => {
             console.warn('Res=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
@@ -54,7 +58,7 @@ class CoachListing extends BaseComponent {
                         marginLeft: 8,
                         backgroundColor: 'white',
                         borderRadius: 16,
-                        fontFamily:'Quicksand-Regular'
+                        fontFamily: 'Quicksand-Regular'
                     }} placeholder="Search"
                         onChangeText={text => {
                             this.state.query = text
@@ -88,7 +92,10 @@ class CoachListing extends BaseComponent {
         <TouchableOpacity
             onPress={() => {
                 console.warn('test')
-                this.props.navigation.navigate('CoachProfileDetail')
+                this.props.navigation.navigate('CoachProfileDetail', {
+                    academy_id: this.state.academy_id,
+                    coach_id: item.id
+                })
             }}
             activeOpacity={.8}
         >

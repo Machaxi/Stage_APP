@@ -47,9 +47,11 @@ import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import coachPerfomenceModule from './CoachPerformenceRouter'
 import WriteFeedback from '../containers/feedback/WriteFeedback'
+import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
+import ChallengeHome from '../containers/challenge/ChallengeHome'
 
 const headerStyle = {
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+    marginTop: Platform.OS === "android" ? 0 : 0
 };
 const loginModule = createStackNavigator({
 
@@ -105,16 +107,50 @@ const Switcher = createStackNavigator({
 
     SwitchPlayer1: {
         screen: switchplayer,
-        navigationOptions: {
+        navigationOptions: ({ navigation }) => ({
             title: "Switch Player",
-            headerStyle
-            // : {
-            //     backgroundColor: '#FFFFFF',
-            //
-            // },
-            //header:null
-        }
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+            headerTintColor: '#000',
+        })
+    },
+    CurrentBooking: {
+        screen: CurrentBooking,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+            headerTintColor: '#000',
+        }),
+    },
+    CourtAcademyListing: {
+        screen: CourtAcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Book and play',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
     },
 
 }
@@ -127,11 +163,36 @@ const userHomeModule = createStackNavigator({
         screen: userhome,
 
     },
+    AcademyListing: {
+        screen: AcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Dribble Diaries',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+            headerTintColor: '#000',
+        }),
+    },
 
 }
 );
+const userChallengeModule = createStackNavigator({
 
+
+    ChallengeHome: {
+        screen: ChallengeHome,
+
+    }
+
+}
+);
 
 
 const GuestHomeModule = createStackNavigator({
@@ -240,6 +301,21 @@ const GuestHomeModule = createStackNavigator({
         })
 
     },
+    WriteAcademyFeedback: {
+        screen: WriteAcademyFeedback,
+        navigationOptions: ({ navigation }) => ({
+            title: "Give Feedback",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
 })
 
 
@@ -248,7 +324,7 @@ const tabBarController = createBottomTabNavigator(
         Home: {
             screen: userHomeModule,
             navigationOptions: {
-                tabBarLabel: 'Home1',
+                tabBarLabel: 'Home',
                 tabBarIcon: ({ tintColor }) => (
 
                     <Image
@@ -317,7 +393,7 @@ const tabBarController = createBottomTabNavigator(
 
         },
         Challenge: {
-            screen: userHomeModule,
+            screen: userChallengeModule,
             navigationOptions: {
                 tabBarLabel: 'Challenge',
                 showLabel: false,
@@ -475,7 +551,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         Home: {
             screen: coachHomeModule,
             navigationOptions: {
-                tabBarLabel: 'Home1',
+                tabBarLabel: 'Home',
                 tabBarIcon: ({ tintColor }) => (
 
                     <Image
@@ -677,7 +753,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
         Home: {
             screen: GuestHomeModule,
             navigationOptions: {
-                tabBarLabel: 'Home1',
+                tabBarLabel: 'Home',
                 tabBarIcon: ({ tintColor }) => (
 
                     <Image
@@ -762,15 +838,12 @@ const guestDrawer = createDrawerNavigator({
     },
 
 },
-    BaseComponent.isUserLoggedIn ?
-        {
-            contentComponent: ({ navigation }) => {
-                return (<CoachMenuDrawer navigation={navigation} />)
-            },
-            drawerWidth: Dimensions.get('window').width * 0.83,
-        } : {
-            drawerLockMode: 'locked-closed'
-        }
+    {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.83,
+    }
 );
 
 const WIDTH = Dimensions.get('window').width;
@@ -805,14 +878,127 @@ const parentHomeModule = createStackNavigator({
             // header: null
         }
     },
-    ParentHome: {
-        screen: parenthome,
-        navigationOptions: {
-            title: "Sign In",
-            // headerStyle,
-            // header: null
-        }
+    AcademyListing: {
+        screen: AcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Dribble Diaries',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
     },
+    AcademyProfile: {
+        screen: AcademyProfile,
+        navigationOptions: ({ navigation }) => ({
+            //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
+            title: "Academy Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        })
+    },
+    CoachListing: {
+        screen: CoachListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    PlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    CoachProfileDetail: {
+        screen: CoachProfileDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    EditProfile: {
+        screen: EditProfile,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    WriteFeedback: {
+        screen: WriteFeedback,
+        navigationOptions: ({ navigation }) => ({
+            title: "Write Feedbacks",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+
+    WriteAcademyFeedback: {
+        screen: WriteAcademyFeedback,
+        navigationOptions: ({ navigation }) => ({
+            title: "Give Feedback",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+
 }
 );
 
@@ -822,7 +1008,7 @@ const tabBarControllerParent = createBottomTabNavigator(
         Home: {
             screen: parentHomeModule,
             navigationOptions: {
-                tabBarLabel: 'Home1',
+                tabBarLabel: 'Home',
                 tabBarIcon: ({ tintColor }) => (
 
                     <Image
@@ -891,7 +1077,7 @@ const tabBarControllerParent = createBottomTabNavigator(
 
         },
         Challenge: {
-            screen: userHomeModule,
+            screen: userChallengeModule,
             navigationOptions: {
                 tabBarLabel: 'Challenge',
                 showLabel: false,
@@ -913,7 +1099,7 @@ const tabBarControllerParent = createBottomTabNavigator(
 
         },
         BookandPlay: {
-            screen: GuestHomeModule,
+            screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 showLabel: false,

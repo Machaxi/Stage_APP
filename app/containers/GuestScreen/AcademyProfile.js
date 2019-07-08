@@ -377,7 +377,7 @@ class AcademyProfile extends BaseComponent {
                     <TouchableOpacity
                         activeOpacity={.8}
                         onPress={() => {
-                            this.props.navigation.navigate('CoachListing')
+                            this.props.navigation.navigate('CoachListing', { academy_id: this.state.id })
                         }}
                     >
 
@@ -395,15 +395,26 @@ class AcademyProfile extends BaseComponent {
                         </Card>
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
 
-                        <Text
-                            style={styles.filled_button}
-                        >
-                            Give Feedback
+                    <TouchableOpacity
+                        activeOpacity={.8}
+                        onPress={() => {
+                            this.props.navigation.navigate('WriteAcademyFeedback',
+                                { academy_id: this.state.id, target_id: this.state.id })
+                        }}>
+
+                        <View
+
+                            style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+
+                            <Text
+                                style={styles.filled_button}
+                            >
+                                Give Feedback
                                 </Text>
 
-                    </View>
+                        </View>
+                    </TouchableOpacity>
 
                     <Card
                         style={{

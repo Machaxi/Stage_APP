@@ -90,15 +90,14 @@ export function search_auto_suggest(search_query) {
 };
 
 
-export function coachListing() {
+export function coachListing(academy_id) {
 
-    let url = `global/coach/list`
-    console.log("search => " + url)
+    console.log("coachListing => " + academy_id)
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: url
+                url: `global/coach/list?academy_id=${academy_id}`
             }
         }
     }
@@ -118,8 +117,8 @@ export function coachDetail() {
     }
 };
 
-export function getBatchPlayersList(header,batch_id) {
-    console.log("getBatchPlayersList",header,batch_id)
+export function getBatchPlayersList(header, batch_id) {
+    console.log("getBatchPlayersList", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
