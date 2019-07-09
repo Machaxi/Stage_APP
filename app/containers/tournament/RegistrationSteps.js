@@ -69,7 +69,7 @@ export default class RegistrationSteps extends BaseComponent {
                         }}>
 
                         <Text style={{
-                            fontFamily: 'Quicksand-Bold',
+                            fontFamily: 'Quicksand-Medium',
                             fontSize: 14,
                             color: '#000000'
                         }}>
@@ -80,7 +80,7 @@ export default class RegistrationSteps extends BaseComponent {
                             color: '#404040',
                             fontSize: 14,
                             marginTop: 20,
-                            fontFamily: 'Quicksand-Bold',
+                            fontFamily: 'Quicksand-Medium',
                         }}>
                             Prithviraj P
                     </Text>
@@ -217,7 +217,7 @@ export default class RegistrationSteps extends BaseComponent {
                     }}>
 
                     <Text style={{
-                        fontFamily: 'Quicksand-Bold',
+                        fontFamily: 'Quicksand-Medium',
                         fontSize: 14,
                         color: '#000000'
                     }}>
@@ -396,7 +396,7 @@ export default class RegistrationSteps extends BaseComponent {
 
                             <Text style={{
 
-                                fontFamily: 'Quicksand-Bold',
+                                fontFamily: 'Quicksand-Medium',
                                 fontSize: 14,
                                 color: '#000000'
                             }}>
@@ -444,7 +444,7 @@ export default class RegistrationSteps extends BaseComponent {
                                     </Text>
 
                                 <Text style={{
-                                    fontFamily: 'Quicksand-Bold',
+                                    fontFamily: 'Quicksand-Medium',
                                     fontSize: 16,
                                     marginTop: 8,
                                     color: '#404040'

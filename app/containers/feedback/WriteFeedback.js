@@ -57,7 +57,7 @@ export default class WriteFeedback extends BaseComponent {
                                         fontSize: 16,
                                         color: 'black',
                                         fontWeight: "400",
-                                        fontFamily: 'Quicksand-Bold'
+                                        fontFamily: 'Quicksand-Medium'
                                     }}
                                 >Success</Text>
 
@@ -103,7 +103,7 @@ export default class WriteFeedback extends BaseComponent {
                                 fontSize: 14,
                                 color: '#404040',
                                 fontWeight: "400",
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 Academy Feedback
                             </Text>
@@ -118,7 +118,7 @@ export default class WriteFeedback extends BaseComponent {
                                 fontSize: 14,
                                 color: '#404040',
                                 fontWeight: "400",
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 Your Feedback
                             </Text>
@@ -178,7 +178,7 @@ export default class WriteFeedback extends BaseComponent {
                                 fontSize: 14,
                                 color: '#404040',
                                 fontWeight: "400",
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 Academy Feedback
                             </Text>
@@ -193,7 +193,7 @@ export default class WriteFeedback extends BaseComponent {
                                 fontSize: 14,
                                 color: '#404040',
                                 fontWeight: "400",
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 Your Feedback
                             </Text>

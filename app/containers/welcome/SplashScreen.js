@@ -18,8 +18,8 @@ class Splash extends BaseComponent {
 
     componentDidMount() {
 
-        //this.props.navigation.navigate('AcademyListing')
-        //return
+        this.props.navigation.navigate('Login')
+        return
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
@@ -50,10 +50,14 @@ class Splash extends BaseComponent {
                 getData('userInfo', (value) => {
                     userData = (JSON.parse(value))
                     // onSignIn()
-                    if (userData.academy_id != null) {
+                    console.log("SplashScreen=> ", userData);
+                    if (userData.user['user_type'] == GUEST) {
+                        this.props.navigation.navigate('GHome')
+                    }
+                    else if (userData.academy_id != null) {
                         console.log(userData);
                         if (userData.user['user_type'] == GUEST) {
-                            this.props.navigation.navigate('AcademyListing')
+                            this.props.navigation.navigate('GHome')
                         } else if (userData.user['user_type'] == PLAYER) {
                             this.props.navigation.navigate('UHome')
 

@@ -50,10 +50,6 @@ class NavigationDrawerStructure extends React.Component {
         if (this.props.showDrawer != undefined)
             showDrawer = this.props.showDrawer
 
-        //if user is not logged in then we will not show drawer to user
-        if (!this.state.signedIn)
-            showDrawer = false
-
         return (
             <View style={{ flexDirection: 'row' }}>
                 {showBackAction ?

@@ -41,7 +41,7 @@ export default class Registration extends BaseComponent {
                 >
 
                     <Text style={{
-                        fontFamily: 'Quicksand-Bold',
+                        fontFamily: 'Quicksand-Medium',
                         fontSize: 14,
                         color: '#000000'
                     }}>

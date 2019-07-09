@@ -225,7 +225,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                                 color: '#404040',
                                                 width: "30%",
                                                 fontWeight: '400',
-                                                fontFamily: 'Quicksand-Bold'
+                                                fontFamily: 'Quicksand-Medium'
                                             }}>
                                                 Prithiviraj P
                                             </Text>

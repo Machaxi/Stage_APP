@@ -14,7 +14,6 @@ class AcademyListing extends BaseComponent {
         super(props)
         this.secondTextInputRef = React.createRef();
 
-
         this.state = {
             academies: [],
             query: '',
@@ -184,17 +183,18 @@ class AcademyListing extends BaseComponent {
                     }} placeholder="Search"></TextInput> */}
 
                     <Autocomplete
-                        //containerStyle={styles.autocompleteContainer}
+                     listStyle={{ borderWidth: 0 }}
+                        containerStyle={{
+                            borderWidth: 0
+                        }}
                         ref={this.secondTextInputRef}
                         inputContainerStyle={{
-                            marginLeft: 8,
-                            marginRight: 8,
                             marginTop: 2,
                             marginBottom: 2,
                             backgroundColor: 'white',
                             borderRadius: 16,
                             borderWidth: 0,
-
+                            
                         }}
                         style={{
                             fontFamily: 'Quicksand-Regular'
@@ -219,10 +219,12 @@ class AcademyListing extends BaseComponent {
                                     {item.is_first ?
                                         <Text
                                             style={{
-                                                backgroundColor: '#f7f7f7', color: 'black', padding: 4
-                                                , fontWeight: 'bold', fontFamily: 'Quicksand-Regular'
+                                                backgroundColor: '#ECECEC',
+                                                color: 'black', padding: 4,
+                                                fontSize: 12,
+                                                fontFamily: 'Quicksand-Regular'
                                             }}
-                                        >{item.is_academy ? "Academies" : "Localities"}</Text>
+                                        >{item.is_academy ? "Academies by name" : "Academies by location"}</Text>
                                         :
                                         null
                                     }
@@ -240,7 +242,12 @@ class AcademyListing extends BaseComponent {
                                             }
                                         }}
                                     >
-                                        <Text style={{ fontSize: 12, padding: 2, fontFamily: 'Quicksand-Regular' }}>{item.name}</Text>
+                                        <Text style={{
+                                            fontSize: 12,
+                                            padding: 6,
+                                            color: '#000000',
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}>{item.name}</Text>
                                     </TouchableOpacity>
 
                                 </View>
@@ -288,7 +295,7 @@ class AcademyListing extends BaseComponent {
                     <Text style={{
                         paddingTop: 12, paddingLeft: 12, fontSize: 16,
                         color: '#707070',
-                        fontFamily: 'Quicksand-Regular'
+                        fontFamily: 'Quicksand-Medium'
                     }}>
                         {item.name}
                     </Text>
@@ -310,9 +317,9 @@ class AcademyListing extends BaseComponent {
                             backgroundColor: '#DFDFDF', height: 19, width: 30, textAlign: 'center',
                             fontSize: 12,
                             color: '#707070',
-                            paddingTop: 2,
+                            paddingTop: 0,
                             borderRadius: 12,
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Medium'
                         }}>{item.ratings}</Text>
 
                     </View>
@@ -404,7 +411,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#67BAF5',
         color: 'white',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
 });
 

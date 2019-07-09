@@ -179,18 +179,18 @@ const styles = {
     text: {
         fontSize: 14, fontWeight: "400",
         color: '#404040',
-        fontFamily: 'Quicksand-Bold'
+        fontFamily: 'Quicksand-Medium'
     },
     text_bold: {
         width: "50%",
         fontSize: 14, fontWeight: "400",
         color: '#404040',
-        fontFamily: 'Quicksand-Bold'
+        fontFamily: 'Quicksand-Medium'
     },
     text_12: {
         fontSize: 12, fontWeight: "400",
         color: '#404040',
-        fontFamily: 'Quicksand-Bold'
+        fontFamily: 'Quicksand-Medium'
     },
     text_12_regular: {
         width: "50%",

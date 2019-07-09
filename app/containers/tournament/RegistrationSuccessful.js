@@ -42,7 +42,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 fontSize: 14,
                                 color: '#000000',
                                 marginTop: 16,
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 Registration Sucessfull!
                     </Text>

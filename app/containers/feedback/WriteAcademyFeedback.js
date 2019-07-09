@@ -134,7 +134,7 @@ class WriteAcademyFeedback extends BaseComponent {
                                         fontSize: 16,
                                         color: 'black',
                                         fontWeight: "400",
-                                        fontFamily: 'Quicksand-Bold'
+                                        fontFamily: 'Quicksand-Medium'
                                     }}
                                 >Success</Text>
 
@@ -181,7 +181,7 @@ class WriteAcademyFeedback extends BaseComponent {
                                 fontSize: 14,
                                 color: '#404040',
                                 fontWeight: "400",
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 {this.state.is_coach ? "Coach Feedback" : "Academy Feedback"}
 
@@ -197,7 +197,7 @@ class WriteAcademyFeedback extends BaseComponent {
                                 fontSize: 14,
                                 color: '#404040',
                                 fontWeight: "400",
-                                fontFamily: 'Quicksand-Bold'
+                                fontFamily: 'Quicksand-Medium'
                             }}>
                                 Your Feedback
                             </Text>

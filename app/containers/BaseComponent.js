@@ -12,6 +12,9 @@ colors = {
 
 ACADEMY_LISTING = "AcademyListing"
 var connected = false
+fontMedium="Quicksand-Medium"
+fontBold="Quicksand-Bold"
+fontRegular="Quicksand-Regular"
 
 export default class BaseComponent extends React.Component {
 
@@ -63,15 +66,40 @@ export default class BaseComponent extends React.Component {
 export const defaultStyle = {
     spinnerTextStyle: {
         color: '#FFF'
-      },
+    },
     bold_text_14: {
+        fontSize: 14,
+        color: '#404040',
+        fontFamily: 'Quicksand-Medium'
+    },
+    heavy_bold_text_14: {
         fontSize: 14,
         color: '#404040',
         fontFamily: 'Quicksand-Bold'
     },
+    bold_text_10: {
+        fontSize: 10,
+        color: '#404040',
+        fontFamily: 'Quicksand-Medium'
+    },
     regular_text_14: {
         fontSize: 14,
         color: '#404040',
+        fontFamily: 'Quicksand-Regular'
+    },
+    regular_text_10: {
+        fontSize: 10,
+        color: '#404040',
+        fontFamily: 'Quicksand-Regular'
+    },
+    regular_text_12: {
+        fontSize: 12,
+        color: '#404040',
+        fontFamily: 'Quicksand-Regular'
+    },
+    regular_text_blue_10: {
+        fontSize: 10,
+        color: '#667DDB',
         fontFamily: 'Quicksand-Regular'
     },
     blue_rounded_4: {
@@ -86,7 +114,7 @@ export const defaultStyle = {
         paddingTop: 2,
         paddingBottom: 2,
         fontWeight: '100',
-        fontFamily: 'Quicksand-Bold'
+        fontFamily: 'Quicksand-Medium'
     },
     line_style: {
         marginTop: 10,
@@ -103,6 +131,6 @@ export const defaultStyle = {
         backgroundColor: '#67BAF5',
         color: 'white',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Bold'
+        fontFamily: 'Quicksand-Medium'
     },
 }

@@ -46,7 +46,7 @@ class UserHome extends BaseComponent {
                     >
                         <Text
                             style={{
-                                fontFamily: 'Quicksand-Bold',
+                                fontFamily: 'Quicksand-Medium',
                                 fontSize: 14,
                                 color: 'white'
                             }}
@@ -336,7 +336,7 @@ class UserHome extends BaseComponent {
                                         <Text style={{
                                             color: 'white',
                                             marginRight: 0,
-                                            fontFamily: 'Quicksand-Bold',
+                                            fontFamily: 'Quicksand-Medium',
                                             textAlign: 'center', fontSize: 22, fontWeight: 'bold'
                                         }}
                                         numberOfLines={1}

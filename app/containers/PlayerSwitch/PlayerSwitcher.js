@@ -159,31 +159,33 @@ class PlayerSwitcher extends BaseComponent {
                 </View>
             </TouchableOpacity>
         </Card>);
+
+
+
     renderItem = ({ item }) => (
 
-
-
         <Card style={{ marginTop: 20, borderRadius: 10 }}>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity
+                activeOpacity={.8}
+                onPress={() => {
 
-                console.warn("Touch Press")
+                    var tempuserData = this.state.userData;
+                    tempuserData['academy_id'] = item.academy_id;
+                    tempuserData['player_id'] = item.id;
+                    tempuserData['academy_name'] = item.academy_name;
+                    console.log('tempuserData', tempuserData)
+                    storeData("userInfo", JSON.stringify(tempuserData))
 
-                var tempuserData = this.state.userData;
-                tempuserData['academy_id'] = item.academy_id;
-                tempuserData['player_id'] = item.id;
-                tempuserData['academy_name'] = item.academy_name;
-                console.log('tempuserData', tempuserData)
-                storeData("userInfo", JSON.stringify(tempuserData))
-
-                if (tempuserData.user['user_type'] == 'PLAYER') {
-                    this.props.navigation.navigate('UHome')
-                } else {
-                    this.props.navigation.navigate('PHome')
-                }
+                    if (tempuserData.user['user_type'] == 'PLAYER') {
+                        this.props.navigation.navigate('UHome')
+                    } else {
+                        this.props.navigation.navigate('PHome')
+                    }
 
 
-            }}>
-                <View style={{ margin: 10, marginTop: 20, marginBottom: 20 }}><Text>{item.academy_name} </Text></View>
+                }}>
+                <View style={{ margin: 10, marginTop: 20, marginBottom: 20 }}>
+                    <Text style={[defaultStyle.heavy_bold_text_14, { color: 'black' }]}>{item.academy_name} </Text></View>
                 <View style={{ width: '100%', marginTop: 0, height: 300, }}>
                     <ImageBackground
                         source={require('../../images/RectangleImg.png')}
@@ -203,12 +205,15 @@ class PlayerSwitcher extends BaseComponent {
 
                                     </Image>
                                     <View style={{ display: 'flex', flex: 1, marginBottom: 100 }}>
-                                        <Text style={{
-                                            color: 'white',
-                                            marginRight: 0,
-                                            textAlign: 'center', fontSize: 22, fontWeight: 'bold'
-                                        }}>{item.name}</Text>
-
+                                        <Text
+                                            numberOfLines={1}
+                                            style={{
+                                                fontFamily: 'Quicksand-Bold',
+                                                color: 'white',
+                                                marginRight: 0,
+                                                textAlign: 'center',
+                                                fontSize: 22,
+                                            }}>{item.name}</Text>
 
 
                                         {/* <Image source={require('../../images/Rank.png')}
@@ -258,8 +263,6 @@ class PlayerSwitcher extends BaseComponent {
                                             </ImageBackground>
 
 
-
-
                                         </View>
 
 
@@ -269,7 +272,7 @@ class PlayerSwitcher extends BaseComponent {
                                                 marginRight: 10,
                                                 textAlign: 'center',
                                                 fontSize: 12,
-                                                fontWeight: 'bold'
+                                                fontFamily: 'Quicksand-Bold',
                                             }}>{item.player_level}</Text>
                                             <View
                                                 style={{ backgroundColor: 'red', width: 60, marginRight: 20, marginTop: -5 }}>
@@ -278,7 +281,7 @@ class PlayerSwitcher extends BaseComponent {
                                                     marginRight: 0,
                                                     textAlign: 'center',
                                                     fontSize: 12,
-                                                    fontWeight: 'bold',
+                                                    fontFamily: 'Quicksand-Bold',
                                                     marginTop: 5,
                                                     marginBottom: 5
                                                 }}>{item.player_category} </Text>
@@ -307,7 +310,7 @@ class PlayerSwitcher extends BaseComponent {
                                                 height: 80,
                                             }}>
 
-                                            <Text style={{ margin: 15, color: 'white' }}>Rank</Text>
+                                            <Text style={{ fontSize: 12, margin: 15, color: '#F4F4F4', fontFamily: 'Quicksand-Medium' }}>Rank</Text>
                                             {item.rank ? <Text style={styles.scoreBox}>{item.rank}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
 
@@ -319,7 +322,7 @@ class PlayerSwitcher extends BaseComponent {
                                             width: deviceWidth / 3,
                                             height: 80,
                                         }}>
-                                        <Text style={{ margin: 15, color: 'white' }}>Score</Text>
+                                        <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 12, margin: 15, color: '#F4F4F4' }}>Score</Text>
                                         <Text style={styles.scoreBox}>{item.score}</Text>
 
                                     </ImageBackground>
@@ -333,7 +336,7 @@ class PlayerSwitcher extends BaseComponent {
                                                 height: 80,
                                             }}>
 
-                                            <Text style={{ margin: 15, color: 'white' }}>Reward</Text>
+                                            <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 12, margin: 15, color: '#F4F4F4' }}>Reward</Text>
                                             <Text style={styles.scoreBox}>{item.reward_point}</Text>
 
 
@@ -353,15 +356,17 @@ class PlayerSwitcher extends BaseComponent {
 
 
                     <View style={{ margin: 5 }}>
-                        <Text style={{ fontSize: 10 }}>Attendance</Text>
-                        <Text style={{ fontSize: 14, marginTop: 10 }}>{item.operations.attendance['attendance'] + '%' + '(' + item.operations.attendance.month + ')'}</Text>
+                        <Text style={defaultStyle.bold_text_10}>Attendance</Text>
+                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{item.operations.attendance['attendance'] + '%' + '(' + item.operations.attendance.month + ')'}</Text>
                     </View>
                     <View style={{ width: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
                     <View style={{ margin: 5 }}>
-                        <Text style={{ fontSize: 10, marginRight: 20 }}>Next Session</Text>
+                        <Text
+                            style={[defaultStyle.bold_text_10, { marginRight: 20 }]}>Next Session</Text>
 
-                        <Text style={{ marginRight: 20, fontSize: 14, marginTop: 10 }}>{item.operations.next_sessions[0].session_date}</Text>
-                        <Text style={{ marginRight: 20, fontSize: 14, marginTop: 10 }}>{item.operations.next_sessions[0].start_time + "  -   " + item.operations.next_sessions[0].end_time}</Text>
+                        <Text
+                            style={[defaultStyle.regular_text_14, { marginRight: 20, marginTop: 10 }]}>{item.operations.next_sessions[0].session_date}</Text>
+                        <Text style={[defaultStyle.regular_text_14, { marginRight: 20, marginTop: 10 }]}>{item.operations.next_sessions[0].start_time + "  -   " + item.operations.next_sessions[0].end_time}</Text>
                     </View>
 
                 </View>
@@ -485,7 +490,7 @@ class PlayerSwitcher extends BaseComponent {
                         <TouchableOpacity onPress={() => {
 
                             console.warn("Touch Press")
-
+                            this.props.navigation.navigate('AcademyListing')
 
                         }}>
 
@@ -604,9 +609,11 @@ const styles = StyleSheet.create({
     },
 
     scoreBox: {
-        color: 'white',
+        color: '#F4F4F4',
         marginRight: 20,
-        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
+        textAlign: 'right',
+        fontSize: 22,
+        fontFamily: "Quicksand-Bold"
     },
     buttomButton: {
         flexDirection: 'row',

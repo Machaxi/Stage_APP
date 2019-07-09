@@ -39,7 +39,7 @@ export default class TournamentScorer extends BaseComponent {
                                     color: 'black',
                                     fontSize: 17,
                                     fontWeight: "400",
-                                    fontFamily: 'Quicksand-Bold'
+                                    fontFamily: 'Quicksand-Medium'
                                 }}
                             >Rahul R</Text>
 
@@ -86,7 +86,7 @@ export default class TournamentScorer extends BaseComponent {
                                     alignItems: 'center',
                                     fontSize: 17,
                                     fontWeight: "400",
-                                    fontFamily: 'Quicksand-Bold',
+                                    fontFamily: 'Quicksand-Medium',
                                     color: 'white'
 
                                 }}>VS</Text>
@@ -105,7 +105,7 @@ export default class TournamentScorer extends BaseComponent {
                                     color: 'black',
                                     fontSize: 17,
                                     fontWeight: "400",
-                                    fontFamily: 'Quicksand-Bold'
+                                    fontFamily: 'Quicksand-Medium'
                                 }}
                             >Rahul R</Text>
 
@@ -223,7 +223,7 @@ export default class TournamentScorer extends BaseComponent {
                                         alignItems: 'center',
                                         fontSize: 30,
                                         fontWeight: "400",
-                                        fontFamily: 'Quicksand-Bold',
+                                        fontFamily: 'Quicksand-Medium',
                                         color: '#A3A5AE'
 
                                     }}>–</Text>
@@ -235,7 +235,7 @@ export default class TournamentScorer extends BaseComponent {
                                         fontSize: 40,
                                         fontWeight: "400",
                                         marginLeft: 10,
-                                        fontFamily: 'Quicksand-Bold'
+                                        fontFamily: 'Quicksand-Medium'
                                     }}>10</Text>
 
                             </View>
@@ -324,7 +324,7 @@ export default class TournamentScorer extends BaseComponent {
                                         alignItems: 'center',
                                         fontSize: 30,
                                         fontWeight: "400",
-                                        fontFamily: 'Quicksand-Bold',
+                                        fontFamily: 'Quicksand-Medium',
                                         color: '#A3A5AE'
 
                                     }}>–</Text>
@@ -336,7 +336,7 @@ export default class TournamentScorer extends BaseComponent {
                                         fontSize: 40,
                                         fontWeight: "400",
                                         marginLeft: 10,
-                                        fontFamily: 'Quicksand-Bold'
+                                        fontFamily: 'Quicksand-Medium'
                                     }}>10</Text>
 
                             </View>

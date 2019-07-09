@@ -54,7 +54,7 @@ export default userBatchModule;
 const style = StyleSheet.create({
     headerStyle: {
         color: '#191919',
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Medium',
         fontWeight: '400',
         textAlign: 'center',
         fontSize: 16,

@@ -29,7 +29,6 @@ import spalsh from '../containers/welcome/SplashScreen'
 import IntroScreen from '../containers/welcome/IntroScreen'
 
 import phoneauth from '../containers/Login/PhoneAuth'
-import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
@@ -49,6 +48,7 @@ import coachPerfomenceModule from './CoachPerformenceRouter'
 import WriteFeedback from '../containers/feedback/WriteFeedback'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import ChallengeHome from '../containers/challenge/ChallengeHome'
+import Switcher from './Switcher'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -103,58 +103,7 @@ const loginModule = createStackNavigator({
 
 
 })
-const Switcher = createStackNavigator({
 
-    SwitchPlayer1: {
-        screen: switchplayer,
-        navigationOptions: ({ navigation }) => ({
-            title: "Switch Player",
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-            headerTintColor: '#000',
-        })
-    },
-    CurrentBooking: {
-        screen: CurrentBooking,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    CourtAcademyListing: {
-        screen: CourtAcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
-}
-);
 
 const userHomeModule = createStackNavigator({
 
@@ -163,23 +112,23 @@ const userHomeModule = createStackNavigator({
         screen: userhome,
 
     },
-    AcademyListing: {
-        screen: AcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Dribble Diaries',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+    // AcademyListing: {
+    //     screen: AcademyListing,
+    //     navigationOptions: ({ navigation }) => ({
+    //         title: 'Dribble Diaries',
+    //         headerTitleStyle: style.headerStyle,
+    //         headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+    //             showBackAction={false}
+    //         />,
+    //         headerRight: <RightMenuToolbar navigationProps={navigation}
+    //             navigation={navigation} showNotification={true} />,
+    //         headerStyle: {
+    //             backgroundColor: '#FFFFFF',
+    //         },
 
-            headerTintColor: '#000',
-        }),
-    },
+    //         headerTintColor: '#000',
+    //     }),
+    // },
 
 }
 );
@@ -857,7 +806,7 @@ const DrawerConfig = {
 const style = StyleSheet.create({
     headerStyle: {
         color: '#191919',
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Medium',
         fontWeight: '400',
         textAlign: 'center',
         fontSize: 16,

@@ -109,7 +109,7 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                     paddingTop: 15, fontSize: 14,
                                     color: '#404040',
                                     fontWeight: '400',
-                                    fontFamily: 'Quicksand-Bold'
+                                    fontFamily: 'Quicksand-Medium'
                                 }}>
                                     Fixtures
                                 </Text>

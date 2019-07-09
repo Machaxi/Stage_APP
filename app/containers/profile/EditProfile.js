@@ -19,6 +19,19 @@ class EditProfile extends BaseComponent {
             txtphone: '8291088636',
             imageData: null,
         }
+
+        getData('userInfo', (value) => {
+			userData = (JSON.parse(value))
+
+
+			console.log("SplashScreen=> ", userData);
+			this.setState({
+				birthdate: userData.user['dob'],
+				txtname: userData.user['name'],
+				txtphone: userData.user['mobile_number'],
+			})
+        });
+        
     }
     saveUserProfile() {
 

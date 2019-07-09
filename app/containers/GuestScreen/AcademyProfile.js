@@ -51,7 +51,7 @@ class AcademyProfile extends BaseComponent {
             }}>
 
                 <Text
-                    style={{ color: '#707070', fontSize: 14, flex: 1 }}
+                    style={{ color: '#707070', fontSize: 14, flex: 1, fontFamily: 'Quicksand-Medium', }}
                 >
                     {item.name}
                 </Text>
@@ -234,7 +234,11 @@ class AcademyProfile extends BaseComponent {
 
                             </Image>
 
-                            <Text style={{ paddingTop: 12, fontSize: 18, color: 'gray' }}> {academy.name}</Text>
+                            <Text style={{
+                                fontFamily: 'Quicksand-Medium',
+                                paddingTop: 12,
+                                fontSize: 18, color: 'gray'
+                            }}> {academy.name}</Text>
 
                             <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
@@ -284,7 +288,7 @@ class AcademyProfile extends BaseComponent {
                         <View style={{ padding: 12 }}>
 
                             <Text style={{ fontSize: 10, color: '#404040' }}>Founder Corner</Text>
-                            <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
+                            <View style={{ marginTop: 8, marginBottom: 8, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
                             <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
                         </View>
 
@@ -497,6 +501,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         borderWidth: 1,
+        fontFamily: 'Quicksand-Medium',
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

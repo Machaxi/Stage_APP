@@ -67,7 +67,7 @@ class CustomHeader extends React.Component {
                         >
                             <Text
                                 style={{
-                                    fontFamily: 'Quicksand-Bold',
+                                    fontFamily: 'Quicksand-Medium',
                                     fontSize: 14,
                                     color: 'white'
                                 }}
