@@ -18,49 +18,26 @@ import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import EditProfile from '../containers/profile/EditProfile'
 import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
+import userhome from '../containers/UserScreen/UserHome'
+import ParentRewards from '../containers/rewards/ParentRewards'
 
-const Switcher = createStackNavigator({
 
-    SwitchPlayer1: {
-        screen: switchplayer,
-        navigationOptions: ({ navigation }) => ({
-            title: "Dribble Diary",
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-            headerTintColor: '#000',
-        })
+const userHomeModule = createStackNavigator({
+
+    UserHome: {
+        screen: userhome,
     },
-    CurrentBooking: {
-        screen: CurrentBooking,
+    ParentRewards: {
+        screen: ParentRewards,
         navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
+            title: 'Reward points',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    CourtAcademyListing: {
-        screen: CourtAcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
                 showDrawer={true}
+                showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
+                navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -189,9 +166,9 @@ const Switcher = createStackNavigator({
 
     },
 
-}
-);
-export default Switcher;
+});
+
+export default userHomeModule;
 
 
 const style = StyleSheet.create({

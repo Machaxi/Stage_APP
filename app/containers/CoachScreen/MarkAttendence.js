@@ -12,6 +12,7 @@ import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 const acedemicList = [
     {
         label: 'India',
@@ -27,7 +28,7 @@ const placeholder = {
 };
 var deviceWidth = Dimensions.get('window').width - 20;
 
-class MarkAttendence extends React.Component {
+class MarkAttendence extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -119,7 +120,7 @@ class MarkAttendence extends React.Component {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                 }}>
-                    <Text>
+                    <Text style={defaultStyle.regular_text_14}>
                         {item.name}
                     </Text>
                     <View style={{ backgroundColor: 'white', marginTop: -10 }}>
@@ -152,6 +153,18 @@ class MarkAttendence extends React.Component {
             </View>
         </TouchableOpacity>
 
+    );
+
+    renderFooterItem = () => (
+
+        <View style={{ flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20, justifyContent: 'flex-end' }}>
+
+            <CustomeButtonB onPress={() => { this.savePlayerAttendence() }}>
+                Update
+       </CustomeButtonB>
+
+
+        </View>
     );
 
 
@@ -221,47 +234,44 @@ class MarkAttendence extends React.Component {
 
                 <View style={{ backgroundColor: 'white' }}>
                     <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Batch 1 : {batch_name} </Text>
-                        <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{batch_category} </Text>
+                        <Text style={defaultStyle.bold_text_14}>Batch 1 : {batch_name} </Text>
+                        <Text style={defaultStyle.bold_text_14}>{batch_category} </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: -10, }}>
-                        <View style={{ margin: 5 }}>
-                            <Text style={{ fontSize: 10, marginBottom: 10 }}>Date </Text>
-                            <Text style={{ fontSize: 14 }}>{session.session_date} </Text>
+                        <View style={{ marginTop: 5 }}>
+                            <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Date </Text>
+                            <Text style={defaultStyle.regular_text_14}>{session.session_date} </Text>
 
                         </View>
-                        <View style={{ margin: 5 }}>
-                            <Text style={{ fontSize: 10, marginBottom: 10 }}>Time slot </Text>
-                            <Text style={{ fontSize: 14 }}>{session.start_time + ' - ' + session.end_time}</Text>
+                        <View style={{ marginTop: 5 }}>
+                            <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Time slot </Text>
+                            <Text style={defaultStyle.regular_text_14}>{session.start_time + ' - ' + session.end_time}</Text>
                         </View>
                     </View>
                 </View>
 
-                <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, marginBottom: 10 }}>Player </Text>
-                    <Text style={{ fontSize: 14 }}>Present </Text>
+                <View style={{
+                    marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
+                    flexDirection: 'row', justifyContent: 'space-between'
+                }}>
+                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Player </Text>
+                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
                 </View>
 
-                <View style={{ backgroundColor: 'white', marginTop: -10 }}>
+                <View style={{ backgroundColor: 'white', marginTop: -10, flex: 1 }}>
                     <CustomeCard>
 
                         <FlatList
                             data={this.state.playerList}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => item.id}
+                            ListFooterComponent={this.renderFooterItem}
                         />
                     </CustomeCard>
 
                 </View>
 
-                <View style={{ flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20, justifyContent: 'flex-end' }}>
 
-                    <CustomeButtonB onPress={() => { this.savePlayerAttendence() }}>
-                        Update
-                           </CustomeButtonB>
-
-
-                </View>
 
 
 

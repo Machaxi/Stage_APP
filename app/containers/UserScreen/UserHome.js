@@ -11,22 +11,10 @@ import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../../components/custom/CustomHeader';
-import BaseComponent from '../BaseComponent';
-import {NavigationDrawerStructure} from '../../router/router'
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
 
-];
 
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
 var deviceWidth = Dimensions.get('window').width - 20;
 
 class UserHome extends BaseComponent {
@@ -35,73 +23,78 @@ class UserHome extends BaseComponent {
 
     static navigationOptions = ({ navigation }) => {
 
-            return {
-                headerTitle: (
-                    <TouchableOpacity
-
-                        onPress={() => {
-                            navigation.navigate('SwitchPlayer')
+        return {
+            headerTitle: (
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        flex: 1
+                    }}
+                    onPress={() => {
+                        navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Quicksand-Medium',
+                            fontSize: 14,
+                            color: 'white'
                         }}
-                        activeOpacity={.8}
-                    >
-                        <Text
-                            style={{
-                                fontFamily: 'Quicksand-Medium',
-                                fontSize: 14,
-                                color: 'white'
-                            }}
-                        >{navigation.getParam('Title', 'Default Title') + ' ▼'}</Text>
-                    </TouchableOpacity>
+                    >{navigation.getParam('Title', 'Default Title') + ' ▼'}</Text>
+                </TouchableOpacity>
 
-                ),
-                headerTitleStyle: {
-                    color: 'white'
-                },
-                headerStyle: {
-                    elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+            ),
+            headerTitleStyle: {
+                color: 'white'
+            },
+            headerStyle: {
+                elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
 
-                },
-                //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
-                // navigation={navigation} />,
-                headerBackground: (
-                    <LinearGradient
-                        colors={['#262051', '#24262A']}
-                        style={{flex: 1}}
-                        start={{x: 0, y: 0}}
-                        end={{x: 2.5, y: 0}}
+            },
+            //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+            // navigation={navigation} />,
+            headerBackground: (
+                <LinearGradient
+                    colors={['#262051', '#24262A']}
+                    style={{ flex: 1 }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 2.5, y: 0 }}
+                />
+            ),
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}
+                >
+
+                    <Image
+
+                        source={require('../../images/hamburger_white.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
                     />
-                ),
-                headerLeft: (
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.toggleDrawer();
-                        }}
-                        activeOpacity={.8}
-                    >
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}
+                >
 
-                        <Image
+                    <Image
 
-                            source={require('../../images/hamburger_white.png')}
-                            style={{width: 20, height: 16, marginLeft: 12}}
-                        />
-                    </TouchableOpacity>
-                ),
-                headerRight: (
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.toggleDrawer();
-                        }}
-                        activeOpacity={.8}
-                    >
-
-                        <Image
-
-                            source={require('../../images/ic_notifications.png')}
-                            style={{width: 20, height: 20, marginRight: 12}}
-                        />
-                    </TouchableOpacity>
-                )
-            };
+                        source={require('../../images/ic_notifications.png')}
+                        style={{ width: 20, height: 20, marginRight: 12 }}
+                    />
+                </TouchableOpacity>
+            )
+        };
 
     };
 
@@ -119,7 +112,7 @@ class UserHome extends BaseComponent {
             country: undefined,
             player_profile: null,
             strenthList: null,
-            acedemy_name:''
+            acedemy_name: ''
         }
     }
 
@@ -133,7 +126,7 @@ class UserHome extends BaseComponent {
         console.log("PlayerDashboard");
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
-            this.props.navigation.setParams({Title: userData.academy_name });
+            this.props.navigation.setParams({ Title: userData.academy_name });
             this.setState({
                 userData: JSON.parse(value)
             });
@@ -169,11 +162,11 @@ class UserHome extends BaseComponent {
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         strenthList: user1.data.player_profile['stats'],
-                        acedemy_name:user1.data['player_profile'].academy_name,
+                        acedemy_name: user1.data['player_profile'].academy_name,
 
 
                     })
-                    acedemy_name =  user1.data['player_profile'].academy_name
+                    acedemy_name = user1.data['player_profile'].academy_name
                     navigation.title = user1.data['player_profile'].academy_name
 
                 }
@@ -190,7 +183,7 @@ class UserHome extends BaseComponent {
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
+            console.warn("Touch Press1")
 
             // this.props.navigation.navigate('OrderTracking', {
             //     order_id: item.increment_id
@@ -201,8 +194,8 @@ class UserHome extends BaseComponent {
 
                 <Image source={require('../../images/Mysatus.png')}
                     style={{
-                        width: 50,
-                        height: 50, marginRight: 20
+                        width: 40,
+                        height: 40, marginRight: 20
                     }} />
                 <View>
 
@@ -213,10 +206,10 @@ class UserHome extends BaseComponent {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                     }}>
-                        <Text>
+                        <Text style={defaultStyle.bold_text_14}>
                             {item.name}
                         </Text>
-                        <Text>
+                        <Text style={defaultStyle.bold_text_12}>
                             {item.score}
                         </Text>
                     </View>
@@ -225,8 +218,8 @@ class UserHome extends BaseComponent {
                 <View style={{ height: 50, width: 30, alignItems: 'center', marginTop: 20, marginBottom: 20, marginRight: 10, marginLeft: 10 }}>
                     <Image source={require('../../images/forward.png')}
                         style={{
-                            width: 3,
-                            height: 8, marginRight: 10
+                            width: 5,
+                            height: 12, marginRight: 10
                         }} />
                 </View>
 
@@ -323,7 +316,7 @@ class UserHome extends BaseComponent {
                             {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
                                 navigation={this.props.navigation} /> */}
 
-                            <View style={{ position: 'relative',marginTop:30 }}>
+                            <View style={{ position: 'relative', marginTop: 30 }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image source={require('../../images/playerimg.png')}
                                         style={{
@@ -336,10 +329,10 @@ class UserHome extends BaseComponent {
                                         <Text style={{
                                             color: 'white',
                                             marginRight: 0,
-                                            fontFamily: 'Quicksand-Medium',
-                                            textAlign: 'center', fontSize: 22, fontWeight: 'bold'
+                                            fontFamily: 'Quicksand-Bold',
+                                            textAlign: 'center', fontSize: 22,
                                         }}
-                                        numberOfLines={1}
+                                            numberOfLines={1}
                                         >{name}</Text>
 
 
@@ -373,7 +366,10 @@ class UserHome extends BaseComponent {
 
                                                     <Text style={{
                                                         width: '100%',
-                                                        fontSize: 10, color: 'white', textAlign: 'center'
+                                                        fontSize: 10,
+                                                        color: '#F4F4F4',
+                                                        textAlign: 'center',
+                                                        fontFamily: 'Quicksand-Regular',
                                                     }}>{badge}</Text>
                                                     <Image style={{ height: 18, width: 20, }}
                                                         source={require('../../images/right_batch_arrow.png')}></Image>
@@ -402,12 +398,14 @@ class UserHome extends BaseComponent {
                                                 marginRight: 10,
                                                 textAlign: 'center',
                                                 fontSize: 12,
-                                                fontWeight: 'bold'
+                                                fontFamily: 'Quicksand-Medium',
+
                                             }}>{player_level}</Text>
                                             <View
                                                 style={{
                                                     backgroundColor: 'red',
-                                                    width: 60,
+                                                    width: 40,
+                                                    borderRadius: 4,
                                                     marginRight: 20,
                                                     marginTop: -5
                                                 }}>
@@ -416,7 +414,7 @@ class UserHome extends BaseComponent {
                                                     marginRight: 0,
                                                     textAlign: 'center',
                                                     fontSize: 12,
-                                                    fontWeight: 'bold',
+                                                    fontFamily: 'Quicksand-Bold',
                                                     marginTop: 5,
                                                     marginBottom: 5
                                                 }}> {player_category} </Text>
@@ -445,7 +443,7 @@ class UserHome extends BaseComponent {
                                                 height: 80,
                                             }}>
 
-                                            <Text style={{ margin: 15, color: 'white' }}>Rank</Text>
+                                            <Text style={{ fontFamily: 'Quicksand-Medium', margin: 15, color: '#F4F4F4' }}>Rank</Text>
                                             {rank ? <Text style={styles.scoreBox}>{rank}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
 
@@ -457,7 +455,7 @@ class UserHome extends BaseComponent {
                                             width: deviceWidth / 3,
                                             height: 80,
                                         }}>
-                                        <Text style={{ margin: 15, color: 'white' }}>Score</Text>
+                                        <Text style={{ fontFamily: 'Quicksand-Medium', margin: 15, color: '#F4F4F4' }}>Score</Text>
                                         {score ? <Text style={styles.scoreBox}>{score}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
                                     </ImageBackground>
@@ -471,7 +469,7 @@ class UserHome extends BaseComponent {
                                                 height: 80,
                                             }}>
 
-                                            <Text style={{ margin: 15, color: 'white' }}>Reward</Text>
+                                            <Text style={{ fontFamily: 'Quicksand-Medium', margin: 15, color: '#F4F4F4' }}>Reward</Text>
                                             {reward_point ? <Text style={styles.scoreBox}>{reward_point}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
 
@@ -499,154 +497,123 @@ class UserHome extends BaseComponent {
                     </View>
 
                     <View style={{ margin: 10 }}>
-                        <CustomeCard>
-                            <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
-                            <FlatList
-                                data={this.state.strenthList}
-                                renderItem={this.renderItem}
-                                keyExtractor={(item, index) => item.id}
-                            />
-                        </CustomeCard>
-                    </View>
-                    <View style={{ margin: 5 }}>
-                        <CustomeCard>
-                            <TouchableOpacity onPress={() => {
+                        <Card>
+                            <View>
 
-                                console.warn("Touch Press")
+                                <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                <View style={{
+                                    width: 60,
+                                    height: 3, marginLeft: 10,
+                                    marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                }}></View>
 
-
-                            }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
-
-                                    <Image source={require('../../images/booking.png')}
-                                        style={{
-                                            width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
-                                        }} />
-                                    <View style={{ flex: 1 }}>
-
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={{ fontSize: 14 }}>
-                                                Book and Play
-                                            </Text>
-
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
-
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </CustomeCard>
-                    </View>
-                    <View style={{ margin: 5 }}>
-                        <CustomeCard>
-                            <TouchableOpacity onPress={() => {
-
-                                console.warn("Touch Press")
-
-
-                            }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
-
-                                    <Image source={require('../../images/booking.png')}
-                                        style={{
-                                            width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
-                                        }} />
-                                    <View style={{ flex: 1 }}>
-
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={{ fontSize: 14 }}>
-                                                View other Players Progress
-                                            </Text>
-
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
-
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </CustomeCard>
-                    </View>
-                    <View style={{ margin: 5 }}>
-                        <CustomeCard>
-                            <TouchableOpacity onPress={() => {
-
-                                console.warn("Touch Press")
-
-
-                            }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
-
-                                    <Image source={require('../../images/booking.png')}
-                                        style={{
-                                            width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
-                                        }} />
-                                    <View style={{ flex: 1 }}>
-
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={{ fontSize: 14 }}>
-                                                Browse other Academies
-                                            </Text>
-
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
-
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </CustomeCard>
-                    </View>
-                    <View style={{ margin: 5 }}>
-                        <CustomeCard>
-                            <View style={{ margin: 10 }}>
-                                <Text style={{ marginTop: 10 }}>Academy Feedback</Text>
+                                <FlatList
+                                    data={this.state.strenthList}
+                                    renderItem={this.renderItem}
+                                    keyExtractor={(item, index) => item.id}
+                                />
                             </View>
-                            <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+                        </Card>
+                    </View>
+
+
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => {
+
+                                //console.warn("Touch Press")
+                                this.props.navigation.navigate('CurrentBooking')
+
+                            }}>
+                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+
+                                    <Image source={require('../../images/book_play.png')}
+                                        style={{
+                                            width: 30,
+                                            height: 30, marginRight: 20, marginTop: 5
+                                        }} />
+                                    <View style={{ flex: 1 }}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                View Academy Players
+                                        </Text>
+
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
+
+                                        </View>
+                                    </View>
+                                </View>
+
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => {
+
+                                console.warn("Touch Press")
+                                this.props.navigation.navigate('AcademyListing')
+
+                            }}>
+                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+
+                                    <Image source={require('../../images/view_academy_player.png')}
+                                        style={{
+                                            width: 30,
+                                            height: 30, marginRight: 20, marginTop: 5
+                                        }} />
+                                    <View style={{ flex: 1 }}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                Browse Academies
+                                        </Text>
+
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
+
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
+
+
+                    <View style={{ margin: 8 }}>
+                        <Card style={{ borderRadius: 8, elevation: 2 }}>
                             <View style={{ margin: 10 }}>
-                                <View style={{ flexDirection: 'row', margin: 10 }}>
-                                    <Text>Feather Academy</Text>
-                                    <Text>Feather Academy</Text>
+                                <Text style={[defaultStyle.bold_text_10, { marginTop: 10 }]}>Academy Feedback</Text>
+                            </View>
+                            <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 8 }} />
+                            <View style={{ marginLeft: 10 }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>Feather Academy</Text>
+
                                 </View>
                                 <View>
 
@@ -663,8 +630,8 @@ class UserHome extends BaseComponent {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                            Suspendisse nec tortor urna.
-                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                                                                                                                                                Suspendisse nec tortor urna.
+                                                                                                                                                                                Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>
@@ -687,8 +654,10 @@ class UserHome extends BaseComponent {
 
 
                             </View>
-                        </CustomeCard>
+                        </Card>
                     </View>
+
+
                     <View style={{ margin: 5 }}>
                         <CustomeCard >
                             <View style={{ margin: 10 }}>
@@ -715,8 +684,8 @@ class UserHome extends BaseComponent {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                            Suspendisse nec tortor urna.
-                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                                                                                                                                                Suspendisse nec tortor urna.
+                                                                                                                                                                                Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>
@@ -831,7 +800,9 @@ const styles = StyleSheet.create({
         color: 'white',
         marginRight: 20,
         marginBottom: 20,
-        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
+        textAlign: 'right',
+        fontSize: 24,
+        fontFamily: 'Quicksand-Bold'
     },
     buttomButton: {
         flexDirection: 'row',

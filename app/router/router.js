@@ -18,7 +18,6 @@ import coachhome from '../containers/CoachScreen/CoachHome'
 import guesthome from '../containers/GuestScreen/GuestHome'
 import guestdetails from '../containers/GuestScreen/GuestDetails'
 import parenthome from '../containers/ParentsScreen/ParentHome'
-import userhome from '../containers/UserScreen/UserHome'
 import AcademyListing from '../containers/GuestScreen/AcademyListing'
 import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
 import CoachListing from '../containers/GuestScreen/CoachListing'
@@ -45,10 +44,11 @@ import userBatchModule from './PlayerBatchRouter'
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import coachPerfomenceModule from './CoachPerformenceRouter'
-import WriteFeedback from '../containers/feedback/WriteFeedback'
+import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import ChallengeHome from '../containers/challenge/ChallengeHome'
 import Switcher from './Switcher'
+import userHomeModule from './UserHomeModule'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -105,33 +105,7 @@ const loginModule = createStackNavigator({
 })
 
 
-const userHomeModule = createStackNavigator({
 
-
-    UserHome: {
-        screen: userhome,
-
-    },
-    // AcademyListing: {
-    //     screen: AcademyListing,
-    //     navigationOptions: ({ navigation }) => ({
-    //         title: 'Dribble Diaries',
-    //         headerTitleStyle: style.headerStyle,
-    //         headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-    //             showBackAction={false}
-    //         />,
-    //         headerRight: <RightMenuToolbar navigationProps={navigation}
-    //             navigation={navigation} showNotification={true} />,
-    //         headerStyle: {
-    //             backgroundColor: '#FFFFFF',
-    //         },
-
-    //         headerTintColor: '#000',
-    //     }),
-    // },
-
-}
-);
 const userChallengeModule = createStackNavigator({
 
 
@@ -486,6 +460,130 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    AcademyListing: {
+        screen: AcademyListing,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Dribble Diaries',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AcademyProfile: {
+        screen: AcademyProfile,
+        navigationOptions: ({ navigation }) => ({
+            //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
+            title: "Academy Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        })
+    },
+    CoachListing: {
+        screen: CoachListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    PlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    CoachProfileDetail: {
+        screen: CoachProfileDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    EditProfile: {
+        screen: EditProfile,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    WriteFeedback: {
+        screen: WriteFeedback,
+        navigationOptions: ({ navigation }) => ({
+            title: "Write Feedbacks",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    WriteAcademyFeedback: {
+        screen: WriteAcademyFeedback,
+        navigationOptions: ({ navigation }) => ({
+            title: "Give Feedback",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+
+
+
+
 }, {
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
@@ -574,7 +672,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
         Performence: {
             screen: coachPerfomenceModule,
             navigationOptions: {
-                tabBarLabel: 'Performence',
+                tabBarLabel: 'Performance',
                 showLabel: false,
                 tabBarIcon: ({ tintColor }) => (
                     <Image

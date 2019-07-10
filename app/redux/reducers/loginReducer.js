@@ -52,6 +52,30 @@ export function doLogin(postdata) {
     };
 
 }
+
+export function doLoginTest(postdata) {
+    console.log("doLogin postdata",postdata)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `global/test-login`,
+                method: 'POST',
+                data: postdata,
+                // headers: {
+                //     'x-authorization': header
+                //
+                // },
+            }
+        }
+    };
+
+}
+
 export function resetPassword(email,code,newpassword) {
     console.log("email",email);
     return {

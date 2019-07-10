@@ -3,13 +3,14 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
-import {Card} from 'react-native-paper'
-import {SwitchButton ,CustomeButtonB} from  '../../components/Home/SwitchButton'
-import {CustomeCard } from  '../../components/Home/Card'
-import {getCoachDashboard} from "../../redux/reducers/dashboardReducer";
-import {getData} from "../../components/auth";
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-paper'
+import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
+import { CustomeCard } from '../../components/Home/Card'
+import { getCoachDashboard } from "../../redux/reducers/dashboardReducer";
+import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
+import { defaultStyle } from '../BaseComponent';
 const acedemicList = [
     {
         label: 'India',
@@ -23,9 +24,67 @@ const placeholder = {
     value: null,
     color: '#9EA0A4',
 };
-var deviceWidth = Dimensions.get('window').width -20;
+var deviceWidth = Dimensions.get('window').width - 20;
 
-class  CoachHome extends React.Component {
+class CoachHome extends React.Component {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: (
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        flex: 1
+                    }}
+                    onPress={() => {
+                        navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Quicksand-Medium',
+                            fontSize: 16,
+                            color: '#404040'
+                        }}
+                    >{navigation.getParam('academy_name', 'Default Title') + ' ▼'}</Text>
+                </TouchableOpacity>
+
+            ),
+            headerStyle: {
+                elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+            },
+            headerTitleStyle: styles.headerStyle,
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        source={require('../../images/hamburger_white.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        console.warn('test')
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        source={require('../../images/ic_notifications.png')}
+                        style={{ width: 20, height: 20, marginRight: 12 }}
+                    />
+                </TouchableOpacity>
+            )
+        };
+
+    };
 
     constructor(props) {
         super(props)
@@ -36,29 +95,35 @@ class  CoachHome extends React.Component {
         };
         this.state = {
 
-            coach_profile:null,
+            coach_profile: null,
             country: undefined,
-            strenthList : null,
-            userData:null
+            strenthList: null,
+            userData: null
 
         }
+
+
+        getData('academy_name', (value) => {
+            this.props.navigation.setParams({ 'academy_name': value });
+        })
+
     }
 
-    componentDidMount(){
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
+        getData('header', (value) => {
+            console.log("header", value);
         });
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='COACH'){
-                this.getCoachDashboardData(userData['academy_id'],userData['coach_id'])
+            console.log("userData.user", userData.user['user_type'])
+            if (userData.user['user_type'] == 'COACH') {
+                this.getCoachDashboardData(userData['academy_id'], userData['coach_id'])
 
             }
 
@@ -66,20 +131,20 @@ class  CoachHome extends React.Component {
         });
     }
 
-    getCoachDashboardData(academy_id,player_id,){
-        getData('header',(value)=>{
-            console.log("header",value,academy_id,player_id);
-            this.props.getCoachDashboard(value,player_id,academy_id).then(() => {
+    getCoachDashboardData(academy_id, player_id, ) {
+        getData('header', (value) => {
+            console.log("header", value, academy_id, player_id);
+            this.props.getCoachDashboard(value, player_id, academy_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.dashboardData);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     this.setState({
-                        coach_profile:user1.data['coach_profile'],
-                       // strenthList:user1.data.player_profile['stats']
+                        coach_profile: user1.data['coach_profile'],
+                        // strenthList:user1.data.player_profile['stats']
 
                     })
                 }
@@ -93,22 +158,20 @@ class  CoachHome extends React.Component {
 
     }
 
-    attedenceMangement(attandence_batch)
-    {
+    attedenceMangement(attandence_batch) {
 
         attendenceArray = [];
-        for (let i = 0; i < attandence_batch.length; i++)
-        {
-            const {routine_name, batch_name, batch_category,batch_id,session} = this.state.coach_profile.attandence_batch[i]
-            const {is_canceled, end_time,session_date, start_time} = session
+        for (let i = 0; i < attandence_batch.length; i++) {
+            const { routine_name, batch_name, batch_category, batch_id, session } = this.state.coach_profile.attandence_batch[i]
+            const { is_canceled, end_time, session_date, start_time } = session
 
             attendenceArray.push(
 
                 <View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{
                             margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>{batch_name }</Text>
+                        }}>{batch_name}</Text>
                         <Text style={{
                             margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
                         }}>{batch_category}</Text>
@@ -117,17 +180,17 @@ class  CoachHome extends React.Component {
 
 
 
-                    { is_canceled ?  <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                        <Text style={{marginRight: 20, fontSize: 14,textDecorationLine: 'line-through'}}>{session_date}</Text>
-                        <Text style={{fontSize: 14,textDecorationLine: 'line-through'}}>{start_time + "  -   " + end_time}</Text>
+                    {is_canceled ? <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                        <Text style={{ marginRight: 20, fontSize: 14, textDecorationLine: 'line-through' }}>{session_date}</Text>
+                        <Text style={{ fontSize: 14, textDecorationLine: 'line-through' }}>{start_time + "  -   " + end_time}</Text>
                     </View> : <View>
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>{session_date}</Text>
-                            <Text style={{fontSize: 14}}>{start_time + "  -   " + end_time}</Text>
-                        </View>
-                        <CustomeButtonB onPress={() =>   this.props.navigation.navigate('MarkAttendence',{batch_id:batch_id})}>
-                            Mark Attendance</CustomeButtonB>
-                    </View> }
+                            <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                                <Text style={{ marginRight: 20, fontSize: 14 }}>{session_date}</Text>
+                                <Text style={{ fontSize: 14 }}>{start_time + "  -   " + end_time}</Text>
+                            </View>
+                            <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id })}>
+                                Mark Attendance</CustomeButtonB>
+                        </View>}
 
 
                 </View>
@@ -135,29 +198,27 @@ class  CoachHome extends React.Component {
         }
     }
 
-    sessionMangement(operations)
-    {
+    sessionMangement(operations) {
 
         sessionArray = [];
-        for (let i = 0; i < operations.next_sessions.length; i++)
-        {
-            const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
-            console.log("is_canceled",{is_canceled})
-            if( is_canceled == true ){
+        for (let i = 0; i < operations.next_sessions.length; i++) {
+            const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
+            console.log("is_canceled", { is_canceled })
+            if (is_canceled == true) {
                 sessionArray.push(
                     <View>
-                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{
                                 margin: 10, textDecorationLine: 'line-through'
                             }}>{routine_name}</Text>
-                            <View style={{backgroundColor:'#FF7373',margin:0,borderRadius:10}}>
+                            <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                 <Text style={{
-                                    margin: 10,color:'white'
+                                    margin: 10, color: 'white'
                                 }}>Canceled</Text>
                             </View>
                         </View>
 
-                        <View style={{flexDirection: 'row', margin: 10}}>
+                        <View style={{ flexDirection: 'row', margin: 10 }}>
                             <Text style={{
                                 marginRight: 20,
                                 fontSize: 14,
@@ -173,14 +234,14 @@ class  CoachHome extends React.Component {
 
                     </View>
                 );
-            }else{
+            } else {
                 sessionArray.push(
                     <View>
 
                         <Text style={{
                             margin: 10,
                         }}>{routine_name}</Text>
-                        <View style={{flexDirection: 'row', margin: 10}}>
+                        <View style={{ flexDirection: 'row', margin: 10 }}>
                             <Text style={{
                                 marginRight: 20,
                                 fontSize: 14,
@@ -200,27 +261,25 @@ class  CoachHome extends React.Component {
         }
     }
 
-    scoreMangement(tournaments)
-    {
+    scoreMangement(tournaments) {
 
         scoreArray = [];
-        for (let i = 0; i < tournaments.length; i++)
-        {
-            const {name,start_date,end_date,is_canceled,end_time,start_time } = tournaments[i]
-            console.log("is_canceled",{is_canceled})
+        for (let i = 0; i < tournaments.length; i++) {
+            const { name, start_date, end_date, is_canceled, end_time, start_time } = tournaments[i]
+            console.log("is_canceled", { is_canceled })
 
-                scoreArray.push(
-                    <View>
-                        <Text style={{
-                            margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>{name}</Text>
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>{start_date + ' - ' + end_date}</Text>
-                            <Text style={{marginRight: 20, fontSize: 14,}}>{start_time + ' - ' + end_time}</Text>
-                        </View>
-
+            scoreArray.push(
+                <View>
+                    <Text style={{
+                        margin: 10, fontSize: 14, fontWeight: 'bold'
+                    }}>{name}</Text>
+                    <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                        <Text style={{ marginRight: 20, fontSize: 14 }}>{start_date + ' - ' + end_date}</Text>
+                        <Text style={{ marginRight: 20, fontSize: 14, }}>{start_time + ' - ' + end_time}</Text>
                     </View>
-                );
+
+                </View>
+            );
 
         }
     }
@@ -228,35 +287,35 @@ class  CoachHome extends React.Component {
     render() {
         if (this.props.data.loading && !this.state.player_profile) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         }
         if (this.state.coach_profile) {
-            const {is_attandence_due, is_performance_due, is_reward_point_due, is_scorer,operations,tournaments,attandence_batch} = this.state.coach_profile
+            const { is_attandence_due, is_performance_due, is_reward_point_due, is_scorer, operations, tournaments, attandence_batch } = this.state.coach_profile
             // const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
             // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
-            { is_attandence_due ? this.attedenceMangement(attandence_batch):null}
+            { is_attandence_due ? this.attedenceMangement(attandence_batch) : null }
 
             this.sessionMangement(operations)
             this.scoreMangement(tournaments)
 
-            return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                    <View style={{margin: 10, marginTop: 20}}>
+            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                    <View style={{ margin: 10, marginTop: 20 }}>
 
                         <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
                             userType: 'coach'
                         })}>
-                            Switch Acedemi
+                            Switch Academy
                         </SwitchButton>
                     </View>
-                    {is_attandence_due ?  <CustomeCard>
-                        <View style={{margin: 10, marginTop: 20,flexDirection:'row'}}>
+                    {is_attandence_due ? <CustomeCard>
+                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row' }}>
                             <Text>Attendance</Text>
                             {is_attandence_due ? <View
-                                style={{backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5}}>
+                                style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                 <Text style={{
                                     margin: 5,
                                     fontSize: 10,
@@ -264,9 +323,9 @@ class  CoachHome extends React.Component {
                                     marginRight: 10,
                                     marginLeft: 10,
                                 }}>Due</Text>
-                            </View> :null}
+                            </View> : null}
                         </View>
-                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
 
                         {attendenceArray}
 
@@ -275,21 +334,21 @@ class  CoachHome extends React.Component {
 
                     <CustomeCard>
                         <View
-                            style={{margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>Next Session:</Text>
-                            <Text style={{color: '#667DDB'}}>{'Attendance  - '+ operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
+                            style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
+                            <Text style={{ color: '#667DDB' }}>{'Attendance  - ' + operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
                         </View>
-                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
                         {sessionArray}
 
                     </CustomeCard>
 
 
                     {is_performance_due ? <CustomeCard>
-                        <View style={{margin: 10, marginTop: 20, flexDirection: 'row'}}>
-                            <Text>Update Player Performance</Text>
+                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row' }}>
+                            <Text style={defaultStyle.bold_text_10}>Update Player Performance</Text>
                             <View
-                                style={{backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5}}>
+                                style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                 <Text style={{
                                     margin: 5,
                                     fontSize: 10,
@@ -299,36 +358,36 @@ class  CoachHome extends React.Component {
                                 }}>Due</Text>
                             </View>
                         </View>
-                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
 
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>You are yet to update performance of
+                        <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                            <Text style={{ marginRight: 20, fontSize: 14 }}>You are yet to update performance of
                                 players.</Text>
 
                         </View>
-                        <CustomeButtonB onPress={() =>  this.props.navigation.navigate('EditProfile')}>
+                        <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
                             Mark Attendance</CustomeButtonB>
-                    </CustomeCard>:null}
+                    </CustomeCard> : null}
 
 
                     {is_scorer ? <CustomeCard>
                         <View
-                            style={{margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>Scorer</Text>
+                            style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={defaultStyle.bold_text_10}>Scorer</Text>
                             {/*<Text style={{color:'#667DDB'}}>Attendance - 80% (Jul)</Text>*/}
                         </View>
-                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
 
                         {scoreArray}
                         <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
                             View Fixtures</CustomeButtonB>
-                    </CustomeCard>:null}
+                    </CustomeCard> : null}
 
-                    {is_reward_point_due ?  <CustomeCard>
-                        <View style={{margin: 10, marginTop: 20, flexDirection: 'row'}}>
-                            <Text>Reward Point</Text>
+                    {is_reward_point_due ? <CustomeCard>
+                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row' }}>
+                            <Text style={defaultStyle.bold_text_10} >Reward Point</Text>
                             <View
-                                style={{backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5}}>
+                                style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                 <Text style={{
                                     margin: 5,
                                     fontSize: 10,
@@ -338,34 +397,32 @@ class  CoachHome extends React.Component {
                                 }}>Due</Text>
                             </View>
                         </View>
-                        <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10}}/>
+                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
 
-                        <View style={{flexDirection: 'row', margin: 10, marginBottom: 20}}>
-                            <Text style={{marginRight: 20, fontSize: 14}}>You are yet to Reward the players .</Text>
+                        <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                            <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to Reward the players .</Text>
 
                         </View>
                         <CustomeButtonB onPress={() => console.log("title")}>
                             Reward Players</CustomeButtonB>
-                    </CustomeCard>:null}
+                    </CustomeCard> : null}
 
-                    <View style={{margin: 5}}>
-                        <Card style={{margin: 5, borderRadius: 10}}>
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
-                               // this.props.navigation.navigate('PlayersListing')
+                                // this.props.navigation.navigate('PlayersListing')
                                 this.props.navigation.navigate('PlayersListing', { id: this.state.userData.academy_id })
-                              //
+                                //
 
                             }}>
-                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+                                <View style={{
+                                    marginLeft: 10, marginRight: 10, marginTop: 10,
+                                    flexDirection: 'row', height: 40
+                                }}>
 
-                                    <Image source={require('../../images/booking.png')}
-                                           style={{
-                                               width: 30,
-                                               height: 30, marginRight: 20, marginTop: 5
-                                           }}/>
-                                    <View style={{flex: 1}}>
+                                    <View style={{ flex: 1 }}>
 
                                         <View style={{
                                             marginTop: 10,
@@ -375,15 +432,15 @@ class  CoachHome extends React.Component {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
-                                            <Text style={{fontSize: 14}}>
+                                            <Text style={defaultStyle.regular_text_14}>
                                                 View Academy Players
                                             </Text>
 
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                   style={{
-                                                       width: 19,
-                                                       height: 13, marginRight: 0, marginTop: 5
-                                                   }}/>
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
                                         </View>
                                     </View>
@@ -393,22 +450,18 @@ class  CoachHome extends React.Component {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    <View style={{margin: 5}}>
-                        <Card style={{margin: 5, borderRadius: 10}}>
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
 
 
                             }}>
-                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+                                <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/booking.png')}
-                                           style={{
-                                               width: 30,
-                                               height: 30, marginRight: 20, marginTop: 5
-                                           }}/>
-                                    <View style={{flex: 1}}>
+
+                                    <View style={{ flex: 1 }}>
 
                                         <View style={{
                                             marginTop: 10,
@@ -418,15 +471,15 @@ class  CoachHome extends React.Component {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
-                                            <Text style={{fontSize: 14}}>
+                                            <Text style={defaultStyle.regular_text_14}>
                                                 View my Feedback
                                             </Text>
 
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                   style={{
-                                                       width: 19,
-                                                       height: 13, marginRight: 0, marginTop: 5
-                                                   }}/>
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
                                         </View>
                                     </View>
@@ -436,22 +489,18 @@ class  CoachHome extends React.Component {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    <View style={{margin: 5}}>
-                        <Card style={{margin: 5, borderRadius: 10}}>
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
 
 
                             }}>
-                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+                                <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/booking.png')}
-                                           style={{
-                                               width: 30,
-                                               height: 30, marginRight: 20, marginTop: 5
-                                           }}/>
-                                    <View style={{flex: 1}}>
+
+                                    <View style={{ flex: 1 }}>
 
                                         <View style={{
                                             marginTop: 10,
@@ -461,15 +510,15 @@ class  CoachHome extends React.Component {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
-                                            <Text style={{fontSize: 14}}>
+                                            <Text style={defaultStyle.regular_text_14}>
                                                 Job vacancies
                                             </Text>
 
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                   style={{
-                                                       width: 19,
-                                                       height: 13, marginRight: 0, marginTop: 5
-                                                   }}/>
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
                                         </View>
                                     </View>
@@ -479,22 +528,18 @@ class  CoachHome extends React.Component {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    <View style={{margin: 5}}>
-                        <Card style={{margin: 5, borderRadius: 10}}>
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
-                                console.warn("Touch Press")
-
+                                //console.warn("Touch Press")
+                                this.props.navigation.navigate('AcademyListing')
 
                             }}>
-                                <View style={{margin: 10, flexDirection: 'row', height: 40}}>
+                                <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/booking.png')}
-                                           style={{
-                                               width: 30,
-                                               height: 30, marginRight: 20, marginTop: 5
-                                           }}/>
-                                    <View style={{flex: 1}}>
+
+                                    <View style={{ flex: 1 }}>
 
                                         <View style={{
                                             marginTop: 10,
@@ -504,15 +549,15 @@ class  CoachHome extends React.Component {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
-                                            <Text style={{fontSize: 14}}>
+                                            <Text style={defaultStyle.regular_text_14}>
                                                 Browse Academies
                                             </Text>
 
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                   style={{
-                                                       width: 19,
-                                                       height: 13, marginRight: 0, marginTop: 5
-                                                   }}/>
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
                                         </View>
                                     </View>
@@ -526,9 +571,9 @@ class  CoachHome extends React.Component {
 
                 </ScrollView>
             </View>;
-        }else{
+        } else {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
                 </View>
             )
@@ -559,7 +604,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -603,30 +648,38 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
+    },
+    headerStyle: {
+        color: '#191919',
+        fontFamily: 'Quicksand-Medium',
+        fontWeight: '400',
+        textAlign: 'center',
+        fontSize: 16,
+        flexGrow: 1,
+        alignSelf: 'center',
     }
-
 
 });

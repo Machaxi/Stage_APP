@@ -4,6 +4,7 @@ import { Card, Text, ActivityIndicator } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
+import { getData, storeData } from "../../components/auth";
 
 import { getAcademyDetail } from '../../redux/reducers/AcademyReducer'
 import BaseComponent from '../BaseComponent';
@@ -14,9 +15,25 @@ class AcademyProfile extends BaseComponent {
         super(props)
         this.state = {
             id: '',
-            academy: null
+            academy: null,
+            player_id: '',
+            showFeedback: false
         }
         this.state.id = this.props.navigation.getParam('id', '');
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value)
+            this.state.player_id = userData.user['id']
+            console.warn(this.state.player_id)
+            if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+                this.setState({
+                    showFeedback: true
+                })
+            } else {
+                this.setState({
+                    showFeedback: false
+                })
+            }
+        });
     }
 
     componentDidMount() {
@@ -203,6 +220,8 @@ class AcademyProfile extends BaseComponent {
 
 
     render() {
+
+        let showFeedback = this.state.showFeedback
 
         if (this.props.data.loading || this.state.academy == null) {
             return (
@@ -400,25 +419,28 @@ class AcademyProfile extends BaseComponent {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity
-                        activeOpacity={.8}
-                        onPress={() => {
-                            this.props.navigation.navigate('WriteAcademyFeedback',
-                                { academy_id: this.state.id, target_id: this.state.id })
-                        }}>
+                    {showFeedback ?
+                        <TouchableOpacity
+                            activeOpacity={.8}
+                            onPress={() => {
+                                this.props.navigation.navigate('WriteFeedback',
 
-                        <View
+                                    { academy_id: this.state.id, player_id: this.state.player_id })
+                            }}>
 
-                            style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+                            <View
 
-                            <Text
-                                style={styles.filled_button}
-                            >
-                                Give Feedback
-                                </Text>
+                                style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
 
-                        </View>
-                    </TouchableOpacity>
+                                <Text
+                                    style={styles.filled_button}
+                                >
+                                    Give Feedback
+                            </Text>
+
+                            </View>
+                        </TouchableOpacity> : null}
+
 
                     <Card
                         style={{

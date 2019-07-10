@@ -2,13 +2,15 @@
 import React from 'react'
 
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
-import {Card} from 'react-native-paper'
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-paper'
 
-import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachBatch} from "../../../redux/reducers/BatchReducer";
-import {getData} from "../../../components/auth";
+import { CustomeCard } from '../../../components/Home/Card'
+import { getCoachBatch } from "../../../redux/reducers/BatchReducer";
+import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
+import BaseComponent, { defaultStyle } from '../../BaseComponent'
+
 const acedemicList = [
     {
         label: 'India',
@@ -22,36 +24,36 @@ const placeholder = {
     value: null,
     color: '#9EA0A4',
 };
-var deviceWidth = Dimensions.get('window').width -20;
+var deviceWidth = Dimensions.get('window').width - 20;
 
-class  BatchScreen extends React.Component {
+class BatchScreen extends BaseComponent {
 
     constructor(props) {
         super(props)
 
         this.state = {
 
-            batchList :null,
-            userData:null
+            batchList: null,
+            userData: null
 
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
+        getData('header', (value) => {
+            console.log("header", value);
         });
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='COACH'){
-                this.getCoachBatchList(userData['academy_id'],userData['coach_id'])
+            console.log("userData.user", userData.user['user_type'])
+            if (userData.user['user_type'] == 'COACH') {
+                this.getCoachBatchList(userData['academy_id'], userData['coach_id'])
 
             }
 
@@ -59,19 +61,19 @@ class  BatchScreen extends React.Component {
         });
     }
 
-    getCoachBatchList(academy_id,player_id,){
-        getData('header',(value)=>{
-            console.log("header",value,academy_id,player_id);
-            this.props.getCoachBatch(value,academy_id,player_id).then(() => {
+    getCoachBatchList(academy_id, player_id, ) {
+        getData('header', (value) => {
+            console.log("header", value, academy_id, player_id);
+            this.props.getCoachBatch(value, academy_id, player_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     this.setState({
-                        batchList:user1.data['coach_batches'],
+                        batchList: user1.data['coach_batches'],
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -89,48 +91,50 @@ class  BatchScreen extends React.Component {
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press",item.batch_id)
+            console.warn("Touch Press", item.batch_id)
 
-            this.props.navigation.navigate('BatchDetails',{batch_id:item.batch_id})
+            this.props.navigation.navigate('BatchDetails', { batch_id: item.batch_id })
 
         }}>
-           <CustomeCard>
+            <CustomeCard>
 
 
-
-
-                    <View  style={{
-                        marginLeft: 8,
-                        marginRight: 15,
-                        margin:10,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                    }}>
-                        <Text>
-                            {item.batch_name}
-                        </Text>
-                        <Image source ={require('../../../images/forward.png')}
-                               style={{
-                                   width: 3,
-                                   height: 8,marginRight:10,marginTop:5}}/>
+                <View style={{
+                    marginLeft: 8,
+                    marginRight: 15,
+                    margin: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={defaultStyle.bold_text_14}>
+                        {item.batch_name}
+                    </Text>
+                    <Image source={require('../../../images/forward.png')}
+                        style={{
+                            width: 6,
+                            height: 13, marginRight: 10, marginTop: 5
+                        }} />
 
 
                 </View>
-               <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10,marginTop:0}}/>
-               <View style={{flexDirection:'row',justifyContent:'space-between',margin:10}}>
-                   {/*<View>*/}
-                       {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
-                       {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
-                   {/*</View>*/}
-                   <View>
-                       <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Level</Text>
-                       <Text style={{fontSize:14,marginBottom:10}}>{item.level}</Text>
-                   </View>
-                   <View>
-                       <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Player</Text>
-                       <Text style={{fontSize:14,marginBottom:10}}>{item.total_players}</Text>
-                   </View>
-               </View>
+                <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10, marginTop: 0 }} />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
+                    {/*<View>*/}
+                    {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
+                    {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
+                    {/*</View>*/}
+                    <View>
+                        <Text style={{
+                            fontSize: 10, color: '#A3A5AE', marginBottom: 10,
+                            fontFamily: 'Quicksand-Medium'
+                        }}>Level</Text>
+                        <Text style={{ fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{item.level}</Text>
+                    </View>
+                    <View>
+                        <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Player</Text>
+                        <Text style={{ fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{item.total_players}</Text>
+                    </View>
+                </View>
 
             </CustomeCard>
         </TouchableOpacity>
@@ -141,43 +145,47 @@ class  BatchScreen extends React.Component {
     render() {
         if (this.props.data.loading && !this.state.player_profile) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         }
-       // if (this.state.coach_profile) {
+        // if (this.state.coach_profile) {
 
 
 
-            return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                    <View style={{margin: 10, marginTop: 20}}>
+        return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+            <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <View style={{ margin: 10, marginTop: 20 }}>
 
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('SwitchPlayer111', {
-                            userType: 'coach'
-                        })}>
-                            <Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SwitchPlayer111', {
+                        userType: 'coach'
+                    })}>
+                        <Text style={{
+                            color: '#667DDB', textAlign: 'right',
+                            fontSize: 10,
+                            fontFamily: 'Quicksand-Regular'
+                        }}> Cancel Session</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    <FlatList
-                        data={this.state.batchList}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => item.id}
-                    />
+                <FlatList
+                    data={this.state.batchList}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => item.id}
+                />
 
 
 
-                </ScrollView>
-            </View>;
+            </ScrollView>
+        </View>;
         // }else{
         //     return (
         //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         //
         //         </View>
         //     )
-      //  }
+        //  }
     }
 }
 const mapStateToProps = state => {
@@ -204,7 +212,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -248,28 +256,28 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     }
 

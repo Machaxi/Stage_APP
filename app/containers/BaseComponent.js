@@ -72,10 +72,20 @@ export const defaultStyle = {
         color: '#404040',
         fontFamily: 'Quicksand-Medium'
     },
+    bold_text_16: {
+        fontSize: 16,
+        color: '#404040',
+        fontFamily: 'Quicksand-Medium'
+    },
     heavy_bold_text_14: {
         fontSize: 14,
         color: '#404040',
         fontFamily: 'Quicksand-Bold'
+    },
+    bold_text_12: {
+        fontSize: 12,
+        color: '#404040',
+        fontFamily: 'Quicksand-Medium'
     },
     bold_text_10: {
         fontSize: 10,

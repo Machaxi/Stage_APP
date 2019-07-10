@@ -223,7 +223,7 @@ export default class CoachMenuDrawer extends BaseComponent {
 
 						<Text
 							numberOfLines={1}
-							style={[defaultStyle.bold_text_14, { width: 90 }]}>Prithviraj Pankaj</Text>
+							style={[defaultStyle.bold_text_16, { width: 90 }]}>Prithviraj Pankaj</Text>
 						<Text style={defaultStyle.regular_text_12}>+91 9833245623</Text>
 						<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
 					</View>
@@ -252,7 +252,7 @@ export default class CoachMenuDrawer extends BaseComponent {
 
 						<Text
 							numberOfLines={1}
-							style={[defaultStyle.bold_text_14, { width: 90 }]}>Prithviraj Pankaj</Text>
+							style={[defaultStyle.bold_text_16, { width: 90 }]}>Prithviraj Pankaj</Text>
 						<Text style={defaultStyle.regular_text_12}>+91 9833245623</Text>
 						<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
 					</View>
@@ -266,7 +266,7 @@ export default class CoachMenuDrawer extends BaseComponent {
 
 						<Text
 							numberOfLines={1}
-							style={[defaultStyle.bold_text_14, { width: 90 }]}>Prithviraj Pankaj</Text>
+							style={[defaultStyle.bold_text_16, { width: 90 }]}>Prithviraj Pankaj</Text>
 						<Text style={defaultStyle.regular_text_12}>+91 9833245623</Text>
 						<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
 					</View>
@@ -507,14 +507,13 @@ export default class CoachMenuDrawer extends BaseComponent {
 
 									<View>
 
-
 										<Text
 											style={{
 												color: 'black',
 												fontFamily: 'Quicksand-Medium',
 												fontSize: 14, marginTop: 16,
 											}}>
-											{fullame}</Text>
+											Guest</Text>
 
 										<Text
 											style={{

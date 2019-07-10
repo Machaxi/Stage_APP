@@ -25,8 +25,8 @@ export default function FeedbackReducer(state = initialState, action) {
 }
 
 export function submitFeedback(header) {
-    console.log("submitFeedback",header)
-    
+    console.log("submitFeedback", header)
+
     return {
         type: types.GET_TOURNAMENT,
         payload: {
@@ -43,7 +43,7 @@ export function submitFeedback(header) {
 }
 export function postFeedback(header, postdata) {
     console.log("postFeedback ", header, postdata)
-  
+
     return {
         type: types.GET_FEEDBACK,
         payload: {
@@ -51,6 +51,43 @@ export function postFeedback(header, postdata) {
                 url: `feedback/create`,
                 method: 'POST',
                 data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+}
+
+export function postFeedbackMultiple(header, postdata) {
+    console.log("postFeedback ", header, postdata)
+
+    return {
+        type: types.GET_FEEDBACK,
+        payload: {
+            request: {
+                url: `feedback/createMultiple`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+}
+
+export function getCoachListing(header, academy_id, player_id) {
+    console.log("getCoachListing ", header, academy_id, player_id)
+
+    return {
+        type: types.GET_FEEDBACK,
+        payload: {
+            request: {
+                url: `player/getCoaches?player_id=${player_id}&academy_id=${academy_id}`,
+                method: 'GET',
                 headers: {
                     'x-authorization': header,
                     'Content-Type': 'application/json',

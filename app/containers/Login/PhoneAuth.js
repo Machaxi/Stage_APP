@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image, StyleSheet, Platform } from 'react-native';
-import { doLogin, doFBLogin } from '../../redux/reducers/loginReducer';
+import { doLogin, doFBLogin,doLoginTest } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
 
@@ -115,8 +115,9 @@ class PhoneAuth extends BaseComponent {
         })
         var dataDic = {};
         var dict = {};
-        dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
-        dict['firebase_token'] = token;
+        dict['phone_number'] = this.state.phoneNumber//user1.phoneNumber;//"+919214088636"//
+        dict['name'] = this.state.phoneNumber
+        dict['firebase_token'] = "token";
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
         dict['fcm_token'] = 'xyzabcdcc';
@@ -125,7 +126,7 @@ class PhoneAuth extends BaseComponent {
 
         dataDic['data'] = dict;
         console.log("dicttttc ", dict)
-        this.props.doLogin(dataDic).then(() => {
+        this.props.doLoginTest(dataDic).then(() => {
             //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
             //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
             let user = JSON.stringify(this.props.data.user);
@@ -223,14 +224,16 @@ class PhoneAuth extends BaseComponent {
                         borderBottomWidth: 1,
                         marginTop: 100, marginBottom: 15
                     }}
-                    keyboardType={"phone-pad"}
+                    //keyboardType={"phone-pad"}
                     onChangeText={value => this.setState({ phoneNumber: value })}
                     placeholder={'Enter Phone Number'}
                     value={phoneNumber}
                 />
 
                 <Text style={styles.rounded_button}
-                    onPress={this.signIn}>Login</Text>
+                    onPress={() => {
+                        this.signIn11(null, null)
+                    }}>Login</Text>
 
                 <Text style={{
                     color: '#67BAF5',
@@ -241,8 +244,6 @@ class PhoneAuth extends BaseComponent {
                         this.props.navigation.navigate('GHome')
                     }}
                 >SKIP</Text>
-
-
 
             </View>
         );
@@ -365,7 +366,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    doLogin, doFBLogin
+    doLogin, doFBLogin,doLoginTest
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhoneAuth);

@@ -15,6 +15,7 @@ class PlayersListing extends BaseComponent {
             players: null,
             id: '',
             filter: [],
+            query:''
         }
         this.state.id = this.props.navigation.getParam('id', '');
     }
@@ -86,12 +87,15 @@ class PlayersListing extends BaseComponent {
                     }} placeholder="Search"
                         onChangeText={text => {
                             this.state.query = text
-                            const data = this.find(this.state.query);
-                            this.state.filter = data;
-                            console.warn('search ',data)
                             this.setState({
-                                filter: data
+                                query : text
                             })
+                            // const data = this.find(this.state.query);
+                            // this.state.filter = data;
+                            // console.warn('search ',data)
+                            // this.setState({
+                            //     filter: data
+                            // })
                         }}
                     ></TextInput>
                 </Card>
@@ -214,6 +218,7 @@ class PlayersListing extends BaseComponent {
 
     find(query) {
         const { players } = this.state;
+        console.warn('here =>', players)
 
         if (query === '') {
             return players;
@@ -224,6 +229,9 @@ class PlayersListing extends BaseComponent {
 
 
     render() {
+
+        const data = this.find(this.state.query);
+
 
         if (this.props.data.loading || this.state.players == null) {
             return (
@@ -242,8 +250,8 @@ class PlayersListing extends BaseComponent {
                 <FlatList
                     style={{ padding: 8 }}
                     //ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.filter}
-                    extraData={this.state.filter}
+                    data={data}
+                    extraData={data}
                     numColumns={3}
                     renderItem={this._renderItem}
                 />

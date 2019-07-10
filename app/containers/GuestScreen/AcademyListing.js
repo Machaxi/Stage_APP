@@ -166,7 +166,8 @@ class AcademyListing extends BaseComponent {
 
                 }}>
                 <Card style={{
-                    borderRadius: 16, elevation: 1,
+                    borderRadius: 4,
+                    elevation: 5,
                     flex: 1,
                     left: 0,
                     position: 'absolute',
@@ -183,21 +184,22 @@ class AcademyListing extends BaseComponent {
                     }} placeholder="Search"></TextInput> */}
 
                     <Autocomplete
-                     listStyle={{ borderWidth: 0 }}
+                        listStyle={{ borderWidth: 0 }}
                         containerStyle={{
-                            borderWidth: 0
+                            borderWidth: 0,
+                            padding: 0,
+                            margin: 0
                         }}
                         ref={this.secondTextInputRef}
                         inputContainerStyle={{
                             marginTop: 2,
                             marginBottom: 2,
                             backgroundColor: 'white',
-                            borderRadius: 16,
                             borderWidth: 0,
-                            
                         }}
                         style={{
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Regular',
+                            borderRadius: 4
                         }}
                         data={autoData}
                         defaultValue={this.state.query}
@@ -215,12 +217,14 @@ class AcademyListing extends BaseComponent {
                         returnKeyType='search'
                         renderItem={({ item, i }) =>
                             (
-                                <View>
+                                <View >
                                     {item.is_first ?
                                         <Text
                                             style={{
                                                 backgroundColor: '#ECECEC',
-                                                color: 'black', padding: 4,
+                                                color: 'black',
+                                                paddingTop: 4,
+                                                paddingBottom: 4,
                                                 fontSize: 12,
                                                 fontFamily: 'Quicksand-Regular'
                                             }}
@@ -235,7 +239,7 @@ class AcademyListing extends BaseComponent {
                                                 this.state.suggestionResult = []
                                                 if (!item.is_academy) {
                                                     this.state.query = item.name
-                                                    this.getAcademicSearchResult(false)
+                                                    this.getAcademicSearchResult(true)
                                                 } else {
                                                     this.props.navigation.navigate('AcademyProfile', { id: item.id })
                                                 }
@@ -243,7 +247,7 @@ class AcademyListing extends BaseComponent {
                                         }}
                                     >
                                         <Text style={{
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             padding: 6,
                                             color: '#000000',
                                             fontFamily: 'Quicksand-Regular'
