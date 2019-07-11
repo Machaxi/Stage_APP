@@ -18,7 +18,7 @@ class Splash extends BaseComponent {
 
     componentDidMount() {
 
-        //this.props.navigation.navigate('GHome')
+        //this.props.navigation.navigate('ParentRewards')
         //return
         var userData;
         // getData('userInfo', (value) => {

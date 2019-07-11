@@ -10,9 +10,12 @@ import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from '../PlayerBatch/PlayerBatchComponent'
 import ParentRewardComponent from './ParentRewardComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 
-
-class ParentRewards extends React.Component {
+const FirstRoute = () => (
+    <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
+);
+class ParentRewards extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -28,8 +31,7 @@ class ParentRewards extends React.Component {
             routes: [
                 { key: 'first', title: 'First' },
                 { key: 'second', title: 'Second' },
-              ],
-
+            ],
         }
     }
 
@@ -42,7 +44,7 @@ class ParentRewards extends React.Component {
 
 
     _renderTabBar = props => (
-       
+
         <TabBar
             {...props}
             scrollEnabled
@@ -56,21 +58,19 @@ class ParentRewards extends React.Component {
             }}
             style={{ backgroundColor: 'white' }}
             tabStyle={styles.tab}
-            labelStyle={{ color: 'Black', fontSize: 16, fontWeight: 'bold' }}
+            labelStyle={defaultStyle.regular_text_14}
         />
     );
     renderScene = ({ route, jumpTo }) => {
-        console.warn('test')
         return <ParentRewardComponent jumpTo={this.state.batchList[route.key]} navigation={this.props.navigation} />;
         // return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key]} navigation= {this.props.navigation} />;
         // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
-
+        //return <FirstRoute jumpTo={jumpTo} />
     };
     render() {
 
 
         return (
-
             <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <TabView
                     navigationState={this.state}

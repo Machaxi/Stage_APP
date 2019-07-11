@@ -33,8 +33,9 @@ export const CustomeButtonB = ({onPress,children}) => {
 
 const styles = StyleSheet.create({
     cardStyle: {
+        elevation:2,
         margin:10,
-        borderRadius:10,
+        borderRadius:12,
         backgroundColor:'#ffffff'
     },
 

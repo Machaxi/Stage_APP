@@ -143,4 +143,17 @@ export const defaultStyle = {
         textAlign: 'center',
         fontFamily: 'Quicksand-Medium'
     },
+    rounded_button: {
+        width: '48%',
+        padding: 10,
+        borderRadius: 20,
+        borderWidth: 1,
+        marginLeft: 4,
+        marginRight: 4,
+        borderColor: '#67BAF5',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular'
+    },
 }
