@@ -49,6 +49,8 @@ import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import ChallengeHome from '../containers/challenge/ChallengeHome'
 import Switcher from './Switcher'
 import userHomeModule from './UserHomeModule'
+import CoachRewardsPoints from '../containers/rewards/CoachRewardsPoints'
+import CoachGiveRewards from '../containers/rewards/CoachGiveRewards'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -432,6 +434,38 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    CoachRewardPoints: {
+        screen: CoachRewardsPoints,
+        navigationOptions: ({ navigation }) => ({
+            title: "Reward points",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    CoachGiveRewards: {
+        screen: CoachGiveRewards,
+        navigationOptions: ({ navigation }) => ({
+            title: "Award Players",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
+
     PlayersListing: {
         screen: PlayersListing,
         navigationOptions: ({ navigation }) => ({

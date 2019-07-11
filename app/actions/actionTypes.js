@@ -27,9 +27,9 @@ export const GET_PROFILE = 'profile/LOAD';
 export const DO_PROFILE_SUCCESS = 'profile/LOAD_SUCCESS';
 export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
 
-export const GET_TOURNAMENT = 'tournament/LOAD';
-export const DO_TOURNAMENT_SUCCESS = 'tournament/LOAD_SUCCESS';
-export const DO_TOURNAMENT_FAIL = 'tournament/LOAD_FAIL';
+export const GET_REWARD = 'reward/LOAD';
+export const DO_REWARD_SUCCESS = 'reward/LOAD_SUCCESS';
+export const DO_REWARD_FAIL = 'reward/LOAD_FAIL';
 
 export const GET_FEEDBACK = 'feedback/LOAD';
 export const DO_FEEDBACK_SUCCESS = 'feedback/LOAD_SUCCESS';
