@@ -55,15 +55,17 @@ class ParentRewardComponent extends BaseComponent {
                                 padding: 16,
                                 borderRadius: 16,
                                 backgroundColor: 'white',
-                                height: 300,
+                                height: 280,
                             }}>
 
-                                <Text
-                                    style={defaultStyle.bold_text_14}>Reward Points to Rahul</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Text style={defaultStyle.bold_text_14}>Reward Points to Rahul </Text>
+                                    <Image style={{ height: 30, width: 30, }} source={require('../../images/ic_close.png')}
+                                    />
+                                </View>
 
                                 <View style={{ flexDirection: 'row', }}>
-
-                                    <View style={{ marginTop: 10, flexDirection: 'row' }}>
+                                    <View style={{ marginTop: 10, flexDirection: 'row', marginBottom: 20 }}>
                                         <View>
                                             <Text style={styles.regular_text_10}>Month</Text>
                                             <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>Oct 19</Text>
@@ -82,15 +84,29 @@ class ParentRewardComponent extends BaseComponent {
                                     flexDirection: 'row',
                                 }}>
 
-                               
+                                </View>
+
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginTop: 15, fontSize: 10 }} >
+
+                                    <TextInput style={styles.formInput} placeholder="Following Diet"
+                                        onChangeText={(text) => this.setState({ text })}
+                                        value={this.state.text}
+                                    ></TextInput>
+
+                                    <TextInput style={[styles.formInput, { marginLeft: 20 }]} placeholder="Love for the game"
+                                        placeholderTextColor='#A3A5AE'
+                                        onChangeText={(text) => this.setState({ text })}
+                                        value={this.state.text}
+                                    ></TextInput>
 
                                 </View>
 
-                                <Text style={[defaultStyle.rounded_button, { marginTop: 16, width: "90%" }]}
+
+                                <Text style={[defaultStyle.rounded_button, { marginTop: 16, width: "100%", marginLeft: 0, marginRight: 0 }]}
                                     onPress={() => {
                                         this.setModalVisible(false);
                                     }}>
-                                    OK</Text>
+                                    Reward</Text>
 
                             </View>
 
@@ -147,7 +163,7 @@ class ParentRewardComponent extends BaseComponent {
 
                     </CustomeCard>
                 </View>
-            </ScrollView>
+            </ScrollView >
         )
 
     }
@@ -168,5 +184,16 @@ const styles = StyleSheet.create({
         color: '#A3A5AE',
         fontFamily: 'Quicksand-Regular'
     },
+    formInput: {
+        backgroundColor: 'white',
+        fontFamily: 'Quicksand-Regular',
+        borderColor: '#A3A5AE',
+        borderWidth: 1,
+        borderRadius: 4,
+        borderBottomWidth: 0,
+        height: 40,
+        width: '45%',
+        color: '#A3A5AE',
+    }
 }
 );
