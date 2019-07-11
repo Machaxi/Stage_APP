@@ -11,6 +11,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from '../PlayerBatch/PlayerBatchComponent'
 import ParentRewardComponent from './ParentRewardComponent';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
+import { getAcademyListing, getPlayerRewardDue } from "../../redux/reducers/RewardReducer";
 
 const FirstRoute = () => (
     <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
@@ -22,24 +23,67 @@ class ParentRewards extends BaseComponent {
         this.inputRefs = {
 
             acedemic: null
-
         };
         this.state = {
 
             batchList: ["Test1", "Test2", "Test3"],
             index: 0,
-            routes: [
-                { key: 'first', title: 'First' },
-                { key: 'second', title: 'Second' },
-            ],
+            routes: [ ],
+            parent_player_id: '',
+            response: []
         }
     }
 
     componentDidMount() {
         var userData;
-        getData('header', (value) => {
-            console.log("header", value);
+
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value)
+            console.warn("userData.user", userData.user['id'])
+            parent_player_id = userData.user['id']
+            getData('header', (value) => {
+
+                this.props.getPlayerRewardDue(value, parent_player_id).then(() => {
+                    console.log(' getPlayerRewardDue response payload ' + JSON.stringify(this.props.data));
+                    // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                    let user = JSON.stringify(this.props.data.data);
+                    console.log(' user response payload 11' + user);
+                    let user1 = JSON.parse(user)
+                    if (user1.success) {
+                        this.setState({
+                            response: user1.data.data
+                        })
+                        console.warn(JSON.stringify(user1.data.data))
+
+
+                        let array = user1.data.data
+                        let newArray = []
+                        for (let i = 0; i < array.length; i++) {
+                            let row = array[i].player_data;
+                            let obj = {
+                                key: i,
+                                title: row.name,
+                            }
+                            newArray[i] = obj
+                        }
+                        this.setState({
+                            routes: newArray,
+                        })
+                        console.warn(JSON.stringify(newArray))
+
+                    }
+
+                }).catch((response) => {
+                    //handle form errors
+                    console.log(response);
+                })
+
+            })
+
+
+
         });
+
     }
 
 
@@ -62,7 +106,8 @@ class ParentRewards extends BaseComponent {
         />
     );
     renderScene = ({ route, jumpTo }) => {
-        return <ParentRewardComponent jumpTo={this.state.batchList[route.key]} navigation={this.props.navigation} />;
+        
+        return <ParentRewardComponent jumpTo={this.state.response[route.key]} navigation={this.props.navigation} />;
         // return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key]} navigation= {this.props.navigation} />;
         // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
         //return <FirstRoute jumpTo={jumpTo} />
@@ -85,7 +130,15 @@ class ParentRewards extends BaseComponent {
     }
 }
 
-export default ParentRewards
+const mapStateToProps = state => {
+    return {
+        data: state.RewardReducer,
+    };
+};
+const mapDispatchToProps = {
+    getPlayerRewardDue
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ParentRewards);
 
 
 const pickerSelectStyles = StyleSheet.create({

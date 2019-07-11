@@ -564,7 +564,9 @@ class ParentHome extends React.Component {
                                 </View>
                             </View>
                             <View style={{ width: '40%' }}>
-                                <CustomeButtonB onPress={() => console.log("title")}>
+                                <CustomeButtonB onPress={() => {
+                                    this.props.navigation.navigate('ParentRewards')
+                                }}>
                                     Reward </CustomeButtonB>
                             </View>
                         </View>
@@ -738,8 +740,8 @@ class ParentHome extends React.Component {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                    Suspendisse nec tortor urna.
-                                                    Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                        Suspendisse nec tortor urna.
+                                                        Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>
@@ -790,8 +792,8 @@ class ParentHome extends React.Component {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                    Suspendisse nec tortor urna.
-                                                    Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                        Suspendisse nec tortor urna.
+                                                        Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>

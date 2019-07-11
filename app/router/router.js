@@ -51,6 +51,7 @@ import Switcher from './Switcher'
 import userHomeModule from './UserHomeModule'
 import CoachRewardsPoints from '../containers/rewards/CoachRewardsPoints'
 import CoachGiveRewards from '../containers/rewards/CoachGiveRewards'
+import ParentRewards from '../containers/rewards/ParentRewards'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -958,6 +959,25 @@ const parentHomeModule = createStackNavigator({
             // headerStyle,
             // header: null
         }
+    },
+    
+    ParentRewards: {
+        screen: ParentRewards,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Reward points',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
     },
     AcademyListing: {
         screen: AcademyListing,

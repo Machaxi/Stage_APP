@@ -1,10 +1,12 @@
 import React from 'react'
 
-import { View, ScrollView, Text, StyleSheet, Modal, TouchableOpacity, Image } from 'react-native'
+import { View, ScrollView, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
-import { TextInput } from 'react-native-paper';
+import { getData, storeData } from "../../components/auth";
+import { getAcademyListing, getPlayerRewardDue } from "../../redux/reducers/RewardReducer";
+import { connect } from 'react-redux';
 
 class ParentRewardComponent extends BaseComponent {
 
@@ -12,19 +14,96 @@ class ParentRewardComponent extends BaseComponent {
         super(props)
         this.state = {
             modalVisible: false,
+            following_diet: '',
+            love_game: '',
+            month: '',
+            year: '',
+            batch_id: '',
+            parent_player_id: '',
+            response: []
         }
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value)
+            console.warn("userData.user", userData.user['id'])
+            parent_player_id = userData.user['id']
+            // getData('header', (value) => {
+
+            //     this.props.getPlayerRewardDue(value, parent_player_id).then(() => {
+            //         console.log(' getPlayerRewardDue response payload ' + JSON.stringify(this.props.data));
+            //         // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+            //         let user = JSON.stringify(this.props.data.data);
+            //         console.log(' user response payload 11' + user);
+            //         let user1 = JSON.parse(user)
+            //         if (user1.success) {
+            //             this.setState({
+            //                 response: user1.data.data
+            //             })
+            //             console.warn(JSON.stringify(user1.data.data))
+
+
+            //             //     let array = user1.data['academies']
+            //             //     let newArray = []
+            //             //     for (let i = 0; i < array.length; i++) {
+            //             //         let row = array[i];
+            //             //         let obj = {
+            //             //             label: row.academy_name,
+            //             //             value: row.academy_id,
+            //             //         }
+            //             //         newArray[i] = obj
+            //             //     }
+            //             //     this.setState({
+            //             //         academies: newArray
+            //             //     })
+
+            //         }
+
+            //     }).catch((response) => {
+            //         //handle form errors
+            //         console.log(response);
+            //     })
+
+            // })
+
+
+
+        });
+
+
+
     }
 
     componentDidMount() {
-
-        console.warn('hjhc', this.props.jumpTo)
-        this.setState({
-
-        })
+        console.warn("Jump => " + JSON.stringify(this.props.jumpTo))
     }
 
     setModalVisible(visible) {
         this.setState({ modalVisible: visible });
+    }
+
+    saveData() {
+        //     {
+        //         "data" : {
+        //                 "month": 6,
+        //         "year": 2019,
+        //         "batch_id":3,
+        //         "reward_detail":{"loveForGame":200,"dietInTake":200},
+        //         "player_id":2,
+        //         "parent_player_id":12
+        //         }
+        // }
+
+        let data = {};
+        data["month"] = this.state.month
+        data["year"] = this.state.year
+        data["batch_id"] = this.state.batch_id
+        data["player_id"] = this.state.player_id
+        data["parent_player_id"] = this.state.parent_player_id
+        let reward = { loveForGame: this.state.love_game, dietInTake: this.state.following_diet }
+        data["reward_detail"] = reward
+        let req = {}
+        req['data'] = data
+        console.warn(JSON.stringify(req))
+
     }
 
     render() {
@@ -55,7 +134,7 @@ class ParentRewardComponent extends BaseComponent {
                                 padding: 16,
                                 borderRadius: 16,
                                 backgroundColor: 'white',
-                                height: 280,
+                                height: 300,
                             }}>
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -86,16 +165,22 @@ class ParentRewardComponent extends BaseComponent {
 
                                 </View>
 
-                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginTop: 15, fontSize: 10 }} >
+                                <View style={{
+                                    flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginTop: 15,
+                                    marginBottom: 18,
+                                    fontSize: 10
+                                }} >
 
-                                    <TextInput style={styles.formInput} placeholder="Following Diet"
-                                        onChangeText={(text) => this.setState({ text })}
+                                    <TextInput style={styles.formInput}
+                                        placeholder="Following Diet"
+                                        onChangeText={(text) => this.setState({ following_diet: text })}
                                         value={this.state.text}
                                     ></TextInput>
 
-                                    <TextInput style={[styles.formInput, { marginLeft: 20 }]} placeholder="Love for the game"
+                                    <TextInput style={[styles.formInput, { marginLeft: 20 }]}
+                                        placeholder="Love for the game"
                                         placeholderTextColor='#A3A5AE'
-                                        onChangeText={(text) => this.setState({ text })}
+                                        onChangeText={(text) => this.setState({ love_game: text })}
                                         value={this.state.text}
                                     ></TextInput>
 
@@ -104,6 +189,7 @@ class ParentRewardComponent extends BaseComponent {
 
                                 <Text style={[defaultStyle.rounded_button, { marginTop: 16, width: "100%", marginLeft: 0, marginRight: 0 }]}
                                     onPress={() => {
+                                        this.saveData()
                                         this.setModalVisible(false);
                                     }}>
                                     Reward</Text>
@@ -169,7 +255,16 @@ class ParentRewardComponent extends BaseComponent {
     }
 }
 
-export default ParentRewardComponent;
+const mapStateToProps = state => {
+    return {
+        data: state.RewardReducer,
+    };
+};
+const mapDispatchToProps = {
+    getPlayerRewardDue
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ParentRewardComponent);
+
 
 const styles = StyleSheet.create({
     labelText: {
@@ -188,9 +283,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         fontFamily: 'Quicksand-Regular',
         borderColor: '#A3A5AE',
-        borderWidth: 1,
         borderRadius: 4,
-        borderBottomWidth: 0,
+        fontSize: 14,
+        borderWidth: 1,
         height: 40,
         width: '45%',
         color: '#A3A5AE',

@@ -403,8 +403,7 @@ class CoachHome extends React.Component {
                             <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to Reward the players .</Text>
 
                         </View>
-                        <CustomeButtonB onPress={() => 
-                        {
+                        <CustomeButtonB onPress={() => {
                             this.props.navigation.navigate('CoachRewardPoints')
                         }}>
                             Reward Players</CustomeButtonB>

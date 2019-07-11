@@ -67,6 +67,25 @@ export function getRewardDue(header, academy_id, coach_id) {
     };
 
 }
+export function getPlayerRewardDue(header, parent_player_id) {
+    console.log("postdata", header)
+
+    return {
+        type: types.GET_REWARD,
+        payload: {
+            request: {
+                url: `rewards/players/dues?parent_player_id=${parent_player_id}`,
+                method: 'GET',
+                // data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}
 
 
 export function getRewardMonthlyDue(header, academy_id, batch_id, month, year) {

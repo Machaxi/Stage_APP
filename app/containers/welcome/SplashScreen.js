@@ -18,8 +18,8 @@ class Splash extends BaseComponent {
 
     componentDidMount() {
 
-        //this.props.navigation.navigate('CoachRewardPoints')
-        //return
+        this.props.navigation.navigate('ParentRewards')
+        return
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
@@ -44,7 +44,7 @@ class Splash extends BaseComponent {
             if (signedIn !== true) {
 
                 this.props.navigation.navigate('IntroScreen')//'SignedOut')
-
+                
 
             } else {
                 getData('userInfo', (value) => {
