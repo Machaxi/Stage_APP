@@ -10,7 +10,8 @@ import { CustomeCard } from '../../components/Home/Card'
 import { getCoachDashboard } from "../../redux/reducers/dashboardReducer";
 import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
-import { defaultStyle } from '../BaseComponent';
+import moment from 'moment'
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 const acedemicList = [
     {
         label: 'India',
@@ -26,7 +27,7 @@ const placeholder = {
 };
 var deviceWidth = Dimensions.get('window').width - 20;
 
-class CoachHome extends React.Component {
+class CoachHome extends BaseComponent {
 
     static navigationOptions = ({ navigation }) => {
 
@@ -164,29 +165,25 @@ class CoachHome extends React.Component {
         for (let i = 0; i < attandence_batch.length; i++) {
             const { routine_name, batch_name, batch_category, batch_id, session } = this.state.coach_profile.attandence_batch[i]
             const { is_canceled, end_time, session_date, start_time } = session
-
             attendenceArray.push(
 
                 <View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{
-                            margin: 10, fontSize: 14, fontWeight: 'bold'
-                        }}>{batch_name}</Text>
-                        <Text style={{
-                            margin: 10, marginRight: 20, fontSize: 14, fontWeight: 'bold'
-                        }}>{batch_category}</Text>
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                        <Text style={
+                            [defaultStyle.bold_text_14]} >{batch_name}</Text>
+                        <Text style={
+                            [defaultStyle.bold_text_14]}>{batch_category}</Text>
                     </View>
 
-
-
-                    {is_canceled ? <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                        <Text style={{ marginRight: 20, fontSize: 14, textDecorationLine: 'line-through' }}>{session_date}</Text>
-                        <Text style={{ fontSize: 14, textDecorationLine: 'line-through' }}>{start_time + "  -   " + end_time}</Text>
-                    </View> : <View>
-                            <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                                <Text style={{ marginRight: 20, fontSize: 14 }}>{session_date}</Text>
-                                <Text style={{ fontSize: 14 }}>{start_time + "  -   " + end_time}</Text>
+                    {is_canceled ?
+                        <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
+                            <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>{session_date}</Text>
+                            <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>{start_time + "  -   " + end_time}</Text>
+                        </View> :
+                        <View>
+                            <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
+                                <Text style={defaultStyle.regular_text_14}>{session_date}</Text>
+                                <Text style={defaultStyle.regular_text_14}>{start_time + "  -   " + end_time}</Text>
                             </View>
                             <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id })}>
                                 Mark Attendance</CustomeButtonB>
@@ -206,29 +203,40 @@ class CoachHome extends React.Component {
             console.log("is_canceled", { is_canceled })
             if (is_canceled == true) {
                 sessionArray.push(
-                    <View>
+                    <View
+                        style={{
+                            marginTop: 6,
+                            marginBottom: 16
+                        }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{
-                                margin: 10, textDecorationLine: 'line-through'
-                            }}>{routine_name}</Text>
+                            <Text style={[defaultStyle.bold_text_14, {
+                                textDecorationLine: 'line-through'
+                            }]}
+                            >{routine_name}</Text>
                             <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                 <Text style={{
-                                    margin: 10, color: 'white'
+                                    fontFamily: 'Quicksand-Medium',
+                                    fontSize: 10,
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    marginTop: 5,
+                                    marginBottom: 5,
+                                    color: 'white'
                                 }}>Canceled</Text>
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', margin: 10 }}>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
-                                textDecorationLine: 'line-through'
-                            }}>{session_date}</Text>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
-                                textDecorationLine: 'line-through'
-                            }}>{start_time + "  -   " + end_time}</Text>
+                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                            <Text
+                                style={[defaultStyle.regular_text_14, {
+                                    textDecorationLine: 'line-through'
+                                }]}
+                            >{session_date}</Text>
+                            <Text
+                                style={[defaultStyle.regular_text_14, {
+                                    textDecorationLine: 'line-through',
+                                    marginLeft: 10,
+                                }]}> {start_time + "  -   " + end_time}</Text>
 
                         </View>
 
@@ -236,26 +244,25 @@ class CoachHome extends React.Component {
                 );
             } else {
                 sessionArray.push(
-                    <View>
 
-                        <Text style={{
-                            margin: 10,
-                        }}>{routine_name}</Text>
-                        <View style={{ flexDirection: 'row', margin: 10 }}>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
+                    <View style={{
+                        marginTop: 6,
+                        marginBottom: 16
+                    }}>
 
-                            }}>{session_date}</Text>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
+                        <Text style={[defaultStyle.bold_text_14, {
+                        }]}>{routine_name}</Text>
 
-                            }}>{start_time + "  -   " + end_time}</Text>
+                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                            <Text style={defaultStyle.regular_text_14}>
+                                {session_date}</Text>
+
+                            <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
+                                {start_time + "  -   " + end_time}</Text>
 
                         </View>
 
-                    </View>
+                    </View >
                 );
             }
         }
@@ -270,12 +277,10 @@ class CoachHome extends React.Component {
 
             scoreArray.push(
                 <View>
-                    <Text style={{
-                        margin: 10, fontSize: 14, fontWeight: 'bold'
-                    }}>{name}</Text>
-                    <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                        <Text style={{ marginRight: 20, fontSize: 14 }}>{start_date + ' - ' + end_date}</Text>
-                        <Text style={{ marginRight: 20, fontSize: 14, }}>{start_time + ' - ' + end_time}</Text>
+                    <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{name}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
+                        <Text style={defaultStyle.regular_text_14}>{moment(start_date).format('DD') + ' - ' + end_date}</Text>
+                        <Text style={defaultStyle.regular_text_14}>{start_time + ' - ' + end_time}</Text>
                     </View>
 
                 </View>
@@ -311,36 +316,59 @@ class CoachHome extends React.Component {
                             Switch Academy
                         </SwitchButton>
                     </View>
-                    {is_attandence_due ? <CustomeCard>
-                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row' }}>
-                            <Text>Attendance</Text>
-                            {is_attandence_due ? <View
-                                style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                <Text style={{
-                                    margin: 5,
-                                    fontSize: 10,
-                                    color: 'white',
-                                    marginRight: 10,
-                                    marginLeft: 10,
-                                }}>Due</Text>
-                            </View> : null}
-                        </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
 
-                        {attendenceArray}
 
-                    </CustomeCard> : null}
+                    {is_attandence_due ?
+
+                        <CustomeCard>
+                            <View
+                                style={{
+                                    marginLeft: 16,
+                                    marginRight: 16,
+                                    marginTop: 16
+                                }}
+                            >
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={defaultStyle.bold_text_10}>Attendance</Text>
+
+                                    {is_attandence_due ? <View
+                                        style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
+                                        <Text style={{
+                                            marginTop: 2,
+                                            marginBottom: 2,
+                                            fontFamily: 'Quicksand-Medium',
+                                            fontSize: 10,
+                                            color: 'white',
+                                            marginRight: 10,
+                                            marginLeft: 10,
+                                        }}>Due</Text>
+                                    </View> : null}
+                                </View>
+                                <View style={defaultStyle.line_style} />
+
+                                {attendenceArray}
+                            </View>
+                        </CustomeCard> : null}
 
 
                     <CustomeCard>
                         <View
-                            style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
-                            <Text style={{ color: '#667DDB' }}>{'Attendance  - ' + operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
+                            style={{
+                                marginLeft: 16,
+                                marginRight: 16,
+                                marginTop: 16
+                            }} >
+                            <View
+                                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
+                                {/* {operations.attendance.attendance != undefined ?
+                                    <Text style={{ color: '#667DDB' }}>{'Attendance  - ' + operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
+                                    : null
+                                } */}
+                            </View>
+                            <View style={defaultStyle.line_style} />
+                            {sessionArray}
                         </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
-                        {sessionArray}
-
                     </CustomeCard>
 
 
@@ -350,10 +378,12 @@ class CoachHome extends React.Component {
                             <View
                                 style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                 <Text style={{
-                                    margin: 5,
+                                    marginTop: 2,
+                                    marginBottom: 2,
                                     fontSize: 10,
                                     color: 'white',
                                     marginRight: 10,
+                                    fontFamily: 'Quicksand-Medium',
                                     marginLeft: 10,
                                 }}>Due</Text>
                             </View>
@@ -370,43 +400,63 @@ class CoachHome extends React.Component {
                     </CustomeCard> : null}
 
 
-                    {is_scorer ? <CustomeCard>
-                        <View
-                            style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={defaultStyle.bold_text_10}>Scorer</Text>
-                            {/*<Text style={{color:'#667DDB'}}>Attendance - 80% (Jul)</Text>*/}
-                        </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+                    {is_scorer ?
 
-                        {scoreArray}
-                        <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
-                            View Fixtures</CustomeButtonB>
-                    </CustomeCard> : null}
+                        <CustomeCard>
+                            <View
+                                style={{
+                                    marginLeft: 16,
+                                    marginRight: 16,
+                                    marginTop: 16
+                                }}
+                            >
+                                <View
+                                    style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Text style={defaultStyle.bold_text_10}>Scorer</Text>
+                                    {/*<Text style={{color:'#667DDB'}}>Attendance - 80% (Jul)</Text>*/}
+                                </View>
+                                <View style={defaultStyle.line_style} />
+
+                                {scoreArray}
+                                <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
+                                    View Fixtures</CustomeButtonB>
+                            </View>
+                        </CustomeCard> : null}
 
                     {is_reward_point_due ? <CustomeCard>
-                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row' }}>
-                            <Text style={defaultStyle.bold_text_10} >Reward Point</Text>
-                            <View
-                                style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                <Text style={{
-                                    margin: 5,
-                                    fontSize: 10,
-                                    color: 'white',
-                                    marginRight: 10,
-                                    marginLeft: 10,
-                                }}>Due</Text>
+                        <View
+                            style={{
+                                marginLeft: 16,
+                                marginRight: 16,
+                                marginTop: 16
+                            }}>
+
+                            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                <Text style={defaultStyle.bold_text_10} >Reward Point</Text>
+                                <View
+                                    style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
+                                    <Text style={{
+                                        marginTop: 2,
+                                        marginBottom: 2,
+                                        fontSize: 10,
+                                        color: 'white',
+                                        fontFamily: 'Quicksand-Medium',
+                                        marginRight: 10,
+                                        marginLeft: 10,
+                                    }}>Due</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+                            <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                            <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to Reward the players .</Text>
+                            <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                                <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to Reward the players .</Text>
 
+                            </View>
+                            <CustomeButtonB onPress={() => {
+                                this.props.navigation.navigate('CoachRewardPoints')
+                            }}>
+                                Reward Players</CustomeButtonB>
                         </View>
-                        <CustomeButtonB onPress={() => {
-                            this.props.navigation.navigate('CoachRewardPoints')
-                        }}>
-                            Reward Players</CustomeButtonB>
                     </CustomeCard> : null}
 
                     <View style={{ margin: 5 }}>

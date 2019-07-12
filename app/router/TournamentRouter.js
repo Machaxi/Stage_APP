@@ -19,20 +19,20 @@ const TournamentModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
     TournamentTabs: {
         screen: TournamentTabs,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                                           navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Tournament',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //                                            showBackAction={false}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //                                    navigation={navigation} showNotification={true} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-            headerTintColor: '#000',
-        }),
+        //     headerTintColor: '#000',
+        // }),
     },
     UpcomingTournamentDetail: {
         screen: UpcomingTournamentDetail,

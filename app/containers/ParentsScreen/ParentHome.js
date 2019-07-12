@@ -12,7 +12,7 @@ import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
-
+import BaseComponent, { getFormattedLevel, defaultStyle } from '../BaseComponent'
 const acedemicList = [
     {
         label: 'India',
@@ -28,7 +28,7 @@ const placeholder = {
 };
 var deviceWidth = Dimensions.get('window').width - 20;
 
-class ParentHome extends React.Component {
+class ParentHome extends BaseComponent {
 
     acedemy_name = ''
 
@@ -36,7 +36,12 @@ class ParentHome extends React.Component {
         return {
             headerTitle: (
                 <TouchableOpacity
-
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        flex: 1
+                    }}
                     onPress={() => {
                         navigation.navigate('SwitchPlayer')
                     }}
@@ -48,7 +53,7 @@ class ParentHome extends React.Component {
                             fontSize: 14,
                             color: 'white'
                         }}
-                    >{navigation.getParam('Title', 'Default Title') + ' ▼'}</Text>
+                    >{navigation.getParam('Title', '') + ' ▼'}</Text>
                 </TouchableOpacity>
 
             ),
@@ -134,14 +139,9 @@ class ParentHome extends React.Component {
                 userData: JSON.parse(value)
             });
             console.log("userData.user", userData.user['user_type'])
-            if (userData.user['user_type'] == 'PLAYER') {
+            if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
                 this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
-
-            } else if (userData.user['user_type'] == 'FAMILY') {
-                this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
-
             }
-
 
         });
     }
@@ -156,7 +156,7 @@ class ParentHome extends React.Component {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.dashboardData);
-                console.log(' user response payload ' + user);
+                console.log(' getPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
@@ -248,29 +248,40 @@ class ParentHome extends React.Component {
                 console.log("is_canceled", { is_canceled })
                 if (is_canceled == true) {
                     sessionArray.push(
-                        <View>
+                        <View
+                            style={{
+                                marginTop: 6,
+                                marginBottom: 16
+                            }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={{
-                                    margin: 10, textDecorationLine: 'line-through'
-                                }}>{routine_name}</Text>
+                                <Text style={[defaultStyle.bold_text_14, {
+                                    textDecorationLine: 'line-through'
+                                }]}
+                                >{routine_name}</Text>
                                 <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                     <Text style={{
-                                        margin: 10, color: 'white'
+                                        fontFamily: 'Quicksand-Medium',
+                                        fontSize: 10,
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        marginTop: 5,
+                                        marginBottom: 5,
+                                        color: 'white'
                                     }}>Canceled</Text>
                                 </View>
                             </View>
 
-                            <View style={{ flexDirection: 'row', margin: 10 }}>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-                                    textDecorationLine: 'line-through'
-                                }}>{session_date}</Text>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-                                    textDecorationLine: 'line-through'
-                                }}>{start_time + "  -   " + end_time}</Text>
+                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <Text
+                                    style={[defaultStyle.regular_text_14, {
+                                        textDecorationLine: 'line-through'
+                                    }]}
+                                >{session_date}</Text>
+                                <Text
+                                    style={[defaultStyle.regular_text_14, {
+                                        textDecorationLine: 'line-through',
+                                        marginLeft: 10,
+                                    }]}> {start_time + "  -   " + end_time}</Text>
 
                             </View>
 
@@ -278,26 +289,24 @@ class ParentHome extends React.Component {
                     );
                 } else {
                     sessionArray.push(
-                        <View>
+                        <View style={{
+                            marginTop: 6,
+                            marginBottom: 16
+                        }}>
 
-                            <Text style={{
-                                margin: 10,
-                            }}>{routine_name}</Text>
-                            <View style={{ flexDirection: 'row', margin: 10 }}>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
+                            <Text style={[defaultStyle.bold_text_14, {
+                            }]}>{routine_name}</Text>
 
-                                }}>{session_date}</Text>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
+                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {session_date}</Text>
 
-                                }}>{start_time + "  -   " + end_time}</Text>
+                                <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
+                                    {start_time + "  -   " + end_time}</Text>
 
                             </View>
 
-                        </View>
+                        </View >
                     );
                 }
             }
@@ -328,8 +337,9 @@ class ParentHome extends React.Component {
                                         <Text style={{
                                             color: 'white',
                                             marginRight: 0,
-                                            fontFamily: 'Quicksand-Medium',
-                                            textAlign: 'center', fontSize: 22, fontWeight: 'bold'
+                                            fontFamily: 'Quicksand-Bold',
+                                            textAlign: 'center', fontSize: 22,
+
                                         }}
                                             numberOfLines={1}>{name}</Text>
 
@@ -381,21 +391,24 @@ class ParentHome extends React.Component {
                                                 marginRight: 10,
                                                 textAlign: 'center',
                                                 fontSize: 12,
-                                                fontWeight: 'bold'
-                                            }}>{player_level}</Text>
+                                                fontFamily: 'Quicksand-Medium',
+                                            }}>{getFormattedLevel(player_level)}</Text>
                                             <View
                                                 style={{
                                                     backgroundColor: 'red',
-                                                    width: 60,
+                                                    width: 35,
                                                     marginRight: 20,
-                                                    marginTop: -5
+                                                    marginTop: -5,
+                                                    alignItems: 'center',
+                                                    borderRadius: 4,
+                                                    justifyContent: 'center'
                                                 }}>
                                                 <Text style={{
                                                     color: 'white',
                                                     marginRight: 0,
                                                     textAlign: 'center',
                                                     fontSize: 12,
-                                                    fontWeight: 'bold',
+                                                    fontFamily: 'Quicksand-Bold',
                                                     marginTop: 5,
                                                     marginBottom: 5
                                                 }}> {player_category} </Text>
@@ -424,7 +437,11 @@ class ParentHome extends React.Component {
                                                 height: 80,
                                             }}>
 
-                                            <Text style={{ margin: 15, color: 'white' }}>Rank</Text>
+                                            <Text style={{
+                                                fontSize: 12,
+                                                fontFamily: 'Quicksand-Medium', color: '#F4F4F4',
+                                                margin: 15, color: 'white'
+                                            }}>Rank</Text>
                                             {rank ? <Text style={styles.scoreBox}>{rank}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
 
@@ -436,7 +453,7 @@ class ParentHome extends React.Component {
                                             width: deviceWidth / 3,
                                             height: 80,
                                         }}>
-                                        <Text style={{ margin: 15, color: 'white' }}>Score</Text>
+                                        <Text style={{ fontSize: 12, fontFamily: 'Quicksand-Medium', color: '#F4F4F4', margin: 15, color: 'white' }}>Score</Text>
                                         {score ? <Text style={styles.scoreBox}>{score}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
                                     </ImageBackground>
@@ -450,7 +467,7 @@ class ParentHome extends React.Component {
                                                 height: 80,
                                             }}>
 
-                                            <Text style={{ margin: 15, color: 'white' }}>Reward</Text>
+                                            <Text style={{ fontSize: 12, fontFamily: 'Quicksand-Medium', color: '#F4F4F4', margin: 15, color: 'white' }}>Reward</Text>
                                             {reward_point ? <Text style={styles.scoreBox}>{reward_point}</Text> : <Text style={styles.scoreBox}>00</Text>}
 
 
@@ -474,128 +491,158 @@ class ParentHome extends React.Component {
                             Switch Player
                         </SwitchButton>
                     </View>
-                    <View style={{ margin: 10 }}>
-                        <CustomeCard >
-                            <View style={{ margin: 10 }}>
-                                <Text>Next Session:</Text>
-                            </View>
 
-                            <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+                    <CustomeCard >
+                        <View
+                            style={{
+                                marginLeft: 16,
+                                marginRight: 16,
+                                marginTop: 16
+                            }}
+                        >
+                            <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+
+                            <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
+
                             {sessionArray}
 
-                        </CustomeCard>
-                    </View>
-                    {is_payment_due ? <CustomeCard>
-                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text>Payment</Text>
-                                <View
-                                    style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                    <Text style={{
-                                        margin: 5,
-                                        fontSize: 10,
-                                        color: 'white',
-                                        marginRight: 10,
-                                        marginLeft: 10,
-                                    }}>Due</Text>
+                        </View>
+                    </CustomeCard>
+
+                    {is_payment_due ? <CustomeCard >
+                        <View
+                            style={{
+                                marginLeft: 16,
+                                marginRight: 16,
+                                marginTop: 16
+                            }}
+                        >
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={defaultStyle.bold_text_10}>Payment</Text>
+                                    <View
+                                        style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
+                                        <Text style={{
+                                            margin: 5,
+                                            fontSize: 10,
+                                            fontFamily: 'Quicksand-Bold',
+                                            color: 'white',
+                                            marginRight: 10,
+                                            marginLeft: 10,
+                                        }}>Due</Text>
+                                    </View>
+                                </View>
+                                <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
+                            </View>
+                            <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
+
+                            <Text style={[defaultStyle.bold_text_14, { marginRight: 16, }]}>{name}</Text>
+
+                            <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+
+                                <View style={{ width: '50%', flexDirection: 'row', }}>
+                                    <View>
+                                        <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Due Date</Text>
+                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{moment(Date(payment_detail.due_date)).format('DD-MMM-YYYY')}</Text>
+                                    </View>
+
+
+                                    <View style={{ marginLeft: 24 }}>
+                                        <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Amount</Text>
+                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{payment_detail.amount}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ width: '40%' }}>
+                                    <CustomeButtonB onPress={() => {
+                                        //this.props.navigation.navigate('ParentRewards')
+                                    }}>
+                                        Pay </CustomeButtonB>
                                 </View>
                             </View>
-                            <Text style={{ color: '#667DDB', marginRight: 10, fontSize: 14 }}>View Details</Text>
                         </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
-
-                        <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                            <Text style={{ marginRight: 20, fontSize: 14 }}>{name}</Text>
-
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-
-                            <View style={{ width: '50%', margin: 10 }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text>Due Date</Text>
-                                    <Text>Amount</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                                    <Text style={{ marginRight: 0 }}>{moment(Date(payment_detail.due_date)).format('DD-MMM-YYYY')}</Text>
-                                    <Text>{payment_detail.amount}</Text>
-                                </View>
-                            </View>
-                            <View style={{ width: '40%' }}>
-                                <CustomeButtonB onPress={() => console.log("title")}>
-                                    Pay </CustomeButtonB>
-                            </View>
-                        </View>
-
                     </CustomeCard> : null}
 
-                    {is_reward_point_due ? <CustomeCard>
-                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text>Reward Points</Text>
-                                <View
-                                    style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                    <Text style={{
-                                        margin: 5,
-                                        fontSize: 10,
-                                        color: 'white',
-                                        marginRight: 10,
-                                        marginLeft: 10,
-                                    }}>Due</Text>
-                                </View>
-                            </View>
-                            <Text style={{ color: '#667DDB', marginRight: 10, fontSize: 14 }}>View Details</Text>
-                        </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
-
-                        <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                            <Text style={{ marginRight: 20, fontSize: 14 }}>{name}</Text>
-
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-
-                            <View style={{ width: '50%', margin: 10 }}>
+                    {is_reward_point_due ?
+                        <CustomeCard >
+                            <View
+                                style={{
+                                    marginLeft: 16,
+                                    marginRight: 16,
+                                    marginTop: 16
+                                }}
+                            >
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text>Month</Text>
-                                    <Text>Available</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text style={defaultStyle.bold_text_10}>Reward Points</Text>
+                                        <View
+                                            style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
+                                            <Text style={{
+                                                margin: 5,
+                                                fontSize: 10,
+                                                fontFamily: 'Quicksand-Bold',
+                                                color: 'white',
+                                                marginRight: 10,
+                                                marginLeft: 10,
+                                            }}>Due</Text>
+                                        </View>
+                                    </View>
+                                    <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                                    <Text style={{ marginRight: 0 }}>{reward_detail.month}</Text>
-                                    <Text>{reward_detail.points + 'pts'}</Text>
+                                <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
+
+                                <Text style={[defaultStyle.bold_text_14, { marginRight: 16, }]}>{name}</Text>
+
+                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+
+                                    <View style={{ width: '50%', flexDirection: 'row', }}>
+                                        <View>
+                                            <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Month</Text>
+                                            <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{reward_detail.month}</Text>
+                                        </View>
+
+
+                                        <View style={{ marginLeft: 24 }}>
+                                            <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Available</Text>
+                                            <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{reward_detail.points + 'pts'}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ width: '40%' }}>
+                                        <CustomeButtonB onPress={() => {
+                                            this.props.navigation.navigate('ParentRewards')
+                                        }}>
+                                            Reward </CustomeButtonB>
+                                    </View>
                                 </View>
                             </View>
-                            <View style={{ width: '40%' }}>
-                                <CustomeButtonB onPress={() => {
-                                    this.props.navigation.navigate('ParentRewards')
-                                }}>
-                                    Reward </CustomeButtonB>
-                            </View>
-                        </View>
-
-                    </CustomeCard> : null}
+                        </CustomeCard> : null}
 
 
 
-                    <View style={{ margin: 10 }}>
-                        <CustomeCard>
-                            <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
-                            <FlatList
-                                data={this.state.strenthList}
-                                renderItem={this.renderItem}
-                                keyExtractor={(item, index) => item.id}
-                            />
-                        </CustomeCard>
-                    </View>
+                    {this.state.strenthList.length != 0 ?
+                        <View style={{ margin: 10 }}>
+                            <CustomeCard>
+                                <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
+                                <FlatList
+                                    data={this.state.strenthList}
+                                    renderItem={this.renderItem}
+                                    keyExtractor={(item, index) => item.id}
+                                />
+                            </CustomeCard>
+                        </View> : null
+                    }
+
+
                     <View style={{ margin: 5 }}>
-                        <CustomeCard>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")
-                                this.props.navigation.navigate('BookandPlay')
+                                this.props.navigation.navigate('CurrentBooking')
 
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/booking.png')}
+                                    <Image source={require('../../images/book_play.png')}
                                         style={{
                                             width: 30,
                                             height: 30, marginRight: 20, marginTop: 5
@@ -610,11 +657,11 @@ class ParentHome extends React.Component {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
-                                            <Text style={{ fontSize: 14 }}>
-                                                Book and Play
-                                            </Text>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                View Academy Players
+                                        </Text>
 
-                                            <Image source={require('../../images/forwardArrow.png')}
+                                            <Image source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
                                                     height: 13, marginRight: 0, marginTop: 5
@@ -624,64 +671,20 @@ class ParentHome extends React.Component {
                                     </View>
                                 </View>
 
-
                             </TouchableOpacity>
-                        </CustomeCard>
+                        </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <CustomeCard>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
-
-
-                            }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
-
-                                    <Image source={require('../../images/booking.png')}
-                                        style={{
-                                            width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
-                                        }} />
-                                    <View style={{ flex: 1 }}>
-
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={{ fontSize: 14 }}>
-                                                View other Players Progress
-                                            </Text>
-
-                                            <Image source={require('../../images/forwardArrow.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
-
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </CustomeCard>
-                    </View>
-                    <View style={{ margin: 5 }}>
-                        <CustomeCard>
-                            <TouchableOpacity onPress={() => {
-
-                                //console.warn("Touch Press")
                                 this.props.navigation.navigate('AcademyListing')
 
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/booking.png')}
+                                    <Image source={require('../../images/view_academy_player.png')}
                                         style={{
                                             width: 30,
                                             height: 30, marginRight: 20, marginTop: 5
@@ -696,11 +699,11 @@ class ParentHome extends React.Component {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
-                                            <Text style={{ fontSize: 14 }}>
-                                                Browse other Academies
-                                            </Text>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                Browse Academies
+                                        </Text>
 
-                                            <Image source={require('../../images/forwardArrow.png')}
+                                            <Image source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
                                                     height: 13, marginRight: 0, marginTop: 5
@@ -712,8 +715,9 @@ class ParentHome extends React.Component {
 
 
                             </TouchableOpacity>
-                        </CustomeCard>
+                        </Card>
                     </View>
+
                     <View style={{ margin: 5 }}>
                         <CustomeCard>
                             <View style={{ margin: 10 }}>
@@ -740,8 +744,8 @@ class ParentHome extends React.Component {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                        Suspendisse nec tortor urna.
-                                                        Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                                                                                                                                                                                                                                                            Suspendisse nec tortor urna.
+                                                                                                                                                                                                                                                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>
@@ -792,8 +796,8 @@ class ParentHome extends React.Component {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                        Suspendisse nec tortor urna.
-                                                        Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                                                                                                                                                                                                                                                            Suspendisse nec tortor urna.
+                                                                                                                                                                                                                                                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>
@@ -907,7 +911,10 @@ const styles = StyleSheet.create({
     scoreBox: {
         color: 'white',
         marginRight: 20,
-        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
+        textAlign: 'right',
+        fontSize: 24,
+        fontFamily: 'Quicksand-Bold',
+        color: '#F4F4F4',
     },
     buttomButton: {
         flexDirection: 'row',

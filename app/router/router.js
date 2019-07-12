@@ -52,6 +52,8 @@ import userHomeModule from './UserHomeModule'
 import CoachRewardsPoints from '../containers/rewards/CoachRewardsPoints'
 import CoachGiveRewards from '../containers/rewards/CoachGiveRewards'
 import ParentRewards from '../containers/rewards/ParentRewards'
+import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListing'
+import EditOtherProfile from '../containers/profile/EditOtherProfile'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -407,6 +409,24 @@ const coachHomeModule = createStackNavigator({
 
 
     },
+    CoachMyFeedbackListing: {
+        screen: CoachMyFeedbackListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "My Feedback",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
     MarkAttendence: {
         screen: markAttendence,
         navigationOptions: ({ navigation }) => ({
@@ -960,7 +980,7 @@ const parentHomeModule = createStackNavigator({
             // header: null
         }
     },
-    
+
     ParentRewards: {
         screen: ParentRewards,
         navigationOptions: ({ navigation }) => ({
@@ -1058,6 +1078,24 @@ const parentHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    EditOtherProfile: {
+        screen: EditOtherProfile,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,

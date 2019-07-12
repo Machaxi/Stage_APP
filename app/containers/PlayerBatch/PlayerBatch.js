@@ -1,14 +1,15 @@
 
 import React from 'react'
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
-import {Card} from 'react-native-paper'
-import {SwitchButton ,CustomeButtonB} from  '../../components/Home/SwitchButton'
-import {CustomeCard } from  '../../components/Home/Card'
-import {getPlayerBatch} from "../../redux/reducers/PlayerBatchReducer";
-import {getData} from "../../components/auth";
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-paper'
+import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
+import { CustomeCard } from '../../components/Home/Card'
+import { getPlayerBatch } from "../../redux/reducers/PlayerBatchReducer";
+import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
-import { TabView, SceneMap,TabBar } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from './PlayerBatchComponent'
+import BaseComponent, {defaultStyle} from '../BaseComponent';
 const acedemicList = [
     {
         label: 'India',
@@ -22,14 +23,56 @@ const placeholder = {
     value: null,
     color: '#9EA0A4',
 };
-var deviceWidth = Dimensions.get('window').width -20;
+var deviceWidth = Dimensions.get('window').width - 20;
 const FirstRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#ff4081'}]} />
+    <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
 );
 const SecondRoute = () => (
     <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
 );
-class  PlayerBatch extends React.Component {
+class PlayerBatch extends BaseComponent{
+
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: 'My Batch',
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        source={require('../../images/hamburger.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#667DDB'
+                        }}
+                    >Switch Player</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
+
 
     constructor(props) {
         super(props)
@@ -40,30 +83,30 @@ class  PlayerBatch extends React.Component {
         };
         this.state = {
 
-            batchList:null,
+            batchList: null,
             country: undefined,
-            strenthList : null,
+            strenthList: null,
             index: 0,
             routes: []
 
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
+        getData('header', (value) => {
+            console.log("header", value);
         });
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='PLAYER' || userData.user['user_type'] =='PARENT'){
-                this.getPlayerBatchData(userData['academy_id'],userData['player_id'])
+            console.log("userData.user", userData.user['user_type'])
+            if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') {
+                this.getPlayerBatchData(userData['academy_id'], userData['player_id'])
 
             }
 
@@ -71,26 +114,26 @@ class  PlayerBatch extends React.Component {
         });
     }
 
-    getPlayerBatchData(academy_id,player_id,){
-        getData('header',(value)=>{
-            console.log("header",value,academy_id,player_id);
-            this.props.getPlayerBatch(value,academy_id,player_id).then(() => {
+    getPlayerBatchData(academy_id, player_id, ) {
+        getData('header', (value) => {
+            console.log("header", value, academy_id, player_id);
+            this.props.getPlayerBatch(value, academy_id, player_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
-                   var temparra=[];
-                   for (let i = 0; i < user1.data['batches'].length; i++) {
-                       const obj = {'key':i, 'title':user1.data.batches[i].batch_name};
-                       temparra.push(obj);
+                if (user1.success == true) {
+                    var temparra = [];
+                    for (let i = 0; i < user1.data['batches'].length; i++) {
+                        const obj = { 'key': i, 'title': user1.data.batches[i].batch_name };
+                        temparra.push(obj);
 
-                   }
+                    }
                     this.setState({
-                        batchList:user1.data['batches'],
-                        routes:temparra
+                        batchList: user1.data['batches'],
+                        routes: temparra
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -106,29 +149,27 @@ class  PlayerBatch extends React.Component {
     }
 
 
-    sessionMangement(operations)
-    {
+    sessionMangement(operations) {
 
         sessionArray = [];
-        for (let i = 0; i < operations.next_sessions.length; i++)
-        {
-            const {routine_name,session_date,is_canceled,end_time,start_time } = operations.next_sessions[i]
-            console.log("is_canceled",{is_canceled})
-            if( is_canceled == true ){
+        for (let i = 0; i < operations.next_sessions.length; i++) {
+            const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
+            console.log("is_canceled", { is_canceled })
+            if (is_canceled == true) {
                 sessionArray.push(
                     <View>
-                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{
                                 margin: 10, textDecorationLine: 'line-through'
                             }}>{routine_name}</Text>
-                            <View style={{backgroundColor:'#FF7373',margin:0,borderRadius:10}}>
+                            <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                 <Text style={{
-                                    margin: 10,color:'white'
+                                    margin: 10, color: 'white'
                                 }}>Canceled</Text>
                             </View>
                         </View>
 
-                        <View style={{flexDirection: 'row', margin: 10}}>
+                        <View style={{ flexDirection: 'row', margin: 10 }}>
                             <Text style={{
                                 marginRight: 20,
                                 fontSize: 14,
@@ -144,14 +185,14 @@ class  PlayerBatch extends React.Component {
 
                     </View>
                 );
-            }else{
+            } else {
                 sessionArray.push(
                     <View>
 
                         <Text style={{
                             margin: 10,
                         }}>{routine_name}</Text>
-                        <View style={{flexDirection: 'row', margin: 10}}>
+                        <View style={{ flexDirection: 'row', margin: 10 }}>
                             <Text style={{
                                 marginRight: 20,
                                 fontSize: 14,
@@ -183,29 +224,27 @@ class  PlayerBatch extends React.Component {
                 right: 5,
                 height: 5,
             }}
-            style={{backgroundColor:'white'}}
+            style={{ backgroundColor: 'white' }}
             tabStyle={styles.tab}
-            labelStyle={{color:'Black',fontSize:16,fontWeight:'bold'}}
+            labelStyle={defaultStyle.regular_text_14}
         />
     );
-    renderScene = ({ route, jumpTo }) =>
-
-    {
-        return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key]} navigation= {this.props.navigation} />;
-     // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
+    renderScene = ({ route, jumpTo }) => {
+        return <PlayerBatchComponent jumpTo={this.state.batchList[route.key]} navigation={this.props.navigation} />;
+        // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
 
     };
     render() {
         if (this.props.data.loading && !this.state.player_profile) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         }
         if (this.state.batchList) {
 
-           return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <TabView
 
                     navigationState={this.state}
@@ -216,9 +255,9 @@ class  PlayerBatch extends React.Component {
                 />
 
             </View>;
-        }else{
+        } else {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
                 </View>
             )
@@ -249,7 +288,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -262,7 +301,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingVertical: 8,
         borderWidth: 0.5,
         borderColor: '#614051',
-        borderRadius: 8,    color: 'black',    paddingRight: 30, // to ensure the text is never behind the icon
+        borderRadius: 8, color: 'black', paddingRight: 30, // to ensure the text is never behind the icon
     },
 });
 
@@ -291,28 +330,28 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     },
     scene: {

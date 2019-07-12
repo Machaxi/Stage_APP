@@ -423,9 +423,9 @@ class AcademyProfile extends BaseComponent {
                         <TouchableOpacity
                             activeOpacity={.8}
                             onPress={() => {
-                                this.props.navigation.navigate('WriteFeedback',
+                                this.props.navigation.navigate('WriteAcademyFeedback',
 
-                                    { academy_id: this.state.id, player_id: this.state.player_id })
+                                    { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
                             }}>
 
                             <View

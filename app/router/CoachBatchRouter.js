@@ -13,19 +13,19 @@ const coachBatchModule = createStackNavigator({
 
         CoachBatch: {
             screen: coachBatch,
-            navigationOptions: ({ navigation }) => ({
-                title: "My Batch",
-                headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                       showBackAction={false}
-                />,
-                headerRight: <RightMenuToolbar navigationProps={navigation}
-                                               navigation={navigation} showHome={false} />,
-                headerTitleStyle: style.headerStyle,
-                headerStyle: {
-                    backgroundColor: '#FFFFFF',
-                },
+            // navigationOptions: ({ navigation }) => ({
+            //     title: "My Batch",
+            //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+            //                                            showBackAction={false}
+            //     />,
+            //     headerRight: <RightMenuToolbar navigationProps={navigation}
+            //                                    navigation={navigation} showHome={false} />,
+            //     headerTitleStyle: style.headerStyle,
+            //     headerStyle: {
+            //         backgroundColor: '#FFFFFF',
+            //     },
 
-            })
+            // })
 
         },
         BatchDetails: {

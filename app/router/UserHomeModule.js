@@ -20,7 +20,7 @@ import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import userhome from '../containers/UserScreen/UserHome'
 import ParentRewards from '../containers/rewards/ParentRewards'
-
+import EditOtherProfile from '../containers/profile/EditOtherProfile'
 
 const userHomeModule = createStackNavigator({
 
@@ -125,6 +125,24 @@ const userHomeModule = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    EditOtherProfile: {
+        screen: EditOtherProfile,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,

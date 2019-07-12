@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
-import { Card } from 'react-native-paper'
+import { Card, ActivityIndicator } from 'react-native-paper'
 import { Rating } from 'react-native-ratings';
 import { getData, storeData } from "../../components/auth";
 import { getPlayerSWitcher, getCoachSWitcher } from "../../redux/reducers/switchReducer";
 import { connect } from 'react-redux';
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormattedLevel } from '../BaseComponent';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 class PlayerSwitcher extends BaseComponent {
@@ -56,6 +56,7 @@ class PlayerSwitcher extends BaseComponent {
         // const otherParam = navigation.getParam('userType');
 
     }
+
 
     getPlayerSwitchingData() {
         console.log("hererererre");
@@ -119,7 +120,8 @@ class PlayerSwitcher extends BaseComponent {
                 tempuserData['academy_id'] = item.academy_id;
                 console.log('tempuserData', tempuserData)
                 storeData("userInfo", JSON.stringify(tempuserData))
-                storeData('academy_name',item.academy_name)
+                storeData('academy_name', item.academy_name)
+                storeData('academy_id', item.academy_id)
                 this.props.navigation.navigate('CHome', { academy_name: item.academy_name })
 
             }}>
@@ -180,8 +182,15 @@ class PlayerSwitcher extends BaseComponent {
                     tempuserData['academy_id'] = item.academy_id;
                     tempuserData['player_id'] = item.id;
                     tempuserData['academy_name'] = item.academy_name;
+                    tempuserData['academy_rating'] = item.academy_rating;
+
                     console.log('tempuserData', tempuserData)
                     storeData("userInfo", JSON.stringify(tempuserData))
+
+                    storeData('academy_name', item.academy_name)
+                    storeData('academy_id', item.academy_id)
+                    storeData('academy_rating', item.academy_rating)
+                    storeData('player_id', item.id)
 
                     if (tempuserData.user['user_type'] == 'PLAYER') {
                         this.props.navigation.navigate('UHome')
@@ -247,7 +256,7 @@ class PlayerSwitcher extends BaseComponent {
 
                                             <ImageBackground
                                                 style={{
-                                                    height: 38, width: 25, justifyContent: 'center',
+                                                    height: 85, width: 57, justifyContent: 'center',
                                                     alignItems: 'center',
                                                 }}
                                                 source={require('../../images/batch_pink.png')}>
@@ -257,17 +266,26 @@ class PlayerSwitcher extends BaseComponent {
                                                     justifyContent: 'center',
                                                     alignItems: 'center',
                                                     flexDirection: 'row',
-                                                    backgroundColor: '#485FA0', height: 6, width: '120%'
+                                                    borderRadius: 2,
+                                                    backgroundColor: '#485FA0', height: 26, width: '110%'
                                                 }}>
-                                                    <Image style={{ height: 7, width: 12, marginLeft: -12 }}
+                                                    <Image style={{ height: 18, width: 20, }}
                                                         source={require('../../images/left_batch_arrow.png')}></Image>
 
-                                                    <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{item.badge}</Text>
-                                                    <Image style={{ height: 7, width: 12, marginRight: -12 }}
+                                                    <Text style={{
+                                                        width: '100%',
+                                                        fontSize: 10,
+                                                        color: '#F4F4F4',
+                                                        textAlign: 'center',
+                                                        fontFamily: 'Quicksand-Regular',
+                                                    }}>{item.badge}</Text>
+                                                    <Image style={{ height: 18, width: 20, }}
                                                         source={require('../../images/right_batch_arrow.png')}></Image>
 
                                                 </View>
                                             </ImageBackground>
+
+
 
 
                                         </View>
@@ -280,9 +298,16 @@ class PlayerSwitcher extends BaseComponent {
                                                 textAlign: 'center',
                                                 fontSize: 12,
                                                 fontFamily: 'Quicksand-Bold',
-                                            }}>{item.player_level}</Text>
+                                            }}>{getFormattedLevel(item.player_level)}</Text>
+
                                             <View
-                                                style={{ backgroundColor: 'red', width: 60, marginRight: 20, marginTop: -5 }}>
+                                                style={{
+                                                    backgroundColor: 'red', width: 35,
+                                                    borderRadius: 4,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    marginRight: 20, marginTop: -5
+                                                }}>
                                                 <Text style={{
                                                     color: 'white',
                                                     marginRight: 0,
@@ -359,7 +384,7 @@ class PlayerSwitcher extends BaseComponent {
                     </ImageBackground>
 
                 </View>
-                <View style={{ margin: 10, height: 80, flexDirection: 'row' }}>
+                {/* <View style={{ margin: 10, height: 80, flexDirection: 'row' }}>
 
 
                     <View style={{ margin: 5 }}>
@@ -376,7 +401,7 @@ class PlayerSwitcher extends BaseComponent {
                         <Text style={[defaultStyle.regular_text_14, { marginRight: 20, marginTop: 10 }]}>{item.operations.next_sessions[0].start_time + "  -   " + item.operations.next_sessions[0].end_time}</Text>
                     </View>
 
-                </View>
+                </View> */}
             </TouchableOpacity>
         </Card>
 
@@ -390,158 +415,173 @@ class PlayerSwitcher extends BaseComponent {
             const otherParam = userData.user['user_type'];
             console.log("otherParam", otherParam)
         }
-        return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-            {userData ? <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-
-                {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? null : <View style={{ marginTop: 15, marginBottom: 0, flex: 1, alignItems: 'center' }}>
-                    <Text style={defaultStyle.regular_text_14}>Select Academy</Text></View>}
-
-                <View>
 
 
-                    <FlatList
-                        data={this.state.itemList}
-                        renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? this.renderItem : this.renderItemAcedemic}
-                        keyExtractor={(item, index) => item.id}
-                    />
+        if (this.props.data.loading || this.state.itemList == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
-                <View style={{ margin: 5 }}>
-                    <Card style={{ margin: 5, borderRadius: 10 }}>
-                        <TouchableOpacity onPress={() => {
+            )
+        }
 
-                            //console.warn("Touch Press")
-                            this.props.navigation.navigate('CurrentBooking')
 
-                        }}>
-                            <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+        return (
 
-                                <Image source={require('../../images/book_play.png')}
-                                    style={{
-                                        width: 30,
-                                        height: 30, marginRight: 20, marginTop: 5
-                                    }} />
-                                <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                {userData ? <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                                    <View style={{
-                                        marginTop: 10,
-                                        flex: 1,
-                                        marginRight: 15,
-                                        marginBottom: 5,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text style={defaultStyle.bold_text_14}>
-                                            Book and Play
-                                        </Text>
+                    {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? null : <View style={{ marginTop: 15, marginBottom: 0, flex: 1, alignItems: 'center' }}>
+                        <Text style={defaultStyle.regular_text_14}>Select Academy</Text></View>}
 
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
+                    <View>
 
+
+                        <FlatList
+                            data={this.state.itemList}
+                            renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? this.renderItem : this.renderItemAcedemic}
+                            keyExtractor={(item, index) => item.id}
+                        />
+                    </View>
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => {
+
+                                //console.warn("Touch Press")
+                                this.props.navigation.navigate('CurrentBooking')
+
+                            }}>
+                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+
+                                    <Image source={require('../../images/book_play.png')}
+                                        style={{
+                                            width: 30,
+                                            height: 30, marginRight: 20, marginTop: 5
+                                        }} />
+                                    <View style={{ flex: 1 }}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                Book and Play
+                                    </Text>
+
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
+
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
 
-                        </TouchableOpacity>
-                    </Card>
-                </View>
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
 
 
-                <View style={{ margin: 5 }}>
-                    <Card style={{ margin: 5, borderRadius: 10 }}>
-                        <TouchableOpacity onPress={() => {
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => {
 
-                            console.warn("Touch Press")
-                            this.props.navigation.navigate('AcademyListing')
+                                console.warn("Touch Press")
+                                this.props.navigation.navigate('AcademyListing')
 
-                        }}>
+                            }}>
 
-                            <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                <Image source={require('../../images/browse_academy.png')}
-                                    style={{
-                                        width: 30,
-                                        height: 30, marginRight: 20, marginTop: 5
-                                    }} />
-                                <View style={{ flex: 1 }}>
+                                    <Image source={require('../../images/browse_academy.png')}
+                                        style={{
+                                            width: 30,
+                                            height: 30, marginRight: 20, marginTop: 5
+                                        }} />
+                                    <View style={{ flex: 1 }}>
 
-                                    <View style={{
-                                        marginTop: 10,
-                                        flex: 1,
-                                        marginRight: 15,
-                                        marginBottom: 5,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text style={defaultStyle.bold_text_14}>
-                                            Browse other Academies
-                                        </Text>
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                Browse other Academies
+                                    </Text>
 
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
 
-                        </TouchableOpacity>
-                    </Card>
-                </View>
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
 
-                <View style={{ margin: 5 }}>
-                    <Card style={{ margin: 5, borderRadius: 10 }}>
-                        <TouchableOpacity onPress={() => {
+                    <View style={{ margin: 5 }}>
+                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => {
 
-                            console.warn("Touch Press")
+                                console.warn("Touch Press")
 
 
-                        }}>
-                            <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                            }}>
+                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                <Image source={require('../../images/about_dribble.png')}
-                                    style={{
-                                        width: 26,
-                                        height: 26, marginRight: 20, marginTop: 5
-                                    }} />
-                                <View style={{ flex: 1 }}>
+                                    <Image source={require('../../images/about_dribble.png')}
+                                        style={{
+                                            width: 26,
+                                            height: 26, marginRight: 20, marginTop: 5
+                                        }} />
+                                    <View style={{ flex: 1 }}>
 
-                                    <View style={{
-                                        marginTop: 10,
-                                        flex: 1,
-                                        marginRight: 15,
-                                        marginBottom: 5,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text style={defaultStyle.bold_text_14}>
-                                            About Dribble Diary
-                                        </Text>
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.bold_text_14}>
+                                                About Dribble Diary
+                                    </Text>
 
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
 
-                        </TouchableOpacity>
-                    </Card>
-                </View>
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
 
 
-            </ScrollView> : null}
-        </View>
+                </ScrollView> : null}
+            </View>
+        );
+
     }
 }
 

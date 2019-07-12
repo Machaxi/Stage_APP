@@ -125,7 +125,7 @@ class PhoneAuth extends BaseComponent {
 
 
         dataDic['data'] = dict;
-        console.log("dicttttc ", dict)
+        console.log("dicttttc ", JSON.stringify(dict))
         this.props.doLoginTest(dataDic).then(() => {
             //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
             //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));

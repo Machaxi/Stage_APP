@@ -41,6 +41,7 @@ class ParentRewards extends BaseComponent {
             userData = JSON.parse(value)
             console.warn("userData.user", userData.user['id'])
             parent_player_id = userData.user['id']
+            parent_player_id = "12"
             getData('header', (value) => {
 
                 this.props.getPlayerRewardDue(value, parent_player_id).then(() => {
@@ -107,7 +108,9 @@ class ParentRewards extends BaseComponent {
     );
     renderScene = ({ route, jumpTo }) => {
         
-        return <ParentRewardComponent jumpTo={this.state.response[route.key]} navigation={this.props.navigation} />;
+        return <ParentRewardComponent jumpTo={this.state.response[route.key]} 
+        name={route.title}
+        navigation={this.props.navigation} />;
         // return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key]} navigation= {this.props.navigation} />;
         // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
         //return <FirstRoute jumpTo={jumpTo} />

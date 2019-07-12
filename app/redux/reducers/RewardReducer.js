@@ -126,3 +126,22 @@ export function saveRewardData(header, req) {
 
 }
 
+export function saveParentRewardData(header, req) {
+    console.log("saveParentRewardData", header, req)
+
+    return {
+        type: types.GET_REWARD,
+        payload: {
+            request: {
+                url: `rewards/family/save`,
+                method: 'POST',
+                data: req,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+
+}

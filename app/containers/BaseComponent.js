@@ -12,9 +12,9 @@ colors = {
 
 ACADEMY_LISTING = "AcademyListing"
 var connected = false
-fontMedium="Quicksand-Medium"
-fontBold="Quicksand-Bold"
-fontRegular="Quicksand-Regular"
+fontMedium = "Quicksand-Medium"
+fontBold = "Quicksand-Bold"
+fontRegular = "Quicksand-Regular"
 
 export default class BaseComponent extends React.Component {
 
@@ -60,6 +60,23 @@ export default class BaseComponent extends React.Component {
             this._handleConnectivityChange
         );
     }
+
+
+
+}
+export function getFormattedLevel(level) {
+
+    switch (level) {
+        case "DISTRICT_LEVEL":
+            return "District Level"
+
+        case "STATE_LEVEL":
+            return "State Level"
+
+        case "DISTRICT_LEVEL":
+            return "District Level"
+    }
+    return level
 }
 
 
@@ -156,4 +173,20 @@ export const defaultStyle = {
         textAlign: 'center',
         fontFamily: 'Quicksand-Regular'
     },
+    headerStyle: {
+        color: '#191919',
+        fontFamily: 'Quicksand-Medium',
+        fontWeight: '400',
+        textAlign: 'center',
+        fontSize: 16,
+        flexGrow: 1,
+        alignSelf: 'center',
+    },
+    line_style: {
+        height: 1,
+        backgroundColor: '#DFDFDF',
+        marginTop: 8,
+        marginBottom: 8
+
+    }
 }

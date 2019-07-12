@@ -67,3 +67,21 @@ export function saveUserStartupProfile(header, postdata) {
 
 
 }
+
+export function getRelationsDetails(header) {
+    console.log("getRelationsDetails ", header)
+   
+    return {
+        type: types.GET_PROFILE,
+        payload: {
+            request: {
+                url: `user/relations`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+}

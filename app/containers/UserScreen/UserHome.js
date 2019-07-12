@@ -11,7 +11,7 @@ import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../../components/custom/CustomHeader';
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormattedLevel } from '../BaseComponent';
 
 
 
@@ -249,28 +249,40 @@ class UserHome extends BaseComponent {
 
                 if (is_canceled == true) {
                     sessionArray.push(
-                        <View>
+                        <View
+                            style={{
+                                marginTop: 6,
+                                marginBottom: 16
+                            }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={{
-                                    margin: 10, textDecorationLine: 'line-through'
-                                }}>{routine_name}</Text>
+                                <Text style={[defaultStyle.bold_text_14, {
+                                    textDecorationLine: 'line-through'
+                                }]}
+                                >{routine_name}</Text>
                                 <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                     <Text style={{
-                                        margin: 10, color: 'white'
+                                        fontFamily: 'Quicksand-Medium',
+                                        fontSize: 10,
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        marginTop: 5,
+                                        marginBottom: 5,
+                                        color: 'white'
                                     }}>Canceled</Text>
                                 </View>
                             </View>
-                            <View style={{ flexDirection: 'row', margin: 10 }}>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-                                    textDecorationLine: 'line-through'
-                                }}>{session_date}</Text>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
-                                    textDecorationLine: 'line-through'
-                                }}>{start_time + "  -   " + end_time}</Text>
+
+                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <Text
+                                    style={[defaultStyle.regular_text_14, {
+                                        textDecorationLine: 'line-through'
+                                    }]}
+                                >{session_date}</Text>
+                                <Text
+                                    style={[defaultStyle.regular_text_14, {
+                                        textDecorationLine: 'line-through',
+                                        marginLeft: 10,
+                                    }]}> {start_time + "  -   " + end_time}</Text>
 
                             </View>
 
@@ -278,26 +290,25 @@ class UserHome extends BaseComponent {
                     );
                 } else {
                     sessionArray.push(
-                        <View>
+                        <View style={{
+                            marginTop: 6,
+                            marginBottom: 16
+                        }}>
 
-                            <Text style={{
-                                margin: 10,
-                            }}>{routine_name}</Text>
-                            <View style={{ flexDirection: 'row', margin: 10 }}>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
+                            <Text style={[defaultStyle.bold_text_14, {
+                            }]}>{routine_name}</Text>
 
-                                }}>{session_date}</Text>
-                                <Text style={{
-                                    marginRight: 20,
-                                    fontSize: 14,
+                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {session_date}</Text>
 
-                                }}>{start_time + "  -   " + end_time}</Text>
+                                <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
+                                    {start_time + "  -   " + end_time}</Text>
 
                             </View>
 
-                        </View>
+                        </View >
+
                     );
                 }
             }
@@ -400,11 +411,11 @@ class UserHome extends BaseComponent {
                                                 fontSize: 12,
                                                 fontFamily: 'Quicksand-Medium',
 
-                                            }}>{player_level}</Text>
+                                            }}>{getFormattedLevel(player_level)}</Text>
                                             <View
                                                 style={{
                                                     backgroundColor: 'red',
-                                                    width: 40,
+                                                    width: 36,
                                                     borderRadius: 4,
                                                     marginRight: 20,
                                                     marginTop: -5
@@ -485,36 +496,47 @@ class UserHome extends BaseComponent {
                         </ImageBackground>
 
                     </View>
-                    <View style={{ margin: 10 }}>
-                        <CustomeCard >
-                            <View style={{ margin: 10 }}>
-                                <Text>Next Session:</Text>
-                            </View>
-                            <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+
+
+                    <CustomeCard >
+                        <View
+                            style={{
+                                marginLeft: 16,
+                                marginRight: 16,
+                                marginTop: 16
+                            }}
+                        >
+                            <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+
+                            <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
 
                             {sessionArray}
-                        </CustomeCard>
-                    </View>
 
-                    <View style={{ margin: 10 }}>
-                        <Card>
-                            <View>
+                        </View>
+                    </CustomeCard>
 
-                                <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
-                                <View style={{
-                                    width: 60,
-                                    height: 3, marginLeft: 10,
-                                    marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
-                                }}></View>
 
-                                <FlatList
-                                    data={this.state.strenthList}
-                                    renderItem={this.renderItem}
-                                    keyExtractor={(item, index) => item.id}
-                                />
-                            </View>
-                        </Card>
-                    </View>
+                    {this.state.strenthList.length != 0 ?
+                        <View style={{ margin: 10 }}>
+                            <Card>
+                                <View>
+
+                                    <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                    <View style={{
+                                        width: 60,
+                                        height: 3, marginLeft: 10,
+                                        marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                    }}></View>
+
+                                    <FlatList
+                                        data={this.state.strenthList}
+                                        renderItem={this.renderItem}
+                                        keyExtractor={(item, index) => item.id}
+                                    />
+                                </View>
+                            </Card>
+                        </View> : null}
+
 
 
                     <View style={{ margin: 5 }}>
@@ -630,8 +652,8 @@ class UserHome extends BaseComponent {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                                                                                                                                                Suspendisse nec tortor urna.
-                                                                                                                                                                                Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                                                                                                                                                            Suspendisse nec tortor urna.
+                                                                                                                                                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>
@@ -684,8 +706,8 @@ class UserHome extends BaseComponent {
                                             marginTop: 5
 
                                         }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                                                                                                                                                Suspendisse nec tortor urna.
-                                                                                                                                                                                Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
+                                                                                                                                                                                            Suspendisse nec tortor urna.
+                                                                                                                                                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
                                             Donec …….</Text>
 
                                     </View>

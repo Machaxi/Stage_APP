@@ -21,6 +21,7 @@ class WriteFeedbackListing extends BaseComponent {
         };
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.player_id = this.props.navigation.getParam('player_id', '');
+        console.warn("Data " + this.state.academy_id + "" + this.state.player_id)
     }
 
     componentDidMount() {

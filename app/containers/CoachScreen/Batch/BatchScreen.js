@@ -39,6 +39,47 @@ class BatchScreen extends BaseComponent {
         }
     }
 
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: 'My Batch',
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        source={require('../../../images/hamburger.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#667DDB'
+                        }}
+                    >Switch Academy</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
+
+
     componentDidMount() {
         var userData;
         getData('header', (value) => {
