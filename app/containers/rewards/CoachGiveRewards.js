@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { View, ImageBackground, Text, StyleSheet, Image, Modal,TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, Image, Modal, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper'
 import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
@@ -29,6 +29,7 @@ class CoachGiveRewards extends BaseComponent {
             total_player: 0,
             totalPointsAvailable: 0,
             modalVisible: false,
+            remainingPointsAvailable: 0
         }
 
         this.state.batch_id = this.props.navigation.getParam('batch_id', '')
@@ -68,7 +69,8 @@ class CoachGiveRewards extends BaseComponent {
                         batch_name: batch.batch_name,
                         batch_category: batch.batch_category,
                         total_player: batch.total_players,
-                        totalPointsAvailable: batch.totalPointsAvailable
+                        totalPointsAvailable: batch.totalPointsAvailable,
+                        remainingPointsAvailable: batch.totalPointsAvailable
                     })
 
                     let newPlayerList = []
@@ -114,7 +116,7 @@ class CoachGiveRewards extends BaseComponent {
             let reward = {}
             let player = players[i]
             let id = player.id
-            let nId =id+""
+            let nId = id + ""
             let score = player.input_score
             reward[nId] = score
             rewards[i] = reward
@@ -185,6 +187,17 @@ class CoachGiveRewards extends BaseComponent {
             <Text style={[defaultStyle.bold_text_12, { color: '#A3A5AE', width: '40%' }]}>Total reward points</Text>
         </View>
     )
+
+    subtractRewardPoints = (points) => {
+
+        if (points) {
+            this.setState({ remainingPointsAvailable: this.state.totalPointsAvailable - points });
+        }
+        else {
+            this.setState({ remainingPointsAvailable: this.state.totalPointsAvailable });
+        }
+    }
+
     _renderItem = ({ item }) => (
 
         <View style={{
@@ -204,7 +217,10 @@ class CoachGiveRewards extends BaseComponent {
                     borderWidth: 1,
                     borderColor: '#CECECE'
                 }}
-                onChangeText={(text) => { item.input_score = text }}
+                onChangeText={(text) => {
+                    item.input_score = text
+                    this.subtractRewardPoints(text)
+                }}
 
             >{item.input_score}</TextInput>
         </View>
@@ -380,7 +396,7 @@ class CoachGiveRewards extends BaseComponent {
                         height: 100
                     }}
                 >
-                    <Text style={[defaultStyle.bold_text_14, { marginTop: 8 }]}>2600 pts remaining</Text>
+                    <Text style={[defaultStyle.bold_text_14, { marginTop: 8 }]}>{this.state.remainingPointsAvailable} pts remaining</Text>
                     <View style={{
                         margin: 16,
                         flex: 1
