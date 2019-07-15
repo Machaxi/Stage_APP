@@ -22,6 +22,14 @@ class AcademyListing extends BaseComponent {
             isAutoSuggest: false,
 
         }
+        this._handleChange = this._handleChange.bind(this)
+    }
+
+    _handleChange(e) {
+        this.setState({
+            query: e
+        })
+        this.getAutoSuggestion()
     }
 
     componentDidMount() {
@@ -56,7 +64,7 @@ class AcademyListing extends BaseComponent {
 
     getAutoSuggestion() {
 
-        this.secondTextInputRef.current.focus();
+        // this.secondTextInputRef.current.focus();
         this.state.isAutoSuggest = true;
         let search_query = this.state.query
 
@@ -112,7 +120,7 @@ class AcademyListing extends BaseComponent {
                 this.setState({
                     suggestionResult: data
                 })
-                this.secondTextInputRef.current.focus();
+                //this.secondTextInputRef.current.focus();
             })
             .catch((error) => {
                 // handle error
@@ -167,7 +175,7 @@ class AcademyListing extends BaseComponent {
                 }}>
                 <Card style={{
                     borderRadius: 4,
-                    elevation: 5,
+                    elevation: 8,
                     flex: 1,
                     left: 0,
                     position: 'absolute',
@@ -176,14 +184,71 @@ class AcademyListing extends BaseComponent {
                     zIndex: 1
                 }}>
 
-                    {/* <TextInput style={{
-                        marginLeft: 8,
-                        backgroundColor: 'white',
-                        borderRadius: 16,
-                        fontFamily: 'Quicksand-Regular'
-                    }} placeholder="Search"></TextInput> */}
+                    <TextInput
+                        onChangeText={this._handleChange}
+                        // onChangeText={(text) => {
+                        //     this.state.query = text
+                        //     //console.warn(text)
+                        //     this.getAutoSuggestion()
+                        // }}
+                        value={this.state.query}
+                        style={{
+                            marginLeft: 8,
+                            backgroundColor: 'white',
+                            borderRadius: 16,
+                            fontFamily: 'Quicksand-Regular'
+                        }} placeholder="Search" />
 
-                    <Autocomplete
+                    <FlatList
+                        data={autoData}
+                        renderItem={({ item }) =>
+                            <View >
+                                {item.is_first ?
+                                    <Text
+                                        style={{
+                                            backgroundColor: '#ECECEC',
+                                            color: 'black',
+                                            paddingTop: 4,
+                                            paddingBottom: 4,
+                                            paddingLeft: 8,
+                                            fontSize: 12,
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}
+                                    >{item.is_academy ? "Academies by name" : "Academies by location"}</Text>
+                                    :
+                                    null
+                                }
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        {
+                                            this.state.suggestionResult = []
+                                            if (!item.is_academy) {
+                                                //this.state.query = item.name
+                                                this.setState({
+                                                    query: item.name
+                                                })
+                                                this.getAcademicSearchResult(true)
+                                            } else {
+                                                this.props.navigation.navigate('AcademyProfile', { id: item.id })
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <Text style={{
+                                        fontSize: 14,
+                                        padding: 6,
+                                        color: '#000000',
+                                        fontFamily: 'Quicksand-Regular'
+                                    }}>{item.name}</Text>
+                                </TouchableOpacity>
+
+                            </View>
+
+                        }
+                    />
+
+                    {/* <Autocomplete
                         listStyle={{ borderWidth: 0 }}
                         containerStyle={{
                             borderWidth: 0,
@@ -257,7 +322,7 @@ class AcademyListing extends BaseComponent {
                                 </View>
 
                             )}
-                    />
+                    /> */}
 
                 </Card>
 

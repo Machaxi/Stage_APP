@@ -68,9 +68,31 @@ export function saveUserStartupProfile(header, postdata) {
 
 }
 
+export function saveOtherUserProfile(header, postdata) {
+    console.log("saveOtherUserProfile ", header, postdata)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_PROFILE,
+        payload: {
+            request: {
+                url: `user/profile`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+}
+
 export function getRelationsDetails(header) {
     console.log("getRelationsDetails ", header)
-   
+
     return {
         type: types.GET_PROFILE,
         payload: {

@@ -4,19 +4,112 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { CustomeButtonB } from '../../components/Home/Card';
+import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
+import { connect } from 'react-redux';
+import { getData } from "../../components/auth";
+import Moment from 'moment';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-
-export default class UpcomingRoute extends BaseComponent {
+class RegisteredRoute extends BaseComponent {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            data: ["", "", ""],
+            tournaments: null,
             query: '',
+            spinner: false,
         }
     }
+    componentDidMount() {
 
+        getData('header', (value) => {
+
+            this.props.getRegisteredTournament(value).then(() => {
+                let data = this.props.data.data
+                console.log(' getRegisteredTournament ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    console.log(' 1getRegisteredTournament ' + JSON.stringify(data.data.tournaments));
+
+                    this.setState({
+                        tournaments: data.data.tournaments
+                    })
+                }
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        })
+    }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
+    getFixtureData(tournament_id) {
+
+        this.progress(true)
+
+        getData('header', (value) => {
+
+            this.props.getTournamentFixture(value, tournament_id).then(() => {
+
+                this.progress(false)
+
+                let data = this.props.data.data
+                console.log(' getTournamentFixture ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    console.log(' tournament_fixtures ' + JSON.stringify(data.data.tournament_fixtures));
+
+                    let fixture_data = data.data.tournament_fixtures[1].tournament_matches
+                    console.log('fixture array ', fixture_data)
+
+                    let playerArray = []
+
+                    for (var key in fixture_data) {
+                        if (fixture_data.hasOwnProperty(key)) {
+                            console.log("KEY = >", key)
+                            //console.log(data[key].id);
+                            let tournament_matches = fixture_data[key]
+
+                            let count = 0
+                            let subArray = []
+                            for (let i = 0; i < tournament_matches.length; i++) {
+
+                                let obj = tournament_matches[i]
+
+                                let player1 = obj.player1
+                                let player2 = obj.player2
+                                //subArray[count++] = player1
+                                ///subArray[count++] = player2
+                                subArray.push(player1)
+                                subArray.push(player2)
+                            }
+                            playerArray.push(subArray)
+
+                        }
+                    }
+                    console.log('Final => ', JSON.stringify(playerArray))
+
+                    this.props.navigation.navigate('TournamentFixture', { data: JSON.stringify(playerArray) })
+
+                }
+
+            }).catch((response) => {
+                console.log(response);
+                this.progress(false)
+            })
+        })
+
+    }
 
     find(query) {
         if (query === '') {
@@ -83,7 +176,7 @@ export default class UpcomingRoute extends BaseComponent {
                 }}>
                 <View>
                     <Image style={{ height: 150, width: "100%", borderRadius: 16, }}
-                        source={require('../../images/tournament_banner.png')}
+                        source={{ uri: item.cover_pic }}
                     >
 
                     </Image>
@@ -101,8 +194,8 @@ export default class UpcomingRoute extends BaseComponent {
                         }}>
 
                             <Text style={defaultStyle.bold_text_14}>
-                                Feather Academy Tournament
-                    </Text>
+                                {item.name}
+                            </Text>
 
                             <Image
                                 style={{ width: 5, height: 12, }}
@@ -117,10 +210,10 @@ export default class UpcomingRoute extends BaseComponent {
                         <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
                             <Text style={defaultStyle.bold_text_14}>
-                                May 2019
-                    </Text>
+                                {Moment(item.start_date).format('MMM YYYY')}
+                            </Text>
 
-                            <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
+                            <Text style={defaultStyle.blue_rounded_4}>{item.academic_type}</Text>
 
                         </View>
 
@@ -130,7 +223,9 @@ export default class UpcomingRoute extends BaseComponent {
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Dates <Text style={defaultStyle.bold_text_14}>05 May 19</Text>
+                            Dates <Text style={defaultStyle.bold_text_14}>
+                                {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
+                            </Text>
                         </Text>
 
                         <Text style={{
@@ -139,7 +234,8 @@ export default class UpcomingRoute extends BaseComponent {
                             fontFamily: 'Quicksand-Regular'
                         }}>
                             Last Date of Registration
-                            <Text style={defaultStyle.bold_text_14}>05 May 19</Text>
+                            <Text style={defaultStyle.bold_text_14}>
+                                {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
                         </Text>
 
 
@@ -161,9 +257,10 @@ export default class UpcomingRoute extends BaseComponent {
 
                         <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
-                                this.props.navigation.navigate('TournamentFixture')
+                                this.getFixtureData(item.id)
                             }}
                         >
+
 
                             <View style={{
                                 width: '100%',
@@ -174,9 +271,12 @@ export default class UpcomingRoute extends BaseComponent {
                                 alignItems: 'center'
                             }}>
 
+
                                 <Text style={defaultStyle.rounded_button_150}>
                                     View Fixtures
                                 </Text>
+
+
                             </View>
                         </TouchableOpacity>
 
@@ -190,22 +290,27 @@ export default class UpcomingRoute extends BaseComponent {
 
     render() {
 
-        // if (this.props.data.loading && !this.state.isAutoSuggest) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
+        if (this.props.data.loading && this.state.tournaments == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
 
         return (
 
             <View style={styles.chartContainer}>
 
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+
                 <FlatList
                     ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.data}
-                    extraData={this.state.data}
+                    data={this.state.tournaments}
+                    extraData={this.state.tournaments}
                     renderItem={this._renderItem}
                 />
 
@@ -213,7 +318,15 @@ export default class UpcomingRoute extends BaseComponent {
         );
     }
 }
-
+const mapStateToProps = state => {
+    return {
+        data: state.TournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getRegisteredTournament, getTournamentFixture
+};
+export default connect(mapStateToProps, mapDispatchToProps)(RegisteredRoute);
 
 const styles = StyleSheet.create({
     chartContainer: {

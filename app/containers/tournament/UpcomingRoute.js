@@ -144,7 +144,7 @@ class UpcomingRoute extends BaseComponent {
                                 {Moment(item.start_date).format('MMM YYYY')}
                             </Text>
 
-                            <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
+                            <Text style={defaultStyle.blue_rounded_4}>{item.academic_type}</Text>
 
                         </View>
 

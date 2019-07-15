@@ -30,12 +30,30 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 export default class TournamentFixture extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            array: []
+        }
+        let data = this.props.navigation.getParam('data')
+        // this.setState({
+        //     array : JSON.parse(data)
+        // })
+        this.state.array =  JSON.parse(data)
+        console.warn('Fxitrue data'+ this.state.array)
+    }
+    componentDidMount() {
+
+        
+
+    }
     square(val) {
         return val * val
     }
 
     random() {
-        return Math.floor(Math.random() * 90 + 10)
+        return 0
+        //return Math.floor(Math.random() * 90 + 10)
     }
 
     componentDidMount() {
@@ -43,13 +61,14 @@ export default class TournamentFixture extends Component {
 
     render() {
 
-        let array = [
-            //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H","A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
-            //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
-            ["A", "B", "C", "D", "E", "F", "G", "H"],
-            ["A", "C", "E", "H"],
-            ["A", "E"]
-        ]
+        // let array = [
+        //     //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H","A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
+        //     //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
+        //     ["A", "B", "C", "D", "E", "F", "G", "H"],
+        //     ["A", "C", "E", "H"],
+        //     ["A", "E"]
+        // ]
+        let array = this.state.array
 
         let height = 45
         let width = 200
@@ -138,7 +157,7 @@ export default class TournamentFixture extends Component {
                     ry="4"
                     onPress={() => {
                         console.warn("Round : " + (i + 1) + " Player : " + (j + 1))
-                        this.props.navigation.navigate('TournamentScorer')
+                        //this.props.navigation.navigate('TournamentScorer')
                     }}
                     fill={color}>
 
@@ -184,51 +203,52 @@ export default class TournamentFixture extends Component {
                         fontFamily="Quicksand-Regular"
                         x={x + 40}
                         y={y + 25}>
-                        Player {array[i][j]}
+                        {array[i][j].name}
                     </Text>
                 )
 
-                for (k = 0; k < 2; k++) {
+                //===============ADDING SCORE =============================
+                // for (k = 0; k < 2; k++) {
 
-                    let bgColor
-                    if (j % 2 == 0) {
-                        if (k % 2 == 0)
-                            bgColor = "#F5FFB8"
-                        else
-                            bgColor = color
+                //     let bgColor
+                //     if (j % 2 == 0) {
+                //         if (k % 2 == 0)
+                //             bgColor = "#F5FFB8"
+                //         else
+                //             bgColor = color
 
-                    } else {
-                        if (k % 2 == 0)
-                            bgColor = color
-                        else
-                            bgColor = "#F5FFB8"
-                    }
+                //     } else {
+                //         if (k % 2 == 0)
+                //             bgColor = color
+                //         else
+                //             bgColor = "#F5FFB8"
+                //     }
 
 
-                    container.push(
-                        <Rect
-                            x={x + width - 30 * (k + 1)}
-                            y={y}
-                            height={height}
-                            width="30"
-                            stroke="#DFDFDF"
-                            strokeWidth=".5"
-                            fill={bgColor} >
+                //     container.push(
+                //         <Rect
+                //             x={x + width - 30 * (k + 1)}
+                //             y={y}
+                //             height={height}
+                //             width="30"
+                //             stroke="#DFDFDF"
+                //             strokeWidth=".5"
+                //             fill={bgColor} >
 
-                        </Rect>
-                    )
+                //         </Rect>
+                //     )
 
-                    container.push(
-                        <Text
-                            stroke={textColor}
-                            fontSize="12"
-                            fontFamily="Quicksand-Regular"
-                            x={x + width + 10 - (30 * (k + 1))}
-                            y={y + 24}>
-                            10
-                        </Text>
-                    )
-                }
+                //     container.push(
+                //         <Text
+                //             stroke={textColor}
+                //             fontSize="12"
+                //             fontFamily="Quicksand-Regular"
+                //             x={x + width + 10 - (30 * (k + 1))}
+                //             y={y + 24}>
+                //             10
+                //         </Text>
+                //     )
+                // }
 
 
 
@@ -327,10 +347,13 @@ export default class TournamentFixture extends Component {
                         flex: 1, width: '100%', height: '100%', marginTop: 50
                     }}>
 
-                        <Svg height="100%" width="100%">
-                            {container}
+                        {this.state.array.length != 0
+                            ?
+                            <Svg height="100%" width="100%">
+                                {container}
+                            </Svg>
+                            : null}
 
-                        </Svg>
                     </View>
 
                 </ScrollView>

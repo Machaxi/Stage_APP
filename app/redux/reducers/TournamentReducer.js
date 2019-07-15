@@ -26,13 +26,49 @@ export default function TournamentReducer(state = initialState, action) {
 }
 
 export function getUpcomingTournament(header) {
-    console.log("getUpcomingTournament",header)
-    
+    console.log("getUpcomingTournament", header)
+
     return {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
                 url: `tournament/upcoming`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getRegisteredTournament(header) {
+    console.log("getRegisteredTournament", header)
+
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `tournament/registered`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getTournamentFixture(header, tournament_id) {
+    console.log("getTournamentFixture", header, tournament_id)
+
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `tournament/${tournament_id}/fixtures`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

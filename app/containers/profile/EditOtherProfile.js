@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
 import { getData } from "../../components/auth";
-import { saveUserStartupProfile } from "../../redux/reducers/ProfileReducer";
+import { saveOtherUserProfile } from "../../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 class EditOtherProfile extends BaseComponent {
 
@@ -17,18 +17,64 @@ class EditOtherProfile extends BaseComponent {
             birthdate: "",
             txtname: '',
             txtphone: '',
-            profile_pic: ''
+            profile_pic: '',
+            id: ''
         }
 
         let data = this.props.navigation.getParam('data')
-        if (data != undefined) {
-            this.setState({
-                birthdate: data.dob,
-                txtname: data.name,
-                txtphone: data.phone_number
+        let res = JSON.parse(data)
+        if (res != undefined) {
+            let name = res.name
+            let dob = res.dob
+            let phone_number = res.phone_number
+            this.state.txtname = name
+            this.state.txtphone = phone_number
+            this.state.birthdate = dob
+        }
+
+        getData('userInfo', (value) => {
+            let res = JSON.parse(value)
+            this.state.id = res.user['id']
+        })
+    }
+
+    saveUserProfile() {
+
+        let txtname = this.state.txtname;
+        let txtphone = this.state.txtphone;
+        let dob = this.state.birthdate;
+        if (txtname == '') {
+            alert("Name is empty")
+        }
+        else if (txtphone == '') {
+            alert("Phone number is empty.")
+        } else {
+
+            getData('header', (value) => {
+                var formData = new FormData();
+                var dataDic = {};
+                // data.append('file', this.state.imageData);
+                var dict = {};
+                //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
+                //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
+
+                dict['phone_number'] = txtphone//user.phoneNumber;
+                dict['name'] = txtname;
+                dict['dob'] = dob;
+                dict['user_id'] = this.state.id
+                formData.append('post', dict);
+                // console.log("header",value,batch_id);
+
+                // this.props.saveOtherUserProfile(value, formData).then(() => {
+                //     console.log('saveOtherUserProfile payload ' + JSON.stringify(this.props));
+
+                // }).catch((response) => {
+                //     //handle form errors
+                //     console.log(response);
+                // })
+             
             })
         }
-        console.warn('other profiel data ',data)
     }
 
     render() {
@@ -95,7 +141,8 @@ class EditOtherProfile extends BaseComponent {
                     </Text>
 
                             <TextInput
-                                value={this.state.txtname}
+                                onChangeText={(text) => this.setState({ txtphone: text })}
+                                value={this.state.txtphone}
                                 style={style.textinput}>
 
                             </TextInput>
@@ -151,7 +198,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    saveUserStartupProfile
+    saveOtherUserProfile
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EditOtherProfile);
 

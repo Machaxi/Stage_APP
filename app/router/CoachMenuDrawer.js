@@ -30,7 +30,8 @@ class CoachMenuDrawer extends BaseComponent {
 			academy_rating: '',
 			academy_name: '',
 			related_players: [],
-			related_guardians: []
+			related_guardians: [],
+			profile_pic: ''
 		};
 
 
@@ -47,6 +48,7 @@ class CoachMenuDrawer extends BaseComponent {
 				academy_id: userData.academy_id,
 				academy_rating: userData.academy_rating,
 				academy_name: userData.academy_name,
+				profile_pic: userData.user['profile_pic']
 
 			})
 
@@ -66,14 +68,14 @@ class CoachMenuDrawer extends BaseComponent {
 			this.props.getRelationsDetails(value).then(() => {
 
 				let data = this.props.data.profileData
-				console.log('getRelationsDetails payload ' + JSON.stringify(this.props.data.profileData));
+				//console.log('getRelationsDetails payload ' + JSON.stringify(this.props.data.profileData));
 				if (data.success) {
 
 					this.setState({
 						related_players: data.data.players,
 						related_guardians: data.data.guardians
 					})
-					console.warn("related ", JSON.stringify(this.state.related_players))
+					//console.warn("related ", JSON.stringify(this.state.related_players))
 				}
 			}).catch((response) => {
 				console.log(response);
@@ -240,7 +242,7 @@ class CoachMenuDrawer extends BaseComponent {
 			</View>)
 	}
 
-	 parentCell = (obj) => {
+	parentCell = (obj) => {
 		return <View style={{
 			flexDirection: 'row',
 			flex: 1,
@@ -255,13 +257,13 @@ class CoachMenuDrawer extends BaseComponent {
 
 			<TouchableOpacity
 				onPress={() => {
-					//this.props.navigation.navigate('EditOtherProfile', { data: obj })
+					this.props.navigation.navigate('EditOtherProfile', { data: JSON.stringify(obj) })
 				}}
 			>
 				<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
 			</TouchableOpacity>
 		</View>
-	  }
+	}
 
 	getPlayerMenu() {
 		let related_players = this.state.related_players
@@ -555,11 +557,20 @@ class CoachMenuDrawer extends BaseComponent {
 		let menu;
 		//user_type = COACH
 		//signedIn = true
+		let profile_pic = this.state.profile_pic
+		if (profile_pic == '') {
+			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
+		}
+		//console.warn('profile_pic', profile_pic)
+
+
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
 			fullName = "Guest"
 			mobileNumber = "-"
 		}
+
+
 		else if (user_type != null) {
 
 			if (user_type == GUEST) {
@@ -597,7 +608,7 @@ class CoachMenuDrawer extends BaseComponent {
 						>
 							<Image
 								style={{ width: 128, height: 128, borderRadius: 8 }}
-								source={require('../images/guest_profile.png')}
+								source={{ uri: profile_pic }}
 							></Image>
 
 							<View
