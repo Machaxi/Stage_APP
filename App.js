@@ -20,8 +20,9 @@ import { SafeAreaView } from 'react-navigation'
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NativeEventEmitter, NativeModules, StatusBar } from 'react-native';
 
+export const BASE_URL = 'http://13.233.182.217:8080/api/'
 const client = axios.create({
-    baseURL: 'http://13.233.124.189:8080/api/',
+    baseURL: BASE_URL,
     responseType: 'json'
 });
 
@@ -51,15 +52,15 @@ export default class App extends Component {
     render() {
         return (
 
-          //  <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#e6e6e6", marginTop: 0, marginBottom: 0 }}>
+            //  <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#e6e6e6", marginTop: 0, marginBottom: 0 }}>
 
-                <PaperProvider theme={ModifiedDefaultTheme}>
+            <PaperProvider theme={ModifiedDefaultTheme}>
 
-                    <Provider store={store}>
-                        <AppMain />
-                    </Provider>
-                </PaperProvider>
-           // </SafeAreaView>
+                <Provider store={store}>
+                    <AppMain />
+                </Provider>
+            </PaperProvider>
+            // </SafeAreaView>
         );
     }
 }

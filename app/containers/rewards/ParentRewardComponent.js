@@ -421,10 +421,10 @@ class ParentRewardComponent extends BaseComponent {
                             }}
                         >
 
-                            <Text style={{
+                            <Text style={[defaultStyle.regular_text_14, {
                                 justifyContent: 'center',
                                 flex: 1, textAlign: 'center',
-                            }}>No Dues found</Text></View>
+                            }]}>No Dues found</Text></View>
                         :
                         <FlatList
                             data={data}

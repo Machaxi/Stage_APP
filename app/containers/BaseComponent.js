@@ -16,6 +16,9 @@ fontMedium = "Quicksand-Medium"
 fontBold = "Quicksand-Bold"
 fontRegular = "Quicksand-Regular"
 
+export const EVENT_REFRESH_DASHBOARD = 'EVENT_REFRESH_DASHBOARD'
+export const EVENT_EDIT_PROFILE = 'EVENT_EDIT_PROFILE'
+
 export default class BaseComponent extends React.Component {
 
 

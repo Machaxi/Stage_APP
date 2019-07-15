@@ -317,7 +317,7 @@ class WriteFeedbackListing extends BaseComponent {
 
                         <Text style={styles.rounded_button}
                             onPress={() => {
-                                //this.submitFeedback()
+                                this.submitFeedback()
                                 //this.setModalVisible(true);
                             }}>
                             Submit</Text>

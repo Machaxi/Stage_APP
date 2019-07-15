@@ -1,83 +1,115 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
-import { getData } from "../../components/auth";
+import { getData,storeData } from "../../components/auth";
 import { saveUserStartupProfile } from "../../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Events from '../../router/events';
+
+
 class EditProfile extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
-            birthdate: "2016-05-15",
-            txtname: 'Niranjan',
-            txtphone: '8291088636',
+            birthdate: "",
+            txtname: '',
+            txtphone: '',
             imageData: null,
         }
 
         getData('userInfo', (value) => {
-			userData = (JSON.parse(value))
 
-
-			console.log("SplashScreen=> ", userData);
-			this.setState({
-				birthdate: userData.user['dob'],
-				txtname: userData.user['name'],
-				txtphone: userData.user['mobile_number'],
-			})
+            userData = (JSON.parse(value))
+            console.warn('name => ', userData.user['name'])
+            console.log("SplashScreen=> ", userData);
+            this.state.birthdate = userData.user['dob']
+            this.state.txtname = userData.user['name']
+            this.state.txtphone = userData.user['mobile_number']
+            this.setState({
+                txtname: userData.user['name'],
+                txtphone: userData.user['mobile_number'],
+                birthdate: userData.user['dob']
+            })
         });
-        
+
     }
     saveUserProfile() {
 
-        getData('header', (value) => {
-            var formData = new FormData();
-            var dataDic = {};
-            // data.append('file', this.state.imageData);
-            var dict = {};
-            //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
-            //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
+        let txtname = this.state.txtname
+        let phone_number = this.state.txtphone
+        let birthdate = this.state.birthdate
 
-            dict['phone_number'] = "+918890633388"//user.phoneNumber;
-            dict['name'] = 'Niranjan1';
-            dict['dob'] = "1987-06-28";
-            formData.append('post', dict);
-            // console.log("header",value,batch_id);
+        if (txtname == '') {
+            alert('Name cannot be empty.')
+        } else if (phone_number == '') {
+            alert('Phone number can\'t be empty')
+        } else {
+            getData('header', (value) => {
+                var formData = new FormData();
+                var dataDic = {};
+                // data.append('file', this.state.imageData);
+                var dict = {};
+                //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
+                //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
 
-            this.props.saveUserStartupProfile(value, formData).then(() => {
-                // console.log(' user response payload ' + JSON.stringify(this.props.data));
-                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-              //  let user = JSON.stringify(this.props.data.profileData);
-                console.log(' user response payload ' + JSON.stringify(this.props));
-                // let user1 = JSON.parse(user)
+                this.progress(true)
+                dict['phone_number'] = phone_number;
+                dict['name'] = txtname;
+                dict['dob'] = birthdate;
+                formData.append('post', JSON.stringify(dict));
+                // console.log("header",value,batch_id);
 
-                // if (user1.success == true) {
-                //     this.setState({
-                //         batchDetails: user1.data['batch'],
-                //         coactList: user1.data['batch'].coaches
-                //         // strenthList:user1.data.player_profile['stats']
-
-                //     })
-                // }
-
-            }).catch((response) => {
-                //handle form errors
-                console.log(response);
+                this.props.saveUserStartupProfile(value, formData).then(() => {
+                    this.progress(false)
+                    let data = this.props.data.profileData.data
+                    console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data.profileData));
+                    alert('Success.')
+                    this.updatePrefData(JSON.stringify(data))
+                }).catch((response) => {
+                    console.log(response);
+                    this.progress(false)
+                    alert('Something went wrong.')
+                })
             })
-        })
+        }
+    }
 
-        // this.props.navigation.navigate('SwitchPlayer')
+    updatePrefData(res) {
+
+        getData('userInfo', (value) => {
+            //console.log('old info => ', value)
+            //console.log('new => ', res)
+            let newObj = JSON.parse(value)
+            newObj.user = JSON.parse(res).user
+            storeData("userInfo", JSON.stringify(newObj))
+            //console.log('result = > ', JSON.stringify(newObj))
+            Events.publish(EVENT_EDIT_PROFILE);
+        });
+    }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
     }
 
     render() {
         return (
 
             <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                     <View
                         style={{
@@ -185,9 +217,10 @@ class EditProfile extends BaseComponent {
                     </Text>
 
                             <TextInput
+                                value={this.state.txtphone}
                                 style={style.textinput}>
-                                987654210
-                    </TextInput>
+
+                            </TextInput>
                         </View>
 
                         <View

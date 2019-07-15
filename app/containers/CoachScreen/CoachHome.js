@@ -11,21 +11,9 @@ import { getCoachDashboard } from "../../redux/reducers/dashboardReducer";
 import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent';
+import Events from '../../router/events';
 
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width - 20;
 
 class CoachHome extends BaseComponent {
 
@@ -108,9 +96,24 @@ class CoachHome extends BaseComponent {
             this.props.navigation.setParams({ 'academy_name': value });
         })
 
+        //let date = moment("26-07-2019", "DD-MM-YYYY").format("DD MM YYYY")
+        //let date = moment.utc("Monday 15 July 2019 09:00 AM").local().format("hh:mm a")
+        //console.warn(date)
+
     }
 
     componentDidMount() {
+
+        this.getCoachData()
+
+        this.refreshEvent = Events.subscribe(EVENT_REFRESH_DASHBOARD, () => {
+            console.warn(EVENT_REFRESH_DASHBOARD)
+            this.getCoachData()
+        });
+
+    }
+
+    getCoachData() {
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -127,8 +130,6 @@ class CoachHome extends BaseComponent {
                 this.getCoachDashboardData(userData['academy_id'], userData['coach_id'])
 
             }
-
-
         });
     }
 
@@ -182,8 +183,12 @@ class CoachHome extends BaseComponent {
                         </View> :
                         <View>
                             <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
-                                <Text style={defaultStyle.regular_text_14}>{session_date}</Text>
-                                <Text style={defaultStyle.regular_text_14}>{start_time + "  -   " + end_time}</Text>
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}</Text>
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        + "  -   " +
+                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}</Text>
                             </View>
                             <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id })}>
                                 Mark Attendance</CustomeButtonB>
@@ -226,17 +231,22 @@ class CoachHome extends BaseComponent {
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                        <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                             <Text
                                 style={[defaultStyle.regular_text_14, {
                                     textDecorationLine: 'line-through'
-                                }]}
-                            >{session_date}</Text>
+                                }]}>
+                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                            </Text>
                             <Text
                                 style={[defaultStyle.regular_text_14, {
                                     textDecorationLine: 'line-through',
                                     marginLeft: 10,
-                                }]}> {start_time + "  -   " + end_time}</Text>
+                                }]}>
+                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    + "  -   " +
+                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            </Text>
 
                         </View>
 
@@ -253,12 +263,16 @@ class CoachHome extends BaseComponent {
                         <Text style={[defaultStyle.bold_text_14, {
                         }]}>{routine_name}</Text>
 
-                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                        <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                             <Text style={defaultStyle.regular_text_14}>
-                                {session_date}</Text>
+                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                            </Text>
 
                             <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                                {start_time + "  -   " + end_time}</Text>
+                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    + "  -   " +
+                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            </Text>
 
                         </View>
 
@@ -273,14 +287,22 @@ class CoachHome extends BaseComponent {
         scoreArray = [];
         for (let i = 0; i < tournaments.length; i++) {
             const { name, start_date, end_date, is_canceled, end_time, start_time } = tournaments[i]
-            console.log("is_canceled", { is_canceled })
+            console.log("end_date", end_date)
+            let f_start_date = moment.utc(start_date, "DD-MM-YYYY").local().format("DD MMM")
+            let f_end_date = moment.utc(end_date, "DD-MM-YYYY").local().format("DD MMM YYYY")
 
             scoreArray.push(
                 <View>
                     <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{name}</Text>
                     <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
-                        <Text style={defaultStyle.regular_text_14}>{moment(start_date).format('DD') + ' - ' + end_date}</Text>
-                        <Text style={defaultStyle.regular_text_14}>{start_time + ' - ' + end_time}</Text>
+                        <Text style={defaultStyle.regular_text_14}>{
+                            f_start_date
+                            + ' - ' + f_end_date}</Text>
+                        <Text style={defaultStyle.regular_text_14}>
+                            {moment.utc(start_date + " " + start_time).local().format("hh:mm a")
+                                + " - " +
+                                moment.utc(start_date + " " + end_time).local().format("hh:mm a")}
+                        </Text>
                     </View>
 
                 </View>

@@ -12,21 +12,9 @@ import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
+import Events from '../../router/events';
 
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width - 20;
 
 class MarkAttendence extends BaseComponent {
 
@@ -101,57 +89,50 @@ class MarkAttendence extends BaseComponent {
 
 
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
-
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
-
+        <View style={{
+            marginLeft: 10, marginRight: 10, marginTop: 10,
+            flex: 1, flexDirection: 'row', height: 50
         }}>
-            <View style={{ marginLeft: 0, marginRight: 10, flex: 1, flexDirection: 'row', height: 50 }}>
 
-                <View style={{
-                    flex: 1,
-                    marginLeft: 8,
-                    marginRight: 15,
-                    marginBottom: 5,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                }}>
-                    <Text style={defaultStyle.regular_text_14}>
-                        {item.name}
-                    </Text>
-                    <View style={{ backgroundColor: 'white', marginTop: -10 }}>
-                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                            // title='a'
-                            checked={item.is_present}
-                            onPress={() => {
-                                console.log("he;eleleo", item.is_present)
-                                let playerList = [...this.state.playerList];
-                                let index = playerList.findIndex(el => el.id === item.id);
-                                playerList[index] = { ...playerList[index], is_present: !item.is_present };
-                                this.setState({ playerList });
+            <View style={{
+                flex: 1,
+                marginLeft: 8,
+                marginRight: 15,
+                marginBottom: 5,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+            }}>
+                <Text style={defaultStyle.regular_text_14}>
+                    {item.name}
+                </Text>
+                <View style={{ backgroundColor: 'white', marginTop: -10 }}>
+                    <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
+                        // title='a'
+                        checked={item.is_present}
+                        onPress={() => {
+                            console.log("he;eleleo", item.is_present)
+                            let playerList = [...this.state.playerList];
+                            let index = playerList.findIndex(el => el.id === item.id);
+                            playerList[index] = { ...playerList[index], is_present: !item.is_present };
+                            this.setState({ playerList });
 
-                                //   item.isPresent = !item.isPresent
-                                // this.setState({
-                                //     playerList:item
-                                // })
+                            //   item.isPresent = !item.isPresent
+                            // this.setState({
+                            //     playerList:item
+                            // })
 
-                                console.log("he;eleleo", playerList[0].is_present)
-                            }
+                            console.log("he;eleleo", playerList[0].is_present)
+                        }
 
 
-                            }
-                        />
-                    </View>
-
+                        }
+                    />
                 </View>
 
-
             </View>
-        </TouchableOpacity>
+
+        </View>
 
     );
 
@@ -201,12 +182,15 @@ class MarkAttendence extends BaseComponent {
                     //     // batchDetails:user1.data['batch']
                     //
                     // })
+                    Events.publish(EVENT_REFRESH_DASHBOARD);
                 }
 
             }).catch((response) => {
                 //handle form errors
                 console.log(response);
             })
+
+
 
         });
     }
@@ -240,12 +224,18 @@ class MarkAttendence extends BaseComponent {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: -10, }}>
                         <View style={{ marginTop: 5 }}>
                             <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Date </Text>
-                            <Text style={defaultStyle.regular_text_14}>{session.session_date} </Text>
+                            <Text style={defaultStyle.regular_text_14}>
+                                {moment.utc(session.session_date).local().format("dddd, DD MMM YYYY")}
+                            </Text>
 
                         </View>
                         <View style={{ marginTop: 5 }}>
                             <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Time slot </Text>
-                            <Text style={defaultStyle.regular_text_14}>{session.start_time + ' - ' + session.end_time}</Text>
+                            <Text style={defaultStyle.regular_text_14}>
+                                {moment.utc(session.session_date + " " + session.start_time).local().format("hh:mm a")
+                                    + " - " +
+                                    moment.utc(session.session_date + " " + session.end_time).local().format("hh:mm a")}
+                            </Text>
                         </View>
                     </View>
                 </View>

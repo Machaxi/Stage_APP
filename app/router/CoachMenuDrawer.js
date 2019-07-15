@@ -12,9 +12,10 @@ import { isSignedIn, getData } from "../components/auth";
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
 import { COACH, GUEST, PARENT, PLAYER } from "../components/Constants";
-import BaseComponent, { defaultStyle } from '../containers/BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../containers/BaseComponent'
 import { getRelationsDetails } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
+import Events from '../router/events';
 
 class CoachMenuDrawer extends BaseComponent {
 
@@ -35,6 +36,15 @@ class CoachMenuDrawer extends BaseComponent {
 		};
 
 
+		this.updateData()
+
+		this.refreshEvent = Events.subscribe(EVENT_EDIT_PROFILE, () => {
+			console.warn(EVENT_EDIT_PROFILE)
+			this.updateData()
+		});
+	}
+
+	updateData() {
 		getData('userInfo', (value) => {
 			userData = (JSON.parse(value))
 

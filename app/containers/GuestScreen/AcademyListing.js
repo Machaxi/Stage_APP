@@ -7,6 +7,7 @@ import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
 import BaseComponent from './../BaseComponent'
+import { BASE_URL } from '../../../App';
 
 class AcademyListing extends BaseComponent {
 
@@ -75,7 +76,7 @@ class AcademyListing extends BaseComponent {
         // }).catch((response) => {
         //     console.log(response);
         // })
-        const addCart = "http://13.233.124.189:8080/api/" + `global/academy/search-auto-suggest?search_query=${search_query}`
+        const addCart = BASE_URL + `global/academy/search-auto-suggest?search_query=${search_query}`
 
         console.log(addCart)
 

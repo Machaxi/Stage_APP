@@ -9,6 +9,8 @@ import PhotoUpload from 'react-native-photo-upload'
 import { getData } from "../../components/auth";
 import { saveOtherUserProfile } from "../../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
+import axios from 'axios'
+
 class EditOtherProfile extends BaseComponent {
 
     constructor(props) {
@@ -63,7 +65,28 @@ class EditOtherProfile extends BaseComponent {
                 dict['dob'] = dob;
                 dict['user_id'] = this.state.id
                 formData.append('post', dict);
-                // console.log("header",value,batch_id);
+                console.log("header", JSON.stringify(formData));
+
+                axios({
+                    method: 'post',
+                    url: 'http://13.233.182.217:8080/api/user/profile',
+                    data: dict,
+                    config: {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'x-authorization': value
+                        }
+                    }
+                })
+                    .then(function (response) {
+                        //handle success
+                        console.log(response);
+                    })
+                    .catch(function (response) {
+                        //handle error
+                        console.log(response);
+                    });
+
 
                 // this.props.saveOtherUserProfile(value, formData).then(() => {
                 //     console.log('saveOtherUserProfile payload ' + JSON.stringify(this.props));
@@ -72,7 +95,7 @@ class EditOtherProfile extends BaseComponent {
                 //     //handle form errors
                 //     console.log(response);
                 // })
-             
+
             })
         }
     }

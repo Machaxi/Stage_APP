@@ -12,20 +12,10 @@ import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
+import { Rating } from 'react-native-ratings';
+
 import BaseComponent, { getFormattedLevel, defaultStyle } from '../BaseComponent'
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
 
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
 var deviceWidth = Dimensions.get('window').width - 20;
 
 class ParentHome extends BaseComponent {
@@ -120,7 +110,9 @@ class ParentHome extends BaseComponent {
             country: undefined,
             player_profile: null,
             strenthList: null,
-            acedemy_name: ''
+            acedemy_name: '',
+            academy_feedback_data: null,
+            coach_feedback_data: null
         }
     }
 
@@ -163,7 +155,9 @@ class ParentHome extends BaseComponent {
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         strenthList: user1.data.player_profile['stats'],
-                        acedemy_name: user1.data['player_profile'].academy_name
+                        acedemy_name: user1.data['player_profile'].academy_name,
+                        academy_feedback_data: user1.data['academy_data'].feedback[0],
+                        coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
 
                     })
                 }
@@ -231,6 +225,10 @@ class ParentHome extends BaseComponent {
 
 
     render() {
+
+        let academy_feedback_data = this.state.academy_feedback_data
+        let coach_feedback_data = this.state.coach_feedback_data
+
         if (this.props.data.loading && !this.state.player_profile) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -275,13 +273,17 @@ class ParentHome extends BaseComponent {
                                 <Text
                                     style={[defaultStyle.regular_text_14, {
                                         textDecorationLine: 'line-through'
-                                    }]}
-                                >{session_date}</Text>
+                                    }]} >
+                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                </Text>
                                 <Text
                                     style={[defaultStyle.regular_text_14, {
                                         textDecorationLine: 'line-through',
                                         marginLeft: 10,
-                                    }]}> {start_time + "  -   " + end_time}</Text>
+                                    }]}> {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        + "  -   " +
+                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                </Text>
 
                             </View>
 
@@ -299,10 +301,14 @@ class ParentHome extends BaseComponent {
 
                             <View style={{ flexDirection: 'row', marginTop: 10 }}>
                                 <Text style={defaultStyle.regular_text_14}>
-                                    {session_date}</Text>
+                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                </Text>
 
                                 <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                                    {start_time + "  -   " + end_time}</Text>
+                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        + "  -   " +
+                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                </Text>
 
                             </View>
 
@@ -517,7 +523,7 @@ class ParentHome extends BaseComponent {
                                 marginTop: 16
                             }}
                         >
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={defaultStyle.bold_text_10}>Payment</Text>
                                     <View
@@ -543,7 +549,9 @@ class ParentHome extends BaseComponent {
                                 <View style={{ width: '50%', flexDirection: 'row', }}>
                                     <View>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Due Date</Text>
-                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{moment(Date(payment_detail.due_date)).format('DD-MMM-YYYY')}</Text>
+                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>
+                                        {moment.utc(payment_detail.due_date).local().format("DD-MMM-YYYY")}
+                                        </Text>
                                     </View>
 
 
@@ -571,7 +579,7 @@ class ParentHome extends BaseComponent {
                                     marginTop: 16
                                 }}
                             >
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Text style={defaultStyle.bold_text_10}>Reward Points</Text>
                                         <View
@@ -718,112 +726,197 @@ class ParentHome extends BaseComponent {
                         </Card>
                     </View>
 
-                    <View style={{ margin: 5 }}>
-                        <CustomeCard>
-                            <View style={{ margin: 10 }}>
-                                <Text style={{ marginTop: 10 }}>Academy Feedback</Text>
-                            </View>
-                            <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
-                            <View style={{ margin: 10 }}>
-                                <View style={{ flexDirection: 'row', margin: 10 }}>
-                                    <Text>Feather Academy</Text>
-                                    <Text>Feather Academy</Text>
-                                </View>
-                                <View>
-
-                                    <View style={{ margin: 10 }}>
-                                        <Text style={{
-                                            marginTop: 5
-
-                                        }}>Top rating</Text>
-                                        <Text style={{
-                                            marginTop: 5
-
-                                        }}> Manish A.</Text>
-                                        <Text style={{
-                                            marginTop: 5
-
-                                        }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                                                                                                                                                                                                                                                            Suspendisse nec tortor urna.
-                                                                                                                                                                                                                                                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
-                                            Donec …….</Text>
-
-                                    </View>
-                                    <TouchableOpacity style={styles.buttomButton} onPress={() => {
-                                        // this.setState({
-                                        //     isShowAddress: true
-                                        // })
+                    {/* ================================ ACADEMY FEEDBACk =================== */}
 
 
-                                        //this.props.navigation.navigate('RegisterScreen')
-                                    }}>
-                                        <Text
-                                            style={{ textAlign: 'center', flex: 1 }}>
+                    {academy_feedback_data != null ?
 
-                                            View Academy
-                                        </Text>
-
-                                    </TouchableOpacity>
-                                </View>
-
-
-                            </View>
-                        </CustomeCard>
-                    </View>
-                    <View style={{ margin: 5 }}>
                         <CustomeCard >
-                            <View style={{ margin: 10 }}>
-                                <Text style={{ marginTop: 10 }}>Coach Feedback</Text>
+                            <View
+                                style={{
+                                    marginLeft: 12,
+                                    marginRight: 12,
+                                    marginTop: 16
+                                }}
+                            >
+                                <Text style={defaultStyle.bold_text_10}>Academy Feedback</Text>
                             </View>
-                            <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
-                            <View style={{ margin: 10 }}>
-                                <View style={{ flexDirection: 'row', margin: 10 }}>
-                                    <Text>Suman Kumar</Text>
-                                    <Text>Feather Academy</Text>
+
+                            <View style={[defaultStyle.line_style, { marginLeft: 12, marginRight: 12 }]} />
+
+
+                            <View style={{ marginLeft: 10, marginRight: 10 }}>
+
+                                <View style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    flex: 1,
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{academy_feedback_data.target.name}</Text>
+
+                                    <View style={{ flexDirection: 'row', }}>
+
+                                        <Rating
+                                            type='custom'
+                                            ratingColor='#F4FC9A'
+                                            ratingBackgroundColor='#D7D7D7'
+                                            ratingCount={5}
+                                            imageSize={14}
+                                            readonly={true}
+                                            startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            style={{ height: 20, width: 80 }}
+                                        />
+
+                                        <Text style={{
+                                            borderColor: '#DFDFDF',
+                                            borderWidth: 1,
+                                            height: 19, width: 30, textAlign: 'center',
+                                            fontSize: 12,
+                                            color: '#707070',
+                                            paddingTop: 0,
+                                            borderRadius: 12,
+                                            fontFamily: 'Quicksand-Medium'
+                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</Text>
+
+                                    </View>
                                 </View>
                                 <View>
 
-                                    <View style={{ margin: 10 }}>
-                                        <Text style={{
-                                            marginTop: 5
+                                    <View style={{ marginTop: 10 }}>
+                                        <Text style={
+                                            [defaultStyle.bold_text_10, { marginTop: 5, color: '#A3A5AE' }]
+                                        }>Top Reviews</Text>
+                                        <Text style={[defaultStyle.bold_text_12, { marginTop: 5, color: '#707070' }]} >{academy_feedback_data.source.name}</Text>
 
-                                        }}>Top rating</Text>
-                                        <Text style={{
-                                            marginTop: 5
+                                        <Text style={[defaultStyle.regular_text_12, {
+                                            marginTop: 5,
+                                            color: '#707070'
 
-                                        }}> Manish A.</Text>
-                                        <Text style={{
-                                            marginTop: 5
-
-                                        }}>Vestibulum rutrum quam vitae fringilla tincidunt.
-                                                                                                                                                                                                                                                                                            Suspendisse nec tortor urna.
-                                                                                                                                                                                                                                                                                            Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae.
-                                            Donec …….</Text>
+                                        }]}>{academy_feedback_data.review}</Text>
 
                                     </View>
-                                    <TouchableOpacity style={styles.buttomButton} onPress={() => {
-                                        // this.setState({
-                                        //     isShowAddress: true
-                                        // })
 
 
-                                        // this.props.navigation.navigate('SwitchPlayer', {
-                                        //     userType: 'player'
-                                        // })
+                                    <View style={{
+                                        elevation: 4,
+                                        marginTop: 10
                                     }}>
-                                        <Text
-                                            style={{ textAlign: 'center', flex: 1 }}>
 
-                                            View Coach
-                                        </Text>
+                                        <TouchableOpacity onPress={() => {
 
-                                    </TouchableOpacity>
+                                        }}>
+                                            <Text
+                                                style={[defaultStyle.bold_text_12,
+                                                { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
+                                                View Academy
+                </Text>
+
+                                        </TouchableOpacity>
+                                    </View>
+
                                 </View>
-
 
                             </View>
                         </CustomeCard>
-                    </View>
+                        : null
+                    }
+
+                    {/* ================================ COACH FEEDBACk =================== */}
+
+                    {coach_feedback_data != null ?
+
+                        <CustomeCard >
+                            <View
+                                style={{
+                                    marginLeft: 12,
+                                    marginRight: 12,
+                                    marginTop: 16
+                                }}
+                            >
+                                <Text style={defaultStyle.bold_text_10}>Coach Feedback</Text>
+                            </View>
+
+                            <View style={[defaultStyle.line_style, { marginLeft: 12, marginRight: 12 }]} />
+
+
+                            <View style={{ marginLeft: 10, marginRight: 10 }}>
+
+                                <View style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    flex: 1,
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{coach_feedback_data.target.name}</Text>
+
+                                    <View style={{ flexDirection: 'row', }}>
+
+                                        <Rating
+                                            type='custom'
+                                            ratingColor='#F4FC9A'
+                                            ratingBackgroundColor='#D7D7D7'
+                                            ratingCount={5}
+                                            imageSize={14}
+                                            readonly={true}
+                                            startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            style={{ height: 20, width: 80 }}
+                                        />
+
+                                        <Text style={{
+                                            borderColor: '#DFDFDF',
+                                            borderWidth: 1,
+                                            height: 19, width: 30, textAlign: 'center',
+                                            fontSize: 12,
+                                            color: '#707070',
+                                            paddingTop: 0,
+                                            borderRadius: 12,
+                                            fontFamily: 'Quicksand-Medium'
+                                        }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating}</Text>
+
+                                    </View>
+                                </View>
+                                <View>
+
+                                    <View style={{ marginTop: 10 }}>
+                                        <Text style={
+                                            [defaultStyle.bold_text_10, { marginTop: 5, color: '#A3A5AE' }]
+                                        }>Top Reviews</Text>
+                                        <Text style={[defaultStyle.bold_text_12, { marginTop: 5, color: '#707070' }]} >{coach_feedback_data.source.name}</Text>
+
+                                        <Text style={[defaultStyle.regular_text_12, {
+                                            marginTop: 5,
+                                            color: '#707070'
+
+                                        }]}>{coach_feedback_data.review}</Text>
+
+                                    </View>
+
+
+                                    <View style={{
+                                        elevation: 4,
+                                        marginTop: 10
+                                    }}>
+
+                                        <TouchableOpacity onPress={() => {
+
+                                        }}>
+                                            <Text
+                                                style={[defaultStyle.bold_text_12,
+                                                { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
+                                                View Coach
+                                        </Text>
+
+                                        </TouchableOpacity>
+                                    </View>
+
+                                </View>
+
+                            </View>
+                        </CustomeCard>
+                        : null
+                    }
+
 
                 </ScrollView>
             </View>;

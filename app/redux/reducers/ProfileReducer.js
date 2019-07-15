@@ -40,7 +40,8 @@ export function saveUserStartupProfile(header, postdata) {
                 data: postdata,
                 headers: {
                     'x-authorization': header,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data; charset=utf-8; ',
+                    
                 },
             }
         }

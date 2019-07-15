@@ -9,20 +9,10 @@ import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from './PlayerBatchComponent'
-import BaseComponent, {defaultStyle} from '../BaseComponent';
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import BaseComponent, { defaultStyle } from '../BaseComponent';
+import moment from 'moment'
 
-];
 
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
 var deviceWidth = Dimensions.get('window').width - 20;
 const FirstRoute = () => (
     <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
@@ -30,7 +20,7 @@ const FirstRoute = () => (
 const SecondRoute = () => (
     <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
 );
-class PlayerBatch extends BaseComponent{
+class PlayerBatch extends BaseComponent {
 
 
     static navigationOptions = ({ navigation }) => {
@@ -121,7 +111,7 @@ class PlayerBatch extends BaseComponent{
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.batchdata);
-                console.log(' user response payload ' + user);
+                console.log(' getPlayerBatchData response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
@@ -174,12 +164,18 @@ class PlayerBatch extends BaseComponent{
                                 marginRight: 20,
                                 fontSize: 14,
                                 textDecorationLine: 'line-through'
-                            }}>{session_date}</Text>
+                            }}>
+                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                            </Text>
                             <Text style={{
                                 marginRight: 20,
                                 fontSize: 14,
                                 textDecorationLine: 'line-through'
-                            }}>{start_time + "  -   " + end_time}</Text>
+                            }}>
+                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    + "  -   " +
+                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            </Text>
 
                         </View>
 
@@ -197,12 +193,19 @@ class PlayerBatch extends BaseComponent{
                                 marginRight: 20,
                                 fontSize: 14,
 
-                            }}>{session_date}</Text>
+                            }}>
+                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+
+                            </Text>
                             <Text style={{
                                 marginRight: 20,
                                 fontSize: 14,
 
-                            }}>{start_time + "  -   " + end_time}</Text>
+                            }}>
+                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    + "  -   " +
+                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            </Text>
 
                         </View>
 

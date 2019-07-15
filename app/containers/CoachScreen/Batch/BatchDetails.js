@@ -10,20 +10,8 @@ import { getCoachBatchDetails } from "../../../redux/reducers/BatchReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import { defaultStyle } from '../../BaseComponent';
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import moment from 'moment'
 
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width - 20;
 
 class BatchDetails extends React.Component {
 
@@ -119,12 +107,18 @@ class BatchDetails extends React.Component {
                             marginRight: 20,
                             fontSize: 14,
                             textDecorationLine: 'line-through'
-                        }}>{session_date}</Text>
+                        }}>
+                            {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                        </Text>
                         <Text style={{
                             marginRight: 20,
                             fontSize: 14,
                             textDecorationLine: 'line-through'
-                        }}>{start_time + "  -   " + end_time}</Text>
+                        }}>
+                            {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                + "  -   " +
+                                moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                        </Text>
 
                     </View>
 
@@ -146,13 +140,19 @@ class BatchDetails extends React.Component {
                             fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
-                        }}>{session_date}</Text>
+                        }}>
+                            {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                        </Text>
                         <Text style={{
                             marginRight: 20,
                             fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
-                        }}>{start_time + "  -   " + end_time}</Text>
+                        }}>
+                            {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                + "  -   " +
+                                moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                        </Text>
 
                     </View>
 
@@ -249,12 +249,22 @@ class BatchDetails extends React.Component {
                             <View style={{ width: '50%' }}>
                                 <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekdays</Text>
                                 <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.days.join(' ')}</Text>
-                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.start_time + ' - ' + operations.weekday.end_time}</Text>
+                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
+                                    {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
+                                        + ' - ' +
+                                        moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
+                                    }
+                                </Text>
                             </View>
                             <View style={{ width: '50%' }}>
                                 <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekend</Text>
                                 <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.days.join(' ')}</Text>
-                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.start_time + ' - ' + operations.weekend.end_time}</Text>
+                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
+                                    {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
+                                        + ' - ' +
+                                        moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
+                                    }
+                                </Text>
 
                             </View>
 

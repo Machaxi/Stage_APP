@@ -13,20 +13,7 @@ import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
 import DatePicker from 'react-native-datepicker'
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
 
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width -20;
 
 class  CoachAttendenceBook extends React.Component {
 
@@ -82,7 +69,7 @@ class  CoachAttendenceBook extends React.Component {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.batchdata);
-                console.log(' user response payload ' + user);
+                console.log(' getCoachBatchAttendenceDetails response payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if(user1.success == true){
@@ -95,7 +82,7 @@ class  CoachAttendenceBook extends React.Component {
 
             }).catch((response) => {
                 //handle form errors
-                console.log(response);
+                console.warn(response);
             })
 
         });

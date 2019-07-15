@@ -16,7 +16,7 @@ class RegisteredRoute extends BaseComponent {
         super(props)
 
         this.state = {
-            tournaments: null,
+            tournaments: [],
             query: '',
             spinner: false,
         }
@@ -290,7 +290,7 @@ class RegisteredRoute extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.tournaments == null) {
+        if (this.props.data.loading && this.state.tournaments.length == 0) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -307,12 +307,28 @@ class RegisteredRoute extends BaseComponent {
                     textStyle={defaultStyle.spinnerTextStyle}
                 />
 
-                <FlatList
-                    ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.tournaments}
-                    extraData={this.state.tournaments}
-                    renderItem={this._renderItem}
-                />
+                {this.state.tournaments.length != 0 ?
+                    <FlatList
+                        ListHeaderComponent={() => this.listHeader()}
+                        data={this.state.tournaments}
+                        extraData={this.state.tournaments}
+                        renderItem={this._renderItem}
+                    /> :
+                    <View
+                        style={{
+
+                            alignSelf: 'center',
+                            marginTop: 150,
+                            justifyContent: 'center', flex: 1, alignItems: 'center'
+                        }}
+                    >
+
+                        <Text style={[defaultStyle.regular_text_14, {
+                            justifyContent: 'center',
+                            flex: 1, textAlign: 'center',
+                        }]}>No Tournament found</Text></View>
+                }
+
 
             </View>
         );
