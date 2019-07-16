@@ -112,7 +112,8 @@ class ParentHome extends BaseComponent {
             strenthList: null,
             acedemy_name: '',
             academy_feedback_data: null,
-            coach_feedback_data: null
+            coach_feedback_data: null,
+            academy_id: ''
         }
     }
 
@@ -126,12 +127,14 @@ class ParentHome extends BaseComponent {
         getData('userInfo', (value) => {
             console.warn(value)
             userData = JSON.parse(value)
+            this.state.academy_id = userData['academy_id']
             this.props.navigation.setParams({ Title: userData.academy_name });
             this.setState({
                 userData: JSON.parse(value)
             });
             console.log("userData.user", userData.user['user_type'])
             if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+               
                 this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
             }
 
@@ -274,7 +277,7 @@ class ParentHome extends BaseComponent {
                                     style={[defaultStyle.regular_text_14, {
                                         textDecorationLine: 'line-through'
                                     }]} >
-                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                    {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
                                 </Text>
                                 <Text
                                     style={[defaultStyle.regular_text_14, {
@@ -301,7 +304,7 @@ class ParentHome extends BaseComponent {
 
                             <View style={{ flexDirection: 'row', marginTop: 10 }}>
                                 <Text style={defaultStyle.regular_text_14}>
-                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                    {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
                                 </Text>
 
                                 <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
@@ -550,7 +553,7 @@ class ParentHome extends BaseComponent {
                                     <View>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Due Date</Text>
                                         <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>
-                                        {moment.utc(payment_detail.due_date).local().format("DD-MMM-YYYY")}
+                                            {moment.utc(payment_detail.due_date).local().format("DD-MMM-YYYY")}
                                         </Text>
                                     </View>
 
@@ -645,7 +648,8 @@ class ParentHome extends BaseComponent {
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")
-                                this.props.navigation.navigate('CurrentBooking')
+                                this.props.navigation.navigate('PlayersListing', { id: this.state.academy_id })
+
 
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>

@@ -10,6 +10,7 @@ import {getCoachPerformenceList} from "../../../redux/reducers/PerformenceReduce
 import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 import moment from "moment/moment";
+import { COACH, ACADEMY } from '../../../components/Constants';
 const acedemicList = [
     {
         label: 'India',
@@ -51,7 +52,9 @@ class  PerformenceScreen extends React.Component {
                 userData: JSON.parse(value)
             });
             console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='COACH'){
+            let userType = userData.user['user_type']
+
+            if(userType == COACH || userType == ACADEMY){
                 this.getCoachBatchList(userData['academy_id'],userData['coach_id'])
 
             }

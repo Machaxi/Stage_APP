@@ -2,7 +2,7 @@ import React from 'react'
 
 import { View, Image, Linking, Platform } from 'react-native'
 import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
-import { COACH, GUEST, PARENT, PLAYER } from "../../components/Constants";
+import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
 import BaseComponent from '../BaseComponent';
 
 class Splash extends BaseComponent {
@@ -44,31 +44,31 @@ class Splash extends BaseComponent {
             if (signedIn !== true) {
 
                 this.props.navigation.navigate('IntroScreen')//'SignedOut')
-                
+
 
             } else {
                 getData('userInfo', (value) => {
                     userData = (JSON.parse(value))
                     // onSignIn()
+                    let userType = userData.user['user_type']
                     console.log("SplashScreen=> ", userData);
-                    if (userData.user['user_type'] == GUEST) {
+                    if (userType == GUEST) {
                         this.props.navigation.navigate('GHome')
                     }
                     else if (userData.academy_id != null) {
                         console.log(userData);
-                        if (userData.user['user_type'] == GUEST) {
+                        if (userType == GUEST) {
                             this.props.navigation.navigate('GHome')
-                        } else if (userData.user['user_type'] == PLAYER) {
+                        } else if (userType == PLAYER) {
                             this.props.navigation.navigate('UHome')
 
-                        } else if (userData.user['user_type'] == COACH) {
+                        } else if (userType == COACH || userType == ACADEMY) {
                             this.props.navigation.navigate('CHome')
-
                         }
-                        else if (userData.user['user_type'] == PARENT) {
+                        else if (userType == PARENT) {
                             this.props.navigation.navigate('PHome')
-
                         }
+
                     } else {
                         this.props.navigation.navigate('SwitchPlayer')
                     }

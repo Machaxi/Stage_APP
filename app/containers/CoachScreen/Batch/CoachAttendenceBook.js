@@ -3,19 +3,22 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
-import {Card} from 'react-native-paper'
-import {SwitchButton ,CustomeButtonB} from  '../../../components/Home/SwitchButton'
-import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachBatchAttendenceDetails} from "../../../redux/reducers/BatchReducer";
-import {getData} from "../../../components/auth";
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-paper'
+import { SwitchButton, CustomeButtonB } from '../../../components/Home/SwitchButton'
+import { CustomeCard } from '../../../components/Home/Card'
+import { getCoachBatchAttendenceDetails } from "../../../redux/reducers/BatchReducer";
+import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
 import DatePicker from 'react-native-datepicker'
+import { defaultStyle } from '../../BaseComponent';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { ACADEMY, COACH } from '../../../components/Constants';
 
 
-class  CoachAttendenceBook extends React.Component {
+class CoachAttendenceBook extends React.Component {
 
     constructor(props) {
         super(props)
@@ -28,54 +31,67 @@ class  CoachAttendenceBook extends React.Component {
 
             //  coach_profile:null,
             country: undefined,
-            billingchecked:false,
-            playerList : null,
-            batchDetails:null,
-            attendenceDate:'26-JUNE-2019',
+            billingchecked: false,
+            playerList: null,
+            batchDetails: null,
+            attendenceDate: '10-JULY-2019',
+            batch_data: null,
+            spinner: false
         }
+        this.state.batch_data = this.props.navigation.getParam('batch_data', undefined)
+        console.warn('batch_data => ', this.state.batch_data)
     }
 
-    componentDidMount(){
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
-        });
+        let batch_id = this.props.navigation.getParam('batch_id')
+
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='COACH'){
+            console.log("userData.user", userData.user['user_type'])
+            let userType = userData.user['user_type']
+
+            if (userType == COACH || userType == ACADEMY) {
 
                 const yourDate = Date()
 
                 const NewDate = moment(this.state.attendenceDate).format('YYYY-MM-DD')
-                console.log("savePlaye",NewDate)
-                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'),NewDate)
+                console.log("savePlaye", NewDate)
+                this.getCoachAttendencedData(batch_id, NewDate)
 
             }
-
-
         });
     }
 
-    getCoachAttendencedData(btach_id,date){
-        getData('header',(value)=>{
-            console.log("header",value,btach_id);
-            this.props.getCoachBatchAttendenceDetails(value,btach_id,date).then(() => {
+    getCoachAttendencedData(btach_id, date) {
+        this.progress(true)
+
+        getData('header', (value) => {
+            console.log("header", value, btach_id);
+            this.props.getCoachBatchAttendenceDetails(value, btach_id, date).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                this.progress(false)
+
                 let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' getCoachBatchAttendenceDetails response payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     this.setState({
-                        playerList:user1.data['players'],
-                        batchDetails:user1.data['batch']
+                        playerList: user1.data['players'],
+                        batchDetails: user1.data['batch']
 
                     })
                 }
@@ -83,6 +99,7 @@ class  CoachAttendenceBook extends React.Component {
             }).catch((response) => {
                 //handle form errors
                 console.warn(response);
+                this.progress(false)
             })
 
         });
@@ -90,39 +107,52 @@ class  CoachAttendenceBook extends React.Component {
     }
 
 
-
-
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
+        <View
+            style={{
+                backgroundColor: 'white',
+                paddingLeft: 20,
+                paddingRight: 20,
+                paddingTop: 20,
+                paddingBottom: 20
+            }}>
 
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
+            <TouchableOpacity key={item} onPress={() => {
 
-        }}>
-            <View style={{marginLeft:0,marginRight:10,flex:1,flexDirection:'row',height:50}}>
+                console.warn("Touch Press")
 
-                <View  style={{
-                    flex:1,
-                    marginLeft: 8,
-                    marginRight: 15,
-                    marginBottom:5,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                }}>
-                    <Text>
+                // this.props.navigation.navigate('OrderTracking', {
+                //     order_id: item.increment_id
+                // })
+
+            }}>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+
+
+                    <Text
+                        style={[defaultStyle.regular_text_14, {
+                            width: "50%"
+                        }]}
+                    >
                         {item.name}
                     </Text>
-                  <Text> {item.attendance + '%'}</Text>
-                    <Text> {item.is_present ?'P' :'A'}</Text>
+                    <Text
+                        style={[defaultStyle.regular_text_14, {
+                            width: "25%"
+                        }]} >
+                        {item.attendance + '%'}
+                    </Text>
+                    <Text
+                        style={[defaultStyle.regular_text_14, {
+                            width: "25%"
+                        }]} > {item.is_present ? 'P' : 'A'}
+                    </Text>
+
 
                 </View>
-
-
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
 
     );
 
@@ -132,95 +162,131 @@ class  CoachAttendenceBook extends React.Component {
 
 
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
-            return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
-                </View>
-            )
-        }
+        // if (this.props.data.loading && !this.state.player_profile) {
+        //     return (
+        //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        //             <ActivityIndicator size="large" color="#67BAF5"/>
+        //         </View>
+        //     )
+        // }
+        // const { batch_name, batch_category, batch_id, session } = this.state.batchDetails
+
+        let batch_name = this.state.batch_data.batch_name
+        let batch_category = this.state.batch_data.batch_category
+        let session = this.state.batch_data.session
+        let batch_id = this.state.batch_data.batch_id
+
         if (this.state.batchDetails) {
-            const {batch_name, batch_category, batch_id, session} = this.state.batchDetails
 
             // this.attedenceMangement(attandence_batch)
             //
             // this.sessionMangement(operations)
             // this.scoreMangement(tournaments)
 
-            return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#ffffff' }}>
 
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
 
-                <View style={{backgroundColor:'white'}}>
-                    <View style={{flexDirection:'row',justifyContent:'space-between',margin:20}}>
-                    <View style={{justifyContent:'space-between'}}>
-                        <Text style={{fontSize:10,marginBottom:5}}>Category</Text>
-                        <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_category} </Text>
-                    </View>
-
-                        <View style={{justifyContent:'space-between'}}>
-                            <Text style={{fontSize:10,marginBottom:5}}>Batch name</Text>
-                            <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_name} </Text>
+                <View style={{ backgroundColor: 'white' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 5 }]}>Category</Text>
+                            <Text style={defaultStyle.regular_text_14}>{batch_category} </Text>
                         </View>
-                        <View style={{justifyContent:'space-between'}}>
-                            <Text style={{fontSize:10,marginBottom:5}}>Showing for</Text>
+
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 5 }]} > Batch name</Text>
+                            <Text style={defaultStyle.regular_text_14}>{batch_name} </Text>
+                        </View>
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 5 }]} > Showing for</Text>
                             <DatePicker
-                                style={{width: 120,borderWidth:0}}
+                                textStyle={defaultStyle.regular_text_14}
+                                style={[defaultStyle.regular_text_14, { width: 120, borderWidth: 0 }]}
                                 date={this.state.attendenceDate}
                                 mode="date"
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
                                 minDate="01-01-2019"
-                                maxDate = {Date.now()}
+                                maxDate={Date.now()}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 showIcon={false}
                                 customStyles={{
 
                                     dateInput: {
-                                        marginLeft: 10,
-                                        borderWidth:1
+                                        borderWidth: 0,
+                                        fontSize: 14,
+                                        color: '#404040',
+                                        fontFamily: 'Quicksand-Regular',
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: '#A3A5AE'
                                     }
                                     // ... You can check the source to find the other keys.
                                 }}
                                 onDateChange={(attendenceDate) => {
+                                    this.setState({
+                                        batchDetails: []
+                                    })
                                     const NewDate = moment(attendenceDate).format('YYYY-MM-DD')
-                                    console.log("savePlaye",NewDate)
-                                    this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'),NewDate)
-                                    this.setState({attendenceDate: attendenceDate})}}
+                                    console.log("savePlaye", NewDate)
+                                    this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'), NewDate)
+                                    this.setState({ attendenceDate: attendenceDate })
+                                }}
                             />
                         </View>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'space-between',margin:20,marginTop:-10,}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: -10, }}>
 
-                        <View style={{margin:5}}>
-                            <Text style={{fontSize:10,marginBottom:10}}>Time slot </Text>
-                            <Text style={{fontSize:14}}>{session.start_time + ' - ' + session.end_time}</Text>
+                        <View style={{ margin: 5 }}>
+                            <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Time slot </Text>
+                            <Text style={[defaultStyle.regular_text_14, { color: '#404040' }]}>{session.start_time + ' - ' + session.end_time}</Text>
                         </View>
                     </View>
                 </View>
 
-                <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:14,marginBottom:10}}>Player </Text>
-                    <Text style={{fontSize:14}}>Attendence </Text>
-                    <Text style={{fontSize:14}}>Session </Text>
+                <View style={{ backgroundColor: '#F7F7F7', padding: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={[defaultStyle.regular_text_10, { width: "50%", color: '#A3A5AE' }]}>Player </Text>
+                    <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Attendence </Text>
+                    <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Session </Text>
                 </View>
 
-                <View style={{backgroundColor:'white',marginTop:-10}}>
-                    <CustomeCard>
+                {this.state.batchDetails.length != 0 ?
+                    <View style={{
+                        backgroundColor: 'white',
+                    }}>
+
 
                         <FlatList
                             data={this.state.playerList}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => item.id}
                         />
-                    </CustomeCard>
 
-                </View>
+                    </View>
+                    :
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: 16
+                        }}
+                    >
 
-                <View style={{flex:1, marginBottom: 30,marginRight:20,marginLeft:20,justifyContent:'flex-end'}}>
+                        <Text style={defaultStyle.regular_text_14}>No Data found of selected date</Text>
+                    </View>
+
+                }
+
+
+                <View style={{ flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20, justifyContent: 'flex-end' }}>
 
                     {/*<CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>*/}
-                        {/*Update*/}
+                    {/*Update*/}
                     {/*</CustomeButtonB>*/}
 
 
@@ -228,9 +294,9 @@ class  CoachAttendenceBook extends React.Component {
 
 
             </View>;
-        }else{
+        } else {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
                 </View>
             )
@@ -261,7 +327,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -305,28 +371,28 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     }
 

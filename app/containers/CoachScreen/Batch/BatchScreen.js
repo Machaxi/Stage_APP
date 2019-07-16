@@ -10,6 +10,7 @@ import { getCoachBatch } from "../../../redux/reducers/BatchReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import BaseComponent, { defaultStyle } from '../../BaseComponent'
+import { COACH, ACADEMY } from '../../../components/Constants';
 
 const acedemicList = [
     {
@@ -92,12 +93,12 @@ class BatchScreen extends BaseComponent {
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user", userData.user['user_type'])
-            if (userData.user['user_type'] == 'COACH') {
+            let userType = userData.user['user_type']
+            console.log("userData.user", userType)
+
+            if (userType == COACH || userType == ACADEMY) {
                 this.getCoachBatchList(userData['academy_id'], userData['coach_id'])
-
             }
-
 
         });
     }
@@ -130,13 +131,13 @@ class BatchScreen extends BaseComponent {
     }
 
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
+        <TouchableOpacity
+            activeOpacity={.8}
+            key={item} onPress={() => {
 
-            console.warn("Touch Press", item.batch_id)
+                this.props.navigation.navigate('BatchDetails', { batch_id: item.batch_id })
 
-            this.props.navigation.navigate('BatchDetails', { batch_id: item.batch_id })
-
-        }}>
+            }}>
             <CustomeCard>
 
 

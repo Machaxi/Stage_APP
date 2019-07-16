@@ -45,7 +45,7 @@ class UserHome extends BaseComponent {
                             fontSize: 14,
                             color: 'white'
                         }}
-                    >{navigation.getParam('Title', 'Default Title') + ' ▼'}</Text>
+                    >{navigation.getParam('Title', '') + ' ▼'}</Text>
                 </TouchableOpacity>
 
             ),
@@ -116,7 +116,8 @@ class UserHome extends BaseComponent {
             strenthList: null,
             acedemy_name: '',
             academy_feedback_data: null,
-            coach_feedback_data: null
+            coach_feedback_data: null,
+            academy_id: ''
         }
     }
 
@@ -130,6 +131,7 @@ class UserHome extends BaseComponent {
         console.log("PlayerDashboard");
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
+            this.state.academy_id = userData['academy_id']
             this.props.navigation.setParams({ Title: userData.academy_name });
             this.setState({
                 userData: JSON.parse(value)
@@ -162,17 +164,36 @@ class UserHome extends BaseComponent {
                 console.log(' user response getPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
 
+                if (user1.data['coach_data'] != null) {
+                    this.setState({
+                        coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
+                    })
+                }
+
+                if (user1.data['academy_data'] != null) {
+                    this.setState({
+                        academy_feedback_data: user1.data['academy_data'].feedback[0],
+                    })
+                }
+
                 if (user1.success == true) {
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         strenthList: user1.data.player_profile['stats'],
                         acedemy_name: user1.data['player_profile'].academy_name,
                         academy_feedback_data: user1.data['academy_data'].feedback[0],
-                        coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
+                        //coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
 
                     })
-                    acedemy_name = user1.data['player_profile'].academy_name
-                    navigation.title = user1.data['player_profile'].academy_name
+                    let acedemy_name = user1.data['player_profile'].academy_name
+                    //navigation.title = user1.data['player_profile'].academy_name
+                    this.props.navigation.setParams({ Title: acedemy_name });
+
+                    getData('userInfo', (value) => {
+                        userData = JSON.parse(value)
+                        userData['academy_name'] = acedemy_name
+                        storeData("userInfo", JSON.stringify(userData))
+                    });
 
 
                 }
@@ -252,86 +273,90 @@ class UserHome extends BaseComponent {
             )
         }
         if (this.state.player_profile) {
+
+
             const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, operations } = this.state.player_profile
             sessionArray = [];
-            for (let i = 0; i < operations.next_sessions.length; i++) {
-                const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
+            if (operations.next_sessions != null) {
 
-                if (is_canceled == true) {
-                    sessionArray.push(
-                        <View
-                            style={{
+                for (let i = 0; i < operations.next_sessions.length; i++) {
+                    const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
+
+                    if (is_canceled == true) {
+                        sessionArray.push(
+                            <View
+                                style={{
+                                    marginTop: 6,
+                                    marginBottom: 16
+                                }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Text style={[defaultStyle.bold_text_14, {
+                                        textDecorationLine: 'line-through'
+                                    }]}
+                                    >{routine_name}</Text>
+                                    <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
+                                        <Text style={{
+                                            fontFamily: 'Quicksand-Medium',
+                                            fontSize: 10,
+                                            marginLeft: 10,
+                                            marginRight: 10,
+                                            marginTop: 5,
+                                            marginBottom: 5,
+                                            color: 'white'
+                                        }}>Canceled</Text>
+                                    </View>
+                                </View>
+
+                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                    <Text
+                                        style={[defaultStyle.regular_text_14, {
+                                            textDecorationLine: 'line-through'
+                                        }]}>
+                                        {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                    </Text>
+                                    <Text
+                                        style={[defaultStyle.regular_text_14, {
+                                            textDecorationLine: 'line-through',
+                                            marginLeft: 10,
+                                        }]}>
+                                        {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                            + "  -   " +
+                                            moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                    </Text>
+
+                                </View>
+
+                            </View>
+                        );
+                    } else {
+                        sessionArray.push(
+                            <View style={{
                                 marginTop: 6,
                                 marginBottom: 16
                             }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
                                 <Text style={[defaultStyle.bold_text_14, {
-                                    textDecorationLine: 'line-through'
-                                }]}
-                                >{routine_name}</Text>
-                                <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
-                                    <Text style={{
-                                        fontFamily: 'Quicksand-Medium',
-                                        fontSize: 10,
-                                        marginLeft: 10,
-                                        marginRight: 10,
-                                        marginTop: 5,
-                                        marginBottom: 5,
-                                        color: 'white'
-                                    }}>Canceled</Text>
+                                }]}>{routine_name}</Text>
+
+                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                    <Text style={defaultStyle.regular_text_14}>
+                                        {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                    </Text>
+
+                                    <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
+                                        {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                            + "  -   " +
+                                            moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                    </Text>
+
                                 </View>
-                            </View>
 
-                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                                <Text
-                                    style={[defaultStyle.regular_text_14, {
-                                        textDecorationLine: 'line-through'
-                                    }]}>
-                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
-                                </Text>
-                                <Text
-                                    style={[defaultStyle.regular_text_14, {
-                                        textDecorationLine: 'line-through',
-                                        marginLeft: 10,
-                                    }]}>
-                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                        + "  -   " +
-                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
-                                </Text>
+                            </View >
 
-                            </View>
-
-                        </View>
-                    );
-                } else {
-                    sessionArray.push(
-                        <View style={{
-                            marginTop: 6,
-                            marginBottom: 16
-                        }}>
-
-                            <Text style={[defaultStyle.bold_text_14, {
-                            }]}>{routine_name}</Text>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                                <Text style={defaultStyle.regular_text_14}>
-                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
-                                </Text>
-
-                                <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                        + "  -   " +
-                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
-                                </Text>
-
-                            </View>
-
-                        </View >
-
-                    );
+                        );
+                    }
                 }
             }
-
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
@@ -516,23 +541,25 @@ class UserHome extends BaseComponent {
 
                     </View>
 
+                    {sessionArray.length != 0 ?
+                        <CustomeCard >
+                            <View
+                                style={{
+                                    marginLeft: 16,
+                                    marginRight: 16,
+                                    marginTop: 16
+                                }}
+                            >
+                                <Text style={defaultStyle.bold_text_10}>Next Session</Text>
 
-                    <CustomeCard >
-                        <View
-                            style={{
-                                marginLeft: 16,
-                                marginRight: 16,
-                                marginTop: 16
-                            }}
-                        >
-                            <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                <View style={defaultStyle.line_style} />
 
-                            <View style={defaultStyle.line_style} />
+                                {sessionArray}
 
-                            {sessionArray}
+                            </View>
+                        </CustomeCard>
+                        : null}
 
-                        </View>
-                    </CustomeCard>
 
 
                     {this.state.strenthList.length != 0 ?

@@ -11,6 +11,7 @@ import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import { defaultStyle } from '../../BaseComponent';
 import moment from 'moment'
+import { COACH, ACADEMY } from '../../../components/Constants';
 
 
 class BatchDetails extends React.Component {
@@ -39,10 +40,10 @@ class BatchDetails extends React.Component {
                 userData: JSON.parse(value)
             });
             console.log("userData.user", this.props.navigation.getParam('batch_id'))
-            if (userData.user['user_type'] == 'COACH') {
-                //  this.state.id = this.props.navigation.getParam('batch_id', '');
-                this.getCoachBatch(this.props.navigation.getParam('batch_id'))
+            let userType = userData.user['user_type']
 
+            if (userType == COACH || userType == ACADEMY) {
+                this.getCoachBatch(this.props.navigation.getParam('batch_id'))
             }
 
 
@@ -173,23 +174,49 @@ class BatchDetails extends React.Component {
             // })
 
         }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
-                <View style={{ marginRight: 20, flexDirection: 'row', height: 50 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                <View style={{ marginRight: 20, flexDirection: 'row', height: 50, alignItems: 'center' }}>
 
-                    <Image source={require('../../../images/Mysatus.png')}
+                    <Image source={require('../../../images/coach_small_pic.png')}
                         style={{
-                            width: 50,
-                            height: 50, marginRight: 10
+                            width: 36,
+                            borderRadius: 6,
+                            height: 36, marginRight: 10
                         }} />
-                    <Text style={{ fontSize: 14, marginBottom: 10, marginTop: 10, fontFamily: 'Quicksand-Regular' }}>{item.name}</Text>
-                    <View style={{ backgroundColor: '#CDB473', borderRadius: 10, marginBottom: 20, marginTop: 5, marginRight: 10, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
-                        {item.is_head ? <Text style={{ fontSize: 10, color: 'white', marginRight: 10, marginLeft: 10, textAlign: 'center' }}>Head Coach</Text> : null}
-
+                    <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
+                    <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 10, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
+                        {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 10, marginLeft: 10, textAlign: 'center' }}>Head Coach</Text> : null}
                     </View>
                 </View>
-                <View style={{ borderColor: '#DFDFDF', borderWidth: 1, borderRadius: 20, marginBottom: 20, marginTop: 5, marginRight: 10, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ fontFamily: 'Quicksand-Bold', fontSize: 14, color: '#A3A5AE', marginBottom: 0, marginRight: 10, marginLeft: 10 }}>{item.ratings}</Text>
 
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={require('../../../images/ic_star.png')}
+                        style={{
+                            width: 14,
+                            height: 14, marginRight: 6
+                        }} />
+                    <View style={{
+                        borderColor: '#DFDFDF',
+                        marginTop: 2, marginBottom: 2,
+                        borderWidth: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
+                    }}>
+                        <Text
+                            style={{
+                                fontSize: 14,
+                                color: '#707070',
+                                fontFamily: 'Quicksand-Bold',
+                                marginRight: 10,
+                                marginLeft: 10,
+
+                            }}>{item.ratings}</Text>
+
+                    </View>
+                    <Image source={require('../../../images/right_icon.png')}
+                        style={{
+                            width: 6,
+                            height: 13,
+                            marginLeft: 10
+                        }} />
                 </View>
 
             </View>
@@ -239,53 +266,62 @@ class BatchDetails extends React.Component {
 
                     <CustomeCard>
                         <View
-                            style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 12,
+                                marginTop: 16
+                            }}
+                        >
                             <Text style={defaultStyle.bold_text_10}>Timing</Text>
 
-                        </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+                            <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
-                            <View style={{ width: '50%' }}>
-                                <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekdays</Text>
-                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.days.join(' ')}</Text>
-                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
-                                    {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
-                                        + ' - ' +
-                                        moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
-                                    }
-                                </Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                                <View style={{ width: '50%' }}>
+                                    <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekdays</Text>
+                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.days.join(' ')}</Text>
+                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
+                                        {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
+                                            + ' - ' +
+                                            moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
+                                        }
+                                    </Text>
+                                </View>
+                                <View style={{ width: '50%' }}>
+                                    <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekend</Text>
+                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.days.join(' ')}</Text>
+                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
+                                        {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
+                                            + ' - ' +
+                                            moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
+                                        }
+                                    </Text>
+
+                                </View>
+
                             </View>
-                            <View style={{ width: '50%' }}>
-                                <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekend</Text>
-                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.days.join(' ')}</Text>
-                                <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
-                                    {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
-                                        + ' - ' +
-                                        moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
-                                    }
-                                </Text>
-
-                            </View>
 
                         </View>
-
-
                     </CustomeCard>
+
                     <CustomeCard>
                         <View
-                            style={{ margin: 10, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 12,
+                                marginTop: 16
+                            }}
+                        >
                             <Text style={defaultStyle.bold_text_10}>Coach</Text>
 
+                            <View style={defaultStyle.line_style} />
+
+                            <FlatList
+                                data={this.state.coactList}
+                                renderItem={this.renderItem}
+                                keyExtractor={(item, index) => item.id}
+                            />
                         </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
-
-                        <FlatList
-                            data={this.state.coactList}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.id}
-                        />
-
                     </CustomeCard>
                     <View >
                         <CustomeCard>
@@ -370,7 +406,10 @@ class BatchDetails extends React.Component {
 
                                 console.warn("Touch Press")
                                 //
-                                this.props.navigation.navigate('AttendenceBook', { batch_id: this.props.navigation.getParam('batch_id') })
+                                this.props.navigation.navigate('AttendenceBook', {
+                                    batch_id: this.props.navigation.getParam('batch_id'),
+                                    batch_data: this.state.batchDetails
+                                })
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 

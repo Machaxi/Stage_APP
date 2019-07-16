@@ -3,16 +3,17 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import {View,TextInput,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
-import {Card} from 'react-native-paper'
-import {SwitchButton ,CustomeButtonB} from  '../../../components/Home/SwitchButton'
-import {CustomeCard } from  '../../../components/Home/Card'
-import {getPerformenceDuePlayer} from "../../../redux/reducers/PerformenceReducer";
-import {getData} from "../../../components/auth";
+import { View, TextInput, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-paper'
+import { SwitchButton, CustomeButtonB } from '../../../components/Home/SwitchButton'
+import { CustomeCard } from '../../../components/Home/Card'
+import { getPerformenceDuePlayer } from "../../../redux/reducers/PerformenceReducer";
+import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
 import DatePicker from 'react-native-datepicker'
+import { COACH, ACADEMY } from '../../../components/Constants';
 const acedemicList = [
     {
         label: 'India',
@@ -20,15 +21,15 @@ const acedemicList = [
     }
 
 ];
-const KEYS_TO_FILTERS = ['name', ];
+const KEYS_TO_FILTERS = ['name',];
 const placeholder = {
     label: 'Select Option',
     value: null,
     color: '#9EA0A4',
 };
-var deviceWidth = Dimensions.get('window').width -20;
+var deviceWidth = Dimensions.get('window').width - 20;
 
-class  PerformencePlayerList extends React.Component {
+class PerformencePlayerList extends React.Component {
 
     constructor(props) {
         super(props)
@@ -41,36 +42,38 @@ class  PerformencePlayerList extends React.Component {
 
             //  coach_profile:null,
             country: undefined,
-            billingchecked:false,
-            playerList : null,
-            batchDetails:null,
-            attendenceDate:'26-JUNE-2019',
-            searchtxt:'',
-            isSearching:false,
-            searchArray:null
+            billingchecked: false,
+            playerList: null,
+            batchDetails: null,
+            attendenceDate: '26-JUNE-2019',
+            searchtxt: '',
+            isSearching: false,
+            searchArray: null
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
+        getData('header', (value) => {
+            console.log("header", value);
         });
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='COACH'){
+            console.log("userData.user", userData.user['user_type'])
+            let userType = userData.user['user_type']
+
+            if (userType == COACH || userType == ACADEMY) {
 
                 //const yourDate = Date()
 
                 // const NewDate = moment(this.state.attendenceDate).format('YYYY-MM-DD')
                 // console.log("savePlaye",NewDate)
-                this.getPerformencePlayerData(this.props.navigation.getParam('batch_id'),this.props.navigation.getParam('month'),this.props.navigation.getParam('year'))
+                this.getPerformencePlayerData(this.props.navigation.getParam('batch_id'), this.props.navigation.getParam('month'), this.props.navigation.getParam('year'))
 
             }
 
@@ -78,21 +81,21 @@ class  PerformencePlayerList extends React.Component {
         });
     }
 
-    getPerformencePlayerData(btach_id,month,year){
-        getData('header',(value)=>{
-            console.log("header",value,btach_id);
-            this.props.getPerformenceDuePlayer(value,btach_id,month,year).then(() => {
+    getPerformencePlayerData(btach_id, month, year) {
+        getData('header', (value) => {
+            console.log("header", value, btach_id);
+            this.props.getPerformenceDuePlayer(value, btach_id, month, year).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     this.setState({
-                        playerList:user1.data['players'],
-                        batchDetails:user1.data['batch'],
-                        searchArray:user1.data['players']
+                        playerList: user1.data['players'],
+                        batchDetails: user1.data['batch'],
+                        searchArray: user1.data['players']
                     })
                 }
 
@@ -114,17 +117,17 @@ class  PerformencePlayerList extends React.Component {
             console.warn("Touch Press")
 
             this.props.navigation.navigate('UpdatePlayerPerformence', {
-                 batch_id: '1',player_id:item.id,month:this.props.navigation.getParam('month'),year:this.props.navigation.getParam('year')
+                batch_id: '1', player_id: item.id, month: this.props.navigation.getParam('month'), year: this.props.navigation.getParam('year')
             })
 
         }}>
-            <View style={{marginLeft:0,marginRight:10,flex:1,flexDirection:'row',height:50}}>
+            <View style={{ marginLeft: 0, marginRight: 10, flex: 1, flexDirection: 'row', height: 50 }}>
 
-                <View  style={{
-                    flex:1,
+                <View style={{
+                    flex: 1,
                     marginLeft: 8,
                     marginRight: 15,
-                    marginBottom:5,
+                    marginBottom: 5,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                 }}>
@@ -132,10 +135,11 @@ class  PerformencePlayerList extends React.Component {
                         {item.name}
                     </Text>
 
-                    <Image source ={require('../../../images/forward.png')}
-                           style={{
-                               width: 3,
-                               height: 8,marginRight:-10,marginTop:5}}/>
+                    <Image source={require('../../../images/forward.png')}
+                        style={{
+                            width: 3,
+                            height: 8, marginRight: -10, marginTop: 5
+                        }} />
 
                 </View>
 
@@ -152,12 +156,12 @@ class  PerformencePlayerList extends React.Component {
             return playerList;
         }
         try {
-        const regex = new RegExp(`${query.trim()}`, 'i');
-        console.log('regex ', regex)
+            const regex = new RegExp(`${query.trim()}`, 'i');
+            console.log('regex ', regex)
 
             return playerList.filter(item => item.name.search(regex) >= 0);
-        } catch(e) {
-           // alert(e);
+        } catch (e) {
+            // alert(e);
             return false;
         }
 
@@ -169,13 +173,13 @@ class  PerformencePlayerList extends React.Component {
     render() {
         if (this.props.data.loading && !this.state.player_profile) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         }
         if (this.state.batchDetails) {
-            const {batch_name, batch_category, total_players,remaining_players,batch_id, session} = this.state.batchDetails
+            const { batch_name, batch_category, total_players, remaining_players, batch_id, session } = this.state.batchDetails
 
             // this.attedenceMangement(attandence_batch)
             //
@@ -184,53 +188,53 @@ class  PerformencePlayerList extends React.Component {
 
             //
             // {console.warn(filteredEmails)}
-            return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
 
-                <View style={{backgroundColor:'white'}}>
-                    <View style={{flexDirection:'row',margin:20,}}>
-                        <View style={{justifyContent:'space-between'}}>
-                            <Text style={{fontSize:10,marginBottom:5,color:'#A3A5AE'}}>Batch name</Text>
-                            <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_name} </Text>
+                <View style={{ backgroundColor: 'white' }}>
+                    <View style={{ flexDirection: 'row', margin: 20, }}>
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Batch name</Text>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{batch_name} </Text>
                         </View>
 
-                        <View style={{justifyContent:'space-between',marginLeft:30}}>
-                            <Text style={{fontSize:10,marginBottom:5,color:'#A3A5AE'}}>Category</Text>
-                            <Text style={{fontSize:14,fontWeight:'bold'}}>{batch_category}</Text>
-                        </View>
-
-                    </View>
-
-                    <View style={{flexDirection:'row',margin:20,justifyContent:'space-between'}}>
-                        <View style={{justifyContent:'space-between'}}>
-                            <Text style={{fontSize:10,marginBottom:5,color:'#A3A5AE'}}>Total players</Text>
-                            <Text style={{fontSize:14,fontWeight:'bold'}}>{total_players} </Text>
-                        </View>
-
-                        <View style={{justifyContent:'space-between'}}>
-                            <Text style={{fontSize:10,marginBottom:5,color:'#A3A5AE'}}>Update remaining</Text>
-                            <Text style={{fontSize:14,fontWeight:'bold'}}>{remaining_players}</Text>
-                        </View>
-                        <View style={{justifyContent:'space-between'}}>
-                            <Text style={{fontSize:10,marginBottom:5,color:'#A3A5AE'}}>Month</Text>
-                            <Text style={{fontSize:14,fontWeight:'bold'}}>{ moment('06-'+this.props.navigation.getParam('month') +'-'+this.props.navigation.getParam('year')).format('MMM YY')}</Text>
+                        <View style={{ justifyContent: 'space-between', marginLeft: 30 }}>
+                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Category</Text>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{batch_category}</Text>
                         </View>
 
                     </View>
-                <View>
 
-                </View>
+                    <View style={{ flexDirection: 'row', margin: 20, justifyContent: 'space-between' }}>
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Total players</Text>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{total_players} </Text>
+                        </View>
+
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Update remaining</Text>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{remaining_players}</Text>
+                        </View>
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Month</Text>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{moment('06-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM YY')}</Text>
+                        </View>
+
+                    </View>
+                    <View>
+
+                    </View>
                     <TextInput
-                       // autoFocus
-                        style={{ height: 40, margin: 15,paddingLeft:10,borderWidth:0.5,borderColor:'#CECECE',borderRadius:15 }}
+                        // autoFocus
+                        style={{ height: 40, margin: 15, paddingLeft: 10, borderWidth: 0.5, borderColor: '#CECECE', borderRadius: 15 }}
                         onChangeText={value => {
 
                             const data = this.find(value);
-                           // this.state.searchArray = data;
+                            // this.state.searchArray = data;
                             this.setState({
                                 searchtxt: value,
                                 searchArray: data
-                        })
+                            })
 
                         }}
                         placeholder={'Search'}
@@ -238,12 +242,12 @@ class  PerformencePlayerList extends React.Component {
                     />
                 </View>
 
-                <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:14,marginBottom:10,color:'#A3A5AE'}}>Name </Text>
+                <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 14, marginBottom: 10, color: '#A3A5AE' }}>Name </Text>
 
                 </View>
 
-                <View style={{backgroundColor:'white',marginTop:-10}}>
+                <View style={{ backgroundColor: 'white', marginTop: -10 }}>
                     <CustomeCard>
 
                         <FlatList
@@ -255,7 +259,7 @@ class  PerformencePlayerList extends React.Component {
 
                 </View>
 
-                <View style={{flex:1, marginBottom: 30,marginRight:20,marginLeft:20,justifyContent:'flex-end'}}>
+                <View style={{ flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20, justifyContent: 'flex-end' }}>
 
                     {/*<CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>*/}
                     {/*Update*/}
@@ -266,9 +270,9 @@ class  PerformencePlayerList extends React.Component {
 
 
             </View>;
-        }else{
+        } else {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
                 </View>
             )
@@ -299,7 +303,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -343,28 +347,28 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     }
 

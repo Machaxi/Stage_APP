@@ -78,6 +78,9 @@ export function getFormattedLevel(level) {
 
         case "DISTRICT_LEVEL":
             return "District Level"
+            
+        case "NATIONAL_LEVEL":
+            return "National Level"
     }
     return level
 }

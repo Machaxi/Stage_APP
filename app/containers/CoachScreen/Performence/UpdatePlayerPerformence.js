@@ -10,6 +10,7 @@ import {getData} from "../../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
+import { ACADEMY, COACH } from '../../../components/Constants';
 const acedemicList = [
     {
         label: 'India',
@@ -57,7 +58,9 @@ class  UpdatePlayerPerformence extends React.Component {
                 userData: JSON.parse(value)
             });
             console.log("userData.user",userData.user['user_type'])
-            if(userData.user['user_type'] =='COACH'){
+            let userType = userData.user['user_type']
+
+            if (userType == COACH || userType == ACADEMY) {
 
                 this.getCoachPerformenceData(this.props.navigation.getParam('batch_id'),this.props.navigation.getParam('player_id'),this.props.navigation.getParam('month'),this.props.navigation.getParam('year'))
 

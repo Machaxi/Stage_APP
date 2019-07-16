@@ -8,10 +8,10 @@ import {
 	Text,
 } from 'react-native';
 import { isSignedIn, getData } from "../components/auth";
+import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
-import { COACH, GUEST, PARENT, PLAYER } from "../components/Constants";
 import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../containers/BaseComponent'
 import { getRelationsDetails } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
@@ -62,9 +62,9 @@ class CoachMenuDrawer extends BaseComponent {
 
 			})
 
-			if (userData.user['user_type'] == 'PLAYER' ||
-				userData.user['user_type'] == 'PARENT' ||
-				userData.user['user_type'] == 'FAMILY') {
+			let userType = userData.user['user_type']
+			if (userType == PLAYER ||
+				userType == PARENT) {
 
 				this.fetchParentDetails()
 			}
@@ -78,7 +78,7 @@ class CoachMenuDrawer extends BaseComponent {
 			this.props.getRelationsDetails(value).then(() => {
 
 				let data = this.props.data.profileData
-				//console.log('getRelationsDetails payload ' + JSON.stringify(this.props.data.profileData));
+				console.log('getRelationsDetails payload ' + JSON.stringify(this.props.data.profileData));
 				if (data.success) {
 
 					this.setState({
@@ -589,7 +589,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 				menu = this.getPlayerMenu()
 
-			} else if (user_type == COACH) {
+			} else if (user_type == COACH || user_type == ACADEMY) {
 				menu = this.getCoachMenu()
 			}
 			else if (user_type == PARENT) {

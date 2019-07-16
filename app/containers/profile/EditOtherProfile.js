@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import BaseComponent , { defaultStyle, EVENT_EDIT_PROFILE }  from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
@@ -10,6 +10,9 @@ import { getData } from "../../components/auth";
 import { saveOtherUserProfile } from "../../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import axios from 'axios'
+import Spinner from 'react-native-loading-spinner-overlay';
+import Events from '../../router/events';
+
 
 class EditOtherProfile extends BaseComponent {
 
@@ -59,45 +62,36 @@ class EditOtherProfile extends BaseComponent {
                 var dict = {};
                 //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
                 //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
-
+                this.progress(true)
                 dict['phone_number'] = txtphone//user.phoneNumber;
                 dict['name'] = txtname;
                 dict['dob'] = dob;
                 dict['user_id'] = this.state.id
-                formData.append('post', dict);
+                formData.append('post', JSON.stringify(dict));
                 console.log("header", JSON.stringify(formData));
 
-                axios({
-                    method: 'post',
-                    url: 'http://13.233.182.217:8080/api/user/profile',
-                    data: dict,
-                    config: {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'x-authorization': value
-                        }
-                    }
+                this.props.saveOtherUserProfile(value, formData).then(() => {
+                    this.progress(false)
+                    let data = this.props.data.profileData.data
+                    console.log(' saveOtherUserProfile payload ' + JSON.stringify(this.props.data.profileData));
+                    alert('Success.')
+                    Events.publish(EVENT_EDIT_PROFILE);
+
+                }).catch((response) => {
+                    //handle form errors
+                    console.log(response);
+                    this.progress(false)
+                    alert('Something went wrong.')
                 })
-                    .then(function (response) {
-                        //handle success
-                        console.log(response);
-                    })
-                    .catch(function (response) {
-                        //handle error
-                        console.log(response);
-                    });
-
-
-                // this.props.saveOtherUserProfile(value, formData).then(() => {
-                //     console.log('saveOtherUserProfile payload ' + JSON.stringify(this.props));
-
-                // }).catch((response) => {
-                //     //handle form errors
-                //     console.log(response);
-                // })
 
             })
         }
+    }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
     }
 
     render() {
@@ -114,6 +108,11 @@ class EditOtherProfile extends BaseComponent {
                     flex: 1, marginTop: 20,
                     backgroundColor: '#F7F7F7'
                 }}>
+
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
                     <View
                         style={{
                             margin: 16,

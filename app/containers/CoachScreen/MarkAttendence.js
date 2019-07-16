@@ -14,6 +14,7 @@ import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
 import Events from '../../router/events';
+import { ACADEMY, COACH } from '../../components/Constants';
 
 
 class MarkAttendence extends BaseComponent {
@@ -48,7 +49,9 @@ class MarkAttendence extends BaseComponent {
                 userData: JSON.parse(value)
             });
             console.log("userData.user", userData.user['user_type'])
-            if (userData.user['user_type'] == 'COACH') {
+            let userType = userData.user['user_type']
+
+            if (userType == COACH || userType == ACADEMY) {
 
                 this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'))
 

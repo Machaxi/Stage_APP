@@ -14,7 +14,7 @@ class UpcomingRoute extends BaseComponent {
         super(props)
 
         this.state = {
-            tournaments: null,
+            tournaments: [],
             query: '',
         }
     }
@@ -193,12 +193,27 @@ class UpcomingRoute extends BaseComponent {
             <View style={styles.chartContainer}>
 
                 {this.listHeader()}
-                <FlatList
-                    //ListHeaderComponent={() => }
-                    data={this.state.tournaments}
-                    extraData={this.state.tournaments}
-                    renderItem={this._renderItem}
-                />
+                
+                 {this.state.tournaments.length != 0 ?
+                    <FlatList
+                        data={this.state.tournaments}
+                        extraData={this.state.tournaments}
+                        renderItem={this._renderItem}
+                    /> :
+                    <View
+                        style={{
+
+                            alignSelf: 'center',
+                            marginTop: 150,
+                            justifyContent: 'center', flex: 1, alignItems: 'center'
+                        }}
+                    >
+
+                        <Text style={[defaultStyle.regular_text_14, {
+                            justifyContent: 'center',
+                            flex: 1, textAlign: 'center',
+                        }]}>No Tournament found</Text></View>
+                }
 
             </View>
         );

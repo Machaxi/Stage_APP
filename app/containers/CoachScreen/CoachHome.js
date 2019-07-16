@@ -2,6 +2,7 @@
 import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
+import { GUEST, PLAYER, COACH, ACADEMY } from "../../components/Constants";
 
 import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper'
@@ -29,7 +30,9 @@ class CoachHome extends BaseComponent {
                         flex: 1
                     }}
                     onPress={() => {
-                        navigation.navigate('SwitchPlayer')
+                        let userType = navigation.getParam('userType', '')
+                        if (userType == COACH)
+                            navigation.navigate('SwitchPlayer')
                     }}
                     activeOpacity={.8}
                 >
@@ -39,7 +42,7 @@ class CoachHome extends BaseComponent {
                             fontSize: 16,
                             color: '#404040'
                         }}
-                    >{navigation.getParam('academy_name', 'Default Title') + ' ▼'}</Text>
+                    >{navigation.getParam('academy_name', '') + ' ▼'}</Text>
                 </TouchableOpacity>
 
             ),
@@ -87,8 +90,8 @@ class CoachHome extends BaseComponent {
             coach_profile: null,
             country: undefined,
             strenthList: null,
-            userData: null
-
+            userData: null,
+            userType: ''
         }
 
 
@@ -125,10 +128,16 @@ class CoachHome extends BaseComponent {
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user", userData.user['user_type'])
-            if (userData.user['user_type'] == 'COACH') {
-                this.getCoachDashboardData(userData['academy_id'], userData['coach_id'])
 
+            let userType = userData.user['user_type']
+            console.log("UserType", userType)
+            this.props.navigation.setParams({ 'userType': userType })
+            this.setState({
+                userType: userType
+            })
+
+            if (userType == COACH || userType == ACADEMY) {
+                this.getCoachDashboardData(userData['academy_id'], userData['coach_id'])
             }
         });
     }
@@ -140,7 +149,7 @@ class CoachHome extends BaseComponent {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.dashboardData);
-                console.log(' user response payload ' + user);
+                console.log(' getCoachDashboard payload ' + user);
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
@@ -150,6 +159,7 @@ class CoachHome extends BaseComponent {
 
                     })
                 }
+
 
             }).catch((response) => {
                 //handle form errors
@@ -236,7 +246,7 @@ class CoachHome extends BaseComponent {
                                 style={[defaultStyle.regular_text_14, {
                                     textDecorationLine: 'line-through'
                                 }]}>
-                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
                             </Text>
                             <Text
                                 style={[defaultStyle.regular_text_14, {
@@ -244,7 +254,7 @@ class CoachHome extends BaseComponent {
                                     marginLeft: 10,
                                 }]}>
                                 {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                    + "  -   " +
+                                    + " - " +
                                     moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
                             </Text>
 
@@ -265,12 +275,12 @@ class CoachHome extends BaseComponent {
 
                         <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                             <Text style={defaultStyle.regular_text_14}>
-                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
                             </Text>
 
                             <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
                                 {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                    + "  -   " +
+                                    + " - " +
                                     moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
                             </Text>
 
@@ -330,14 +340,17 @@ class CoachHome extends BaseComponent {
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                    <View style={{ margin: 10, marginTop: 20 }}>
 
-                        <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
-                            userType: 'coach'
-                        })}>
-                            Switch Academy
-                        </SwitchButton>
-                    </View>
+                    {this.state.userType == COACH ?
+                        <View style={{ margin: 10, marginTop: 20 }}>
+
+                            <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
+                                userType: 'coach'
+                            })}>
+                                Switch Academy
+                     </SwitchButton>
+                        </View> : null}
+
 
 
                     {is_attandence_due ?
@@ -528,8 +541,8 @@ class CoachHome extends BaseComponent {
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
-                                console.warn("Touch Press")
-
+                                //console.warn("Touch Press")
+                                this.props.navigation.navigate('CoachMyFeedbackListing')
 
                             }}>
                                 <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image, StyleSheet, Platform } from 'react-native';
-import { doLogin, doFBLogin,doLoginTest } from '../../redux/reducers/loginReducer';
+import { doLogin, doFBLogin, doLoginTest } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
 
 import firebase from 'react-native-firebase';
-import { PARENT } from "../../components/Constants";
+import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
@@ -115,9 +115,8 @@ class PhoneAuth extends BaseComponent {
         })
         var dataDic = {};
         var dict = {};
-        dict['phone_number'] = this.state.phoneNumber//user1.phoneNumber;//"+919214088636"//
-        dict['name'] = this.state.phoneNumber
-        dict['firebase_token'] = "token";
+        dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
+        dict['firebase_token'] = token;
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
         dict['fcm_token'] = 'xyzabcdcc';
@@ -126,11 +125,11 @@ class PhoneAuth extends BaseComponent {
 
         dataDic['data'] = dict;
         console.log("dicttttc ", JSON.stringify(dict))
-        this.props.doLoginTest(dataDic).then(() => {
+        this.props.doLogin(dataDic).then(() => {
             //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
             //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
             let user = JSON.stringify(this.props.data.user);
-            console.log(' user response payload ' + user);
+            console.log(' doLoginTest payload ' + user);
             let user1 = JSON.parse(user)
 
             if (user1.success == true) {
@@ -174,6 +173,130 @@ class PhoneAuth extends BaseComponent {
                                 userType: COACH
                             })
                         }
+
+                    }
+                    else if (userInfoData.user_type == ACADEMY) {
+                        //==================== NOTE ==========================
+                        //      Forcefully adding coach_id = '', to run coach section as academy
+                        //      academy section does not require coach_id
+                        //=====================================================
+                        userData['coach_id'] = ''
+                        storeData("userInfo", JSON.stringify(userData))
+                        storeData('academy_name', userData.user.name)
+                        console.log('coach userData => ', JSON.stringify(userData))
+                        this.props.navigation.navigate('CHome')
+
+                    }
+
+
+
+                    //
+                    // if(otherParam == true){
+                    //     this.props.navigation.navigate('DrawerNavigator')
+                    // }
+                    // else
+                    // {
+                    //     this.props.navigation.goBack();
+
+                }
+                else {
+                    this.props.navigation.navigate('EditProfile')
+                }
+            } else {
+                alert('Invalid credentials')
+            }
+
+
+        }).catch((response) => {
+            //handle form errors
+            console.log(response);
+        })
+
+    }
+
+    signInByName = (user1, token) => {
+
+        let os = "IOS"
+        if (Platform.OS === 'android') {
+            os = "android";
+        }
+
+        this.setState({
+            isCall: false
+        })
+        var dataDic = {};
+        var dict = {};
+        dict['phone_number'] = this.state.phoneNumber//user1.phoneNumber;//"+919214088636"//
+        dict['name'] = this.state.phoneNumber
+        dict['firebase_token'] = "token";
+        dict['device_type'] = os;
+        dict['app_version'] = '1.1.0';
+        dict['fcm_token'] = 'xyzabcdcc';
+        dict['has_firebase_check'] = false;
+
+
+        dataDic['data'] = dict;
+        console.log("dicttttc ", JSON.stringify(dict))
+        this.props.doLoginTest(dataDic).then(() => {
+            //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
+            //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
+            let user = JSON.stringify(this.props.data.user);
+            console.log(' doLoginTest payload ' + user);
+            let user1 = JSON.parse(user)
+
+            if (user1.success == true) {
+                console.log(' user response  ' + user1.success_message);
+
+                var userData = user1['data'];
+                var userInfoData = userData['user'];
+                storeData("userInfo", JSON.stringify(userData))
+                onSignIn()
+                if (userData.is_existing_user == true) {
+                    if (userInfoData.user_type == GUEST) {
+
+                        this.props.navigation.navigate('AcademyListing')
+
+                    } else if (userInfoData.user_type == PLAYER) {
+                        if (!userData.has_multiple_acadmies) {
+                            this.props.navigation.navigate('UHome')
+
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: 'PLAYER'
+                            })
+                        }
+
+                    } else if (userInfoData.user_type == PARENT) {
+                        if (userData.has_multiple_acadmies == false) {
+                            this.props.navigation.navigate('PHome')
+
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: PLAYER
+                            })
+                        }
+
+                    }
+                    else if (userInfoData.user_type == COACH) {
+                        if (userData.has_multiple_acadmies == false) {
+                            this.props.navigation.navigate('CHome')
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
+                        }
+
+                    }
+                    else if (userInfoData.user_type == ACADEMY) {
+                        //==================== NOTE ==========================
+                        //      Forcefully adding coach_id = '', to run coach section as academy
+                        //      academy section does not require coach_id
+                        //=====================================================
+                        userData['coach_id'] = ''
+                        storeData("userInfo", JSON.stringify(userData))
+                        storeData('academy_name', userData.user.name)
+                        console.log('coach userData => ', JSON.stringify(userData))
+                        this.props.navigation.navigate('CHome')
 
                     }
 
@@ -232,8 +355,13 @@ class PhoneAuth extends BaseComponent {
 
                 <Text style={styles.rounded_button}
                     onPress={() => {
-                        this.signIn11(null, null)
+                        this.signIn()
                     }}>Login</Text>
+
+                <Text style={[styles.rounded_button, { marginTop: 16 }]}
+                    onPress={() => {
+                        this.signInByName(null, null)
+                    }}>Login by name</Text>
 
                 <Text style={{
                     color: '#67BAF5',
@@ -332,7 +460,7 @@ class PhoneAuth extends BaseComponent {
 
                 {user1 == null && confirmResult == null && this.renderPhoneNumberInput()}
 
-                {/* {this.renderMessage()} */}
+                {this.renderMessage()}
 
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
@@ -366,7 +494,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    doLogin, doFBLogin,doLoginTest
+    doLogin, doFBLogin, doLoginTest
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhoneAuth);

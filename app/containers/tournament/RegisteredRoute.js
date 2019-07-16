@@ -306,10 +306,10 @@ class RegisteredRoute extends BaseComponent {
                     visible={this.state.spinner}
                     textStyle={defaultStyle.spinnerTextStyle}
                 />
-
+                {this.listHeader()}
                 {this.state.tournaments.length != 0 ?
                     <FlatList
-                        ListHeaderComponent={() => this.listHeader()}
+                        //ListHeaderComponent={() => this.listHeader()}
                         data={this.state.tournaments}
                         extraData={this.state.tournaments}
                         renderItem={this._renderItem}
