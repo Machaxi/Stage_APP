@@ -6,11 +6,12 @@ import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButto
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
-import { getData,storeData } from "../../components/auth";
+import { getData, storeData } from "../../components/auth";
 import { saveUserStartupProfile } from "../../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
+import moment from 'moment'
 
 
 class EditProfile extends BaseComponent {
@@ -27,7 +28,7 @@ class EditProfile extends BaseComponent {
         getData('userInfo', (value) => {
 
             userData = (JSON.parse(value))
-            console.warn('name => ', userData.user['name'])
+            //console.warn('name => ', userData.user['name'])
             console.log("SplashScreen=> ", userData);
             this.state.birthdate = userData.user['dob']
             this.state.txtname = userData.user['name']
@@ -37,7 +38,22 @@ class EditProfile extends BaseComponent {
                 txtphone: userData.user['mobile_number'],
                 birthdate: userData.user['dob']
             })
+
+
+            let date = userData.user['dob']
+            //console.warn('date = >', date)
+            if (date != '') {
+                date = date.split('T')
+                //console.warn('date = >', date[0])
+                date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
+                //console.warn('m date ,', date)
+                this.state.birthdate = date
+                this.setState({
+                    birthdate: date
+                })
+            }
         });
+
 
     }
     saveUserProfile() {
@@ -45,6 +61,10 @@ class EditProfile extends BaseComponent {
         let txtname = this.state.txtname
         let phone_number = this.state.txtphone
         let birthdate = this.state.birthdate
+        if (birthdate != '') {
+            birthdate = moment.utc(birthdate).local().format("YYYY-MM-DD")
+        }
+
 
         if (txtname == '') {
             alert('Name cannot be empty.')
@@ -69,7 +89,7 @@ class EditProfile extends BaseComponent {
                 this.props.saveUserStartupProfile(value, formData).then(() => {
                     this.progress(false)
                     let data = this.props.data.profileData.data
-                    console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data.profileData));
+                    console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data));
                     alert('Success.')
                     this.updatePrefData(JSON.stringify(data))
                 }).catch((response) => {

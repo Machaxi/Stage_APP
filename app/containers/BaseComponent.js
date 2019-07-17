@@ -35,6 +35,10 @@ export default class BaseComponent extends React.Component {
         NetInfo.isConnected.fetch().done((isConnected) => {
             connected = isConnected
         });
+
+        //StatusBar.setBackgroundColor("#ffffff")
+        //StatusBar.setBarStyle('dark-content', true)
+
     }
 
     static isUserLoggedIn() {
@@ -63,7 +67,12 @@ export default class BaseComponent extends React.Component {
             this._handleConnectivityChange
         );
     }
-
+    render() {
+        return (<StatusBar
+            backgroundColor="blue"
+            barStyle="light-content"
+        />)
+    }
 
 
 }
@@ -78,7 +87,7 @@ export function getFormattedLevel(level) {
 
         case "DISTRICT_LEVEL":
             return "District Level"
-            
+
         case "NATIONAL_LEVEL":
             return "National Level"
     }

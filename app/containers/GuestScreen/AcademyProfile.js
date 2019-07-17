@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
 
-import { getAcademyDetail } from '../../redux/reducers/AcademyReducer'
+import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
 import BaseComponent from '../BaseComponent';
 
 class AcademyProfile extends BaseComponent {
@@ -17,7 +17,8 @@ class AcademyProfile extends BaseComponent {
             id: '',
             academy: null,
             player_id: '',
-            showFeedback: false
+            showFeedback: false,
+            feedback: []
         }
         this.state.id = this.props.navigation.getParam('id', '');
         getData('userInfo', (value) => {
@@ -46,6 +47,9 @@ class AcademyProfile extends BaseComponent {
                 this.setState({
                     academy: academy
                 })
+
+                this.getAcademyFeedbacks()
+
             }
 
 
@@ -53,6 +57,34 @@ class AcademyProfile extends BaseComponent {
             console.log(response);
         })
     }
+
+    getAcademyFeedbacks() {
+
+        let academy_id = this.state.id;
+        let page = 0
+        let size = 10
+        let sort = ''
+
+        // getData('header', (value) => {
+
+        // })
+
+        this.props.getAcademyFeedbackList('', academy_id, page, size, sort).then(() => {
+            //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            let status = this.props.data.res.success
+            if (status) {
+                let feedback = this.props.data.res.data.feedback
+                console.warn('Feedback => ' + JSON.stringify(feedback))
+                this.setState({
+                    feedback: feedback
+                })
+            }
+
+        }).catch((response) => {
+            console.log(response);
+        })
+    }
+
 
     _renderRatingItem = ({ item }) => (
 
@@ -70,7 +102,7 @@ class AcademyProfile extends BaseComponent {
                 <Text
                     style={{ color: '#707070', fontSize: 14, flex: 1, fontFamily: 'Quicksand-Medium', }}
                 >
-                    {item.name}
+                    {item.source.name}
                 </Text>
 
 
@@ -86,7 +118,7 @@ class AcademyProfile extends BaseComponent {
                         ratingCount={5}
                         imageSize={14}
                         readonly={true}
-                        startingValue={item.ratings}
+                        startingValue={item.rating}
                         style={{ height: 30, width: 80 }}
                     />
 
@@ -98,7 +130,7 @@ class AcademyProfile extends BaseComponent {
                         paddingTop: 2,
                         color: '#707070',
                         borderRadius: 12,
-                    }}>{item.ratings}</Text>
+                    }}>{item.rating}</Text>
 
                 </View>
 
@@ -107,7 +139,7 @@ class AcademyProfile extends BaseComponent {
             <Text style={{
                 fontSize: 12,
                 color: '#707070',
-            }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</Text>
+            }}>{item.review}</Text>
 
         </View>
 
@@ -231,7 +263,7 @@ class AcademyProfile extends BaseComponent {
             )
         }
 
-
+        let feedback = this.state.feedback
         const academy = this.state.academy
         const academy_reviews = this.state.academy.academy_reviews
         return (
@@ -442,57 +474,60 @@ class AcademyProfile extends BaseComponent {
                         </TouchableOpacity> : null}
 
 
-                    <Card
-                        style={{
-                            elevation: 2,
-                            backgroundColor: 'white',
-                            borderRadius: 10,
-                            marginTop: 10,
-                        }}
-                    >
-                        <View
-                            style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
+                    {feedback.length != 0 ?
+                        <Card
+                            style={{
+                                elevation: 2,
+                                backgroundColor: 'white',
+                                borderRadius: 10,
+                                marginTop: 10,
+                            }}
                         >
+                            <View
+                                style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
+                            >
 
-                            <View style={{
+                                <View style={{
 
-                                flexDirection: 'row',
-                                flex: 1,
-                                justifyContent: 'space-between',
-                            }}>
-                                <Text
-                                    style={{ fontSize: 14, color: '#707070' }}
-                                >
-                                    Reviews ({academy_reviews.length})
+                                    flexDirection: 'row',
+                                    flex: 1,
+                                    justifyContent: 'space-between',
+                                }}>
+                                    <Text
+                                        style={{ fontSize: 14, color: '#707070' }}
+                                    >
+                                        Reviews ({academy_reviews.length})
                             </Text>
 
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text
-                                        style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
-                                    >Latest</Text>
-                                    <Image
-                                        style={{ width: 24, height: 15, }}
-                                        source={require('../../images/filter_rating.png')}
-                                    ></Image>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text
+                                            style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
+                                        >Latest</Text>
+                                        <Image
+                                            style={{ width: 24, height: 15, }}
+                                            source={require('../../images/filter_rating.png')}
+                                        ></Image>
+
+                                    </View>
 
                                 </View>
 
+                                <View
+                                    style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
+                                ></View>
+
+
                             </View>
 
-                            <View
-                                style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
-                            ></View>
 
+                            <FlatList
+                                extraData={feedback}
+                                data={feedback}
+                                renderItem={this._renderRatingItem}
+                            />
 
-                        </View>
-
-                        <FlatList
-                            extraData={academy_reviews}
-                            data={academy_reviews}
-                            renderItem={this._renderRatingItem}
-                        />
-
-                    </Card>
+                        </Card>
+                        : null}
 
                 </View>
             </ScrollView>
@@ -507,7 +542,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getAcademyDetail
+    getAcademyDetail, getAcademyFeedbackList
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AcademyProfile);

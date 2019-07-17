@@ -50,6 +50,38 @@ export function getAcademyDetail(id) {
     };
 }
 
+export function getAcademyFeedbackList(header,academy_id, page, size, sort) {
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `global/feedback/getByAcademy?academy_id=${academy_id}&page=${page}&size=${size}&sort=${sort}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+}
+
+export function getCoachFeedbackList(header,academy_id,coach_id, page, size, sort) {
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `global/feedback/getByAcademyCoach?academy_id=${academy_id}&coach_id=${coach_id}&page=${page}&size=${size}&sort=${sort}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+}
+
 export function getAcademyPlayersList(id) {
     return {
         type: types.DO_LOGIN,
@@ -103,9 +135,9 @@ export function coachListing(academy_id) {
     }
 };
 
-export function coachDetail() {
+export function coachDetail(coach_id) {
 
-    let url = `global/coach/details`
+    let url = `global/coach/details?coach_id=${coach_id}`
     console.log("search => " + url)
     return {
         type: types.DO_LOGIN,

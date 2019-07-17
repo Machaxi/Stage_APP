@@ -107,7 +107,7 @@ class CoachMyFeedbackListing extends BaseComponent {
                             ratingCount={5}
                             imageSize={14}
                             readonly={true}
-                            startingValue={item.ratings}
+                            startingValue={item.rating}
                             style={{ height: 30, width: 80 }}
                         />
 

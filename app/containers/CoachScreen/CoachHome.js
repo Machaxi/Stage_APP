@@ -8,7 +8,7 @@ import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimen
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
-import { getCoachDashboard } from "../../redux/reducers/dashboardReducer";
+import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashboardReducer";
 import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
@@ -98,11 +98,6 @@ class CoachHome extends BaseComponent {
         getData('academy_name', (value) => {
             this.props.navigation.setParams({ 'academy_name': value });
         })
-
-        //let date = moment("26-07-2019", "DD-MM-YYYY").format("DD MM YYYY")
-        //let date = moment.utc("Monday 15 July 2019 09:00 AM").local().format("hh:mm a")
-        //console.warn(date)
-
     }
 
     componentDidMount() {
@@ -114,6 +109,40 @@ class CoachHome extends BaseComponent {
             this.getCoachData()
         });
 
+        //This case is used because academy name was not returning from api, 
+        //in switch case we were getting from previous screen
+
+        getData('multiple', (value) => {
+            if (!value) {
+                this.getSwitchData()
+            }
+        })
+    }
+
+    getSwitchData() {
+        getData('header', (value) => {
+            console.log("header", value);
+            this.props.getCoachSWitcher(value).then(() => {
+                let user = JSON.stringify(this.props.data.dashboardData);
+                console.log(' getCoachSWitcher payload ' + user);
+                let user1 = JSON.parse(user)
+
+                if (user1.success == true) {
+                    let data = user1.data['academies']
+                    if (data.length > 0) {
+                        let name = data[0].academy_name
+                        console.warn('test => ' + name)
+                        this.props.navigation.setParams({ 'academy_name': name })
+                    }
+
+                }
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
+
+        });
     }
 
     getCoachData() {
@@ -673,7 +702,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getCoachDashboard
+    getCoachDashboard, getCoachSWitcher
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CoachHome);
 

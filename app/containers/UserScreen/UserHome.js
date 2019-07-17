@@ -2,7 +2,7 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, Image, StatusBar,TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
@@ -11,9 +11,10 @@ import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomHeader from '../../components/custom/CustomHeader';
-import BaseComponent, { defaultStyle, getFormattedLevel } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
+import Events from '../../router/events';
 
 
 
@@ -119,6 +120,9 @@ class UserHome extends BaseComponent {
             coach_feedback_data: null,
             academy_id: ''
         }
+        //StatusBar.setBackgroundColor("#262051")
+        //StatusBar.setBarStyle('light-content', true)
+
     }
 
     componentDidMount() {
@@ -140,16 +144,15 @@ class UserHome extends BaseComponent {
             if (userData.user['user_type'] == 'PLAYER') {
                 this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
 
-            } else if (userData.user['user_type'] == 'PARENT') {
-                this.getParentSwitchingData();
+             } 
+             //else if (userData.user['user_type'] == 'PARENT') {
+            //     this.getParentSwitchingData();
 
-            }
+            // }
 
 
         });
     }
-
-
 
 
     getPlayerDashboardData(academy_id, player_id, ) {
@@ -193,6 +196,8 @@ class UserHome extends BaseComponent {
                         userData = JSON.parse(value)
                         userData['academy_name'] = acedemy_name
                         storeData("userInfo", JSON.stringify(userData))
+                        Events.publish(EVENT_EDIT_PROFILE);
+
                     });
 
 
@@ -357,7 +362,11 @@ class UserHome extends BaseComponent {
                     }
                 }
             }
+
+
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+            {/* <StatusBar translucent backgroundColor="#264d9b"
+                barStyle="light-content"/> */}
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                     <View style={{ width: '100%', height: 300, }}>
@@ -817,7 +826,7 @@ class UserHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating}</Text>
+                                        }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
 
                                     </View>
                                 </View>

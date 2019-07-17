@@ -9,6 +9,7 @@ import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803718_1280.png';
@@ -24,6 +25,7 @@ class PhoneAuth extends BaseComponent {
             phoneNumber: '+91',
             confirmResult: null,
             isCall: true,
+            spinner: false
         };
     }
 
@@ -56,17 +58,30 @@ class PhoneAuth extends BaseComponent {
 
     }
 
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
     componentWillUnmount() {
         if (this.unsubscribe) this.unsubscribe();
     }
 
     signIn = () => {
+
         const { phoneNumber } = this.state;
         this.setState({ message: 'Sending code ...' });
+        this.progress(true)
 
         firebase.auth().signInWithPhoneNumber(phoneNumber)
-            .then(confirmResult => this.setState({ confirmResult, message: 'Code has been sent!' }))
-            .catch(error => this.setState({ message: `Sign In With Phone Number Error: ${error.message}` }));
+            .then(confirmResult => {
+                this.progress(false)
+                this.setState({ confirmResult, message: 'Code has been sent!' })
+            })
+            .catch(error => {
+                this.progress(false)
+            });
     };
 
     confirmCode = () => {
@@ -166,6 +181,7 @@ class PhoneAuth extends BaseComponent {
 
                     }
                     else if (userInfoData.user_type == COACH) {
+                        storeData('multiple',userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('CHome')
                         } else {
@@ -215,7 +231,7 @@ class PhoneAuth extends BaseComponent {
     }
 
     signInByName = (user1, token) => {
-
+        this.progress(true)
         let os = "IOS"
         if (Platform.OS === 'android') {
             os = "android";
@@ -238,6 +254,7 @@ class PhoneAuth extends BaseComponent {
         dataDic['data'] = dict;
         console.log("dicttttc ", JSON.stringify(dict))
         this.props.doLoginTest(dataDic).then(() => {
+            this.progress(false)
             //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
             //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
             let user = JSON.stringify(this.props.data.user);
@@ -322,6 +339,7 @@ class PhoneAuth extends BaseComponent {
         }).catch((response) => {
             //handle form errors
             console.log(response);
+            this.progress(false)
         })
 
     }
@@ -421,17 +439,20 @@ class PhoneAuth extends BaseComponent {
                     activeColor="#C4C4C4"
                     inactiveColor="#C4C4C4"
                     inputPosition='left'
+
                     cellBorderWidth={1}
                     space={10}
                     autoFocus={true}
                     codeLength={6}
                     size={40}
                     onFulfill={(code) => this.verify(code)}
-                    containerStyle={{ marginTop: 50, }}
+                    containerStyle={{ marginTop: 50, height: 60, flex: 0 }}
                     codeInputStyle={{ color: "#404040", fontSize: 32, }}
                 />
+
+
                 <Text style={[defaultStyle.bold_text_14,
-                { color: "#A3A5AE", marginTop: 20, marginBottom: 10 }]}>
+                { color: "#A3A5AE", marginTop: 0, marginBottom: 10 }]}>
                     Didn’t receive the OTP?
                     <Text style={{
                         color: "#67BAF5", paddingLeft: 4,
@@ -441,8 +462,9 @@ class PhoneAuth extends BaseComponent {
 
                 <Text style={styles.rounded_button}
                     onPress={this.confirmCode}>Confirm</Text>
-
             </View>
+
+
 
         );
     }
@@ -458,9 +480,14 @@ class PhoneAuth extends BaseComponent {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+
                 {user1 == null && confirmResult == null && this.renderPhoneNumberInput()}
 
-                {this.renderMessage()}
+                {/* {this.renderMessage()} */}
 
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 

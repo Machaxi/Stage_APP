@@ -156,7 +156,7 @@ class CoachListing extends BaseComponent {
                             fontSize: 12,
                             color: '#707070',
                             paddingTop: 2,
-                        }}>{item.ratings}</Text>
+                        }}>{item.ratings == undefined ? 0 : item.ratings.toFixed(1)}</Text>
 
                         <Image
                             style={{ width: 13, height: 13, marginLeft: 2, marginTop: 2 }}

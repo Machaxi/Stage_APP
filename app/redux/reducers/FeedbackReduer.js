@@ -104,7 +104,7 @@ export function getMyCoachFeedbackListing(header, academy_id, coach_id) {
         type: types.GET_FEEDBACK,
         payload: {
             request: {
-                url: `feedback/getByAcademyCoach?coach_id=${coach_id}&academy_id=${academy_id}`,
+                url: `global/feedback/getByAcademyCoach?coach_id=${coach_id}&academy_id=${academy_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header,

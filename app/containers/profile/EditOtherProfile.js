@@ -73,7 +73,7 @@ class EditOtherProfile extends BaseComponent {
                 this.props.saveOtherUserProfile(value, formData).then(() => {
                     this.progress(false)
                     let data = this.props.data.profileData.data
-                    console.log(' saveOtherUserProfile payload ' + JSON.stringify(this.props.data.profileData));
+                    console.log(' saveOtherUserProfile payload ' + JSON.stringify(this.props.data));
                     alert('Success.')
                     Events.publish(EVENT_EDIT_PROFILE);
 

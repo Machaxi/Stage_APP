@@ -8,6 +8,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
 import BaseComponent from './../BaseComponent'
 import { BASE_URL } from '../../../App';
+import PTRView from 'react-native-pull-to-refresh';
 
 class AcademyListing extends BaseComponent {
 
@@ -26,6 +27,10 @@ class AcademyListing extends BaseComponent {
         this._handleChange = this._handleChange.bind(this)
     }
 
+    _refresh() {
+        alert('test')
+    }
+
     _handleChange(e) {
         this.setState({
             query: e
@@ -33,8 +38,7 @@ class AcademyListing extends BaseComponent {
         this.getAutoSuggestion()
     }
 
-    componentDidMount() {
-
+    getAcademyList(){
         this.props.getAllAcademy().then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
@@ -49,6 +53,11 @@ class AcademyListing extends BaseComponent {
         }).catch((response) => {
             console.log(response);
         })
+    }
+
+    componentDidMount() {
+
+       this.getAcademyList()
     }
 
     find(query) {
@@ -165,6 +174,7 @@ class AcademyListing extends BaseComponent {
         const autoData = this.find(this.state.query);
 
         return (
+
             <View
                 style={{
                     marginLeft: 16,
@@ -427,20 +437,19 @@ class AcademyListing extends BaseComponent {
         }
 
         return (
-
-            <View style={styles.chartContainer}>
-                {
-                    this.listHeader()
-                }
-                <FlatList
-                    //ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.academies}
-                    extraData={this.state.academies}
-                    renderItem={this._renderItem}
-                />
-
-
-            </View>
+            <PTRView onRefresh={this._refresh} >
+                <View style={styles.chartContainer}>
+                    {
+                        this.listHeader()
+                    }
+                    <FlatList
+                        //ListHeaderComponent={() => this.listHeader()}
+                        data={this.state.academies}
+                        extraData={this.state.academies}
+                        renderItem={this._renderItem}
+                    />
+                </View>
+            </PTRView>
         );
     }
 }

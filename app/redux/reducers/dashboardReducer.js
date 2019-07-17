@@ -69,3 +69,26 @@ export function getCoachDashboard(header,coach_id,academy_id) {
     };
 
 }
+
+export function getCoachSWitcher(header) {
+    console.log("postdata",header)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_SWITCHING,
+        payload: {
+            request: {
+                url: `coach/switcher`,
+                method: 'GET',
+                // data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}

@@ -62,10 +62,9 @@ export default class IntroPage extends Component {
                 </Swiper>
                 <View
                     style={{
-                        paddingTop: 16,
                         paddingLeft: 20,
                         paddingRight: 20,
-                        paddingBottom: 16,
+                        paddingBottom: 6,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
@@ -95,7 +94,7 @@ export default class IntroPage extends Component {
                     </Text>
 
                     <TouchableOpacity
-                        style={{ height: 30, width: 50, alignItems:'flex-end' }}
+                        style={{ height: 30, width: 50, alignItems: 'flex-end' }}
                         activeOpacity={.8}
                         onPress={() => {
                             this.onPress()
@@ -117,17 +116,21 @@ export default class IntroPage extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'column',
-        backgroundColor: 'white'
-    },
-    wrapper: {
-        height: "90%",
-    },
-    sliderImage: {
+        backgroundColor: 'white',
         width: '100%',
         height: "100%",
-        resizeMode:'cover'
+    },
+    wrapper: {
+        alignItems:'center',
+        justifyContent:'center',
+        flex:1
+    },
+    sliderImage: {
+        width: "100%",
+        height: "100%",
+        alignItems:'center',
+        flex:1,
+        resizeMode: 'stretch',
     }
 });
 

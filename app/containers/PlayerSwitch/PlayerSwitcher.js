@@ -139,7 +139,9 @@ class PlayerSwitcher extends BaseComponent {
                         ratingColor='#F4FC9A'
                         ratingBackgroundColor='#D7D7D7'
                         ratingCount={5}
+                        startingValue={item.academy_rating}
                         imageSize={14}
+                        readonly={true}
                         style={{ height: 30, width: 80 }}
                     />
 
