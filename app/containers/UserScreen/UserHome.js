@@ -1,16 +1,13 @@
 import React from 'react'
-import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
 import { View, ImageBackground, Text, StyleSheet, Image, StatusBar,TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
-import { getCoachSWitcher, getPlayerSWitcher } from "../../redux/reducers/switchReducer";
 import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomHeader from '../../components/custom/CustomHeader';
 import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
@@ -167,7 +164,7 @@ class UserHome extends BaseComponent {
                 console.log(' user response getPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
 
-                if (user1.data['coach_data'] != null) {
+                if (user1.data['coach_data'] != null && user1.data['coach_data'].length>0) {
                     this.setState({
                         coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
                     })

@@ -10,6 +10,7 @@ import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803718_1280.png';
@@ -181,7 +182,7 @@ class PhoneAuth extends BaseComponent {
 
                     }
                     else if (userInfoData.user_type == COACH) {
-                        storeData('multiple',userData.has_multiple_acadmies)
+                        storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('CHome')
                         } else {
@@ -381,15 +382,24 @@ class PhoneAuth extends BaseComponent {
                         this.signInByName(null, null)
                     }}>Login by name</Text>
 
-                <Text style={{
-                    color: '#67BAF5',
-                    marginTop: 50,
-                    fontFamily: 'Quicksand-Regular'
-                }}
+                <TouchableOpacity
+                    style={{
+                        height: 30,
+                        width: 60,
+                        marginTop: 50,
+                        alignItems: 'center'
+                    }}
                     onPress={() => {
                         this.props.navigation.navigate('GHome')
+                    }}>
+
+                    <Text style={{
+                        color: '#67BAF5',
+
+                        fontFamily: 'Quicksand-Regular'
                     }}
-                >SKIP</Text>
+                    >SKIP</Text>
+                </TouchableOpacity>
 
             </View>
         );

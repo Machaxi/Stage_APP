@@ -54,6 +54,8 @@ import CoachGiveRewards from '../containers/rewards/CoachGiveRewards'
 import ParentRewards from '../containers/rewards/ParentRewards'
 import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListing'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
+import TabBarHighlightLabel from './TabBarHighlightLabel'
+import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -253,24 +255,10 @@ const tabBarController = createBottomTabNavigator(
             screen: userHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Home',
-                tabBarIcon: ({ tintColor }) => (
-
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Home.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-
-
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    underlineBottomPosition: 1,
-                    underlineColor: 'red',
-                    underlineHeight: 5
-                },
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
 
             },
 
@@ -280,21 +268,10 @@ const tabBarController = createBottomTabNavigator(
             screen: userBatchModule,
             navigationOptions: {
                 tabBarLabel: 'Batch',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/groupicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_batch.png')} />,
             }
 
         },
@@ -302,21 +279,10 @@ const tabBarController = createBottomTabNavigator(
             screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Tournamenticon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
 
         },
@@ -324,21 +290,10 @@ const tabBarController = createBottomTabNavigator(
             screen: userChallengeModule,
             navigationOptions: {
                 tabBarLabel: 'Challenge',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Challengeiocn.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_challenge.png')} />,
             }
 
         },
@@ -346,21 +301,10 @@ const tabBarController = createBottomTabNavigator(
             screen: GuestHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Bookingicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
         },
@@ -654,24 +598,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
             screen: coachHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Home',
-                tabBarIcon: ({ tintColor }) => (
-
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Home.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-
-
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    underlineBottomPosition: 1,
-                    underlineColor: 'red',
-                    underlineHeight: 5
-                },
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
 
             },
 
@@ -681,24 +611,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
             screen: coachBatchModule,
             navigationOptions: {
                 tabBarLabel: 'Batch',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-
-                    <Image
-                        //focused={focused}
-                        source={require('../images/groupicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-
-
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_batch.png')} />,
             }
 
         },
@@ -706,21 +622,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
             screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Tournamenticon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
 
         },
@@ -728,21 +633,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
             screen: coachPerfomenceModule,
             navigationOptions: {
                 tabBarLabel: 'Performance',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/performence.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_performance.png')} />,
             }
 
         },
@@ -750,21 +644,10 @@ const tabBarControllerCoach = createBottomTabNavigator(
             screen: GuestHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Bookingicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
         },
@@ -856,49 +739,21 @@ const tabBarControllerGuest = createBottomTabNavigator(
             screen: GuestHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Home',
-                tabBarIcon: ({ tintColor }) => (
-
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Home.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-
-
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    underlineBottomPosition: 1,
-                    underlineColor: 'red',
-                    underlineHeight: 5
-                },
-
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
             },
-
-
         },
 
         Tournament: {
             screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Tournamenticon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
 
         },
@@ -907,23 +762,11 @@ const tabBarControllerGuest = createBottomTabNavigator(
             screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Bookingicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_booking.png')} />,
             }
-
         },
 
     })
@@ -1148,25 +991,10 @@ const tabBarControllerParent = createBottomTabNavigator(
             screen: parentHomeModule,
             navigationOptions: {
                 tabBarLabel: 'Home',
-                tabBarIcon: ({ tintColor }) => (
-
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Home.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-
-
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    underlineBottomPosition: 1,
-                    underlineColor: 'red',
-                    underlineHeight: 5
-                },
-
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
             },
 
 
@@ -1175,21 +1003,10 @@ const tabBarControllerParent = createBottomTabNavigator(
             screen: userBatchModule,
             navigationOptions: {
                 tabBarLabel: 'Batch',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/groupicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_batch.png')} />,
             }
 
         },
@@ -1197,21 +1014,10 @@ const tabBarControllerParent = createBottomTabNavigator(
             screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Tournamenticon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
 
         },
@@ -1219,21 +1025,10 @@ const tabBarControllerParent = createBottomTabNavigator(
             screen: userChallengeModule,
             navigationOptions: {
                 tabBarLabel: 'Challenge',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Challengeiocn.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_challenge.png')} />,
             }
 
         },
@@ -1241,21 +1036,10 @@ const tabBarControllerParent = createBottomTabNavigator(
             screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
-                showLabel: false,
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        //focused={focused}
-                        source={require('../images/Bookingicon.png')}
-                        tintColor={tintColor}
-                        size={24}
-                    />
-                ),
-                tabBarOptions: {
-                    showLabel: true,
-                    showIcon: true,
-                    // tintColor: '#333',
-                    // activeTintColor: '#aaa',
-                }
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
         },

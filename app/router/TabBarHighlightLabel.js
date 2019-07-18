@@ -3,26 +3,30 @@ import {
   StyleSheet,
   Text,
   View,
+  Image
 } from 'react-native';
 
 export default TabBarHighlightLabel = ({
-    focused,
-    label,
-    indicatorHeight,
-    activeLabelColor,
-    activeIndicatorColor,
-    inactiveLabelColor,
-    inactiveIndicatorColor
+  focused,
+  label,
+  indicatorHeight,
+  activeLabelColor,
+  activeIndicatorColor,
+  inactiveLabelColor,
+  inactiveIndicatorColor,
+  activeIcon
 }) => {
   const config = {
-    activeIndicatorColor: activeIndicatorColor || '#333333',
-    inactiveIndicatorColor: inactiveIndicatorColor || 'transparent',
-    activeLabelColor: activeLabelColor || '#333333',
-    inactiveLabelColor: inactiveLabelColor || '#CCCCCC',
+    activeIndicatorColor: '#667DDB',
+    inactiveIndicatorColor: 'transparent',
+    activeLabelColor: '#333333',
+    inactiveLabelColor: "#333333",//inactiveLabelColor || '#CCCCCC',
+    activeIcon: '../images/Home.png'
   };
 
   const indicatorColor = focused ? config.activeIndicatorColor : config.inactiveIndicatorColor;
   const labelColor = focused ? config.activeLabelColor : config.inactiveLabelColor;
+  //const activeIcon1 = require(config.activeIcon)
 
   const styles = StyleSheet.create({
     labelContainer: {
@@ -41,18 +45,31 @@ export default TabBarHighlightLabel = ({
     },
     labelIndicator: {
       flex: 0,
-      width: '100%',
-      height: (indicatorHeight ? indicatorHeight : 2),
+      width: 55,
+      marginBottom: 4,
+      height: 4,
       justifyContent: 'flex-end',
       backgroundColor: indicatorColor
     },
   });
-  const maybeRenderLabel = label && <Text style={styles.labelText}>{label}</Text>; 
+  const maybeRenderLabel = label && <Text style={styles.labelText}>{label}</Text>;
+
 
   return (
     <View style={styles.labelContainer}>
+      <Image
+      resizeMode="contain"
+        style={{
+          width: 34,
+          height: 24,
+          marginBottom: 6
+        }}
+        source={activeIcon}
+        size={24}
+      />
       {maybeRenderLabel}
       <View style={styles.labelIndicator} />
+
     </View>
   );
 }

@@ -197,29 +197,32 @@ class BatchScreen extends BaseComponent {
 
 
         return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-            <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                <View style={{ margin: 10, marginTop: 20 }}>
 
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SwitchPlayer111', {
-                        userType: 'coach'
-                    })}>
+            {/* <View style={{ margin: 10, marginTop: 20 }}>
+
+                    <TouchableOpacity onPress={() =>
+                        this.props.navigation.navigate('CancelSession')
+                    }>
                         <Text style={{
                             color: '#667DDB', textAlign: 'right',
                             fontSize: 10,
                             fontFamily: 'Quicksand-Regular'
                         }}> Cancel Session</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
+
+            {this.state.batchList != null && this.state.batchList.length > 0 ?
                 <FlatList
                     data={this.state.batchList}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => item.id}
-                />
+                /> :
+                <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={defaultStyle.regular_text_14}>No Batch Found.</Text>
+                </View>
+            }
 
-
-
-            </ScrollView>
         </View>;
         // }else{
         //     return (

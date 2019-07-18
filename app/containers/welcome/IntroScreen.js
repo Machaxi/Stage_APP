@@ -70,8 +70,7 @@ export default class IntroPage extends Component {
                     }}>
 
                     <TouchableOpacity
-                        style={{ height: 20, width: 40 }}
-                        activeOpacity={.8}
+                        style={{ height: 20, width: 50 }}
                         onPress={() => {
                             this.props.navigation.navigate('Login')
                         }}
@@ -94,7 +93,7 @@ export default class IntroPage extends Component {
                     </Text>
 
                     <TouchableOpacity
-                        style={{ height: 30, width: 50, alignItems: 'flex-end' }}
+                        style={{ height: 30, width: 60, alignItems: 'flex-end' }}
                         activeOpacity={.8}
                         onPress={() => {
                             this.onPress()

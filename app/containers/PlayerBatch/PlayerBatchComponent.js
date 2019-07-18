@@ -12,7 +12,7 @@ class PlayerBatchComponent extends BaseComponent {
         this.state = {
 
             batchdata: null,
-            coactList: null
+            coactList: []
         }
 
     }
@@ -81,7 +81,7 @@ class PlayerBatchComponent extends BaseComponent {
                     <View style={{
                         borderColor: '#DFDFDF',
                         marginTop: 2, marginBottom: 2,
-                    borderWidth: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
+                        borderWidth: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
                     }}>
                         <Text
                             style={{
@@ -98,7 +98,7 @@ class PlayerBatchComponent extends BaseComponent {
                         style={{
                             width: 6,
                             height: 13,
-                            marginLeft:10
+                            marginLeft: 10
                         }} />
                 </View>
 
@@ -281,42 +281,45 @@ class PlayerBatchComponent extends BaseComponent {
                                         moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
                                     }</Text>
                             </View>
+                            {operations.weekend ?
 
-                            <View style={{ width: '40%' }}>
-                                <Text style={[defaultStyle.regular_text_10, {
-                                    marginBottom: 5
-                                }]}>Weekends</Text>
-                                <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
-                                <Text style={defaultStyle.regular_text_14}>
+                                <View style={{ width: '40%' }}>
+                                    <Text style={[defaultStyle.regular_text_10, {
+                                        marginBottom: 5
+                                    }]}>Weekends</Text>
+                                    <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
+                                    <Text style={defaultStyle.regular_text_14}>
 
-                                    {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
-                                        + ' - ' +
-                                        moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
-                                    }</Text>
-                            </View>
+                                        {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
+                                            + ' - ' +
+                                            moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
+                                        }</Text>
+                                </View> : null
+                            }
                         </View>
                     </View>
                 </CustomeCard>
 
-                <CustomeCard>
-                    <View
-                        style={{
-                            marginLeft: 12,
-                            marginRight: 12,
-                            marginTop: 16
-                        }}
-                    >
-                        <Text style={defaultStyle.bold_text_10}>Coach</Text>
+                {this.state.coactList.length > 0 ?
+                    <CustomeCard>
+                        <View
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 12,
+                                marginTop: 16
+                            }}
+                        >
+                            <Text style={defaultStyle.bold_text_10}>Coach</Text>
 
-                        <View style={defaultStyle.line_style} />
+                            <View style={defaultStyle.line_style} />
 
-                        <FlatList
-                            data={this.state.coactList}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.id}
-                        />
-                    </View>
-                </CustomeCard>
+                            <FlatList
+                                data={this.state.coactList}
+                                renderItem={this.renderItem}
+                                keyExtractor={(item, index) => item.id}
+                            />
+                        </View>
+                    </CustomeCard> : null}
 
                 <View style={{ margin: 5 }}>
                     <CustomeCard>

@@ -6,6 +6,7 @@ import UpcomingRoute from './UpcomingRoute'
 import RegisteredRoute from './RegisteredRoute'
 import ResultsRoute from './ResultsRoute'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
+import { getData } from '../../components/auth';
 
 
 export default class TournamentTabs extends BaseComponent {
@@ -19,13 +20,19 @@ export default class TournamentTabs extends BaseComponent {
   };
   componentDidMount() {
 
-    if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
-      this.props.navigation.setParams({ Title: "Switch Player" });
-    } else if (userData.user['user_type'] == 'COACH') {
-      this.props.navigation.setParams({ Title: "Switch Academy" });
-    } else {
-      this.props.navigation.setParams({ Title: "" });
-    }
+    getData('userInfo', (value) => {
+      userData = JSON.parse(value)
+      if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+        this.props.navigation.setParams({ Title: "Switch Player" });
+      } else if (userData.user['user_type'] == 'COACH') {
+        this.props.navigation.setParams({ Title: "Switch Academy" });
+      } else {
+        this.props.navigation.setParams({ Title: "" });
+      }
+
+  });
+
+   
   }
 
   static navigationOptions = ({ navigation }) => {

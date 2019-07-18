@@ -2,8 +2,9 @@ import React from 'react'
 
 import { View, ImageBackground, Text, Image, TextInput } from 'react-native'
 import { Button } from 'react-native-paper';
-import BaseComponent, { defaultStyle } from '../../BaseComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 import firebase from "react-native-firebase";
+import { onSignOut } from "../../components/auth";
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
 //import firebase from 'react-native-firebase';
@@ -110,8 +111,8 @@ class CancelSession extends BaseComponent {
                                             marginRight: 8
                                         }}
                                         source={
-                                            is_single_day ? require('../../../images/ic_radio_button_checked.png')
-                                                : require('../../../images/ic_radio_button_unchecked.png')
+                                            is_single_day ? require('../../images/ic_radio_button_checked.png')
+                                                : require('../../images/ic_radio_button_unchecked.png')
                                         } />
                                     <Text style={defaultStyle.regular_text_14}>Single day</Text>
                                 </TouchableOpacity>
@@ -139,8 +140,8 @@ class CancelSession extends BaseComponent {
                                             marginRight: 8
                                         }}
                                         source={
-                                            !is_single_day ? require('../../../images/ic_radio_button_checked.png')
-                                                : require('../../../images/ic_radio_button_unchecked.png')
+                                            !is_single_day ? require('../../images/ic_radio_button_checked.png')
+                                                : require('../../images/ic_radio_button_unchecked.png')
                                         } />
                                     <Text style={defaultStyle.regular_text_14}>Range</Text>
                                 </TouchableOpacity>
@@ -177,7 +178,7 @@ class CancelSession extends BaseComponent {
 
                                     <Image
                                         style={{ width: 8, height: 5 }}
-                                        source={require('../../../images/ic_down_arrow.png')} />
+                                        source={require('../../images/ic_down_arrow.png')} />
                                 </View>
                                 <View
                                     style={{
@@ -213,7 +214,7 @@ class CancelSession extends BaseComponent {
 
                                     <Image
                                         style={{ width: 8, height: 5 }}
-                                        source={require('../../../images/ic_down_arrow.png')} />
+                                        source={require('../../images/ic_down_arrow.png')} />
                                 </View>
                                 <View
                                     style={{

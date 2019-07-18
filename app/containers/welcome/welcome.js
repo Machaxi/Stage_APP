@@ -3,8 +3,6 @@ import React from 'react'
 import { View, ImageBackground } from 'react-native'
 import { Button } from 'react-native-paper';
 import BaseComponent from '../BaseComponent';
-import firebase from "react-native-firebase";
-import { onSignOut } from "../../components/auth";
 //import firebase from 'react-native-firebase';
 
 class welcome extends BaseComponent {

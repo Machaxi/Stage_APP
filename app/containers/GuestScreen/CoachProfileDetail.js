@@ -46,7 +46,7 @@ class CoachProfileDetail extends BaseComponent {
         let sort = ''
 
         this.props.getCoachFeedbackList('', academy_id, coach_id, page, size, sort).then(() => {
-            //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            console.log('getCoachFeedbackList=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
                 let feedback = this.props.data.res.data.feedback
@@ -68,6 +68,7 @@ class CoachProfileDetail extends BaseComponent {
         let coach_id = this.state.coach_id
 
         this.props.coachDetail(coach_id).then(() => {
+            console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
                 let coach = this.props.data.res.data.coach
@@ -159,6 +160,7 @@ class CoachProfileDetail extends BaseComponent {
         let feedback = this.state.feedback
         let coachData = this.state.coachData
         let year = coachData.experience / 12
+        year =  Math.floor(year)
         let month = coachData.experience % 12
 
         return (

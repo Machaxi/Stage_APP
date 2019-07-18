@@ -245,11 +245,10 @@ class PlayerBatch extends BaseComponent {
                 </View>
             )
         }
-        if (this.state.batchList) {
+        if (this.state.batchList && this.state.batchList.length > 0) {
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <TabView
-
                     navigationState={this.state}
                     renderTabBar={this._renderTabBar}
                     renderScene={this.renderScene}
@@ -261,7 +260,7 @@ class PlayerBatch extends BaseComponent {
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
+                    <Text style={defaultStyle.regular_text_14}>No Batch Found</Text>
                 </View>
             )
         }

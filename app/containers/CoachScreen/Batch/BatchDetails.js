@@ -287,17 +287,21 @@ class BatchDetails extends React.Component {
                                         }
                                     </Text>
                                 </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekend</Text>
-                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.days.join(' ')}</Text>
-                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
-                                        {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
-                                            + ' - ' +
-                                            moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
-                                        }
-                                    </Text>
 
-                                </View>
+                                {operations.weekend ?
+                                    <View style={{ width: '50%' }}>
+                                        <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekend</Text>
+                                        <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.days.join(' ')}</Text>
+                                        <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
+                                            {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
+                                                + ' - ' +
+                                                moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
+                                            }
+                                        </Text>
+
+                                    </View>
+                                    : null}
+
 
                             </View>
 

@@ -67,6 +67,7 @@ class EditOtherProfile extends BaseComponent {
                 dict['name'] = txtname;
                 dict['dob'] = dob;
                 dict['user_id'] = this.state.id
+                console.log('json => ',JSON.stringify(dict))
                 formData.append('post', JSON.stringify(dict));
                 console.log("header", JSON.stringify(formData));
 
