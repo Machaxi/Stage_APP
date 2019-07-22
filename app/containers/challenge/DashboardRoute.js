@@ -1,0 +1,723 @@
+import React, { Component } from 'react';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
+import { Card, ActivityIndicator, } from 'react-native-paper';
+import { Rating } from 'react-native-ratings';
+import BaseComponent, { defaultStyle } from '../BaseComponent'
+import { getData } from "../../components/auth";
+import { getChallengeDashboard } from "../../redux/reducers/ChallengeReducer";
+import { connect } from 'react-redux';
+import Moment from 'moment';
+
+class DashboardRoute extends BaseComponent {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      data: ['Test'],
+      query: '',
+      modalVisible: false,
+    }
+  }
+
+  componentDidMount() {
+
+    getData('header', (value) => {
+
+      this.props.getChallengeDashboard(value, '1').then(() => {
+        let data = this.props.data.data
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+        // let success = data.success
+        // if (success) {
+
+        //   console.log(' 1getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
+
+        //   this.setState({
+        //     tournaments: data.data.tournaments
+        //   })
+        // }
+
+      }).catch((response) => {
+        console.log(response);
+      })
+    })
+  }
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
+
+  // find(query) {
+  //     if (query === '') {
+  //         return [];
+  //     }
+  //     const { suggestionResult } = this.state;
+  //     const regex = new RegExp(`${query.trim()}`, 'i');
+  //     console.log('regex ', regex)
+  //     return suggestionResult.filter(item => item.name.search(regex) >= 0);
+  // }
+
+
+  _renderItem = ({ item }) => (
+
+    <View>
+      <TouchableOpacity activeOpacity={.8}
+        onPress={() => {
+          this.setModalVisible(true);
+        }}>
+
+        <Card style={styles.challengePlayerCard}>
+          <View style={styles.playerCardOuter}>
+            <View style={styles.playerCard}>
+              <TouchableOpacity>
+                <ImageBackground style={styles.playerBackImage}
+                  source={require('../../images/batch_card.png')}
+                >
+                  <Text style={styles.playerScoreLabel}>Score</Text>
+                  <Text style={styles.playerScore}>40</Text>
+
+                  <View style={styles.middleBox}>
+                    <Text style={styles.playerCategory}>Player</Text>
+                    <Image style={styles.playerImage} source={require('../../images/player_small.png')}></Image>
+                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>Split1</Text>
+                  </View>
+
+                  <View style={styles.playerNameOuter}>
+                    <Text style={styles.playerName}>Deepika</Text>
+                  </View>
+
+                  <View style={styles.badgeOuter}>
+
+                    <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                      <View style={styles.badgeInner}>
+                        <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
+                        <Text style={styles.badgeValue}>111</Text>
+                        <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.versusOuter}>
+              <Text style={styles.versusText}>VS</Text>
+            </View>
+
+            <View style={styles.opponentCard}>
+              <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList') }}>
+                <ImageBackground style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
+                  <Text style={styles.addOpponentLabel}>+ Add Opponent</Text>
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Card>
+      </TouchableOpacity>
+
+
+      <View style={styles.filterOuter}>
+        <Text style={styles.challengeText}>Challenges</Text>
+        <Text style={styles.filterText}>Filter</Text>
+      </View>
+
+      <Card style={styles.challengeCard}>
+        <View>
+          <Text style={styles.cardHeading}>You have been challenged</Text>
+          <Text style={styles.challengePlayerName}>Vinoth T</Text>
+          <View style={styles.scoreCatLabelOuter}>
+            <Text style={styles.scoreLabel}>Score</Text>
+            <Text style={styles.categoryLabel}>Category</Text>
+            <Text style={styles.dateLabel}>Date</Text>
+          </View>
+          <View style={styles.scoreCatValueOuter}>
+            <Text style={styles.scoreValue}>50</Text>
+            <Text style={styles.categoryValue}>U-13</Text>
+            <Text style={styles.dateValue}>25/05/2019</Text>
+          </View>
+
+          <View style={styles.challengeBtnOuter}>
+            <TouchableOpacity activeOpacity={.8} style={styles.rounded_button_white}
+              onPress={() => { this.props.navigation.navigate('Registration') }}>
+              <Text style={styles.cancelBtnText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
+              onPress={() => { this.props.navigation.navigate('Registration') }}>
+              <Text style={styles.primaryBtnText}>Accept</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </Card>
+
+      <Card style={styles.challengeCard}>
+
+        <View>
+          <View style={styles.acceptCardHeadingOuter}>
+            <View style={styles.acceptCardHeading}>
+              <Text style={styles.acceptCardheadingText}>You have challenged</Text>
+              <Text style={styles.statusLabel}> Accepted </Text>
+            </View>
+            <Text style={styles.actionLabel}>Abort</Text>
+          </View>
+          <Text style={styles.challengePlayerName}>Vinoth T</Text>
+          <View style={styles.scoreCatLabelOuter}>
+            <Text style={styles.scoreLabel}>Score</Text>
+            <Text style={styles.categoryLabel}>Category</Text>
+            <Text style={styles.dateLabel}>Date</Text>
+          </View>
+          <View style={styles.scoreCatValueOuter}>
+            <Text style={styles.scoreValue}>50</Text>
+            <Text style={styles.categoryValue}>U-13</Text>
+            <Text style={styles.dateValue}>25/05/2019</Text>
+          </View>
+
+          <View style={styles.challengeBtnOuter}>
+            <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
+            <Text style={defaultStyle.rounded_button_150}>Update Score</Text>
+          </View>
+        </View>
+
+      </Card>
+
+      <Card style={styles.challengeCard}>
+
+        <View>
+          <View style={styles.acceptCardHeadingOuter}>
+            <View style={styles.acceptCardHeading}>
+              <Text style={styles.acceptCardheadingText}>You have challenged</Text>
+              <Text style={styles.statusLabel}> Pending </Text>
+            </View>
+            <Text style={styles.actionLabel}>Abort</Text>
+          </View>
+          <Text style={styles.challengePlayerName}>Vinoth T</Text>
+          <View style={styles.scoreCatLabelOuter}>
+            <Text style={styles.scoreLabel}>Score</Text>
+            <Text style={styles.categoryLabel}>Category</Text>
+            <Text style={styles.dateLabel}>Date</Text>
+          </View>
+          <View style={styles.scoreCatValueOuter}>
+            <Text style={styles.scoreValue}>50</Text>
+            <Text style={styles.categoryValue}>U-13</Text>
+            <Text style={styles.dateValue}>25/05/2019</Text>
+          </View>
+        </View>
+
+      </Card>
+
+      <Card style={styles.challengeCard}>
+
+        <View>
+          <View style={styles.acceptCardHeadingOuter}>
+            <View style={styles.acceptCardHeading}>
+              <Text style={styles.acceptCardheadingText}>You have challenged</Text>
+              <Text style={styles.statusErrorLabel}> Rejected </Text>
+            </View>
+            <Text style={styles.actionDismissLabel}>Dismiss</Text>
+          </View>
+          <Text style={styles.challengePlayerName}>Vinoth T</Text>
+          <View style={styles.scoreCatLabelOuter}>
+            <Text style={styles.scoreLabel}>Score</Text>
+            <Text style={styles.categoryLabel}>Category</Text>
+            <Text style={styles.dateLabel}>Date</Text>
+          </View>
+          <View style={styles.scoreCatValueOuter}>
+            <Text style={styles.scoreValue}>50</Text>
+            <Text style={styles.categoryValue}>U-13</Text>
+            <Text style={styles.dateValue}>25/05/2019</Text>
+          </View>
+        </View>
+      </Card>
+    </View>
+
+  );
+
+  render() {
+
+    // if (this.props.data.loading || this.state.tournadataments == null) {
+    //   return (
+    //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    //       <ActivityIndicator size="large" color="#67BAF5" />
+    //     </View>
+    //   )
+    // }
+
+    let data = this.state.data
+    return (
+
+      <View style={styles.chartContainer}>
+        <FlatList
+          data={data}
+          renderItem={this._renderItem}
+        />
+        <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
+          <View>
+            <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
+              <View style={styles.modalOuter}>
+                <View style={styles.modalBox}>
+                  <View style={styles.modalHeadingOuter}>
+                    <Text></Text>
+                    <Text style={[defaultStyle.bold_text_14, styles.modalHeadingText]}>Create Challenge </Text>
+
+                    <TouchableOpacity onPress={() => { this.setModalVisible(false); }}>
+                      <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.playerCardOuter}>
+                    <View style={styles.playerCard}>
+                      <TouchableOpacity>
+                        <ImageBackground style={styles.playerBackImage}
+                          source={require('../../images/batch_card.png')}
+                        >
+                          <Text style={styles.playerScoreLabel}>Score</Text>
+                          <Text style={styles.playerScore}>40</Text>
+
+                          <View style={styles.middleBox}>
+                            <Text style={styles.playerCategory}>Player</Text>
+                            <Image style={styles.playerImage} source={require('../../images/player_small.png')}></Image>
+                            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>Split1</Text>
+                          </View>
+
+                          <View style={styles.playerNameOuter}>
+                            <Text style={styles.playerName}>Deepika</Text>
+                          </View>
+
+                          <View style={styles.badgeOuter}>
+                            <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                              <View style={styles.badgeInner}>
+                                <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
+                                <Text style={styles.badgeValue}>111</Text>
+                                <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                              </View>
+                            </ImageBackground>
+                          </View>
+                        </ImageBackground>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.versusOuter}>
+                      <Text style={styles.versusText}>VS</Text>
+                    </View>
+
+                    <View style={styles.opponentCard}>
+                      <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList') }}>
+                        <ImageBackground style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
+                          <Text style={styles.addOpponentLabel}>+ Add Opponent</Text>
+                        </ImageBackground>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  {/* <View style={{display:'flex', flexDirection: 'row'}}>
+            <Text style={{color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50%",textAlign:'center'}}>You</Text>
+            <Text style={{color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50 %", textAlign:'center'}}>Opponent</Text>
+          </View> */}
+
+                  <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Confirm</Text>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </ScrollView >
+      </View>
+    );
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    data: state.ChallengeReducer,
+  };
+};
+const mapDispatchToProps = {
+  getChallengeDashboard
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardRoute);
+
+const styles = StyleSheet.create({
+  chartContainer: {
+    flex: 1,
+    backgroundColor: '#F7F7F7',
+    fontFamily: 'Quicksand-Regular'
+  },
+  rounded_button: {
+    width: '48%',
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginLeft: 4,
+    marginRight: 4,
+    borderColor: '#67BAF5',
+    backgroundColor: '#67BAF5',
+    color: 'white',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular'
+  },
+  challengePlayerCard: {
+    borderRadius: 16,
+    marginLeft: 12,
+    marginRight: 12,
+    marginTop: 8,
+    marginBottom: 8,
+    elevation: 2,
+    paddingVertical: 16
+  },
+  challengeCard: {
+    borderRadius: 16,
+    marginLeft: 12,
+    marginRight: 12,
+    marginTop: 8,
+    marginBottom: 8,
+    elevation: 2,
+    padding: 16
+  },
+  playerCardOuter: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    //paddingHorizontal: 5
+    marginLeft: 18
+  },
+  playerCard: {
+    overflow: 'hidden',
+    height: 200,
+    width: "35%",
+    marginBottom: 16
+  },
+  playerBackImage: {
+    height: 200,
+    width: '100%'
+  },
+  playerScoreLabel: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 8,
+    paddingTop: 6,
+    fontFamily: 'Quicksand-Regular'
+  },
+  playerScore: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 13,
+    fontFamily: 'Quicksand-Regular'
+  },
+  middleBox: {
+    flexDirection: 'row',
+    paddingTop: 13,
+    marginLeft: 2,
+    marginRight: 2,
+  },
+  playerCategory: {
+    width: 26,
+    height: 12,
+    color: 'white',
+    marginRight: 4,
+    marginTop: 16,
+    alignItems: 'center',
+    alignSelf: 'center',
+    textAlign: 'center',
+    backgroundColor: 'red',
+    borderRadius: 4,
+    fontSize: 8,
+    paddingTop: 1,
+    fontFamily: 'Quicksand-Regular'
+  },
+  playerImage: {
+    height: 80,
+    width: 50,
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  playerLevel: {
+    color: 'white',
+    alignItems: 'center',
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 8,
+    marginLeft: 4,
+    marginTop: 16,
+    fontFamily: 'Quicksand-Regular'
+  },
+  playerNameOuter: {
+    position: 'absolute',
+    marginTop: 116,
+    width: "100%",
+    height: 20,
+    backgroundColor: 'white'
+  },
+  playerName: {
+    color: '#404040',
+    fontWeight: 16,
+    fontWeight: '500',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular'
+  },
+  badgeOuter: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15
+  },
+  badgeBackImage: {
+    height: 38,
+    width: 25,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  badgeInner: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: '#485FA0',
+    height: 6,
+    width: '120%'
+  },
+  badgeLeftArrow: {
+    height: 7,
+    width: 12,
+    marginLeft: -12
+  },
+  badgeValue: {
+    fontSize: 5,
+    color: 'white',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular'
+  },
+  badgeRightArrow: {
+    height: 7,
+    width: 12,
+    marginRight: -12
+  },
+  versusOuter: {
+    backgroundColor: '#6759B7',
+    borderRadius: 50,
+    width: 40,
+    height: 40,
+    marginLeft: 20,
+    marginRight: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  versusText: {
+    color: '#ffffff',
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 17,
+    fontFamily: 'Quicksand-Regular'
+  },
+  opponentCard: {
+    overflow: 'hidden',
+    height: 200,
+    width: "35%",
+    marginBottom: 16
+  },
+  opponentBackImage: {
+    height: 200,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  addOpponentLabel: {
+    color: 'white',
+    fontSize: 12,
+    paddingTop: 6,
+    color: '#A3A5AE',
+    fontFamily: 'Quicksand-Regular'
+  },
+  filterOuter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 16
+  },
+  challengeText: {
+    fontSize: 14,
+    color: '#707070',
+    fontFamily: 'Quicksand-Regular',
+  },
+  filterText: {
+    fontSize: 12,
+    color: '#707070',
+    fontFamily: 'Quicksand-Regular'
+  },
+  rounded_button_white: {
+    width: '48%',
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginRight: 4,
+    borderColor: '#FF7373',
+    backgroundColor: 'white',
+    color: '#FC4E4E',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular'
+  },
+  cardHeading: {
+    fontSize: 10,
+    color: '#404040',
+    borderBottomWidth: 1,
+    borderBottomColor: '#DFDFDF',
+    paddingBottom: 15,
+    fontFamily: 'Quicksand-Regular'
+  },
+  challengePlayerName: {
+    fontSize: 14,
+    color: '#404040',
+    marginTop: 15,
+    marginBottom: 15,
+    fontFamily: 'Quicksand-Regular'
+  },
+  scoreCatLabelOuter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  scoreLabel: {
+    fontSize: 10,
+    color: '#A3A5AE',
+    width: '33.33%',
+    fontFamily: 'Quicksand-Regular'
+  },
+  categoryLabel: {
+    fontSize: 10,
+    color: '#A3A5AE',
+    width: '33.33%',
+    fontFamily: 'Quicksand-Regular'
+  },
+  dateLabel: {
+    fontSize: 10,
+    color: '#A3A5AE',
+    width: '33.33%',
+    fontFamily: 'Quicksand-Regular'
+  },
+  scoreCatValueOuter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10
+  },
+  scoreValue: {
+    fontSize: 14,
+    color: '#404040',
+    width: '33.33%',
+    fontFamily: 'Quicksand-Regular'
+  },
+  categoryValue: {
+    fontSize: 14,
+    color: '#404040',
+    width: '33.33%',
+    fontFamily: 'Quicksand-Regular'
+  },
+  dateValue: {
+    fontSize: 14,
+    color: '#404040',
+    width: '33.33%',
+    fontFamily: 'Quicksand-Regular'
+  },
+  challengeBtnOuter: {
+    flexDirection: 'row',
+    marginTop: 25,
+    marginBottom: 15
+  },
+  cancelBtnText: {
+    color: '#FC4E4E',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular'
+  },
+  primaryBtnText: {
+    color: 'white',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular'
+  },
+  acceptCardHeadingOuter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#DFDFDF',
+    paddingBottom: 15
+  },
+  acceptCardHeading: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  acceptCardheadingText: {
+    fontSize: 10,
+    color: '#404040',
+    marginRight: 10,
+    fontFamily: 'Quicksand-Regular'
+  },
+  statusLabel: {
+    fontSize: 10,
+    color: '#404040',
+    backgroundColor: '#667DDB',
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+    color: '#ffffff',
+    borderRadius: 4,
+    fontFamily: 'Quicksand-Regular'
+  },
+  actionLabel: {
+    fontSize: 10,
+    fontFamily: 'QuickSand-Regular',
+    color: '#FF7373',
+    fontFamily: 'Quicksand-Regular'
+  },
+  statusErrorLabel: {
+    fontSize: 10,
+    color: '#404040',
+    backgroundColor: '#FF7373',
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+    color: '#ffffff',
+    borderRadius: 4,
+    fontFamily: 'Quicksand-Regular'
+  },
+  actionDismissLabel: {
+    fontSize: 10,
+    fontFamily: 'QuickSand-Regular',
+    color: '#667DDB',
+    fontFamily: 'Quicksand-Regular'
+  },
+  confirmBtn: {
+    marginTop: 16,
+    width: "100%",
+    marginLeft: 0,
+    marginRight: 0,
+    fontFamily: 'Quicksand-Regular'
+  },
+  closeImg: {
+    height: 30,
+    width: 30,
+  },
+  modalOuter: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    paddingVertical: 16
+  },
+  modalBox: {
+    width: "100%",
+    margin: 16,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: 'white',
+    height: 370,
+  },
+  modalHeadingOuter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  modalHeadingText: {
+    color: '#707070',
+    fontFamily: 'Quicksand-Regular'
+  }
+});

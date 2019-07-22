@@ -46,7 +46,7 @@ import RightMenuToolbar from "./RightMenuToolbar";
 import coachPerfomenceModule from './CoachPerformenceRouter'
 import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
-import ChallengeHome from '../containers/challenge/ChallengeHome'
+import userChallengeModule from './ChallengeRouter'
 import Switcher from './Switcher'
 import userHomeModule from './UserHomeModule'
 import CoachRewardsPoints from '../containers/rewards/CoachRewardsPoints'
@@ -108,20 +108,6 @@ const loginModule = createStackNavigator({
 
 
 })
-
-
-
-const userChallengeModule = createStackNavigator({
-
-
-    ChallengeHome: {
-        screen: ChallengeHome,
-
-    }
-
-}
-);
-
 
 const GuestHomeModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
