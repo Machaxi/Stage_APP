@@ -195,43 +195,42 @@ class BatchScreen extends BaseComponent {
         // if (this.state.coach_profile) {
 
 
+        if (this.state.batchList != null && this.state.batchList.length > 0) {
+            return (
+                <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-        return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                    <View style={{ margin: 10, marginTop: 20 }}>
 
-            {/* <View style={{ margin: 10, marginTop: 20 }}>
+                        <TouchableOpacity onPress={() =>
+                            this.props.navigation.navigate('CancelSession')
+                        }>
+                            <Text style={{
+                                color: '#667DDB', textAlign: 'right',
+                                fontSize: 10,
+                                fontFamily: 'Quicksand-Regular'
+                            }}> Cancel Session</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                    <TouchableOpacity onPress={() =>
-                        this.props.navigation.navigate('CancelSession')
-                    }>
-                        <Text style={{
-                            color: '#667DDB', textAlign: 'right',
-                            fontSize: 10,
-                            fontFamily: 'Quicksand-Regular'
-                        }}> Cancel Session</Text>
-                    </TouchableOpacity>
-                </View> */}
+                    <FlatList
+                        data={this.state.batchList}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => item.id}
+                    />
 
-
-            {this.state.batchList != null && this.state.batchList.length > 0 ?
-                <FlatList
-                    data={this.state.batchList}
-                    renderItem={this.renderItem}
-                    keyExtractor={(item, index) => item.id}
-                /> :
-                <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={defaultStyle.regular_text_14}>No Batch Found.</Text>
+                </View>);
+        } else {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={defaultStyle.regular_text_14}>No Batch Found.</Text>
+                    </View>
                 </View>
-            }
-
-        </View>;
-        // }else{
-        //     return (
-        //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        //
-        //         </View>
-        //     )
-        //  }
+            )
+        }
     }
+
+
 }
 const mapStateToProps = state => {
     return {

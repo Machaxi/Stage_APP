@@ -2,60 +2,48 @@
 import React from 'react'
 
 
-import {View,ImageBackground,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView,SectionList} from 'react-native';
-import {Card} from 'react-native-paper'
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, SectionList } from 'react-native';
+import { Card } from 'react-native-paper'
 
-import {CustomeCard } from  '../../../components/Home/Card'
-import {getCoachPerformenceList} from "../../../redux/reducers/PerformenceReducer";
-import {getData} from "../../../components/auth";
+import { CustomeCard } from '../../../components/Home/Card'
+import { getCoachPerformenceList } from "../../../redux/reducers/PerformenceReducer";
+import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import moment from "moment/moment";
 import { COACH, ACADEMY } from '../../../components/Constants';
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import BaseComponent, { defaultStyle } from '../../BaseComponent'
 
-];
 
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width -20;
-
-class  PerformenceScreen extends React.Component {
+class PerformenceScreen extends BaseComponent {
 
     constructor(props) {
         super(props)
 
         this.state = {
 
-            batchList :null,
-            userData:null
+            batchList: null,
+            userData: null
 
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
+        getData('header', (value) => {
+            console.log("header", value);
         });
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
+            console.log("userData.user", userData.user['user_type'])
             let userType = userData.user['user_type']
 
-            if(userType == COACH || userType == ACADEMY){
-                this.getCoachBatchList(userData['academy_id'],userData['coach_id'])
+            if (userType == COACH || userType == ACADEMY) {
+                this.getCoachBatchList(userData['academy_id'], userData['coach_id'])
 
             }
 
@@ -63,17 +51,17 @@ class  PerformenceScreen extends React.Component {
         });
     }
 
-    getCoachBatchList(academy_id,player_id,){
-        getData('header',(value)=>{
-            console.log("header",value,academy_id,player_id);
-            this.props.getCoachPerformenceList(value,academy_id,player_id).then(() => {
+    getCoachBatchList(academy_id, player_id, ) {
+        getData('header', (value) => {
+            console.log("header", value, academy_id, player_id);
+            this.props.getCoachPerformenceList(value, academy_id, player_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.performencedata);
-                console.log(' user response payload ' + user);
+                console.log(' getCoachPerformenceList payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     tempArray = []
                     for (let i = 0; i < user1.data['dues'].length; i++) {
 
@@ -81,22 +69,22 @@ class  PerformenceScreen extends React.Component {
                         var month = user1.data.dues[i].month
                         var year = user1.data.dues[i].year
 
-                        tempatta1=[]
+                        tempatta1 = []
                         for (let j = 0; j < user1.data.dues[i].batches.length; j++) {
 
-                          var data =  user1.data.dues[i].batches[j]
+                            var data = user1.data.dues[i].batches[j]
                             data['month'] = month
                             data['year'] = year
                             tempatta1[j] = data
                         }
-                       // tempdata['title'] = moment('06-'+month +'-'+year).format('MMM YY')
+                        // tempdata['title'] = moment('06-'+month +'-'+year).format('MMM YY')
                         tempdata['batches'] = tempatta1
                         tempArray[i] = tempdata
                     }
 
-                console.log('tempArray',tempArray)
+                    console.log('tempArray', tempArray)
                     this.setState({
-                        batchList:tempArray,
+                        batchList: tempArray,
 
 
 
@@ -116,15 +104,15 @@ class  PerformenceScreen extends React.Component {
 
     renderItemSection = ({ item }) => (
         <View>
-        <View style={{margin: 10, marginTop: 20}}>
-        <Text>
-            {moment('06-'+item.month +'-'+item.year).format('MMM YY')}
-        </Text>
-        </View>
+            <View style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}>
+                <Text style={defaultStyle.bold_text_14}>
+                    {moment('06-' + item.month + '-' + item.year).format('MMM YY')}
+                </Text>
+            </View>
             <FlatList
                 data={item.batches}
                 renderItem={this.renderItem}
-                keyExtractor1={(item, index) => moment('06-'+item.month +'-'+item.year).format('MMM YY')}
+                keyExtractor1={(item, index) => moment('06-' + item.month + '-' + item.year).format('MMM YY')}
             />
         </View>
 
@@ -132,44 +120,42 @@ class  PerformenceScreen extends React.Component {
 
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
-
-           // console.warn("Touch Press",index)
-
-            this.props.navigation.navigate('PlayersListing',{batch_id:item.batch_id,month:item.month,year:item.year})
+            // console.warn("Touch Press",index)
+            this.props.navigation.navigate('PlayersListing', { batch_id: item.batch_id, month: item.month, year: item.year })
 
         }}>
             <CustomeCard>
 
-
-
-
-                <View  style={{
+                <View style={{
                     marginLeft: 8,
                     marginRight: 15,
-                    margin:10,
+                    margin: 12,
                     flexDirection: 'row',
+                    alignItems: 'center',
                     justifyContent: 'space-between',
                 }}>
-                    <Text>
+                    <Text style={defaultStyle.regular_text_14}>
                         {item.batch_name}
                     </Text>
-                    <Image source ={require('../../../images/forward.png')}
-                           style={{
-                               width: 3,
-                               height: 8,marginRight:10,marginTop:5}}/>
+                    <Image source={require('../../../images/forward.png')}
+                        resizeMode="contain"
+                        style={{
+                            width: 5,
+                            height: 11,
+                        }} />
 
 
                 </View>
-                <View style={{height: 1, backgroundColor: '#DFDFDF', margin: 10,marginTop:0}}/>
-                <View style={{flexDirection:'row',margin:10}}>
+                <View style={[defaultStyle.line_style, { marginLeft: 10, marginRight: 10 }]} />
+                <View style={{ flexDirection: 'row', margin: 10 }}>
 
-                    <View style={{wdith:'50%'}}>
-                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Category</Text>
-                        <Text style={{fontSize:14,marginBottom:10}}>{item.batch_category}</Text>
+                    <View style={{ wdith: '50%' }}>
+                        <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Category</Text>
+                        <Text style={[defaultStyle.regular_text_14, { marginBottom: 10 }]}>{item.batch_category}</Text>
                     </View>
-                    <View style={{wdith:'40%',marginLeft:100}}>
-                        <Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}> Players to be updated</Text>
-                        <Text style={{fontSize:14,marginBottom:10}}>{item.remaining_players}</Text>
+                    <View style={{ wdith: '40%', marginLeft: 100 }}>
+                        <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Players to be updated</Text>
+                        <Text style={[defaultStyle.regular_text_14, { marginBottom: 10 }]}>{item.remaining_players}</Text>
                     </View>
                 </View>
 
@@ -180,27 +166,17 @@ class  PerformenceScreen extends React.Component {
 
 
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (this.props.data.loading && !this.state.batchList) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         }
-        // if (this.state.coach_profile) {
+        if (this.state.batchList) {
 
 
-
-        return <View style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-            <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
-                {/*<View style={{margin: 10, marginTop: 20}}>*/}
-
-                    {/*<TouchableOpacity onPress={() => this.props.navigation.navigate('PlayersListing',*/}
-                    {/*{batch_id:'1',month:'6',year:'2019'}*/}
-                    {/*)}>*/}
-                        {/*<Text style={{color:'#667DDB',textAlign:'right'}}> Cancel Session</Text>*/}
-                    {/*</TouchableOpacity>*/}
-                {/*</View>*/}
+            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                 <FlatList
                     data={this.state.batchList}
@@ -208,17 +184,14 @@ class  PerformenceScreen extends React.Component {
                     keyExtractor={(item, index) => item.id}
                 />
 
+            </View>;
+        } else {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-
-            </ScrollView>
-        </View>;
-        // }else{
-        //     return (
-        //         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        //
-        //         </View>
-        //     )
-        //  }
+                </View>
+            )
+        }
     }
 }
 const mapStateToProps = state => {
@@ -245,7 +218,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -289,28 +262,28 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     }
 

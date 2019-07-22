@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
-import BaseComponent , { defaultStyle, EVENT_EDIT_PROFILE }  from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
@@ -27,6 +27,7 @@ class EditOtherProfile extends BaseComponent {
         }
 
         let data = this.props.navigation.getParam('data')
+        console.warn('date - ', data)
         let res = JSON.parse(data)
         if (res != undefined) {
             let name = res.name
@@ -35,12 +36,13 @@ class EditOtherProfile extends BaseComponent {
             this.state.txtname = name
             this.state.txtphone = phone_number
             this.state.birthdate = dob
+            this.state.id = res.user_id
         }
 
-        getData('userInfo', (value) => {
-            let res = JSON.parse(value)
-            this.state.id = res.user['id']
-        })
+        // getData('userInfo', (value) => {
+        //     let res = JSON.parse(value)
+        //     this.state.id = res.user['id']
+        // })
     }
 
     saveUserProfile() {
@@ -67,7 +69,7 @@ class EditOtherProfile extends BaseComponent {
                 dict['name'] = txtname;
                 dict['dob'] = dob;
                 dict['user_id'] = this.state.id
-                console.log('json => ',JSON.stringify(dict))
+                console.log('json => ', JSON.stringify(dict))
                 formData.append('post', JSON.stringify(dict));
                 console.log("header", JSON.stringify(formData));
 

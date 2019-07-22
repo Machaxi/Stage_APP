@@ -328,7 +328,7 @@ const playerDrawer = createDrawerNavigator({
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
         },
-        drawerWidth: Dimensions.get('window').width * 0.83,
+        drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
 
@@ -587,7 +587,7 @@ const coachHomeModule = createStackNavigator({
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
         },
-        drawerWidth: Dimensions.get('window').width * 0.83,
+        drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
 
@@ -670,7 +670,7 @@ const coachDrawer = createDrawerNavigator({
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
         },
-        drawerWidth: Dimensions.get('window').width * 0.83,
+        drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
 
@@ -787,14 +787,14 @@ const guestDrawer = createDrawerNavigator({
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
         },
-        drawerWidth: Dimensions.get('window').width * 0.83,
+        drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
 
 const WIDTH = Dimensions.get('window').width;
 
 const DrawerConfig = {
-    drawerWidth: WIDTH * 0.83,
+    drawerWidth: WIDTH * 0.86,
     contentComponent: ({ navigation }) => {
         return (<CoachMenuDrawer navigation={navigation} />)
     }
@@ -1061,7 +1061,7 @@ const parentDrawer = createDrawerNavigator({
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
         },
-        drawerWidth: Dimensions.get('window').width * 0.83,
+        drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
 

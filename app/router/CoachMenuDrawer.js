@@ -115,7 +115,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						>
 
 						</Image>
@@ -133,10 +133,28 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							sstyle={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						>
 
 						</Image>
+
+					</View>
+				</TouchableOpacity>
+
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					onSignOut()
+					clearData()
+					firebase.auth().signOut();
+					this.props.navigation.navigate('Login')
+				}
+				}>
+
+
+					<View style={styles.drawercell}>
+						<Text style={styles.menu}>
+							Sign Out
+								</Text>
 
 					</View>
 				</TouchableOpacity>
@@ -152,13 +170,13 @@ class CoachMenuDrawer extends BaseComponent {
 
 					<View style={styles.drawercell}>
 
-						<Text style={styles.menu}>
+						<Text style={styles.menu_coach}>
 							View Academy feedback
 						</Text>
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -168,23 +186,23 @@ class CoachMenuDrawer extends BaseComponent {
 
 					<View style={styles.drawercell}>
 
-						<Text style={styles.menu}>
+						<Text style={styles.menu_coach}>
 							Browse Academies
 								</Text>
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>Find Vacancies</Text>
+						<Text style={styles.menu_coach}>Find Vacancies</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
@@ -192,61 +210,76 @@ class CoachMenuDrawer extends BaseComponent {
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('CoachMyFeedbackListing')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>View my Feedback</Text>
+						<Text style={styles.menu_coach}>View my Feedback</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>Reward Points</Text>
+						<Text style={styles.menu_coach}>Reward Points</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>Challenge leaderboard</Text>
+						<Text style={styles.menu_coach}>Challenge leaderboard</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>Challenge Disputes</Text>
+						<Text style={styles.menu_coach}>Challenge Disputes</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>About Dribble</Text>
+						<Text style={styles.menu_coach}>About Dribble</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 					</View>
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu}>Contact Us</Text>
+						<Text style={styles.menu_coach}>Contact Us</Text>
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					onSignOut()
+					clearData()
+					firebase.auth().signOut();
+					this.props.navigation.navigate('Login')
+				}
+				}>
+					<View style={styles.drawercell}>
+						<Text style={styles.menu_coach}>
+							Sign Out
+								</Text>
+
 					</View>
 				</TouchableOpacity>
 			</View>)
@@ -262,7 +295,7 @@ class CoachMenuDrawer extends BaseComponent {
 		}}>
 			<Text
 				numberOfLines={1}
-				style={[defaultStyle.bold_text_16, { width: 90 }]}>{obj.name}</Text>
+				style={[defaultStyle.bold_text_14, { width: 90 }]}>{obj.name}</Text>
 			<Text style={defaultStyle.regular_text_12}>{obj.phone_number}</Text>
 
 			<TouchableOpacity
@@ -343,7 +376,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						>
 
 						</Image>
@@ -361,7 +394,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -377,7 +410,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -393,7 +426,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -409,7 +442,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -440,7 +473,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Text
 							numberOfLines={1}
-							style={[defaultStyle.bold_text_16, { width: 200 }]}>{this.state.academy_name}</Text>
+							style={[defaultStyle.bold_text_14, { width: 200 }]}>{this.state.academy_name}</Text>
 
 						<View style={{
 							flexDirection: 'row'
@@ -502,7 +535,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -518,7 +551,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -534,7 +567,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
@@ -550,11 +583,29 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/right_icon.png')}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
 				</TouchableOpacity>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					onSignOut()
+					clearData()
+					firebase.auth().signOut();
+					this.props.navigation.navigate('Login')
+				}
+				}>
+
+
+					<View style={styles.drawercell}>
+						<Text style={styles.menu}>
+							Sign Out
+								 </Text>
+
+					</View>
+				</TouchableOpacity>
+
 			</View>)
 	}
 
@@ -727,7 +778,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<View
 							style={{
-								paddingLeft: 10, paddingRight: 10,
+								paddingLeft: 0, paddingRight: 10,
 								paddingBottom: 16
 							}}
 						>
@@ -735,24 +786,24 @@ class CoachMenuDrawer extends BaseComponent {
 							{menu}
 
 
-							{signedIn ?
-								<TouchableOpacity activeOpacity={0.8} onPress={() => {
-									onSignOut()
-									clearData()
-									firebase.auth().signOut();
-									this.props.navigation.navigate('Login')
-								}
-								}>
+							{!signedIn ?
+								// <TouchableOpacity activeOpacity={0.8} onPress={() => {
+								// 	onSignOut()
+								// 	clearData()
+								// 	firebase.auth().signOut();
+								// 	this.props.navigation.navigate('Login')
+								// }
+								// }>
 
 
-									<View style={styles.drawercell}>
-										<Text style={styles.menu}>
-											Sign Out
-								</Text>
+								// 	<View style={styles.drawercell}>
+								// 		<Text style={styles.menu}>
+								// 			Sign Out
+								// </Text>
 
-									</View>
-								</TouchableOpacity>
-								:
+								// 	</View>
+								// </TouchableOpacity>
+								//:
 								<TouchableOpacity activeOpacity={0.8} onPress={() => {
 									this.props.navigation.navigate('Login')
 								}
@@ -766,7 +817,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 									</View>
-								</TouchableOpacity>
+								</TouchableOpacity> : null
 							}
 
 
@@ -794,16 +845,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(CoachMenuDrawer);
 
 const styles = StyleSheet.create({
 
-
+	menu_coach: {
+		color: '#404040',
+		alignItems: 'flex-start',
+		fontSize: 14,
+		fontFamily: 'Quicksand-Regular',
+	},
 	menu: {
 		color: '#404040',
 		alignItems: 'flex-start',
-		fontSize: 16,
+		fontSize: 14,
 		fontFamily: 'Quicksand-Medium',
 	},
 	arrow_img: {
-		height: 16,
-		width: 7
+		height: 12,
+		width: 5,
+		resizeMode: 'contain'
 	},
 	filled_button: {
 		width: '100%',

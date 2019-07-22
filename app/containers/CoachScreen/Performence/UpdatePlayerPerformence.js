@@ -1,68 +1,50 @@
 
 import React from 'react'
 
-import {View,TextInput,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ActivityIndicator,FlatList,ScrollView} from 'react-native';
-import {Card} from 'react-native-paper'
-import {SwitchButton ,CustomeButtonB} from  '../../../components/Home/SwitchButton'
-import {CustomeCard } from  '../../../components/Home/Card'
-import {getPerformenceOption,saveCoachBatchAttendence} from "../../../redux/reducers/PerformenceReducer";
-import {getData} from "../../../components/auth";
+import { View, TextInput, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { SwitchButton, CustomeButtonB } from '../../../components/Home/SwitchButton'
+import { getPerformenceOption, saveCoachBatchAttendence } from "../../../redux/reducers/PerformenceReducer";
+import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
-import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
 import { ACADEMY, COACH } from '../../../components/Constants';
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import BaseComponent, { defaultStyle } from '../../BaseComponent';
 
-];
 
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width -20;
-
-class  UpdatePlayerPerformence extends React.Component {
+class UpdatePlayerPerformence extends BaseComponent {
 
     constructor(props) {
         super(props)
-        this.inputRefs = {
-
-            acedemic: null
-
-        };
         this.state = {
-
-            //  coach_profile:null,
             country: undefined,
-            billingchecked:false,
-            playerList : null,
-            batchDetails:null,
+            billingchecked: false,
+            playerList: null,
+            batchDetails: null,
+            player_name: ''
         }
+        let data = this.props.navigation.getParam('data')
+        this.state.player_name = JSON.parse(data).name
+        console.log(data)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         var userData;
-        getData('header',(value)=>{
-            console.log("header",value);
+        getData('header', (value) => {
+            console.log("header", value);
         });
 
         console.log("CoachDashboard");
-        getData('userInfo',(value) => {
+        getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user",userData.user['user_type'])
+            console.log("userData.user", userData.user['user_type'])
             let userType = userData.user['user_type']
 
             if (userType == COACH || userType == ACADEMY) {
 
-                this.getCoachPerformenceData(this.props.navigation.getParam('batch_id'),this.props.navigation.getParam('player_id'),this.props.navigation.getParam('month'),this.props.navigation.getParam('year'))
+                this.getCoachPerformenceData(this.props.navigation.getParam('batch_id'), this.props.navigation.getParam('player_id'), this.props.navigation.getParam('month'), this.props.navigation.getParam('year'))
 
             }
 
@@ -70,21 +52,20 @@ class  UpdatePlayerPerformence extends React.Component {
         });
     }
 
-    getCoachPerformenceData(btach_id,player_id,month,year){
-        getData('header',(value)=>{
-            console.log("header",value,btach_id);
-            this.props.getPerformenceOption(value,btach_id,player_id,month,year).then(() => {
+    getCoachPerformenceData(btach_id, player_id, month, year) {
+        getData('header', (value) => {
+            console.log("header", value, btach_id);
+            this.props.getPerformenceOption(value, btach_id, player_id, month, year).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.performencedata);
-                console.log(' user response payload ' + user);
+                console.log(' getPerformenceOption payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     this.setState({
-                        playerList:user1.data['attributes'],
-                        batchDetails:user1.data
-
+                        playerList: user1.data['attributes'],
+                        batchDetails: user1.data
                     })
                 }
 
@@ -98,90 +79,74 @@ class  UpdatePlayerPerformence extends React.Component {
     }
 
 
-
-
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
 
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
-
+        <View style={{
+            flex: 1,
+            paddingLeft: 20,
+            paddingRight: 20,
+            paddingTop: 8,
+            paddingBottom: 8,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
         }}>
-            <View style={{marginLeft:0,marginTop:10,marginRight:10,flex:1,flexDirection:'row',height:50}}>
+            <View style={{ width: '50%' }}>
+                <Text style={defaultStyle.regular_text_14}>
+                    {item.name}
+                </Text>
+            </View>
 
-                <View  style={{
-                    flex:1,
-                    marginLeft: 8,
-                    marginRight: 15,
-                    marginBottom:5,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+            <View style={{
+                backgroundColor: 'white', marginTop: 0, flexDirection: 'row', justifyContent: 'space-between',
+                width: '45%', marginRight: 20,
+            }}>
+                <View style={{
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    flex: 1,
+                    alignContent: 'center',
                 }}>
-                    <View style={{width:'60%'}}>
-                    <Text>
-                        {item.name}
-                    </Text>
-                    </View>
+                    <TextInput
+                        placeholder={'Enter'}
+                        style={{
 
-                    <View style={{backgroundColor:'white',marginTop:0,flexDirection:'row',justifyContent:'space-between', width:'35%',marginRight:20,}}>
-                            <View>
-                        <TextInput
-                            style={{borderColor:'#CECECE',borderWidth:0.5,borderRadius:12,height:36,width:70,padding:10}}
-                            // mode='outlined'
-                            label='name'
-
-                            // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
-                            value={this.state.txtname}
-                            onChangeText={(txtname) => this.setState({ txtname: txtname })}
-                        />
-                            </View>
-                        <Text style={{textAlign:'center'}}>{item.prev_month_score}</Text>
-
-                        {/*<CheckBox style={{ height: 30,width: 30, alignItems: 'center', backgroundColor: 'red' }}*/}
-                            {/*// title='a'*/}
-                                  {/*checked={item.is_present}*/}
-                                  {/*onPress={() => {*/}
-                                      {/*console.log("he;eleleo",item.is_present)*/}
-                                      {/*let playerList = [...this.state.playerList];*/}
-                                      {/*let index = playerList.findIndex(el => el.id === item.id);*/}
-                                      {/*playerList[index] = {...playerList[index], is_present: !item.is_present};*/}
-                                      {/*this.setState({ playerList });*/}
-
-                                      {/*//   item.isPresent = !item.isPresent*/}
-                                      {/*// this.setState({*/}
-                                      {/*//     playerList:item*/}
-                                      {/*// })*/}
-
-                                     {/*// console.log("he;eleleo",playerList[0].is_present)*/}
-                                  {/*}*/}
-
-
-                                  {/*}*/}
-                        {/*/>*/}
-                    </View>
-
+                            borderColor: '#CECECE',
+                            borderWidth: 0.5, borderRadius: 12,
+                            height: 36,
+                            fontFamily: 'Quicksand-Regular',
+                            width: 70,
+                            textAlign: 'center',
+                            padding: 10
+                        }}
+                        keyboardType={'number-pad'}
+                        // mode='outlined'
+                        label='name'
+                        // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
+                        value={this.state.txtname}
+                        onChangeText={(txtname) => this.setState({ txtname: txtname })}
+                    />
                 </View>
-
+                <Text style={defaultStyle.regular_text_14}>
+                    {item.prev_month_score}
+                </Text>
 
             </View>
-        </TouchableOpacity>
+
+        </View>
 
     );
 
 
 
-    savePlayerAttendence()
-    {
+    savePlayerAttendence() {
 
-        getData('header',(value)=>{
-            console.log("savePlayerAttendence header",value);
+        getData('header', (value) => {
+            console.log("savePlayerAttendence header", value);
             const yourDate = Date()
-            console.log("savePlaye",yourDate)
+            console.log("savePlaye", yourDate)
             const NewDate = moment(yourDate).format('YYYY-MM-DD')
-            console.log("savePlayerAttendence",NewDate);
+            console.log("savePlayerAttendence", NewDate);
             var dataDic = {};
             var dict = {};
             dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
@@ -193,17 +158,17 @@ class  UpdatePlayerPerformence extends React.Component {
             dataDic['data'] = dict;
             console.log("dicttttc ", dict)
 
-            this.props.saveCoachBatchAttendence(value,this.props.navigation.getParam('batch_id'),dataDic).then(() => {
+            this.props.saveCoachBatchAttendence(value, this.props.navigation.getParam('batch_id'), dataDic).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
 
-                if(user1.success == true){
+                if (user1.success == true) {
                     this.setState({
-                        playerList:user1.data['attributes'],
-                         batchDetails:user1.data
+                        playerList: user1.data['attributes'],
+                        batchDetails: user1.data
 
                     })
                 }
@@ -218,27 +183,45 @@ class  UpdatePlayerPerformence extends React.Component {
 
     renderItemSection = ({ item }) => (
         <View>
-            <View style={{margin: 10, marginTop: 0,marginBottom:0,flexDirection:'row'}}>
-                <View style={{width:'60%'}}>
-                <Text>
-                    {item.name}
-                </Text>
-                </View>
-                <View style={{flexDirection:'row',width:'35%',justifyContent:'space-between',marginRight:20}}>
-                    <Text >
-                        {moment(this.props.navigation.getParam('month')+'-'+this.props.navigation.getParam('month') +'-'+this.props.navigation.getParam('year')).format('MMM')}
+            <View style={{
+                paddingLeft: 20,
+                paddingRight: 20,
+                paddingBottom: 12,
+                paddingTop: 12,
+                backgroundColor: '#F7F7F7',
+                flexDirection: 'row'
+            }}>
+                <View style={{ width: '50%' }}>
+                    <Text style={[defaultStyle.bold_text_12, { color: '#A3A5AE' }]}>
+                        {item.name}
                     </Text>
-                    <Text>
-                        {moment(this.state.batchDetails.prev_month + '-' +this.state.batchDetails.prev_month +'-'+this.state.batchDetails.prev_year).format('MMM')}
+                </View>
+                <View style={{ flexDirection: 'row', width: '45%', justifyContent: 'space-between', marginRight: 20 }}>
+                    <Text style={[defaultStyle.bold_text_12, {
+                        color: '#A3A5AE',
+                        width: "30%",
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        flex: 1,
+                        textAlign: 'center',
+                        alignContent: 'center'
+                    }]}>
+                        {moment(this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM')}
+                    </Text>
+                    <Text style={[defaultStyle.bold_text_12, { color: '#A3A5AE' }]}>
+                        {moment(this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_year).format('MMM')}
                     </Text>
                 </View>
             </View>
-            <View style={{backgroundColor:'white',marginTop:10,marginBottom:10}}>
-            <FlatList
-                data={item.parameters}
-                renderItem={this.renderItem}
-                keyExtractor1={(item, parmeterindex) => item.parameter_id}
-            />
+
+
+            <View style={{ backgroundColor: 'white', marginTop: 8, marginBottom: 8 }}>
+                <FlatList
+                    data={item.parameters}
+                    renderItem={this.renderItem}
+                    keyExtractor1={(item, parmeterindex) => item.parameter_id}
+                />
             </View>
         </View>
 
@@ -248,66 +231,85 @@ class  UpdatePlayerPerformence extends React.Component {
     render() {
         if (this.props.data.loading && !this.state.batchDetails) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color="#67BAF5"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         }
+
+        let name = this.state.player_name
+
         if (this.state.batchDetails) {
-            const {batch_name, batch_category, batch_id, session} = this.state.batchDetails
+            const { batch_name, batch_category, batch_id, session } = this.state.batchDetails
 
             // this.attedenceMangement(attandence_batch)
             //
             // this.sessionMangement(operations)
             // this.scoreMangement(tournaments)
 
-            return <View style={{flex: 1, marginBottom: 0, backgroundColor: '#F7F7F7'}}>
-                <ScrollView style={{flex: 1, marginTop: 0, backgroundColor: '#F7F7F7'}}>
+            return <View style={{ flex: 1, marginBottom: 0, backgroundColor: 'white' }}>
+                <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: 'white' }}>
 
-                <View style={{backgroundColor:'white'}}>
-                    <View style={{margin:20,flexDirection:'row',justifyContent:'space-between'}}>
-                        <Text style={{fontSize:14,fontWeight:'bold'}}>{'Update '+ batch_name+'`s progress' } </Text>
-                    </View>
-                    <View style={{margin:20,marginTop:-10,}}>
-                        <View style={{margin:5}}>
-                            <Text style={{fontSize:10,marginBottom:10,color:'#A3A5AE'}}>Month </Text>
+                    <View style={{ backgroundColor: 'white', padding: 16 }}>
+                        <View >
+                            <Text style={[defaultStyle.regular_text_14, { color: 'black' }]}>{'Update ' + name + '`s progress'} </Text>
                         </View>
-                        <View style={{flexDirection:'row',justifyContent:'space-between',marginLeft:0,marginTop:-10,}}>
-                            <Text style={{fontSize:14,marginBottom:10}}> {moment('06-'+this.props.navigation.getParam('month') +'-'+this.props.navigation.getParam('year')).format('MMM YY')} </Text>
-                            <Text style={{fontSize:14,color:'#A3A5AE'}}>(Enter Percentage)</Text>
+                        <View style={{ marginTop: 20, marginBottom: 10 }}>
+                            <View style={{ marginBottom: 10 }}>
+                                <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE' }]}>Month </Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                <Text style={defaultStyle.bold_text_14}>{moment('06-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM ’YY')} </Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: '#A3A5AE' }]}>(Enter Percentage)</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
 
 
-                <View style={{marginTop:10}}>
 
 
-                        <FlatList
-                            data={this.state.playerList}
+                    <FlatList
+                        data={this.state.playerList}
+                        renderItem={this.renderItemSection}
+                        keyExtractor={(item, index) => item.attribute_id}
 
-                            renderItem={this.renderItemSection}
-                            keyExtractor={(item,index) => item.attribute_id}
+                    />
 
-                        />
+                    <View style={{
 
+                        flexDirection: 'row',
+                        marginBottom: 30,
+                        marginTop: 20,
+                        marginRight: 16,
+                        marginLeft: 16,
+                        justifyContent: 'space-between'
+                    }}>
 
-                </View>
+                        <View style={{ flex: 1, marginRight: 10 }}>
 
-                <View style={{flex:1, marginBottom: 30,marginRight:20,marginLeft:20,justifyContent:'flex-end'}}>
+                            <SwitchButton
 
-                    <CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>
-                        Update
+                                onPress={() => { this.savePlayerAttendence() }}>
+                                Save
+                    </SwitchButton>
+                        </View>
+
+                        <View style={{ flex: 1, marginLeft: 10 }}>
+
+                            <CustomeButtonB
+                                style={{ flex: 1 }}
+                                onPress={() => { this.savePlayerAttendence() }}>
+                                Save and Next
                     </CustomeButtonB>
+                        </View>
 
-
-                </View>
+                    </View>
                 </ScrollView>
 
             </View>;
-        }else{
+        } else {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
                 </View>
             )
@@ -320,7 +322,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getPerformenceOption,saveCoachBatchAttendence
+    getPerformenceOption, saveCoachBatchAttendence
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UpdatePlayerPerformence);
 
@@ -338,7 +340,7 @@ const pickerSelectStyles = StyleSheet.create({
 
         // alignItems: 'stretch',
         // // justifyContent: 'right',
-        alignSelf:'center',
+        alignSelf: 'center',
         height: 40,
         marginRight: 10,
         marginTop: 5,
@@ -382,28 +384,28 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         resizeMode: 'contain',
-        marginRight:20
+        marginRight: 20
         //backgroundColor: 'white',
     },
 
-    scoreBox:{
-        color:'white',
-        marginRight:20,
-        textAlign:'right',fontSize:24,fontWeight:'bold'
+    scoreBox: {
+        color: 'white',
+        marginRight: 20,
+        textAlign: 'right', fontSize: 24, fontWeight: 'bold'
     },
-    buttomButton:{
+    buttomButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        height:45,
+        height: 45,
 
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:-5,
-        marginLeft:-5,
-        marginRight:-5,
-        shadowColor:'black',
+        marginTop: 10,
+        marginBottom: -5,
+        marginLeft: -5,
+        marginRight: -5,
+        shadowColor: 'black',
         shadowOpacity: 0.5,
-        shadowOffset: { width: 0, height: 1 },borderBottomRightRadius:10,borderBottomLeftRadius:10
+        shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     }
 

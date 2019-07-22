@@ -19,7 +19,7 @@ class Splash extends BaseComponent {
     componentDidMount() {
 
         //this.props.navigation.navigate('CancelSession')
-       //return
+        //return
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
@@ -51,7 +51,7 @@ class Splash extends BaseComponent {
                     userData = (JSON.parse(value))
                     // onSignIn()
                     let userType = userData.user['user_type']
-                    console.log("SplashScreen=> ",JSON.stringify( userData));
+                    console.log("SplashScreen=> ", JSON.stringify(userData));
                     if (userType == GUEST) {
                         this.props.navigation.navigate('GHome')
                     }

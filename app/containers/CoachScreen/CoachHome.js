@@ -391,8 +391,8 @@ class CoachHome extends BaseComponent {
                         <CustomeCard>
                             <View
                                 style={{
-                                    marginLeft: 16,
-                                    marginRight: 16,
+                                    marginLeft: 12,
+                                    marginRight: 12,
                                     marginTop: 16
                                 }}
                             >
@@ -422,8 +422,8 @@ class CoachHome extends BaseComponent {
                         <CustomeCard>
                             <View
                                 style={{
-                                    marginLeft: 16,
-                                    marginRight: 16,
+                                    marginLeft: 12,
+                                    marginRight: 12,
                                     marginTop: 16
                                 }} >
                                 <View
@@ -441,30 +441,40 @@ class CoachHome extends BaseComponent {
 
 
                     {is_performance_due ? <CustomeCard>
-                        <View style={{ margin: 10, marginTop: 20, flexDirection: 'row' }}>
-                            <Text style={defaultStyle.bold_text_10}>Update Player Performance</Text>
-                            <View
-                                style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                <Text style={{
-                                    marginTop: 2,
-                                    marginBottom: 2,
-                                    fontSize: 10,
-                                    color: 'white',
-                                    marginRight: 10,
-                                    fontFamily: 'Quicksand-Medium',
-                                    marginLeft: 10,
-                                }}>Due</Text>
+                        <View
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 12,
+                                marginTop: 16
+                            }}
+                        >
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={defaultStyle.bold_text_10}>Update Player Performance</Text>
+                                <View
+                                    style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
+                                    <Text style={{
+                                        marginTop: 2,
+                                        marginBottom: 2,
+                                        fontSize: 10,
+                                        color: 'white',
+                                        marginRight: 10,
+                                        fontFamily: 'Quicksand-Medium',
+                                        marginLeft: 10,
+                                    }}>Due</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10 }} />
+                            <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                            <Text style={{ marginRight: 20, fontSize: 14 }}>You are yet to update performance of
+                            <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
+                                <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to update performance of
                                 players.</Text>
 
+                            </View>
+                            <CustomeButtonB onPress={() => {
+                                alert('under development')
+                            }}>
+                                Update Progress</CustomeButtonB>
                         </View>
-                        <CustomeButtonB onPress={() => this.props.navigation.navigate('EditProfile')}>
-                            Mark Attendance</CustomeButtonB>
                     </CustomeCard> : null}
 
 
@@ -473,8 +483,8 @@ class CoachHome extends BaseComponent {
                         <CustomeCard>
                             <View
                                 style={{
-                                    marginLeft: 16,
-                                    marginRight: 16,
+                                    marginLeft: 12,
+                                    marginRight: 12,
                                     marginTop: 16
                                 }}
                             >
@@ -494,8 +504,8 @@ class CoachHome extends BaseComponent {
                     {is_reward_point_due ? <CustomeCard>
                         <View
                             style={{
-                                marginLeft: 16,
-                                marginRight: 16,
+                                marginLeft: 12,
+                                marginRight: 12,
                                 marginTop: 16
                             }}>
 

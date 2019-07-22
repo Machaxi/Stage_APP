@@ -10,26 +10,11 @@ import { CustomeCard } from '../../../components/Home/Card'
 import { getPerformenceDuePlayer } from "../../../redux/reducers/PerformenceReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
-import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
-import DatePicker from 'react-native-datepicker'
 import { COACH, ACADEMY } from '../../../components/Constants';
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
+import BaseComponent, { defaultStyle } from '../../BaseComponent'
 
-];
-const KEYS_TO_FILTERS = ['name',];
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
-var deviceWidth = Dimensions.get('window').width - 20;
-
-class PerformencePlayerList extends React.Component {
+class PerformencePlayerList extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -117,32 +102,31 @@ class PerformencePlayerList extends React.Component {
             console.warn("Touch Press")
 
             this.props.navigation.navigate('UpdatePlayerPerformence', {
-                batch_id: '1', player_id: item.id, month: this.props.navigation.getParam('month'), year: this.props.navigation.getParam('year')
+                batch_id: '1', player_id: item.id, 
+                month: this.props.navigation.getParam('month'), 
+                year: this.props.navigation.getParam('year'),
+                data:JSON.stringify(item)
             })
 
         }}>
-            <View style={{ marginLeft: 0, marginRight: 10, flex: 1, flexDirection: 'row', height: 50 }}>
 
-                <View style={{
-                    flex: 1,
-                    marginLeft: 8,
-                    marginRight: 15,
-                    marginBottom: 5,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                }}>
-                    <Text>
-                        {item.name}
-                    </Text>
+            <View style={{
+                flex: 1,
+                margin: 12,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}>
+                <Text style={defaultStyle.regular_text_14}>
+                    {item.name}
+                </Text>
 
-                    <Image source={require('../../../images/forward.png')}
-                        style={{
-                            width: 3,
-                            height: 8, marginRight: -10, marginTop: 5
-                        }} />
-
-                </View>
-
+                <Image source={require('../../../images/forward.png')}
+                    resizeMode="contain"
+                    style={{
+                        width: 5,
+                        height: 11
+                    }} />
 
             </View>
         </TouchableOpacity>
@@ -181,43 +165,37 @@ class PerformencePlayerList extends React.Component {
         if (this.state.batchDetails) {
             const { batch_name, batch_category, total_players, remaining_players, batch_id, session } = this.state.batchDetails
 
-            // this.attedenceMangement(attandence_batch)
-            //
-            // this.sessionMangement(operations)
-            // this.scoreMangement(tournaments)
-
-            //
-            // {console.warn(filteredEmails)}
-            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+           
+            return <View style={{ flex: 1, marginTop: 0, backgroundColor: 'white' }}>
 
 
                 <View style={{ backgroundColor: 'white' }}>
-                    <View style={{ flexDirection: 'row', margin: 20, }}>
-                        <View style={{ justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Batch name</Text>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{batch_name} </Text>
+                    <View style={{ flexDirection: 'row', margin: 12, }}>
+                        <View style={{ width: 130 }}>
+                            <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]}>Batch name</Text>
+                            <Text style={defaultStyle.regular_text_14}>{batch_name} </Text>
                         </View>
 
-                        <View style={{ justifyContent: 'space-between', marginLeft: 30 }}>
-                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Category</Text>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{batch_category}</Text>
+                        <View style={{ width: 130 }}>
+                            <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Category</Text>
+                            <Text style={defaultStyle.regular_text_14}>{batch_category}</Text>
                         </View>
 
                     </View>
 
-                    <View style={{ flexDirection: 'row', margin: 20, justifyContent: 'space-between' }}>
-                        <View style={{ justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Total players</Text>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{total_players} </Text>
+                    <View style={{ flexDirection: 'row', marginLeft: 12, }}>
+                        <View style={{ width: 130 }}>
+                            <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Total players</Text>
+                            <Text style={defaultStyle.regular_text_14}>{total_players} </Text>
                         </View>
 
-                        <View style={{ justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Update remaining</Text>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{remaining_players}</Text>
+                        <View style={{ width: 130 }}>
+                            <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Update remaining</Text>
+                            <Text style={defaultStyle.regular_text_14}>{remaining_players}</Text>
                         </View>
-                        <View style={{ justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 10, marginBottom: 5, color: '#A3A5AE' }}>Month</Text>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{moment('06-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM YY')}</Text>
+                        <View style={{ width: 130 }}>
+                            <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Month</Text>
+                            <Text style={defaultStyle.regular_text_14}>{moment('06-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM YY')}</Text>
                         </View>
 
                     </View>
@@ -226,7 +204,19 @@ class PerformencePlayerList extends React.Component {
                     </View>
                     <TextInput
                         // autoFocus
-                        style={{ height: 40, margin: 15, paddingLeft: 10, borderWidth: 0.5, borderColor: '#CECECE', borderRadius: 15 }}
+                        style={{
+                            height: 40,
+                            marginLeft: 12,
+                            marginRight: 12,
+                            marginTop: 24,
+                            marginBottom: 16,
+                            paddingLeft: 10,
+                            fontFamily: '',
+                            borderWidth: 0.5,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 14,
+                            borderColor: '#CECECE', borderRadius: 15
+                        }}
                         onChangeText={value => {
 
                             const data = this.find(value);
@@ -237,39 +227,31 @@ class PerformencePlayerList extends React.Component {
                             })
 
                         }}
-                        placeholder={'Search'}
+                        placeholder={'Search Students'}
                         value={this.state.searchtxt}
                     />
                 </View>
 
-                <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, marginBottom: 10, color: '#A3A5AE' }}>Name </Text>
-
-                </View>
-
-                <View style={{ backgroundColor: 'white', marginTop: -10 }}>
-                    <CustomeCard>
-
-                        <FlatList
-                            data={this.state.searchArray}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.id}
-                        />
-                    </CustomeCard>
-
-                </View>
-
-                <View style={{ flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20, justifyContent: 'flex-end' }}>
-
-                    {/*<CustomeButtonB onPress={() => {this.savePlayerAttendence()}}>*/}
-                    {/*Update*/}
-                    {/*</CustomeButtonB>*/}
-
+                <View style={{
+                    paddingTop: 16,
+                    paddingBottom: 16,
+                    paddingRight: 12,
+                    paddingLeft: 12,
+                    backgroundColor: '#F7F7F7',
+                    flexDirection: 'row', justifyContent: 'space-between'
+                }}>
+                    <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Name </Text>
 
                 </View>
 
 
-            </View>;
+                <FlatList
+                    data={this.state.searchArray}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => item.id}
+                />
+
+            </View >;
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

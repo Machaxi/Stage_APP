@@ -1,5 +1,5 @@
 import * as types from '../../actions/actionTypes';
-import {getData,storeData} from '../../components/auth'
+import { getData, storeData } from '../../components/auth'
 //import {getBatchPlayersList} from "./AcademyReducer";
 
 const initialState = {
@@ -12,10 +12,10 @@ export default function BatchReducer(state = initialState, action) {
         case types.GET_BATCHES:
             return { ...state, loading: true };
         case types.DO_BATCHES_SUCCESS:
-            console.log("sucesss",action.payload.data);
+            console.log("sucesss", action.payload.data);
             return { ...state, loading: false, batchdata: action.payload.data };
         case types.DO_BATCHES_FAIL:
-            console.log("fails",action.payload);
+            console.log("fails", action.payload);
             return {
 
                 ...state,
@@ -23,13 +23,13 @@ export default function BatchReducer(state = initialState, action) {
                 error: 'Error while fetching user'
             };
         default:
-          //  console.log("fails",action.payload);
+            //  console.log("fails",action.payload);
             return state;
     }
 }
 
-export function getCoachBatch(header,academy_id,coach_id) {
-    console.log("postdata getCoachBatch",header)
+export function getCoachBatch(header, academy_id, coach_id) {
+    console.log("postdata getCoachBatch", header)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -51,8 +51,8 @@ export function getCoachBatch(header,academy_id,coach_id) {
 
 }
 
-export function getCoachBatchDetails(header,batch_id) {
-    console.log("postdata",header,batch_id)
+export function getCoachBatchDetails(header, batch_id) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -74,8 +74,8 @@ export function getCoachBatchDetails(header,batch_id) {
 
 }
 
-export function getCoachBatchAttendence(header,batch_id) {
-    console.log("postdata",header,batch_id)
+export function getCoachBatchAttendence(header, batch_id) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -97,8 +97,8 @@ export function getCoachBatchAttendence(header,batch_id) {
 
 }
 
-export function saveCoachBatchAttendence(header,batch_id,postdata) {
-    console.log("postdata",header,batch_id)
+export function saveCoachBatchAttendence(header, batch_id, postdata) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -109,7 +109,7 @@ export function saveCoachBatchAttendence(header,batch_id,postdata) {
             request: {
                 url: `batch/${batch_id}/attendance`,
                 method: 'POST',
-                 data: postdata,
+                data: postdata,
                 headers: {
                     'x-authorization': header
 
@@ -121,8 +121,27 @@ export function saveCoachBatchAttendence(header,batch_id,postdata) {
 }
 
 
-export function getCoachBatchAttendenceDetails(header,batch_id,date) {
-    console.log("postdata",header,batch_id)
+export function getBatchOperational(header, postdata) {
+    console.log("postdata", header, postdata)
+    return {
+        type: types.GET_BATCHES,
+        payload: {
+            request: {
+                url: `batch/operational`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}
+
+export function getCoachBatchAttendenceDetails(header, batch_id, date) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
