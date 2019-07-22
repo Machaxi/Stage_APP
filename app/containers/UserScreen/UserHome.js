@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, StatusBar,TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, Image, StatusBar, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
@@ -12,7 +12,7 @@ import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE } fr
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
 import Events from '../../router/events';
-
+import PlayerHeader from '../../components/custom/PlayerHeader'
 
 
 var deviceWidth = Dimensions.get('window').width - 20;
@@ -58,7 +58,7 @@ class UserHome extends BaseComponent {
             // navigation={navigation} />,
             headerBackground: (
                 <LinearGradient
-                    colors={['#262051', '#24262A']}
+                    colors={['#332B70', '#24262A']}
                     style={{ flex: 1 }}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 2.5, y: 0 }}
@@ -133,7 +133,11 @@ class UserHome extends BaseComponent {
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.state.academy_id = userData['academy_id']
-            this.props.navigation.setParams({ Title: userData.academy_name });
+
+            let academy_name = userData.academy_name
+            if (academy_name == undefined)
+                academy_name = ''
+            this.props.navigation.setParams({ Title: academy_name });
             this.setState({
                 userData: JSON.parse(value)
             });
@@ -141,8 +145,8 @@ class UserHome extends BaseComponent {
             if (userData.user['user_type'] == 'PLAYER') {
                 this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
 
-             } 
-             //else if (userData.user['user_type'] == 'PARENT') {
+            }
+            //else if (userData.user['user_type'] == 'PARENT') {
             //     this.getParentSwitchingData();
 
             // }
@@ -164,7 +168,7 @@ class UserHome extends BaseComponent {
                 console.log(' user response getPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
 
-                if (user1.data['coach_data'] != null && user1.data['coach_data'].length>0) {
+                if (user1.data['coach_data'] != null && user1.data['coach_data'].length > 0) {
                     this.setState({
                         coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
                     })
@@ -266,6 +270,7 @@ class UserHome extends BaseComponent {
 
         let academy_feedback_data = this.state.academy_feedback_data
         let coach_feedback_data = this.state.coach_feedback_data
+        let academy_id = this.state.academy_id
 
         if (this.props.data.loading && !this.state.player_profile) {
             return (
@@ -362,190 +367,13 @@ class UserHome extends BaseComponent {
 
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-            {/* <StatusBar translucent backgroundColor="#264d9b"
+                {/* <StatusBar translucent backgroundColor="#264d9b"
                 barStyle="light-content"/> */}
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                    <View style={{ width: '100%', height: 300, }}>
-                        <ImageBackground
-                            source={require('../../images/RectangleImg.png')}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                            }}>
-
-                            {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
-                                navigation={this.props.navigation} /> */}
-
-                            <View style={{ position: 'relative', marginTop: 30 }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Image source={require('../../images/playerimg.png')}
-                                        style={{
-                                            width: 201,
-                                            height: 238, marginRight: 20, marginTop: 0, display: 'flex'
-                                        }}>
-
-                                    </Image>
-                                    <View style={{ display: 'flex', flex: 1, marginBottom: 100 }}>
-                                        <Text style={{
-                                            color: 'white',
-                                            marginRight: 0,
-                                            fontFamily: 'Quicksand-Bold',
-                                            textAlign: 'center', fontSize: 22,
-                                        }}
-                                            numberOfLines={1}
-                                        >{name}</Text>
-
-
-                                        <View style={{
-                                            width: 119,
-                                            height: 84,
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            marginBottom: 20,
-                                            marginTop: 20,
-                                            justifyContent: 'center', alignItems: 'center',
-                                        }}>
-
-                                            <ImageBackground
-                                                style={{
-                                                    height: 85, width: 57, justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                }}
-                                                source={require('../../images/batch_pink.png')}>
-
-
-                                                <View style={{
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    flexDirection: 'row',
-                                                    borderRadius: 2,
-                                                    backgroundColor: '#485FA0', height: 26, width: '110%'
-                                                }}>
-                                                    <Image style={{ height: 18, width: 20, }}
-                                                        source={require('../../images/left_batch_arrow.png')}></Image>
-
-                                                    <Text style={{
-                                                        width: '100%',
-                                                        fontSize: 10,
-                                                        color: '#F4F4F4',
-                                                        textAlign: 'center',
-                                                        fontFamily: 'Quicksand-Regular',
-                                                    }}>{badge}</Text>
-                                                    <Image style={{ height: 18, width: 20, }}
-                                                        source={require('../../images/right_batch_arrow.png')}></Image>
-
-                                                </View>
-                                            </ImageBackground>
-
-
-
-
-                                        </View>
-                                        {/* <Image source={require('../../images/Rank.png')}
-                                            style={{
-                                                width: 119,
-                                                height: 84,
-                                                alignItems: 'center',
-                                                display: 'flex',
-                                                marginBottom: 20,
-                                                marginTop: 20
-                                            }}>
-
-                                        </Image> */}
-                                        <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                                            <Text style={{
-                                                color: 'white',
-                                                marginRight: 10,
-                                                textAlign: 'center',
-                                                fontSize: 12,
-                                                fontFamily: 'Quicksand-Medium',
-
-                                            }}>{getFormattedLevel(player_level)}</Text>
-                                            <View
-                                                style={{
-                                                    backgroundColor: 'red',
-                                                    width: 36,
-                                                    borderRadius: 4,
-                                                    marginRight: 20,
-                                                    marginTop: -5
-                                                }}>
-                                                <Text style={{
-                                                    color: 'white',
-                                                    marginRight: 0,
-                                                    textAlign: 'center',
-                                                    fontSize: 12,
-                                                    fontFamily: 'Quicksand-Bold',
-                                                    marginTop: 5,
-                                                    marginBottom: 5
-                                                }}> {player_category} </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={{
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    position: 'absolute',
-                                    bottom: 20,
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    selfAlign: 'center'
-                                }}>
-                                    {console.log("width", deviceWidth / 3)}
-                                    <View style={{
-                                        width: deviceWidth / 3,
-                                        height: 80, marginLeft: 10
-                                    }}>
-
-                                        <ImageBackground source={require('../../images/box.png')}
-                                            style={{
-                                                width: '100%',
-                                                height: 80,
-                                            }}>
-
-                                            <Text style={{ fontFamily: 'Quicksand-Medium', margin: 15, color: '#F4F4F4' }}>Rank</Text>
-                                            {rank ? <Text style={styles.scoreBox}>{rank}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-
-                                        </ImageBackground>
-
-                                    </View>
-                                    <ImageBackground source={require('../../images/box.png')}
-                                        style={{
-                                            width: deviceWidth / 3,
-                                            height: 80,
-                                        }}>
-                                        <Text style={{ fontFamily: 'Quicksand-Medium', margin: 15, color: '#F4F4F4' }}>Score</Text>
-                                        {score ? <Text style={styles.scoreBox}>{score}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-                                    </ImageBackground>
-                                    <View style={{
-                                        width: deviceWidth / 3,
-                                        height: 80, marginRight: 0
-                                    }}>
-                                        <ImageBackground source={require('../../images/box.png')}
-                                            style={{
-                                                width: '100%',
-                                                height: 80,
-                                            }}>
-
-                                            <Text style={{ fontFamily: 'Quicksand-Medium', margin: 15, color: '#F4F4F4' }}>Reward</Text>
-                                            {reward_point ? <Text style={styles.scoreBox}>{reward_point}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-
-                                        </ImageBackground>
-
-                                    </View>
-
-
-                                </View>
-
-
-                            </View>
-                        </ImageBackground>
-
-                    </View>
+                    <PlayerHeader
+                        player_profile={this.state.player_profile}
+                    />
 
                     {sessionArray.length != 0 ?
                         <CustomeCard >
@@ -595,8 +423,8 @@ class UserHome extends BaseComponent {
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
-                                //console.warn("Touch Press")
-                                this.props.navigation.navigate('CurrentBooking')
+                                this.props.navigation.navigate('PlayersListing',
+                                    { id: academy_id })
 
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
@@ -682,7 +510,16 @@ class UserHome extends BaseComponent {
 
                     {academy_feedback_data != null ?
 
-                        <CustomeCard >
+                        <Card
+                            style={{
+                                marginLeft: 10,
+                                marginRight: 10,
+                                marginTop: 10,
+                                borderRadius: 12,
+                                marginBottom: 8,
+
+                            }}
+                        >
                             <View
                                 style={{
                                     marginLeft: 12,
@@ -749,27 +586,32 @@ class UserHome extends BaseComponent {
                                     </View>
 
 
-                                    <View style={{
-                                        elevation: 4,
-                                        marginTop: 10
-                                    }}>
 
-                                        <TouchableOpacity onPress={() => {
-
-                                        }}>
-                                            <Text
-                                                style={[defaultStyle.bold_text_12,
-                                                { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
-                                                View Academy
-                                        </Text>
-
-                                        </TouchableOpacity>
-                                    </View>
 
                                 </View>
 
                             </View>
-                        </CustomeCard>
+                            <Card style={{
+                                elevation: 4,
+                                borderBottomLeftRadius: 12,
+                                borderBottomRightRadius: 12,
+                                marginTop: 12,
+                                borderTopLeftRadius: 0,
+                                borderTopRightRadius: 0,
+                            }}>
+
+                                <TouchableOpacity onPress={() => {
+
+                                }}>
+                                    <Text
+                                        style={[defaultStyle.bold_text_12,
+                                        { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
+                                        View Academy
+                                                </Text>
+
+                                </TouchableOpacity>
+                            </Card>
+                        </Card>
                         : null
                     }
 
@@ -777,7 +619,13 @@ class UserHome extends BaseComponent {
 
                     {coach_feedback_data != null ?
 
-                        <CustomeCard >
+                        <Card
+                            style={{
+                                marginLeft: 10,
+                                marginRight: 10,
+                                marginTop: 10,
+                                borderRadius: 12,
+                            }}>
                             <View
                                 style={{
                                     marginLeft: 12,
@@ -843,28 +691,31 @@ class UserHome extends BaseComponent {
 
                                     </View>
 
-
-                                    <View style={{
-                                        elevation: 4,
-                                        marginTop: 10
-                                    }}>
-
-                                        <TouchableOpacity onPress={() => {
-
-                                        }}>
-                                            <Text
-                                                style={[defaultStyle.bold_text_12,
-                                                { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
-                                                View Coach
-                </Text>
-
-                                        </TouchableOpacity>
-                                    </View>
-
                                 </View>
 
                             </View>
-                        </CustomeCard>
+
+                            <Card style={{
+                                elevation: 4,
+                                borderBottomLeftRadius: 12,
+                                borderBottomRightRadius: 12,
+                                borderTopLeftRadius: 0,
+                                borderTopRightRadius: 0,
+                                marginTop: 12,
+                            }}>
+
+                                <TouchableOpacity onPress={() => {
+
+                                }}>
+                                    <Text
+                                        style={[defaultStyle.bold_text_12,
+                                        { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
+                                        View Coach
+                                                </Text>
+
+                                </TouchableOpacity>
+                            </Card>
+                        </Card>
                         : null
                     }
 

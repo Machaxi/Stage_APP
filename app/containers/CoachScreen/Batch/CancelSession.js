@@ -33,7 +33,7 @@ class CancelSession extends BaseComponent {
             reason_text: ''
         }
 
-        
+
         this.state.selected_start_date = moment().format('YYYY-MM-DD');
         this.state.selected_end_date = moment().format('YYYY-MM-DD');
         console.warn(this.state.selected_start_date)
@@ -48,6 +48,8 @@ class CancelSession extends BaseComponent {
 
             this.getBatchData()
         });
+
+        console.warn('Date => ' + Date.now())
     }
 
     progress(status) {
@@ -77,10 +79,10 @@ class CancelSession extends BaseComponent {
             is_single_day } = this.state
 
         let subData = {}
-        let end_date = is_single_day ? null : selected_end_date
+        let end_date = is_single_day ? null : moment(selected_end_date).format('YYYY-MM-DD')
 
         subData['is_range'] = !this.state.is_single_day
-        subData['from_date'] = selected_start_date
+        subData['from_date'] = moment(selected_start_date).format('YYYY-MM-DD')
         subData['to_date'] = end_date
         subData['academy_id'] = academy_id
         subData['coach_id'] = coach_id
@@ -162,11 +164,11 @@ class CancelSession extends BaseComponent {
                 is_single_day, reason_text } = this.state
 
             let subData = {}
-            let end_date = is_single_day ? null : selected_end_date
+            let end_date = is_single_day ? null : moment(selected_end_date).format('YYYY-MM-DD')
 
             subData['is_range'] = !this.state.is_single_day
-            subData['from_date'] = selected_start_date
-            subData['to_date'] = end_date
+            subData['from_date'] = moment(selected_start_date).format('YYYY-MM-DD')
+            subData['to_date'] = 
             subData['academy_id'] = academy_id
             subData['coach_id'] = coach_id
             subData['cancelation_reason'] = reason_text
@@ -212,47 +214,75 @@ class CancelSession extends BaseComponent {
                 flexDirection: 'row',
                 alignItems: 'center'
             }}>
-                <Text
-                    style={[defaultStyle.regular_text_14, { width: '33%', color: '#000000' }]}>
-                    {item.batch_name}
-                </Text>
-                <Text
-                    style={[defaultStyle.regular_text_14, { width: '33%', color: '#000000' }]}>
-                    {item.batch_category}
-                </Text>
 
-                <CheckBox
-                    containerStyle={{
-                        backgroundColor: 'white',
-                        borderWidth: 0,
-                        padding: 0,
-                        margin: 0,
-                        width: '33%'
-                        //width: "60%",
-                    }}
-                    onPress={() => {
-                        let data = { ...this.state.data };
-                        let batches = data.batches
+                <View style={{
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    flex: 1,
+                    width: "33%",
+                    alignContent: 'center',
+                }}>
+
+                    <Text
+                        style={[defaultStyle.regular_text_14, { color: '#000000' }]}>
+                        {item.batch_name}
+                    </Text>
+                </View>
+
+                <View style={{
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    flex: 1,
+                    width: "33%",
+                    alignContent: 'center',
+                }}>
+
+                    <Text
+                        style={[defaultStyle.regular_text_14, { color: '#000000' }]}>
+                        {item.batch_category}
+                    </Text>
+                </View>
+
+                <View style={{
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    flex: 1,
+                    width: "33%",
+                    alignContent: 'center',
+                }}>
+
+                    <CheckBox
+                        containerStyle={{
+                            backgroundColor: 'white',
+                            borderWidth: 0,
+                            padding: 0,
+                            margin: 0,
+                            //width: "60%",
+                        }}
+                        onPress={() => {
+                            let data = { ...this.state.data };
+                            let batches = data.batches
 
 
-                        let index = batches.findIndex(el => el.batch_id === item.batch_id);
-                        console.log("Tournamen Press =>", index)
-                        data.batches[index] =
-                            { ...data.batches[index], is_canceled: !item.is_canceled };
+                            let index = batches.findIndex(el => el.batch_id === item.batch_id);
+                            console.log("Tournamen Press =>", index)
+                            data.batches[index] =
+                                { ...data.batches[index], is_canceled: !item.is_canceled };
 
-                        console.log("Tournamen Press =>", JSON.stringify(data))
-                        //console.log("Tournamen Press whole => ", this.state.user_selection)
-                        this.setState({ data })
-                    }}
-                    checked={item.is_canceled}
+                            console.log("Tournamen Press =>", JSON.stringify(data))
+                            //console.log("Tournamen Press whole => ", this.state.user_selection)
+                            this.setState({ data })
+                        }}
+                        checked={item.is_canceled}
 
-                    style={{
-                        color: '#404040',
-                        backgroundColor: 'white',
-                        fontFamily: 'Quicksand-Regular'
-                    }}
+                        style={{
+                            color: '#404040',
+                            backgroundColor: 'white',
+                            fontFamily: 'Quicksand-Regular'
+                        }}
 
-                />
+                    />
+                </View>
 
             </View>
         )
@@ -385,11 +415,11 @@ class CancelSession extends BaseComponent {
                                         {/* <Text style={[defaultStyle.bold_text_14, { width: 100 }]}>
                                             {moment(selected_start_date).format(formatted_date)}
                                         </Text> */}
-                                        <DatePicker
+                                        {/* <DatePicker
                                             style={{
                                                 width: 100,
-                                                fontFamily: 'Quicksand-Regular'
-
+                                                fontFamily: 'Quicksand-Regular',
+                                                marginLeft: -10
                                             }}
                                             mode="date"
                                             placeholder={this.state.selected_start_date}
@@ -408,6 +438,36 @@ class CancelSession extends BaseComponent {
                                                 }
                                             }}
                                             onDateChange={(birthdate) => { this.setState({ selected_start_date: birthdate }) }}
+                                        /> */}
+                                        <DatePicker
+                                            style={{
+                                                width: 100, borderWidth: 0,
+                                                marginBottom: -2,
+                                                marginLeft: -10, borderWidth: 0,
+                                                borderColor: 'white',
+                                                fontFamily: 'Quicksand-Regular',
+                                            }}
+                                            date={moment(selected_start_date).format(formatted_date)}
+                                            mode="date"
+                                            placeholder="select date"
+                                            format="DD-MMM-YYYY"
+                                            minDate="2018-05-01"
+                                            //maxDate={Date.now()}
+                                            confirmBtnText="Confirm"
+                                            cancelBtnText="Cancel"
+                                            showIcon={false}
+                                            customStyles={{
+
+                                                dateInput: {
+                                                    borderColor: 'white',
+                                                    fontFamily: 'Quicksand-Regular',
+                                                }
+                                                // ... You can check the source to find the other keys.
+                                            }}
+                                            onDateChange={(birthdate) => {
+                                                this.setState({ selected_start_date: birthdate })
+                                                this.getBatchData()
+                                            }}
                                         />
 
                                     </View>
@@ -443,9 +503,39 @@ class CancelSession extends BaseComponent {
 
                                         <View>
 
-                                            <Text style={[defaultStyle.bold_text_14, { width: 100 }]}>
+                                            {/* <Text style={[defaultStyle.bold_text_14, { width: 100 }]}>
                                                 {moment(selected_end_date).format(formatted_date)}
-                                            </Text>
+                                            </Text> */}
+                                            <DatePicker
+                                                style={{
+                                                    width: 100, borderWidth: 0,
+                                                    marginBottom: -2,
+                                                    marginLeft: -10, borderWidth: 0,
+                                                    borderColor: 'white',
+                                                    fontFamily: 'Quicksand-Regular',
+                                                }}
+                                                date={moment(selected_end_date).format(formatted_date)}
+                                                mode="date"
+                                                placeholder="select date"
+                                                format="DD-MMM-YYYY"
+                                                minDate="2018-05-01"
+                                                //maxDate={Date.now()}
+                                                confirmBtnText="Confirm"
+                                                cancelBtnText="Cancel"
+                                                showIcon={false}
+                                                customStyles={{
+
+                                                    dateInput: {
+                                                        borderColor: 'white',
+                                                        fontFamily: 'Quicksand-Regular',
+                                                    }
+                                                    // ... You can check the source to find the other keys.
+                                                }}
+                                                onDateChange={(birthdate) => {
+                                                    this.setState({ selected_end_date: birthdate })
+                                                    this.getBatchData()
+                                                }}
+                                            />
 
                                         </View>
 
@@ -524,31 +614,57 @@ class CancelSession extends BaseComponent {
                                 backgroundColor: '#DCDEE7',
                                 justifyContent: 'space-between',
                                 flexDirection: 'row',
+                                alignContent: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'center'
 
                             }}>
-                                <Text
-                                    style={[defaultStyle.bold_text_10, {
-                                        width: "33%", color: '#A3A5AE',
-                                        alignContent: 'center',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flex: 1
-                                    }]}>
-                                    Batch name
+
+                                <View style={{
+                                    alignItems: 'center',
+                                    alignSelf: 'center',
+                                    flex: 1,
+                                    width: "33%",
+                                    alignContent: 'center',
+                                }}>
+
+                                    <Text
+                                        style={[defaultStyle.bold_text_10, {
+                                            color: '#A3A5AE',
+                                        }]}>
+                                        Batch name
                             </Text>
-                                <Text
-                                    style={[defaultStyle.bold_text_10, {
-                                        width: "33%", color: '#A3A5AE'
-                                    }]}>
-                                    Type
+                                </View>
+
+                                <View style={{
+                                    alignItems: 'center',
+                                    alignSelf: 'center',
+                                    flex: 1,
+                                    width: "33%",
+                                    alignContent: 'center',
+                                }}>
+                                    <Text
+                                        style={[defaultStyle.bold_text_10, {
+                                            color: '#A3A5AE',
+
+                                        }]}>
+                                        Type
                             </Text>
-                                <Text
-                                    style={[defaultStyle.bold_text_10, {
-                                        width: "33%",
-                                        color: '#A3A5AE'
-                                    }]}>
-                                    Cancel
+                                </View>
+                                <View style={{
+                                    alignItems: 'center',
+                                    alignSelf: 'center',
+                                    flex: 1,
+                                    width: "33%",
+                                    alignContent: 'center',
+                                }}>
+                                    <Text
+                                        style={[defaultStyle.bold_text_10, {
+                                            color: '#A3A5AE',
+                                        }]}>
+                                        Cancel
                             </Text>
+                                </View>
 
                             </View>
 

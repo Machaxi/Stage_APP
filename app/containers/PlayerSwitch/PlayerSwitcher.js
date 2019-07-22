@@ -7,6 +7,7 @@ import { getData, storeData } from "../../components/auth";
 import { getPlayerSWitcher, getCoachSWitcher } from "../../redux/reducers/switchReducer";
 import { connect } from 'react-redux';
 import BaseComponent, { defaultStyle, getFormattedLevel } from '../BaseComponent';
+import PlayerHeader from '../../components/custom/PlayerHeader'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 class PlayerSwitcher extends BaseComponent {
@@ -177,7 +178,7 @@ class PlayerSwitcher extends BaseComponent {
 
         <Card style={{ marginTop: 20, borderRadius: 10 }}>
             <TouchableOpacity
-                activeOpacity={.8}
+                activeOpacity={.7}
                 onPress={() => {
 
                     var tempuserData = this.state.userData;
@@ -204,188 +205,9 @@ class PlayerSwitcher extends BaseComponent {
                 }}>
                 <View style={{ margin: 10, marginTop: 20, marginBottom: 20 }}>
                     <Text style={[defaultStyle.heavy_bold_text_14, { color: 'black' }]}>{item.academy_name} </Text></View>
-                <View style={{ width: '100%', marginTop: 0, height: 300, }}>
-                    <ImageBackground
-                        source={require('../../images/RectangleImg.png')}
-                        style={{
-                            width: '100%',
-                            height: '100%', borderRadius: 20
-                        }}>
-                        <View style={{ marginTop: 20, flex: 1, height: '100%' }}>
 
-                            <View style={{ position: 'relative' }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Image source={require('../../images/playerimg.png')}
-                                        style={{
-                                            width: 201,
-                                            height: 238, marginRight: 20, marginTop: 0, display: 'flex'
-                                        }}>
+                <PlayerHeader player_profile={item} />
 
-                                    </Image>
-                                    <View style={{ display: 'flex', flex: 1, marginBottom: 100 }}>
-                                        <Text
-                                            numberOfLines={1}
-                                            style={{
-                                                fontFamily: 'Quicksand-Bold',
-                                                color: 'white',
-                                                marginRight: 0,
-                                                textAlign: 'center',
-                                                fontSize: 22,
-                                            }}>{item.name}</Text>
-
-
-                                        {/* <Image source={require('../../images/Rank.png')}
-                                            style={{
-                                                width: 119,
-                                                height: 84,
-                                                alignItems: 'center',
-                                                display: 'flex',
-                                                marginBottom: 20,
-                                                marginTop: 20
-                                            }}>
-
-                                        </Image> */}
-
-                                        <View style={{
-                                            width: 119,
-                                            height: 84,
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            marginBottom: 20,
-                                            marginTop: 20,
-                                            justifyContent: 'center', alignItems: 'center',
-                                        }}>
-
-                                            <ImageBackground
-                                                style={{
-                                                    height: 85, width: 57, justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                }}
-                                                source={require('../../images/batch_pink.png')}>
-
-
-                                                <View style={{
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    flexDirection: 'row',
-                                                    borderRadius: 2,
-                                                    backgroundColor: '#485FA0', height: 26, width: '110%'
-                                                }}>
-                                                    <Image style={{ height: 18, width: 20, }}
-                                                        source={require('../../images/left_batch_arrow.png')}></Image>
-
-                                                    <Text style={{
-                                                        width: '100%',
-                                                        fontSize: 10,
-                                                        color: '#F4F4F4',
-                                                        textAlign: 'center',
-                                                        fontFamily: 'Quicksand-Regular',
-                                                    }}>{item.badge}</Text>
-                                                    <Image style={{ height: 18, width: 20, }}
-                                                        source={require('../../images/right_batch_arrow.png')}></Image>
-
-                                                </View>
-                                            </ImageBackground>
-
-
-
-
-                                        </View>
-
-
-                                        <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                                            <Text style={{
-                                                color: 'white',
-                                                marginRight: 10,
-                                                textAlign: 'center',
-                                                fontSize: 12,
-                                                fontFamily: 'Quicksand-Bold',
-                                            }}>{getFormattedLevel(item.player_level)}</Text>
-
-                                            <View
-                                                style={{
-                                                    backgroundColor: 'red', width: 35,
-                                                    borderRadius: 4,
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    marginRight: 20, marginTop: -5
-                                                }}>
-                                                <Text style={{
-                                                    color: 'white',
-                                                    marginRight: 0,
-                                                    textAlign: 'center',
-                                                    fontSize: 12,
-                                                    fontFamily: 'Quicksand-Bold',
-                                                    marginTop: 5,
-                                                    marginBottom: 5
-                                                }}>{item.player_category} </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={{
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    position: 'absolute',
-                                    bottom: 20,
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    selfAlign: 'center'
-                                }}>
-                                    {console.log("width", deviceWidth / 3)}
-                                    <View style={{
-                                        width: deviceWidth / 3,
-                                        height: 80, marginLeft: 10
-                                    }}>
-
-                                        <ImageBackground source={require('../../images/box.png')}
-                                            style={{
-                                                width: '100%',
-                                                height: 80,
-                                            }}>
-
-                                            <Text style={{ fontSize: 12, margin: 15, color: '#F4F4F4', fontFamily: 'Quicksand-Medium' }}>Rank</Text>
-                                            {item.rank ? <Text style={styles.scoreBox}>{item.rank}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-
-                                        </ImageBackground>
-
-                                    </View>
-                                    <ImageBackground source={require('../../images/box.png')}
-                                        style={{
-                                            width: deviceWidth / 3,
-                                            height: 80,
-                                        }}>
-                                        <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 12, margin: 15, color: '#F4F4F4' }}>Score</Text>
-                                        <Text style={styles.scoreBox}>{item.score}</Text>
-
-                                    </ImageBackground>
-                                    <View style={{
-                                        width: deviceWidth / 3,
-                                        height: 80, marginRight: 0
-                                    }}>
-                                        <ImageBackground source={require('../../images/box.png')}
-                                            style={{
-                                                width: '100%',
-                                                height: 80,
-                                            }}>
-
-                                            <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 12, margin: 15, color: '#F4F4F4' }}>Reward</Text>
-                                            <Text style={styles.scoreBox}>{item.reward_point}</Text>
-
-
-                                        </ImageBackground>
-
-                                    </View>
-
-
-                                </View>
-
-                            </View>
-                        </View>
-                    </ImageBackground>
-
-                </View>
                 {/* <View style={{ margin: 10, height: 80, flexDirection: 'row' }}>
 
 

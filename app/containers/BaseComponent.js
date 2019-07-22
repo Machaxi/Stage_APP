@@ -45,6 +45,9 @@ export default class BaseComponent extends React.Component {
         return this.isUserLoggedIn;
     }
 
+
+    
+
     getNetworkStatus() {
         if (!connected) {
             alert("Oops!! No Internet Connection Available");
@@ -75,6 +78,11 @@ export default class BaseComponent extends React.Component {
     }
 
 
+}
+
+export function formattedName(name){
+    
+        
 }
 export function getFormattedLevel(level) {
 
@@ -203,5 +211,10 @@ export const defaultStyle = {
         marginTop: 8,
         marginBottom: 8
 
-    }
+    },
+    bebas_text_blue_10: {
+        fontSize: 10,
+        color: '#F4F4F4',
+        fontFamily: 'BebasNeue-Regular'
+    },
 }
