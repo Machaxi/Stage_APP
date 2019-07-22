@@ -9,12 +9,13 @@ import { CheckBox } from 'react-native-elements';
 //import firebase from 'react-native-firebase';
 import moment from 'moment'
 import { getData } from '../../../components/auth';
-import { getBatchOperational } from "../../../redux/reducers/BatchReducer";
+import { getBatchOperational, cancelBatch } from "../../../redux/reducers/BatchReducer";
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DatePicker from 'react-native-datepicker'
+
 
 const formatted_date = 'DD MMM ’YY'
-
 
 class CancelSession extends BaseComponent {
 
@@ -28,9 +29,11 @@ class CancelSession extends BaseComponent {
             selected_end_date: '',
             academy_id: '',
             coach_id: '',
-            spinner: false
+            spinner: false,
+            reason_text: ''
         }
 
+        
         this.state.selected_start_date = moment().format('YYYY-MM-DD');
         this.state.selected_end_date = moment().format('YYYY-MM-DD');
         console.warn(this.state.selected_start_date)
@@ -127,7 +130,78 @@ class CancelSession extends BaseComponent {
 
     }
 
-    submitS
+    submit() {
+
+        let reason_text = this.state.reason_text
+        let is_selected = false
+        let data = this.state.data
+        let batches = data.batches
+        console.log('batch => ,', data.batches)
+        if (data != null && data.batches) {
+            let batches = data.batches
+
+            for (let i = 0; i < batches.length; i++) {
+                let obj = batches[i]
+                if (obj.is_canceled) {
+                    is_selected = true
+                }
+            }
+        }
+
+        if (reason_text == '') {
+            alert('Reason for cancellation can\'t be empty.')
+        } else if (!is_selected) {
+            alert('Please select at least one batch to cancel.')
+        } else {
+
+            let {
+                selected_start_date,
+                selected_end_date,
+                academy_id,
+                coach_id,
+                is_single_day, reason_text } = this.state
+
+            let subData = {}
+            let end_date = is_single_day ? null : selected_end_date
+
+            subData['is_range'] = !this.state.is_single_day
+            subData['from_date'] = selected_start_date
+            subData['to_date'] = end_date
+            subData['academy_id'] = academy_id
+            subData['coach_id'] = coach_id
+            subData['cancelation_reason'] = reason_text
+            subData['batches'] = batches
+            let data = {}
+            data['data'] = subData
+
+            console.log('SubData=> ', JSON.stringify(data))
+
+            this.progress(true)
+
+            getData('header', (value) => {
+
+                this.props.cancelBatch(value, data).then(() => {
+                    this.progress(false)
+
+                    let user = JSON.stringify(this.props.data.batchdata);
+                    console.log(' cancelBatch payload ' + user);
+                    let user1 = JSON.parse(user)
+
+                    if (user1.success == true) {
+                        let msg = user1.success_message
+                        alert(msg)
+                        this.getBatchData()
+                    }
+
+                }).catch((response) => {
+                    this.progress(false)
+                    console.log(response);
+                    alert('Something went wrong.')
+                })
+            });
+        }
+
+    }
 
     getBatchItem(item, index) {
         return (
@@ -308,9 +382,33 @@ class CancelSession extends BaseComponent {
 
                                     <View>
 
-                                        <Text style={[defaultStyle.bold_text_14, { width: 100 }]}>
+                                        {/* <Text style={[defaultStyle.bold_text_14, { width: 100 }]}>
                                             {moment(selected_start_date).format(formatted_date)}
-                                        </Text>
+                                        </Text> */}
+                                        <DatePicker
+                                            style={{
+                                                width: 100,
+                                                fontFamily: 'Quicksand-Regular'
+
+                                            }}
+                                            mode="date"
+                                            placeholder={this.state.selected_start_date}
+                                            format="DD-MMM-YYYY"
+                                            minDate={Date.now()}
+                                            maxDate={Date.now()}
+                                            confirmBtnText="Confirm"
+                                            cancelBtnText="Cancel"
+                                            showIcon={false}
+                                            date={moment(selected_start_date).format(formatted_date)}
+                                            customStyles={{
+                                                dateInput: {
+                                                    fontFamily: 'Quicksand-Regular',
+                                                    borderBottomColor: '#fff',
+                                                    borderWidth: 0
+                                                }
+                                            }}
+                                            onDateChange={(birthdate) => { this.setState({ selected_start_date: birthdate }) }}
+                                        />
 
                                     </View>
 
@@ -373,7 +471,7 @@ class CancelSession extends BaseComponent {
 
                     </View>
 
-                    {data != null ?
+                    {data != null && data.batches.length > 0 ?
                         <View>
 
                             <View style={{
@@ -394,6 +492,8 @@ class CancelSession extends BaseComponent {
                                         borderWidth: 1,
                                         borderRadius: 8
                                     }}
+                                    onChangeText={(reason_text) => this.setState({ reason_text })}
+
                                 >
                                 </TextInput>
 
@@ -458,14 +558,29 @@ class CancelSession extends BaseComponent {
                             <TouchableOpacity activeOpacity={.8}
                                 style={style.rounded_button}
                                 onPress={() => {
-
+                                    this.submit()
                                 }}>
                                 <Text style={style.rounded_button_text}>
                                     Cancel session</Text>
                             </TouchableOpacity>
 
                         </View>
-                        : null}
+                        :
+
+                        <View
+                            style={{
+                                alignContent: 'center',
+                                alignItems: 'center'
+                            }}
+                        >
+
+                            <Text style={[defaultStyle.regular_text_14, {
+                                alignContent: 'center',
+                                justifyContent: 'center',
+                                flex: 1,
+                                alignItems: 'center'
+                            }]}>No batches on selected dates</Text></View>
+                    }
                 </View>
 
             </ScrollView >
@@ -478,7 +593,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getBatchOperational
+    getBatchOperational, cancelBatch
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CancelSession);
 

@@ -140,6 +140,26 @@ export function getBatchOperational(header, postdata) {
 
 }
 
+
+export function cancelBatch(header, postdata) {
+    console.log("postdata", header, postdata)
+    return {
+        type: types.GET_BATCHES,
+        payload: {
+            request: {
+                url: `batch/cancellation`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}
+
 export function getCoachBatchAttendenceDetails(header, batch_id, date) {
     console.log("postdata", header, batch_id)
     // var header =
