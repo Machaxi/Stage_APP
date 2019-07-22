@@ -10,6 +10,8 @@ import ProfileReducer from './ProfileReducer'
  import PerformenceReducer from './PerformenceReducer'
  import FeedbackReducer from './FeedbackReduer'
  import RewardReducer from './RewardReducer'
+import ChallengeReducer from './ChallengeReducer'
+
 // import ShippingAddressReducer from './shippingAddressReducer'
 // import CodReducer from './codReducer'
 // import { homeSliderReducer, homeInstaReducer } from './homePage';
@@ -29,7 +31,8 @@ const rootReducer = combineReducers({
     PerformenceReducer,
     TournamentReducer,
     FeedbackReducer,
-    RewardReducer
+    RewardReducer,
+    ChallengeReducer
     // AddressReducer,
     // ShippingReducer,
     // ShippingAddressReducer,
