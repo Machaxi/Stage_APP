@@ -340,22 +340,34 @@ class ParentHome extends BaseComponent {
                         </SwitchButton>
                     </View>
 
-                    <CustomeCard >
-                        <View
-                            style={{
-                                marginLeft: 16,
-                                marginRight: 16,
-                                marginTop: 16
-                            }}
-                        >
-                            <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                    
+                    {sessionArray.length != 0 ?
+                        <CustomeCard >
 
-                            <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
 
-                            {sessionArray}
+                            <View
+                                style={{
+                                    borderTopLeftRadius: 10,
+                                    borderTopRightRadius:10,
+                                    backgroundColor: '#F9FBE9',
+                                    paddingLeft: 12,
+                                    paddingRight: 12,
+                                    paddingTop: 16,
+                                    paddingBottom: 12
+                                }}
+                            >
+                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                </View>
+                                <View style={{ marginLeft: 12, marginRight: 12 }}>
 
-                        </View>
-                    </CustomeCard>
+                               
+                                <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
+
+                                {sessionArray}
+                                </View>
+
+                        </CustomeCard>
+                        : null}
 
                     {is_payment_due ? <CustomeCard >
                         <View

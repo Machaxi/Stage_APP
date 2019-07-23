@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent from './../BaseComponent'
+import BaseComponent, {EVENT_SELECT_PLAYER_TOURNAMENT} from './../BaseComponent'
+import Events from '../../router/events';
 
 export default class AddPartner extends BaseComponent {
 
@@ -16,7 +17,9 @@ export default class AddPartner extends BaseComponent {
         this.state = {
             data: ["", "", "", "", "", ""],
             query: '',
+            item_id:''
         }
+        this.state.item_id = this.props.navigation.getParam('id','')
     }
 
 
@@ -35,7 +38,11 @@ export default class AddPartner extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
+                let id = this.state.item_id
                 //this.props.navigation.navigate('AcademyProfile', { id: item.id })
+                this.props.navigation.goBack()
+                Events.publish(EVENT_SELECT_PLAYER_TOURNAMENT,
+                    {name:'Raj',phone:'919999999999',id:id});
             }}>
 
             <Card
@@ -60,7 +67,7 @@ export default class AddPartner extends BaseComponent {
                     </Image>
 
                     <Text style={{
-                        paddingTop: 12, paddingLeft: 12, fontSize: 16,
+                        paddingLeft: 12, fontSize: 16,
                         color: '#707070',
                         fontFamily: 'Quicksand-Regular'
                     }}>

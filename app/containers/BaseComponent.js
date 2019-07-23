@@ -18,6 +18,7 @@ fontRegular = "Quicksand-Regular"
 
 export const EVENT_REFRESH_DASHBOARD = 'EVENT_REFRESH_DASHBOARD'
 export const EVENT_EDIT_PROFILE = 'EVENT_EDIT_PROFILE'
+export const EVENT_SELECT_PLAYER_TOURNAMENT = 'EVENT_SELECT_PLAYER_TOURNAMENT'
 
 export default class BaseComponent extends React.Component {
 
@@ -46,7 +47,7 @@ export default class BaseComponent extends React.Component {
     }
 
 
-    
+
 
     getNetworkStatus() {
         if (!connected) {
@@ -80,9 +81,21 @@ export default class BaseComponent extends React.Component {
 
 }
 
-export function formattedName(name){
-    
-        
+export function formattedName(name) {
+
+    let array = name.split(' ')
+    let newName = ''
+    if (array.length > 1) {
+
+        let singleChar = array[1].charAt(0)
+        newName = array[0] + " " + singleChar
+        return newName
+    } else {
+        newName = name
+    }
+    alert(array)
+    return newName
+
 }
 export function getFormattedLevel(level) {
 

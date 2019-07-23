@@ -122,7 +122,7 @@ export default class UpcomingRoute extends BaseComponent {
                         </View>
 
                         <Text style={{
-                            paddingTop: 6, 
+                            paddingTop: 6,
                             fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular'
@@ -146,7 +146,7 @@ export default class UpcomingRoute extends BaseComponent {
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
 
                                 <Text style={{
-                                    paddingTop: 10, 
+                                    paddingTop: 10,
                                     fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
@@ -154,7 +154,7 @@ export default class UpcomingRoute extends BaseComponent {
                                     Prithiviraj
                     </Text>
                                 <Text style={{
-                                    paddingTop: 10, 
+                                    paddingTop: 10,
                                     fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
@@ -162,7 +162,7 @@ export default class UpcomingRoute extends BaseComponent {
                                     1st
                     </Text>
                                 <Text style={{
-                                    paddingTop: 10, 
+                                    paddingTop: 10,
                                     fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
@@ -226,7 +226,7 @@ export default class UpcomingRoute extends BaseComponent {
 
                                 </Text>
                                 <Text style={{
-                                    paddingTop: 10, 
+                                    paddingTop: 10,
                                     fontSize: 14,
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'

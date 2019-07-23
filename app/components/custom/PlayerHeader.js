@@ -2,7 +2,7 @@ import React from "react";
 import { Header } from "react-navigation";
 import { View, Platform, Text, TouchableOpacity, Image, ImageBackground, Dimensions, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import BaseComponent, { defaultStyle, bebas_text_blue_10, getFormattedLevel } from "../../containers/BaseComponent";
+import BaseComponent, { defaultStyle, bebas_text_blue_10, getFormattedLevel, formattedName } from "../../containers/BaseComponent";
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -17,9 +17,10 @@ export default class PlayerHeader extends BaseComponent {
         const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, operations } =
             this.props.player_profile
 
+        let newName = formattedName(name)
 
         return (
-            <View style={{ width: '100%', height: 300, }}>
+            <View style={{ width: '100%', height: 310, }}>
                 {/* <ImageBackground
                 
                     source={require('../../images/RectangleImg.png')}
@@ -51,10 +52,10 @@ export default class PlayerHeader extends BaseComponent {
                                     color: 'white',
                                     marginRight: 0,
                                     fontFamily: 'Quicksand-Bold',
-                                    textAlign: 'center', fontSize: 22,
+                                   fontSize: 28,
                                 }}
                                     numberOfLines={1}
-                                >{name}</Text>
+                                >{newName}</Text>
 
 
                                 <View style={{
@@ -135,7 +136,7 @@ export default class PlayerHeader extends BaseComponent {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: 20,
-                                            marginTop: -5
+                                           
                                         }}>
                                         <Text style={{
                                             color: 'white',
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     box_label: {
         fontFamily: 'Quicksand-Medium',
         marginLeft: 18,
-        marginTop: 15,
+        marginTop: 12,
         color: '#F4F4F4',
         fontSize: 12,
     }

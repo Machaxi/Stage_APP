@@ -1,18 +1,63 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import Moment from 'moment';
 
 export default class RegistrationSuccessful extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.state = {
+            user_selection: [],
+            name: '',
+            data: {}
+        }
+        this.state.user_selection = this.props.navigation.getParam('user_selection', '')
+        this.state.name = this.props.navigation.getParam('name', '')
+        this.state.data = this.props.navigation.getParam('data', '')
 
     }
 
     render() {
+
+        let data = JSON.parse(this.state.data)
+        let name = this.state.name
+        let tournament_name = data['name']
+        let month = data['month'] + " " + data['year']
+        let academic_type = data['academic_type']
+        let start_date = data['start_date']
+        let end_date = data['end_date']
+
+        let dates = Moment.utc(start_date).local().format('DD MMM') + " - " +
+            Moment.utc(end_date).local().format('DD MMM')
+
+        let user_selection = JSON.parse(this.state.user_selection)
+        let array = []
+        for (let i = 0; i < user_selection.length; i++) {
+            let obj = user_selection[i]
+            let title = obj.title
+            let wholeText = ''
+            wholeText = wholeText + title
+            let tournament_types = obj.tournament_types
+            for (let j = 0; j < tournament_types.length; j++) {
+
+                let type = tournament_types[j]
+                if (type.selected) {
+
+                    wholeText = wholeText + "          " + type.tournament_type
+                }
+
+
+            }
+            array.push(<Text style={[defaultStyle.regular_text_14, { paddingBottom: 8 }]}>
+                {wholeText}
+            </Text>)
+        }
+        console.log('registrion success => ', user_selection)
+
+
         return (
 
             <ScrollView>
@@ -49,6 +94,9 @@ export default class RegistrationSuccessful extends BaseComponent {
 
                         </View>
 
+                        <View style={defaultStyle.line_style}></View>
+
+
                         <View style={{
                             paddingLeft: 16,
                             paddingTop: 8,
@@ -62,8 +110,8 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 color: '#404040',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Feather Academy Tournament
-                    </Text>
+                                {tournament_name}
+                            </Text>
 
 
                             <View style={{ paddingTop: 12, flexDirection: 'row', flex: 1 }}>
@@ -73,8 +121,8 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
-                                    May 2019
-                    </Text>
+                                    {month}
+                                </Text>
 
                                 <Text style={{
                                     backgroundColor: '#667DDB',
@@ -88,7 +136,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     paddingTop: 2,
                                     paddingBottom: 2,
                                     fontFamily: 'Quicksand-Regular'
-                                }}>Inter-Academy</Text>
+                                }}>{academic_type}</Text>
 
                             </View>
 
@@ -97,7 +145,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 color: '#404040',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                Dates <Text style={{ color: '#404040' }}>{dates}</Text>
                             </Text>
 
 
@@ -116,35 +164,12 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 color: '#404040',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Prithiviraj P
-                    </Text>
+                                {name}
+                            </Text>
 
-                            <View style={{ flexDirection: 'row', paddingTop: 10, }}>
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    U - 13
-                                </Text>
+                            <View style={{ paddingTop: 10, }}>
 
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    marginLeft:16,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Singles
-                                </Text>
-
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    marginLeft:16,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Doubles
-                                </Text>
+                                {array}
 
                             </View>
 

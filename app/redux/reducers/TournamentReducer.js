@@ -78,3 +78,24 @@ export function getTournamentFixture(header, tournament_id) {
     };
 
 }
+
+
+export function registerTournament(header, postdata) {
+    console.log("registerTournament", header, postdata)
+
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `tournament/register`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+
+}

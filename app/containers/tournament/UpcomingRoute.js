@@ -155,7 +155,7 @@ class UpcomingRoute extends BaseComponent {
                             fontFamily: 'Quicksand-Regular'
                         }}>
                             Dates <Text style={defaultStyle.bold_text_14}>
-                                {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
+                                {Moment.utc(item.start_date).local().format('DD') + " - " + Moment.utc(item.end_date).local().format('DD MMM')}
                             </Text>
                         </Text>
 
@@ -165,7 +165,9 @@ class UpcomingRoute extends BaseComponent {
                             fontFamily: 'Quicksand-Regular'
                         }}>
                             Last Date of Registration <Text style={defaultStyle.bold_text_14}>
-                                {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
+                                {Moment.utc(item.registration_last_date).local().format("DD MMM YYYY")}
+
+                            </Text>
                         </Text>
 
                     </View>
@@ -193,8 +195,8 @@ class UpcomingRoute extends BaseComponent {
             <View style={styles.chartContainer}>
 
                 {this.listHeader()}
-                
-                 {this.state.tournaments.length != 0 ?
+
+                {this.state.tournaments.length != 0 ?
                     <FlatList
                         data={this.state.tournaments}
                         extraData={this.state.tournaments}

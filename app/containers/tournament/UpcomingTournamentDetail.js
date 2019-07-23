@@ -89,7 +89,8 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                     </Text>
                                 </Text>
 
-                                <Text style={[defaultStyle.regular_text_14, { paddingTop: 6 }]}>
+                                <Text style={[defaultStyle.regular_text_14,
+                                { paddingTop: 6, color: '#FF7373' }]}>
                                     Last Date of Registration
                                     <Text style={defaultStyle.bold_text_14}>
                                         {" " + Moment(data.registration_last_date).format('DD MMM YYYY')}</Text>
@@ -103,32 +104,52 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                                        <Text style={{
-                                            fontSize: 10,
-                                            color: '#A3A5AE',
-                                            width: "33.33%",
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Registration Fees
-                        </Text>
+                                        <View
+                                            style={{
+                                                width: "33.33%",
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }} >
 
-                                        <Text style={{
-                                            fontSize: 10,
-                                            color: '#A3A5AE',
-                                            width: "33.33%",
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Category
-                        </Text>
+                                            <Text style={{
+                                                fontSize: 10,
+                                                color: '#A3A5AE',
 
-                                        <Text style={{
-                                            fontSize: 10,
-                                            color: '#A3A5AE',
-                                            width: "33.33%",
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Gender
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Registration Fees
                         </Text>
+                                        </View>
+
+                                        <View
+                                            style={{
+                                                width: "33.33%",
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }} >
+                                            <Text style={{
+                                                fontSize: 10,
+                                                color: '#A3A5AE',
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Category
+                        </Text>
+                                        </View>
+
+                                        <View
+                                            style={{
+                                                width: "33.33%",
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }} >
+                                            <Text style={{
+                                                fontSize: 10,
+                                                color: '#A3A5AE',
+                                                width: "33.33%",
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Gender
+                        </Text></View>
 
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

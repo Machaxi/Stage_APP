@@ -377,20 +377,29 @@ class UserHome extends BaseComponent {
 
                     {sessionArray.length != 0 ?
                         <CustomeCard >
+
+
                             <View
                                 style={{
-                                    marginLeft: 16,
-                                    marginRight: 16,
-                                    marginTop: 16
+                                    borderTopLeftRadius: 10,
+                                    borderTopRightRadius:10,
+                                    backgroundColor: '#F9FBE9',
+                                    paddingLeft: 12,
+                                    paddingRight: 12,
+                                    paddingTop: 16,
+                                    paddingBottom: 12
                                 }}
                             >
-                                <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                </View>
+                                <View style={{ marginLeft: 12, marginRight: 12 }}>
 
-                                <View style={defaultStyle.line_style} />
+                               
+                                <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
 
                                 {sessionArray}
+                                </View>
 
-                            </View>
                         </CustomeCard>
                         : null}
 

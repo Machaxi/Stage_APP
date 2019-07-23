@@ -1,20 +1,94 @@
 import React from 'react'
 
-import { View, Text } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import { View, Text, Image, Modal } from 'react-native'
+import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT } from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
 import { getData } from '../../components/auth';
+import { registerTournament } from "../../redux/reducers/TournamentReducer";
+import { connect } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Events from '../../router/events';
 
+class RegistrationSteps extends BaseComponent {
 
-export default class RegistrationSteps extends BaseComponent {
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: 'Tournament Registration',
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.getParam('goBackAction')();
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        resizeMode="contain"
+                        source={require('../../images/go_back_arrow.png')}
+                        style={{ padding: 8, width: 20, height: 16, marginLeft: 12, }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.getParam('showConfirmAlert')();
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#FF7373'
+                        }}
+                    >Abort</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
+
+    goBackAction = () => {
+        let step = this.state.step
+        console.log('steps => ' + step)
+        let subStep = this.state.subStep
+
+        if (step == 3) {
+            step = 2
+            subStep = subStep - 1
+        }
+        else if (step == 2 && subStep >= 1) {
+
+            subStep = subStep - 1
+
+        } else if (step == 2) {
+            step = 1;
+        } else if (step == 1) {
+            this.props.navigation.goBack()
+        }
+        this.setState({
+            step: step,
+            subStep: subStep
+        })
+    }
+
+    showConfirmAlert = () => {
+        this.setState({
+            show_alert: true
+        })
+    }
 
     constructor(props) {
         super(props)
         this.state = {
             birthdate: "",
-            txtname: '',
+            txtname: 'Prithviraj',
             txtphone: '',
             step: 1,
             subStep: 0,
@@ -24,12 +98,29 @@ export default class RegistrationSteps extends BaseComponent {
             tournament_selection: [],
             checked_category: [],
             tournament_types: [],
-            user_selection: []
+            user_selection: [],
+            show_alert: false,
+            user_id: '',
+            spinner: false
 
         }
 
+        const { navigation } = this.props
+        navigation.setParams({
+            showConfirmAlert: this.showConfirmAlert,
+            goBackAction: this.goBackAction
+        })
+
+        getData('userInfo', (value) => {
+            console.log('userInfo => ' + value)
+            let userData = JSON.parse(value)
+            this.state.user_id = userData.user['id']
+            console.log('userId= > ', this.state.user_id)
+        });
+
         getData('detail', (value) => {
 
+            console.log('detail=> ', value)
             this.state.data = JSON.parse(value)
 
             let array = []
@@ -54,6 +145,49 @@ export default class RegistrationSteps extends BaseComponent {
             })
             console.log("tournament_types => ", this.state.tournament_types)
         })
+
+        //============== ADD PLAYER CALLBACK ==========================
+        this.refreshEvent = Events.subscribe(EVENT_SELECT_PLAYER_TOURNAMENT, (args) => {
+            console.log(EVENT_SELECT_PLAYER_TOURNAMENT)
+            console.log('args - > ' + JSON.stringify(args))
+
+            let user_selection = [...this.state.user_selection]
+            let steps_data = user_selection[this.state.subStep]
+            let tournament_types = steps_data.tournament_types
+
+            for (let i = 0; i < tournament_types.length; i++) {
+
+
+                console.log('tournament_types => ', tournament_types[i])
+                let id = tournament_types[i].id
+                let selected = tournament_types[i].selected
+
+                if (id == args.id && selected) {
+                    console.log('true => ')
+                    tournament_types[i]['partner_name'] = args.name;
+                    tournament_types[i]['partner_phone'] = args.phone;
+
+                }
+            }
+            this.setState({
+                user_selection: user_selection
+            })
+            console.log('steps_data => ', JSON.stringify(steps_data))
+            console.log('user_selection => ', JSON.stringify(user_selection))
+
+        });
+        ///===============================================================
+
+    }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
+    getFeesTotal() {
+
     }
 
     showStepOne() {
@@ -124,6 +258,22 @@ export default class RegistrationSteps extends BaseComponent {
                             data={this.state.tournament_selection}
                             renderItem={({ item }) =>
                                 <CheckBox
+                                    checkedIcon={<Image style={{
+                                        width: 18,
+                                        height: 18
+                                    }} resizeMode="contain" source={require('../../images/ic_checkbox_on.png')} />}
+                                    uncheckedIcon={<Image style={{
+                                        width: 18,
+                                        height: 18
+                                    }} resizeMode="contain" source={require('../../images/ic_checkbox_off.png')} />}
+                                    containerStyle={{
+                                        backgroundColor: 'white',
+                                        borderWidth: 0,
+                                        padding: 4,
+                                        margin: 0,
+                                        marginTop: 20,
+
+                                    }}
                                     checked={item.selected}
                                     onPress={() => {
                                         let tournament_selection = [...this.state.tournament_selection];
@@ -135,13 +285,9 @@ export default class RegistrationSteps extends BaseComponent {
                                     }
                                     style={{ marginTop: -4 }}
                                     title={item.title}
-                                    containerStyle={{
-                                        backgroundColor: 'white',
-                                        borderWidth: 0
-                                    }}
                                     style={{
                                         color: '#404040',
-                                        backgroundColor: 'white'
+                                        backgroundColor: 'white',
                                     }}
                                 />
                             }
@@ -154,6 +300,7 @@ export default class RegistrationSteps extends BaseComponent {
                         flexDirection: 'row',
                         justifyContent: 'center',
                         marginTop: 40,
+                        marginBottom: 40
                     }}>
 
                         <TouchableOpacity activeOpacity={.8}
@@ -203,7 +350,41 @@ export default class RegistrationSteps extends BaseComponent {
     showStepTwo(model) {
 
         let tournament_types = model.tournament_types
+        let user_selection = this.state.user_selection
+        let sub_total_ui = []
+        let all_total = 0
 
+        for (let i = 0; i < user_selection.length; i++) {
+
+            let element = user_selection[i]
+            let title = element['title']
+            let total = 0
+            let tournament_types = element['tournament_types']
+            for (let j = 0; j < tournament_types.length; j++) {
+
+                let selected = tournament_types[j].selected
+                if (selected) {
+                    total = total + tournament_types[j].fees
+                    all_total = tournament_types[j].fees + all_total
+                }
+            }
+            if (total > 0) {
+                sub_total_ui.push(
+                    <Text style={{
+                        marginTop: 8,
+                        width: 250,
+                        textAlign: 'right',
+                        justifyContent: 'center',
+                        fontFamily: 'Quicksand-Regular',
+                        fontSize: 14,
+                        color: '#A3A5AE'
+                    }}>
+                        Fees ({title}) :
+                    <Text style={{ marginLeft: 12, color: '#404040' }}>    Rs {total}</Text>
+                    </Text>
+                )
+            }
+        }
 
         return (
 
@@ -243,6 +424,23 @@ export default class RegistrationSteps extends BaseComponent {
                                     }}>
 
                                         <CheckBox
+                                            checkedIcon={<Image style={{
+                                                width: 18,
+                                                height: 18
+                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_on.png')} />}
+                                            uncheckedIcon={<Image style={{
+                                                width: 18,
+                                                height: 18
+                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_off.png')} />}
+                                            containerStyle={{
+                                                backgroundColor: 'white',
+                                                borderWidth: 0,
+                                                padding: 4,
+                                                margin: 0,
+                                                marginTop: 20,
+                                                fontFamily: 'Quicksand-Regular',
+                                                fontWeight: '0'
+                                            }}
                                             title={item.tournament_type}
                                             containerStyle={{
                                                 backgroundColor: 'white',
@@ -283,10 +481,11 @@ export default class RegistrationSteps extends BaseComponent {
 
                                     {item.is_partner_required && item.selected
                                         ?
+
                                         <TouchableOpacity activeOpacity={.8}
 
                                             onPress={() => {
-                                                this.props.navigation.navigate('AddPartner')
+                                                this.props.navigation.navigate('AddPartner', { id: item.id })
                                             }}
                                             style={{
                                                 backgroundColor: '#F2F2F2',
@@ -300,10 +499,12 @@ export default class RegistrationSteps extends BaseComponent {
                                                 fontFamily: 'Quicksand-Regular',
                                                 fontSize: 14,
                                                 padding: 6,
-
                                                 color: '#A3A5AE'
-                                            }}>
-                                                + Add Partner
+                                            }}
+                                                numberOfLines={1}
+                                            >
+                                                {item.partner_name ? item.partner_name + ' (' + item.partner_phone + ')'
+                                                    : '+ Add Partner'}
                                             </Text>
                                         </TouchableOpacity>
                                         :
@@ -318,23 +519,40 @@ export default class RegistrationSteps extends BaseComponent {
 
                         <View style={{
                             width: 260,
-                            marginTop: 8,
+                            marginTop: 12,
                             marginBottom: 8,
                             height: 1,
                             backgroundColor: "#E5E5E5"
                         }}></View>
 
-                        <Text style={{
-                            marginTop: 8,
-                            width: 250,
-                            textAlign: 'right',
-                            justifyContent: 'center',
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 14,
-                            color: '#000000'
-                        }}>
-                            Fees (U-13) : Rs 800
-                             </Text>
+
+
+                        {sub_total_ui}
+
+                        {all_total > 0 ?
+                            <View>
+                                <View style={{
+                                    width: 260,
+                                    marginTop: 12,
+                                    marginBottom: 8,
+                                    height: 1,
+                                    backgroundColor: "#E5E5E5"
+                                }}></View>
+
+                                <Text style={{
+                                    marginTop: 8,
+                                    width: 250,
+                                    textAlign: 'right',
+                                    justifyContent: 'center',
+                                    fontFamily: 'Quicksand-Medium',
+                                    fontSize: 14,
+                                    color: '#A3A5AE'
+                                }}>
+                                    Total Fees :
+                            <Text style={{ color: '#404040' }}>    Rs {all_total}</Text>
+                                </Text>
+                            </View> : null
+                        }
 
                     </View>
 
@@ -344,6 +562,7 @@ export default class RegistrationSteps extends BaseComponent {
                         flexDirection: 'row',
                         justifyContent: 'center',
                         marginTop: 40,
+                        marginBottom: 40,
                     }}>
 
                         <TouchableOpacity activeOpacity={.8}
@@ -377,7 +596,26 @@ export default class RegistrationSteps extends BaseComponent {
 
     showStepThree() {
         const user_selection = this.state.user_selection
-        console.log(user_selection)
+        let all_total = 0
+        console.log('user_selection=> ' + JSON.stringify(user_selection))
+        for (let i = 0; i < user_selection.length; i++) {
+
+            let element = user_selection[i]
+            let title = element['title']
+            let total = 0
+            let tournament_types = element['tournament_types']
+            for (let j = 0; j < tournament_types.length; j++) {
+
+                let selected = tournament_types[j].selected
+                if (selected) {
+                    total = total + tournament_types[j].fees
+                    all_total = tournament_types[j].fees + all_total
+                }
+            }
+            element['total'] = total
+
+        }
+
         return (
             <ScrollView>
 
@@ -421,6 +659,25 @@ export default class RegistrationSteps extends BaseComponent {
                             Registered Player
                     </Text>
 
+
+                        <View style={{
+                            marginTop: 8, flexDirection: 'row', justifyContent: 'space-between'
+                        }}>
+
+                            <Text style={defaultStyle.regular_text_14}>
+                                {this.state.txtname}
+                            </Text>
+                            <Text style={{
+                                fontFamily: 'Quicksand-Regular',
+                                fontSize: 14,
+                                color: '#A3A5AE'
+                            }}>
+                                Total Fees :
+                            <Text style={{ color: '#404040' }}> Rs {all_total}</Text>
+                            </Text>
+
+                        </View>
+
                         <View>
 
                             <FlatList
@@ -449,8 +706,8 @@ export default class RegistrationSteps extends BaseComponent {
                                     marginTop: 8,
                                     color: '#404040'
                                 }}>
-                                    Rs 1100
-                                    </Text>
+                                    Rs {all_total}
+                                </Text>
 
                                 <Text style={{
                                     fontFamily: 'Quicksand-Regular',
@@ -467,10 +724,12 @@ export default class RegistrationSteps extends BaseComponent {
                                 <TouchableOpacity activeOpacity={.8}
                                     style={style.rounded_button}
                                     onPress={() => {
-                                        this.props.navigation.navigate('RegistrationSuccessful')
+
+                                        this.submitData()
                                     }}>
                                     <Text style={style.rounded_button_text}>
-                                        Next</Text>
+                                        Next
+                                        </Text>
                                 </TouchableOpacity>
 
 
@@ -485,6 +744,70 @@ export default class RegistrationSteps extends BaseComponent {
             </ScrollView>
 
         )
+    }
+
+    submitData() {
+
+        let tournament_reg_details = [];
+
+        let tournament_id = this.state.data['id']
+        let user_id = this.state.user_id
+
+        let user_selection = this.state.user_selection
+        for (let i = 0; i < user_selection.length; i++) {
+
+            let element = user_selection[i]
+            let title = element['title']
+            let tournament_types = element['tournament_types']
+            for (let j = 0; j < tournament_types.length; j++) {
+
+                let selected = tournament_types[j].selected
+                if (selected) {
+
+                    let obj = {}
+                    obj['tournament_category'] = title
+                    obj['tournament_type'] = tournament_types[j].tournament_type
+                    obj['partner_name'] = ''
+                    obj['partner_mobile_number'] = ''
+                    tournament_reg_details.push(obj)
+
+                }
+            }
+        }
+
+        let subData = {}
+        subData['tournament_id'] = tournament_id
+        subData['participant_user_id'] = user_id
+        subData['tournament_registration_details'] = tournament_reg_details
+        let data = {}
+        data['data'] = subData
+        console.log('Data=> ', JSON.stringify(data))
+
+        this.progress(true)
+        getData('header', (value) => {
+
+            this.props.registerTournament(value, data).then(() => {
+                this.progress(false)
+
+                let data = this.props.data.data
+                console.log(' registerTournament payload ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+                    console.log('userText=> ', JSON.stringify(this.state.user_selection))
+                    this.props.navigation.navigate('RegistrationSuccessful', {
+                        data: JSON.stringify(this.state.data),
+                        name: this.state.txtname,
+                        user_selection: JSON.stringify(this.state.user_selection)
+                    })
+                }
+
+            }).catch((response) => {
+                console.log(response);
+                this.progress(false)
+            })
+        })
+
     }
 
     renderItem_tournament = ({ item }) => (
@@ -532,8 +855,8 @@ export default class RegistrationSteps extends BaseComponent {
                         fontSize: 14,
                         color: '#404040'
                     }}>
-                        Rs 500
-            </Text>
+                        Rs {item.total}
+                    </Text>
                 </View>
 
 
@@ -604,9 +927,89 @@ export default class RegistrationSteps extends BaseComponent {
                 style={{
                     flex: 1,
                     backgroundColor: '#F7F7F7',
-                }}
-            >
+                }} >
 
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={this.state.show_alert}
+                    onRequestClose={() => {
+                        this.setState({
+                            show_alert: false
+                        })
+                    }}>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        //backgroundColor: '#0E0E0E',
+                        //opacity: 0.56,
+                        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+                        padding: 16
+                    }}>
+                        <View style={{
+                            width: 300,
+                            borderRadius: 16,
+                            backgroundColor: 'white',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: 300,
+                        }}>
+
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    color: 'black',
+                                    fontWeight: "400",
+                                    fontFamily: 'Quicksand-Medium'
+                                }}
+                            >Abort</Text>
+
+                            <Image
+                                style={{ marginTop: 16, height: 100, width: 100 }}
+                                source={require('../../images/ic_alert_icon.png')}
+                            ></Image>
+
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    margin: 16,
+                                    color: 'black',
+                                    textAlign: 'center',
+                                    fontFamily: 'Quicksand-Regular'
+                                }}>
+                                Are you sure you want to Abort the Registration?</Text>
+
+                            <View style={{ flexDirection: 'row', marginLeft: 12, marginRight: 12 }}>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.setState({
+                                            show_alert: false
+                                        })
+                                    }}
+                                    style={[style.touch_red_border, { marginRight: 6 }]}>
+
+                                    <Text style={style.touch_red_border_txt}>Yes</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={[style.touch_red_border, { marginRight: 6 }]}>
+
+                                    <Text style={style.touch_red_border_txt}>Yes</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
+
+                    </View>
+                </Modal >
+
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
 
                 <View
                     style={{
@@ -680,7 +1083,11 @@ export default class RegistrationSteps extends BaseComponent {
 
                 </View>
 
-                <ScrollView>
+                <ScrollView
+                    contentContainerStyle={{
+                        flexGrow: 1
+                    }}
+                >
                     <Card
                         style={{ height: "100%", width: "100%", elevation: 5, borderRadius: 10 }}
                     >
@@ -694,6 +1101,17 @@ export default class RegistrationSteps extends BaseComponent {
     }
 
 }
+
+const mapStateToProps = state => {
+    return {
+        data: state.TournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    registerTournament
+};
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationSteps);
+
 
 const style = {
 
@@ -767,5 +1185,20 @@ const style = {
         width: 150, borderBottomColor: '#DFDFDF',
         borderBottomWidth: 1,
         fontFamily: 'Quicksand-Regular'
-    }
+    },
+    touch_red_border: {
+        padding: 12,
+        backgroundColor: '#ffffff',
+        borderColor: '#FF7373',
+        borderRadius: 23,
+        borderWidth: 1,
+        width: "100%",
+        height: 45,
+    },
+    touch_red_border_txt: {
+        fontSize: 14,
+        color: '#FF7373',
+        width: "100%",
+        textAlign: 'center'
+    },
 }
