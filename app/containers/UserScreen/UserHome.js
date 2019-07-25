@@ -184,8 +184,8 @@ class UserHome extends BaseComponent {
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         strenthList: user1.data.player_profile['stats'],
-                        acedemy_name: user1.data['player_profile'].academy_name,
-                        academy_feedback_data: user1.data['academy_data'].feedback[0],
+                        //acedemy_name: user1.data['player_profile'].academy_name,
+                        //academy_feedback_data: user1.data['academy_data'].feedback[0],
                         //coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
 
                     })

@@ -280,7 +280,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
                                             style={styles.rounded_button}
                                             onPress={() => {
-                                                this.props.navigation.navigate('Registration')
+                                                this.props.navigation.navigate('RegistrationSteps')
                                             }}>
                                             <Text
                                                 style={{

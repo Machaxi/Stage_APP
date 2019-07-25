@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import Moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
+import TournamentCategoryDialog from './TournamentCategoryDialog'
 
 class RegisteredRoute extends BaseComponent {
 
@@ -17,8 +18,10 @@ class RegisteredRoute extends BaseComponent {
 
         this.state = {
             tournaments: [],
+            tournament_fixtures: [],
             query: '',
             spinner: false,
+            is_show_dialog: false
         }
     }
     componentDidMount() {
@@ -67,39 +70,18 @@ class RegisteredRoute extends BaseComponent {
                 let success = data.success
                 if (success) {
 
-                    console.log(' tournament_fixtures ' + JSON.stringify(data.data.tournament_fixtures));
+                    let tournament_fixtures = data.data.tournament_fixtures
+                    if (tournament_fixtures != null && tournament_fixtures.length > 0) {
+                        console.log(' tournament_fixtures ' + JSON.stringify(data.data.tournament_fixtures));
+                        this.setState({
+                            tournament_fixtures: tournament_fixtures,
+                            is_show_dialog: true
 
-                    let fixture_data = data.data.tournament_fixtures[1].tournament_matches
-                    console.log('fixture array ', fixture_data)
-
-                    let playerArray = []
-
-                    for (var key in fixture_data) {
-                        if (fixture_data.hasOwnProperty(key)) {
-                            console.log("KEY = >", key)
-                            //console.log(data[key].id);
-                            let tournament_matches = fixture_data[key]
-
-                            let count = 0
-                            let subArray = []
-                            for (let i = 0; i < tournament_matches.length; i++) {
-
-                                let obj = tournament_matches[i]
-
-                                let player1 = obj.player1
-                                let player2 = obj.player2
-                                //subArray[count++] = player1
-                                ///subArray[count++] = player2
-                                subArray.push(player1)
-                                subArray.push(player2)
-                            }
-                            playerArray.push(subArray)
-
-                        }
+                        })
                     }
-                    console.log('Final => ', JSON.stringify(playerArray))
-
-                    this.props.navigation.navigate('TournamentFixture', { data: JSON.stringify(playerArray) })
+                    else {
+                        alert('No data found.')
+                    }
 
                 }
 
@@ -111,14 +93,74 @@ class RegisteredRoute extends BaseComponent {
 
     }
 
-    find(query) {
-        if (query === '') {
-            return [];
+    showFixture(id) {
+        this.setState({
+            is_show_dialog: false
+        })
+        if (id == undefined) {
+            return
         }
-        const { suggestionResult } = this.state;
+
+        console.warn('ShowFixture = > ', id)
+
+        let data = null
+        let tournament_fixtures = this.state.tournament_fixtures
+        for (let i = 0; i < tournament_fixtures.length; i++) {
+            let obj = tournament_fixtures[i]
+            if (obj.id == id) {
+                data = obj
+            }
+        }
+
+        if (data != null) {
+            let fixture_data = data.tournament_matches
+
+            console.log('fixture array ', fixture_data)
+
+            let playerArray = []
+
+            for (var key in fixture_data) {
+                if (fixture_data.hasOwnProperty(key)) {
+                    console.log("KEY = >", key)
+                    //console.log(data[key].id);
+                    let tournament_matches = fixture_data[key]
+
+                    let count = 0
+                    let subArray = []
+                    for (let i = 0; i < tournament_matches.length; i++) {
+
+                        let obj = tournament_matches[i]
+
+                        let player1 = obj.player1
+                        let player2 = obj.player2
+                        //subArray[count++] = player1
+                        ///subArray[count++] = player2
+                        if (player1 != null)
+                            subArray.push(player1)
+                        if (player2 != null)
+                            subArray.push(player2)
+                    }
+                    playerArray.push(subArray)
+
+                }
+            }
+            console.log('Final => ', JSON.stringify(playerArray))
+
+            this.props.navigation.navigate('TournamentFixture', { data: JSON.stringify(playerArray) })
+
+        } else {
+            alert('No data found.')
+        }
+    }
+
+    find(query) {
+        let tournaments = this.state.tournaments
+        if (query === '') {
+            return tournaments;
+        }
         const regex = new RegExp(`${query.trim()}`, 'i');
         console.log('regex ', regex)
-        return suggestionResult.filter(item => item.name.search(regex) >= 0);
+        return tournaments.filter(item => item.name.search(regex) >= 0);
     }
 
     listHeader() {
@@ -134,12 +176,20 @@ class RegisteredRoute extends BaseComponent {
                 }}>
                 <Card style={{ borderRadius: 16, elevation: 1 }}>
 
-                    <TextInput style={{
-                        marginLeft: 8,
-                        backgroundColor: 'white',
-                        borderRadius: 16,
-                        fontFamily: 'Quicksand-Regular'
-                    }} placeholder="Search"></TextInput>
+                    <TextInput
+                        onChangeText={text => {
+                            this.state.query = text
+                            //console.warn(this.state.query)
+                            this.setState({
+                                query: text
+                            })
+                        }}
+                        style={{
+                            marginLeft: 8,
+                            backgroundColor: 'white',
+                            borderRadius: 16,
+                            fontFamily: 'Quicksand-Regular'
+                        }} placeholder="Search"></TextInput>
 
 
                 </Card>
@@ -198,7 +248,8 @@ class RegisteredRoute extends BaseComponent {
                             </Text>
 
                             <Image
-                                style={{ width: 5, height: 12, }}
+                                resizeMode="contain"
+                                style={{ width: 7, height: 13, }}
                                 source={require('../../images/forward.png')}
                             >
 
@@ -258,6 +309,7 @@ class RegisteredRoute extends BaseComponent {
                         <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
                                 this.getFixtureData(item.id)
+
                             }}
                         >
 
@@ -298,6 +350,8 @@ class RegisteredRoute extends BaseComponent {
             )
         }
 
+        const data = this.find(this.state.query);
+
         return (
 
             <View style={styles.chartContainer}>
@@ -306,12 +360,19 @@ class RegisteredRoute extends BaseComponent {
                     visible={this.state.spinner}
                     textStyle={defaultStyle.spinnerTextStyle}
                 />
+
+                <TournamentCategoryDialog
+                    tournament_fixture={this.state.tournament_fixtures}
+                    touchOutside={(id) => this.showFixture(id)}
+                    visible={this.state.is_show_dialog} />
+
+
                 {this.listHeader()}
                 {this.state.tournaments.length != 0 ?
                     <FlatList
                         //ListHeaderComponent={() => this.listHeader()}
-                        data={this.state.tournaments}
-                        extraData={this.state.tournaments}
+                        data={data}
+                        extraData={data}
                         renderItem={this._renderItem}
                     /> :
                     <View

@@ -1,19 +1,49 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, ImageBackground, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
+import { getTournamentResultListing, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
+import { connect } from 'react-redux';
+import { getData } from "../../components/auth";
+import Spinner from 'react-native-loading-spinner-overlay';
+import Moment from 'moment';
 
 
-export default class UpcomingRoute extends BaseComponent {
+class ResultsRoute extends BaseComponent {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            data: ["", "", ""],
+            tournaments: [],
             query: '',
+            spinner: false,
         }
+    }
+
+    componentDidMount() {
+
+        getData('header', (value) => {
+
+            this.props.getTournamentResultListing(value).then(() => {
+                let data = this.props.data.data
+                console.log(' getTournamentResultListing ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    console.log(' getTournamentResultListing ' + JSON.stringify(data.data.tournaments));
+
+                    this.setState({
+                        tournaments: data.data.tournaments
+                    })
+                }
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        })
     }
 
 
@@ -26,6 +56,14 @@ export default class UpcomingRoute extends BaseComponent {
         console.log('regex ', regex)
         return suggestionResult.filter(item => item.name.search(regex) >= 0);
     }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
+
 
     listHeader() {
 
@@ -61,180 +99,155 @@ export default class UpcomingRoute extends BaseComponent {
             </View>
         )
     }
-    _renderItem = ({ item }) => (
 
-        <TouchableOpacity activeOpacity={.8}
-            onPress={() => {
-                this.props.navigation.navigate('ResultsTournamentDetail')
-            }}>
+    _renderItem = ({ item }) => {
+        console.warn(item.name)
 
-            <Card
-                style={{
-                    borderRadius: 16,
-                    marginLeft: 16,
-                    marginRight: 16,
-                    marginTop: 8,
-                    marginBottom: 8,
-                    elevation: 2
+        let array = []
+        if (item.winners) {
 
+            for (var key in item.winners) {
+                if (item.winners.hasOwnProperty(key)) {
+                    console.log("KEY = >", key)
+                    let data = item.winners[key]
+
+                    array.push(
+                        <View>
+
+
+                            <Text style={{
+                                fontSize: 10,
+                                color: '#A3A5AE',
+                                fontFamily: 'Quicksand-Regular'
+                            }}>
+                                Winner {key}
+                            </Text>
+
+                            <View style={{
+                                paddingTop: 8,
+                                flexDirection: 'row',
+                                flex: 1,
+                                justifyContent: 'space-between'
+                            }}>
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {data.name}
+                                </Text>
+
+                                <Text style={defaultStyle.regular_text_14}>
+                                    1st
+                                </Text>
+
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {"   -   "}
+                                </Text>
+
+                            </View>
+                        </View>
+                    )
+                }
+            }
+        }
+
+        return (
+
+            <TouchableOpacity activeOpacity={.8}
+                onPress={() => {
+                    this.props.navigation.navigate('ResultsTournamentDetail',{
+                        data:JSON.stringify(item)
+                    })
                 }}>
-                <View>
-                    <Image style={{ height: 150, width: "100%", borderRadius: 16, }}
-                        source={require('../../images/tournament_banner.png')}
-                    >
 
-                    </Image>
+                <Card
+                    style={{
+                        borderRadius: 16,
+                        marginLeft: 16,
+                        marginRight: 16,
+                        marginTop: 8,
+                        marginBottom: 8,
+                        elevation: 2
 
-                    <View style={{
-                        paddingLeft: 16,
-                        paddingTop: 8,
-                        paddingBottom: 8
                     }}>
+                    <View>
+                        <Image style={{ height: 150, width: "100%", borderRadius: 16, }}
+                            source={{ uri: item.cover_pic }}
+                        >
 
+                        </Image>
 
                         <View style={{
-                            paddingTop: 12, paddingRight: 12,
-                            flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                            paddingLeft: 16,
+                            paddingTop: 8,
+                            paddingBottom: 8
                         }}>
 
-                            <Text style={defaultStyle.bold_text_14}>
-                                Feather Academy Tournament
-                    </Text>
 
-                            <Image
-                                style={{ width: 5, height: 12, }}
-                                source={require('../../images/forward.png')}
+                            <View style={{
+                                paddingTop: 12, paddingRight: 12,
+                                flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                            }}>
+
+                                <Text style={defaultStyle.bold_text_14}>
+                                    {item.name}
+                                </Text>
+
+                                <Image
+                                    resizeMode="contain"
+                                    style={{ width: 7, height: 13, }}
+                                    source={require('../../images/forward.png')} />
+                            </View>
+
+
+                            <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+
+                                <Text style={defaultStyle.bold_text_14}>
+                                    {item.month + " " + item.year}
+                                </Text>
+
+                                <Text style={defaultStyle.blue_rounded_4}>{item.academic_type}</Text>
+
+                            </View>
+
+                            <Text style={{
+                                paddingTop: 6,
+                                fontSize: 14,
+                                color: '#404040',
+                                fontFamily: 'Quicksand-Regular'
+                            }}>
+                                Dates <Text style={defaultStyle.bold_text_14}>{Moment(item.start_date).format('DD MMM YY')}</Text>
+                            </Text>
+
+
+                            {/* <Image
+                                style={{
+                                    height: 86,
+                                    marginTop: 23,
+                                    marginRight: 12,
+                                    borderRadius: 8,
+                                    marginBottom: 20,
+                                    width: "100%"
+                                }}
+                                resizeMode="contain"
+                                source={require('../../images/view_gallery.png')}
                             >
 
-                            </Image>
-
-                        </View>
-
-
-                        <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
-
-                            <Text style={defaultStyle.bold_text_14}>
-                                May 2019
-                    </Text>
-
-                            <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
-
-                        </View>
-
-                        <Text style={{
-                            paddingTop: 6,
-                            fontSize: 14,
-                            color: '#404040',
-                            fontFamily: 'Quicksand-Regular'
-                        }}>
-                            Dates <Text style={defaultStyle.bold_text_14}>05 May 19</Text>
-                        </Text>
-
-                        <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
-
-                        <View style={{ marginBottom: 8, marginRight: 12 }}>
-
-
-                            <Text style={{
-                                fontSize: 10,
-                                color: '#A3A5AE',
-                                fontFamily: 'Quicksand-Regular'
+                            </Image> */}
+                            {/* <View style={{
+                                color: '#4B4B4B',
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                alignItems: 'center',
                             }}>
-                                Winner Singles
-                        </Text>
 
-                            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                                <Text style={[defaultStyle.bold_text_14,
+                                { justifyContent: 'center', color: 'white' }]}>View Gallery</Text>
 
-                                <Text style={{
-                                    paddingTop: 10,
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Prithiviraj
-                    </Text>
-                                <Text style={{
-                                    paddingTop: 10,
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    1st
-                    </Text>
-                                <Text style={{
-                                    paddingTop: 10,
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Feather Academy
-                    </Text>
+                            </View> */}
 
+                            <View style={{ marginTop: 12, marginBottom: 8, marginRight: 12 }}>
+                                {array}
                             </View>
-                        </View>
-
-                        <View style={{ marginBottom: 8, marginRight: 12, marginTop: 4 }}>
 
 
-                            <Text style={{
-                                fontSize: 10,
-                                color: '#A3A5AE',
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
-                                Winner Doubles
-                        </Text>
-
-                            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-
-                                <Text style={{
-                                    paddingTop: 10, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Prithiviraj
-                    </Text>
-                                <Text style={{
-                                    paddingTop: 10, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    1st
-                    </Text>
-                                <Text style={{
-                                    paddingTop: 10, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Feather Academy
-                    </Text>
-
-                            </View>
-                            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-
-                                <Text style={{
-                                    paddingTop: 10, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Prithiviraj
-                                </Text>
-                                <Text style={{
-                                    paddingTop: 10, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-
-                                </Text>
-                                <Text style={{
-                                    paddingTop: 10,
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Feather Academy
-                             </Text>
-
-                            </View>
 
                             <TouchableOpacity activeOpacity={.8}
                                 onPress={() => {
@@ -261,40 +274,67 @@ export default class UpcomingRoute extends BaseComponent {
 
                     </View>
 
+                </Card>
+            </TouchableOpacity>
 
-                </View>
-
-            </Card>
-        </TouchableOpacity>
-
-    );
+        )
+    };
 
     render() {
 
-        // if (this.props.data.loading && !this.state.isAutoSuggest) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
+        if (this.props.data.loading && this.state.tournaments.length == 0) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
 
         return (
 
             <View style={styles.chartContainer}>
 
-                <FlatList
-                    ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.data}
-                    extraData={this.state.data}
-                    renderItem={this._renderItem}
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
                 />
+                {this.listHeader()}
+
+                {this.state.tournaments.length != 0 ?
+                    <FlatList
+                        //ListHeaderComponent={() => this.listHeader()}
+                        data={this.state.tournaments}
+                        extraData={this.state.tournaments}
+                        renderItem={this._renderItem}
+                    /> :
+                    <View
+                        style={{
+
+                            alignSelf: 'center',
+                            marginTop: 150,
+                            justifyContent: 'center', flex: 1, alignItems: 'center'
+                        }}
+                    >
+
+                        <Text style={[defaultStyle.regular_text_14, {
+                            justifyContent: 'center',
+                            flex: 1, textAlign: 'center',
+                        }]}>No Tournament found</Text></View>
+                }
 
             </View>
         );
     }
 }
-
+const mapStateToProps = state => {
+    return {
+        data: state.TournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getTournamentResultListing, getTournamentFixture
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ResultsRoute);
 
 const styles = StyleSheet.create({
     chartContainer: {

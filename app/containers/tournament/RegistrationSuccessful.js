@@ -4,6 +4,10 @@ import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
+import { CustomeButtonB } from '../../components/Home/Card';
+import { getData } from '../../components/auth';
+import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
+
 
 export default class RegistrationSuccessful extends BaseComponent {
 
@@ -87,6 +91,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 fontSize: 14,
                                 color: '#000000',
                                 marginTop: 16,
+                                marginBottom: 4,
                                 fontFamily: 'Quicksand-Medium'
                             }}>
                                 Registration Sucessfull!
@@ -178,14 +183,34 @@ export default class RegistrationSuccessful extends BaseComponent {
 
                             <TouchableOpacity activeOpacity={.8}
                                 onPress={() => {
+                                    this.props.navigation.navigate('RegistrationSteps')
+                                    //console.warn('Done')
+                                }}
+                            >
+                                <View style={{
+                                    marginTop: 16,
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]}>
+                                        Register another Player?
+                                </Text>
+                                </View>
+                            </TouchableOpacity>
+
+
+                            <TouchableOpacity activeOpacity={.8}
+                                style={{ marginTop: 20 }}
+                                onPress={() => {
                                     //this.props.navigation.navigate('TournamentFixture')
                                     console.warn('Done')
                                 }}
                             >
 
-                                <View style={{
+                                {/* <View style={{
                                     width: '100%',
-                                    marginTop: 12,
+                                    marginTop: 16,
                                     marginBottom: 8,
                                     flex: 1,
                                     justifyContent: 'center',
@@ -195,7 +220,52 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     <Text style={style.rounded_button}>
                                         Finish Registration
                                 </Text>
+                                </View> */}
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: "100%"
+                                }}>
+
+                                    <View style={{
+                                        flex: 1,
+                                        width: 200,
+                                    }}>
+                                        <CustomeButtonB
+                                            onPress={() => {
+                                                getData('userInfo', (value) => {
+                                                    userData = (JSON.parse(value))
+                                                    // onSignIn()
+                                                    let userType = userData.user['user_type']
+                                                    console.log("SplashScreen=> ", JSON.stringify(userData));
+                                                    console.warn('userType ', userType == PLAYER)
+                                                    console.warn('academy_id ', userData.academy_id)
+
+                                                    if (userType == GUEST) {
+                                                        this.props.navigation.navigate('GHome')
+                                                    }
+                                                    else if (userData.academy_id != null) {
+                                                        console.log('data=> ', userData);
+                                                        if (userType == GUEST) {
+                                                            this.props.navigation.navigate('GHome')
+                                                        } else if (userType == PLAYER) {
+                                                            this.props.navigation.navigate('UHome')
+
+                                                        } else if (userType == COACH || userType == ACADEMY) {
+                                                            this.props.navigation.navigate('CHome')
+                                                        }
+                                                        else if (userType == PARENT) {
+                                                            this.props.navigation.navigate('PHome')
+                                                        }
+                                                    }
+                                                });
+                                            }}
+                                        >
+                                            Finish Registration
+                                    </CustomeButtonB>
+                                    </View>
                                 </View>
+
                             </TouchableOpacity>
 
                         </View>

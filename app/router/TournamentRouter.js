@@ -10,11 +10,11 @@ import UpcomingTournamentDetail from "../containers/tournament/UpcomingTournamen
 import TournamentScorer from "../containers/tournament/TournamentScorer";
 import RegisteredTournamentDetail from "../containers/tournament/RegisteredTournamentDetail";
 import AddPartner from "../containers/tournament/AddPartner";
-import {createStackNavigator} from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 import TournamentTabs from "../containers/tournament/TournamentTabs";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 const TournamentModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
     TournamentTabs: {
@@ -40,10 +40,10 @@ const TournamentModule = createStackNavigator({
             title: 'Tournament',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={true}
+                showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                                           navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -58,10 +58,10 @@ const TournamentModule = createStackNavigator({
             title: 'Registered Tournament',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={true}
+                showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                                           navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -72,14 +72,14 @@ const TournamentModule = createStackNavigator({
     ResultsTournamentDetail: {
         screen: ResultsTournamentDetail,
         navigationOptions: ({ navigation }) => ({
-            title: 'Featther accademy Tournament',
+            title: 'Tournament Results',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={true}
+                showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                                           navigation={navigation}
-                                           showNotification={true} />,
+                navigation={navigation}
+                showNotification={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -95,10 +95,10 @@ const TournamentModule = createStackNavigator({
             title: 'Fixture',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={true}
+                showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                                           navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -106,19 +106,19 @@ const TournamentModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
-    
-    
+
+
     TournamentScorer: {
         screen: TournamentScorer,
         navigationOptions: ({ navigation }) => ({
             title: 'Tournament Scorer',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showBackAction={true}
-                                                   showDrawer={false}
+                showBackAction={true}
+                showDrawer={false}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                                           navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },

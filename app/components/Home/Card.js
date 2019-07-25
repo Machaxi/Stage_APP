@@ -80,9 +80,10 @@ const styles = StyleSheet.create({
     },
 
     textStyleB: {
-        fontSize: 20,
+        fontSize: 14,
         color: '#FFFFFF',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Medium'
     },
 
     buttonStyleB: {

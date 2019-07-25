@@ -2,20 +2,27 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
+import Moment from 'moment';
 
 
 export default class ResultsTournamentDetail extends BaseComponent {
 
+
     constructor(props) {
         super(props)
+        this.state = {
+            data: {}
+        }
+        this.state.data = JSON.parse(this.props.navigation.getParam('data'));
 
     }
 
 
     render() {
 
+        let data = this.state.data
         // if (this.props.data.loading && !this.state.isAutoSuggest) {
         //     return (
         //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -36,7 +43,7 @@ export default class ResultsTournamentDetail extends BaseComponent {
                         }}>
                         <View style={{ marginLeft: 8, marginRight: 8, marginTop: 2 }}>
                             <Image style={{ height: 150, width: "100%" }}
-                                source={require('../../images/tournament_banner.png')}
+                                source={{ uri: data.cover_pic }}
                             />
 
 
@@ -52,38 +59,29 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                     justifyContent: 'space-between'
                                 }}>
 
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        Feather Academy Tournament
-                    </Text>
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {data.name}
+                                    </Text>
 
                                     <Image
+                                        resizeMode="contain"
                                         style={{ width: 16, height: 18, marginRight: 8 }}
                                         source={require('../../images/share.png')}
-                                    >
-
-                                    </Image>
+                                    />
 
                                 </View>
 
 
                                 <View style={{ paddingTop: 8, flexDirection: 'row' }}>
 
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        May 2019
-                    </Text>
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {data.month + " " + data.year}
+                                    </Text>
 
                                     <Text style={{
                                         backgroundColor: '#667DDB',
                                         textAlign: 'center',
-                                        fontSize: 12,
+                                        fontSize: 11,
                                         marginLeft: 8,
                                         color: 'white',
                                         borderRadius: 4,
@@ -91,8 +89,8 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                         paddingRight: 6,
                                         paddingTop: 2,
                                         paddingBottom: 2,
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>Inter-Academy</Text>
+                                        fontFamily: 'Quicksand-Medium'
+                                    }}>{data.academic_type}</Text>
 
                                 </View>
 
@@ -101,16 +99,15 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
-                                    Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                    Dates <Text style={defaultStyle.bold_text_14}>
+                                        {Moment(data.start_date).format('DD MMM') + " - " + Moment(data.end_date).format('DD MMM')}
+                                    </Text>
                                 </Text>
 
 
-                                <Text style={{
-                                    paddingTop: 15, fontSize: 14,
-                                    color: '#404040',
-                                    fontWeight: '400',
-                                    fontFamily: 'Quicksand-Medium'
-                                }}>
+                                <Text style={[defaultStyle.bold_text_14, {
+                                    paddingTop: 24,
+                                }]}>
                                     Fixtures
                                 </Text>
 

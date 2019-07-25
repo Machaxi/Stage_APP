@@ -1057,24 +1057,7 @@ const parentDrawer = createDrawerNavigator({
     }
 );
 const TournamentRegistration = createStackNavigator({
-    Registration: {
-        screen: Registration,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Registration',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
 
-            headerTintColor: '#000',
-        }),
-    },
     RegistrationSteps: {
         screen: RegistrationSteps,
         // navigationOptions: ({ navigation }) => ({
@@ -1093,7 +1076,24 @@ const TournamentRegistration = createStackNavigator({
         //     headerTintColor: '#000',
         // }),
     },
+    Registration: {
+        screen: Registration,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Registration',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+            headerTintColor: '#000',
+        }),
+    },
     AddPartner: {
         screen: AddPartner,
         navigationOptions: ({ navigation }) => ({
@@ -1104,7 +1104,7 @@ const TournamentRegistration = createStackNavigator({
                 showDrawer={false}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -1136,11 +1136,11 @@ const TournamentRegistration = createStackNavigator({
             title: 'Tournament Registration',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
+                showBackAction={false}
                 showDrawer={false}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },

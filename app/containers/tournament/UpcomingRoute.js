@@ -45,13 +45,13 @@ class UpcomingRoute extends BaseComponent {
 
 
     find(query) {
+        let tournaments = this.state.tournaments
         if (query === '') {
-            return [];
+            return tournaments;
         }
-        const { suggestionResult } = this.state;
         const regex = new RegExp(`${query.trim()}`, 'i');
         console.log('regex ', regex)
-        return suggestionResult.filter(item => item.name.search(regex) >= 0);
+        return tournaments.filter(item => item.name.search(regex) >= 0);
     }
 
     listHeader() {
@@ -67,12 +67,20 @@ class UpcomingRoute extends BaseComponent {
                 }}>
                 <Card style={{ borderRadius: 16, elevation: 1 }}>
 
-                    <TextInput style={{
-                        marginLeft: 8,
-                        backgroundColor: 'white',
-                        borderRadius: 16,
-                        fontFamily: 'Quicksand-Regular'
-                    }} placeholder="Search"></TextInput>
+                    <TextInput
+                        onChangeText={text => {
+                            this.state.query = text
+                            //console.warn(this.state.query)
+                            this.setState({
+                                query: text
+                            })
+                        }}
+                        style={{
+                            marginLeft: 8,
+                            backgroundColor: 'white',
+                            borderRadius: 16,
+                            fontFamily: 'Quicksand-Regular'
+                        }} placeholder="Search"></TextInput>
 
 
                 </Card>
@@ -129,7 +137,8 @@ class UpcomingRoute extends BaseComponent {
                             </Text>
 
                             <Image
-                                style={{ width: 5, height: 12, }}
+                                resizeMode="contain"
+                                style={{ width: 7, height: 13, }}
                                 source={require('../../images/forward.png')}
                             >
 
@@ -189,6 +198,7 @@ class UpcomingRoute extends BaseComponent {
                 </View>
             )
         }
+        const data = this.find(this.state.query);
 
         return (
 
@@ -198,8 +208,8 @@ class UpcomingRoute extends BaseComponent {
 
                 {this.state.tournaments.length != 0 ?
                     <FlatList
-                        data={this.state.tournaments}
-                        extraData={this.state.tournaments}
+                        data={data}
+                        extraData={data}
                         renderItem={this._renderItem}
                     /> :
                     <View

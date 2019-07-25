@@ -674,7 +674,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-				{this.state.related_players.length != 0
+				{this.state.related_guardians.length != 0
 					?
 					<View style={{
 						paddingLeft: 16,

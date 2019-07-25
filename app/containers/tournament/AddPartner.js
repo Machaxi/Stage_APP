@@ -6,26 +6,66 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent, {EVENT_SELECT_PLAYER_TOURNAMENT} from './../BaseComponent'
+import BaseComponent, {EVENT_SELECT_PLAYER_TOURNAMENT,EVENT_SELECT_PLAYER_ADD_NUMBER, defaultStyle} from './../BaseComponent'
 import Events from '../../router/events';
+import { getPartnerList } from "../../redux/reducers/TournamentReducer";
+import { getData } from "../../components/auth";
 
-export default class AddPartner extends BaseComponent {
+class AddPartner extends BaseComponent {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            data: ["", "", "", "", "", ""],
+            players: [],
             query: '',
-            item_id:''
+            item_id:'',
+            tournament_id:''
         }
         this.state.item_id = this.props.navigation.getParam('id','')
+        this.state.tournament_id = this.props.navigation.getParam('tournament_id','')
+        
+        this.refreshEvent = Events.subscribe('AddPartner', (args) => {
+            Events.publish(EVENT_SELECT_PLAYER_TOURNAMENT,
+               args);
+              this.props.navigation.goBack()
+
+        });
+    }
+
+    componentDidMount(){
+
+        getData('header', (value) => {
+
+            let size = 20
+            let page =0
+            let tournament_id = this.state.tournament_id
+
+            this.props.getPartnerList(value,tournament_id,page,size).then(() => {
+                let data = this.props.data.data
+                console.log(' getTournamentResultListing ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    console.log(' getTournamentResultListing ' + JSON.stringify(data.data.tournaments));
+
+                    this.setState({
+                        players: data.data.players
+                    })
+                }
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        })
     }
 
 
     find(query) {
+        let players = this.state.players
         if (query === '') {
-            return [];
+            return players;
         }
         const { suggestionResult } = this.state;
         const regex = new RegExp(`${query.trim()}`, 'i');
@@ -42,7 +82,7 @@ export default class AddPartner extends BaseComponent {
                 //this.props.navigation.navigate('AcademyProfile', { id: item.id })
                 this.props.navigation.goBack()
                 Events.publish(EVENT_SELECT_PLAYER_TOURNAMENT,
-                    {name:'Raj',phone:'919999999999',id:id});
+                    {name:item.name,phone:'-',id:id});
             }}>
 
             <Card
@@ -61,17 +101,14 @@ export default class AddPartner extends BaseComponent {
                 paddingLeft:16}}
                 >
                     <Image style={{ height: 50, width: 45, borderRadius: 16, }}
-                        source={require('../../images/player_small.png')}
-                    >
+                        source={{uri:item.profile_pic}} />
 
-                    </Image>
-
-                    <Text style={{
-                        paddingLeft: 12, fontSize: 16,
-                        color: '#707070',
-                        fontFamily: 'Quicksand-Regular'
-                    }}>
-                        Rohit J.
+                    <Text style={
+                        [defaultStyle.regular_text_14,
+                            {paddingLeft: 12, 
+                                color: '#707070',
+                                }] }>
+                       {item.name}
                     </Text>
 
                 </View>
@@ -85,13 +122,13 @@ export default class AddPartner extends BaseComponent {
 
         const autoData = this.find(this.state.query);
 
-        // if (this.props.data.loading && !this.state.isAutoSuggest) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
+        if (this.props.data.loading && this.state.players.length==0) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
 
         return (
 
@@ -119,7 +156,11 @@ export default class AddPartner extends BaseComponent {
 
                     <TouchableOpacity activeOpacity={.8}
                     onPress={()=>{
-                        this.props.navigation.navigate('AddPartnerWithPhone')
+                        let id = this.state.item_id
+                        this.props.navigation.navigate('AddPartnerWithPhone',{
+                            id:id
+                        })
+                        
                     }}
                     >
 
@@ -141,9 +182,10 @@ export default class AddPartner extends BaseComponent {
                     
                 </View>
                 
+                {}
                 <FlatList
-                    data={this.state.data}
-                    extraData={this.state.data}
+                    data={autoData}
+                    extraData={autoData}
                     renderItem={this._renderItem}
                 />
 
@@ -151,6 +193,15 @@ export default class AddPartner extends BaseComponent {
         );
     }
 }
+const mapStateToProps = state => {
+    return {
+        data: state.TournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getPartnerList
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AddPartner);
 
 
 

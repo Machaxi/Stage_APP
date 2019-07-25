@@ -1,17 +1,27 @@
 import React from 'react'
 
-import { View, Text, Image, Modal } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT } from '../BaseComponent';
+import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
+import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, goToHome } from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
 import { getData } from '../../components/auth';
-import { registerTournament } from "../../redux/reducers/TournamentReducer";
+import { registerTournament, getPlayerSWitcher } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
+import RNPickerSelect from 'react-native-picker-select'
+import AbortDialog from './AbortDialog'
+import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
+
+const placeholder = {
+    label: 'Select ',
+    value: null,
+    color: '#A3A5AE',
+};
 
 class RegistrationSteps extends BaseComponent {
+
 
     static navigationOptions = ({ navigation }) => {
 
@@ -41,7 +51,7 @@ class RegistrationSteps extends BaseComponent {
                 >
                     <Text
                         style={{
-                            marginRight: 12,
+                            padding: 12,
                             fontFamily: 'Quicksand-Regular',
                             fontSize: 10,
                             color: '#FF7373'
@@ -70,8 +80,11 @@ class RegistrationSteps extends BaseComponent {
         } else if (step == 2) {
             step = 1;
         } else if (step == 1) {
-            this.props.navigation.goBack()
+            this.setState({
+                show_alert: true
+            })
         }
+
         this.setState({
             step: step,
             subStep: subStep
@@ -88,7 +101,7 @@ class RegistrationSteps extends BaseComponent {
         super(props)
         this.state = {
             birthdate: "",
-            txtname: 'Prithviraj',
+            txtname: '',
             txtphone: '',
             step: 1,
             subStep: 0,
@@ -100,10 +113,18 @@ class RegistrationSteps extends BaseComponent {
             tournament_types: [],
             user_selection: [],
             show_alert: false,
-            user_id: '',
-            spinner: false
-
+            //user_id: '',
+            spinner: false,
+            is_player_selected: false, //if selected then show tournament category
+            players: [],
+            country: '',
+            new_array: [], // this is for picker,
+            selected_player: null
         }
+
+        this.inputRefs = {
+            country: null
+        };
 
         const { navigation } = this.props
         navigation.setParams({
@@ -111,12 +132,12 @@ class RegistrationSteps extends BaseComponent {
             goBackAction: this.goBackAction
         })
 
-        getData('userInfo', (value) => {
-            console.log('userInfo => ' + value)
-            let userData = JSON.parse(value)
-            this.state.user_id = userData.user['id']
-            console.log('userId= > ', this.state.user_id)
-        });
+        // getData('userInfo', (value) => {
+        //     console.log('userInfo => ' + value)
+        //     let userData = JSON.parse(value)
+        //     this.state.user_id = userData.user['id']
+        //     console.log('userId= > ', this.state.user_id)
+        // });
 
         getData('detail', (value) => {
 
@@ -178,6 +199,102 @@ class RegistrationSteps extends BaseComponent {
         });
         ///===============================================================
 
+
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
+    }
+    componentDidMount() {
+        this.getPlayerList()
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.setState({
+            show_alert: true
+        })
+        return true;
+    }
+
+    getPlayerList() {
+
+        this.progress(true)
+
+        getData('header', (value) => {
+            console.log("header", value);
+            this.props.getPlayerSWitcher(value).then(() => {
+
+                this.progress(false)
+
+                let user = JSON.stringify(this.props.data.data);
+                console.log(' getPlayerSWitcher payload ' + user);
+                let user1 = JSON.parse(user)
+
+                let uniqueArray = []
+                if (user1.success == true) {
+                    let itemList = user1.data['players']
+                    for (let i = 0; i < itemList.length; i++) {
+
+                        let obj = itemList[i]
+                        if (!this.isPlayerExists(obj.id, uniqueArray)) {
+                            uniqueArray.push(obj)
+                        }
+                    }
+                    this.setState({
+                        players: uniqueArray
+                    })
+                    //console.warn('uniqueArray => ', JSON.stringify(uniqueArray))
+
+                    let new_array = []
+                    for (let i = 0; i < uniqueArray.length; i++) {
+                        let row = uniqueArray[i];
+                        let obj = {
+                            label: row.name,
+                            value: row.id,
+                        }
+                        new_array[i] = obj
+                    }
+                    this.setState({
+                        new_array: new_array
+                    })
+                }
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+                this.progress(false)
+            })
+
+        });
+
+    }
+    isPlayerExists(id, uniqueArray) {
+
+        for (let i = 0; i < uniqueArray.length; i++) {
+            let obj = uniqueArray[i]
+            if (obj.id == id) {
+                return true
+            }
+        }
+        return false
+    }
+
+    getPlayerById(id) {
+        let selected_obj = null
+        let players = this.state.players
+        for (let i = 0; i < players.length; i++) {
+            let obj = players[i]
+            if (obj.id == id) {
+                selected_obj = obj;
+            }
+        }
+        return selected_obj
     }
 
     progress(status) {
@@ -191,6 +308,9 @@ class RegistrationSteps extends BaseComponent {
     }
 
     showStepOne() {
+
+        let is_player_selected = this.state.is_player_selected
+
         return (
             <ScrollView>
                 <View style={{ elevation: 1 }}>
@@ -207,141 +327,184 @@ class RegistrationSteps extends BaseComponent {
                             fontSize: 14,
                             color: '#000000'
                         }}>
-                            Select Category
+                            Select Player
                     </Text>
 
-                        <Text style={{
+                    </View>
+
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+
+                        {/* <Text style={{
                             color: '#404040',
                             fontSize: 14,
+
                             marginTop: 20,
                             fontFamily: 'Quicksand-Medium',
                         }}>
                             Prithviraj P
-                    </Text>
-
-                    </View>
-
-                    <View
-                        style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: 30
+                        </Text> */}
+                        <RNPickerSelect style={{
+                            width: '90%',
                         }}
-                    >
-                        <Text style={style.text1}>
-                            Gender
-                    </Text>
-
-                        <Text style={{
-                            color: '#404040',
-                            fontSize: 14,
-                            marginTop: 6,
-                            fontFamily: 'Quicksand-Regular',
-                        }}>
-                            Male
-                    </Text>
-                    </View>
-
-                    <View
-                        style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: 20
-                        }}
-                    >
-                        <Text style={style.text1}>
-                            Select player to play
-                    </Text>
-
-
-                        <FlatList
-                            data={this.state.tournament_selection}
-                            renderItem={({ item }) =>
-                                <CheckBox
-                                    checkedIcon={<Image style={{
-                                        width: 18,
-                                        height: 18
-                                    }} resizeMode="contain" source={require('../../images/ic_checkbox_on.png')} />}
-                                    uncheckedIcon={<Image style={{
-                                        width: 18,
-                                        height: 18
-                                    }} resizeMode="contain" source={require('../../images/ic_checkbox_off.png')} />}
-                                    containerStyle={{
-                                        backgroundColor: 'white',
-                                        borderWidth: 0,
-                                        padding: 4,
-                                        margin: 0,
-                                        marginTop: 20,
-
-                                    }}
-                                    checked={item.selected}
-                                    onPress={() => {
-                                        let tournament_selection = [...this.state.tournament_selection];
-                                        let index = tournament_selection.findIndex(el => el.title === item.title);
-                                        tournament_selection[index] = { ...tournament_selection[index], selected: !item.selected };
-                                        this.setState({ tournament_selection });
-
-                                    }
-                                    }
-                                    style={{ marginTop: -4 }}
-                                    title={item.title}
-                                    style={{
-                                        color: '#404040',
-                                        backgroundColor: 'white',
-                                    }}
-                                />
-                            }
-                        />
-
-                    </View>
-
-
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        marginTop: 40,
-                        marginBottom: 40
-                    }}>
-
-                        <TouchableOpacity activeOpacity={.8}
-                            style={style.rounded_button}
-                            onPress={() => {
-
-                                let tournament = this.state.tournament_selection
-                                let count = 0
-                                let checked_category = []
-                                let template = []
-                                for (let i = 0; i < tournament.length; i++) {
-                                    if (tournament[i].selected) {
-                                        checked_category[count] = tournament[i].title
-                                        let detail = {
-                                            title: tournament[i].title,
-                                            tournament_types: [...this.state.tournament_types]
-                                        }
-                                        template[count++] = detail
-                                    }
-                                }
-                                this.state.checked_category = checked_category;
-                                let size = checked_category.length
-                                this.state.user_selection = template
-
-                                if (size == 0) {
-                                    alert('Please select atleast one category')
-                                } else {
-                                    console.warn('userselection=>', this.state.user_selection)
+                            placeholder={placeholder}
+                            items={this.state.new_array}
+                            onValueChange={(value) => {
+                                //console.warn(value)
+                                if (value != null) {
+                                    let player = this.getPlayerById(value)
+                                    this.state.txtname = player.name
                                     this.setState({
-                                        step: this.state.step + 1,
-                                        selected_tour_size: size,
-                                    })
+                                        country: value,
+                                        selected_player: player,
+                                        is_player_selected: true
+                                    });
                                 }
-
-
-                            }}>
-                            <Text style={style.rounded_button_text}>
-                                Next</Text>
-                        </TouchableOpacity>
-
+                            }}
+                            style={pickerSelectStyles}
+                            value={this.state.country}
+                            useNativeAndroidPickerStyle={false}
+                            ref={(el) => {
+                                this.inputRefs.country = el;
+                            }}
+                        />
                     </View>
+
+                    {is_player_selected ?
+                        <View>
+
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginTop: 20
+                                }}
+                            >
+
+                                <Image
+                                    style={{ width: 80, height: 100 }}
+                                    source={require('../../images/edit_profile_holder.png')} />
+                                <Text style={[style.text1, { marginTop: 10 }]}>
+                                    Gender
+                                </Text>
+
+                                <Text style={{
+                                    color: '#404040',
+                                    fontSize: 14,
+                                    marginTop: 6,
+                                    fontFamily: 'Quicksand-Regular',
+                                }}>
+                                    Male
+                    </Text>
+                            </View>
+
+
+
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginTop: 20
+                                }}
+                            >
+                                <Text style={style.text1}>
+                                    Select player to play
+                </Text>
+
+
+                                <FlatList
+                                    data={this.state.tournament_selection}
+                                    renderItem={({ item }) =>
+                                        <CheckBox
+                                            checkedIcon={<Image style={{
+                                                width: 18,
+                                                height: 18
+                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_on.png')} />}
+                                            uncheckedIcon={<Image style={{
+                                                width: 18,
+                                                height: 18
+                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_off.png')} />}
+                                            containerStyle={{
+                                                backgroundColor: 'white',
+                                                borderWidth: 0,
+                                                padding: 4,
+                                                margin: 0,
+                                                marginTop: 20,
+
+                                            }}
+                                            checked={item.selected}
+                                            onPress={() => {
+                                                let tournament_selection = [...this.state.tournament_selection];
+                                                let index = tournament_selection.findIndex(el => el.title === item.title);
+                                                tournament_selection[index] = { ...tournament_selection[index], selected: !item.selected };
+                                                this.setState({ tournament_selection });
+
+                                            }
+                                            }
+                                            style={{ marginTop: -4 }}
+                                            title={item.title}
+                                            style={{
+                                                color: '#404040',
+                                                backgroundColor: 'white',
+                                            }}
+                                        />
+                                    }
+                                />
+
+                            </View>
+
+
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                marginTop: 40,
+                                marginBottom: 40
+                            }}>
+
+                                <TouchableOpacity activeOpacity={.8}
+                                    style={style.rounded_button}
+                                    onPress={() => {
+
+                                        let tournament = this.state.tournament_selection
+                                        let count = 0
+                                        let checked_category = []
+                                        let template = []
+                                        for (let i = 0; i < tournament.length; i++) {
+                                            if (tournament[i].selected) {
+                                                checked_category[count] = tournament[i].title
+                                                let detail = {
+                                                    title: tournament[i].title,
+                                                    tournament_types: [...this.state.tournament_types]
+                                                }
+                                                template[count++] = detail
+                                            }
+                                        }
+                                        this.state.checked_category = checked_category;
+                                        let size = checked_category.length
+                                        this.state.user_selection = template
+
+                                        if (size == 0) {
+                                            alert('Please select at least one category')
+                                        } else {
+                                            //console.warn('userselection=>', this.state.user_selection)
+                                            this.setState({
+                                                step: this.state.step + 1,
+                                                selected_tour_size: size,
+                                            })
+                                        }
+
+
+                                    }}>
+                                    <Text style={style.rounded_button_text}>
+                                        Next</Text>
+                                </TouchableOpacity>
+
+                            </View>
+                        </View>
+                        : null}
                 </View>
             </ScrollView>
         )
@@ -485,7 +648,10 @@ class RegistrationSteps extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
 
                                             onPress={() => {
-                                                this.props.navigation.navigate('AddPartner', { id: item.id })
+                                                this.props.navigation.navigate('AddPartner', {
+                                                    id: item.id,
+                                                    tournament_id: this.state.data['id']
+                                                })
                                             }}
                                             style={{
                                                 backgroundColor: '#F2F2F2',
@@ -751,7 +917,7 @@ class RegistrationSteps extends BaseComponent {
         let tournament_reg_details = [];
 
         let tournament_id = this.state.data['id']
-        let user_id = this.state.user_id
+        let user_id = this.state.selected_player['user_id']
 
         let user_selection = this.state.user_selection
         for (let i = 0; i < user_selection.length; i++) {
@@ -807,6 +973,13 @@ class RegistrationSteps extends BaseComponent {
                 this.progress(false)
             })
         })
+
+        //=============BYPASS CODE================
+        // this.props.navigation.navigate('RegistrationSuccessful', {
+        //     data: JSON.stringify(this.state.data),
+        //     name: this.state.txtname,
+        //     user_selection: JSON.stringify(this.state.user_selection)
+        // })
 
     }
 
@@ -929,82 +1102,49 @@ class RegistrationSteps extends BaseComponent {
                     backgroundColor: '#F7F7F7',
                 }} >
 
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={this.state.show_alert}
-                    onRequestClose={() => {
+                <AbortDialog
+                    onYesPress={() => {
                         this.setState({
-                            show_alert: false
+                            show_alert:false
                         })
-                    }}>
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //backgroundColor: '#0E0E0E',
-                        //opacity: 0.56,
-                        backgroundColor: 'rgba(52, 52, 52, 0.8)',
-                        padding: 16
-                    }}>
-                        <View style={{
-                            width: 300,
-                            borderRadius: 16,
-                            backgroundColor: 'white',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: 300,
-                        }}>
+                        setTimeout(()=>{
+                            
+                            getData('userInfo', (value) => {
+                                userData = (JSON.parse(value))
+                                // onSignIn()
+                                let userType = userData.user['user_type']
+                                console.log("SplashScreen=> ", JSON.stringify(userData));
+                                console.warn('userType ', userType == PLAYER)
+                                console.warn('academy_id ', userData.academy_id)
+                                
+                                if (userType == GUEST) {
+                                    this.props.navigation.navigate('GHome')
+                                }
+                                else if (userData.academy_id != null) {
+                                    console.log('data=> ',userData);
+                                    if (userType == GUEST) {
+                                        this.props.navigation.navigate('GHome')
+                                    } else if (userType == PLAYER) {
+                                        this.props.navigation.navigate('UHome')
+                        
+                                    } else if (userType == COACH || userType == ACADEMY) {
+                                        this.props.navigation.navigate('CHome')
+                                    }
+                                    else if (userType == PARENT) {
+                                        this.props.navigation.navigate('PHome')
+                                    }
+                                }
+                            });
 
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                    color: 'black',
-                                    fontWeight: "400",
-                                    fontFamily: 'Quicksand-Medium'
-                                }}
-                            >Abort</Text>
-
-                            <Image
-                                style={{ marginTop: 16, height: 100, width: 100 }}
-                                source={require('../../images/ic_alert_icon.png')}
-                            ></Image>
-
-                            <Text
-                                style={{
-                                    fontSize: 14,
-                                    margin: 16,
-                                    color: 'black',
-                                    textAlign: 'center',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                Are you sure you want to Abort the Registration?</Text>
-
-                            <View style={{ flexDirection: 'row', marginLeft: 12, marginRight: 12 }}>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.setState({
-                                            show_alert: false
-                                        })
-                                    }}
-                                    style={[style.touch_red_border, { marginRight: 6 }]}>
-
-                                    <Text style={style.touch_red_border_txt}>Yes</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={[style.touch_red_border, { marginRight: 6 }]}>
-
-                                    <Text style={style.touch_red_border_txt}>Yes</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                        </View>
-
-                    </View>
-                </Modal >
+                        },100)
+                        
+                    }}
+                    onNoPress={() => {
+                        this.setState({
+                            show_alert:false
+                        })
+                    }}
+                    visible={this.state.show_alert} />
 
                 <Spinner
                     visible={this.state.spinner}
@@ -1108,11 +1248,38 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    registerTournament
+    registerTournament, getPlayerSWitcher
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationSteps);
 
-
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        //paddingVertical: 12,
+        //paddingHorizontal: 10,
+        borderColor: '#D3D3D3',
+        borderWidth: 1,
+        borderRadius: 4,
+        color: 'black',
+        width: 120,
+        height: 40,
+        marginBottom: 4,
+        fontFamily: 'Quicksand-Regular',
+        // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 14,
+        textAlign: 'center',
+        width: 120,
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        fontFamily: 'Quicksand-Regular',
+        borderColor: '#A3A5AE',
+        borderRadius: 8,
+        borderBottomWidth: 1,
+        color: 'black',
+    },
+});
 const style = {
 
     rounded_button: {
@@ -1187,18 +1354,28 @@ const style = {
         fontFamily: 'Quicksand-Regular'
     },
     touch_red_border: {
-        padding: 12,
+        padding: 10,
         backgroundColor: '#ffffff',
         borderColor: '#FF7373',
         borderRadius: 23,
         borderWidth: 1,
-        width: "100%",
-        height: 45,
     },
     touch_red_border_txt: {
         fontSize: 14,
         color: '#FF7373',
-        width: "100%",
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular'
+    },
+    touch_sky_fill: {
+        padding: 10,
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        borderRadius: 23,
+    },
+    touch_sky_txt: {
+        fontFamily: 'Quicksand-Regular',
+        fontSize: 14,
+        color: 'white',
         textAlign: 'center'
     },
 }

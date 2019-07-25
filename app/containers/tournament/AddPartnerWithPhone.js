@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { EVENT_SELECT_PLAYER_ADD_NUMBER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
+import Events from '../../router/events';
 
 export default class AddPartnerWithPhone extends BaseComponent {
 
@@ -13,6 +14,25 @@ export default class AddPartnerWithPhone extends BaseComponent {
         this.state = {
             txtname: '',
             txtphone: '',
+            id: ''
+        }
+        this.state.id = this.props.navigation.getParam('id', '')
+
+    }
+
+    save() {
+        let id = this.state.id
+        let txtname = this.state.txtname
+        let txtphone = this.state.txtphone
+        if (txtname == '') {
+            alert('Name can\'t be empty')
+        }
+        else if (txtphone == '') {
+            alert('Phone number can\'t be empty')
+        } else {
+            this.props.navigation.goBack()
+            Events.publish('AddPartner',
+                { name: txtname, phone: txtphone, id: id });
         }
     }
 
@@ -47,7 +67,7 @@ export default class AddPartnerWithPhone extends BaseComponent {
                     }}
                 >
                     <Text style={style.text}>
-                    Enter Name
+                        Enter Name
                     </Text>
                     <TextInput
                         style={style.textinput}
@@ -73,14 +93,20 @@ export default class AddPartnerWithPhone extends BaseComponent {
                     </Text>
 
                     <TextInput
-                        style={style.textinput}>
-                        
-                    </TextInput>
+                        style={style.textinput}
+                        keyboardType={'number-pad'}
+                        value={this.state.txtphone}
+                        onChangeText={(txtphone) => this.setState({ txtphone: txtphone })}
+                    />
                 </View>
 
 
                 <View style={{ flex: 1, margin: 40, width: '80%' }}>
-                    <CustomeButtonB > Submit </CustomeButtonB>
+                    <CustomeButtonB
+                        onPress={() => {
+                            this.save()
+                        }}
+                    > Submit </CustomeButtonB>
                 </View>
 
             </View>
