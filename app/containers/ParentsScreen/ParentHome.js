@@ -14,6 +14,7 @@ import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 import { Rating } from 'react-native-ratings';
 import PlayerHeader from '../../components/custom/PlayerHeader'
+import { DueView } from '../../components/Home/DueView'
 
 import BaseComponent, { getFormattedLevel, defaultStyle } from '../BaseComponent'
 
@@ -67,14 +68,14 @@ class ParentHome extends BaseComponent {
             ),
             headerLeft: (
                 <TouchableOpacity
+                    style={{ marginRight: 8 }}
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
-                    activeOpacity={.8}
-                >
+                    activeOpacity={.8}>
 
                     <Image
-
+                        resizeMode="contain"
                         source={require('../../images/hamburger_white.png')}
                         style={{ width: 20, height: 16, marginLeft: 12 }}
                     />
@@ -89,9 +90,9 @@ class ParentHome extends BaseComponent {
                 >
 
                     <Image
-
+                        resizeMode="contain"
                         source={require('../../images/ic_notifications.png')}
-                        style={{ width: 20, height: 20, marginRight: 12 }}
+                        style={{ width: 20, height: 20, marginRight: 24 }}
                     />
                 </TouchableOpacity>
             )
@@ -160,28 +161,36 @@ class ParentHome extends BaseComponent {
                 console.log(' getPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
 
-                if (user1.data['coach_data'] != null && user1.data['coach_data'].length > 0) {
-                    this.setState({
-                        coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
-                    })
-                }
-
-                if (user1.data['academy_data'] != null) {
-                    this.setState({
-                        academy_feedback_data: user1.data['academy_data'].feedback[0],
-                    })
-                }
 
 
                 if (user1.success == true) {
+
+                    let coach_feedback_data = null;
+                    let academy_feedback_data = null;
+
+                    if (user1.data['coach_data'] != null && user1.data['coach_data']) {
+                        if (user1.data['coach_data'].coach_feedback != undefined)
+                            coach_feedback_data = user1.data['coach_data'].coach_feedback[0]
+                    }
+
+                    if (user1.data['academy_data'] != null) {
+                        academy_feedback_data = user1.data['academy_data'].feedback[0]
+                    }
+
+                    console.log('coach_feedback_data =>', coach_feedback_data)
+
+
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         strenthList: user1.data.player_profile['stats'],
                         acedemy_name: user1.data['player_profile'].academy_name,
-                        //academy_feedback_data: user1.data['academy_data'].feedback[0],
-                        //coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
+                        academy_feedback_data: academy_feedback_data,
+                        coach_feedback_data: coach_feedback_data,
 
                     })
+
+
+
                 }
 
             }).catch((response) => {
@@ -207,32 +216,38 @@ class ParentHome extends BaseComponent {
 
                 <Image source={require('../../images/Mysatus.png')}
                     style={{
-                        width: 50,
-                        height: 50, marginRight: 20
+                        width: 40,
+                        height: 40, marginRight: 20
                     }} />
                 <View>
 
                     <View style={{
                         marginLeft: 8,
-                        marginRight: 15,
+                        marginRight: 2,
                         marginBottom: 5,
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                     }}>
-                        <Text>
+                        <Text style={defaultStyle.bold_text_14}>
                             {item.name}
                         </Text>
-                        <Text>
+                        <Text style={defaultStyle.bold_text_12}>
                             {item.score}
                         </Text>
                     </View>
                     <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} />
                 </View>
-                <View style={{ height: 50, width: 30, alignItems: 'center', marginTop: 20, marginBottom: 20, marginRight: 10, marginLeft: 10 }}>
-                    <Image source={require('../../images/forward.png')}
+                <View style={{
+                    height: 50,
+                    width: 30,
+                    alignItems: 'center',
+                    marginTop: 26, marginRight: 10, marginLeft: 20
+                }}>
+                    <Image source={require('../../images/ic_drawer_arrow.png')}
+                        resizeMode="contain"
                         style={{
-                            width: 3,
-                            height: 8, marginRight: 10
+                            width: 5,
+                            height: 11, marginRight: 10
                         }} />
                 </View>
 
@@ -387,8 +402,8 @@ class ParentHome extends BaseComponent {
                     {is_payment_due ? <CustomeCard >
                         <View
                             style={{
-                                marginLeft: 16,
-                                marginRight: 16,
+                                marginLeft: 12,
+                                marginRight: 12,
                                 marginTop: 16
                             }}
                         >
@@ -396,15 +411,8 @@ class ParentHome extends BaseComponent {
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={defaultStyle.bold_text_10}>Payment</Text>
                                     <View
-                                        style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                        <Text style={{
-                                            margin: 5,
-                                            fontSize: 10,
-                                            fontFamily: 'Quicksand-Bold',
-                                            color: 'white',
-                                            marginRight: 10,
-                                            marginLeft: 10,
-                                        }}>Due</Text>
+                                        style={{ marginLeft: 10 }}>
+                                        <DueView />
                                     </View>
                                 </View>
                                 <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
@@ -443,8 +451,8 @@ class ParentHome extends BaseComponent {
                         <CustomeCard >
                             <View
                                 style={{
-                                    marginLeft: 16,
-                                    marginRight: 16,
+                                    marginLeft: 12,
+                                    marginRight: 12,
                                     marginTop: 16
                                 }}
                             >
@@ -452,15 +460,8 @@ class ParentHome extends BaseComponent {
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Text style={defaultStyle.bold_text_10}>Reward Points</Text>
                                         <View
-                                            style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                            <Text style={{
-                                                margin: 5,
-                                                fontSize: 10,
-                                                fontFamily: 'Quicksand-Bold',
-                                                color: 'white',
-                                                marginRight: 10,
-                                                marginLeft: 10,
-                                            }}>Due</Text>
+                                            style={{ marginLeft: 10 }}>
+                                            <DueView />
                                         </View>
                                     </View>
                                     <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
@@ -495,18 +496,46 @@ class ParentHome extends BaseComponent {
 
 
 
-                    {this.state.strenthList.length != 0 ?
-                        <View style={{ margin: 10 }}>
-                            <CustomeCard>
+                    {/* {this.state.strenthList.length != 0 ?
+
+                        <CustomeCard>
+                            <View
+                                style={{
+                                    marginLeft: 12,
+                                    marginRight: 12,
+                                    marginTop: 16
+                                }}
+                            >
                                 <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
                                 <FlatList
                                     data={this.state.strenthList}
                                     renderItem={this.renderItem}
                                     keyExtractor={(item, index) => item.id}
                                 />
-                            </CustomeCard>
-                        </View> : null
-                    }
+                            </View>
+                        </CustomeCard>
+                        : null
+                    } */}
+                    {this.state.strenthList.length != 0 ?
+                        <View style={{ margin: 10 }}>
+                            <Card style={{ borderRadius: 12 }}>
+                                <View>
+
+                                    <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                    <View style={{
+                                        width: 60,
+                                        height: 3, marginLeft: 10,
+                                        marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                    }}></View>
+
+                                    <FlatList
+                                        data={this.state.strenthList}
+                                        renderItem={this.renderItem}
+                                        keyExtractor={(item, index) => item.id}
+                                    />
+                                </View>
+                            </Card>
+                        </View> : null}
 
 
                     <View style={{ margin: 5 }}>
@@ -655,7 +684,7 @@ class ParentHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</Text>
+                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
 
                                     </View>
                                 </View>
@@ -678,7 +707,10 @@ class ParentHome extends BaseComponent {
                                             <Text style={[defaultStyle.bold_text_12, { color: '#707070' }]} >{academy_feedback_data.source.name}</Text>
 
 
-                                            <View style={{ flexDirection: 'row', marginLeft: 6, marginTop: 4 }}>
+                                            <View style={{
+                                                alignItems: 'center',
+                                                flexDirection: 'row', marginLeft: 6, marginTop: 4
+                                            }}>
 
                                                 <Rating
                                                     type='custom'
@@ -699,7 +731,7 @@ class ParentHome extends BaseComponent {
                                                     paddingTop: 0,
                                                     borderRadius: 12,
                                                     fontFamily: 'Quicksand-Medium'
-                                                }}>{coach_feedback_data.rating}</Text>
+                                                }}>{coach_feedback_data.rating.toFixed(1)}</Text>
 
                                             </View>
                                         </View>
@@ -803,7 +835,7 @@ class ParentHome extends BaseComponent {
                                                 paddingTop: 0,
                                                 borderRadius: 12,
                                                 fontFamily: 'Quicksand-Medium'
-                                            }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating}</Text>
+                                            }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
 
                                         </View>
                                     </View>
@@ -842,7 +874,7 @@ class ParentHome extends BaseComponent {
                                                         paddingTop: 0,
                                                         borderRadius: 12,
                                                         fontFamily: 'Quicksand-Medium'
-                                                    }}>{coach_feedback_data.rating}</Text>
+                                                    }}>{coach_feedback_data.rating.toFixed(1)}</Text>
 
                                                 </View>
                                             </View>

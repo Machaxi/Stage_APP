@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import moment from 'moment'
 import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent';
 import Events from '../../router/events';
+import { DueView } from '../../components/Home/DueView';
 
 
 class CoachHome extends BaseComponent {
@@ -405,18 +406,11 @@ class CoachHome extends BaseComponent {
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={defaultStyle.bold_text_10}>Attendance</Text>
 
-                                    {is_attandence_due ? <View
-                                        style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                        <Text style={{
-                                            marginTop: 2,
-                                            marginBottom: 2,
-                                            fontFamily: 'Quicksand-Medium',
-                                            fontSize: 10,
-                                            color: 'white',
-                                            marginRight: 10,
-                                            marginLeft: 10,
-                                        }}>Due</Text>
-                                    </View> : null}
+                                    {is_attandence_due ?
+                                        <View
+                                            style={{ marginLeft: 10 }}>
+                                            <DueView />
+                                        </View> : null}
                                 </View>
                                 <View style={defaultStyle.line_style} />
 
@@ -518,16 +512,8 @@ class CoachHome extends BaseComponent {
                             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                 <Text style={defaultStyle.bold_text_10} >Reward Point</Text>
                                 <View
-                                    style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                    <Text style={{
-                                        marginTop: 2,
-                                        marginBottom: 2,
-                                        fontSize: 10,
-                                        color: 'white',
-                                        fontFamily: 'Quicksand-Medium',
-                                        marginRight: 10,
-                                        marginLeft: 10,
-                                    }}>Due</Text>
+                                    style={{ marginLeft: 10 }}>
+                                    <DueView />
                                 </View>
                             </View>
                             <View style={defaultStyle.line_style} />
@@ -546,7 +532,7 @@ class CoachHome extends BaseComponent {
 
 
                     <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5,marginRight: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
@@ -586,7 +572,7 @@ class CoachHome extends BaseComponent {
                         </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5,marginRight: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")
@@ -627,7 +613,7 @@ class CoachHome extends BaseComponent {
                         </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5,marginRight: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
@@ -667,7 +653,7 @@ class CoachHome extends BaseComponent {
                         </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5,marginRight: 5,marginBottom:20, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")

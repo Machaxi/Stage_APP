@@ -168,8 +168,8 @@ class RegisteredRoute extends BaseComponent {
         return (
             <View
                 style={{
-                    marginLeft: 16,
-                    marginRight: 16,
+                    marginLeft: 12,
+                    marginRight: 12,
                     marginTop: 16,
                     marginBottom: 8,
                     borderRadius: 12
@@ -211,21 +211,27 @@ class RegisteredRoute extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                this.props.navigation.navigate('RegisteredTournamentDetail')
+                this.props.navigation.navigate('RegisteredTournamentDetail', {
+                    data: JSON.stringify(item)
+                })
             }}>
 
             <Card
                 style={{
-                    borderRadius: 16,
-                    marginLeft: 16,
-                    marginRight: 16,
+                    borderRadius: 12,
+                    marginLeft: 12,
+                    marginRight: 12,
                     marginTop: 8,
                     marginBottom: 8,
                     elevation: 2
 
                 }}>
                 <View>
-                    <Image style={{ height: 150, width: "100%", borderRadius: 16, }}
+                    <Image style={{
+                        height: 150, width: "100%",
+                        borderTopLeftRadius: 12,
+                        borderTopRightRadius: 12,
+                    }}
                         source={{ uri: item.cover_pic }}
                     >
 

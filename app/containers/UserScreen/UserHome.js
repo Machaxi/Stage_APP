@@ -81,6 +81,7 @@ class UserHome extends BaseComponent {
             ),
             headerRight: (
                 <TouchableOpacity
+                    style={{ marginRight: 8 }}
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
@@ -88,7 +89,7 @@ class UserHome extends BaseComponent {
                 >
 
                     <Image
-
+                        resizeMode="contain"
                         source={require('../../images/ic_notifications.png')}
                         style={{ width: 20, height: 20, marginRight: 12 }}
                     />
@@ -248,11 +249,17 @@ class UserHome extends BaseComponent {
                     </View>
                     <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} />
                 </View>
-                <View style={{ height: 50, width: 30, alignItems: 'center', marginTop: 20, marginBottom: 20, marginRight: 10, marginLeft: 10 }}>
-                    <Image source={require('../../images/forward.png')}
+                <View style={{
+                    height: 50,
+                    width: 30,
+                    alignItems: 'center',
+                    marginTop: 26, marginRight: 10, marginLeft: 20
+                }}>
+                    <Image source={require('../../images/ic_drawer_arrow.png')}
+                        resizeMode="contain"
                         style={{
                             width: 5,
-                            height: 12, marginRight: 10
+                            height: 11, marginRight: 10
                         }} />
                 </View>
 
@@ -382,7 +389,7 @@ class UserHome extends BaseComponent {
                             <View
                                 style={{
                                     borderTopLeftRadius: 10,
-                                    borderTopRightRadius:10,
+                                    borderTopRightRadius: 10,
                                     backgroundColor: '#F9FBE9',
                                     paddingLeft: 12,
                                     paddingRight: 12,
@@ -390,15 +397,15 @@ class UserHome extends BaseComponent {
                                     paddingBottom: 12
                                 }}
                             >
-                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
-                                </View>
-                                <View style={{ marginLeft: 12, marginRight: 12 }}>
+                                <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                            </View>
+                            <View style={{ marginLeft: 12, marginRight: 12 }}>
 
-                               
+
                                 <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
 
                                 {sessionArray}
-                                </View>
+                            </View>
 
                         </CustomeCard>
                         : null}
@@ -407,7 +414,7 @@ class UserHome extends BaseComponent {
 
                     {this.state.strenthList.length != 0 ?
                         <View style={{ margin: 10 }}>
-                            <Card>
+                            <Card style={{ borderRadius: 12 }}>
                                 <View>
 
                                     <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>

@@ -143,11 +143,12 @@ class CoachListing extends BaseComponent {
                             borderColor: '#D8D8D8',
                             borderRadius: 12,
                             borderWidth: 1,
-                            paddingLeft: 4,
-                            paddingRight: 4,
+                            width: 50,
                             paddingTop: 2,
                             paddingBottom: 2,
-                            flexDirection: 'row'
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            alignItems: 'center'
                         }}>
 
 
@@ -160,7 +161,7 @@ class CoachListing extends BaseComponent {
 
                         <Image
                             style={{ width: 13, height: 13, marginLeft: 2, marginTop: 2 }}
-                            source={require('../../images/single_star.png')}
+                            source={require('../../images/ic_star.png')}
                         >
 
                         </Image>

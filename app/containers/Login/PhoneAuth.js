@@ -87,10 +87,12 @@ class PhoneAuth extends BaseComponent {
 
     confirmCode = () => {
         const { codeInput, confirmResult } = this.state;
+        this.progress(true)
 
         if (confirmResult && codeInput.length) {
             confirmResult.confirm(codeInput)
                 .then((user1) => {
+                    this.progress(false)
                     console.log(user1)
                     this.setState({ message: 'Code Confirmed!' });
                     firebase.auth().currentUser.getIdToken(true).then((token) => {
@@ -108,7 +110,11 @@ class PhoneAuth extends BaseComponent {
                         }
                     })
                 })
-                .catch(error => this.setState({ message: `Code Confirm Error: ${error.message}` }));
+                .catch(error => {
+                    this.progress(false)
+                    this.setState({ message: `Code Confirm Error: ${error.message}` })
+                }
+                );
         }
     };
 
@@ -141,7 +147,10 @@ class PhoneAuth extends BaseComponent {
 
         dataDic['data'] = dict;
         console.log("dicttttc ", JSON.stringify(dict))
+
+        this.progress(true)
         this.props.doLogin(dataDic).then(() => {
+            this.progress(false)
             //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
             //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
             let user = JSON.stringify(this.props.data.user);
@@ -225,6 +234,7 @@ class PhoneAuth extends BaseComponent {
 
 
         }).catch((response) => {
+            this.progress(false)
             //handle form errors
             console.log(response);
         })

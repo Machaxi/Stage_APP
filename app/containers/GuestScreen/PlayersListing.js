@@ -114,9 +114,11 @@ class PlayersListing extends BaseComponent {
 
 
         <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
-            <TouchableOpacity onPress={() => {
-                this.props.navigation.navigate('OtherPlayerDeatils')
-            }}>
+            <TouchableOpacity
+                activeOpacity={.8}
+                onPress={() => {
+                    this.props.navigation.navigate('OtherPlayerDeatils')
+                }}>
                 <ImageBackground style={{ height: 200, width: '100%' }}
                     source={require('../../images/batch_card.png')}
                 >

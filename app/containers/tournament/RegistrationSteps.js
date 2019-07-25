@@ -119,7 +119,8 @@ class RegistrationSteps extends BaseComponent {
             players: [],
             country: '',
             new_array: [], // this is for picker,
-            selected_player: null
+            selected_player: null,
+            alert_msg: ''
         }
 
         this.inputRefs = {
@@ -682,6 +683,13 @@ class RegistrationSteps extends BaseComponent {
                             }
                         />
 
+                        {this.state.alert_msg != '' ?
+                            <Text style={[defaultStyle.regular_text_14, {
+                                color: 'red'
+                            }]}>
+                                {this.state.alert_msg}
+                            </Text> : null}
+
 
                         <View style={{
                             width: 260,
@@ -735,17 +743,62 @@ class RegistrationSteps extends BaseComponent {
                             style={style.rounded_button}
                             onPress={() => {
 
-                                if (this.state.subStep == this.state.selected_tour_size - 1) {
-                                    this.setState({
-                                        step: this.state.step + 1,
-                                        subStep: this.state.subStep + 1
-                                    })
+                                console.log('tournament_types => ', tournament_types)
+                                let is_selected = false
+                                for (let i = 0; i < tournament_types.length; i++) {
 
+                                    let type = tournament_types[i]
+                                    if (type.selected) {
+                                        is_selected = true;
+                                        break;
+                                    }
+                                }
+
+                                let is_double_player_selected = true
+                                let typeName = ''
+
+                                for (let i = 0; i < tournament_types.length; i++) {
+
+                                    let type = tournament_types[i]
+                                    if (type.selected && type.is_partner_required) {
+                                        if (type.partner_name == undefined
+                                            || type.partner_name == '') {
+                                            typeName = type.tournament_type
+                                            is_double_player_selected = false
+                                            break
+                                        }
+                                    }
+                                }
+
+                                if (!is_selected) {
+                                    //alert('Please select tournament type')
+                                    this.setState({
+                                        alert_msg: 'Please select tournament type'
+                                    })
+                                } else if (!is_double_player_selected) {
+                                    //alert()
+                                    this.setState({
+                                        alert_msg: 'Please select partner for ' + typeName
+                                    })
                                 } else {
                                     this.setState({
-                                        subStep: this.state.subStep + 1
+                                        alert_msg: ''
                                     })
+                                    if (this.state.subStep == this.state.selected_tour_size - 1) {
+                                        this.setState({
+                                            step: this.state.step + 1,
+                                            subStep: this.state.subStep + 1
+                                        })
+
+                                    } else {
+                                        this.setState({
+                                            subStep: this.state.subStep + 1
+                                        })
+                                    }
                                 }
+
+
+
                             }}>
                             <Text style={style.rounded_button_text}>
                                 Next</Text>
@@ -1105,10 +1158,10 @@ class RegistrationSteps extends BaseComponent {
                 <AbortDialog
                     onYesPress={() => {
                         this.setState({
-                            show_alert:false
+                            show_alert: false
                         })
-                        setTimeout(()=>{
-                            
+                        setTimeout(() => {
+
                             getData('userInfo', (value) => {
                                 userData = (JSON.parse(value))
                                 // onSignIn()
@@ -1116,17 +1169,17 @@ class RegistrationSteps extends BaseComponent {
                                 console.log("SplashScreen=> ", JSON.stringify(userData));
                                 console.warn('userType ', userType == PLAYER)
                                 console.warn('academy_id ', userData.academy_id)
-                                
+
                                 if (userType == GUEST) {
                                     this.props.navigation.navigate('GHome')
                                 }
                                 else if (userData.academy_id != null) {
-                                    console.log('data=> ',userData);
+                                    console.log('data=> ', userData);
                                     if (userType == GUEST) {
                                         this.props.navigation.navigate('GHome')
                                     } else if (userType == PLAYER) {
                                         this.props.navigation.navigate('UHome')
-                        
+
                                     } else if (userType == COACH || userType == ACADEMY) {
                                         this.props.navigation.navigate('CHome')
                                     }
@@ -1136,12 +1189,12 @@ class RegistrationSteps extends BaseComponent {
                                 }
                             });
 
-                        },100)
-                        
+                        }, 100)
+
                     }}
                     onNoPress={() => {
                         this.setState({
-                            show_alert:false
+                            show_alert: false
                         })
                     }}
                     visible={this.state.show_alert} />

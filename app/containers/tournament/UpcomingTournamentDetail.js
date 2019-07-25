@@ -264,7 +264,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
                                             style={styles.rounded_button_white}
                                             onPress={() => {
-                                                this.props.navigation.navigate('Registration')
+                                                this.props.navigation.goBack()
                                             }}>
                                             <Text
                                                 style={{

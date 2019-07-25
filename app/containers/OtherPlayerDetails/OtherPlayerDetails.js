@@ -52,24 +52,25 @@ class OtherPlayerDetails extends React.Component {
         });
 
         console.log("PlayerDashboard");
-        getData('userInfo', (value) => {
-            userData = JSON.parse(value)
-            this.setState({
-                userData: JSON.parse(value)
-            });
-            console.log("userData.user", userData.user['user_type'])
-            if (userData.user['user_type'] == 'PLAYER') {
-                this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
+        // getData('userInfo', (value) => {
+        //     userData = JSON.parse(value)
+        //     this.setState({
+        //         userData: JSON.parse(value)
+        //     });
+        //     console.log("userData.user", userData.user['user_type'])
+        //     if (userData.user['user_type'] == 'PLAYER') {
+        //         this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
 
-            } else if (userData.user['user_type'] == 'PARENT') {
-                this.getParentSwitchingData();
+        //     } else if (userData.user['user_type'] == 'PARENT') {
+        //         this.getParentSwitchingData();
 
-            } else {
-                this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
-            }
+        //     } else {
+        //         this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
+        //     }
 
 
-        });
+        // });
+        alert('Under Development')
     }
 
 
