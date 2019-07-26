@@ -7,27 +7,15 @@ import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
 import { getCoachSWitcher, getPlayerSWitcher } from "../../redux/reducers/switchReducer";
-import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
+import { getOtherPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
+import BaseComponent, {defaultStyle} from '../BaseComponent';
 
-const acedemicList = [
-    {
-        label: 'India',
-        value: 'IN',
-    }
-
-];
-
-const placeholder = {
-    label: 'Select Option',
-    value: null,
-    color: '#9EA0A4',
-};
 var deviceWidth = Dimensions.get('window').width - 20;
 
-class OtherPlayerDetails extends React.Component {
+class OtherPlayerDetails extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -43,6 +31,8 @@ class OtherPlayerDetails extends React.Component {
             player_profile: null,
             strenthList: null
         }
+
+
     }
 
     componentDidMount() {
@@ -52,61 +42,46 @@ class OtherPlayerDetails extends React.Component {
         });
 
         console.log("PlayerDashboard");
-        // getData('userInfo', (value) => {
-        //     userData = JSON.parse(value)
-        //     this.setState({
-        //         userData: JSON.parse(value)
-        //     });
-        //     console.log("userData.user", userData.user['user_type'])
-        //     if (userData.user['user_type'] == 'PLAYER') {
-        //         this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
 
-        //     } else if (userData.user['user_type'] == 'PARENT') {
-        //         this.getParentSwitchingData();
-
-        //     } else {
-        //         this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
-        //     }
-
-
-        // });
-        alert('Under Development')
+        let academy_id = this.props.navigation.getParam('academy_id', '')
+        let player_id = this.props.navigation.getParam('player_id', '')
+        if (academy_id == '' || player_id == '') {
+            alert('player id is missing')
+        } else {
+            this.getPlayerDashboardData(academy_id, player_id)
+        }
     }
 
 
 
 
     getPlayerDashboardData(academy_id, player_id, ) {
-        getData('header', (value) => {
-            console.log("header", value, academy_id, player_id);
-            this.props.getPlayerDashboard(value, 1, 1).then(() => {
-                // console.log(' user response payload ' + JSON.stringify(this.props.data));
-                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.dashboardData);
-                console.log(' user response payload ' + user);
-                let user1 = JSON.parse(user)
 
-                if (user1.success == true) {
-                    this.setState({
-                        player_profile: user1.data['player_profile'],
-                        strenthList: user1.data.player_profile['stats']
+        this.props.getOtherPlayerDashboard(academy_id, player_id).then(() => {
+            // console.log(' user response payload ' + JSON.stringify(this.props.data));
+            // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+            let user = JSON.stringify(this.props.data.dashboardData);
+            console.log(' user getOtherPlayerDashboard ' + user);
+            let user1 = JSON.parse(user)
 
-                    })
-                }
+            if (user1.success == true) {
+                this.setState({
+                    player_profile: user1.data['player_profile'],
+                    strenthList: user1.data.player_profile['stats']
 
-            }).catch((response) => {
-                //handle form errors
-                console.log(response);
-            })
+                })
+            }
 
-        });
-
+        }).catch((response) => {
+            //handle form errors
+            console.log(response);
+        })
     }
 
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
+            console.warn("Touch Press1")
 
             // this.props.navigation.navigate('OrderTracking', {
             //     order_id: item.increment_id
@@ -117,8 +92,8 @@ class OtherPlayerDetails extends React.Component {
 
                 <Image source={require('../../images/Mysatus.png')}
                     style={{
-                        width: 50,
-                        height: 50, marginRight: 20
+                        width: 40,
+                        height: 40, marginRight: 20
                     }} />
                 <View>
 
@@ -129,20 +104,26 @@ class OtherPlayerDetails extends React.Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                     }}>
-                        <Text>
+                        <Text style={defaultStyle.bold_text_14}>
                             {item.name}
                         </Text>
-                        <Text>
+                        <Text style={defaultStyle.bold_text_12}>
                             {item.score}
                         </Text>
                     </View>
                     <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} />
                 </View>
-                <View style={{ height: 50, width: 30, alignItems: 'center', marginTop: 20, marginBottom: 20, marginRight: 10, marginLeft: 10 }}>
-                    <Image source={require('../../images/forward.png')}
+                <View style={{
+                    height: 50,
+                    width: 30,
+                    alignItems: 'center',
+                    marginTop: 26, marginRight: 10, marginLeft: 20
+                }}>
+                    <Image source={require('../../images/ic_drawer_arrow.png')}
+                        resizeMode="contain"
                         style={{
-                            width: 3,
-                            height: 8, marginRight: 10
+                            width: 5,
+                            height: 11, marginRight: 10
                         }} />
                 </View>
 
@@ -173,7 +154,8 @@ class OtherPlayerDetails extends React.Component {
                     <PlayerHeader
                         player_profile={this.state.player_profile}
                     />
-                    <View style={{ margin: 10 }}>
+
+                    {/* <View style={{ margin: 10 }}>
                         <CustomeCard>
                             <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
                             <FlatList
@@ -182,8 +164,27 @@ class OtherPlayerDetails extends React.Component {
                                 keyExtractor={(item, index) => item.id}
                             />
                         </CustomeCard>
-                    </View>
+                    </View> */}
+                    {this.state.strenthList.length != 0 ?
+                        <View style={{ margin: 10 }}>
+                            <Card style={{ borderRadius: 12 }}>
+                                <View>
 
+                                    <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                    <View style={{
+                                        width: 60,
+                                        height: 3, marginLeft: 10,
+                                        marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                    }}></View>
+
+                                    <FlatList
+                                        data={this.state.strenthList}
+                                        renderItem={this.renderItem}
+                                        keyExtractor={(item, index) => item.id}
+                                    />
+                                </View>
+                            </Card>
+                        </View> : null}
 
 
                 </ScrollView>
@@ -203,42 +204,12 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getPlayerDashboard,
+    getOtherPlayerDashboard,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OtherPlayerDetails);
 
 
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        // paddingVertical: 12,
-        //paddingHorizontal: 10,
-        borderWidth: 0,
-        borderColor: '#D3D3D3',
-        borderRadius: 4,
-        color: 'white',
-        // paddingLeft: 10,
 
-        // alignItems: 'stretch',
-        // // justifyContent: 'right',
-        alignSelf: 'center',
-        height: 40,
-        marginRight: 10,
-        marginTop: 5,
-        marginBottom: 5
-        // to ensure the text is never behind the icon
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: '#614051',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-});
 
 const styles = StyleSheet.create({
     navBar: {

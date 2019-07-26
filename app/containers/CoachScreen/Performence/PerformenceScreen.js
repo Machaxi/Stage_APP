@@ -173,7 +173,7 @@ class PerformenceScreen extends BaseComponent {
                 </View>
             )
         }
-        if (this.state.batchList) {
+        if (this.state.batchList && this.state.batchList.length > 0) {
 
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
@@ -188,7 +188,9 @@ class PerformenceScreen extends BaseComponent {
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
+                    <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={defaultStyle.regular_text_14}>No Dues Yet.</Text>
+                    </View>
                 </View>
             )
         }

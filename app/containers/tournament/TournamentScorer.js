@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, Image } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 
@@ -16,8 +16,15 @@ export default class TournamentScorer extends BaseComponent {
         return (
 
             <ScrollView>
-
+                <View style={{
+                    width: 2,
+                    position: 'absolute',
+                    backgroundColor: 'gray',
+                    height: '100%'
+                }}></View>
                 <View style={{ padding: 16, }}>
+
+
 
                     <View style={{
 
@@ -38,7 +45,6 @@ export default class TournamentScorer extends BaseComponent {
                                 style={{
                                     color: 'black',
                                     fontSize: 17,
-                                    fontWeight: "400",
                                     fontFamily: 'Quicksand-Medium'
                                 }}
                             >Rahul R</Text>
@@ -70,10 +76,11 @@ export default class TournamentScorer extends BaseComponent {
 
                             <View
                                 style={{
-                                    width: 44,
-                                    height: 44,
-                                    borderRadius: 44 / 2,
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 40 / 2,
                                     marginBottom: 10,
+                                    alignItems: 'center',
                                     backgroundColor: "#D2D2D2",
                                     justifyContent: 'center'
                                 }}>
@@ -85,7 +92,6 @@ export default class TournamentScorer extends BaseComponent {
                                     textAlign: 'center',
                                     alignItems: 'center',
                                     fontSize: 17,
-                                    fontWeight: "400",
                                     fontFamily: 'Quicksand-Medium',
                                     color: 'white'
 
@@ -131,27 +137,41 @@ export default class TournamentScorer extends BaseComponent {
                         flex: 1,
                         marginTop: 10,
                         alignContent: 'center',
-                        justifyContent: 'center',
                         alignItems: 'center',
                     }}>
 
-                        <Text
-                            style={{
-                                textAlign: 'center',
-                                width: 120,
-                                elevation: 2,
-                                marginTop: 16,
-                                padding: 4,
-                                color: '#A3A5AE',
-                                fontFamily: 'Quicksand-Regular',
-                                borderRadius: 8,
-                                backgroundColor: 'white'
-                            }}
-                        >Set 1</Text>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginTop: 16,
+                            paddingTop: 4,
+                            paddingBottom: 4,
+                            paddingLeft: 14,
+                            paddingRight: 14,
+                            elevation: 2,
+                            width: 120,
+                            borderRadius: 8,
+                            backgroundColor: 'white'
+                        }}>
+
+                            <Text
+                                style={defaultStyle.bold_text_14}>21</Text>
+
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    color: '#A3A5AE',
+                                    fontFamily: 'Quicksand-Regular',
+                                }}>Set 1</Text>
+
+                            <Text
+                                style={defaultStyle.bold_text_14}>12</Text>
+                        </View>
 
                         <Text
                             style={{
-                                marginTop: 16,
+                                marginTop: 14,
                                 textAlign: 'center',
                                 width: 120,
                                 elevation: 2,
@@ -165,7 +185,7 @@ export default class TournamentScorer extends BaseComponent {
 
                         <Text
                             style={{
-                                marginTop: 16,
+                                marginTop: 14,
                                 textAlign: 'center',
                                 width: 120,
                                 elevation: 2,
@@ -232,8 +252,7 @@ export default class TournamentScorer extends BaseComponent {
                                 <Text
                                     style={{
                                         color: '#404040',
-                                        fontSize: 40,
-                                        fontWeight: "400",
+                                        fontSize: 46,
                                         marginLeft: 10,
                                         fontFamily: 'Quicksand-Medium'
                                     }}>10</Text>
@@ -303,22 +322,24 @@ export default class TournamentScorer extends BaseComponent {
 
                                 }}>
 
-                                <View
+                                {/* <View
                                     style={{
-                                        width: 30,
-                                        height: 30,
-                                        borderRadius: 30 / 2,
+                                        
                                         marginBottom: 10,
                                         backgroundColor: "#F3F1F1",
                                         alignItems: 'center',
                                         alignContent: 'center',
                                         marginTop: 6,
                                         justifyContent: 'center'
-                                    }}>
+                                    }}> */}
 
 
 
                                     <Text style={{
+                                        width: 30,
+                                        backgroundColor: "#F3F1F1",
+                                        height: 30,
+                                        borderRadius: 30 / 2,
                                         justifyContent: 'center',
                                         textAlign: 'center',
                                         alignItems: 'center',
@@ -329,12 +350,11 @@ export default class TournamentScorer extends BaseComponent {
 
                                     }}>–</Text>
 
-                                </View>
+                                {/* </View> */}
                                 <Text
                                     style={{
                                         color: '#404040',
-                                        fontSize: 40,
-                                        fontWeight: "400",
+                                        fontSize: 46,
                                         marginLeft: 10,
                                         fontFamily: 'Quicksand-Medium'
                                     }}>10</Text>
@@ -432,6 +452,6 @@ const style = {
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
 }

@@ -112,6 +112,7 @@ class PhoneAuth extends BaseComponent {
                 })
                 .catch(error => {
                     this.progress(false)
+                    alert(`Code Confirm Error: ${error.message}`)
                     this.setState({ message: `Code Confirm Error: ${error.message}` })
                 }
                 );
@@ -167,7 +168,7 @@ class PhoneAuth extends BaseComponent {
                 if (userData.is_existing_user == true) {
                     if (userInfoData.user_type == GUEST) {
 
-                        this.props.navigation.navigate('AcademyListing')
+                        this.props.navigation.navigate('GHome')
 
                     } else if (userInfoData.user_type == PLAYER) {
                         if (!userData.has_multiple_acadmies) {
@@ -282,7 +283,7 @@ class PhoneAuth extends BaseComponent {
                 if (userData.is_existing_user == true) {
                     if (userInfoData.user_type == GUEST) {
 
-                        this.props.navigation.navigate('AcademyListing')
+                        this.props.navigation.navigate('GHome')
 
                     } else if (userInfoData.user_type == PLAYER) {
                         if (!userData.has_multiple_acadmies) {

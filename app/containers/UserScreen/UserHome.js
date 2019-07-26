@@ -169,7 +169,8 @@ class UserHome extends BaseComponent {
                 console.log(' user response getPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
 
-                if (user1.data['coach_data'] != null && user1.data['coach_data'].length > 0) {
+                if (user1.data['coach_data'] != null && user1.data['coach_data']) {
+                    
                     this.setState({
                         coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
                     })
@@ -181,10 +182,17 @@ class UserHome extends BaseComponent {
                     })
                 }
 
+                if (user1.data.player_profile['stats'] != null &&
+                    user1.data.player_profile['stats']) {
+                    this.setState({
+                        strenthList: user1.data.player_profile['stats'],
+                    })
+                }
+
                 if (user1.success == true) {
                     this.setState({
                         player_profile: user1.data['player_profile'],
-                        strenthList: user1.data.player_profile['stats'],
+                        //strenthList: user1.data.player_profile['stats'],
                         //acedemy_name: user1.data['player_profile'].academy_name,
                         //academy_feedback_data: user1.data['academy_data'].feedback[0],
                         //coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
@@ -581,7 +589,7 @@ class UserHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</Text>
+                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
 
                                     </View>
                                 </View>

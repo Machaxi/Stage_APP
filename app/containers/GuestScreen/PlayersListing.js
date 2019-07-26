@@ -4,7 +4,7 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
@@ -27,7 +27,7 @@ class PlayersListing extends BaseComponent {
             this.getBtachPlayer(this.props.navigation.getParam('batch_id'))
         } else {
             this.props.getAcademyPlayersList(this.state.id).then(() => {
-                //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+                console.log('Res=> ' + JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {
                     let players = this.props.data.res.data.players
@@ -117,7 +117,10 @@ class PlayersListing extends BaseComponent {
             <TouchableOpacity
                 activeOpacity={.8}
                 onPress={() => {
-                    this.props.navigation.navigate('OtherPlayerDeatils')
+                    this.props.navigation.navigate('OtherPlayerDeatils', {
+                        academy_id: this.state.id,
+                        player_id: item.id
+                    })
                 }}>
                 <ImageBackground style={{ height: 200, width: '100%' }}
                     source={require('../../images/batch_card.png')}
@@ -177,7 +180,7 @@ class PlayersListing extends BaseComponent {
                             fontSize: 16,
                             textAlign: 'center',
                             fontFamily: 'Quicksand-Medium'
-                        }}>{item.name}</Text>
+                        }}>{formattedName(item.name)}</Text>
                     </View>
 
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
@@ -199,7 +202,7 @@ class PlayersListing extends BaseComponent {
                                 <Image style={{ height: 7, width: 12, marginLeft: -12 }}
                                     source={require('../../images/left_batch_arrow.png')}></Image>
 
-                                <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>{item.badge}</Text>
+                                <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>{item.badge == undefined ? ' - ' : item.badge}</Text>
                                 <Image style={{ height: 7, width: 12, marginRight: -12 }}
                                     source={require('../../images/right_batch_arrow.png')}></Image>
 

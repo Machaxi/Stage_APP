@@ -18,7 +18,7 @@ class Splash extends BaseComponent {
 
     componentDidMount() {
 
-        //this.props.navigation.navigate('RegistrationSteps')
+        //this.props.navigation.navigate('GHome')
         //return
         var userData;
         // getData('userInfo', (value) => {
@@ -53,6 +53,7 @@ class Splash extends BaseComponent {
                     let userType = userData.user['user_type']
                     console.log("SplashScreen=> ", JSON.stringify(userData));
                     if (userType == GUEST) {
+                        console.warn(userType)
                         this.props.navigation.navigate('GHome')
                     }
                     else if (userData.academy_id != null) {

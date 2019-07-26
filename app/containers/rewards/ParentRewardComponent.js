@@ -7,6 +7,7 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getData, storeData } from "../../components/auth";
 import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../../redux/reducers/RewardReducer";
 import { connect } from 'react-redux';
+import moment from 'moment'
 
 class ParentRewardComponent extends BaseComponent {
 
@@ -199,11 +200,15 @@ class ParentRewardComponent extends BaseComponent {
                 <View style={{ margin: 10, flexDirection: 'row' }}>
                     <View>
                         <Text style={styles.regular_text_10}>Month</Text>
-                        <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>{item.month + "/" + item.year}</Text>
+                        <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>
+                        {moment.utc(item.month + " " + item.year, "MM YYYY").local()
+                                            .format("MMM YYYY")}
+                        
+                        </Text>
                     </View>
                     <View style={{ marginLeft: 20 }}>
                         <Text style={styles.regular_text_10}>Available</Text>
-                        <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>500  pts</Text>
+                        <Text style={[defaultStyle.regular_text_14, { marginTop: 6 }]}>500  pts</Text>
                     </View>
                 </View>
 
@@ -243,7 +248,11 @@ class ParentRewardComponent extends BaseComponent {
                         animationType="none"
                         transparent={true}
                         visible={this.state.modalVisible}
-                    >
+                        onRequestClose={() => {
+                            this.setState({
+                                modalVisible:false
+                            });
+                        }}>
                         <View style={{
                             flex: 1,
                             flexDirection: 'column',
@@ -287,11 +296,14 @@ class ParentRewardComponent extends BaseComponent {
                                     <View style={{ marginTop: 10, flexDirection: 'row', marginBottom: 20 }}>
                                         <View>
                                             <Text style={styles.regular_text_10}>Month</Text>
-                                            <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>Oct 19</Text>
+                                            <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>
+                                            {moment.utc(this.state.month + " " + this.state.year, "MM YYYY").local()
+                                            .format("MMM YYYY")}
+                                            </Text>
                                         </View>
                                         <View style={{ marginLeft: 20 }}>
                                             <Text style={styles.regular_text_10}>Available</Text>
-                                            <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>500  pts</Text>
+                                            <Text style={[defaultStyle.regular_text_14, { marginTop: 6 }]}>500  pts</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -473,7 +485,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         height: 40,
         width: '45%',
-        color: '#A3A5AE',
+        color: '#404040',
     },
     rounded_button: {
         width: '90%',

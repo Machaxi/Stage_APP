@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import Events from '../router/events';
 import { Rating } from 'react-native-ratings';
 
+let placeholder_img = "https://databytenitt.github.io/img/male.png"
 class CoachMenuDrawer extends BaseComponent {
 
 	constructor(props) {
@@ -36,7 +37,14 @@ class CoachMenuDrawer extends BaseComponent {
 			profile_pic: ''
 		};
 
+		isSignedIn()
+		.then(res => {
+			console.log(res);
+			this.setState({ signedIn: res,})
 
+		})
+		.catch(err => alert("An error occurred"));
+		
 		this.updateData()
 
 		this.refreshEvent = Events.subscribe(EVENT_EDIT_PROFILE, () => {
@@ -71,6 +79,8 @@ class CoachMenuDrawer extends BaseComponent {
 			}
 
 		});
+
+		
 	}
 
 	fetchParentDetails() {
@@ -223,6 +233,170 @@ class CoachMenuDrawer extends BaseComponent {
 			</View>)
 	}
 
+	geLoggedInGuestMenu() {
+
+		let signedIn = this.state.signedIn
+		let user_type = this.state.user_type
+		let fullame = this.state.fullName
+		let mobileNumber = this.state.mobileNumber
+		let menu;
+		let ratings = 5
+		//user_type = COACH
+		//signedIn = true
+		let profile_pic = this.state.profile_pic
+		if (profile_pic == '' || profile_pic == null) {
+			profile_pic = placeholder_img
+		}
+
+		return (
+			<View>
+
+				<View
+					style={{
+						paddingLeft: 10, paddingRight: 10, paddingTop: 16,
+						paddingBottom: 16,
+						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
+					}}
+				>
+					<Image
+						style={{ width: 128, height: 128, borderRadius: 8 }}
+						source={{ uri: profile_pic }}
+					></Image>
+
+					<View
+						style={{
+							justifyContent: 'center',
+							marginLeft: 10,
+
+						}}
+					>
+
+						<View style={{
+							flexDirection: 'row',
+							flex: 1,
+							justifyContent: 'space-between'
+						}}>
+
+							<Image
+								style={{ height: 25, width: 80, }}
+								source={require('../images/dribble_logo.png')}
+							/>
+
+							{/* <Image
+										style={{
+											height: 30, width: 30,
+										}}
+										source={require('../images/ic_close.png')}
+									/> */}
+						</View>
+
+						<View>
+
+							<Text
+								style={{
+									color: 'black',
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14, marginTop: 16,
+								}}>
+								{fullame == null ? '-' : fullame}</Text>
+
+							{/* <Text
+								style={{
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14, marginTop: 8,
+								}}>
+								{mobileNumber}</Text> */}
+							<View style={{ marginTop: 8 }}>
+								<TouchableOpacity activeOpacity={.8} onPress={() => {
+									this.props.navigation.navigate('EditProfile')
+								}}>
+
+									<View style={{
+										flex: 1,
+										justifyContent: 'space-between',
+										flexDirection: 'row',
+									}}>
+
+										<Text
+											style={{
+												color: '#A3A5AE',
+												fontFamily: 'Quicksand-Medium',
+												fontSize: 14,
+											}}>
+											{mobileNumber}
+										</Text>
+										<Text
+											style={[defaultStyle.regular_text_14, {
+												color: '#667DDB',
+												marginLeft: 8
+											}]}
+										>
+											Edit
+								</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+						</View>
+
+
+					</View>
+				</View>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							About Dribble
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						>
+
+						</Image>
+
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							Contact Us
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						>
+
+						</Image>
+
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					onSignOut()
+					clearData()
+					firebase.auth().signOut();
+					this.props.navigation.navigate('Login')
+				}
+				}>
+					<View style={styles.drawercell}>
+						<Text style={styles.menu}>
+							Sign Out
+								</Text>
+
+					</View>
+				</TouchableOpacity>
+
+
+			</View>)
+	}
+
 	getCoachMenu() {
 
 		let signedIn = this.state.signedIn
@@ -234,8 +408,8 @@ class CoachMenuDrawer extends BaseComponent {
 		//user_type = COACH
 		//signedIn = true
 		let profile_pic = this.state.profile_pic
-		if (profile_pic == '') {
-			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
+		if (profile_pic == '' || profile_pic == null) {
+			profile_pic = placeholder_img
 		}
 		//console.warn('profile_pic', profile_pic)
 
@@ -962,22 +1136,23 @@ class CoachMenuDrawer extends BaseComponent {
 		//user_type = COACH
 		//signedIn = true
 		let profile_pic = this.state.profile_pic
-		if (profile_pic == '') {
-			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
+		if (profile_pic == '' || profile_pic == null) {
+			profile_pic = placeholder_img
 		}
 		//console.warn('profile_pic', profile_pic)
 
-
+		console.log('signedIn => ', signedIn)
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
-			fullName = "Guest"
-			mobileNumber = "-"
+			//fullName = "Guest"
+			//mobileNumber = "-"
 		}
 
 
 		else if (user_type != null) {
 
 			if (user_type == GUEST) {
+				menu = this.geLoggedInGuestMenu()
 
 			} else if (user_type == PLAYER) {
 
