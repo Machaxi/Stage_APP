@@ -2,7 +2,7 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, RefreshControl,Image, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { Card } from 'react-native-paper'
@@ -107,7 +107,7 @@ class ParentHome extends BaseComponent {
 
         };
         this.state = {
-
+            refreshing:false,
             userData: null,
             country: undefined,
             player_profile: null,
@@ -120,6 +120,10 @@ class ParentHome extends BaseComponent {
     }
 
     componentDidMount() {
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -147,7 +151,6 @@ class ParentHome extends BaseComponent {
 
         });
     }
-
 
 
 
@@ -259,7 +262,15 @@ class ParentHome extends BaseComponent {
 
 
 
+    onRefresh = () => {
 
+        this.setState({ refreshing: true });
+        this.selfComponentDidMount()
+        // In actual case set refreshing to false when whatever is being refreshed is done!
+        setTimeout(() => {
+          this.setState({ refreshing: false });
+        }, 1000);
+      };
 
     render() {
 
@@ -356,7 +367,15 @@ class ParentHome extends BaseComponent {
                 }
             }
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <ScrollView 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh}
+                        title="Pull to refresh"
+                    />
+                }
+                style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                     <PlayerHeader
                         player_profile={this.state.player_profile}
@@ -719,7 +738,7 @@ class ParentHome extends BaseComponent {
                                                     ratingCount={5}
                                                     imageSize={14}
                                                     readonly={true}
-                                                    startingValue={coach_feedback_data.rating}
+                                                    startingValue={academy_feedback_data.rating}
                                                     style={{ height: 20, width: 80 }}
                                                 />
 
@@ -731,7 +750,7 @@ class ParentHome extends BaseComponent {
                                                     paddingTop: 0,
                                                     borderRadius: 12,
                                                     fontFamily: 'Quicksand-Medium'
-                                                }}>{coach_feedback_data.rating.toFixed(1)}</Text>
+                                                }}>{academy_feedback_data.rating.toFixed(1)}</Text>
 
                                             </View>
                                         </View>
@@ -760,7 +779,9 @@ class ParentHome extends BaseComponent {
                             }}>
 
                                 <TouchableOpacity onPress={() => {
-
+                                    this.props.navigation.navigate('AcademyProfile', {
+                                        id: academy_feedback_data.academyId
+                                    })
                                 }}>
                                     <Text
                                         style={[defaultStyle.bold_text_12,
@@ -788,6 +809,7 @@ class ParentHome extends BaseComponent {
                                     marginLeft: 10,
                                     marginRight: 10,
                                     marginTop: 10,
+                                    marginBottom:10,
                                     borderRadius: 12,
                                 }}>
                                 <View
@@ -902,7 +924,10 @@ class ParentHome extends BaseComponent {
                                 }}>
 
                                     <TouchableOpacity onPress={() => {
-
+                                        this.props.navigation.navigate('CoachProfileDetail', {
+                                            academy_id: coach_feedback_data.academyId,
+                                            coach_id: coach_feedback_data.target.id
+                                        })
                                     }}>
                                         <Text
                                             style={[defaultStyle.bold_text_12,

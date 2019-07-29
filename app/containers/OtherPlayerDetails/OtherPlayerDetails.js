@@ -41,7 +41,7 @@ class OtherPlayerDetails extends BaseComponent {
             console.log("header", value);
         });
 
-        console.log("PlayerDashboard");
+        
 
         let academy_id = this.props.navigation.getParam('academy_id', '')
         let player_id = this.props.navigation.getParam('player_id', '')
@@ -50,6 +50,8 @@ class OtherPlayerDetails extends BaseComponent {
         } else {
             this.getPlayerDashboardData(academy_id, player_id)
         }
+
+        console.log("PlayerDashboard academy_id="+academy_id+" player_id"+player_id); 
     }
 
 

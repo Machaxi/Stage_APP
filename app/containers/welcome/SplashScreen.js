@@ -3,7 +3,7 @@ import React from 'react'
 import { View, Image, Linking, Platform } from 'react-native'
 import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { TOURNAMENT_REGISTER } from '../BaseComponent';
 
 class Splash extends BaseComponent {
 
@@ -14,10 +14,22 @@ class Splash extends BaseComponent {
             checkedSignIn: false,
             deepUrl: ""
         };
+
+        //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
+        // first they have to login then register for tournament
+        getData(TOURNAMENT_REGISTER, (value) => {
+
+            console.warn('TOURNAMENT_REGISTER => ', value)
+            if (value != '' && value) {
+                this.props.navigation.navigate('Login')
+            } else {
+                this.moveNext()
+            }
+        });
+
     }
 
-    componentDidMount() {
-
+    moveNext() {
         //this.props.navigation.navigate('GHome')
         //return
         var userData;
@@ -87,6 +99,11 @@ class Splash extends BaseComponent {
         } else {
             Linking.addEventListener('url', this.handleOpenURL);
         }
+    }
+
+    componentDidMount() {
+
+
     }
     componentWillUnmount() {
         Linking.removeEventListener('url', this.handleOpenURL);

@@ -67,8 +67,8 @@ class PlayerBatchComponent extends BaseComponent {
                             height: 36, marginRight: 10
                         }} />
                     <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
-                    <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 10, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
-                        {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 10, marginLeft: 10, textAlign: 'center' }}>Head Coach</Text> : null}
+                    <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 0, marginLeft: 6, alignItems: 'center', justifyContent: 'center' }}>
+                        {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 6, marginLeft: 6, textAlign: 'center' }}>Head Coach</Text> : null}
                     </View>
                 </View>
 

@@ -32,7 +32,7 @@ export function getUpcomingTournament(header) {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/upcoming`,
+                url: `global/tournament/upcoming`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

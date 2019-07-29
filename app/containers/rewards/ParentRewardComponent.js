@@ -8,6 +8,7 @@ import { getData, storeData } from "../../components/auth";
 import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../../redux/reducers/RewardReducer";
 import { connect } from 'react-redux';
 import moment from 'moment'
+import { Card } from 'react-native-paper';
 
 class ParentRewardComponent extends BaseComponent {
 
@@ -27,7 +28,8 @@ class ParentRewardComponent extends BaseComponent {
             selected_item: null,
             alert: '',
             success_dialog: false,
-            name: ''
+            name: '',
+            player_history: []
         }
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
@@ -84,12 +86,19 @@ class ParentRewardComponent extends BaseComponent {
         let obj = this.props.jumpTo//JSON.parse()
         console.warn(obj)
         let player_dues = obj.player_dues
+        let player_history = obj.player_history
+        let history_view = [];
+        for (let i = 0; i < player_history.length; i++) {
+            let obj = { ...player_history[i], expand: false }
+            history_view[i] = obj
+        }
         //console.warn("Jump => " + JSON.stringify(player_dues))
 
         this.setState({
             data: obj,
             player_due: player_dues,
-            name: this.props.name
+            name: this.props.name,
+            player_history: history_view
             ///player_due: obj.player_due
         })
 
@@ -115,7 +124,8 @@ class ParentRewardComponent extends BaseComponent {
 
         let love_game = this.state.love_game == '' ? 0 : this.state.love_game
         let following_diet = this.state.following_diet == '' ? 0 : this.state.following_diet
-        let sum = love_game + following_diet
+        let sum = +love_game + +following_diet
+        console.warn('sum => ', sum)
         if (following_diet == 0) {
             this.setState({
                 alert: 'Following diet field is empty'
@@ -201,9 +211,9 @@ class ParentRewardComponent extends BaseComponent {
                     <View>
                         <Text style={styles.regular_text_10}>Month</Text>
                         <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>
-                        {moment.utc(item.month + " " + item.year, "MM YYYY").local()
-                                            .format("MMM YYYY")}
-                        
+                            {moment.utc(item.month + " " + item.year, "MM YYYY").local()
+                                .format("MMM YYYY")}
+
                         </Text>
                     </View>
                     <View style={{ marginLeft: 20 }}>
@@ -237,7 +247,91 @@ class ParentRewardComponent extends BaseComponent {
 
         let data = this.state.player_due
         let name = this.state.name
+        let player_history = this.state.player_history
+        let history_view = [];
+        for (let i = 0; i < player_history.length; i++) {
 
+            let obj = player_history[i]
+            let coach = obj.COACH == undefined ? 0 : obj.COACH
+            let family = obj.FAMILY == undefined ? 0 : obj.FAMILY
+
+            let total = +coach + +family
+
+            history_view.push(
+                <View>
+                    <TouchableOpacity
+                        activeOpacity={.8}
+                        onPress={() => {
+                            obj.expand = !obj.expand
+                            player_history[i] = obj
+                            this.setState({
+                                player_history: player_history
+                            })
+                            console.warn('player_history => ', JSON.stringify(player_history))
+                        }}
+                    >
+
+                        <View style={{
+                            padding: 12,
+                            marginBottom: 8,
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                        }}>
+                            <Text style={[defaultStyle.regular_text_14, { width: '50%', color: "#707070" }]}>December</Text>
+                            <Text style={[defaultStyle.regular_text_14, { width: '45%', color: "#707070" }]}>{total}</Text>
+
+                            {obj.expand ?
+                                <Image
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 14,
+                                        marginTop: 3,
+                                        height: 10,
+                                    }}
+                                    source={require('../../images/up_arrow_reward.png')}
+                                /> :
+                                <Image
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 14,
+                                        marginTop: 3,
+                                        height: 10,
+                                    }}
+                                    source={require('../../images/down_arrow_reward.png')}
+                                />}
+
+
+                        </View>
+                    </TouchableOpacity>
+
+                    {obj.expand ?
+                        <View style={{
+                            backgroundColor: '#F8F8F8',
+                            padding: 12,
+                            flexDirection: 'row'
+                        }}>
+
+                            <View style={{ marginRight: 50 }}>
+                                <Text style={[defaultStyle.bold_text_10, {}]}>Parents</Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{family} pts</Text>
+
+                            </View>
+                            <View style={{ marginRight: 70 }}>
+                                <Text style={[defaultStyle.bold_text_10, {}]}>Coach</Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{coach} pts</Text>
+
+                            </View>
+
+                            <View style={{ marginRight: 50 }}>
+                                <Text style={[defaultStyle.bold_text_10, {}]}>Total</Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{total} pts</Text>
+
+                            </View>
+                        </View>
+                        : null}
+                </View>)
+
+        }
 
         return (
             <ScrollView
@@ -250,7 +344,7 @@ class ParentRewardComponent extends BaseComponent {
                         visible={this.state.modalVisible}
                         onRequestClose={() => {
                             this.setState({
-                                modalVisible:false
+                                modalVisible: false
                             });
                         }}>
                         <View style={{
@@ -297,8 +391,8 @@ class ParentRewardComponent extends BaseComponent {
                                         <View>
                                             <Text style={styles.regular_text_10}>Month</Text>
                                             <Text style={[defaultStyle.bold_text_14, { marginTop: 6 }]}>
-                                            {moment.utc(this.state.month + " " + this.state.year, "MM YYYY").local()
-                                            .format("MMM YYYY")}
+                                                {moment.utc(this.state.month + " " + this.state.year, "MM YYYY").local()
+                                                    .format("MMM YYYY")}
                                             </Text>
                                         </View>
                                         <View style={{ marginLeft: 20 }}>
@@ -403,6 +497,8 @@ class ParentRewardComponent extends BaseComponent {
                                     style={{
                                         fontSize: 14,
                                         marginTop: 16,
+                                        paddingLeft: 16,
+                                        paddingRight: 16,
                                         color: 'black',
                                         fontWeight: "400",
                                         textAlign: 'center',
@@ -423,7 +519,7 @@ class ParentRewardComponent extends BaseComponent {
                     </Modal>
 
 
-                    {data.length == 0 ?
+                    {/* {data.length == 0 ?
                         <View
                             style={{
 
@@ -438,12 +534,45 @@ class ParentRewardComponent extends BaseComponent {
                                 flex: 1, textAlign: 'center',
                             }]}>No Dues found</Text></View>
                         :
-                        <FlatList
-                            data={data}
-                            renderItem={this._renderItem}
-                        />}
+                       } */}
+
+                    <ScrollView>
+                        <View>
 
 
+                            <FlatList
+                                data={data}
+                                renderItem={this._renderItem}
+                            />
+
+
+                            <Card style={{
+                                margin: 12,
+                                borderRadius: 8
+                            }}>
+
+                                <View>
+
+                                    <Text style={[defaultStyle.bold_text_12, {
+                                        margin: 12
+                                    }]}>Reward History</Text>
+                                    <View style={{
+                                        padding: 12,
+                                        marginTop: 4,
+                                        backgroundColor: '#F4F5FB',
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Text style={[defaultStyle.bold_text_10, { width: '50%', color: '#A3A5AE' }]}>Month</Text>
+                                        <Text style={[defaultStyle.bold_text_10, { width: '50%', color: '#A3A5AE' }]}>Total Rewards gained</Text>
+                                    </View>
+
+                                    {history_view}
+
+                                </View>
+                            </Card>
+
+                        </View>
+                    </ScrollView>
 
                 </View>
             </ScrollView >

@@ -1,5 +1,5 @@
 import React from "react";
-import {isSignedIn} from "../components/auth";
+import { isSignedIn } from "../components/auth";
 import { Platform, StatusBar, Image, View, Dimensions, TouchableOpacity, Text, StyleSheet, ImageBackground } from "react-native";
 
 class NavigationDrawerStructure extends React.Component {
@@ -58,20 +58,26 @@ class NavigationDrawerStructure extends React.Component {
                         onPress={this.toggleToHome.bind(this)}>
 
                         <Image
+                            resizeMode="contain"
                             source={require('../images/go_back_arrow.png')}
-                            style={{ width: 20, height: 16, marginLeft: 12 }}
+                            style={{
+                                marginLeft: 12,
+                                width: 20, height: 16, paddingLeft: 12, paddingRight: 4,
+                                paddingTop: 8, paddingBottom: 8
+                            }}
                         />
                     </TouchableOpacity>
                     : null
                 }
 
                 {showDrawer ? <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-                        {/*Donute Button Image */}
-                        <Image
-                            source={require('../images/hamburger.png')}
-                            style={{ width: 24, height: 16, marginLeft: 12 }}
-                        />
-                    </TouchableOpacity>
+                    {/*Donute Button Image */}
+                    <Image
+                    resizeMode="contain"
+                        source={require('../images/hamburger.png')}
+                        style={{ width: 24, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
                     : null}
 
                 {/* <TouchableOpacity onPress={this.toggleToHome.bind(this)}>
@@ -85,4 +91,4 @@ class NavigationDrawerStructure extends React.Component {
     }
 }
 
-export  default  NavigationDrawerStructure;
+export default NavigationDrawerStructure;

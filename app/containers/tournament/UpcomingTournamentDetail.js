@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,TOURNAMENT_REGISTER } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
-import { storeData } from '../../components/auth';
+import { storeData, isSignedIn, getData } from '../../components/auth';
 
 
 export default class UpcomingTournamentDetail extends BaseComponent {
@@ -13,10 +13,30 @@ export default class UpcomingTournamentDetail extends BaseComponent {
     constructor(props) {
         super(props)
         this.state = {
-            data: null
+            data: null,
+            signedIn: false
         }
         this.state.data = this.props.navigation.getParam('data');
         storeData("detail", JSON.stringify(this.state.data))
+
+        isSignedIn()
+            .then(res => {
+                console.log(res);
+                this.setState({ signedIn: res, })
+
+            })
+            .catch(err => alert("An error occurred"));
+
+    }
+
+    register() {
+        let signedIn = this.state.signedIn
+        if (signedIn)
+            this.props.navigation.navigate('RegistrationSteps')
+        else {
+            storeData(TOURNAMENT_REGISTER, true)
+            this.props.navigation.navigate('Login')
+        }
     }
 
 
@@ -280,7 +300,8 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
                                             style={styles.rounded_button}
                                             onPress={() => {
-                                                this.props.navigation.navigate('RegistrationSteps')
+                                                this.register();
+
                                             }}>
                                             <Text
                                                 style={{

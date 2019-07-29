@@ -21,6 +21,7 @@ import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import userhome from '../containers/UserScreen/UserHome'
 import ParentRewards from '../containers/rewards/ParentRewards'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 
 const userHomeModule = createStackNavigator({
 
@@ -119,6 +120,20 @@ const userHomeModule = createStackNavigator({
 
         })
 
+    },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
     EditProfile: {
         screen: EditProfile,

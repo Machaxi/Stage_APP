@@ -8,12 +8,9 @@ import firebase from 'react-native-firebase';
 import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, TOURNAMENT_REGISTER } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-
-const successImageUri = 'https://cdn.pixabay.com/photo/2015/06/09/16/12/icon-803718_1280.png';
 
 class PhoneAuth extends BaseComponent {
     constructor(props) {
@@ -26,8 +23,17 @@ class PhoneAuth extends BaseComponent {
             phoneNumber: '+91',
             confirmResult: null,
             isCall: true,
-            spinner: false
+            spinner: false,
+            is_navigation_to_tournament: false
         };
+
+        getData(TOURNAMENT_REGISTER, (value) => {
+
+            if (value != '' && value)
+                this.setState({
+                    is_navigation_to_tournament: value
+                })
+        });
     }
 
     componentDidMount() {
@@ -165,69 +171,81 @@ class PhoneAuth extends BaseComponent {
                 var userInfoData = userData['user'];
                 storeData("userInfo", JSON.stringify(userData))
                 onSignIn()
-                if (userData.is_existing_user == true) {
-                    if (userInfoData.user_type == GUEST) {
 
-                        this.props.navigation.navigate('GHome')
+                let is_navigation_to_tournament = this.state.is_navigation_to_tournament
+                //Registarion for tournament
+                if (is_navigation_to_tournament) {
 
-                    } else if (userInfoData.user_type == PLAYER) {
-                        if (!userData.has_multiple_acadmies) {
-                            this.props.navigation.navigate('UHome')
+                    if (userData.is_existing_user == true)
+                        this.props.navigation.navigate('RegistrationSteps')
+                    else
+                        this.props.navigation.navigate('EditProfile')
 
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: 'PLAYER'
-                            })
+                } else {
+
+
+                    if (userData.is_existing_user == true) {
+                        if (userInfoData.user_type == GUEST) {
+
+                            this.props.navigation.navigate('GHome')
+
+                        } else if (userInfoData.user_type == PLAYER) {
+                            if (!userData.has_multiple_acadmies) {
+                                this.props.navigation.navigate('UHome')
+
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer', {
+                                    userType: 'PLAYER'
+                                })
+                            }
+
+                        } else if (userInfoData.user_type == PARENT) {
+                            if (userData.has_multiple_acadmies == false) {
+                                this.props.navigation.navigate('PHome')
+
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer', {
+                                    userType: PLAYER
+                                })
+                            }
+
                         }
+                        else if (userInfoData.user_type == COACH) {
+                            storeData('multiple', userData.has_multiple_acadmies)
+                            if (userData.has_multiple_acadmies == false) {
+                                this.props.navigation.navigate('CHome')
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer', {
+                                    userType: COACH
+                                })
+                            }
 
-                    } else if (userInfoData.user_type == PARENT) {
-                        if (userData.has_multiple_acadmies == false) {
-                            this.props.navigation.navigate('PHome')
-
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: PLAYER
-                            })
                         }
-
-                    }
-                    else if (userInfoData.user_type == COACH) {
-                        storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false) {
+                        else if (userInfoData.user_type == ACADEMY) {
+                            //==================== NOTE ==========================
+                            //      Forcefully adding coach_id = '', to run coach section as academy
+                            //      academy section does not require coach_id
+                            //=====================================================
+                            userData['coach_id'] = ''
+                            storeData("userInfo", JSON.stringify(userData))
+                            storeData('academy_name', userData.user.name)
+                            console.log('coach userData => ', JSON.stringify(userData))
                             this.props.navigation.navigate('CHome')
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: COACH
-                            })
+
                         }
 
-                    }
-                    else if (userInfoData.user_type == ACADEMY) {
-                        //==================== NOTE ==========================
-                        //      Forcefully adding coach_id = '', to run coach section as academy
-                        //      academy section does not require coach_id
-                        //=====================================================
-                        userData['coach_id'] = ''
-                        storeData("userInfo", JSON.stringify(userData))
-                        storeData('academy_name', userData.user.name)
-                        console.log('coach userData => ', JSON.stringify(userData))
-                        this.props.navigation.navigate('CHome')
+                        //
+                        // if(otherParam == true){
+                        //     this.props.navigation.navigate('DrawerNavigator')
+                        // }
+                        // else
+                        // {
+                        //     this.props.navigation.goBack();
 
                     }
-
-
-
-                    //
-                    // if(otherParam == true){
-                    //     this.props.navigation.navigate('DrawerNavigator')
-                    // }
-                    // else
-                    // {
-                    //     this.props.navigation.goBack();
-
-                }
-                else {
-                    this.props.navigation.navigate('EditProfile')
+                    else {
+                        this.props.navigation.navigate('EditProfile')
+                    }
                 }
             } else {
                 alert('Invalid credentials')
@@ -280,68 +298,83 @@ class PhoneAuth extends BaseComponent {
                 var userInfoData = userData['user'];
                 storeData("userInfo", JSON.stringify(userData))
                 onSignIn()
-                if (userData.is_existing_user == true) {
-                    if (userInfoData.user_type == GUEST) {
+                //this.props.navigation.navigate('EditProfile')
+                //return
 
-                        this.props.navigation.navigate('GHome')
+                let is_navigation_to_tournament = this.state.is_navigation_to_tournament
+                if (is_navigation_to_tournament) {
 
-                    } else if (userInfoData.user_type == PLAYER) {
-                        if (!userData.has_multiple_acadmies) {
-                            this.props.navigation.navigate('UHome')
+                    //this.props.navigation.navigate('EditProfile')
+                    if (userData.is_existing_user == true)
+                        this.props.navigation.navigate('RegistrationSteps')
+                    else
+                        this.props.navigation.navigate('EditProfile')
 
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: 'PLAYER'
-                            })
+                } else {
+
+                    if (userData.is_existing_user == true) {
+                        if (userInfoData.user_type == GUEST) {
+
+                            this.props.navigation.navigate('GHome')
+
+                        } else if (userInfoData.user_type == PLAYER) {
+                            if (!userData.has_multiple_acadmies) {
+                                this.props.navigation.navigate('UHome')
+
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer', {
+                                    userType: 'PLAYER'
+                                })
+                            }
+
+                        } else if (userInfoData.user_type == PARENT) {
+                            if (userData.has_multiple_acadmies == false) {
+                                this.props.navigation.navigate('PHome')
+
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer', {
+                                    userType: PLAYER
+                                })
+                            }
+
                         }
+                        else if (userInfoData.user_type == COACH) {
+                            if (userData.has_multiple_acadmies == false) {
+                                this.props.navigation.navigate('CHome')
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer', {
+                                    userType: COACH
+                                })
+                            }
 
-                    } else if (userInfoData.user_type == PARENT) {
-                        if (userData.has_multiple_acadmies == false) {
-                            this.props.navigation.navigate('PHome')
-
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: PLAYER
-                            })
                         }
-
-                    }
-                    else if (userInfoData.user_type == COACH) {
-                        if (userData.has_multiple_acadmies == false) {
+                        else if (userInfoData.user_type == ACADEMY) {
+                            //==================== NOTE ==========================
+                            //      Forcefully adding coach_id = '', to run coach section as academy
+                            //      academy section does not require coach_id
+                            //=====================================================
+                            userData['coach_id'] = ''
+                            storeData("userInfo", JSON.stringify(userData))
+                            storeData('academy_name', userData.user.name)
+                            console.log('coach userData => ', JSON.stringify(userData))
                             this.props.navigation.navigate('CHome')
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: COACH
-                            })
+
                         }
 
-                    }
-                    else if (userInfoData.user_type == ACADEMY) {
-                        //==================== NOTE ==========================
-                        //      Forcefully adding coach_id = '', to run coach section as academy
-                        //      academy section does not require coach_id
-                        //=====================================================
-                        userData['coach_id'] = ''
-                        storeData("userInfo", JSON.stringify(userData))
-                        storeData('academy_name', userData.user.name)
-                        console.log('coach userData => ', JSON.stringify(userData))
-                        this.props.navigation.navigate('CHome')
+
+
+                        //
+                        // if(otherParam == true){
+                        //     this.props.navigation.navigate('DrawerNavigator')
+                        // }
+                        // else
+                        // {
+                        //     this.props.navigation.goBack();
 
                     }
-
-
-
-                    //
-                    // if(otherParam == true){
-                    //     this.props.navigation.navigate('DrawerNavigator')
-                    // }
-                    // else
-                    // {
-                    //     this.props.navigation.goBack();
-
-                }
-                else {
-                    this.props.navigation.navigate('EditProfile')
+                    else {
+                        this.props.navigation.navigate('EditProfile')
+                    }
                 }
             } else {
                 alert('Invalid credentials')

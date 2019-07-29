@@ -38,13 +38,13 @@ class CoachMenuDrawer extends BaseComponent {
 		};
 
 		isSignedIn()
-		.then(res => {
-			console.log(res);
-			this.setState({ signedIn: res,})
+			.then(res => {
+				console.log(res);
+				this.setState({ signedIn: res, })
 
-		})
-		.catch(err => alert("An error occurred"));
-		
+			})
+			.catch(err => alert("An error occurred"));
+
 		this.updateData()
 
 		this.refreshEvent = Events.subscribe(EVENT_EDIT_PROFILE, () => {
@@ -80,7 +80,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 		});
 
-		
+
 	}
 
 	fetchParentDetails() {
@@ -556,7 +556,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('AcademyListing')}>
 
 					<View style={styles.drawercell}>
 
@@ -592,7 +593,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('CoachRewardPoints')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Reward Points</Text>
 						<Image
@@ -692,8 +693,10 @@ class CoachMenuDrawer extends BaseComponent {
 		let mobileNumber = this.state.mobileNumber
 		let menu;
 		let ratings = 5
+		let academy_rating = this.state.academy_rating==undefined?0:this.state.academy_rating
 		//user_type = COACH
 		//signedIn = true
+		let is_parent = user_type == PARENT
 		let profile_pic = this.state.profile_pic
 		if (profile_pic == '') {
 			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
@@ -915,23 +918,28 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				{is_parent ?
+					<TouchableOpacity activeOpacity={0.8} onPress={() =>
+						this.props.navigation.navigate('ParentRewards')}>
 
-					<View style={styles.drawercell}>
+						<View style={styles.drawercell}>
 
-						<Text style={styles.menu}>
-							Reward Points
-								</Text>
+							<Text style={styles.menu}>
+								Reward Points
+									</Text>
 
-						<Image
-							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						/>
+							<Image
+								style={styles.arrow_img}
+								source={require('../images/ic_drawer_arrow.png')}
+							/>
 
-					</View>
-				</TouchableOpacity>
+						</View>
+					</TouchableOpacity> : null}
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('AcademyListing')
+				}>
 
 					<View style={styles.drawercell}>
 
@@ -1011,7 +1019,7 @@ class CoachMenuDrawer extends BaseComponent {
 								paddingBottom: 2,
 								marginLeft: 4,
 								borderColor: '#DFDFDF'
-							}]}>4.5</Text>
+							}]}>{academy_rating.toFixed(1)}</Text>
 
 						</View>
 					</View>

@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, StatusBar, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
@@ -108,7 +108,7 @@ class UserHome extends BaseComponent {
 
         };
         this.state = {
-
+            refreshing: false,
             userData: null,
             country: undefined,
             player_profile: null,
@@ -125,6 +125,10 @@ class UserHome extends BaseComponent {
 
     componentDidMount() {
 
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount() {
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -156,7 +160,15 @@ class UserHome extends BaseComponent {
         });
     }
 
+    onRefresh = () => {
 
+        this.setState({ refreshing: true });
+        this.selfComponentDidMount()
+        // In actual case set refreshing to false when whatever is being refreshed is done!
+        setTimeout(() => {
+            this.setState({ refreshing: false });
+        }, 1000);
+    };
     getPlayerDashboardData(academy_id, player_id, ) {
 
         getData('header', (value) => {
@@ -170,7 +182,7 @@ class UserHome extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.data['coach_data'] != null && user1.data['coach_data']) {
-                    
+
                     this.setState({
                         coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
                     })
@@ -384,7 +396,15 @@ class UserHome extends BaseComponent {
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 {/* <StatusBar translucent backgroundColor="#264d9b"
                 barStyle="light-content"/> */}
-                <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                            title="Pull to refresh"
+                        />
+                    }
+                    style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                     <PlayerHeader
                         player_profile={this.state.player_profile}
@@ -599,7 +619,47 @@ class UserHome extends BaseComponent {
                                         <Text style={
                                             [defaultStyle.bold_text_10, { marginTop: 5, color: '#A3A5AE' }]
                                         }>Top Reviews</Text>
-                                        <Text style={[defaultStyle.bold_text_12, { marginTop: 5, color: '#707070' }]} >{academy_feedback_data.source.name}</Text>
+                                        {/* <Text style={[defaultStyle.bold_text_12, { marginTop: 5, color: '#707070' }]} >{academy_feedback_data.source.name}</Text> */}
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                marginTop: 5,
+                                                alignItems: 'center'
+                                            }}
+                                        >
+
+
+                                            <Text style={[defaultStyle.bold_text_12, { color: '#707070' }]} >{academy_feedback_data.source.name}</Text>
+
+
+                                            <View style={{
+                                                alignItems: 'center',
+                                                flexDirection: 'row', marginLeft: 6, marginTop: 4
+                                            }}>
+
+                                                <Rating
+                                                    type='custom'
+                                                    ratingColor='#F4FC9A'
+                                                    ratingBackgroundColor='#D7D7D7'
+                                                    ratingCount={5}
+                                                    imageSize={14}
+                                                    readonly={true}
+                                                    startingValue={academy_feedback_data.rating}
+                                                    style={{ height: 20, width: 80 }}
+                                                />
+
+                                                <Text style={{
+                                                    backgroundColor: '#D8D8D8',
+                                                    height: 19, width: 30, textAlign: 'center',
+                                                    fontSize: 12,
+                                                    color: '#707070',
+                                                    paddingTop: 0,
+                                                    borderRadius: 12,
+                                                    fontFamily: 'Quicksand-Medium'
+                                                }}>{academy_feedback_data.rating.toFixed(1)}</Text>
+
+                                            </View>
+                                        </View>
 
                                         <Text style={[defaultStyle.regular_text_12, {
                                             marginTop: 5,
@@ -625,7 +685,9 @@ class UserHome extends BaseComponent {
                             }}>
 
                                 <TouchableOpacity onPress={() => {
-
+                                    this.props.navigation.navigate('AcademyProfile', {
+                                        id: academy_feedback_data.academyId
+                                    })
                                 }}>
                                     <Text
                                         style={[defaultStyle.bold_text_12,
@@ -648,6 +710,7 @@ class UserHome extends BaseComponent {
                                 marginLeft: 10,
                                 marginRight: 10,
                                 marginTop: 10,
+                                marginBottom: 10,
                                 borderRadius: 12,
                             }}>
                             <View
@@ -705,8 +768,40 @@ class UserHome extends BaseComponent {
                                         <Text style={
                                             [defaultStyle.bold_text_10, { marginTop: 5, color: '#A3A5AE' }]
                                         }>Top Reviews</Text>
-                                        <Text style={[defaultStyle.bold_text_12, { marginTop: 5, color: '#707070' }]} >{coach_feedback_data.source.name}</Text>
+                                        {/* <Text style={[defaultStyle.bold_text_12, { marginTop: 5, color: '#707070' }]} >{coach_feedback_data.source.name}</Text> */}
 
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            marginTop: 5,
+                                            alignItems: 'center'
+                                        }}>
+
+                                            <Text style={[defaultStyle.bold_text_12, { color: '#707070' }]} >{coach_feedback_data.source.name}</Text>
+                                            <View style={{ flexDirection: 'row', marginLeft: 6, marginTop: 4 }}>
+
+                                                <Rating
+                                                    type='custom'
+                                                    ratingColor='#F4FC9A'
+                                                    ratingBackgroundColor='#D7D7D7'
+                                                    ratingCount={5}
+                                                    imageSize={14}
+                                                    readonly={true}
+                                                    startingValue={coach_feedback_data.rating}
+                                                    style={{ height: 20, width: 80 }}
+                                                />
+
+                                                <Text style={{
+                                                    backgroundColor: '#D8D8D8',
+                                                    height: 19, width: 30, textAlign: 'center',
+                                                    fontSize: 12,
+                                                    color: '#707070',
+                                                    paddingTop: 0,
+                                                    borderRadius: 12,
+                                                    fontFamily: 'Quicksand-Medium'
+                                                }}>{coach_feedback_data.rating.toFixed(1)}</Text>
+
+                                            </View>
+                                        </View>
                                         <Text style={[defaultStyle.regular_text_12, {
                                             marginTop: 5,
                                             color: '#707070'
@@ -729,7 +824,10 @@ class UserHome extends BaseComponent {
                             }}>
 
                                 <TouchableOpacity onPress={() => {
-
+                                    this.props.navigation.navigate('CoachProfileDetail', {
+                                        academy_id: coach_feedback_data.academyId,
+                                        coach_id: coach_feedback_data.target.id
+                                    })
                                 }}>
                                     <Text
                                         style={[defaultStyle.bold_text_12,

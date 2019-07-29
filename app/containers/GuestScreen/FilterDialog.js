@@ -11,7 +11,7 @@ export default class FilterDialog extends BaseComponent {
 
         return (
             <Dialog
-                width={250}
+                width={270}
                 visible={this.props.visible}
                 dialogStyle={{ borderRadius: 0, padding: 16, aspectRatio: 1 }}
                 onTouchOutside={() => {
@@ -37,12 +37,21 @@ export default class FilterDialog extends BaseComponent {
                     </TouchableOpacity>
                     <View style={styles.header} />
 
-                    <TouchableOpacity onPress={() => this.props.touchOutside('createdAt', '')}>
+                    <TouchableOpacity onPress={() => this.props.touchOutside('createdAt', 'desc')}>
                         <Text style={[defaultStyle.bold_text_14, { padding: 8, }]}>
-                            Date
+                            Most Recent
                         </Text>
                     </TouchableOpacity>
-                    <View style={styles.header} />
+
+                    {/* <View style={styles.header} /> */}
+
+                    {/* <TouchableOpacity onPress={() => this.props.touchOutside('createdAt', 'asc')}>
+                        <Text style={[defaultStyle.bold_text_14, { padding: 8, }]}>
+                            Earlier
+                        </Text>
+                    </TouchableOpacity> */}
+
+                    
 
                 </DialogContent>
             </Dialog>
@@ -59,7 +68,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingHorizontal: 0,
         margin: 0,
-        width: 200
     },
     text: {
         color: '#404040',

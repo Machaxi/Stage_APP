@@ -8,6 +8,9 @@ import { getData, storeData } from "../../components/auth";
 import FilterDialog from './FilterDialog'
 import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
+import Spinner from 'react-native-loading-spinner-overlay';
+import ViewMoreText from 'react-native-view-more-text';
+import ReadMore from 'react-native-read-more-text'
 
 class AcademyProfile extends BaseComponent {
 
@@ -19,13 +22,18 @@ class AcademyProfile extends BaseComponent {
             player_id: '',
             showFeedback: false,
             feedback: [],
-            filter_dialog: false
+            filter_dialog: false,
+            spinner: false,
+            page: 0,
+            sortType: '',
+            type: '',
+            clear_feedback_array: false
         }
         this.state.id = this.props.navigation.getParam('id', '');
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.state.player_id = userData.user['id']
-            console.warn(this.state.player_id)
+            console.log(this.state.player_id)
             if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
                 this.setState({
                     showFeedback: true
@@ -37,7 +45,11 @@ class AcademyProfile extends BaseComponent {
             }
         });
     }
-
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
     componentDidMount() {
 
         this.props.getAcademyDetail(this.state.id).then(() => {
@@ -49,7 +61,9 @@ class AcademyProfile extends BaseComponent {
                     academy: academy
                 })
 
-                this.getAcademyFeedbacks('', '')
+                let sortType = this.state.sortType
+                let type = this.state.type
+                this.getAcademyFeedbacks(sortType, type, false)
 
             }
 
@@ -59,29 +73,52 @@ class AcademyProfile extends BaseComponent {
         })
     }
 
-    getAcademyFeedbacks(sortType, type) {
+    getAcademyFeedbacks(sortType, type, showLoading) {
 
+        console.log('getAcademyFeedbacks => sortType ', sortType + ' type ' + type)
         let academy_id = this.state.id;
-        let page = 0
+        let page = this.state.page
         let size = 10
         let sort = sortType
+        this.setState({
+            sortType: sortType,
+            type: type
 
+        })
+
+        if (showLoading) {
+            this.progress(true)
+        }
         // getData('header', (value) => {
 
         // })
 
         this.props.getAcademyFeedbackList('', academy_id, page, size, sort, type).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            this.progress(false)
             let status = this.props.data.res.success
             if (status) {
                 let feedback = this.props.data.res.data.feedback
-                console.warn('Feedback => ' + JSON.stringify(feedback))
+                console.log('Feedback load =>', feedback.length)
+                console.log('Feedback => ' + JSON.stringify(feedback))
+                let allfeeback = this.state.feedback
+
+                if (this.state.clear_feedback_array) {
+                    this.state.clear_feedback_array = false
+                    allfeeback = []
+                }
+
+                for (let i = 0; i < feedback.length; i++) {
+                    allfeeback.push(feedback[i])
+                }
+
                 this.setState({
-                    feedback: feedback
+                    feedback: allfeeback
                 })
             }
 
         }).catch((response) => {
+            this.progress(false)
             console.log(response);
         })
     }
@@ -124,11 +161,13 @@ class AcademyProfile extends BaseComponent {
                     />
 
                     <Text style={{
-                        backgroundColor: '#D6D6D6', height: 19,
+                        backgroundColor: '#D6D6D6',
+                        height: 19,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         width: 30,
                         textAlign: 'center',
                         fontSize: 12,
-                        paddingTop: 2,
                         color: '#707070',
                         borderRadius: 12,
                     }}>{item.rating}</Text>
@@ -137,21 +176,69 @@ class AcademyProfile extends BaseComponent {
 
             </View>
 
-            <Text style={{
-                fontSize: 12,
-                color: '#707070',
-            }}>{item.review}</Text>
-
+            <ReadMore
+                numberOfLines={2}
+                renderTruncatedFooter={this._renderTruncatedFooter}
+                renderRevealedFooter={this._renderRevealedFooter}
+                onReady={this._handleTextReady}>
+                <Text style={{
+                    fontSize: 12,
+                    color: '#707070',
+                }}>{item.review}</Text>
+            </ReadMore>
         </View>
 
 
 
     );
+    _renderTruncatedFooter = (handlePress) => {
+        return (
+            <View style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                alignItems: 'flex-end'
+            }}>
 
+                <Text style={[defaultStyle.regular_text_10, {
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginTop: 0, color: '#667DDB'
+                }]}
+                    onPress={handlePress}>
+                    Show more
+          </Text>
+            </View>
+
+        );
+    }
+
+    _renderRevealedFooter = (handlePress) => {
+        return (
+            <View style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                alignItems: 'flex-end'
+            }}>
+                <Text style={[defaultStyle.regular_text_10, {
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginTop: 0,
+                    color: '#667DDB'
+                }]}
+                    onPress={handlePress}>
+                    Show less
+          </Text>
+            </View>
+        );
+    }
+
+    _handleTextReady = () => {
+        // ...
+    }
 
     _renderPlayerItem(top_player) {
 
-        console.warn('top_player' + JSON.stringify(top_player), +" id " + top_player.id)
+        console.log('top_player' + JSON.stringify(top_player), +" id " + top_player.id)
         return (
 
             <TouchableOpacity
@@ -275,11 +362,14 @@ class AcademyProfile extends BaseComponent {
         if (id == undefined || type == undefined) {
             return
         }
-        setTimeout(()=>{
-            this.getAcademyFeedbacks(id, type)
-        },100)
+        this.state.page = 0
+        this.state.clear_feedback_array = true
 
-       // 
+        setTimeout(() => {
+            this.getAcademyFeedbacks(id, type)
+        }, 100)
+
+        // 
     }
 
     render() {
@@ -287,7 +377,7 @@ class AcademyProfile extends BaseComponent {
         let filter_dialog = this.state.filter_dialog
         let showFeedback = this.state.showFeedback
 
-        if (this.props.data.loading || this.state.academy == null) {
+        if (this.state.academy == null) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -303,10 +393,14 @@ class AcademyProfile extends BaseComponent {
             <ScrollView style={styles.chartContainer}>
 
                 <View>
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
 
                     <FilterDialog
                         touchOutside={(id, type) => {
-                            this.sort(id, type)
+                            this.sort(id, type, true)
                         }}
                         visible={filter_dialog} />
 
@@ -345,10 +439,11 @@ class AcademyProfile extends BaseComponent {
                                 <Text style={{
                                     backgroundColor: '#D6D6D6', height: 19, width: 30, textAlign: 'center',
                                     fontSize: 12,
-                                    paddingTop: 2,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
                                     color: '#707070',
                                     borderRadius: 12,
-                                }}>{academy.ratings}</Text>
+                                }}>{academy.ratings.toFixed(1)}</Text>
 
                             </View>
 
@@ -542,8 +637,7 @@ class AcademyProfile extends BaseComponent {
                                             this.setState({
                                                 filter_dialog: true
                                             })
-                                        }}
-                                    >
+                                        }} >
 
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text
@@ -568,6 +662,18 @@ class AcademyProfile extends BaseComponent {
 
 
                             <FlatList
+                                onEndReachedThreshold={0.5}
+                                onEndReached={({ distanceFromEnd }) => {
+                                    console.log('on end reached ', distanceFromEnd);
+                                    let page = this.state.page
+                                    page = page + 1
+                                    this.state.page = page
+
+                                    console.log('page => ', this.state.page)
+                                    let sortType = this.state.sortType
+                                    let type = this.state.type
+                                    this.getAcademyFeedbacks(sortType, type, false)
+                                }}
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}

@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput } from '
 import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
-import { coachListing } from '../../redux/reducers/AcademyReducer'
+import { coachListing } from '../../redux/reducers/CoachReducer'
 import BaseComponent from '../BaseComponent';
 
 class CoachListing extends BaseComponent {
@@ -216,7 +216,7 @@ class CoachListing extends BaseComponent {
 
 const mapStateToProps = state => {
     return {
-        data: state.AcademyReducer,
+        data: state.coachReducer,
     };
 };
 const mapDispatchToProps = {

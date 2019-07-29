@@ -11,10 +11,11 @@ export default class RegisteredTournamentDetail extends BaseComponent {
     constructor(props) {
         super(props)
         this.state = {
-            data: {}
+            data: {},
+            
         }
         this.state.data = JSON.parse(this.props.navigation.getParam('data'));
-
+        
     }
 
 

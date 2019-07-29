@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboar
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
-import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
+import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/AcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
 import BaseComponent from './../BaseComponent'
@@ -28,17 +28,26 @@ class AcademyListing extends BaseComponent {
     }
 
     _refresh() {
-        alert('test')
+        // setTimeout(()=>{
+
+        // },100)
+        //this.getAcademyList()
+        //
     }
 
     _handleChange(e) {
+        //console.warn('_handleChange => ', e)
         this.setState({
             query: e
         })
         this.getAutoSuggestion()
+
+        if(e==''){
+            this.getAcademyList()
+        }
     }
 
-    getAcademyList(){
+    getAcademyList() {
         this.props.getAllAcademy().then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
@@ -57,7 +66,7 @@ class AcademyListing extends BaseComponent {
 
     componentDidMount() {
 
-       this.getAcademyList()
+        this.getAcademyList()
     }
 
     find(query) {
@@ -166,7 +175,15 @@ class AcademyListing extends BaseComponent {
             console.log(response);
         })
     }
+    handleKeyDown = (e) => {
 
+        //console.warn('handle key ',e.nativeEvent.key)
+        //let text = e.key
+        //let text = this.state.query
+        // if (text != undefined && text.length > 0) {
+        //    // this.getAutoSuggestion()
+        // }
+    }
 
 
     listHeader() {
@@ -202,15 +219,19 @@ class AcademyListing extends BaseComponent {
                         //     //console.warn(text)
                         //     this.getAutoSuggestion()
                         // }}
+                        returnKeyType="search"
+                        onSubmitEditing={this.handleKeyDown}
                         value={this.state.query}
                         style={{
                             marginLeft: 8,
                             backgroundColor: 'white',
                             borderRadius: 16,
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Regular',
+
                         }} placeholder="Search" />
 
                     <FlatList
+                        keyboardShouldPersistTaps={'handled'}
                         data={autoData}
                         renderItem={({ item }) =>
                             <View >
@@ -239,6 +260,7 @@ class AcademyListing extends BaseComponent {
                                                 this.setState({
                                                     query: item.name
                                                 })
+                                                this.state.query = item.name
                                                 this.getAcademicSearchResult(true)
                                             } else {
                                                 this.props.navigation.navigate('AcademyProfile', { id: item.id })
@@ -400,11 +422,11 @@ class AcademyListing extends BaseComponent {
                             paddingTop: 0,
                             borderRadius: 12,
                             fontFamily: 'Quicksand-Medium'
-                        }}>{item.ratings}</Text>
+                        }}>{item.ratings.toFixed(1)}</Text>
 
                     </View>
 
-                    <View style={{ flexDirection: 'row', margin: 8 }}>
+                    {/* <View style={{ flexDirection: 'row', margin: 8 }}>
 
                         <Text
                             style={styles.rounded_button}
@@ -417,7 +439,7 @@ class AcademyListing extends BaseComponent {
                             Book Court
                                 </Text>
 
-                    </View>
+                    </View> */}
 
                 </View>
 
@@ -437,19 +459,18 @@ class AcademyListing extends BaseComponent {
         }
 
         return (
-            <PTRView onRefresh={this._refresh} >
                 <View style={styles.chartContainer}>
                     {
                         this.listHeader()
                     }
                     <FlatList
+
                         //ListHeaderComponent={() => this.listHeader()}
                         data={this.state.academies}
                         extraData={this.state.academies}
                         renderItem={this._renderItem}
                     />
                 </View>
-            </PTRView>
         );
     }
 }

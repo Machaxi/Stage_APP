@@ -160,7 +160,7 @@ class CoachProfileDetail extends BaseComponent {
         let feedback = this.state.feedback
         let coachData = this.state.coachData
         let year = coachData.experience / 12
-        year =  Math.floor(year)
+        year = Math.floor(year)
         let month = coachData.experience % 12
 
         return (
@@ -207,15 +207,17 @@ class CoachProfileDetail extends BaseComponent {
                                         onStartRating={5}
                                         readonly={true}
                                         imageSize={14}
-                                        style={{ height: 30, width: 80, marginTop: 4 }}
+                                        style={{ height: 30, width: 80, marginTop: 7 }}
                                     />
 
                                     <Text style={{
                                         backgroundColor: '#ddd', height: 20, width: 36, textAlign: 'center',
                                         fontSize: 14,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                         color: 'gray',
                                         borderRadius: 12,
-                                    }}>{5}</Text>
+                                    }}>5</Text>
 
                                 </View>
 

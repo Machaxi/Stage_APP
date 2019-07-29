@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
@@ -23,7 +23,16 @@ class EditProfile extends BaseComponent {
             txtname: '',
             txtphone: '',
             imageData: null,
+            is_navigation_to_tournament: false
         }
+
+        getData(TOURNAMENT_REGISTER, (value) => {
+
+            if (value != '' && value)
+                this.setState({
+                    is_navigation_to_tournament: value
+                })
+        });
 
         getData('userInfo', (value) => {
 
@@ -92,6 +101,13 @@ class EditProfile extends BaseComponent {
                     console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data));
                     alert('Success.')
                     this.updatePrefData(JSON.stringify(data))
+
+
+                    if (this.state.is_navigation_to_tournament) {
+                        storeData(TOURNAMENT_REGISTER, '')
+                        this.props.navigation.navigate('RegistrationSteps')
+                    }
+
                 }).catch((response) => {
                     console.log(response);
                     this.progress(false)

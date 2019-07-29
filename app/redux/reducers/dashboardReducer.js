@@ -47,7 +47,7 @@ export function getPlayerDashboard(header,player_id,academy_id) {
     };
 }
 
-export function getOtherPlayerDashboard(player_id,academy_id) {
+export function getOtherPlayerDashboard(academy_id,player_id) {
     console.log("getPlayerDashboard ",player_id,academy_id)
     // var header =
     //     getData('header', (value) => {
