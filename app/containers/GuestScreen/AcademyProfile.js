@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
 import FilterDialog from './FilterDialog'
 import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle,formattedName } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMore from 'react-native-read-more-text'
@@ -311,7 +311,7 @@ class AcademyProfile extends BaseComponent {
                                 fontWeight: 16,
                                 fontWeight: '500',
                                 textAlign: 'center'
-                            }}>{top_player.name}</Text>
+                            }}>{formattedName(top_player.name)}</Text>
                         </View>
 
                         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>

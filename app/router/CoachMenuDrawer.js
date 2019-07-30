@@ -12,7 +12,7 @@ import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../containers/BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, formattedName } from '../containers/BaseComponent'
 import { getRelationsDetails } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
@@ -672,7 +672,7 @@ class CoachMenuDrawer extends BaseComponent {
 		}}>
 			<Text
 				numberOfLines={1}
-				style={[defaultStyle.bold_text_14, { width: 90 }]}>{obj.name}</Text>
+				style={[defaultStyle.bold_text_14, { width: 90 }]}>{formattedName(obj.name)}</Text>
 			<Text style={defaultStyle.regular_text_12}>{obj.phone_number}</Text>
 
 			<TouchableOpacity
