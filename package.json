@@ -13,11 +13,8 @@
     "react": "16.8.3",
     "react-native": "^0.59.8",
     "react-native-autocomplete-input": "^4.1.0",
-<<<<<<< HEAD
     "react-native-calendar": "^0.13.1",
-=======
     "react-native-collapse-view": "^1.0.0",
->>>>>>> 07fb1b7fb66dcd700b642e4e47d2e881e114f2e4
     "react-native-confirmation-code-input": "^1.0.4",
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^1.1.0",
