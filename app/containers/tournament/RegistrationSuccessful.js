@@ -1,18 +1,67 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 'react-native'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import Moment from 'moment';
+import { CustomeButtonB } from '../../components/Home/Card';
+import { getData } from '../../components/auth';
+import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
+
 
 export default class RegistrationSuccessful extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.state = {
+            user_selection: [],
+            name: '',
+            data: {}
+        }
+        this.state.user_selection = this.props.navigation.getParam('user_selection', '')
+        this.state.name = this.props.navigation.getParam('name', '')
+        this.state.data = this.props.navigation.getParam('data', '')
 
     }
 
     render() {
+
+        let data = JSON.parse(this.state.data)
+        let name = this.state.name
+        let tournament_name = data['name']
+        let month = data['month'] + " " + data['year']
+        let academic_type = data['academic_type']
+        let start_date = data['start_date']
+        let end_date = data['end_date']
+
+        let dates = Moment.utc(start_date).local().format('DD MMM') + " - " +
+            Moment.utc(end_date).local().format('DD MMM')
+
+        let user_selection = JSON.parse(this.state.user_selection)
+        let array = []
+        for (let i = 0; i < user_selection.length; i++) {
+            let obj = user_selection[i]
+            let title = obj.title
+            let wholeText = ''
+            wholeText = wholeText + title
+            let tournament_types = obj.tournament_types
+            for (let j = 0; j < tournament_types.length; j++) {
+
+                let type = tournament_types[j]
+                if (type.selected) {
+
+                    wholeText = wholeText + "          " + type.tournament_type
+                }
+
+
+            }
+            array.push(<Text style={[defaultStyle.regular_text_14, { paddingBottom: 8 }]}>
+                {wholeText}
+            </Text>)
+        }
+        console.log('registrion success => ', user_selection)
+
+
         return (
 
             <ScrollView>
@@ -42,12 +91,16 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 fontSize: 14,
                                 color: '#000000',
                                 marginTop: 16,
+                                marginBottom: 4,
                                 fontFamily: 'Quicksand-Medium'
                             }}>
                                 Registration Sucessfull!
                     </Text>
 
                         </View>
+
+                        <View style={defaultStyle.line_style}></View>
+
 
                         <View style={{
                             paddingLeft: 16,
@@ -62,8 +115,8 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 color: '#404040',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Feather Academy Tournament
-                    </Text>
+                                {tournament_name}
+                            </Text>
 
 
                             <View style={{ paddingTop: 12, flexDirection: 'row', flex: 1 }}>
@@ -73,8 +126,8 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
-                                    May 2019
-                    </Text>
+                                    {month}
+                                </Text>
 
                                 <Text style={{
                                     backgroundColor: '#667DDB',
@@ -88,7 +141,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     paddingTop: 2,
                                     paddingBottom: 2,
                                     fontFamily: 'Quicksand-Regular'
-                                }}>Inter-Academy</Text>
+                                }}>{academic_type}</Text>
 
                             </View>
 
@@ -97,7 +150,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 color: '#404040',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                Dates <Text style={{ color: '#404040' }}>{dates}</Text>
                             </Text>
 
 
@@ -116,35 +169,12 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 color: '#404040',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Prithiviraj P
-                    </Text>
+                                {name}
+                            </Text>
 
-                            <View style={{ flexDirection: 'row', paddingTop: 10, }}>
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    U - 13
-                                </Text>
+                            <View style={{ paddingTop: 10, }}>
 
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    marginLeft:16,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Singles
-                                </Text>
-
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    marginLeft:16,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Doubles
-                                </Text>
+                                {array}
 
                             </View>
 
@@ -153,14 +183,34 @@ export default class RegistrationSuccessful extends BaseComponent {
 
                             <TouchableOpacity activeOpacity={.8}
                                 onPress={() => {
+                                    this.props.navigation.navigate('RegistrationSteps')
+                                    //console.warn('Done')
+                                }}
+                            >
+                                <View style={{
+                                    marginTop: 16,
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]}>
+                                        Register another Player?
+                                </Text>
+                                </View>
+                            </TouchableOpacity>
+
+
+                            <TouchableOpacity activeOpacity={.8}
+                                style={{ marginTop: 20 }}
+                                onPress={() => {
                                     //this.props.navigation.navigate('TournamentFixture')
                                     console.warn('Done')
                                 }}
                             >
 
-                                <View style={{
+                                {/* <View style={{
                                     width: '100%',
-                                    marginTop: 12,
+                                    marginTop: 16,
                                     marginBottom: 8,
                                     flex: 1,
                                     justifyContent: 'center',
@@ -170,7 +220,77 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     <Text style={style.rounded_button}>
                                         Finish Registration
                                 </Text>
+                                </View> */}
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: "100%"
+                                }}>
+
+                                    <View style={{
+                                        flex: 1,
+                                        width: 200,
+                                    }}>
+                                        <CustomeButtonB
+                                            onPress={() => {
+                                                getData('userInfo', (value) => {
+                                                    let userData = (JSON.parse(value))
+                                                    // onSignIn()
+                                                    let userType = userData.user['user_type']
+                                                    console.log("SplashScreen=> ", JSON.stringify(userData));
+                                                    console.warn('userType ', userType == PLAYER)
+                                                    console.warn('academy_id ', userData.academy_id)
+
+                                                    if (userType == GUEST) {
+                                                        this.props.navigation.navigate('GHome')
+                                                    }
+                                                    else {
+                                                        console.log('data=> ', userData);
+                                                        if (userType == GUEST) {
+                                                            this.props.navigation.navigate('GHome')
+                                                        } else {
+                                                            if (userType == PLAYER) {
+                                                                //this.props.navigation.navigate('UHome')
+                                                                if (!userData.has_multiple_acadmies) {
+                                                                    this.props.navigation.navigate('UHome')
+
+                                                                } else {
+                                                                    this.props.navigation.navigate('SwitchPlayer', {
+                                                                        userType: 'PLAYER'
+                                                                    })
+                                                                }
+                                                            } else if (userType == COACH || userType == ACADEMY) {
+                                                                //this.props.navigation.navigate('CHome')
+                                                                storeData('multiple', userData.has_multiple_acadmies)
+                                                                if (userData.has_multiple_acadmies == false) {
+                                                                    this.props.navigation.navigate('CHome')
+                                                                } else {
+                                                                    this.props.navigation.navigate('SwitchPlayer', {
+                                                                        userType: COACH
+                                                                    })
+                                                                }
+                                                            }
+                                                            else if (userType == PARENT) {
+                                                                //this.props.navigation.navigate('PHome')
+                                                                if (userData.has_multiple_acadmies == false) {
+                                                                    this.props.navigation.navigate('PHome')
+
+                                                                } else {
+                                                                    this.props.navigation.navigate('SwitchPlayer', {
+                                                                        userType: PLAYER
+                                                                    })
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            }}
+                                        >
+                                            Finish Registration
+                                    </CustomeButtonB>
+                                    </View>
                                 </View>
+
                             </TouchableOpacity>
 
                         </View>

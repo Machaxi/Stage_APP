@@ -5,9 +5,12 @@ import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
-
+import FilterDialog from './FilterDialog'
 import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle,formattedName } from '../BaseComponent';
+import Spinner from 'react-native-loading-spinner-overlay';
+import ViewMoreText from 'react-native-view-more-text';
+import ReadMore from 'react-native-read-more-text'
 
 class AcademyProfile extends BaseComponent {
 
@@ -18,13 +21,19 @@ class AcademyProfile extends BaseComponent {
             academy: null,
             player_id: '',
             showFeedback: false,
-            feedback: []
+            feedback: [],
+            filter_dialog: false,
+            spinner: false,
+            page: 0,
+            sortType: '',
+            type: '',
+            clear_feedback_array: false
         }
         this.state.id = this.props.navigation.getParam('id', '');
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.state.player_id = userData.user['id']
-            console.warn(this.state.player_id)
+            console.log(this.state.player_id)
             if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
                 this.setState({
                     showFeedback: true
@@ -36,7 +45,11 @@ class AcademyProfile extends BaseComponent {
             }
         });
     }
-
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
     componentDidMount() {
 
         this.props.getAcademyDetail(this.state.id).then(() => {
@@ -48,7 +61,9 @@ class AcademyProfile extends BaseComponent {
                     academy: academy
                 })
 
-                this.getAcademyFeedbacks()
+                let sortType = this.state.sortType
+                let type = this.state.type
+                this.getAcademyFeedbacks(sortType, type, false)
 
             }
 
@@ -58,29 +73,52 @@ class AcademyProfile extends BaseComponent {
         })
     }
 
-    getAcademyFeedbacks() {
+    getAcademyFeedbacks(sortType, type, showLoading) {
 
+        console.log('getAcademyFeedbacks => sortType ', sortType + ' type ' + type)
         let academy_id = this.state.id;
-        let page = 0
+        let page = this.state.page
         let size = 10
-        let sort = ''
+        let sort = sortType
+        this.setState({
+            sortType: sortType,
+            type: type
 
+        })
+
+        if (showLoading) {
+            this.progress(true)
+        }
         // getData('header', (value) => {
 
         // })
 
-        this.props.getAcademyFeedbackList('', academy_id, page, size, sort).then(() => {
+        this.props.getAcademyFeedbackList('', academy_id, page, size, sort, type).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            this.progress(false)
             let status = this.props.data.res.success
             if (status) {
                 let feedback = this.props.data.res.data.feedback
-                console.warn('Feedback => ' + JSON.stringify(feedback))
+                console.log('Feedback load =>', feedback.length)
+                console.log('Feedback => ' + JSON.stringify(feedback))
+                let allfeeback = this.state.feedback
+
+                if (this.state.clear_feedback_array) {
+                    this.state.clear_feedback_array = false
+                    allfeeback = []
+                }
+
+                for (let i = 0; i < feedback.length; i++) {
+                    allfeeback.push(feedback[i])
+                }
+
                 this.setState({
-                    feedback: feedback
+                    feedback: allfeeback
                 })
             }
 
         }).catch((response) => {
+            this.progress(false)
             console.log(response);
         })
     }
@@ -123,11 +161,13 @@ class AcademyProfile extends BaseComponent {
                     />
 
                     <Text style={{
-                        backgroundColor: '#D6D6D6', height: 19,
+                        backgroundColor: '#D6D6D6',
+                        height: 19,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         width: 30,
                         textAlign: 'center',
                         fontSize: 12,
-                        paddingTop: 2,
                         color: '#707070',
                         borderRadius: 12,
                     }}>{item.rating}</Text>
@@ -136,126 +176,208 @@ class AcademyProfile extends BaseComponent {
 
             </View>
 
-            <Text style={{
-                fontSize: 12,
-                color: '#707070',
-            }}>{item.review}</Text>
-
+            <ReadMore
+                numberOfLines={2}
+                renderTruncatedFooter={this._renderTruncatedFooter}
+                renderRevealedFooter={this._renderRevealedFooter}
+                onReady={this._handleTextReady}>
+                <Text style={{
+                    fontSize: 12,
+                    color: '#707070',
+                }}>{item.review}</Text>
+            </ReadMore>
         </View>
 
 
 
     );
+    _renderTruncatedFooter = (handlePress) => {
+        return (
+            <View style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                alignItems: 'flex-end'
+            }}>
 
+                <Text style={[defaultStyle.regular_text_10, {
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginTop: 0, color: '#667DDB'
+                }]}
+                    onPress={handlePress}>
+                    Show more
+          </Text>
+            </View>
+
+        );
+    }
+
+    _renderRevealedFooter = (handlePress) => {
+        return (
+            <View style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                alignItems: 'flex-end'
+            }}>
+                <Text style={[defaultStyle.regular_text_10, {
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginTop: 0,
+                    color: '#667DDB'
+                }]}
+                    onPress={handlePress}>
+                    Show less
+          </Text>
+            </View>
+        );
+    }
+
+    _handleTextReady = () => {
+        // ...
+    }
 
     _renderPlayerItem(top_player) {
 
+        console.log('top_player' + JSON.stringify(top_player), +" id " + top_player.id)
         return (
 
-            <View style={{ overflow: 'hidden', height: 190, width: 120, paddingRight: 4 }}>
+            <TouchableOpacity
+                onPress={() => {
+                    this.props.navigation.navigate('OtherPlayerDeatils', {
+                        academy_id: this.state.id,
+                        player_id: top_player.id
+                    })
+                }}
+                activeOpacity={.8}
+            >
 
-                <ImageBackground style={{ height: 190, width: '100%' }}
-                    source={require('../../images/batch_card.png')}
-                >
-                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
-                    <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{top_player.score}</Text>
+                <View style={{ overflow: 'hidden', height: 190, width: 120, paddingRight: 4 }}>
 
-                    <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
+                    <ImageBackground style={{ height: 190, width: '100%' }}
+                        source={require('../../images/batch_card.png')}
+                    >
+                        <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
+                        <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{top_player.score}</Text>
 
-                        <Text
-                            style={{
-                                width: 26,
-                                height: 12,
-                                color: 'white',
-                                marginRight: 4,
-                                marginTop: 16,
-                                alignItems: 'center',
-                                alignSelf: 'center',
-                                textAlign: 'center',
-                                backgroundColor: 'red',
-                                borderRadius: 4,
-                                fontSize: 8,
-                                paddingTop: 1
-                            }}
-                        >{top_player.player_category}</Text>
-                        <Image
-                            style={{
-                                height: 80, width: 50,
-                                justifyContent: 'center', alignSelf: 'center'
-                            }}
-                            source={require('../../images/player_small.png')}></Image>
+                        <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
-                        <Text
-                            numberOfLines={2}
-                            ellipsizeMode="tail"
-                            style={{
-                                color: 'white',
-                                alignItems: 'center',
-                                alignSelf: 'center',
-                                textAlign: 'center',
-                                fontSize: 8,
-                                marginLeft: 4,
-                                marginTop: 16,
-                            }}
-                        >{top_player.player_level.split(" ").join("\n")}</Text>
-                    </View>
+                            <Text
+                                style={{
+                                    width: 26,
+                                    height: 12,
+                                    color: 'white',
+                                    marginRight: 4,
+                                    marginTop: 16,
+                                    alignItems: 'center',
+                                    alignSelf: 'center',
+                                    textAlign: 'center',
+                                    backgroundColor: 'red',
+                                    borderRadius: 4,
+                                    fontSize: 8,
+                                    paddingTop: 1
+                                }}
+                            >{top_player.player_category}</Text>
+                            <Image
+                                style={{
+                                    height: 80, width: 50,
+                                    justifyContent: 'center', alignSelf: 'center'
+                                }}
+                                source={require('../../images/player_small.png')}></Image>
 
-                    <View style={{
-                        position: 'absolute',
+                            <Text
+                                numberOfLines={2}
+                                ellipsizeMode="tail"
+                                style={{
+                                    color: 'white',
+                                    alignItems: 'center',
+                                    alignSelf: 'center',
+                                    textAlign: 'center',
+                                    fontSize: 8,
+                                    marginLeft: 4,
+                                    marginTop: 16,
+                                }}
+                            >{top_player.player_level.split(" ").join("\n")}</Text>
+                        </View>
 
-                        marginTop: 116,
-                        width: "100%", height: 20, backgroundColor: 'white'
-                    }}>
+                        <View style={{
+                            position: 'absolute',
 
-                        <Text style={{
-                            color: '#404040',
-                            fontWeight: 16,
-                            fontWeight: '500',
-                            textAlign: 'center'
-                        }}>{top_player.name}</Text>
-                    </View>
+                            marginTop: 116,
+                            width: "100%", height: 20, backgroundColor: 'white'
+                        }}>
 
-                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+                            <Text style={{
+                                color: '#404040',
+                                fontWeight: 16,
+                                fontWeight: '500',
+                                textAlign: 'center'
+                            }}>{formattedName(top_player.name)}</Text>
+                        </View>
 
-                        <ImageBackground
-                            style={{
-                                height: 38, width: 25, justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                            source={require('../../images/batch_pink.png')}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
 
-                            <View style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                backgroundColor: '#485FA0', height: 6, width: '120%'
-                            }}>
-                                <Image style={{ height: 7, width: 12, marginLeft: -12 }}
-                                    source={require('../../images/left_batch_arrow.png')}></Image>
+                            <ImageBackground
+                                style={{
+                                    height: 38, width: 25, justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                                source={require('../../images/batch_pink.png')}>
 
-                                <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{top_player.badge}</Text>
-                                <Image style={{ height: 7, width: 12, marginRight: -12 }}
-                                    source={require('../../images/right_batch_arrow.png')}></Image>
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    backgroundColor: '#485FA0', height: 6, width: '120%'
+                                }}>
+                                    <Image style={{ height: 7, width: 12, marginLeft: -12 }}
+                                        source={require('../../images/left_batch_arrow.png')}></Image>
 
-                            </View>
-                        </ImageBackground>
+                                    <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{top_player.badge}</Text>
+                                    <Image style={{ height: 7, width: 12, marginRight: -12 }}
+                                        source={require('../../images/right_batch_arrow.png')}></Image>
+
+                                </View>
+                            </ImageBackground>
 
 
 
-                    </View>
+                        </View>
 
-                </ImageBackground>
+                    </ImageBackground>
 
-            </View>)
+                </View>
+            </TouchableOpacity>
+
+        )
 
     }
 
+    sort(id, type) {
+
+        this.state.filter_dialog = false
+        this.setState({
+            filter_dialog: false
+        })
+
+        if (id == undefined || type == undefined) {
+            return
+        }
+        this.state.page = 0
+        this.state.clear_feedback_array = true
+
+        setTimeout(() => {
+            this.getAcademyFeedbacks(id, type)
+        }, 100)
+
+        // 
+    }
 
     render() {
 
+        let filter_dialog = this.state.filter_dialog
         let showFeedback = this.state.showFeedback
 
-        if (this.props.data.loading || this.state.academy == null) {
+        if (this.state.academy == null) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -271,6 +393,16 @@ class AcademyProfile extends BaseComponent {
             <ScrollView style={styles.chartContainer}>
 
                 <View>
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
+
+                    <FilterDialog
+                        touchOutside={(id, type) => {
+                            this.sort(id, type, true)
+                        }}
+                        visible={filter_dialog} />
 
                     <Card
                         style={{
@@ -307,10 +439,11 @@ class AcademyProfile extends BaseComponent {
                                 <Text style={{
                                     backgroundColor: '#D6D6D6', height: 19, width: 30, textAlign: 'center',
                                     fontSize: 12,
-                                    paddingTop: 2,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
                                     color: '#707070',
                                     borderRadius: 12,
-                                }}>{academy.ratings}</Text>
+                                }}>{academy.ratings.toFixed(1)}</Text>
 
                             </View>
 
@@ -338,7 +471,7 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ padding: 12 }}>
 
-                            <Text style={{ fontSize: 10, color: '#404040' }}>Founder Corner</Text>
+                            <Text style={defaultStyle.bold_text_10}>Founder Corner</Text>
                             <View style={{ marginTop: 8, marginBottom: 8, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
                             <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
                         </View>
@@ -351,7 +484,7 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ padding: 12 }}>
 
-                            <Text style={{ fontSize: 10, color: '#404040' }}>Offering</Text>
+                            <Text style={defaultStyle.bold_text_10}>Offering</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
                             <Text style={{ fontSize: 14, color: '#404040' }}>{academy.offering} </Text>
                         </View>
@@ -364,7 +497,7 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ padding: 12 }}>
 
-                            <Text style={{ fontSize: 10, color: '#404040' }}>Address</Text>
+                            <Text style={defaultStyle.bold_text_10}>Address</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
                             <Text style={{ fontSize: 14, color: '#404040' }}>{academy.locality} </Text>
                         </View>
@@ -376,7 +509,7 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ padding: 12 }}>
 
-                            <Text style={{ fontSize: 10, color: '#404040' }}>Facilities</Text>
+                            <Text style={defaultStyle.bold_text_10}>Facilities</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
                             <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
                         </View>
@@ -388,7 +521,7 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ padding: 12 }}>
 
-                            <Text style={{ fontSize: 10, color: '#404040' }}>Best Player (Badminton)</Text>
+                            <Text style={defaultStyle.bold_text_10}>Best Player (Badminton)</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
 
                             <View style={{
@@ -499,16 +632,24 @@ class AcademyProfile extends BaseComponent {
                                         Reviews ({academy_reviews.length})
                             </Text>
 
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text
-                                            style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
-                                        >Latest</Text>
-                                        <Image
-                                            style={{ width: 24, height: 15, }}
-                                            source={require('../../images/filter_rating.png')}
-                                        ></Image>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.setState({
+                                                filter_dialog: true
+                                            })
+                                        }} >
 
-                                    </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text
+                                                style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
+                                            >Latest </Text>
+                                            <Image
+                                                style={{ width: 24, height: 15, }}
+                                                source={require('../../images/filter_rating.png')}
+                                            ></Image>
+
+                                        </View>
+                                    </TouchableOpacity>
 
                                 </View>
 
@@ -521,6 +662,18 @@ class AcademyProfile extends BaseComponent {
 
 
                             <FlatList
+                                onEndReachedThreshold={0.5}
+                                onEndReached={({ distanceFromEnd }) => {
+                                    console.log('on end reached ', distanceFromEnd);
+                                    let page = this.state.page
+                                    page = page + 1
+                                    this.state.page = page
+
+                                    console.log('page => ', this.state.page)
+                                    let sortType = this.state.sortType
+                                    let type = this.state.type
+                                    this.getAcademyFeedbacks(sortType, type, false)
+                                }}
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}

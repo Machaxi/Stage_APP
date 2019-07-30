@@ -32,7 +32,7 @@ export function getUpcomingTournament(header) {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/upcoming`,
+                url: `global/tournament/upcoming`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -72,6 +72,85 @@ export function getTournamentFixture(header, tournament_id) {
                 method: 'GET',
                 headers: {
                     'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getPartnerList(header, tournament_id, page, size) {
+    console.log("getPartnerList", header, tournament_id, page, size)
+
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `tournament/partner-list?tournament_id=${tournament_id}&page=${page}&size=${size}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getTournamentResultListing(header) {
+    console.log("getTournamentResultListing", header)
+
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `tournament/results`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
+
+
+export function registerTournament(header, postdata) {
+    console.log("registerTournament", header, postdata)
+
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `tournament/register`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+
+}
+
+export function getPlayerSWitcher(header) { 
+    console.log("getPlayerSWitcher",header)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_TOURNAMENT,
+        payload: {
+            request: {
+                url: `player/switcher`,
+                method: 'GET',
+               // data: postdata,
+                headers: {
+                    'x-authorization': header
+
                 },
             }
         }

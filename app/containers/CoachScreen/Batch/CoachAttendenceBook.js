@@ -243,7 +243,13 @@ class CoachAttendenceBook extends React.Component {
 
                         <View style={{ margin: 5 }}>
                             <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Time slot </Text>
-                            <Text style={[defaultStyle.regular_text_14, { color: '#404040' }]}>{session.start_time + ' - ' + session.end_time}</Text>
+                            <Text style={[defaultStyle.regular_text_14, { color: '#404040' }]}>
+                                {/* {session.start_time + ' - ' + session.end_time} */}
+                                {moment.utc("01/01/1970 " + session.start_time).local().format("hh:mm a")
+                                    + ' - ' +
+                                    moment.utc("01/01/1970 " + session.end_time).local().format("hh:mm a")
+                                }
+                            </Text>
                         </View>
                     </View>
                 </View>

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getAcademyListing, getRewardDue, getRewardMonthlyDue, saveRewardData } from "../../redux/reducers/RewardReducer";
 import { TextInput } from 'react-native-gesture-handler';
+import moment from 'moment'
 
 
 class CoachGiveRewards extends BaseComponent {
@@ -93,62 +94,77 @@ class CoachGiveRewards extends BaseComponent {
     }
 
     submitScore() {
-        // "{
-        //     ""data"" : {
-        //         ""month"": 6,
-        //         ""year"": 2019,
-        //         ""batch_id"":3,
-        //         ""coach_id"":2,
-        //         ""rewards"":{""2"":""1000""}
-        //     }
-        // }"
 
-        let data = {};
-        data["month"] = this.state.month
-        data["year"] = this.state.year
-        data["batch_id"] = this.state.batch_id
-        data["coach_id"] = this.state.coach_id
+        let total = this.state.totalPointsAvailable
+        let remainingPointsAvailable = this.state.remainingPointsAvailable
+        console.warn('remainingPointsAvailable = > ', remainingPointsAvailable)
+        if (remainingPointsAvailable < 0) {
 
-        const players = this.state.playerList
-        let rewards = []
-        for (let i = 0; i < players.length; i++) {
+            alert('You can give total point equivalent to ' + Math.floor(total))
 
-            let reward = {}
-            let player = players[i]
-            let id = player.id
-            let nId = id + ""
-            let score = player.input_score
-            reward[nId] = score
-            rewards[i] = reward
-        }
-        data["rewards"] = rewards
+        } else {
 
-        let req = {}
-        req['data'] = data
-        console.warn(JSON.stringify(req))
 
-        getData('header', (value) => {
+            // "{
+            //     ""data"" : {
+            //         ""month"": 6,
+            //         ""year"": 2019,
+            //         ""batch_id"":3,
+            //         ""coach_id"":2,
+            //         ""rewards"":{""2"":""1000""}
+            //     }
+            // }"
 
-            this.props.saveRewardData(value, req).then(() => {
+            let data = {};
+            data["month"] = this.state.month
+            data["year"] = this.state.year
+            data["batch_id"] = this.state.batch_id
+            data["coach_id"] = this.state.coach_id
 
-                //console.warn('Res=> ' + JSON.stringify(this.props.data))
-                let data = this.props.data.data
-                if (data.success) {
+            const players = this.state.playerList
+            let totalScore = 0
+            let rewards = []
+            for (let i = 0; i < players.length; i++) {
+
+                let reward = {}
+                let player = players[i]
+                let id = player.id
+                let nId = id + ""
+                let score = player.input_score
+                reward[nId] = score
+                rewards[i] = reward
+                totalScore = totalScore + player.input_score
+            }
+            data["rewards"] = rewards
+
+            let req = {}
+            req['data'] = data
+            console.warn(JSON.stringify(req))
+
+
+
+            getData('header', (value) => {
+
+                this.props.saveRewardData(value, req).then(() => {
+
+                    //console.warn('Res=> ' + JSON.stringify(this.props.data))
+                    let data = this.props.data.data
+                    if (data.success) {
+                        this.setState({
+                            modalVisible: true
+                        })
+                    } else {
+                        alert("Something went wrong.")
+                    }
+                }).catch((response) => {
+                    console.log(response);
                     this.setState({
-                        modalVisible: true
+                        spinner: false
                     })
-                } else {
-                    alert("Something went wrong.")
-                }
-            }).catch((response) => {
-                console.log(response);
-                this.setState({
-                    spinner: false
                 })
+
             })
-
-        })
-
+        }
     }
 
     fetchBatchByAcademy(academy_id) {
@@ -190,12 +206,27 @@ class CoachGiveRewards extends BaseComponent {
 
     subtractRewardPoints = (points) => {
 
-        if (points) {
-            this.setState({ remainingPointsAvailable: this.state.totalPointsAvailable - points });
+
+        const players = this.state.playerList
+        let totalScore = 0
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i]
+            totalScore = +totalScore + +player.input_score
         }
-        else {
-            this.setState({ remainingPointsAvailable: this.state.totalPointsAvailable });
-        }
+        console.log('players ',JSON.stringify(players))
+        console.warn('total => ',totalScore)
+
+        let total = this.state.totalPointsAvailable
+        total = total - totalScore
+        this.setState({
+            remainingPointsAvailable: total
+        })
+        // if (points) {
+        //     this.setState({ remainingPointsAvailable: this.state.totalPointsAvailable - points });
+        // }
+        // else {
+        //     this.setState({ remainingPointsAvailable: this.state.totalPointsAvailable });
+        // }
     }
 
     _renderItem = ({ item }) => (
@@ -344,7 +375,7 @@ class CoachGiveRewards extends BaseComponent {
 
                                     }}>
                                     <Text style={styles.regular_text_10}>Total reward points</Text>
-                                    <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>{this.state.totalPointsAvailable}</Text>
+                                    <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>{Math.floor(this.state.totalPointsAvailable)}</Text>
                                 </View>
 
                             </View>
@@ -366,7 +397,10 @@ class CoachGiveRewards extends BaseComponent {
                                     }}>
                                     <Text style={styles.regular_text_10}>Month</Text>
                                     <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>
-                                        {this.state.month + "/" + this.state.year}</Text>
+                                        {/* {this.state.month + "/" + this.state.year} */}
+                                        {moment.utc(this.state.month + " " + this.state.year, "MM YYYY").local()
+                                            .format("MMM YYYY")}
+                                    </Text>
                                 </View>
 
                             </View>
@@ -396,7 +430,7 @@ class CoachGiveRewards extends BaseComponent {
                         height: 100
                     }}
                 >
-                    <Text style={[defaultStyle.bold_text_14, { marginTop: 8 }]}>{this.state.remainingPointsAvailable} pts remaining</Text>
+                    <Text style={[defaultStyle.bold_text_14, { marginTop: 8 }]}>{Math.floor(this.state.remainingPointsAvailable)} pts remaining</Text>
                     <View style={{
                         margin: 16,
                         flex: 1

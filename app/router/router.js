@@ -56,6 +56,12 @@ import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListin
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
 import TabBarHighlightLabel from './TabBarHighlightLabel'
 import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
+import Registration from "../containers/tournament/Registration";
+import RegistrationSteps from "../containers/tournament/RegistrationSteps";
+import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
+import AddPartner from "../containers/tournament/AddPartner";
+import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
+
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -160,6 +166,20 @@ const GuestHomeModule = createStackNavigator({
     },
     PlayersListing: {
         screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
         navigationOptions: ({ navigation }) => ({
             title: "Players Listing",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
@@ -902,6 +922,20 @@ const parentHomeModule = createStackNavigator({
         })
 
     },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
     EditProfile: {
         screen: EditProfile,
         navigationOptions: ({ navigation }) => ({
@@ -1050,6 +1084,99 @@ const parentDrawer = createDrawerNavigator({
         drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
+const TournamentRegistration = createStackNavigator({
+
+    RegistrationSteps: {
+        screen: RegistrationSteps,
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Tournament Registration',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //                                            showBackAction={true}
+        //                                            showDrawer={false}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //                                    navigation={navigation} showNotification={true} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
+
+        //     headerTintColor: '#000',
+        // }),
+    },
+    Registration: {
+        screen: Registration,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Registration',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AddPartner: {
+        screen: AddPartner,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Add Partner',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AddPartnerWithPhone: {
+        screen: AddPartnerWithPhone,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Add Partner',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    RegistrationSuccessful: {
+        screen: RegistrationSuccessful,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Registration',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={false}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+})
 
 const BaseNavigator = createSwitchNavigator({
     // Main: {
@@ -1078,7 +1205,7 @@ const BaseNavigator = createSwitchNavigator({
     },
     SwitchPlayer: {
         screen: Switcher,
-    }
+    },
     // Home:{
     //     screen: HomeModule
     // },
@@ -1086,6 +1213,9 @@ const BaseNavigator = createSwitchNavigator({
     // SignedOut: {
     //     screen: loginModule
     // }
+    RegistrationSteps: {
+        screen: TournamentRegistration
+    }
 
 
 });

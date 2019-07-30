@@ -12,11 +12,13 @@ import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../containers/BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, formattedName } from '../containers/BaseComponent'
 import { getRelationsDetails } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
+import { Rating } from 'react-native-ratings';
 
+let placeholder_img = "https://databytenitt.github.io/img/male.png"
 class CoachMenuDrawer extends BaseComponent {
 
 	constructor(props) {
@@ -35,6 +37,13 @@ class CoachMenuDrawer extends BaseComponent {
 			profile_pic: ''
 		};
 
+		isSignedIn()
+			.then(res => {
+				console.log(res);
+				this.setState({ signedIn: res, })
+
+			})
+			.catch(err => alert("An error occurred"));
 
 		this.updateData()
 
@@ -70,6 +79,8 @@ class CoachMenuDrawer extends BaseComponent {
 			}
 
 		});
+
+
 	}
 
 	fetchParentDetails() {
@@ -105,6 +116,68 @@ class CoachMenuDrawer extends BaseComponent {
 		return (
 			<View>
 
+				<View
+					style={{
+						paddingLeft: 10, paddingRight: 10, paddingTop: 16,
+						paddingBottom: 16,
+						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
+					}}
+				>
+					<Image
+						style={{ width: 128, height: 128, borderRadius: 8 }}
+						source={require('../images/guest_profile.png')}
+					></Image>
+
+					<View
+						style={{
+							justifyContent: 'center',
+							marginLeft: 10,
+
+						}}
+					>
+
+						<View style={{
+							flexDirection: 'row',
+							flex: 1,
+							justifyContent: 'space-between'
+						}}>
+
+							<Image
+								style={{ height: 25, width: 80, }}
+								source={require('../images/dribble_logo.png')}
+							/>
+
+							{/* <Image
+										style={{
+											height: 30, width: 30,
+										}}
+										source={require('../images/ic_close.png')}
+									/> */}
+						</View>
+
+						<View>
+
+							<Text
+								style={{
+									color: 'black',
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14, marginTop: 16,
+								}}>
+								Guest</Text>
+
+							<Text
+								style={{
+									color: '#667DDB',
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14, marginTop: 8,
+								}}>
+								Sign In</Text>
+						</View>
+
+
+					</View>
+				</View>
+
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 
 					<View style={styles.drawercell}>
@@ -129,10 +202,10 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Text style={styles.menu}>
 							Contact Us
-								</Text>
+						</Text>
 
 						<Image
-							sstyle={styles.arrow_img}
+							style={styles.arrow_img}
 							source={require('../images/ic_drawer_arrow.png')}
 						>
 
@@ -141,6 +214,169 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					this.props.navigation.navigate('Login')
+				}
+				}>
+
+
+					<View style={styles.drawercell}>
+						<Text style={styles.menu}>
+							Sign In
+								</Text>
+
+
+					</View>
+				</TouchableOpacity>
+
+
+			</View>)
+	}
+
+	geLoggedInGuestMenu() {
+
+		let signedIn = this.state.signedIn
+		let user_type = this.state.user_type
+		let fullame = this.state.fullName
+		let mobileNumber = this.state.mobileNumber
+		let menu;
+		let ratings = 5
+		//user_type = COACH
+		//signedIn = true
+		let profile_pic = this.state.profile_pic
+		if (profile_pic == '' || profile_pic == null) {
+			profile_pic = placeholder_img
+		}
+
+		return (
+			<View>
+
+				<View
+					style={{
+						paddingLeft: 10, paddingRight: 10, paddingTop: 16,
+						paddingBottom: 16,
+						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
+					}}
+				>
+					<Image
+						style={{ width: 128, height: 128, borderRadius: 8 }}
+						source={{ uri: profile_pic }}
+					></Image>
+
+					<View
+						style={{
+							justifyContent: 'center',
+							marginLeft: 10,
+
+						}}
+					>
+
+						<View style={{
+							flexDirection: 'row',
+							flex: 1,
+							justifyContent: 'space-between'
+						}}>
+
+							<Image
+								style={{ height: 25, width: 80, }}
+								source={require('../images/dribble_logo.png')}
+							/>
+
+							{/* <Image
+										style={{
+											height: 30, width: 30,
+										}}
+										source={require('../images/ic_close.png')}
+									/> */}
+						</View>
+
+						<View>
+
+							<Text
+								style={{
+									color: 'black',
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14, marginTop: 16,
+								}}>
+								{fullame == null ? '-' : fullame}</Text>
+
+							{/* <Text
+								style={{
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14, marginTop: 8,
+								}}>
+								{mobileNumber}</Text> */}
+							<View style={{ marginTop: 8 }}>
+								<TouchableOpacity activeOpacity={.8} onPress={() => {
+									this.props.navigation.navigate('EditProfile')
+								}}>
+
+									<View style={{
+										flex: 1,
+										justifyContent: 'space-between',
+										flexDirection: 'row',
+									}}>
+
+										<Text
+											style={{
+												color: '#A3A5AE',
+												fontFamily: 'Quicksand-Medium',
+												fontSize: 14,
+											}}>
+											{mobileNumber}
+										</Text>
+										<Text
+											style={[defaultStyle.regular_text_14, {
+												color: '#667DDB',
+												marginLeft: 8
+											}]}
+										>
+											Edit
+								</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+						</View>
+
+
+					</View>
+				</View>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							About Dribble
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						>
+
+						</Image>
+
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							Contact Us
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						>
+
+						</Image>
+
+					</View>
+				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
 					onSignOut()
@@ -149,8 +385,6 @@ class CoachMenuDrawer extends BaseComponent {
 					this.props.navigation.navigate('Login')
 				}
 				}>
-
-
 					<View style={styles.drawercell}>
 						<Text style={styles.menu}>
 							Sign Out
@@ -158,13 +392,153 @@ class CoachMenuDrawer extends BaseComponent {
 
 					</View>
 				</TouchableOpacity>
+
+
 			</View>)
 	}
 
 	getCoachMenu() {
 
+		let signedIn = this.state.signedIn
+		let user_type = this.state.user_type
+		let fullame = this.state.fullName
+		let mobileNumber = this.state.mobileNumber
+		let menu;
+		let ratings = 5
+		//user_type = COACH
+		//signedIn = true
+		let profile_pic = this.state.profile_pic
+		if (profile_pic == '' || profile_pic == null) {
+			profile_pic = placeholder_img
+		}
+		//console.warn('profile_pic', profile_pic)
+
+
+		if (!signedIn) {
+			menu = this.getWithoutLoggedMenu()
+			fullName = "Guest"
+			mobileNumber = "-"
+		}
+
 		return (
 			<View>
+
+				<View
+					style={{
+						paddingLeft: 10, paddingRight: 10, paddingTop: 16,
+						paddingBottom: 16,
+						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
+					}}
+				>
+					<Image
+						style={{ width: 128, height: 128, borderRadius: 8 }}
+						source={{ uri: profile_pic }}
+					></Image>
+
+					<View
+						style={{
+							justifyContent: 'center',
+							marginLeft: 10,
+
+						}}
+					>
+
+						<View style={{
+							flexDirection: 'row',
+							flex: 1,
+							justifyContent: 'space-between'
+						}}>
+
+							<Image
+								style={{ height: 25, width: 80, }}
+								source={require('../images/dribble_logo.png')}
+							/>
+
+							{/* <Image
+										style={{
+											height: 30, width: 30,
+										}}
+										source={require('../images/ic_close.png')}
+									/> */}
+						</View>
+
+
+						<View>
+
+							<Text
+								style={{
+									color: 'black',
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 14,
+									marginTop: 16
+								}}>
+								{fullame}</Text>
+
+							<View style={{ marginTop: 8 }}>
+								<TouchableOpacity activeOpacity={.8} onPress={() => {
+									this.props.navigation.navigate('EditProfile')
+								}}>
+
+									<View style={{
+										flex: 1,
+										justifyContent: 'space-between',
+										flexDirection: 'row',
+									}}>
+
+										<Text
+											style={{
+												color: '#A3A5AE',
+												fontFamily: 'Quicksand-Medium',
+												fontSize: 14,
+											}}>
+											{mobileNumber}
+										</Text>
+										<Text
+											style={[defaultStyle.regular_text_14, {
+												color: '#667DDB',
+												marginLeft: 8
+											}]}
+										>
+											Edit
+								</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+
+							<View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+
+								<Rating
+									type='custom'
+									ratingColor='#F4FC9A'
+									ratingBackgroundColor='#D7D7D7'
+									ratingCount={5}
+									imageSize={14}
+									readonly={true}
+									startingValue={ratings}
+									style={{ height: 30, width: 80 }}
+								/>
+
+								<Text style={{
+									borderColor: '#DFDFDF',
+									height: 19, width: 30, textAlign: 'center',
+									fontSize: 12,
+									borderWidth: 1,
+									color: '#707070',
+									paddingTop: 0,
+									borderRadius: 12,
+									fontFamily: 'Quicksand-Medium'
+								}}>{ratings}</Text>
+
+							</View>
+						</View>
+
+
+
+					</View>
+
+				</View>
+
+
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 
@@ -182,7 +556,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('AcademyListing')}>
 
 					<View style={styles.drawercell}>
 
@@ -218,7 +593,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('CoachRewardPoints')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Reward Points</Text>
 						<Image
@@ -247,6 +622,8 @@ class CoachMenuDrawer extends BaseComponent {
 						/>
 					</View>
 				</TouchableOpacity>
+
+				<View style={[defaultStyle.line_style, { marginLeft: 12 }]} ></View>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 					<View style={styles.drawercell}>
@@ -282,7 +659,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 					</View>
 				</TouchableOpacity>
-			</View>)
+			</View >)
 	}
 
 	parentCell = (obj) => {
@@ -295,7 +672,7 @@ class CoachMenuDrawer extends BaseComponent {
 		}}>
 			<Text
 				numberOfLines={1}
-				style={[defaultStyle.bold_text_14, { width: 90 }]}>{obj.name}</Text>
+				style={[defaultStyle.bold_text_14, { width: 90 }]}>{formattedName(obj.name)}</Text>
 			<Text style={defaultStyle.regular_text_12}>{obj.phone_number}</Text>
 
 			<TouchableOpacity
@@ -309,6 +686,30 @@ class CoachMenuDrawer extends BaseComponent {
 	}
 
 	getPlayerMenu() {
+
+		let signedIn = this.state.signedIn
+		let user_type = this.state.user_type
+		let fullame = this.state.fullName
+		let mobileNumber = this.state.mobileNumber
+		let menu;
+		let ratings = 5
+		let academy_rating = this.state.academy_rating==undefined?0:this.state.academy_rating
+		//user_type = COACH
+		//signedIn = true
+		let is_parent = user_type == PARENT
+		let profile_pic = this.state.profile_pic
+		if (profile_pic == '') {
+			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
+		}
+		//console.warn('profile_pic', profile_pic)
+
+
+		if (!signedIn) {
+			menu = this.getWithoutLoggedMenu()
+			fullName = "Guest"
+			mobileNumber = "-"
+		}
+
 		let related_players = this.state.related_players
 		let size = related_players.length
 		let related_players_array = []
@@ -332,8 +733,125 @@ class CoachMenuDrawer extends BaseComponent {
 		return (
 			<View>
 
+				<View
+					style={{
+						paddingLeft: 10, paddingRight: 10, paddingTop: 16,
+						paddingBottom: 16,
+						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
+					}}
+				>
+					<Image
+						style={{ width: 128, height: 128, borderRadius: 8 }}
+						source={{ uri: profile_pic }}
+					></Image>
 
-				{this.state.related_players.length != 0
+					<View
+						style={{
+							justifyContent: 'center',
+							marginLeft: 10,
+
+						}}
+					>
+
+						<View style={{
+							flexDirection: 'row',
+							flex: 1,
+							justifyContent: 'space-between'
+						}}>
+
+							<Image
+								style={{ height: 25, width: 80, }}
+								source={require('../images/dribble_logo.png')}
+							/>
+
+							{/* <Image
+										style={{
+											height: 30, width: 30,
+										}}
+										source={require('../images/ic_close.png')}
+									/> */}
+						</View>
+
+						{!signedIn ?
+
+							<View>
+
+								<Text
+									style={{
+										color: 'black',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 16,
+									}}>
+									Guest</Text>
+
+								<Text
+									style={{
+										color: '#667DDB',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 8,
+									}}>
+									Sign In</Text>
+							</View>
+
+							:
+							<View>
+
+								<Text
+									style={{
+										color: 'black',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14,
+										marginTop: 16
+									}}>
+									{fullame}</Text>
+
+								<Text
+									style={{
+										color: '#A3A5AE',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 8
+									}}>
+									{mobileNumber}
+								</Text>
+
+
+								<TouchableOpacity activeOpacity={.8} onPress={() => {
+									this.props.navigation.navigate('EditProfile')
+								}}>
+
+									<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
+										<Image
+											style={{
+												width: 12,
+												height: 12, borderRadius: 8
+											}}
+											source={require('../images/edit_profile.png')}
+										></Image>
+
+										<Text
+											style={{
+												color: '#667DDB',
+												fontFamily: 'Quicksand-Medium',
+												fontSize: 14, marginLeft: 4
+											}}
+										>
+											Edit
+								</Text>
+									</View>
+								</TouchableOpacity>
+
+							</View>
+						}
+
+
+					</View>
+
+				</View>
+
+
+
+
+				{this.state.related_guardians.length != 0
 					?
 					<View style={{
 						paddingLeft: 16,
@@ -400,23 +918,28 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				{is_parent ?
+					<TouchableOpacity activeOpacity={0.8} onPress={() =>
+						this.props.navigation.navigate('ParentRewards')}>
 
-					<View style={styles.drawercell}>
+						<View style={styles.drawercell}>
 
-						<Text style={styles.menu}>
-							Reward Points
-								</Text>
+							<Text style={styles.menu}>
+								Reward Points
+									</Text>
 
-						<Image
-							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						/>
+							<Image
+								style={styles.arrow_img}
+								source={require('../images/ic_drawer_arrow.png')}
+							/>
 
-					</View>
-				</TouchableOpacity>
+						</View>
+					</TouchableOpacity> : null}
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('AcademyListing')
+				}>
 
 					<View style={styles.drawercell}>
 
@@ -496,7 +1019,7 @@ class CoachMenuDrawer extends BaseComponent {
 								paddingBottom: 2,
 								marginLeft: 4,
 								borderColor: '#DFDFDF'
-							}]}>4.5</Text>
+							}]}>{academy_rating.toFixed(1)}</Text>
 
 						</View>
 					</View>
@@ -540,6 +1063,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 					</View>
 				</TouchableOpacity>
+
+				<View style={[defaultStyle.line_style, { marginLeft: 12 }]}></View>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 
@@ -619,22 +1144,23 @@ class CoachMenuDrawer extends BaseComponent {
 		//user_type = COACH
 		//signedIn = true
 		let profile_pic = this.state.profile_pic
-		if (profile_pic == '') {
-			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
+		if (profile_pic == '' || profile_pic == null) {
+			profile_pic = placeholder_img
 		}
 		//console.warn('profile_pic', profile_pic)
 
-
+		console.log('signedIn => ', signedIn)
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
-			fullName = "Guest"
-			mobileNumber = "-"
+			//fullName = "Guest"
+			//mobileNumber = "-"
 		}
 
 
 		else if (user_type != null) {
 
 			if (user_type == GUEST) {
+				menu = this.geLoggedInGuestMenu()
 
 			} else if (user_type == PLAYER) {
 
@@ -660,121 +1186,6 @@ class CoachMenuDrawer extends BaseComponent {
 						}}
 					>
 
-						<View
-							style={{
-								paddingLeft: 10, paddingRight: 10, paddingTop: 16,
-								paddingBottom: 16,
-								flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
-							}}
-						>
-							<Image
-								style={{ width: 128, height: 128, borderRadius: 8 }}
-								source={{ uri: profile_pic }}
-							></Image>
-
-							<View
-								style={{
-									justifyContent: 'center',
-									marginLeft: 10,
-
-								}}
-							>
-
-								<View style={{
-									flexDirection: 'row',
-									flex: 1,
-									justifyContent: 'space-between'
-								}}>
-
-									<Image
-										style={{ height: 25, width: 80, }}
-										source={require('../images/dribble_logo.png')}
-									/>
-
-									{/* <Image
-										style={{
-											height: 30, width: 30,
-										}}
-										source={require('../images/ic_close.png')}
-									/> */}
-								</View>
-
-								{!signedIn ?
-
-									<View>
-
-										<Text
-											style={{
-												color: 'black',
-												fontFamily: 'Quicksand-Medium',
-												fontSize: 14, marginTop: 16,
-											}}>
-											Guest</Text>
-
-										<Text
-											style={{
-												color: '#667DDB',
-												fontFamily: 'Quicksand-Medium',
-												fontSize: 14, marginTop: 8,
-											}}>
-											Sign In</Text>
-									</View>
-
-									:
-									<View>
-
-										<Text
-											style={{
-												color: 'black',
-												fontFamily: 'Quicksand-Medium',
-												fontSize: 14,
-												marginTop: 16
-											}}>
-											{fullame}</Text>
-
-										<Text
-											style={{
-												color: '#A3A5AE',
-												fontFamily: 'Quicksand-Medium',
-												fontSize: 14, marginTop: 8
-											}}>
-											{mobileNumber}
-										</Text>
-
-
-										<TouchableOpacity activeOpacity={.8} onPress={() => {
-											this.props.navigation.navigate('EditProfile')
-										}}>
-
-											<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
-												<Image
-													style={{
-														width: 12,
-														height: 12, borderRadius: 8
-													}}
-													source={require('../images/edit_profile.png')}
-												></Image>
-
-												<Text
-													style={{
-														color: '#667DDB',
-														fontFamily: 'Quicksand-Medium',
-														fontSize: 14, marginLeft: 4
-													}}
-												>
-													Edit
-								</Text>
-											</View>
-										</TouchableOpacity>
-
-									</View>
-								}
-
-
-							</View>
-
-						</View>
-
 
 						<View
 							style={{
@@ -786,39 +1197,7 @@ class CoachMenuDrawer extends BaseComponent {
 							{menu}
 
 
-							{!signedIn ?
-								// <TouchableOpacity activeOpacity={0.8} onPress={() => {
-								// 	onSignOut()
-								// 	clearData()
-								// 	firebase.auth().signOut();
-								// 	this.props.navigation.navigate('Login')
-								// }
-								// }>
 
-
-								// 	<View style={styles.drawercell}>
-								// 		<Text style={styles.menu}>
-								// 			Sign Out
-								// </Text>
-
-								// 	</View>
-								// </TouchableOpacity>
-								//:
-								<TouchableOpacity activeOpacity={0.8} onPress={() => {
-									this.props.navigation.navigate('Login')
-								}
-								}>
-
-
-									<View style={styles.drawercell}>
-										<Text style={styles.menu}>
-											Sign In
-								</Text>
-
-
-									</View>
-								</TouchableOpacity> : null
-							}
 
 
 
@@ -864,7 +1243,10 @@ const styles = StyleSheet.create({
 	},
 	filled_button: {
 		width: '100%',
-		padding: 10,
+		paddingLeft: 14,
+		paddingRight: 14,
+		paddingTop: 10,
+		paddingBottom: 10,
 		borderRadius: 22,
 		marginLeft: 4,
 		marginRight: 4,

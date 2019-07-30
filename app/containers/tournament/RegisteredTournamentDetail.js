@@ -1,19 +1,26 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
+import Moment from 'moment';
 
 
 export default class RegisteredTournamentDetail extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.state = {
+            data: {},
+            
+        }
+        this.state.data = JSON.parse(this.props.navigation.getParam('data'));
+        
     }
 
 
     render() {
-
+        let data = this.state.data
         // if (this.props.data.loading && !this.state.isAutoSuggest) {
         //     return (
         //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -50,33 +57,33 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     justifyContent: 'space-between'
                                 }}>
 
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        Feather Academy Tournament
-                    </Text>
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {data.name}
+                                    </Text>
 
-                                    <Image
-                                        style={{ width: 16, height: 18, marginRight: 8 }}
-                                        source={require('../../images/share.png')}
-                                    >
+                                    <View style={{ flexDirection: 'row' }}>
 
-                                    </Image>
+                                        <Image
+                                            resizeMode="contain"
+                                            style={{ width: 20, height: 20, marginRight: 16 }}
+                                            source={require('../../images/ic_call.png')}
+                                        />
+                                        <Image
+                                            resizeMode="contain"
+                                            style={{ width: 16, height: 18, }}
+                                            source={require('../../images/share.png')}
+                                        />
+
+                                    </View>
 
                                 </View>
 
 
                                 <View style={{ paddingTop: 8, flexDirection: 'row' }}>
 
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        May 2019
-                    </Text>
+                                    <Text style={defaultStyle.bold_text_14}>
+                                        {data.month + " " + data.year}
+                                    </Text>
 
                                     <Text style={{
                                         backgroundColor: '#667DDB',
@@ -89,8 +96,8 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                         paddingRight: 6,
                                         paddingTop: 2,
                                         paddingBottom: 2,
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>Inter-Academy</Text>
+                                        fontFamily: 'Quicksand-Medium'
+                                    }}>{data.academic_type}</Text>
 
                                 </View>
 
@@ -99,7 +106,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     color: '#404040',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
-                                    Dates <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                    Dates <Text style={defaultStyle.bold_text_14}>
+                                        {Moment(data.start_date).format('DD MMM') + " - " + Moment(data.end_date).format('DD MMM')}
+                                    </Text>
                                 </Text>
 
                                 <Text style={{
@@ -107,7 +116,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     color: '#FF7373',
                                     fontFamily: 'Quicksand-Regular'
                                 }}>
-                                    Last Date of Registration <Text style={{ color: '#404040' }}>05 May 19</Text>
+                                    Last Date of Registration <Text style={defaultStyle.bold_text_14}>
+                                        {" " + Moment(data.registration_last_date).format('DD MMM YYYY')}
+                                    </Text>
                                 </Text>
 
                                 <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>

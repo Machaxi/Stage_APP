@@ -1,5 +1,7 @@
 import React from 'react'
 import { StatusBar, NetInfo } from 'react-native';
+import { getData } from '../components/auth';
+import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 
 msg = "GUEST"
 
@@ -18,9 +20,15 @@ fontRegular = "Quicksand-Regular"
 
 export const EVENT_REFRESH_DASHBOARD = 'EVENT_REFRESH_DASHBOARD'
 export const EVENT_EDIT_PROFILE = 'EVENT_EDIT_PROFILE'
+export const EVENT_SELECT_PLAYER_TOURNAMENT = 'EVENT_SELECT_PLAYER_TOURNAMENT'
+export const EVENT_SELECT_PLAYER_ADD_NUMBER = 'EVENT_SELECT_PLAYER_ADD_NUMBER'
 
+//to refresh challenge dashboard
 export const EVENT_REFRESH_CHALLENGE = 'EVENT_REFRESH_CHALLENGE'
 
+//STORE KEYS
+export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
+//
 export default class BaseComponent extends React.Component {
 
 
@@ -46,6 +54,9 @@ export default class BaseComponent extends React.Component {
     static isUserLoggedIn() {
         return this.isUserLoggedIn;
     }
+
+
+
 
     getNetworkStatus() {
         if (!connected) {
@@ -76,6 +87,57 @@ export default class BaseComponent extends React.Component {
         />)
     }
 
+
+}
+
+//This function is used when we go for tournament registration and  go back to home 
+//in that case we have to use this, we are using tournaments in new stack, we cannot
+// go back on back press.
+
+export function goToHome() {
+
+    getData('userInfo', (value) => {
+        userData = (JSON.parse(value))
+        // onSignIn()
+        let userType = userData.user['user_type']
+        console.log("SplashScreen=> ", JSON.stringify(userData));
+        console.warn('userType ', userType == PLAYER)
+        console.warn('academy_id ', userData.academy_id)
+        
+        if (userType == GUEST) {
+            this.props.navigation.navigate('GHome')
+        }
+        else if (userData.academy_id != null) {
+            console.log('data=> ',userData);
+            if (userType == GUEST) {
+                this.props.navigation.navigate('GHome')
+            } else if (userType == PLAYER) {
+                this.props.navigation.navigate('UHome')
+
+            } else if (userType == COACH || userType == ACADEMY) {
+                this.props.navigation.navigate('CHome')
+            }
+            else if (userType == PARENT) {
+                this.props.navigation.navigate('PHome')
+            }
+        }
+    });
+
+}
+export function formattedName(name) {
+
+    let array = name.split(' ')
+    let newName = ''
+    if (array.length > 1) {
+
+        let singleChar = array[1].charAt(0)
+        newName = array[0] + " " + singleChar
+        return newName
+    } else {
+        newName = name
+    }
+    //alert(array)
+    return newName
 
 }
 export function getFormattedLevel(level) {
@@ -205,5 +267,10 @@ export const defaultStyle = {
         marginTop: 8,
         marginBottom: 8
 
-    }
+    },
+    bebas_text_blue_10: {
+        fontSize: 10,
+        color: '#F4F4F4',
+        fontFamily: 'BebasNeue-Regular'
+    },
 }

@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput } from '
 import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
-import { coachListing } from '../../redux/reducers/AcademyReducer'
+import { coachListing } from '../../redux/reducers/CoachReducer'
 import BaseComponent from '../BaseComponent';
 
 class CoachListing extends BaseComponent {
@@ -143,11 +143,12 @@ class CoachListing extends BaseComponent {
                             borderColor: '#D8D8D8',
                             borderRadius: 12,
                             borderWidth: 1,
-                            paddingLeft: 4,
-                            paddingRight: 4,
+                            width: 50,
                             paddingTop: 2,
                             paddingBottom: 2,
-                            flexDirection: 'row'
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            alignItems: 'center'
                         }}>
 
 
@@ -160,7 +161,7 @@ class CoachListing extends BaseComponent {
 
                         <Image
                             style={{ width: 13, height: 13, marginLeft: 2, marginTop: 2 }}
-                            source={require('../../images/single_star.png')}
+                            source={require('../../images/ic_star.png')}
                         >
 
                         </Image>
@@ -215,7 +216,7 @@ class CoachListing extends BaseComponent {
 
 const mapStateToProps = state => {
     return {
-        data: state.AcademyReducer,
+        data: state.coachReducer,
     };
 };
 const mapDispatchToProps = {

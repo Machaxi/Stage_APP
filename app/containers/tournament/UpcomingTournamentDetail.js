@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,TOURNAMENT_REGISTER } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
-import { storeData } from '../../components/auth';
+import { storeData, isSignedIn, getData } from '../../components/auth';
 
 
 export default class UpcomingTournamentDetail extends BaseComponent {
@@ -13,10 +13,30 @@ export default class UpcomingTournamentDetail extends BaseComponent {
     constructor(props) {
         super(props)
         this.state = {
-            data: null
+            data: null,
+            signedIn: false
         }
         this.state.data = this.props.navigation.getParam('data');
         storeData("detail", JSON.stringify(this.state.data))
+
+        isSignedIn()
+            .then(res => {
+                console.log(res);
+                this.setState({ signedIn: res, })
+
+            })
+            .catch(err => alert("An error occurred"));
+
+    }
+
+    register() {
+        let signedIn = this.state.signedIn
+        if (signedIn)
+            this.props.navigation.navigate('RegistrationSteps')
+        else {
+            storeData(TOURNAMENT_REGISTER, true)
+            this.props.navigation.navigate('Login')
+        }
     }
 
 
@@ -89,7 +109,8 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                     </Text>
                                 </Text>
 
-                                <Text style={[defaultStyle.regular_text_14, { paddingTop: 6 }]}>
+                                <Text style={[defaultStyle.regular_text_14,
+                                { paddingTop: 6, color: '#FF7373' }]}>
                                     Last Date of Registration
                                     <Text style={defaultStyle.bold_text_14}>
                                         {" " + Moment(data.registration_last_date).format('DD MMM YYYY')}</Text>
@@ -103,32 +124,52 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                                        <Text style={{
-                                            fontSize: 10,
-                                            color: '#A3A5AE',
-                                            width: "33.33%",
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Registration Fees
-                        </Text>
+                                        <View
+                                            style={{
+                                                width: "33.33%",
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }} >
 
-                                        <Text style={{
-                                            fontSize: 10,
-                                            color: '#A3A5AE',
-                                            width: "33.33%",
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Category
-                        </Text>
+                                            <Text style={{
+                                                fontSize: 10,
+                                                color: '#A3A5AE',
 
-                                        <Text style={{
-                                            fontSize: 10,
-                                            color: '#A3A5AE',
-                                            width: "33.33%",
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Gender
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Registration Fees
                         </Text>
+                                        </View>
+
+                                        <View
+                                            style={{
+                                                width: "33.33%",
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }} >
+                                            <Text style={{
+                                                fontSize: 10,
+                                                color: '#A3A5AE',
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Category
+                        </Text>
+                                        </View>
+
+                                        <View
+                                            style={{
+                                                width: "33.33%",
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }} >
+                                            <Text style={{
+                                                fontSize: 10,
+                                                color: '#A3A5AE',
+                                                width: "33.33%",
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}>
+                                                Gender
+                        </Text></View>
 
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -243,7 +284,7 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
                                             style={styles.rounded_button_white}
                                             onPress={() => {
-                                                this.props.navigation.navigate('Registration')
+                                                this.props.navigation.goBack()
                                             }}>
                                             <Text
                                                 style={{
@@ -259,7 +300,8 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
                                             style={styles.rounded_button}
                                             onPress={() => {
-                                                this.props.navigation.navigate('Registration')
+                                                this.register();
+
                                             }}>
                                             <Text
                                                 style={{

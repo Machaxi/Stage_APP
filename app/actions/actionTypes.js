@@ -5,6 +5,10 @@ export const GET_SWITCHING = 'user/LOAD';
 export const DO_SWITCHING_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_SWITCHING_FAIL = 'user/LOAD_FAIL';
 
+export const GET_COACH1 = 'coach1/LOAD';
+export const DO_COACH1_SUCCESS = 'coach1/LOAD_SUCCESS';
+export const DO_COACH1_FAIL = 'coach1/LOAD_FAIL';
+
 export const GET_BATCHES = 'user/LOAD';
 export const DO_BATCHES_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_BATCHES_FAIL = 'user/LOAD_FAIL';

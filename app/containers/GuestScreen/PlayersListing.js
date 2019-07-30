@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
-import { Card, Text, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { Card, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
@@ -15,7 +15,7 @@ class PlayersListing extends BaseComponent {
             players: null,
             id: '',
             filter: [],
-            query:''
+            query: ''
         }
         this.state.id = this.props.navigation.getParam('id', '');
     }
@@ -27,7 +27,7 @@ class PlayersListing extends BaseComponent {
             this.getBtachPlayer(this.props.navigation.getParam('batch_id'))
         } else {
             this.props.getAcademyPlayersList(this.state.id).then(() => {
-                //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+                console.log('Res=> ' + JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {
                     let players = this.props.data.res.data.players
@@ -88,7 +88,7 @@ class PlayersListing extends BaseComponent {
                         onChangeText={text => {
                             this.state.query = text
                             this.setState({
-                                query : text
+                                query: text
                             })
                             // const data = this.find(this.state.query);
                             // this.state.filter = data;
@@ -114,14 +114,19 @@ class PlayersListing extends BaseComponent {
 
 
         <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
-            <TouchableOpacity onPress={() => {
-                this.props.navigation.navigate('OtherPlayerDeatils')
-            }}>
+            <TouchableOpacity
+                activeOpacity={.8}
+                onPress={() => {
+                    this.props.navigation.navigate('OtherPlayerDeatils', {
+                        academy_id: this.state.id,
+                        player_id: item.id
+                    })
+                }}>
                 <ImageBackground style={{ height: 200, width: '100%' }}
                     source={require('../../images/batch_card.png')}
                 >
-                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
-                    <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{item.score}</Text>
+                    <Text style={{ justifyContent: 'center', fontFamily: 'Quicksand-Medium', textAlign: 'center', color: '#F4F4F4', fontSize: 6, paddingTop: 6 }}>Score</Text>
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontFamily: 'Quicksand-Medium', fontSize: 14 }}>{item.score}</Text>
 
                     <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
@@ -156,8 +161,9 @@ class PlayersListing extends BaseComponent {
                                 alignItems: 'center',
                                 alignSelf: 'center',
                                 textAlign: 'center',
-                                fontSize: 8,
+                                fontSize: 6,
                                 marginLeft: 4,
+                                fontFamily: 'Quicksand-Medium',
                                 marginTop: 16,
                             }}
                         >{item.player_level.split(" ").join("\n")}</Text>
@@ -165,17 +171,16 @@ class PlayersListing extends BaseComponent {
 
                     <View style={{
                         position: 'absolute',
-
                         marginTop: 116,
                         width: "100%", height: 20, backgroundColor: 'white'
                     }}>
 
                         <Text style={{
                             color: '#404040',
-                            fontWeight: 16,
-                            fontWeight: '500',
-                            textAlign: 'center'
-                        }}>{item.name}</Text>
+                            fontSize: 16,
+                            textAlign: 'center',
+                            fontFamily: 'Quicksand-Medium'
+                        }}>{formattedName(item.name)}</Text>
                     </View>
 
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
@@ -197,7 +202,7 @@ class PlayersListing extends BaseComponent {
                                 <Image style={{ height: 7, width: 12, marginLeft: -12 }}
                                     source={require('../../images/left_batch_arrow.png')}></Image>
 
-                                <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{item.badge}</Text>
+                                <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>{item.badge == undefined ? ' - ' : item.badge}</Text>
                                 <Image style={{ height: 7, width: 12, marginRight: -12 }}
                                     source={require('../../images/right_batch_arrow.png')}></Image>
 

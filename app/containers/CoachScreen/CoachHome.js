@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import moment from 'moment'
 import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent';
 import Events from '../../router/events';
+import { DueView } from '../../components/Home/DueView';
 
 
 class CoachHome extends BaseComponent {
@@ -113,7 +114,9 @@ class CoachHome extends BaseComponent {
         //in switch case we were getting from previous screen
 
         getData('multiple', (value) => {
-            if (!value) {
+            //console.warn('multiple => '+value)
+            if (value!='' && !value) {
+                //console.warn('multiple1 => '+value)
                 this.getSwitchData()
             }
         })
@@ -217,8 +220,14 @@ class CoachHome extends BaseComponent {
 
                     {is_canceled ?
                         <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
-                            <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>{session_date}</Text>
-                            <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>{start_time + "  -   " + end_time}</Text>
+                            <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
+                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                            </Text>
+                            <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
+                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    + "  -   " +
+                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            </Text>
                         </View> :
                         <View>
                             <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
@@ -399,18 +408,11 @@ class CoachHome extends BaseComponent {
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={defaultStyle.bold_text_10}>Attendance</Text>
 
-                                    {is_attandence_due ? <View
-                                        style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                        <Text style={{
-                                            marginTop: 2,
-                                            marginBottom: 2,
-                                            fontFamily: 'Quicksand-Medium',
-                                            fontSize: 10,
-                                            color: 'white',
-                                            marginRight: 10,
-                                            marginLeft: 10,
-                                        }}>Due</Text>
-                                    </View> : null}
+                                    {is_attandence_due ?
+                                        <View
+                                            style={{ marginLeft: 10 }}>
+                                            <DueView />
+                                        </View> : null}
                                 </View>
                                 <View style={defaultStyle.line_style} />
 
@@ -512,16 +514,8 @@ class CoachHome extends BaseComponent {
                             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                 <Text style={defaultStyle.bold_text_10} >Reward Point</Text>
                                 <View
-                                    style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
-                                    <Text style={{
-                                        marginTop: 2,
-                                        marginBottom: 2,
-                                        fontSize: 10,
-                                        color: 'white',
-                                        fontFamily: 'Quicksand-Medium',
-                                        marginRight: 10,
-                                        marginLeft: 10,
-                                    }}>Due</Text>
+                                    style={{ marginLeft: 10 }}>
+                                    <DueView />
                                 </View>
                             </View>
                             <View style={defaultStyle.line_style} />
@@ -537,42 +531,41 @@ class CoachHome extends BaseComponent {
                         </View>
                     </CustomeCard> : null}
 
+
+
                     <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
                                 // this.props.navigation.navigate('PlayersListing')
                                 this.props.navigation.navigate('PlayersListing', { id: this.state.userData.academy_id })
                                 //
-
                             }}>
                                 <View style={{
-                                    marginLeft: 10, marginRight: 10, marginTop: 10,
-                                    flexDirection: 'row', height: 40
+                                    marginLeft: 10, marginRight: 10,
+                                    flexDirection: 'row', height: 50
                                 }}>
 
-                                    <View style={{ flex: 1 }}>
 
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.regular_text_14}>
-                                                View Academy Players
+                                    <View style={{
+                                        flex: 1,
+                                        marginRight: 15,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <Text style={defaultStyle.regular_text_14}>
+                                            View Academy Players
                                             </Text>
 
-                                            <Image source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
+                                        <Image source={require('../../images/path.png')}
+                                            style={{
+                                                width: 19,
+                                                resizeMode: "contain",
+                                                height: 13, marginRight: 0, marginTop: 5
+                                            }} />
 
-                                        </View>
                                     </View>
                                 </View>
 
@@ -581,37 +574,39 @@ class CoachHome extends BaseComponent {
                         </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")
                                 this.props.navigation.navigate('CoachMyFeedbackListing')
 
                             }}>
-                                <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    flexDirection: 'row', height: 50
+                                }}>
 
 
-                                    <View style={{ flex: 1 }}>
 
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.regular_text_14}>
-                                                View my Feedback
+                                    <View style={{
+                                        flex: 1,
+                                        marginRight: 15,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <Text style={defaultStyle.regular_text_14}>
+                                            View my Feedback
                                             </Text>
 
-                                            <Image source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
+                                        <Image source={require('../../images/path.png')}
+                                            style={{
+                                                width: 19,
+                                                resizeMode: "contain",
+                                                height: 13, marginRight: 0, marginTop: 5
+                                            }} />
 
-                                        </View>
                                     </View>
                                 </View>
 
@@ -620,37 +615,38 @@ class CoachHome extends BaseComponent {
                         </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 console.warn("Touch Press")
 
 
                             }}>
-                                <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    marginLeft: 10, marginRight: 10,
+                                    flexDirection: 'row', height: 50
+                                }}>
 
 
-                                    <View style={{ flex: 1 }}>
 
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.regular_text_14}>
-                                                Job vacancies
+                                    <View style={{
+                                        flex: 1,
+                                        marginRight: 15,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <Text style={defaultStyle.regular_text_14}>
+                                            Job vacancies
                                             </Text>
 
-                                            <Image source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
+                                        <Image source={require('../../images/path.png')}
+                                            style={{
+                                                width: 19,
+                                                resizeMode: "contain",
+                                                height: 13, marginRight: 0, marginTop: 5
+                                            }} />
 
-                                        </View>
                                     </View>
                                 </View>
 
@@ -659,38 +655,40 @@ class CoachHome extends BaseComponent {
                         </Card>
                     </View>
                     <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
+                        <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")
                                 this.props.navigation.navigate('AcademyListing')
 
                             }}>
-                                <View style={{ marginLeft: 10, marginRight: 10, marginTop: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    marginLeft: 10, marginRight: 10,
+                                    flexDirection: 'row', height: 50
+                                }}>
 
 
-                                    <View style={{ flex: 1 }}>
 
-                                        <View style={{
-                                            marginTop: 10,
-                                            flex: 1,
-                                            marginRight: 15,
-                                            marginBottom: 5,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.regular_text_14}>
-                                                Browse Academies
+                                    <View style={{
+                                        flex: 1,
+                                        marginRight: 15,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <Text style={defaultStyle.regular_text_14}>
+                                            Browse Academies
                                             </Text>
 
-                                            <Image source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
+                                        <Image source={require('../../images/path.png')}
+                                            style={{
+                                                width: 19,
+                                                resizeMode: "contain",
+                                                height: 13, marginRight: 0, marginTop: 5
+                                            }} />
 
-                                        </View>
                                     </View>
+
                                 </View>
 
 

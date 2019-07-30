@@ -13,6 +13,7 @@ import ParentRewardComponent from './ParentRewardComponent';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import RNPickerSelect from 'react-native-picker-select'
 import { getAcademyListing, getRewardDue } from "../../redux/reducers/RewardReducer";
+import moment from 'moment'
 
 const placeholder = {
     label: 'Select Option ',
@@ -26,11 +27,13 @@ class CoachRewardsPoints extends BaseComponent {
     constructor(props) {
         super(props)
         this.state = {
+            isFirstInstance: true,
             batchList: ["Test1", "Test2", "Test3"],
             country: '',
             academies: [],
             coach_id: '',
-            dues: null
+            dues: null,
+            alert: false
         }
         this.inputRefs = {
             country: null
@@ -90,6 +93,9 @@ class CoachRewardsPoints extends BaseComponent {
             console.log("header", value);
             this.props.getRewardDue(value, academy_id, coach_id).then(() => {
 
+                this.setState({
+                    isFirstInstance: false
+                })
                 console.log(' getRewardDue response payload ' + JSON.stringify(this.props.data.data));
                 let data = JSON.stringify(this.props.data.data);
                 let user1 = JSON.parse(data)
@@ -114,7 +120,11 @@ class CoachRewardsPoints extends BaseComponent {
             marginTop: 12,
         }}>
             <Text style={[defaultStyle.bold_text_14,
-            { marginTop: 6 }]}>{item.month + "/" + item.year}</Text>
+            { marginTop: 6 }]}>
+                {/* {moment.item.month + "/" + item.year} */}
+                {moment.utc(item.month + " " + item.year, "MM YYYY").local()
+                    .format("MMM YYYY")}
+            </Text>
 
             <FlatList
                 data={item.batches}
@@ -153,7 +163,7 @@ class CoachRewardsPoints extends BaseComponent {
                     </View>
                     <View style={{ marginLeft: 20 }}>
                         <Text style={styles.regular_text_10}>Points available</Text>
-                        <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>{item.totalPointsAvailable}</Text>
+                        <Text style={[defaultStyle.regular_text_14, { marginTop: 10 }]}>{Math.floor(item.totalPointsAvailable)}</Text>
                     </View>
 
                     <View style={{ marginLeft: 20 }}>
@@ -189,7 +199,15 @@ class CoachRewardsPoints extends BaseComponent {
 
     render() {
 
+        let isFirstInstance = this.state.isFirstInstance
         let data = this.state.dues
+        let alert = this.state.alert
+
+        if (!isFirstInstance && (data == null || data.length == 0)) {
+            alert = true
+        } else {
+            alert = false
+        }
 
         if (this.props.data.loading && this.state.academies.length == []) {
             return (
@@ -233,6 +251,13 @@ class CoachRewardsPoints extends BaseComponent {
                         backgroundColor: '#A3A5AE',
                         height: 1
                     }}></View>
+
+                    {alert ?
+                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={[defaultStyle.regular_text_14, { marginTop: 40 }]}>
+                                No data found.
+                    </Text>
+                        </View> : null}
 
                 </View>
 

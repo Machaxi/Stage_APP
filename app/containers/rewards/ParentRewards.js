@@ -41,7 +41,7 @@ class ParentRewards extends BaseComponent {
             userData = JSON.parse(value)
             console.warn("userData.user", userData.user['id'])
             parent_player_id = userData.user['id']
-            parent_player_id = "12"
+            //parent_player_id = "12"
             getData('header', (value) => {
 
                 this.props.getPlayerRewardDue(value, parent_player_id).then(() => {

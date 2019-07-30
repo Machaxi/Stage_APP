@@ -11,6 +11,7 @@ import ProfileReducer from './ProfileReducer'
  import FeedbackReducer from './FeedbackReduer'
  import RewardReducer from './RewardReducer'
 import ChallengeReducer from './ChallengeReducer'
+import coachReducer from './CoachReducer'
 
 // import ShippingAddressReducer from './shippingAddressReducer'
 // import CodReducer from './codReducer'
@@ -23,6 +24,7 @@ import ChallengeReducer from './ChallengeReducer'
 const rootReducer = combineReducers({
      LoginReducer,
      AcademyReducer,
+     coachReducer,
      SwitchReducer,
     DashboardReducer,
     BatchReducer,

@@ -45,8 +45,26 @@ export function getPlayerDashboard(header,player_id,academy_id) {
             }
         }
     };
-
 }
+
+export function getOtherPlayerDashboard(academy_id,player_id) {
+    console.log("getPlayerDashboard ",player_id,academy_id)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_DASHBOARD,
+        payload: {
+            request: {
+                url: `global/player/academic-profile?player_id=${player_id}&academy_id=${academy_id}`,
+                method: 'GET',
+                // data: postdata,
+            }
+        }
+    };
+}
+
 export function getCoachDashboard(header,coach_id,academy_id) {
     console.log("getCoachDashboard",header,coach_id,academy_id)
     // var header =

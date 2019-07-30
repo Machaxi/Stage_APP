@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
+import moment from 'moment'
 
 
 class EditOtherProfile extends BaseComponent {
@@ -39,6 +40,19 @@ class EditOtherProfile extends BaseComponent {
             this.state.id = res.user_id
         }
 
+        let date = this.state.birthdate
+        //console.warn('date = >', date)
+        if (date!=null && date != '') {
+            date = date.split('T')
+            //console.warn('date = >', date[0])
+            date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
+            //console.warn('m date ,', date)
+            this.state.birthdate = date
+            this.setState({
+                birthdate: date
+            })
+        }
+
         // getData('userInfo', (value) => {
         //     let res = JSON.parse(value)
         //     this.state.id = res.user['id']
@@ -50,6 +64,10 @@ class EditOtherProfile extends BaseComponent {
         let txtname = this.state.txtname;
         let txtphone = this.state.txtphone;
         let dob = this.state.birthdate;
+        if (dob != '') {
+            dob = moment.utc(dob).local().format("YYYY-MM-DD")
+        }
+
         if (txtname == '') {
             alert("Name is empty")
         }
@@ -190,7 +208,7 @@ class EditOtherProfile extends BaseComponent {
                                 mode="date"
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
-                                minDate="2016-05-01"
+                                minDate="1950-05-01"
                                 maxDate={Date.now()}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
