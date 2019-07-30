@@ -26,13 +26,122 @@ export default function ChallengeReducer(state = initialState, action) {
 }
 
 export function getChallengeDashboard(header, academy_id) {
-    console.log("getChallengeDashboard", header, tournament_id)
+    console.log("getChallengeDashboard", header, academy_id)
 
     return {
-        type: types.GET_TOURNAMENT,
+        type: types.GET_CHALLENGE,
         payload: {
             request: {
                 url: `challenge/dashboard?academy_id=${academy_id}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function createChallenge(header, postData) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/create`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getOpponentList(header, academy_id, page, size) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/opponent-list?academy_id=${academy_id}&page=${page}&size=${size}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function acceptChallenge(header, challenge_id) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/${challenge_id}/accept`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function cancelChallenge(header, challenge_id) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/${challenge_id}/cancel`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function dismissChallenge(header, challenge_id) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/${challenge_id}/dismiss`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function abortChallenge(header, challenge_id) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/${challenge_id}/abort`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

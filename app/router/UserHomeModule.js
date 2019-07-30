@@ -21,6 +21,7 @@ import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import userhome from '../containers/UserScreen/UserHome'
 import ParentRewards from '../containers/rewards/ParentRewards'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
+import PlayerAttendance from '../containers/PlayerBatch/PlayerAttendance'
 
 const userHomeModule = createStackNavigator({
 
@@ -183,6 +184,23 @@ const userHomeModule = createStackNavigator({
         })
 
     },
+    PlayerAttendance: {
+        screen: PlayerAttendance,
+        navigationOptions: ({ navigation }) => ({
+            title: 'My Attendance',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true}
+                showBackAction={true}
+            />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+
+    }
 
 });
 

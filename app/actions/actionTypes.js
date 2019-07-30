@@ -102,4 +102,8 @@ export const MENU_DRAWER_METHOD = 'menuDrawer/LOAD';
 export const MENU_DRAWER_METHOD_SUCCESS = 'menuDrawer/LOAD_SUCCESS';
 export const MENU_DRAWER_METHOD_FAIL = 'menuDrawer/LOAD_FAIL';
 
+export const GET_CHALLENGE = 'challenge/LOAD';
+export const DO_CHALLENGE_SUCCESS = 'challenge/LOAD_SUCCESS';
+export const DO_CHALLENGE_FAIL = 'challenge/LOAD_FAIL';
+
 export const LOGOUT = 'user/LOGOUT';
