@@ -11,6 +11,7 @@ import CodeInput from 'react-native-confirmation-code-input';
 import BaseComponent, { defaultStyle, TOURNAMENT_REGISTER } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 class PhoneAuth extends BaseComponent {
     constructor(props) {
@@ -416,15 +417,56 @@ class PhoneAuth extends BaseComponent {
                     value={phoneNumber}
                 />
 
-                <Text style={styles.rounded_button}
+                {/* <Text style={styles.rounded_button}
                     onPress={() => {
                         this.signIn()
-                    }}>Login</Text>
+                    }}>Login</Text> */}
 
-                <Text style={[styles.rounded_button, { marginTop: 16 }]}
+                    {/* <View
+                    style={{ width:"50%",marginTop:16,}}
+                    >
+                    <SkyFilledButton onPress={()=>{
+                        console.warn('test')
+                    }}>Login</SkyFilledButton>
+                    </View> */}
+
+                    <TouchableOpacity activeOpacity={.8}
+                                            style={[defaultStyle.rounded_button,
+                                            {marginTop:16,
+                                            width:150}]}
+                                            onPress={() => {
+                                                this.signIn()
+                                            }}>
+                                            <Text
+                                                style={{
+                                                    color: 'white',
+                                                    textAlign: 'center',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                Login
+                                            </Text>
+                                        </TouchableOpacity>
+                   
+                {/* <Text style={[styles.rounded_button, { marginTop: 16 }]}
                     onPress={() => {
                         this.signInByName(null, null)
-                    }}>Login by name</Text>
+                    }}>Login by name</Text> */}
+                    <TouchableOpacity activeOpacity={.8}
+                                            style={[defaultStyle.rounded_button,
+                                            {marginTop:16,
+                                            width:150}]}
+                                            onPress={() => {
+                                                this.signInByName(null, null)
+                                            }}>
+                                            <Text
+                                                style={{
+                                                    color: 'white',
+                                                    textAlign: 'center',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                Login by name
+                                            </Text>
+                                        </TouchableOpacity>
 
                 <TouchableOpacity
                     style={{

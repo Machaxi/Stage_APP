@@ -9,6 +9,7 @@ import axios from 'axios'
 import BaseComponent from './../BaseComponent'
 import { BASE_URL } from '../../../App';
 import PTRView from 'react-native-pull-to-refresh';
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 class AcademyListing extends BaseComponent {
 
@@ -226,6 +227,7 @@ class AcademyListing extends BaseComponent {
                             marginLeft: 8,
                             backgroundColor: 'white',
                             borderRadius: 16,
+                            height:45,
                             fontFamily: 'Quicksand-Regular',
 
                         }} placeholder="Search" />
@@ -415,15 +417,15 @@ class AcademyListing extends BaseComponent {
                             style={{ height: 30, width: 80 }}
                         />
 
-                        <Text style={{
+                        {/* <Text style={{
                             backgroundColor: '#DFDFDF', height: 19, width: 30, textAlign: 'center',
                             fontSize: 12,
                             color: '#707070',
                             paddingTop: 0,
                             borderRadius: 12,
                             fontFamily: 'Quicksand-Medium'
-                        }}>{item.ratings.toFixed(1)}</Text>
-
+                        }}>{item.ratings.toFixed(1)}</Text> */}
+                        <RateViewFill>{item.ratings}</RateViewFill>
                     </View>
 
                     {/* <View style={{ flexDirection: 'row', margin: 8 }}>

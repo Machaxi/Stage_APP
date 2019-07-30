@@ -11,6 +11,7 @@ import BaseComponent, { defaultStyle,formattedName } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMore from 'react-native-read-more-text'
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 class AcademyProfile extends BaseComponent {
 
@@ -160,7 +161,7 @@ class AcademyProfile extends BaseComponent {
                         style={{ height: 30, width: 80 }}
                     />
 
-                    <Text style={{
+                    {/* <Text style={{
                         backgroundColor: '#D6D6D6',
                         height: 19,
                         justifyContent: 'center',
@@ -170,8 +171,8 @@ class AcademyProfile extends BaseComponent {
                         fontSize: 12,
                         color: '#707070',
                         borderRadius: 12,
-                    }}>{item.rating}</Text>
-
+                    }}>{item.rating}</Text> */}
+                    <RateViewFill>{item.rating}</RateViewFill>
                 </View>
 
             </View>
@@ -436,15 +437,15 @@ class AcademyProfile extends BaseComponent {
                                     style={{ height: 30, width: 80 }}
                                 />
 
-                                <Text style={{
+                                {/* <Text style={{
                                     backgroundColor: '#D6D6D6', height: 19, width: 30, textAlign: 'center',
                                     fontSize: 12,
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     color: '#707070',
                                     borderRadius: 12,
-                                }}>{academy.ratings.toFixed(1)}</Text>
-
+                                }}>{academy.ratings.toFixed(1)}</Text> */}
+                                <RateViewFill>{academy.ratings}</RateViewFill>
                             </View>
 
 

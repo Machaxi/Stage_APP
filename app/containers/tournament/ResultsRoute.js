@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import Moment from 'moment';
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 
 class ResultsRoute extends BaseComponent {
@@ -80,6 +81,7 @@ class ResultsRoute extends BaseComponent {
 
                     <TextInput style={{
                         marginLeft: 8,
+                        height:45,
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'
@@ -255,7 +257,7 @@ class ResultsRoute extends BaseComponent {
 
 
 
-                            <TouchableOpacity activeOpacity={.8}
+                            {/* <TouchableOpacity activeOpacity={.8}
                                 onPress={() => {
                                     this.props.navigation.navigate('TournamentFixture')
                                 }}
@@ -274,8 +276,19 @@ class ResultsRoute extends BaseComponent {
                                         View Fixtures
                                 </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
 
+                            <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:150,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                //this.props.navigation.navigate('TournamentFixture')
+                            }}
+                            >View Fixtures</SkyFilledButton>
+                            </View>
                         </View>
 
                     </View>

@@ -10,6 +10,7 @@ import { getData } from "../../components/auth";
 import Moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 import TournamentCategoryDialog from './TournamentCategoryDialog'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 class RegisteredRoute extends BaseComponent {
 
@@ -186,6 +187,7 @@ class RegisteredRoute extends BaseComponent {
                         }}
                         style={{
                             marginLeft: 8,
+                            height:45,
                             backgroundColor: 'white',
                             borderRadius: 16,
                             fontFamily: 'Quicksand-Regular'
@@ -312,7 +314,7 @@ class RegisteredRoute extends BaseComponent {
                             Prithiviraj P | Prithiviraj P | Prithiviraj P
                     </Text>
 
-                        <TouchableOpacity activeOpacity={.8}
+                        {/* <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
                                 this.getFixtureData(item.id)
 
@@ -336,7 +338,18 @@ class RegisteredRoute extends BaseComponent {
 
 
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:150,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                this.getFixtureData(item.id)
+                            }}
+                            >View Fixtures</SkyFilledButton>
+                            </View>
 
                     </View>
                 </View>

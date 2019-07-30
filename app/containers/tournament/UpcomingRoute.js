@@ -77,6 +77,7 @@ class UpcomingRoute extends BaseComponent {
                         }}
                         style={{
                             marginLeft: 8,
+                            height:45,
                             backgroundColor: 'white',
                             borderRadius: 16,
                             fontFamily: 'Quicksand-Regular'

@@ -1307,18 +1307,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegistrationSteps);
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-        fontSize: 16,
-        //paddingVertical: 12,
+        fontSize: 14,
+        paddingVertical: 12,
         //paddingHorizontal: 10,
-        borderColor: '#D3D3D3',
-        borderWidth: 1,
-        borderRadius: 4,
+        borderColor: '#A3A5AE',
+        borderRadius: 8,
         color: 'black',
-        width: 120,
-        height: 40,
         marginBottom: 4,
+        width: 120,
+        alignSelf:'center',
+        borderBottomWidth:1,
+        alignItems:'center',
+        textAlign:'center',
         fontFamily: 'Quicksand-Regular',
-        // to ensure the text is never behind the icon
     },
     inputAndroid: {
         fontSize: 14,

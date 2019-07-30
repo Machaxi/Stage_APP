@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyReducer'
 import BaseComponent from '../BaseComponent';
 import { getData } from "../../components/auth";
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -121,7 +122,7 @@ class CoachProfileDetail extends BaseComponent {
                         style={{ height: 30, width: 80 }}
                     />
 
-                    <Text style={{
+                    {/* <Text style={{
                         backgroundColor: '#D6D6D6', height: 19,
                         width: 30,
                         textAlign: 'center',
@@ -129,8 +130,8 @@ class CoachProfileDetail extends BaseComponent {
                         paddingTop: 2,
                         color: '#707070',
                         borderRadius: 12,
-                    }}>{item.rating}</Text>
-
+                    }}>{item.rating}</Text> */}
+                    <RateViewFill>{item.rating}</RateViewFill>
                 </View>
 
             </View>
@@ -162,9 +163,13 @@ class CoachProfileDetail extends BaseComponent {
         let year = coachData.experience / 12
         year = Math.floor(year)
         let month = coachData.experience % 12
-
+        let rating =coachData.ratings==undefined?0:coachData.ratings
         return (
-            <ScrollView style={styles.chartContainer}>
+            <ScrollView 
+            contentContainerStyle={{
+                flexGrow: 1
+            }}
+            style={styles.chartContainer}>
 
                 <View>
 
@@ -210,15 +215,15 @@ class CoachProfileDetail extends BaseComponent {
                                         style={{ height: 30, width: 80, marginTop: 7 }}
                                     />
 
-                                    <Text style={{
+                                    {/* <Text style={{
                                         backgroundColor: '#ddd', height: 20, width: 36, textAlign: 'center',
                                         fontSize: 14,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         color: 'gray',
                                         borderRadius: 12,
-                                    }}>5</Text>
-
+                                    }}>5</Text> */}
+                                    <RateViewFill>{rating}</RateViewFill>
                                 </View>
 
                                 <Text style={{ fontSize: 12, color: '#A3A5AE', marginTop: 10 }}>Experience</Text>
@@ -331,6 +336,7 @@ class CoachProfileDetail extends BaseComponent {
 
 
                             <FlatList
+                            
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}

@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	Image,
 	Text,
+	Platform
 } from 'react-native';
 import { isSignedIn, getData } from "../components/auth";
 import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
@@ -17,8 +18,13 @@ import { getRelationsDetails } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
 import { Rating } from 'react-native-ratings';
+import { RateViewBorder } from '../components/Home/RateViewBorder';
+import { SkyFilledButton } from '../components/Home/SkyFilledButton';
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png"
+
+var notchMargin = Platform.OS === 'ios' ? 20 : 0;
+
 class CoachMenuDrawer extends BaseComponent {
 
 	constructor(props) {
@@ -518,7 +524,7 @@ class CoachMenuDrawer extends BaseComponent {
 									style={{ height: 30, width: 80 }}
 								/>
 
-								<Text style={{
+								{/* <Text style={{
 									borderColor: '#DFDFDF',
 									height: 19, width: 30, textAlign: 'center',
 									fontSize: 12,
@@ -527,7 +533,9 @@ class CoachMenuDrawer extends BaseComponent {
 									paddingTop: 0,
 									borderRadius: 12,
 									fontFamily: 'Quicksand-Medium'
-								}}>{ratings}</Text>
+								}}>{ratings}</Text> */}
+								<RateViewBorder>
+								{ratings}</RateViewBorder>
 
 							</View>
 						</View>
@@ -1024,7 +1032,22 @@ class CoachMenuDrawer extends BaseComponent {
 						</View>
 					</View>
 
-					<TouchableOpacity
+					<View
+					style={{
+						marginTop:12,
+					}}
+					>
+
+					<SkyFilledButton
+					onPress={() => {
+						this.props.navigation.navigate('WriteFeedback',
+							{ academy_id: this.state.academy_id, player_id: this.state.player_id })
+					}}
+					
+					>Give Feedback</SkyFilledButton>
+</View>
+					
+					{/* <TouchableOpacity
 						activeOpacity={.8}
 						onPress={() => {
 							this.props.navigation.navigate('WriteFeedback',
@@ -1042,7 +1065,7 @@ class CoachMenuDrawer extends BaseComponent {
                             </Text>
 
 						</View>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 
 				</View>
 
@@ -1175,6 +1198,9 @@ class CoachMenuDrawer extends BaseComponent {
 			}
 		}
 
+		
+		
+		//marginTop:Platform.OS === "ios" ? 24 :0
 		return (
 			<ScrollView style={styles.container}>
 
@@ -1182,7 +1208,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 					<View
 						style={{
-
+							
 						}}
 					>
 

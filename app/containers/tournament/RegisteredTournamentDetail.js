@@ -4,6 +4,7 @@ import { Card, } from 'react-native-paper';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 
 export default class RegisteredTournamentDetail extends BaseComponent {
@@ -343,7 +344,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     </View>
 
 
-                                    <View
+                                    {/* <View
                                         style={{
                                             flexDirection: 'row',
                                             justifyContent: 'center',
@@ -359,7 +360,18 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             View Fixture
                                         </Text>
 
-                                    </View>
+                                    </View> */}
+                                    <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:150,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                //this.getFixtureData(item.id)
+                            }}
+                            >View Fixtures</SkyFilledButton>
+                            </View>
 
                                 </View>
 
