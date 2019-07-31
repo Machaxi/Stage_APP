@@ -20,11 +20,16 @@ class ResultsRoute extends BaseComponent {
             tournaments: [],
             query: '',
             spinner: false,
+            isRefreshing:false
         }
     }
 
     componentDidMount() {
 
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         getData('header', (value) => {
 
             this.props.getTournamentResultListing(value).then(() => {
@@ -40,9 +45,11 @@ class ResultsRoute extends BaseComponent {
                         tournaments: data.data.tournaments
                     })
                 }
+                this.setState({ isRefreshing: false })
 
             }).catch((response) => {
                 console.log(response);
+                this.setState({ isRefreshing: false })
             })
         })
     }
@@ -64,7 +71,10 @@ class ResultsRoute extends BaseComponent {
         })
     }
 
-
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function() 
+        { this.selfComponentDidMount() });
+     }
 
     listHeader() {
 
@@ -301,7 +311,7 @@ class ResultsRoute extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.tournaments.length == 0) {
+        if (!this.state.isRefreshing && (this.props.data.loading && this.state.tournaments.length == 0)) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -321,6 +331,8 @@ class ResultsRoute extends BaseComponent {
 
                 {this.state.tournaments.length != 0 ?
                     <FlatList
+                    onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}
                         data={this.state.tournaments}
                         extraData={this.state.tournaments}

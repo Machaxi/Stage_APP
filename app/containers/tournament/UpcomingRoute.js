@@ -4,7 +4,7 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { getData } from "../../components/auth";
-import { getUpcomingTournament } from "../../redux/reducers/TournamentReducer";
+import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
@@ -16,11 +16,16 @@ class UpcomingRoute extends BaseComponent {
         this.state = {
             tournaments: [],
             query: '',
+            isRefreshing:false
         }
     }
 
     componentDidMount() {
 
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         getData('header', (value) => {
 
             this.props.getUpcomingTournament(value).then(() => {
@@ -37,12 +42,14 @@ class UpcomingRoute extends BaseComponent {
                     })
                 }
 
+                this.setState({ isRefreshing: false })
+
             }).catch((response) => {
+                this.setState({ isRefreshing: false })
                 console.log(response);
             })
         })
     }
-
 
     find(query) {
         let tournaments = this.state.tournaments
@@ -53,6 +60,11 @@ class UpcomingRoute extends BaseComponent {
         console.log('regex ', regex)
         return tournaments.filter(item => item.name.search(regex) >= 0);
     }
+
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function() 
+        { this.selfComponentDidMount() });
+     }
 
     listHeader() {
 
@@ -158,8 +170,10 @@ class UpcomingRoute extends BaseComponent {
                                 {Moment(item.start_date).format('MMM YYYY')}
                             </Text>
 
-                            <Text style={defaultStyle.blue_rounded_4}>{item.academic_type}</Text>
-
+                            <View style={defaultStyle.blue_rounded_4}>
+                            <Text style={[defaultStyle.regular_text_10,{color:'white'}]} >
+                            {item.academic_type}</Text>
+                            </View>
                         </View>
 
                         <Text style={{
@@ -196,7 +210,7 @@ class UpcomingRoute extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading || this.state.tournaments == null) {
+        if (!this.state.isRefreshing && (this.props.data.loading || this.state.tournaments == null)) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -213,6 +227,8 @@ class UpcomingRoute extends BaseComponent {
 
                 {this.state.tournaments.length != 0 ?
                     <FlatList
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         data={data}
                         extraData={data}
                         renderItem={this._renderItem}
@@ -239,7 +255,7 @@ class UpcomingRoute extends BaseComponent {
 
 const mapStateToProps = state => {
     return {
-        data: state.TournamentReducer,
+        data: state.UpcomingTournamentReducer,
     };
 };
 const mapDispatchToProps = {

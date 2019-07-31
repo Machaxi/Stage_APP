@@ -12,6 +12,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMore from 'react-native-read-more-text'
 import { RateViewFill } from '../../components/Home/RateViewFill';
+import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
 
 class AcademyProfile extends BaseComponent {
 
@@ -54,7 +55,7 @@ class AcademyProfile extends BaseComponent {
     componentDidMount() {
 
         this.props.getAcademyDetail(this.state.id).then(() => {
-            //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+            console.warn('getAcademyDetail=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
                 let academy = this.props.data.res.data.academy
@@ -586,26 +587,39 @@ class AcademyProfile extends BaseComponent {
 
 
                     {showFeedback ?
-                        <TouchableOpacity
-                            activeOpacity={.8}
-                            onPress={() => {
-                                this.props.navigation.navigate('WriteAcademyFeedback',
+                        // <TouchableOpacity
+                        //     activeOpacity={.8}
+                        //     onPress={() => {
+                        //         this.props.navigation.navigate('WriteAcademyFeedback',
 
-                                    { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
-                            }}>
+                        //             { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
+                        //     }}>
 
-                            <View
+                        //     <View
 
-                                style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+                        //         style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
 
-                                <Text
-                                    style={styles.filled_button}
-                                >
-                                    Give Feedback
-                            </Text>
+                        //         <Text
+                        //             style={styles.filled_button}
+                        //         >
+                        //             Give Feedback
+                        //     </Text>
 
-                            </View>
-                        </TouchableOpacity> : null}
+                        //     </View>
+                        // </TouchableOpacity>
+                        <View
+                        style={{margin:12}}
+                        >
+
+                        <SkyFilledButton
+                        onPress={() => {
+                                     this.props.navigation.navigate('WriteAcademyFeedback',
+    
+                                         { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
+                                 }}>
+    
+                        Give Feedback</SkyFilledButton></View>
+                        : null}
 
 
                     {feedback.length != 0 ?

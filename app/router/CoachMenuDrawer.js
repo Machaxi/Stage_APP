@@ -1209,7 +1209,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 					<View
 						style={{
-							
+							marginTop:Platform.OS === "ios" ? 24 :0
 						}}
 					>
 

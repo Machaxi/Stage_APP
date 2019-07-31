@@ -85,7 +85,7 @@ class ParentHome extends BaseComponent {
             headerRight: (
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.toggleDrawer();
+                        //navigation.toggleDrawer();
                     }}
                     activeOpacity={.8}
                 >
@@ -569,7 +569,8 @@ class ParentHome extends BaseComponent {
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/book_play.png')}
+                                    <Image source={require('../../images/view_academy_player.png')}
+                                        resizeMode="contain"
                                         style={{
                                             width: 30,
                                             height: 30, marginRight: 20, marginTop: 5
@@ -611,7 +612,8 @@ class ParentHome extends BaseComponent {
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/view_academy_player.png')}
+                                    <Image source={require('../../images/browse_academy.png')}
+                                        resizeMode="contain"
                                         style={{
                                             width: 30,
                                             height: 30, marginRight: 20, marginTop: 5

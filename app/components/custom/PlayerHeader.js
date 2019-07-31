@@ -83,7 +83,7 @@ export default class PlayerHeader extends BaseComponent {
                                             borderRadius: 2,
                                             backgroundColor: '#485FA0', height: 26, width: '110%'
                                         }}>
-                                            <Image style={{ height: 18, width: 20, }}
+                                            <Image style={{ height: 18, width: 31, }}
                                                 source={require('../../images/left_batch_arrow.png')}></Image>
 
                                             <Text style={
@@ -93,7 +93,7 @@ export default class PlayerHeader extends BaseComponent {
                                                     textAlign: 'center',
                                                 }]
                                             }>{badge}</Text>
-                                            <Image style={{ height: 18, width: 20, }}
+                                            <Image style={{ height: 18, width: 31, }}
                                                 source={require('../../images/right_batch_arrow.png')}></Image>
 
                                         </View>

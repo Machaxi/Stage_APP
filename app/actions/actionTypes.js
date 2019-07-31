@@ -21,6 +21,10 @@ export const GET_TOURNAMENT = 'tournament/LOAD';
 export const DO_TOURNAMENT_SUCCESS = 'tournament/LOAD_SUCCESS';
 export const DO_TOURNAMENT_FAIL = 'tournament/LOAD_FAIL';
 
+export const GET_UPCOMING_TOURNAMENT = 'upcoming/LOAD';
+export const DO_UPCOMING_TOURNAMENT_SUCCESS = 'upcoming/LOAD_SUCCESS';
+export const DO_UPCOMING_TOURNAMENT_FAIL = 'upcoming/LOAD_FAIL';
+
 export const GET_PERFORMENCE = 'user/LOAD';
 export const DO_PERFORMENCE_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_PERFORMENCE_FAIL = 'user/LOAD_FAIL';

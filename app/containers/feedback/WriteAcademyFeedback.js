@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { postFeedback } from '../../redux/reducers/FeedbackReduer'
 import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
+import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
 
 class WriteAcademyFeedback extends BaseComponent {
 
@@ -154,15 +155,27 @@ class WriteAcademyFeedback extends BaseComponent {
                                     }}
                                 >Thank you ! Your feedback has been succesfully submitted.</Text>
 
-                                <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
+                                {/* <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
                                     onPress={() => {
                                         this.setModalVisible(false);
                                         this.props.navigation.goBack(null);
                                     }}>
-                                    OK</Text>
+                                    OK</Text> */}
 
+                    <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:100,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                this.setModalVisible(false);
+                                        this.props.navigation.goBack(null);
+                            }}
+                            >OK</SkyFilledButton>
                             </View>
 
+                            </View>
                         </View>
                     </Modal>
                     <Card
@@ -248,7 +261,7 @@ class WriteAcademyFeedback extends BaseComponent {
 
                     </Card>
 
-                    <View style={{
+                    {/* <View style={{
                         marginTop: 16, marginBottom: 16,
                         justifyContent: 'center', alignItems: 'center'
                     }}>
@@ -259,7 +272,19 @@ class WriteAcademyFeedback extends BaseComponent {
                                 //this.setModalVisible(true);
                             }}>
                             Submit</Text>
-                    </View>
+                    </View> */}
+
+                <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:100,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                this.sendFeedback()
+                            }}
+                            >Submit</SkyFilledButton>
+                            </View>
 
                 </View>
             </ScrollView >

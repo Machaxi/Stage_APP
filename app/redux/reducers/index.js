@@ -12,6 +12,7 @@ import ProfileReducer from './ProfileReducer'
  import RewardReducer from './RewardReducer'
 import ChallengeReducer from './ChallengeReducer'
 import coachReducer from './CoachReducer'
+import UpcomingTournamentReducer from './UpcomingReducer'
 
 // import ShippingAddressReducer from './shippingAddressReducer'
 // import CodReducer from './codReducer'
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
     TournamentReducer,
     FeedbackReducer,
     RewardReducer,
-    ChallengeReducer
+    ChallengeReducer,
+    UpcomingTournamentReducer
     // AddressReducer,
     // ShippingReducer,
     // ShippingAddressReducer,

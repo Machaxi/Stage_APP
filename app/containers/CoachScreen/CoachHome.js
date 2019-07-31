@@ -4,7 +4,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 import { GUEST, PLAYER, COACH, ACADEMY } from "../../components/Constants";
 
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, RefreshControl,Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
@@ -87,7 +87,7 @@ class CoachHome extends BaseComponent {
 
         };
         this.state = {
-
+            refreshing:false,
             coach_profile: null,
             country: undefined,
             strenthList: null,
@@ -103,6 +103,10 @@ class CoachHome extends BaseComponent {
 
     componentDidMount() {
 
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         this.getCoachData()
 
         this.refreshEvent = Events.subscribe(EVENT_REFRESH_DASHBOARD, () => {
@@ -140,9 +144,12 @@ class CoachHome extends BaseComponent {
 
                 }
 
+                
+
             }).catch((response) => {
                 //handle form errors
                 console.log(response);
+                
             })
 
         });
@@ -191,11 +198,11 @@ class CoachHome extends BaseComponent {
 
                     })
                 }
-
-
+                this.setState({ refreshing: false });
             }).catch((response) => {
                 //handle form errors
                 console.log(response);
+                this.setState({ refreshing: false });
             })
 
         });
@@ -363,8 +370,15 @@ class CoachHome extends BaseComponent {
         }
     }
 
+    onRefresh = () => {
+
+        this.setState({ refreshing: true });
+        this.selfComponentDidMount()
+       
+      };
+
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (!this.state.refreshing && this.props.data.loading && !this.state.player_profile) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -381,7 +395,15 @@ class CoachHome extends BaseComponent {
             this.scoreMangement(tournaments)
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <ScrollView 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh}
+                        title="Pull to refresh"
+                    />
+                }
+                style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                     {this.state.userType == COACH ?
                         <View style={{ margin: 10, marginTop: 20 }}>

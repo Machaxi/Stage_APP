@@ -41,56 +41,58 @@ class Splash extends BaseComponent {
                 console.log(res);
                 this.setState({ signedIn: res, checkedSignIn: true })
                 BaseComponent.isUserLoggedIn = true
+
+                setTimeout(() => {
+
+                    const { checkedSignIn, signedIn } = this.state;
+                    console.log("signedIn", signedIn)
+                    if (!checkedSignIn) {
+                        this.props.navigation.navigate('IntroScreen')
+                        return;
+                    }
+                    if (signedIn !== true) {
+        
+                        this.props.navigation.navigate('IntroScreen')//'SignedOut')
+        
+        
+                    } else {
+                        getData('userInfo', (value) => {
+                            userData = (JSON.parse(value))
+                            // onSignIn()
+                            let userType = userData.user['user_type']
+                            console.log("SplashScreen=> ", JSON.stringify(userData));
+                            if (userType == GUEST) {
+                                console.warn(userType)
+                                this.props.navigation.navigate('GHome')
+                            }
+                            else if (userData.academy_id != null) {
+                                console.log(userData);
+                                if (userType == GUEST) {
+                                    this.props.navigation.navigate('GHome')
+                                } else if (userType == PLAYER) {
+                                    this.props.navigation.navigate('UHome')
+        
+                                } else if (userType == COACH || userType == ACADEMY) {
+                                    this.props.navigation.navigate('CHome')
+                                }
+                                else if (userType == PARENT) {
+                                    this.props.navigation.navigate('PHome')
+                                }
+        
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer')
+                            }
+        
+                        });
+        
+                    }
+        
+                }, 10)
             })
             .catch(err => alert("An error occurred"));
 
 
-        setTimeout(() => {
-
-            const { checkedSignIn, signedIn } = this.state;
-            console.log("signedIn", signedIn)
-            if (!checkedSignIn) {
-                this.props.navigation.navigate('IntroScreen')
-                return;
-            }
-            if (signedIn !== true) {
-
-                this.props.navigation.navigate('IntroScreen')//'SignedOut')
-
-
-            } else {
-                getData('userInfo', (value) => {
-                    userData = (JSON.parse(value))
-                    // onSignIn()
-                    let userType = userData.user['user_type']
-                    console.log("SplashScreen=> ", JSON.stringify(userData));
-                    if (userType == GUEST) {
-                        console.warn(userType)
-                        this.props.navigation.navigate('GHome')
-                    }
-                    else if (userData.academy_id != null) {
-                        console.log(userData);
-                        if (userType == GUEST) {
-                            this.props.navigation.navigate('GHome')
-                        } else if (userType == PLAYER) {
-                            this.props.navigation.navigate('UHome')
-
-                        } else if (userType == COACH || userType == ACADEMY) {
-                            this.props.navigation.navigate('CHome')
-                        }
-                        else if (userType == PARENT) {
-                            this.props.navigation.navigate('PHome')
-                        }
-
-                    } else {
-                        this.props.navigation.navigate('SwitchPlayer')
-                    }
-
-                });
-
-            }
-
-        }, 100)
+        
 
         if (Platform.OS === 'android') {
             Linking.getInitialURL().then(url => {

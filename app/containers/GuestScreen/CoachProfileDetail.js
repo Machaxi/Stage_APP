@@ -8,6 +8,7 @@ import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyR
 import BaseComponent from '../BaseComponent';
 import { getData } from "../../components/auth";
 import { RateViewFill } from '../../components/Home/RateViewFill';
+import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -268,26 +269,42 @@ class CoachProfileDetail extends BaseComponent {
 
                     </View>
                     {showFeedback ?
-                        <TouchableOpacity
-                            activeOpacity={.8}
-                            onPress={() => {
-                                this.props.navigation.navigate('WriteAcademyFeedback',
-                                    {
-                                        academy_id: this.state.academy_id,
-                                        target_id: this.state.coach_id,
-                                        is_coach: true
-                                    })
-                            }}>
+                        // <TouchableOpacity
+                        //     activeOpacity={.8}
+                        //     onPress={() => {
+                        //         this.props.navigation.navigate('WriteAcademyFeedback',
+                        //             {
+                        //                 academy_id: this.state.academy_id,
+                        //                 target_id: this.state.coach_id,
+                        //                 is_coach: true
+                        //             })
+                        //     }}>
 
 
-                            <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
-                                <Text
-                                    style={styles.filled_button}>
-                                    Give Feedback
-                                 </Text>
-                            </View>
+                        //     <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+                        //         <Text
+                        //             style={styles.filled_button}>
+                        //             Give Feedback
+                        //          </Text>
+                        //     </View>
 
-                        </TouchableOpacity> : null}
+                        // </TouchableOpacity>
+                        <View
+                        style={{margin:12}}
+                        >
+
+                        <SkyFilledButton
+                             onPress={() => {
+                                 this.props.navigation.navigate('WriteAcademyFeedback',
+                                     {
+                                         academy_id: this.state.academy_id,
+                                         target_id: this.state.coach_id,
+                                         is_coach: true
+                                     })
+                             }}>
+    
+                        Give Feedback</SkyFilledButton></View>
+                        : null}
 
                     {feedback.length != 0 ?
                         <Card

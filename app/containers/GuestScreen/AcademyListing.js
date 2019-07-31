@@ -23,6 +23,7 @@ class AcademyListing extends BaseComponent {
             autodata: [],
             suggestionResult: [],
             isAutoSuggest: false,
+            isRefreshing: false,
 
         }
         this._handleChange = this._handleChange.bind(this)
@@ -60,8 +61,11 @@ class AcademyListing extends BaseComponent {
                 })
             }
 
+            this.setState({ isRefreshing: false })
+
         }).catch((response) => {
             console.log(response);
+            this.setState({ isRefreshing: false })
         })
     }
 
@@ -186,6 +190,12 @@ class AcademyListing extends BaseComponent {
         // }
     }
 
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function() 
+        { this.getAcademyList() });
+
+     }
+
 
     listHeader() {
 
@@ -233,6 +243,7 @@ class AcademyListing extends BaseComponent {
                         }} placeholder="Search" />
 
                     <FlatList
+                    
                         keyboardShouldPersistTaps={'handled'}
                         data={autoData}
                         renderItem={({ item }) =>
@@ -452,7 +463,7 @@ class AcademyListing extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && !this.state.isAutoSuggest) {
+        if (!this.state.isRefreshing && this.props.data.loading && !this.state.isAutoSuggest) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -466,7 +477,8 @@ class AcademyListing extends BaseComponent {
                         this.listHeader()
                     }
                     <FlatList
-
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}
                         data={this.state.academies}
                         extraData={this.state.academies}
