@@ -45,7 +45,7 @@ export default class IntroPage extends Component {
                 {/* <SliderImage slider={this.state.sliderData}
 
                     onButtonPress={(catId) => this.onButtonPress(catId)} /> */}
-                <Swiper style={styles.wrapper}
+                <Swiper containerStyle={styles.wrapper}
                     ref={ref => this.swiper = ref}
                     showsPagination={false}
                     onIndexChanged={this.updateState.bind(this)}

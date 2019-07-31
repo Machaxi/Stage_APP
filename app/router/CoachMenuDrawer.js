@@ -829,6 +829,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 									<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
 										<Image
+										resizeMode="contain"
 											style={{
 												width: 12,
 												height: 12, borderRadius: 8
