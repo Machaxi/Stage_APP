@@ -250,6 +250,7 @@ export const defaultStyle = {
         backgroundColor: '#67BAF5',
         color: 'white',
         textAlign: 'center',
+        alignItems:'center',
         fontFamily: 'Quicksand-Regular'
     },
     headerStyle: {

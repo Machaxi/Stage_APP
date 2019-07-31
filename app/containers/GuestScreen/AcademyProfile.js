@@ -452,16 +452,35 @@ class AcademyProfile extends BaseComponent {
 
                             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
 
+                                <TouchableOpacity
+                                activeOpacity={.8}
+                                style={defaultStyle.rounded_button}>
+
                                 <Text
-                                    style={styles.rounded_button}
+                                    style={[defaultStyle.bold_text_14,
+                                        {color:'white'}]}
                                 >
                                     View Batches
                                 </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                activeOpacity={.8}
+                                style={defaultStyle.rounded_button}>
+
                                 <Text
-                                    style={styles.rounded_button}
+                                    style={[defaultStyle.bold_text_14,
+                                        {color:'white'}]}
                                 >
                                     Book Court
                                 </Text>
+                                </TouchableOpacity>
+                                
+                                {/* <Text
+                                    style={styles.rounded_button}
+                                >
+                                    Book Court
+                                </Text> */}
 
                             </View>
                         </View>
