@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE } from '../BaseComponent'
 import { getData } from "../../components/auth";
-import { getChallengeDashboard } from "../../redux/reducers/ChallengeReducer";
+import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
-import Moment from 'moment';
+import moment from 'moment';
+import Events from '../../router/events';
 
 class DashboardRoute extends BaseComponent {
 
@@ -14,29 +15,75 @@ class DashboardRoute extends BaseComponent {
     super(props)
 
     this.state = {
-      data: ['Test'],
+      playerData: [],
+      challengeData: [],
       query: '',
       modalVisible: false,
+      playerId: null,
+      selectedOpponentData: null
     }
   }
 
   componentDidMount() {
 
-    getData('header', (value) => {
+    this.refreshEvent = Events.subscribe(EVENT_REFRESH_CHALLENGE, () => {
+      console.warn(EVENT_REFRESH_CHALLENGE)
+      this.getDashboardData();
+    });
 
-      this.props.getChallengeDashboard(value, '1').then(() => {
+    this.getDashboardData();
+
+  }
+
+  getDashboardData() {
+    getData('userInfo', (value) => {
+      userData = JSON.parse(value)
+      let academy_id = userData['academy_id'];
+      this.state.player_id = userData['player_id'];
+      getData('header', (value) => {
+        this.props.getChallengeDashboard(value, academy_id).then(() => {
+          let data = this.props.data.data
+          console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+          //console.log('data.data.dashboard', data.data.dashboard);
+          //console.log('data.data.challenges', data.data.dashboard.challenges)
+
+          let success = data.success
+          if (success) {
+
+            //console.log(' getChallengeDashboardsds ' + JSON.stringify(data.data.dashboard));
+
+            this.setState({
+              playerData: [data.data.dashboard.player],
+              challengeData: data.data.dashboard.challenges,
+            })
+          }
+
+        }).catch((response) => {
+          console.log(response);
+        })
+      })
+    });
+  }
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
+  acceptTheChallenge(challengeId) {
+    getData('header', (value) => {
+      this.props.acceptChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
         console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
-        // let success = data.success
-        // if (success) {
+        let success = data.success
+        if (success) {
 
-        //   console.log(' 1getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
-
-        //   this.setState({
-        //     tournaments: data.data.tournaments
-        //   })
-        // }
+          this.setState({
+            playerData: [data.data.dashboard.player],
+            challengeData: data.data.dashboard.challenges,
+          })
+        }
 
       }).catch((response) => {
         console.log(response);
@@ -44,10 +91,68 @@ class DashboardRoute extends BaseComponent {
     })
   }
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+  cancelTheChallenge(challengeId) {
+    getData('header', (value) => {
+      this.props.cancelChallenge(value, challengeId).then(() => {
+        let data = this.props.data.data
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+        let success = data.success
+        if (success) {
+
+          this.setState({
+            playerData: [data.data.dashboard.player],
+            challengeData: data.data.dashboard.challenges,
+          })
+        }
+
+      }).catch((response) => {
+        console.log(response);
+      })
+    })
   }
 
+  dismissTheChallenge(challengeId) {
+    getData('header', (value) => {
+      this.props.dismissChallenge(value, challengeId).then(() => {
+        let data = this.props.data.data
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+        let success = data.success
+        if (success) {
+
+          this.setState({
+            playerData: [data.data.dashboard.player],
+            challengeData: data.data.dashboard.challenges,
+          })
+        }
+
+      }).catch((response) => {
+        console.log(response);
+      })
+    })
+  }
+
+  abortTheChallenge(challengeId) {
+    getData('header', (value) => {
+      this.props.abortChallenge(value, challengeId).then(() => {
+        let data = this.props.data.data
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+        let success = data.success
+        if (success) {
+
+          this.setState({
+            playerData: [data.data.dashboard.player],
+            challengeData: data.data.dashboard.challenges,
+          })
+        }
+
+      }).catch((response) => {
+        console.log(response);
+      })
+    })
+  }
 
   // find(query) {
   //     if (query === '') {
@@ -59,41 +164,144 @@ class DashboardRoute extends BaseComponent {
   //     return suggestionResult.filter(item => item.name.search(regex) >= 0);
   // }
 
+  updateScoreModal(data) {
+    return (
+      <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
+        <View>
+          <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
+            <View style={styles.modalOuter}>
+              <View style={styles.modalBox}>
+                <View style={styles.modalHeadingOuter}>
+                  <Text></Text>
+                  <Text style={[defaultStyle.bold_text_14, styles.modalHeadingText]}>Update Score</Text>
+
+                  <TouchableOpacity onPress={() => { this.setModalVisible(false); }}>
+                    <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.playerCardOuter}>
+                  <View style={styles.modalPlayerCard}>
+                    <TouchableOpacity>
+                      <ImageBackground style={styles.playerBackImage}
+                        source={require('../../images/batch_card.png')}
+                      >
+                        <Text style={styles.playerScoreLabel}>Score</Text>
+                        <Text style={styles.playerScore}>{data.score}</Text>
+
+                        <View style={styles.middleBox}>
+                          <Text style={styles.playerCategory}>{data.player_category}</Text>
+                          <Image style={styles.playerImage} source={require('../../images/player_small.png')}></Image>
+                          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{data.player_level}</Text>
+                        </View>
+
+                        <View style={styles.playerNameOuter}>
+                          <Text style={styles.playerName}>{data.name}</Text>
+                        </View>
+
+                        <View style={styles.badgeOuter}>
+                          <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                            <View style={styles.badgeInner}>
+                              <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
+                              <Text style={styles.badgeValue}>{data.badge}</Text>
+                              <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                            </View>
+                          </ImageBackground>
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.versusOuter}>
+                    <Text style={styles.versusText}>VS</Text>
+                  </View>
+
+                  {
+                    this.state.selectedOpponentData != null ?
+                      <View style={styles.modalPlayerCard}>
+                        <TouchableOpacity>
+                          <ImageBackground style={styles.playerBackImage}
+                            source={require('../../images/batch_card.png')}
+                          >
+                            <Text style={styles.playerScoreLabel}>Score</Text>
+                            <Text style={styles.playerScore}>{this.state.selectedOpponentData.score}</Text>
+
+                            <View style={styles.middleBox}>
+                              <Text style={styles.playerCategory}>{this.state.selectedOpponentData.player_category}</Text>
+                              <Image style={styles.playerImage} source={{ uri: this.state.selectedOpponentData.profile_pic }}></Image>
+                              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{this.state.selectedOpponentData.player_level.split(" ").join("\n")}</Text>
+                            </View>
+
+                            <View style={styles.playerNameOuter}>
+                              <Text style={styles.playerName}>{this.state.selectedOpponentData.name}</Text>
+                            </View>
+
+                            <View style={styles.badgeOuter}>
+                              <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                                <View style={styles.badgeInner}>
+                                  <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
+                                  <Text style={styles.badgeValue}>{this.state.selectedOpponentData.badge}</Text>
+                                  <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                                </View>
+                              </ImageBackground>
+                            </View>
+                          </ImageBackground>
+                        </TouchableOpacity>
+                      </View> : null
+                  }
+
+                </View>
+
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50%", textAlign: 'center' }}>You</Text>
+                  <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50 %", textAlign: 'center' }}>Opponent</Text>
+                </View>
+
+
+                <View style={styles.confirmBtnOuter}>
+                  <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Submit</Text>
+                </View>
+
+              </View>
+            </View>
+          </Modal>
+        </View>
+      </ScrollView >
+    )
+
+  }
 
   _renderItem = ({ item }) => (
 
-    <View>
-      <TouchableOpacity activeOpacity={.8}
-        onPress={() => {
-          this.setModalVisible(true);
-        }}>
 
+    <View>
+      <TouchableOpacity activeOpacity={.8} onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
         <Card style={styles.challengePlayerCard}>
+          <Text style={[styles.cardHeading, { marginHorizontal: 16 }]}>Create Challenge</Text>
           <View style={styles.playerCardOuter}>
             <View style={styles.playerCard}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
                 <ImageBackground style={styles.playerBackImage}
                   source={require('../../images/batch_card.png')}
                 >
                   <Text style={styles.playerScoreLabel}>Score</Text>
-                  <Text style={styles.playerScore}>40</Text>
+                  <Text style={styles.playerScore}>{item.score}</Text>
 
                   <View style={styles.middleBox}>
-                    <Text style={styles.playerCategory}>Player</Text>
-                    <Image style={styles.playerImage} source={require('../../images/player_small.png')}></Image>
-                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>Split1</Text>
+                    <Text style={styles.playerCategory}>{item.player_category}</Text>
+                    <Image style={styles.playerImage} source={{ uri: item.profile_pic }}></Image>
+                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{item.player_level.split(" ").join("\n")}</Text>
                   </View>
 
                   <View style={styles.playerNameOuter}>
-                    <Text style={styles.playerName}>Deepika</Text>
+                    <Text style={styles.playerName}>{item.name}</Text>
                   </View>
 
                   <View style={styles.badgeOuter}>
-
                     <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
                       <View style={styles.badgeInner}>
                         <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
-                        <Text style={styles.badgeValue}>111</Text>
+                        <Text style={styles.badgeValue}>{item.badge}</Text>
                         <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
                       </View>
                     </ImageBackground>
@@ -123,7 +331,101 @@ class DashboardRoute extends BaseComponent {
         <Text style={styles.filterText}>Filter</Text>
       </View>
 
-      <Card style={styles.challengeCard}>
+      {
+        this.state.challengeData.map((item, index) => {
+          return (
+            <Card key={index} style={styles.challengeCard}>
+
+              {item.opponent.id == this.state.player_id ?
+                <View>
+                  <Text style={styles.cardHeading}>You have been challenged</Text>
+                  <Text style={styles.challengePlayerName}>{item.challenge_by.name}</Text>
+                  <View style={styles.scoreCatLabelOuter}>
+                    <Text style={styles.scoreLabel}>Score</Text>
+                    <Text style={styles.categoryLabel}>Category</Text>
+                    <Text style={styles.dateLabel}>Date</Text>
+                  </View>
+                  <View style={styles.scoreCatValueOuter}>
+                    <Text style={styles.scoreValue}>{item.challenge_by.score}</Text>
+                    <Text style={styles.categoryValue}>{item.challenge_by.player_category}</Text>
+                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("DD/MM/YYYY")}</Text>
+                  </View>
+
+                  <View style={styles.challengeBtnOuter}>
+                    <TouchableOpacity activeOpacity={.8} style={styles.rounded_button_white}
+                      onPress={() => { this.cancelTheChallenge(item.id) }}>
+                      <Text style={styles.cancelBtnText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
+                      onPress={() => { this.acceptTheChallenge(item.id) }}>
+                      <Text style={styles.primaryBtnText}>Accept</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                :
+
+                <View>
+                  <View style={styles.acceptCardHeadingOuter}>
+                    <View style={styles.acceptCardHeading}>
+                      <Text style={styles.acceptCardheadingText}>You have challenged</Text>
+                      {
+                        item.challenge_status == 'ACCEPTED' &&
+                        <Text style={styles.statusLabel}> Accepted </Text>
+                      }
+                      {
+                        item.challenge_status == 'PENDING' &&
+                        <Text style={styles.statusLabel}> Pending </Text>
+                      }
+                      {
+                        item.challenge_status == 'REJECTED' &&
+                        <Text style={styles.statusErrorLabel}> Rejected </Text>
+                      }
+                    </View>
+                    {
+                      (item.challenge_status == 'ACCEPTED' || item.challenge_status == 'PENDING') ?
+
+                        <Text style={styles.actionLabel} onPress={() => { this.abortTheChallenge(item.id) }}>Abort</Text>
+                        :
+                        <Text style={styles.actionDismissLabel} onPress={() => { this.dismissTheChallenge(item.id) }}>Dismiss</Text>
+                    }
+
+                  </View>
+                  <Text style={styles.challengePlayerName}>{item.opponent.name}</Text>
+                  <View style={styles.scoreCatLabelOuter}>
+                    <Text style={styles.scoreLabel}>Score</Text>
+                    <Text style={styles.categoryLabel}>Category</Text>
+                    <Text style={styles.dateLabel}>Date</Text>
+                  </View>
+                  <View style={styles.scoreCatValueOuter}>
+                    <Text style={styles.scoreValue}>{item.opponent.score}</Text>
+                    <Text style={styles.categoryValue}>{item.opponent.player_category}</Text>
+                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("DD/MM/YYYY")}</Text>
+                  </View>
+
+                  {item.challenge_status == 'ACCEPTED' &&
+                    <View style={styles.challengeBtnOuter}>
+                      <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
+                      <Text style={defaultStyle.rounded_button_150} onPress={() => {
+                        this.setModalVisible(true);
+                        this.setState({
+                          selectedOpponentData: item.opponent
+                        })
+                      }}>Update Score</Text>
+                    </View>
+                  }
+
+                </View>
+
+
+              }
+
+            </Card>
+          )
+        })
+      }
+
+      {/* <Card style={styles.challengeCard}>
         <View>
           <Text style={styles.cardHeading}>You have been challenged</Text>
           <Text style={styles.challengePlayerName}>Vinoth T</Text>
@@ -229,7 +531,7 @@ class DashboardRoute extends BaseComponent {
             <Text style={styles.dateValue}>25/05/2019</Text>
           </View>
         </View>
-      </Card>
+      </Card> */}
     </View>
 
   );
@@ -244,7 +546,8 @@ class DashboardRoute extends BaseComponent {
     //   )
     // }
 
-    let data = this.state.data
+    let data = this.state.playerData;
+    console.log('data', data);
     return (
 
       <View style={styles.chartContainer}>
@@ -252,76 +555,7 @@ class DashboardRoute extends BaseComponent {
           data={data}
           renderItem={this._renderItem}
         />
-        <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
-          <View>
-            <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
-              <View style={styles.modalOuter}>
-                <View style={styles.modalBox}>
-                  <View style={styles.modalHeadingOuter}>
-                    <Text></Text>
-                    <Text style={[defaultStyle.bold_text_14, styles.modalHeadingText]}>Create Challenge </Text>
-
-                    <TouchableOpacity onPress={() => { this.setModalVisible(false); }}>
-                      <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={styles.playerCardOuter}>
-                    <View style={styles.playerCard}>
-                      <TouchableOpacity>
-                        <ImageBackground style={styles.playerBackImage}
-                          source={require('../../images/batch_card.png')}
-                        >
-                          <Text style={styles.playerScoreLabel}>Score</Text>
-                          <Text style={styles.playerScore}>40</Text>
-
-                          <View style={styles.middleBox}>
-                            <Text style={styles.playerCategory}>Player</Text>
-                            <Image style={styles.playerImage} source={require('../../images/player_small.png')}></Image>
-                            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>Split1</Text>
-                          </View>
-
-                          <View style={styles.playerNameOuter}>
-                            <Text style={styles.playerName}>Deepika</Text>
-                          </View>
-
-                          <View style={styles.badgeOuter}>
-                            <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
-                              <View style={styles.badgeInner}>
-                                <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
-                                <Text style={styles.badgeValue}>111</Text>
-                                <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
-                              </View>
-                            </ImageBackground>
-                          </View>
-                        </ImageBackground>
-                      </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.versusOuter}>
-                      <Text style={styles.versusText}>VS</Text>
-                    </View>
-
-                    <View style={styles.opponentCard}>
-                      <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList') }}>
-                        <ImageBackground style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
-                          <Text style={styles.addOpponentLabel}>+ Add Opponent</Text>
-                        </ImageBackground>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  {/* <View style={{display:'flex', flexDirection: 'row'}}>
-            <Text style={{color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50%",textAlign:'center'}}>You</Text>
-            <Text style={{color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50 %", textAlign:'center'}}>Opponent</Text>
-          </View> */}
-
-                  <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Confirm</Text>
-                </View>
-              </View>
-            </Modal>
-          </View>
-        </ScrollView >
+        {data.length > 0 && this.updateScoreModal(data[0])}
       </View>
     );
   }
@@ -333,7 +567,7 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = {
-  getChallengeDashboard
+  getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardRoute);
 
@@ -379,7 +613,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     //paddingHorizontal: 5
-    marginLeft: 18
+    marginLeft: 18,
+    marginTop: 15
   },
   playerCard: {
     overflow: 'hidden',
@@ -390,6 +625,12 @@ const styles = StyleSheet.create({
   playerBackImage: {
     height: 200,
     width: '100%'
+  },
+  modalPlayerCard: {
+    overflow: 'hidden',
+    height: 200,
+    width: "35%",
+    marginBottom: 16
   },
   playerScoreLabel: {
     justifyContent: 'center',
@@ -705,19 +946,32 @@ const styles = StyleSheet.create({
     paddingVertical: 16
   },
   modalBox: {
-    width: "100%",
-    margin: 16,
-    padding: 16,
+    width: "95%",
+    //margin: 16,
+    //padding: 16,
     borderRadius: 16,
     backgroundColor: 'white',
-    height: 370,
+    height: 400,
   },
   modalHeadingOuter: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    padding: 10
   },
   modalHeadingText: {
     color: '#707070',
     fontFamily: 'Quicksand-Regular'
-  }
+  },
+  confirmBtnOuter: {
+    marginHorizontal: 16,
+    marginTop: 20,
+    marginBottom: 15
+  },
+  confirmBtn: {
+    marginTop: 16,
+    width: "100%",
+    marginLeft: 0,
+    marginRight: 0,
+    fontFamily: 'Quicksand-Regular',
+  },
 });

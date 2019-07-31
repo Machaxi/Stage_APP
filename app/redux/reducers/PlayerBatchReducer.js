@@ -143,3 +143,22 @@ export function getCoachBatchAttendenceDetails(header,batch_id) {
     };
 
 }
+
+export function getPlayerBatchAttendenceDetails(header,batch_id) {
+    console.log("postdata",header,batch_id)
+    return {
+        type: types.GET_BATCHES,
+        payload: {
+            request: {
+                url: `batch/${batch_id}/attendance-detail`,
+                method: 'GET',
+                // data: postdata,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}
