@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, Image } from 'react-native'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, ImageBackground } from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 
@@ -17,9 +17,26 @@ export default class TournamentScorer extends BaseComponent {
 
             <ScrollView>
 
+                <View style={{
+                    position: 'absolute',
+                    height: "100%",
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    selfAlign: 'center',
+                    alignContent: 'center',
+                    width: "100%",
+                }}>
+
+
+
+                    <View style={{
+                        height: "100%",
+                        width: 3,
+                        backgroundColor: '#C4C4C4'
+                    }}></View>
+                </View>
+
                 <View style={{ padding: 16, }}>
-
-
 
                     <View style={{
 
@@ -129,6 +146,10 @@ export default class TournamentScorer extends BaseComponent {
                     </View>
 
                     <View style={{
+                        
+                    }}>
+
+                    <View style={{
                         flex: 1,
                         marginTop: 10,
                         alignContent: 'center',
@@ -217,33 +238,14 @@ export default class TournamentScorer extends BaseComponent {
 
                                 }}>
 
-                                <View
+                                <Image
+                                    source={require('../../images/ic_minus.png')}
                                     style={{
                                         width: 30,
                                         height: 30,
-                                        borderRadius: 30 / 2,
-                                        marginBottom: 10,
-                                        backgroundColor: "#F3F1F1",
-                                        alignItems: 'center',
-                                        alignContent: 'center',
-                                        marginTop: 6,
-                                        justifyContent: 'center'
-                                    }}>
-
-
-
-                                    <Text style={{
-                                        justifyContent: 'center',
-                                        textAlign: 'center',
-                                        alignItems: 'center',
-                                        fontSize: 30,
-                                        fontWeight: "400",
-                                        fontFamily: 'Quicksand-Medium',
-                                        color: '#A3A5AE'
-
-                                    }}>–</Text>
-
-                                </View>
+                                        padding: 4,
+                                    }}
+                                />
                                 <Text
                                     style={{
                                         color: '#404040',
@@ -330,20 +332,20 @@ export default class TournamentScorer extends BaseComponent {
 
 
 
-                                    <Text style={{
-                                        width: 30,
-                                        backgroundColor: "#F3F1F1",
-                                        height: 30,
-                                        borderRadius: 30 / 2,
-                                        justifyContent: 'center',
-                                        textAlign: 'center',
-                                        alignItems: 'center',
-                                        fontSize: 30,
-                                        fontWeight: "400",
-                                        fontFamily: 'Quicksand-Medium',
-                                        color: '#A3A5AE'
+                                <Text style={{
+                                    width: 30,
+                                    backgroundColor: "#F3F1F1",
+                                    height: 30,
+                                    borderRadius: 30 / 2,
+                                    justifyContent: 'center',
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    fontSize: 30,
+                                    fontWeight: "400",
+                                    fontFamily: 'Quicksand-Medium',
+                                    color: '#A3A5AE'
 
-                                    }}>–</Text>
+                                }}>–</Text>
 
                                 {/* </View> */}
                                 <Text
@@ -425,8 +427,10 @@ export default class TournamentScorer extends BaseComponent {
                         </TouchableOpacity>
 
                     </View>
-
+                    </View>
+                    
                 </View >
+
             </ScrollView >
 
         );
