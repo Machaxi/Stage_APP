@@ -10,6 +10,7 @@ import { getData } from "../../components/auth";
 import Moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 import TournamentCategoryDialog from './TournamentCategoryDialog'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 class RegisteredRoute extends BaseComponent {
 
@@ -21,11 +22,16 @@ class RegisteredRoute extends BaseComponent {
             tournament_fixtures: [],
             query: '',
             spinner: false,
-            is_show_dialog: false
+            is_show_dialog: false,
+            isRefreshing:false
         }
     }
     componentDidMount() {
 
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         getData('header', (value) => {
 
             this.props.getRegisteredTournament(value).then(() => {
@@ -41,8 +47,10 @@ class RegisteredRoute extends BaseComponent {
                         tournaments: data.data.tournaments
                     })
                 }
+                this.setState({ isRefreshing: false })
 
             }).catch((response) => {
+                this.setState({ isRefreshing: false })
                 console.log(response);
             })
         })
@@ -53,6 +61,11 @@ class RegisteredRoute extends BaseComponent {
             spinner: status
         })
     }
+
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function() 
+        { this.selfComponentDidMount() });
+     }
 
     getFixtureData(tournament_id) {
 
@@ -186,6 +199,7 @@ class RegisteredRoute extends BaseComponent {
                         }}
                         style={{
                             marginLeft: 8,
+                            height:45,
                             backgroundColor: 'white',
                             borderRadius: 16,
                             fontFamily: 'Quicksand-Regular'
@@ -312,7 +326,7 @@ class RegisteredRoute extends BaseComponent {
                             Prithiviraj P | Prithiviraj P | Prithiviraj P
                     </Text>
 
-                        <TouchableOpacity activeOpacity={.8}
+                        {/* <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
                                 this.getFixtureData(item.id)
 
@@ -336,7 +350,18 @@ class RegisteredRoute extends BaseComponent {
 
 
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:150,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                this.getFixtureData(item.id)
+                            }}
+                            >View Fixtures</SkyFilledButton>
+                            </View>
 
                     </View>
                 </View>
@@ -348,7 +373,7 @@ class RegisteredRoute extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.tournaments.length == 0) {
+        if (!this.state.isRefreshing && (this.props.data.loading && this.state.tournaments.length == 0)) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -376,6 +401,8 @@ class RegisteredRoute extends BaseComponent {
                 {this.listHeader()}
                 {this.state.tournaments.length != 0 ?
                     <FlatList
+                    onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}
                         data={data}
                         extraData={data}

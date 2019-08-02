@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import Moment from 'moment';
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 
 class ResultsRoute extends BaseComponent {
@@ -19,11 +20,16 @@ class ResultsRoute extends BaseComponent {
             tournaments: [],
             query: '',
             spinner: false,
+            isRefreshing:false
         }
     }
 
     componentDidMount() {
 
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         getData('header', (value) => {
 
             this.props.getTournamentResultListing(value).then(() => {
@@ -39,9 +45,11 @@ class ResultsRoute extends BaseComponent {
                         tournaments: data.data.tournaments
                     })
                 }
+                this.setState({ isRefreshing: false })
 
             }).catch((response) => {
                 console.log(response);
+                this.setState({ isRefreshing: false })
             })
         })
     }
@@ -63,7 +71,10 @@ class ResultsRoute extends BaseComponent {
         })
     }
 
-
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function() 
+        { this.selfComponentDidMount() });
+     }
 
     listHeader() {
 
@@ -80,6 +91,7 @@ class ResultsRoute extends BaseComponent {
 
                     <TextInput style={{
                         marginLeft: 8,
+                        height:45,
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'
@@ -255,7 +267,7 @@ class ResultsRoute extends BaseComponent {
 
 
 
-                            <TouchableOpacity activeOpacity={.8}
+                            {/* <TouchableOpacity activeOpacity={.8}
                                 onPress={() => {
                                     this.props.navigation.navigate('TournamentFixture')
                                 }}
@@ -274,8 +286,19 @@ class ResultsRoute extends BaseComponent {
                                         View Fixtures
                                 </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
 
+                            <View  style={{
+                        margin: 16,
+                        alignSelf:'center',
+                        width:150,
+                    }}>
+                            <SkyFilledButton
+                             onPress={() => {
+                                //this.props.navigation.navigate('TournamentFixture')
+                            }}
+                            >View Fixtures</SkyFilledButton>
+                            </View>
                         </View>
 
                     </View>
@@ -288,7 +311,7 @@ class ResultsRoute extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.tournaments.length == 0) {
+        if (!this.state.isRefreshing && (this.props.data.loading && this.state.tournaments.length == 0)) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -308,6 +331,8 @@ class ResultsRoute extends BaseComponent {
 
                 {this.state.tournaments.length != 0 ?
                     <FlatList
+                    onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}
                         data={this.state.tournaments}
                         extraData={this.state.tournaments}

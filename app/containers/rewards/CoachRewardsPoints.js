@@ -86,7 +86,7 @@ class CoachRewardsPoints extends BaseComponent {
     fetchBatchByAcademy(academy_id) {
 
         let coach_id = this.state.coach_id
-        coach_id = 1
+        //coach_id = 1
 
         getData('header', (value) => {
 
@@ -289,12 +289,12 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 16,
         //paddingVertical: 12,
         //paddingHorizontal: 10,
-        borderColor: '#D3D3D3',
-        borderRadius: 4,
+        borderColor: '#614051',
+        borderRadius: 8,
         color: 'black',
-        width: 200,
-        height: 40,
         marginBottom: 4,
+        alignItems:'center',
+        textAlign:'center',
         fontFamily: 'Quicksand-Regular',
         // to ensure the text is never behind the icon
     },

@@ -51,14 +51,47 @@ export default class PlayerHeader extends BaseComponent {
                                 <Text style={{
                                     color: 'white',
                                     marginRight: 0,
+                                    marginLeft:10,
                                     fontFamily: 'Quicksand-Bold',
                                    fontSize: 28,
                                 }}
                                     numberOfLines={1}
                                 >{newName}</Text>
 
+                                
+                                <ImageBackground
+                                resizeMode="contain"
+                                style={{
+                                    marginBottom: 20,
+                                    marginTop: 20,
+                                    height:80,
+                                    width:120
+                                }}
+                                source={require('../../images/single_shield.png')}
+                                
+                                    
+                                >
 
-                                <View style={{
+                                    <View style={{
+                                        alignItems:'center',
+                                        marginTop:33,
+                                    }}>
+
+                                    <Text style={
+                                                [defaultStyle.bebas_text_blue_10,
+                                                {
+                                                    alignItems:'center',
+                                                    justifyContent:'center',
+                                                    width: 60,
+                                                    height:20,
+                                                    textAlign: 'center',
+                                                }]
+                                            }>{badge}</Text>
+
+
+                                    </View>
+                                    </ImageBackground>
+                                {/* <View style={{
                                     width: 119,
                                     height: 84,
                                     alignItems: 'center',
@@ -83,7 +116,7 @@ export default class PlayerHeader extends BaseComponent {
                                             borderRadius: 2,
                                             backgroundColor: '#485FA0', height: 26, width: '110%'
                                         }}>
-                                            <Image style={{ height: 18, width: 20, }}
+                                            <Image style={{ height: 18, width: 31, }}
                                                 source={require('../../images/left_batch_arrow.png')}></Image>
 
                                             <Text style={
@@ -93,7 +126,7 @@ export default class PlayerHeader extends BaseComponent {
                                                     textAlign: 'center',
                                                 }]
                                             }>{badge}</Text>
-                                            <Image style={{ height: 18, width: 20, }}
+                                            <Image style={{ height: 18, width: 31, }}
                                                 source={require('../../images/right_batch_arrow.png')}></Image>
 
                                         </View>
@@ -102,7 +135,7 @@ export default class PlayerHeader extends BaseComponent {
 
 
 
-                                </View>
+                                </View> */}
                                 {/* <Image source={require('../../images/Rank.png')}
                                             style={{
                                                 width: 119,
@@ -117,7 +150,8 @@ export default class PlayerHeader extends BaseComponent {
                                 <View style={{
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    marginBottom: 10
+                                    marginBottom: 10,
+                                    marginLeft:10,
                                 }}>
                                     <Text style={{
                                         color: 'white',
@@ -130,7 +164,8 @@ export default class PlayerHeader extends BaseComponent {
                                     <View
                                         style={{
                                             backgroundColor: 'red',
-                                            width: 36,
+                                            paddingLeft:2,
+                                            paddingRight:2,
                                             height: 22,
                                             borderRadius: 4,
                                             alignItems: 'center',
@@ -144,7 +179,7 @@ export default class PlayerHeader extends BaseComponent {
                                             textAlign: 'center',
                                             fontSize: 12,
                                             fontFamily: 'Quicksand-Bold',
-                                        }}> {player_category} </Text>
+                                        }}>{player_category}</Text>
                                     </View>
                                 </View>
                             </View>

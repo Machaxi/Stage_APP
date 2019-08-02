@@ -5,7 +5,7 @@ import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, goToHome }
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
-import { getData } from '../../components/auth';
+import { getData,storeData } from '../../components/auth';
 import { registerTournament, getPlayerSWitcher } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -120,7 +120,8 @@ class RegistrationSteps extends BaseComponent {
             country: '',
             new_array: [], // this is for picker,
             selected_player: null,
-            alert_msg: ''
+            alert_msg: '',
+            user_type: ''
         }
 
         this.inputRefs = {
@@ -205,7 +206,37 @@ class RegistrationSteps extends BaseComponent {
 
     }
     componentDidMount() {
-        this.getPlayerList()
+
+        getData('userInfo', (value) => {
+            console.log('userInfo=> ', value)
+            userData = JSON.parse(value)
+            let user_type = userData.user['user_type']
+            this.setState({
+                user_type: user_type
+            })
+            if (user_type == PLAYER || user_type == PARENT) {
+                this.getPlayerList()
+            }
+            else if (user_type == GUEST || user_type == COACH) {
+
+                let name = userData.user['name']
+                //Treating guest as player so setting player object
+                let selected_player = {}
+                selected_player.name = name
+                selected_player.user_id = userData.user['id']
+                this.state.txtname = name
+                this.setState({
+                    selected_player: selected_player
+                })
+                this.setState({
+                    is_player_selected: true
+                })
+
+            }else{
+                alert('Unknown User Type.')
+            }
+        });
+
     }
 
     componentWillMount() {
@@ -310,6 +341,8 @@ class RegistrationSteps extends BaseComponent {
 
     showStepOne() {
 
+        let is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
+        //if there is GUEST then in that case we are not showing picker selection
         let is_player_selected = this.state.is_player_selected
 
         return (
@@ -323,13 +356,6 @@ class RegistrationSteps extends BaseComponent {
                             marginTop: 20
                         }}>
 
-                        <Text style={{
-                            fontFamily: 'Quicksand-Medium',
-                            fontSize: 14,
-                            color: '#000000'
-                        }}>
-                            Select Player
-                    </Text>
 
                     </View>
 
@@ -339,39 +365,73 @@ class RegistrationSteps extends BaseComponent {
                             alignItems: 'center',
                         }}>
 
-                        {/* <Text style={{
-                            color: '#404040',
-                            fontSize: 14,
 
-                            marginTop: 20,
-                            fontFamily: 'Quicksand-Medium',
-                        }}>
-                            Prithviraj P
-                        </Text> */}
-                        <RNPickerSelect style={{
-                            width: '90%',
-                        }}
-                            placeholder={placeholder}
-                            items={this.state.new_array}
-                            onValueChange={(value) => {
-                                //console.warn(value)
-                                if (value != null) {
-                                    let player = this.getPlayerById(value)
-                                    this.state.txtname = player.name
-                                    this.setState({
-                                        country: value,
-                                        selected_player: player,
-                                        is_player_selected: true
-                                    });
-                                }
-                            }}
-                            style={pickerSelectStyles}
-                            value={this.state.country}
-                            useNativeAndroidPickerStyle={false}
-                            ref={(el) => {
-                                this.inputRefs.country = el;
-                            }}
-                        />
+                        {is_guest ?
+
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <Text style={{
+                                    fontFamily: 'Quicksand-Medium',
+                                    fontSize: 14,
+                                    color: '#000000'
+                                }}>
+                                    Select Category
+                            </Text>
+                                <Text style={{
+
+                                    color: '#404040',
+                                    fontSize: 14,
+
+                                    marginTop: 20,
+                                    fontFamily: 'Quicksand-Medium',
+                                }}>
+                                    {this.state.txtname}
+                                </Text></View>
+                            :
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                <Text style={{
+                                    fontFamily: 'Quicksand-Medium',
+                                    fontSize: 14,
+                                    color: '#000000'
+                                }}>
+                                    Select Player
+                                </Text>
+
+                                <RNPickerSelect style={{
+                                    width: '90%',
+                                }}
+                                    placeholder={placeholder}
+                                    items={this.state.new_array}
+                                    onValueChange={(value) => {
+                                        //console.warn(value)
+                                        if (value != null) {
+                                            let player = this.getPlayerById(value)
+                                            this.state.txtname = player.name
+                                            this.setState({
+                                                country: value,
+                                                selected_player: player,
+                                                is_player_selected: true
+                                            });
+                                        }
+                                    }}
+                                    style={pickerSelectStyles}
+                                    value={this.state.country}
+                                    useNativeAndroidPickerStyle={false}
+                                    ref={(el) => {
+                                        this.inputRefs.country = el;
+                                    }}
+                                /></View>
+                        }
+
+
+
+
                     </View>
 
                     {is_player_selected ?
@@ -986,8 +1046,8 @@ class RegistrationSteps extends BaseComponent {
                     let obj = {}
                     obj['tournament_category'] = title
                     obj['tournament_type'] = tournament_types[j].tournament_type
-                    obj['partner_name'] = ''
-                    obj['partner_mobile_number'] = ''
+                    obj['partner_name'] = tournament_types[j].partner_name
+                    obj['partner_mobile_number'] = tournament_types[j].partner_phone
                     tournament_reg_details.push(obj)
 
                 }
@@ -1163,28 +1223,48 @@ class RegistrationSteps extends BaseComponent {
                         setTimeout(() => {
 
                             getData('userInfo', (value) => {
-                                userData = (JSON.parse(value))
+                                let userData = (JSON.parse(value))
                                 // onSignIn()
                                 let userType = userData.user['user_type']
-                                console.log("SplashScreen=> ", JSON.stringify(userData));
-                                console.warn('userType ', userType == PLAYER)
-                                console.warn('academy_id ', userData.academy_id)
+                                console.log("SplashScreen1=> ", JSON.stringify(userData));
+                                console.warn('userType ', userType)
+                                //console.warn('academy_id ', userData.academy_id)
 
                                 if (userType == GUEST) {
                                     this.props.navigation.navigate('GHome')
                                 }
-                                else if (userData.academy_id != null) {
-                                    console.log('data=> ', userData);
-                                    if (userType == GUEST) {
-                                        this.props.navigation.navigate('GHome')
-                                    } else if (userType == PLAYER) {
-                                        this.props.navigation.navigate('UHome')
+                                else {
+                                    if (userType == PLAYER) {
+                                        //this.props.navigation.navigate('UHome')
+                                        if (!userData.has_multiple_acadmies) {
+                                            this.props.navigation.navigate('UHome')
 
+                                        } else {
+                                            this.props.navigation.navigate('SwitchPlayer', {
+                                                userType: 'PLAYER'
+                                            })
+                                        }
                                     } else if (userType == COACH || userType == ACADEMY) {
-                                        this.props.navigation.navigate('CHome')
+                                        //this.props.navigation.navigate('CHome')
+                                        storeData('multiple', userData.has_multiple_acadmies)
+                                        if (userData.has_multiple_acadmies == false) {
+                                            this.props.navigation.navigate('CHome')
+                                        } else {
+                                            this.props.navigation.navigate('SwitchPlayer', {
+                                                userType: COACH
+                                            })
+                                        }
                                     }
                                     else if (userType == PARENT) {
-                                        this.props.navigation.navigate('PHome')
+                                        //this.props.navigation.navigate('PHome')
+                                        if (userData.has_multiple_acadmies == false) {
+                                            this.props.navigation.navigate('PHome')
+
+                                        } else {
+                                            this.props.navigation.navigate('SwitchPlayer', {
+                                                userType: PLAYER
+                                            })
+                                        }
                                     }
                                 }
                             });
@@ -1307,23 +1387,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegistrationSteps);
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-        fontSize: 16,
-        //paddingVertical: 12,
+        fontSize: 14,
+        paddingVertical: 18,
         //paddingHorizontal: 10,
-        borderColor: '#D3D3D3',
-        borderWidth: 1,
-        borderRadius: 4,
+        borderColor: '#A3A5AE',
+        borderRadius: 8,
         color: 'black',
-        width: 120,
-        height: 40,
         marginBottom: 4,
+        width: 150,
+        alignSelf: 'center',
+        borderBottomWidth: 1,
+        alignItems: 'center',
+        textAlign: 'center',
         fontFamily: 'Quicksand-Regular',
-        // to ensure the text is never behind the icon
     },
     inputAndroid: {
+        marginTop: 12,
         fontSize: 14,
         textAlign: 'center',
-        width: 120,
+        width: 150,
         paddingHorizontal: 10,
         paddingVertical: 2,
         fontFamily: 'Quicksand-Regular',

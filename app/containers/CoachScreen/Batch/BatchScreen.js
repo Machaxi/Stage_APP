@@ -35,7 +35,8 @@ class BatchScreen extends BaseComponent {
         this.state = {
 
             batchList: null,
-            userData: null
+            userData: null,
+            isRefreshing:false
 
         }
     }
@@ -82,6 +83,10 @@ class BatchScreen extends BaseComponent {
 
 
     componentDidMount() {
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount(){
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -120,10 +125,11 @@ class BatchScreen extends BaseComponent {
 
                     })
                 }
-
+                this.setState({ isRefreshing: false })
             }).catch((response) => {
                 //handle form errors
                 console.log(response);
+                this.setState({ isRefreshing: false })
             })
 
         });
@@ -183,9 +189,14 @@ class BatchScreen extends BaseComponent {
 
     );
 
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function() 
+        { this.selfComponentDidMount() });
+     }
+
 
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (!this.state.isRefreshing && (this.props.data.loading && !this.state.player_profile)) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -213,6 +224,8 @@ class BatchScreen extends BaseComponent {
                     </View>
 
                     <FlatList
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         data={this.state.batchList}
                         renderItem={this.renderItem}
                         keyExtractor={(item, index) => item.id}

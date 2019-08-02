@@ -16,12 +16,7 @@ export default class TournamentScorer extends BaseComponent {
         return (
 
             <ScrollView>
-                <View style={{
-                    width: 2,
-                    position: 'absolute',
-                    backgroundColor: 'gray',
-                    height: '100%'
-                }}></View>
+
                 <View style={{ padding: 16, }}>
 
 

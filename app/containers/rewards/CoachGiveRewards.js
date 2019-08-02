@@ -8,6 +8,7 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getAcademyListing, getRewardDue, getRewardMonthlyDue, saveRewardData } from "../../redux/reducers/RewardReducer";
 import { TextInput } from 'react-native-gesture-handler';
 import moment from 'moment'
+import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
 
 
 class CoachGiveRewards extends BaseComponent {
@@ -435,7 +436,7 @@ class CoachGiveRewards extends BaseComponent {
                         margin: 16,
                         flex: 1
                     }}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             activeOpacity={.8}
                             onPress={() => {
                                 this.submitScore()
@@ -445,7 +446,12 @@ class CoachGiveRewards extends BaseComponent {
                             <Text
                                 style={styles.rounded_button}
                             >Award</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <SkyFilledButton
+                        onPress={() => {
+                            this.submitScore()
+                        }}
+                        >Award</SkyFilledButton>
 
                     </View>
 

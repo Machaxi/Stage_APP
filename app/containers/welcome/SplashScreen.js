@@ -20,7 +20,7 @@ class Splash extends BaseComponent {
         getData(TOURNAMENT_REGISTER, (value) => {
 
             console.warn('TOURNAMENT_REGISTER => ', value)
-            if (value != '' && value) {
+            if (value != '' && (value == true || value == "true")) {
                 this.props.navigation.navigate('Login')
             } else {
                 this.moveNext()
@@ -30,8 +30,8 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        //this.props.navigation.navigate('GHome')
-        //return
+        this.props.navigation.navigate('TournamentScorer')
+       return
         var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
@@ -41,90 +41,89 @@ class Splash extends BaseComponent {
                 console.log(res);
                 this.setState({ signedIn: res, checkedSignIn: true })
                 BaseComponent.isUserLoggedIn = true
+
+                setTimeout(() => {
+
+                    const { checkedSignIn, signedIn } = this.state;
+                    console.log("signedIn", signedIn)
+                    if (!checkedSignIn) {
+                        this.props.navigation.navigate('IntroScreen')
+                        return;
+                    }
+                    if (signedIn !== true) {
+
+                        this.props.navigation.navigate('IntroScreen')//'SignedOut')
+
+
+                    } else {
+                        getData('userInfo', (value) => {
+                            userData = (JSON.parse(value))
+                            // onSignIn()
+                            let userType = userData.user['user_type']
+                            console.log("SplashScreen=> ", JSON.stringify(userData));
+                            if (userType == GUEST) {
+                                console.warn(userType)
+                                this.props.navigation.navigate('GHome')
+                            }
+                            else if (userData.academy_id != null) {
+                                console.log(userData);
+                                if (userType == GUEST) {
+                                    this.props.navigation.navigate('GHome')
+                                } else if (userType == PLAYER) {
+                                    this.props.navigation.navigate('UHome')
+
+                                } else if (userType == COACH || userType == ACADEMY) {
+                                    this.props.navigation.navigate('CHome')
+                                }
+                                else if (userType == PARENT) {
+                                    this.props.navigation.navigate('PHome')
+                                }
+
+                            } else {
+                                this.props.navigation.navigate('SwitchPlayer')
+                            }
+
+                        });
+
+                    }
+
+                }, 10)
             })
             .catch(err => alert("An error occurred"));
 
 
-        setTimeout(() => {
-
-            const { checkedSignIn, signedIn } = this.state;
-            console.log("signedIn", signedIn)
-            if (!checkedSignIn) {
-                this.props.navigation.navigate('IntroScreen')
-                return;
-            }
-            if (signedIn !== true) {
-
-                this.props.navigation.navigate('IntroScreen')//'SignedOut')
 
 
-            } else {
-                getData('userInfo', (value) => {
-                    userData = (JSON.parse(value))
-                    // onSignIn()
-                    let userType = userData.user['user_type']
-                    console.log("SplashScreen=> ", JSON.stringify(userData));
-                    if (userType == GUEST) {
-                        console.warn(userType)
-                        this.props.navigation.navigate('GHome')
-                    }
-                    else if (userData.academy_id != null) {
-                        console.log(userData);
-                        if (userType == GUEST) {
-                            this.props.navigation.navigate('GHome')
-                        } else if (userType == PLAYER) {
-                            this.props.navigation.navigate('UHome')
-
-                        } else if (userType == COACH || userType == ACADEMY) {
-                            this.props.navigation.navigate('CHome')
-                        }
-                        else if (userType == PARENT) {
-                            this.props.navigation.navigate('PHome')
-                        }
-
-                    } else {
-                        this.props.navigation.navigate('SwitchPlayer')
-                    }
-
-                });
-
-            }
-
-        }, 100)
-
-        if (Platform.OS === 'android') {
-            Linking.getInitialURL().then(url => {
-                this.navigate(url);
-            });
-        } else {
-            Linking.addEventListener('url', this.handleOpenURL);
-        }
+        // if (Platform.OS === 'android') {
+        //     Linking.getInitialURL().then(url => {
+        //         this.navigate(url);
+        //     });
+        // } else {
+        //     Linking.addEventListener('url', this.handleOpenURL);
+        // }
     }
 
     componentDidMount() {
 
 
     }
-    componentWillUnmount() {
-        Linking.removeEventListener('url', this.handleOpenURL);
+    // componentWillUnmount() {
+    //     Linking.removeEventListener('url', this.handleOpenURL);
 
-    }
-    handleOpenURL(event) {
-    }
+    // }
+    // handleOpenURL(event) {
+    // }
 
-    navigate = (url) => { // E
-        this.state.deepUrl = url
-        storeData('deepUrl', this.state.deepUrl)
+    // navigate = (url) => { // E
+    //     this.state.deepUrl = url
+    //     storeData('deepUrl', this.state.deepUrl)
 
-    }
+    // }
 
     render() {
         return (
             <View style={{ flex: 1 }}>
 
-                {/* <Image style={{ width: '100%', height: '100%' }}
-                    source={require('../../images/login-back.png')}
-                /> */}
 
             </View>
         );

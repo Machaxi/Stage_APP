@@ -8,6 +8,7 @@ import { getPlayerSWitcher, getCoachSWitcher } from "../../redux/reducers/switch
 import { connect } from 'react-redux';
 import BaseComponent, { defaultStyle, getFormattedLevel } from '../BaseComponent';
 import PlayerHeader from '../../components/custom/PlayerHeader'
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 class PlayerSwitcher extends BaseComponent {
@@ -146,7 +147,7 @@ class PlayerSwitcher extends BaseComponent {
                         style={{ height: 30, width: 80 }}
                     />
 
-                    <Text style={{
+                    {/* <Text style={{
                         backgroundColor: '#DFDFDF',
                         height: 19,
                         width: 30,
@@ -155,7 +156,8 @@ class PlayerSwitcher extends BaseComponent {
                         color: '#707070',
                         fontFamily: 'Quicksand-Medium',
                         borderRadius: 12,
-                    }}>{item.academy_rating}</Text>
+                    }}>{item.academy_rating}</Text> */}
+                    <RateViewFill>{item.academy_rating}</RateViewFill>
 
                 </View>
 

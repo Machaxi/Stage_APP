@@ -15,7 +15,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Rating } from 'react-native-ratings';
 import PlayerHeader from '../../components/custom/PlayerHeader'
 import { DueView } from '../../components/Home/DueView'
-
+import {RateViewFill} from '../../components/Home/RateViewFill'
+import {RateViewBorder} from '../../components/Home/RateViewBorder'
 import BaseComponent, { getFormattedLevel, defaultStyle } from '../BaseComponent'
 
 var deviceWidth = Dimensions.get('window').width - 20;
@@ -84,7 +85,7 @@ class ParentHome extends BaseComponent {
             headerRight: (
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.toggleDrawer();
+                        //navigation.toggleDrawer();
                     }}
                     activeOpacity={.8}
                 >
@@ -568,7 +569,8 @@ class ParentHome extends BaseComponent {
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/book_play.png')}
+                                    <Image source={require('../../images/view_academy_player.png')}
+                                        resizeMode="contain"
                                         style={{
                                             width: 30,
                                             height: 30, marginRight: 20, marginTop: 5
@@ -610,7 +612,8 @@ class ParentHome extends BaseComponent {
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/view_academy_player.png')}
+                                    <Image source={require('../../images/browse_academy.png')}
+                                        resizeMode="contain"
                                         style={{
                                             width: 30,
                                             height: 30, marginRight: 20, marginTop: 5
@@ -694,7 +697,7 @@ class ParentHome extends BaseComponent {
                                             style={{ height: 20, width: 80 }}
                                         />
 
-                                        <Text style={{
+                                        {/* <Text style={{
                                             borderColor: '#DFDFDF',
                                             borderWidth: 1,
                                             height: 19, width: 30, textAlign: 'center',
@@ -703,7 +706,8 @@ class ParentHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
+                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
+                                            <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
 
                                     </View>
                                 </View>
@@ -742,7 +746,7 @@ class ParentHome extends BaseComponent {
                                                     style={{ height: 20, width: 80 }}
                                                 />
 
-                                                <Text style={{
+                                                {/* <Text style={{
                                                     backgroundColor: '#D8D8D8',
                                                     height: 19, width: 30, textAlign: 'center',
                                                     fontSize: 12,
@@ -750,8 +754,8 @@ class ParentHome extends BaseComponent {
                                                     paddingTop: 0,
                                                     borderRadius: 12,
                                                     fontFamily: 'Quicksand-Medium'
-                                                }}>{academy_feedback_data.rating.toFixed(1)}</Text>
-
+                                                }}>{academy_feedback_data.rating.toFixed(1)}</Text> */}
+                                            <RateViewFill>{academy_feedback_data.rating}</RateViewFill>
                                             </View>
                                         </View>
 
@@ -848,7 +852,7 @@ class ParentHome extends BaseComponent {
                                                 style={{ height: 20, width: 80 }}
                                             />
 
-                                            <Text style={{
+                                            {/* <Text style={{
                                                 borderColor: '#DFDFDF',
                                                 borderWidth: 1,
                                                 height: 19, width: 30, textAlign: 'center',
@@ -857,8 +861,8 @@ class ParentHome extends BaseComponent {
                                                 paddingTop: 0,
                                                 borderRadius: 12,
                                                 fontFamily: 'Quicksand-Medium'
-                                            }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
-
+                                            }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
+                                            <RateViewBorder>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
                                         </View>
                                     </View>
                                     <View>
@@ -888,7 +892,7 @@ class ParentHome extends BaseComponent {
                                                         style={{ height: 20, width: 80 }}
                                                     />
 
-                                                    <Text style={{
+                                                    {/* <Text style={{
                                                         backgroundColor: '#D8D8D8',
                                                         height: 19, width: 30, textAlign: 'center',
                                                         fontSize: 12,
@@ -896,8 +900,8 @@ class ParentHome extends BaseComponent {
                                                         paddingTop: 0,
                                                         borderRadius: 12,
                                                         fontFamily: 'Quicksand-Medium'
-                                                    }}>{coach_feedback_data.rating.toFixed(1)}</Text>
-
+                                                    }}>{coach_feedback_data.rating.toFixed(1)}</Text> */}
+                                    <RateViewFill>{coach_feedback_data.rating}</RateViewFill>
                                                 </View>
                                             </View>
 

@@ -5,7 +5,7 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { CustomeButtonB } from '../../components/Home/Card';
-import { getData } from '../../components/auth';
+import { getData,storeData } from '../../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
 
 
@@ -239,7 +239,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                                     let userType = userData.user['user_type']
                                                     console.log("SplashScreen=> ", JSON.stringify(userData));
                                                     console.warn('userType ', userType == PLAYER)
-                                                    console.warn('academy_id ', userData.academy_id)
+                                                    //console.warn('academy_id ', userData.academy_id)
 
                                                     if (userType == GUEST) {
                                                         this.props.navigation.navigate('GHome')
@@ -249,6 +249,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                                         if (userType == GUEST) {
                                                             this.props.navigation.navigate('GHome')
                                                         } else {
+                                                          
                                                             if (userType == PLAYER) {
                                                                 //this.props.navigation.navigate('UHome')
                                                                 if (!userData.has_multiple_acadmies) {

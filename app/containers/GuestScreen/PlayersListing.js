@@ -81,6 +81,7 @@ class PlayersListing extends BaseComponent {
 
                     <TextInput style={{
                         marginLeft: 8,
+                        height:45,
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'

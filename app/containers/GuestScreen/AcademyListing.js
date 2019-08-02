@@ -9,6 +9,7 @@ import axios from 'axios'
 import BaseComponent from './../BaseComponent'
 import { BASE_URL } from '../../../App';
 import PTRView from 'react-native-pull-to-refresh';
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 class AcademyListing extends BaseComponent {
 
@@ -22,6 +23,7 @@ class AcademyListing extends BaseComponent {
             autodata: [],
             suggestionResult: [],
             isAutoSuggest: false,
+            isRefreshing: false,
 
         }
         this._handleChange = this._handleChange.bind(this)
@@ -42,7 +44,7 @@ class AcademyListing extends BaseComponent {
         })
         this.getAutoSuggestion()
 
-        if(e==''){
+        if (e == '') {
             this.getAcademyList()
         }
     }
@@ -59,8 +61,11 @@ class AcademyListing extends BaseComponent {
                 })
             }
 
+            this.setState({ isRefreshing: false })
+
         }).catch((response) => {
             console.log(response);
+            this.setState({ isRefreshing: false })
         })
     }
 
@@ -148,6 +153,7 @@ class AcademyListing extends BaseComponent {
     }
 
     getAcademicSearchResult(hardSearch) {
+        this.state.suggestionResult = []
 
         this.state.isAutoSuggest = true
         let locality_id = ""
@@ -177,7 +183,9 @@ class AcademyListing extends BaseComponent {
     }
     handleKeyDown = (e) => {
 
-        //console.warn('handle key ',e.nativeEvent.key)
+        console.warn('handle key ', this.state.query)
+        this.getAcademicSearchResult(true)
+
         //let text = e.key
         //let text = this.state.query
         // if (text != undefined && text.length > 0) {
@@ -185,6 +193,16 @@ class AcademyListing extends BaseComponent {
         // }
     }
 
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function () { this.getAcademyList() });
+
+    }
+    handleKeyDown(e) {
+        console.warn(e.nativeEvent.key)
+        if (e.nativeEvent.key == "Enter") {
+            dismissKeyboard();
+        }
+    }
 
     listHeader() {
 
@@ -220,17 +238,20 @@ class AcademyListing extends BaseComponent {
                         //     this.getAutoSuggestion()
                         // }}
                         returnKeyType="search"
+                        //onKeyPress={this.handleKeyDown}
                         onSubmitEditing={this.handleKeyDown}
                         value={this.state.query}
                         style={{
                             marginLeft: 8,
                             backgroundColor: 'white',
                             borderRadius: 16,
+                            height: 45,
                             fontFamily: 'Quicksand-Regular',
 
                         }} placeholder="Search" />
 
                     <FlatList
+
                         keyboardShouldPersistTaps={'handled'}
                         data={autoData}
                         renderItem={({ item }) =>
@@ -254,7 +275,7 @@ class AcademyListing extends BaseComponent {
                                 <TouchableOpacity
                                     onPress={() => {
                                         {
-                                            this.state.suggestionResult = []
+
                                             if (!item.is_academy) {
                                                 //this.state.query = item.name
                                                 this.setState({
@@ -415,15 +436,15 @@ class AcademyListing extends BaseComponent {
                             style={{ height: 30, width: 80 }}
                         />
 
-                        <Text style={{
+                        {/* <Text style={{
                             backgroundColor: '#DFDFDF', height: 19, width: 30, textAlign: 'center',
                             fontSize: 12,
                             color: '#707070',
                             paddingTop: 0,
                             borderRadius: 12,
                             fontFamily: 'Quicksand-Medium'
-                        }}>{item.ratings.toFixed(1)}</Text>
-
+                        }}>{item.ratings.toFixed(1)}</Text> */}
+                        <RateViewFill>{item.ratings}</RateViewFill>
                     </View>
 
                     {/* <View style={{ flexDirection: 'row', margin: 8 }}>
@@ -450,7 +471,7 @@ class AcademyListing extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && !this.state.isAutoSuggest) {
+        if (!this.state.isRefreshing && this.props.data.loading && !this.state.isAutoSuggest) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -459,18 +480,19 @@ class AcademyListing extends BaseComponent {
         }
 
         return (
-                <View style={styles.chartContainer}>
-                    {
-                        this.listHeader()
-                    }
-                    <FlatList
-
-                        //ListHeaderComponent={() => this.listHeader()}
-                        data={this.state.academies}
-                        extraData={this.state.academies}
-                        renderItem={this._renderItem}
-                    />
-                </View>
+            <View style={styles.chartContainer}>
+                {
+                    this.listHeader()
+                }
+                <FlatList
+                    onRefresh={() => this.onRefresh()}
+                    refreshing={this.state.isRefreshing}
+                    //ListHeaderComponent={() => this.listHeader()}
+                    data={this.state.academies}
+                    extraData={this.state.academies}
+                    renderItem={this._renderItem}
+                />
+            </View>
         );
     }
 }

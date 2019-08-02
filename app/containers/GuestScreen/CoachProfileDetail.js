@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyReducer'
 import BaseComponent from '../BaseComponent';
 import { getData } from "../../components/auth";
+import { RateViewFill, } from '../../components/Home/RateViewFill';
+import { RateViewBorder } from '../../components/Home/RateViewBorder'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -121,7 +124,7 @@ class CoachProfileDetail extends BaseComponent {
                         style={{ height: 30, width: 80 }}
                     />
 
-                    <Text style={{
+                    {/* <Text style={{
                         backgroundColor: '#D6D6D6', height: 19,
                         width: 30,
                         textAlign: 'center',
@@ -129,8 +132,8 @@ class CoachProfileDetail extends BaseComponent {
                         paddingTop: 2,
                         color: '#707070',
                         borderRadius: 12,
-                    }}>{item.rating}</Text>
-
+                    }}>{item.rating}</Text> */}
+                    <RateViewFill>{item.rating}</RateViewFill>
                 </View>
 
             </View>
@@ -162,9 +165,13 @@ class CoachProfileDetail extends BaseComponent {
         let year = coachData.experience / 12
         year = Math.floor(year)
         let month = coachData.experience % 12
-
+        let rating = coachData.ratings == undefined ? 0 : coachData.ratings
         return (
-            <ScrollView style={styles.chartContainer}>
+            <ScrollView
+                contentContainerStyle={{
+                    flexGrow: 1
+                }}
+                style={styles.chartContainer}>
 
                 <View>
 
@@ -196,10 +203,11 @@ class CoachProfileDetail extends BaseComponent {
 
                                 <View style={{
                                     paddingTop: 8, flex: 1,
-                                    flexDirection: 'row', alignItems: 'center'
+                                    flexDirection: 'row',
                                 }}>
 
                                     <Rating
+                                        tintColor="#F7F7F7"
                                         type='custom'
                                         ratingColor='#F4FC9A'
                                         ratingBackgroundColor='#D7D7D7'
@@ -207,18 +215,38 @@ class CoachProfileDetail extends BaseComponent {
                                         onStartRating={5}
                                         readonly={true}
                                         imageSize={14}
-                                        style={{ height: 30, width: 80, marginTop: 7 }}
+                                        style={{ height: 24, width: 80, marginTop: 7 }}
                                     />
 
-                                    <Text style={{
+                                    {/* <Text style={{
                                         backgroundColor: '#ddd', height: 20, width: 36, textAlign: 'center',
                                         fontSize: 14,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         color: 'gray',
                                         borderRadius: 12,
-                                    }}>5</Text>
-
+                                    }}>5</Text> */}
+                                    <View
+                                        style={{
+                                            height: 19,
+                                            width: 30,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderColor: '#D8D8D8',
+                                            borderWidth: 1,
+                                            backgroundColor: '#F7f7f7',
+                                            borderRadius: 10
+                                        }}>
+                                        <Text style={{
+                                            color: '#707070',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontFamily: 'Quicksand-Medium',
+                                            fontSize: 12,
+                                        }}>{rating.toFixed(1)}
+                                        </Text>
+                                    </View>
+                                    {/* <RateViewBorder>{rating}</RateViewBorder> */}
                                 </View>
 
                                 <Text style={{ fontSize: 12, color: '#A3A5AE', marginTop: 10 }}>Experience</Text>
@@ -263,26 +291,42 @@ class CoachProfileDetail extends BaseComponent {
 
                     </View>
                     {showFeedback ?
-                        <TouchableOpacity
-                            activeOpacity={.8}
-                            onPress={() => {
-                                this.props.navigation.navigate('WriteAcademyFeedback',
-                                    {
-                                        academy_id: this.state.academy_id,
-                                        target_id: this.state.coach_id,
-                                        is_coach: true
-                                    })
-                            }}>
+                        // <TouchableOpacity
+                        //     activeOpacity={.8}
+                        //     onPress={() => {
+                        //         this.props.navigation.navigate('WriteAcademyFeedback',
+                        //             {
+                        //                 academy_id: this.state.academy_id,
+                        //                 target_id: this.state.coach_id,
+                        //                 is_coach: true
+                        //             })
+                        //     }}>
 
 
-                            <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
-                                <Text
-                                    style={styles.filled_button}>
-                                    Give Feedback
-                                 </Text>
-                            </View>
+                        //     <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+                        //         <Text
+                        //             style={styles.filled_button}>
+                        //             Give Feedback
+                        //          </Text>
+                        //     </View>
 
-                        </TouchableOpacity> : null}
+                        // </TouchableOpacity>
+                        <View
+                            style={{ margin: 12 }}
+                        >
+
+                            <SkyFilledButton
+                                onPress={() => {
+                                    this.props.navigation.navigate('WriteAcademyFeedback',
+                                        {
+                                            academy_id: this.state.academy_id,
+                                            target_id: this.state.coach_id,
+                                            is_coach: true
+                                        })
+                                }}>
+
+                                Give Feedback</SkyFilledButton></View>
+                        : null}
 
                     {feedback.length != 0 ?
                         <Card
@@ -331,6 +375,7 @@ class CoachProfileDetail extends BaseComponent {
 
 
                             <FlatList
+
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}
