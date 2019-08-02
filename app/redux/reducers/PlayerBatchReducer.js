@@ -144,15 +144,14 @@ export function getCoachBatchAttendenceDetails(header,batch_id) {
 
 }
 
-export function getPlayerBatchAttendenceDetails(header,batch_id) {
-    console.log("postdata",header,batch_id)
+export function getPlayerBatchAttendenceDetails(header,player_id,batch_id,month,year) {
+    console.log("month",month)
     return {
         type: types.GET_BATCHES,
         payload: {
             request: {
-                url: `batch/${batch_id}/attendance-detail`,
+                url: `player/attendance?player_id=${player_id}&batch_id=${batch_id}&month=${month}&year=${year}`,
                 method: 'GET',
-                // data: postdata,
                 headers: {
                     'x-authorization': header
 

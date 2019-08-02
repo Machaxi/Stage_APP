@@ -422,12 +422,11 @@ class AcademyProfile extends BaseComponent {
                                 <RateViewFill>{academy.ratings}</RateViewFill>
                             </View>
 
-
                             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
 
                                 <TouchableOpacity
                                     activeOpacity={.8}
-                                    style={defaultStyle.rounded_button}>
+                                    style={defaultStyle.rounded_button} onPress={() => {this.props.navigation.navigate('AcademyBatch')}}>
 
                                     <Text
                                         style={[defaultStyle.bold_text_14,
