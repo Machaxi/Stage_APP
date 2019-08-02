@@ -447,11 +447,10 @@ class AcademyProfile extends BaseComponent {
 
                             </View>
 
-
                             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
 
                                 <Text
-                                    style={styles.rounded_button}
+                                    style={styles.rounded_button} onPress={() => {this.props.navigation.navigate('AcademyBatch')}}
                                 >
                                     View Batches
                                 </Text>

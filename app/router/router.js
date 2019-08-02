@@ -23,6 +23,7 @@ import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
 import CoachListing from '../containers/GuestScreen/CoachListing'
 import PlayersListing from '../containers/GuestScreen/PlayersListing'
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
+import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
 import CustomHeader from '../components/custom/CustomHeader'
 import spalsh from '../containers/welcome/SplashScreen'
 import IntroScreen from '../containers/welcome/IntroScreen'
@@ -61,7 +62,6 @@ import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
-
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -252,8 +252,20 @@ const GuestHomeModule = createStackNavigator({
         })
 
     },
-})
+    AcademyBatch: {
+        screen: AcademyBatch,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true}/>,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+
+    },
+})
 
 const tabBarController = createBottomTabNavigator(
     {

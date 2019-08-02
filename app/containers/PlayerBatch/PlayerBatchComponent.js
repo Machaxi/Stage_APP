@@ -216,7 +216,7 @@ class PlayerBatchComponent extends BaseComponent {
                 </CustomeCard>
                 {/*</View>*/}
 
-                <CustomeCard onPress={() => { this.props.navigation.navigate('PlayerAttendance') }}>
+                <CustomeCard>
                     <View
                         style={{
                             marginLeft: 12,
@@ -226,7 +226,7 @@ class PlayerBatchComponent extends BaseComponent {
                     >
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={defaultStyle.bold_text_10}>Attendance Summary</Text>
-                            <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]} onPress={() => { this.props.navigation.navigate('PlayerAttendance') }}>View Details </Text>
+                            <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]} onPress={() => { this.props.navigation.navigate('PlayerAttendance', {batch_id: this.props.jumpTo.batch_id}) }}>View Details </Text>
                         </View>
 
                         <View style={defaultStyle.line_style} />
