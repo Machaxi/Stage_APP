@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle,TOURNAMENT_REGISTER } from '../BaseComponent'
+import BaseComponent, { defaultStyle, TOURNAMENT_REGISTER } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { storeData, isSignedIn, getData } from '../../components/auth';
@@ -35,7 +35,10 @@ export default class UpcomingTournamentDetail extends BaseComponent {
             this.props.navigation.navigate('RegistrationSteps')
         else {
             storeData(TOURNAMENT_REGISTER, true)
-            this.props.navigation.navigate('Login')
+            setTimeout(() => {
+                this.props.navigation.navigate('Login')
+            }, 100)
+
         }
     }
 

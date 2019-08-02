@@ -182,6 +182,7 @@ class PhoneAuth extends BaseComponent {
                     else
                         this.props.navigation.navigate('EditProfile')
 
+                    storeData(TOURNAMENT_REGISTER, false)
                 } else {
 
 
@@ -310,7 +311,7 @@ class PhoneAuth extends BaseComponent {
                         this.props.navigation.navigate('RegistrationSteps')
                     else
                         this.props.navigation.navigate('EditProfile')
-
+                    storeData(TOURNAMENT_REGISTER, false)
                 } else {
 
                     if (userData.is_existing_user == true) {
@@ -422,7 +423,7 @@ class PhoneAuth extends BaseComponent {
                         this.signIn()
                     }}>Login</Text> */}
 
-                    {/* <View
+                {/* <View
                     style={{ width:"50%",marginTop:16,}}
                     >
                     <SkyFilledButton onPress={()=>{
@@ -430,43 +431,47 @@ class PhoneAuth extends BaseComponent {
                     }}>Login</SkyFilledButton>
                     </View> */}
 
-                    <TouchableOpacity activeOpacity={.8}
-                                            style={[defaultStyle.rounded_button,
-                                            {marginTop:16,
-                                            width:150}]}
-                                            onPress={() => {
-                                                this.signIn()
-                                            }}>
-                                            <Text
-                                                style={{
-                                                    color: 'white',
-                                                    textAlign: 'center',
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}>
-                                                Login
+                <TouchableOpacity activeOpacity={.8}
+                    style={[defaultStyle.rounded_button,
+                    {
+                        marginTop: 16,
+                        width: 150
+                    }]}
+                    onPress={() => {
+                        this.signIn()
+                    }}>
+                    <Text
+                        style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            fontFamily: 'Quicksand-Regular'
+                        }}>
+                        Login
                                             </Text>
-                                        </TouchableOpacity>
-                   
+                </TouchableOpacity>
+
                 {/* <Text style={[styles.rounded_button, { marginTop: 16 }]}
                     onPress={() => {
                         this.signInByName(null, null)
                     }}>Login by name</Text> */}
-                    <TouchableOpacity activeOpacity={.8}
-                                            style={[defaultStyle.rounded_button,
-                                            {marginTop:16,
-                                            width:150}]}
-                                            onPress={() => {
-                                                this.signInByName(null, null)
-                                            }}>
-                                            <Text
-                                                style={{
-                                                    color: 'white',
-                                                    textAlign: 'center',
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}>
-                                                Login by name
+                <TouchableOpacity activeOpacity={.8}
+                    style={[defaultStyle.rounded_button,
+                    {
+                        marginTop: 16,
+                        width: 150
+                    }]}
+                    onPress={() => {
+                        this.signInByName(null, null)
+                    }}>
+                    <Text
+                        style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            fontFamily: 'Quicksand-Regular'
+                        }}>
+                        Login by name
                                             </Text>
-                                        </TouchableOpacity>
+                </TouchableOpacity>
 
                 <TouchableOpacity
                     style={{

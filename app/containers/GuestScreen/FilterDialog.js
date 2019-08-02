@@ -7,7 +7,7 @@ export default class FilterDialog extends BaseComponent {
 
     render() {
 
-        console.warn('visible ', this.props.visible)
+        //console.warn('visible ', this.props.visible)
 
         return (
             <Dialog

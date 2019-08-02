@@ -45,7 +45,9 @@ export default class IntroPage extends Component {
                 {/* <SliderImage slider={this.state.sliderData}
 
                     onButtonPress={(catId) => this.onButtonPress(catId)} /> */}
-                <Swiper containerStyle={styles.wrapper}
+                <Swiper
+                    containerStyle={Platform.OS === "ios" ? styles.wrapper : null}
+                    style={Platform.OS === "ios" ? null : styles.wrapper}
                     ref={ref => this.swiper = ref}
                     showsPagination={false}
                     onIndexChanged={this.updateState.bind(this)}
@@ -120,15 +122,15 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     wrapper: {
-        alignItems:'center',
-        justifyContent:'center',
-        flex:1
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
     },
     sliderImage: {
         width: "100%",
         height: "100%",
-        alignItems:'center',
-        flex:1,
+        alignItems: 'center',
+        flex: 1,
         resizeMode: 'stretch',
     }
 });

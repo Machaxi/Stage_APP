@@ -44,7 +44,7 @@ class AcademyListing extends BaseComponent {
         })
         this.getAutoSuggestion()
 
-        if(e==''){
+        if (e == '') {
             this.getAcademyList()
         }
     }
@@ -153,6 +153,7 @@ class AcademyListing extends BaseComponent {
     }
 
     getAcademicSearchResult(hardSearch) {
+        this.state.suggestionResult = []
 
         this.state.isAutoSuggest = true
         let locality_id = ""
@@ -182,7 +183,9 @@ class AcademyListing extends BaseComponent {
     }
     handleKeyDown = (e) => {
 
-        //console.warn('handle key ',e.nativeEvent.key)
+        console.warn('handle key ', this.state.query)
+        this.getAcademicSearchResult(true)
+
         //let text = e.key
         //let text = this.state.query
         // if (text != undefined && text.length > 0) {
@@ -191,11 +194,15 @@ class AcademyListing extends BaseComponent {
     }
 
     onRefresh() {
-        this.setState({ isRefreshing: true }, function() 
-        { this.getAcademyList() });
+        this.setState({ isRefreshing: true }, function () { this.getAcademyList() });
 
-     }
-
+    }
+    handleKeyDown(e) {
+        console.warn(e.nativeEvent.key)
+        if (e.nativeEvent.key == "Enter") {
+            dismissKeyboard();
+        }
+    }
 
     listHeader() {
 
@@ -231,19 +238,20 @@ class AcademyListing extends BaseComponent {
                         //     this.getAutoSuggestion()
                         // }}
                         returnKeyType="search"
+                        //onKeyPress={this.handleKeyDown}
                         onSubmitEditing={this.handleKeyDown}
                         value={this.state.query}
                         style={{
                             marginLeft: 8,
                             backgroundColor: 'white',
                             borderRadius: 16,
-                            height:45,
+                            height: 45,
                             fontFamily: 'Quicksand-Regular',
 
                         }} placeholder="Search" />
 
                     <FlatList
-                    
+
                         keyboardShouldPersistTaps={'handled'}
                         data={autoData}
                         renderItem={({ item }) =>
@@ -267,7 +275,7 @@ class AcademyListing extends BaseComponent {
                                 <TouchableOpacity
                                     onPress={() => {
                                         {
-                                            this.state.suggestionResult = []
+
                                             if (!item.is_academy) {
                                                 //this.state.query = item.name
                                                 this.setState({
@@ -472,19 +480,19 @@ class AcademyListing extends BaseComponent {
         }
 
         return (
-                <View style={styles.chartContainer}>
-                    {
-                        this.listHeader()
-                    }
-                    <FlatList
-                        onRefresh={() => this.onRefresh()}
-                        refreshing={this.state.isRefreshing}
-                        //ListHeaderComponent={() => this.listHeader()}
-                        data={this.state.academies}
-                        extraData={this.state.academies}
-                        renderItem={this._renderItem}
-                    />
-                </View>
+            <View style={styles.chartContainer}>
+                {
+                    this.listHeader()
+                }
+                <FlatList
+                    onRefresh={() => this.onRefresh()}
+                    refreshing={this.state.isRefreshing}
+                    //ListHeaderComponent={() => this.listHeader()}
+                    data={this.state.academies}
+                    extraData={this.state.academies}
+                    renderItem={this._renderItem}
+                />
+            </View>
         );
     }
 }

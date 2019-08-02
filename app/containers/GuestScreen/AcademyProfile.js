@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
 import FilterDialog from './FilterDialog'
 import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle,formattedName } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ViewMoreText from 'react-native-view-more-text';
-import ReadMore from 'react-native-read-more-text'
+
 import { RateViewFill } from '../../components/Home/RateViewFill';
-import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import ReadMoreText from "rn-read-more-text";
 
 class AcademyProfile extends BaseComponent {
 
@@ -178,65 +178,38 @@ class AcademyProfile extends BaseComponent {
 
             </View>
 
-            <ReadMore
-                numberOfLines={2}
-                renderTruncatedFooter={this._renderTruncatedFooter}
-                renderRevealedFooter={this._renderRevealedFooter}
-                onReady={this._handleTextReady}>
+            <ReadMoreText
+                limitLines={2}
+                renderFooter={this.renderFooter}
+            >
                 <Text style={{
                     fontSize: 12,
                     color: '#707070',
                 }}>{item.review}</Text>
-            </ReadMore>
+            </ReadMoreText>
         </View>
 
 
 
     );
-    _renderTruncatedFooter = (handlePress) => {
-        return (
-            <View style={{
-                justifyContent: 'flex-end',
-                flex: 1,
-                alignItems: 'flex-end'
-            }}>
-
-                <Text style={[defaultStyle.regular_text_10, {
+    renderFooter = ({ isShowingAll, toggle }) => (
+        <View style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            alignItems: 'flex-end'
+        }}>
+            <Text
+                style={[defaultStyle.regular_text_10, {
                     alignItems: 'flex-end',
                     justifyContent: 'flex-end',
                     marginTop: 0, color: '#667DDB'
                 }]}
-                    onPress={handlePress}>
-                    Show more
-          </Text>
-            </View>
+                onPress={() => toggle()}
+            >
+                {isShowingAll ? "Show less" : "Show more"}
+            </Text></View>
+    );
 
-        );
-    }
-
-    _renderRevealedFooter = (handlePress) => {
-        return (
-            <View style={{
-                justifyContent: 'flex-end',
-                flex: 1,
-                alignItems: 'flex-end'
-            }}>
-                <Text style={[defaultStyle.regular_text_10, {
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    marginTop: 0,
-                    color: '#667DDB'
-                }]}
-                    onPress={handlePress}>
-                    Show less
-          </Text>
-            </View>
-        );
-    }
-
-    _handleTextReady = () => {
-        // ...
-    }
 
     _renderPlayerItem(top_player) {
 
@@ -453,29 +426,29 @@ class AcademyProfile extends BaseComponent {
                             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
 
                                 <TouchableOpacity
-                                activeOpacity={.8}
-                                style={defaultStyle.rounded_button}>
+                                    activeOpacity={.8}
+                                    style={defaultStyle.rounded_button}>
 
-                                <Text
-                                    style={[defaultStyle.bold_text_14,
-                                        {color:'white'}]}
-                                >
-                                    View Batches
+                                    <Text
+                                        style={[defaultStyle.bold_text_14,
+                                        { color: 'white' }]}
+                                    >
+                                        View Batches
                                 </Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                activeOpacity={.8}
-                                style={defaultStyle.rounded_button}>
+                                    activeOpacity={.8}
+                                    style={defaultStyle.rounded_button}>
 
-                                <Text
-                                    style={[defaultStyle.bold_text_14,
-                                        {color:'white'}]}
-                                >
-                                    Book Court
+                                    <Text
+                                        style={[defaultStyle.bold_text_14,
+                                        { color: 'white' }]}
+                                    >
+                                        Book Court
                                 </Text>
                                 </TouchableOpacity>
-                                
+
                                 {/* <Text
                                     style={styles.rounded_button}
                                 >
@@ -627,17 +600,17 @@ class AcademyProfile extends BaseComponent {
                         //     </View>
                         // </TouchableOpacity>
                         <View
-                        style={{margin:12}}
+                            style={{ margin: 12 }}
                         >
 
-                        <SkyFilledButton
-                        onPress={() => {
-                                     this.props.navigation.navigate('WriteAcademyFeedback',
-    
-                                         { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
-                                 }}>
-    
-                        Give Feedback</SkyFilledButton></View>
+                            <SkyFilledButton
+                                onPress={() => {
+                                    this.props.navigation.navigate('WriteAcademyFeedback',
+
+                                        { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
+                                }}>
+
+                                Give Feedback</SkyFilledButton></View>
                         : null}
 
 
