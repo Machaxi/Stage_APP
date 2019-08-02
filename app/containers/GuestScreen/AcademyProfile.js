@@ -426,7 +426,7 @@ class AcademyProfile extends BaseComponent {
 
                                 <TouchableOpacity
                                     activeOpacity={.8}
-                                    style={defaultStyle.rounded_button} onPress={() => {this.props.navigation.navigate('AcademyBatch')}}>
+                                    style={defaultStyle.rounded_button} onPress={() => {this.props.navigation.navigate('AcademyBatch', { academy_id: this.state.id })}}>
 
                                     <Text
                                         style={[defaultStyle.bold_text_14,

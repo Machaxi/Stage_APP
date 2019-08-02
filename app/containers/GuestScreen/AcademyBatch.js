@@ -6,255 +6,295 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
 import FilterDialog from './FilterDialog'
-import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
+import { getAcademyBatchDetail } from '../../redux/reducers/AcademyReducer'
 import BaseComponent, { defaultStyle,formattedName } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNPickerSelect from 'react-native-picker-select';
 
-const placeholder = {
-  label: 'Showing for',
+const placeholderProf = {
+  label: 'Select Proficiency',
   value: null,
   color: '#9EA0A4',
 };
+
+const placeholderRating = {
+  label: 'Coach Rating',
+  value: null,
+  color: '#9EA0A4',
+};
+
 
 class AcademyBatch extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
-            id: '',
             academy: null,
-            player_id: '',
-            showFeedback: false,
             feedback: [],
             filter_dialog: false,
             spinner: false,
-            page: 0,
             sortType: '',
             type: '',
-            clear_feedback_array: false,
-             days: [
-              { 'value': '1', 'label': 'Oct 18' },
-              { 'value': '2', 'label': 'Nov 19' },
-              { 'value': '3', 'label': 'Dec 20' }
+             proficiency: [
+              { 'value': 'BASIC', 'label': 'BASIC' },
+              { 'value': 'INTERMEDIATE', 'label': 'INTERMEDIATE' },
+              { 'value': 'ADVANCED', 'label': 'ADVANCED' }
             ],
-            day: ''
+            proficiencyValue: '',
+            rating: [
+              { 'value': '1', 'label': '1' },
+              { 'value': '2', 'label': '2' },
+              { 'value': '3', 'label': '3' },
+              { 'value': '4', 'label': '4' },
+              { 'value': '5', 'label': '4' }
+            ],
+            ratingValue: '',
+            academyId:null,
+            batchDetails: null,
+            availability: ''
         }
          this.inputRefs = {
-          day: null
+          proficiencyValue: null,
+          ratingValue: null
         };
-        this.state.id = this.props.navigation.getParam('id', '');
-        // getData('userInfo', (value) => {
-        //     userData = JSON.parse(value)
-        //     this.state.player_id = userData.user['id']
-        //     console.log(this.state.player_id)
-        //     if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
-        //         this.setState({
-        //             showFeedback: true
-        //         })
-        //     } else {
-        //         this.setState({
-        //             showFeedback: false
-        //         })
-        //     }
-        // });
+        this.state.academyId = this.props.navigation.getParam('academy_id');
     }
  
     componentDidMount() {
 
-        // this.props.getAcademyDetail(this.state.id).then(() => {
-        //     //console.warn('Res=> ' + JSON.stringify(this.props.data.res))
-        //     let status = this.props.data.res.success
-        //     if (status) {
-        //         let academy = this.props.data.res.data.academy
-        //         this.setState({
-        //             academy: academy
-        //         })
-
-        //         let sortType = this.state.sortType
-        //         let type = this.state.type
-        //         this.getAcademyFeedbacks(sortType, type, false)
-
-        //     }
-
-
-        // }).catch((response) => {
-        //     console.log(response);
-        // })
+      this.getBatchData();
     }
 
-    // _renderRatingItem = ({ item }) => (
+    getBatchData() {
+
+      this.props.getAcademyBatchDetail(this.state.academyId,this.state.proficiencyValue,this.state.ratingValue,this.state.availability).then(() => {
+
+        console.log("dataaaaaaaaaaaaaa", this.props.data.res.data.batches);
+          let status = this.props.data.res.success
+          if (status) {
+              
+              this.setState({
+                  batchDetails: this.props.data.res.data.batches
+              })
+
+          }
 
 
-    // );
+      }).catch((response) => {
+          console.log(response);
+      })
+    }
 
     _renderItem = ({ item }) => (
-      <Card style={styles.batchCardContainer}>
-          <Text style={styles.batchCardHeader}>Batch 1</Text>
+      <View style={styles.batchContainerOuter}>
+          <Card style={styles.batchCardContainer}>
+            <Text style={styles.batchCardHeader}>{item.batch_name}</Text>
 
-          <View style={styles.batchLabelOuter}>
-            <Text style={styles.batchLabel}>Weekdays</Text>
-            <Text style={styles.batchLabel}>Weekends</Text>
-          </View>
-
-          <View style={styles.batchValueOuter}>
-            <Text style={styles.batchValue}>Mon, Tue, Wed, Thu</Text>
-            <Text style={styles.batchValue}>Sat, Sun</Text>
-          </View>
-
-          <View style={styles.batchValueOuter}>
-            <Text style={styles.batchValue}>8:30 AM - 10:30 AM</Text>
-            <Text style={styles.batchValue}>8:30 PM - 10:30 PM</Text>
-          </View>
-
-          <View style={styles.batchLabelOuter}>
-            <Text style={styles.batchLabel}>Monthly Fees</Text>
-          </View>
-
-          <View style={styles.batchValueOuter}>
-            <Text style={styles.batchValuefullWidth}>Rs 2000 onwards</Text>
-          </View>
-
-          <View style={styles.batchLabelOuter}>
-             <Text style={styles.coachLabel}>Caoch</Text>
-          </View>
-
-          <View style={defaultStyle.line_style} />
-
-          <TouchableOpacity key={item} onPress={() => { console.warn("Touch Press")} }>
-            <View style={styles.coachInfoOuter}>
-                <View style={styles.coachInfo}>
-                    <Image source={require('../../images/coach_small_pic.png')} style={styles.coachImg} />
-                    <Text style={[defaultStyle.regular_text_14]}>Manish J</Text>
-                    <View style={styles.headCoachOuter}>
-                        {/* {item.is_head ? <Text style={styles.headCoachLabel}>Head Coach</Text> : null} */}
-                         <Text style={styles.headCoachLabel}>Head Coach</Text>
-                    </View>
-                </View>
-
-                <View style={styles.coachRatingOuter}>
-                    <Image source={require('../../images/ic_star.png')} style={styles.starImg} />
-                    <View style={styles.ratingBorder}>
-                        <Text style={styles.ratingText}>4.5</Text>
-                    </View>
-                    <Image source={require('../../images/right_icon.png')} style={styles.rightArrow} />
-                </View>
+            <View style={styles.batchLabelOuter}>
+              <Text style={styles.batchLabel}>Weekdays</Text>
+              <Text style={styles.batchLabel}>Weekends</Text>
             </View>
 
-            <View style={styles.challengeBtnOuter}>
-              <Text style={defaultStyle.rounded_button}>Enquire</Text>
+            <View style={styles.batchValueOuter}>
+              {
+                item.operations.weekday ? 
+                <Text style={styles.batchValue}>{item.operations.weekday.days.join()}</Text> : <Text>-</Text>
+              }
+              {
+                item.operations.weekend ? 
+                 <Text style={styles.batchValue}>{item.operations.weekend.days.join()}</Text> : <Text>-</Text>
+              }
+              
+             
             </View>
-        </TouchableOpacity>
-      </Card>
+
+            <View style={styles.batchValueOuter}>
+              {
+                item.operations.weekday ? 
+                <Text style={styles.batchValue}>{item.operations.weekday.start_time}- {item.operations.weekday.end_time}</Text> :<Text>-</Text>
+              }
+
+              {
+                 item.operations.weekend ? 
+                 <Text style={styles.batchValue}>{item.operations.weekend.start_time}- {item.operations.weekend.end_time}</Text> : <Text>-</Text>
+              }
+              
+              
+            </View>
+
+            <View style={styles.batchLabelOuter}>
+              <Text style={styles.batchLabel}>Monthly Fees</Text>
+            </View>
+
+            <View style={styles.batchValueOuter}>
+              <Text style={styles.batchValuefullWidth}>{item.monthly_fees}</Text>
+            </View>
+
+            {item.coaches.length>0 &&
+              <View style={styles.batchLabelOuter}>
+                <Text style={styles.coachLabel}>Caoch</Text>
+              </View>
+            }
+            
+
+
+          { item.coaches.map((item, index) => {
+            return (
+              <View>
+
+                <View style={defaultStyle.line_style} />
+
+            <TouchableOpacity key={item} onPress={() => { console.warn("Touch Press")} }>
+              <View style={styles.coachInfoOuter}>
+                  <View style={styles.coachInfo}>
+                      <Image source={require('../../images/coach_small_pic.png')} style={styles.coachImg} />
+                      <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
+                      <View style={styles.headCoachOuter}>
+                          {item.is_head ? <Text style={styles.headCoachLabel}>Head Coach</Text> : null}
+                      </View>
+                  </View>
+
+                  <View style={styles.coachRatingOuter}>
+                      <Image source={require('../../images/ic_star.png')} style={styles.starImg} />
+                      <View style={styles.ratingBorder}>
+                          <Text style={styles.ratingText}>{item.ratings}</Text>
+                      </View>
+                      <Image source={require('../../images/right_icon.png')} style={styles.rightArrow} />
+                  </View>
+              </View>
+
+              
+          </TouchableOpacity>
+
+              </View>
+              )
+
+          })
+
+          }
+
+          <View style={styles.challengeBtnOuter}>
+                <Text style={defaultStyle.rounded_button}>Enquire</Text>
+              </View>
+
+            
+        </Card>
+      </View>
+
     )
 
     render() {
 
-      let data=[{'name': 'Deepika'}]
+      let data= this.state.batchDetails;
+      if (this.props.data.loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator size="large" color="#67BAF5" />
+            </View>
+        )
+        }
       return (
 
-          <View>
+          <View style={{flex:1}}>
 
             <View style={styles.filterOuter}>
 
               <View style={styles.dropDownFilter}>
 
-                <View style={{width:'33.33%'}}>
+                <View style={{width:'45.33%'}}>
                     <RNPickerSelect
-                    placeholder={placeholder}
-                    items={this.state.days}
+                    placeholder={placeholderProf}
+                    items={this.state.proficiency}
                     onValueChange={(value) => {
                       console.log(value)
                       this.setState({
-                        day: value,
+                        proficiencyValue: value,
+                      },()=> {
+                        this.getBatchData();
                       });
                       //this.fetchBatchByAcademy(value)
                     }}
                     style={pickerSelectStyles}
-                    value={this.state.day}
+                    value={this.state.proficiencyValue}
                     useNativeAndroidPickerStyle={false}
                     ref={(el) => {
-                      this.inputRefs.day = el;
+                      this.inputRefs.proficiencyValue = el;
                     }}
                   />
                     <View style={{
-                        width: 100,
+                        width: 150,
                         backgroundColor: '#A3A5AE',
                         height: 1
                     }}></View>
                 </View>
 
-                    <View style={{width:'33.33%'}}>
+                    <View style={{width:'45.33%'}}>
                     <RNPickerSelect
-                    placeholder={placeholder}
-                    items={this.state.days}
+                    placeholder={placeholderRating}
+                    items={this.state.rating}
                     onValueChange={(value) => {
                       console.log(value)
                       this.setState({
-                        day: value,
+                        ratingValue: value,
+                      },()=> {
+                        this.getBatchData();
                       });
                       //this.fetchBatchByAcademy(value)
                     }}
                     style={pickerSelectStyles}
-                    value={this.state.day}
+                    value={this.state.ratingValue}
                     useNativeAndroidPickerStyle={false}
                     ref={(el) => {
-                      this.inputRefs.day = el;
+                      this.inputRefs.ratingValue = el;
                     }}
                   />
                     <View style={{
-                        width: 100,
+                        width: 150,
                         backgroundColor: '#A3A5AE',
                         height: 1
                     }}></View>
                 </View>
 
-                    <View style={{width:'33.33%'}}>
-                    <RNPickerSelect
-                    placeholder={placeholder}
-                    items={this.state.days}
-                    onValueChange={(value) => {
-                      console.log(value)
-                      this.setState({
-                        day: value,
-                      });
-                      //this.fetchBatchByAcademy(value)
-                    }}
-                    style={pickerSelectStyles}
-                    value={this.state.day}
-                    useNativeAndroidPickerStyle={false}
-                    ref={(el) => {
-                      this.inputRefs.day = el;
-                    }}
-                  />
-                    <View style={{
-                        width: 100,
-                        backgroundColor: '#A3A5AE',
-                        height: 1
-                    }}></View>
-                </View>
               </View>
 
                <View style={styles.toggleOuter}>
                     <View style={styles.toggleAvailable}>
                       <View><Text style={styles.availableLabel}>Availability</Text></View>
-                      <View style={styles.toggleView}><Switch></Switch></View>
+                      <View style={styles.toggleView}>
+                      <Switch disabled={false}
+                      ios_backgroundColor= {'#667DDB'}
+                      onValueChange = {(value) => {
+                        console.log(value)
+                        this.setState({
+                          availability: value
+                        },() => {
+                          this.getBatchData();
+                        })
+                      }}
+                      value={this.state.availability}
+                      >
+                        
+                      </Switch>
+                      </View>
                     </View>
                     <View>
-                      <Text style={styles.resultLabel}>4 Results</Text>
+                      <Text style={styles.resultLabel}>{this.state.batchDetails==null ? '0' : this.state.batchDetails.length} Results</Text>
                     </View> 
                 </View>
 
             </View>
-            
-            <View style={styles.batchContainerOuter}>
-              <FlatList
-                data={data}
-                renderItem={this._renderItem}
-              />
-            </View>
-          </View>
 
+            {this.state.batchDetails!=null && this.state.batchDetails.length>0 ?
+                 <FlatList
+                  data={data}
+                  renderItem={this._renderItem}
+                /> : 
+                    this.state.batchDetails==null ? null  : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text style={{fontWeight: '500'}}>No data available</Text></View>
+                
+            }
+            
+             
+          </View>
       );
     }
 }
@@ -265,7 +305,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getAcademyDetail, getAcademyFeedbackList
+    getAcademyBatchDetail
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AcademyBatch);
