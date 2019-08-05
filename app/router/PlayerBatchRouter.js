@@ -7,6 +7,7 @@ import AppMain from "./router";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
+import PlayerAttendance from "../containers/welcome/MyCalendar"
 
 const userBatchModule = createStackNavigator({
 
@@ -44,7 +45,23 @@ const userBatchModule = createStackNavigator({
 
         })
     },
+    PlayerAttendance: {
+        screen: PlayerAttendance,
+        navigationOptions: ({ navigation }) => ({
+            title: 'My Attendance',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true}
+                showBackAction={true}
+            />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+            headerTintColor: '#000',
+        }),
+
+    }
 
 }
 );
