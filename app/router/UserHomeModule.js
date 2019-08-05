@@ -21,7 +21,7 @@ import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import userhome from '../containers/UserScreen/UserHome'
 import ParentRewards from '../containers/rewards/ParentRewards'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
-import PlayerAttendance from '../containers/PlayerBatch/PlayerAttendance'
+import PlayerAttendance from "../containers/welcome/MyCalendar"
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 
 const userHomeModule = createStackNavigator({

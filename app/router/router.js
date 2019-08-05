@@ -271,6 +271,7 @@ const GuestHomeModule = createStackNavigator({
     },
 })
 
+
 const tabBarController = createBottomTabNavigator(
     {
         Home: {
