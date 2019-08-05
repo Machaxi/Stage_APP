@@ -62,6 +62,7 @@ import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
+import MyCalendar from "../containers/welcome/MyCalendar"
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -83,6 +84,9 @@ const loginModule = createStackNavigator({
             headerStyle,
             header: null
         }
+    },
+    MyCalendar:{
+        screen:MyCalendar
     },
     IntroScreen: {
         screen: IntroScreen,

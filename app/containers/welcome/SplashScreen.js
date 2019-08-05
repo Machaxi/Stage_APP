@@ -30,7 +30,7 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        this.props.navigation.navigate('TournamentScorer')
+       this.props.navigation.navigate('MyCalendar')
        return
         var userData;
         // getData('userInfo', (value) => {
