@@ -2,7 +2,7 @@ import React from "react";
 import { Header } from "react-navigation";
 import { View, Platform, Text, TouchableOpacity, Image, ImageBackground, Dimensions, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import BaseComponent, { defaultStyle, bebas_text_blue_10, getFormattedLevel, formattedName } from "../../containers/BaseComponent";
+import BaseComponent, { defaultStyle, bebas_text_blue_10, getFormattedCategory, getFormattedLevel, formattedName } from "../../containers/BaseComponent";
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -92,62 +92,8 @@ export default class PlayerHeader extends BaseComponent {
 
                                     </View>
                                 </ImageBackground>
-                                {/* <View style={{
-                                    width: 119,
-                                    height: 84,
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    marginBottom: 20,
-                                    marginTop: 20,
-                                    justifyContent: 'center', alignItems: 'center',
-                                }}>
-
-                                    <ImageBackground
-                                        style={{
-                                            height: 85, width: 57, justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
-                                        source={require('../../images/batch_pink.png')}>
 
 
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            flexDirection: 'row',
-                                            borderRadius: 2,
-                                            backgroundColor: '#485FA0', height: 26, width: '110%'
-                                        }}>
-                                            <Image style={{ height: 18, width: 31, }}
-                                                source={require('../../images/left_batch_arrow.png')}></Image>
-
-                                            <Text style={
-                                                [defaultStyle.bebas_text_blue_10,
-                                                {
-                                                    width: '100%',
-                                                    textAlign: 'center',
-                                                }]
-                                            }>{badge}</Text>
-                                            <Image style={{ height: 18, width: 31, }}
-                                                source={require('../../images/right_batch_arrow.png')}></Image>
-
-                                        </View>
-                                    </ImageBackground>
-
-
-
-
-                                </View> */}
-                                {/* <Image source={require('../../images/Rank.png')}
-                                            style={{
-                                                width: 119,
-                                                height: 84,
-                                                alignItems: 'center',
-                                                display: 'flex',
-                                                marginBottom: 20,
-                                                marginTop: 20
-                                            }}>
-
-                                        </Image> */}
                                 <View style={{
                                     flexDirection: 'row',
                                     alignItems: 'center',
@@ -179,7 +125,7 @@ export default class PlayerHeader extends BaseComponent {
                                             textAlign: 'center',
                                             fontSize: 12,
                                             fontFamily: 'Quicksand-Bold',
-                                        }}>{player_category}</Text>
+                                        }}>{getFormattedCategory(player_category)}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -257,7 +203,7 @@ const styles = StyleSheet.create({
     scoreBox: {
         color: 'white',
         marginRight: 20,
-        marginTop:16,
+        marginTop: 16,
         marginBottom: 20,
         textAlign: 'right',
         fontSize: 24,

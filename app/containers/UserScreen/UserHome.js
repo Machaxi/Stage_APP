@@ -8,7 +8,7 @@ import { getData, storeData } from "../../components/auth";
 import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormattedLevel,EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
 import Events from '../../router/events';
