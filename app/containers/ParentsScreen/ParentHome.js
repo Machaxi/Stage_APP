@@ -2,7 +2,7 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, RefreshControl,Image, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { Card } from 'react-native-paper'
@@ -15,9 +15,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Rating } from 'react-native-ratings';
 import PlayerHeader from '../../components/custom/PlayerHeader'
 import { DueView } from '../../components/Home/DueView'
-import {RateViewFill} from '../../components/Home/RateViewFill'
-import {RateViewBorder} from '../../components/Home/RateViewBorder'
-import BaseComponent, { getFormattedLevel, defaultStyle } from '../BaseComponent'
+import { RateViewFill } from '../../components/Home/RateViewFill'
+import { RateViewBorder } from '../../components/Home/RateViewBorder'
+import BaseComponent, { getFormattedLevel, defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -108,7 +108,7 @@ class ParentHome extends BaseComponent {
 
         };
         this.state = {
-            refreshing:false,
+            refreshing: false,
             userData: null,
             country: undefined,
             player_profile: null,
@@ -124,7 +124,7 @@ class ParentHome extends BaseComponent {
         this.selfComponentDidMount()
     }
 
-    selfComponentDidMount(){
+    selfComponentDidMount() {
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -177,7 +177,7 @@ class ParentHome extends BaseComponent {
                             coach_feedback_data = user1.data['coach_data'].coach_feedback[0]
                     }
 
-                    if (user1.data['academy_data'] != null) {
+                    if (user1.data['academy_data'] != null && user1.data['academy_data'].feedback) {
                         academy_feedback_data = user1.data['academy_data'].feedback[0]
                     }
 
@@ -269,9 +269,9 @@ class ParentHome extends BaseComponent {
         this.selfComponentDidMount()
         // In actual case set refreshing to false when whatever is being refreshed is done!
         setTimeout(() => {
-          this.setState({ refreshing: false });
+            this.setState({ refreshing: false });
         }, 1000);
-      };
+    };
 
     render() {
 
@@ -319,12 +319,12 @@ class ParentHome extends BaseComponent {
                                     </View>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
                                             textDecorationLine: 'line-through'
                                         }]} >
-                                        {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -349,9 +349,9 @@ class ParentHome extends BaseComponent {
                                 <Text style={[defaultStyle.bold_text_14, {
                                 }]}>{routine_name}</Text>
 
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
-                                        {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
@@ -368,15 +368,15 @@ class ParentHome extends BaseComponent {
                 }
             }
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                <ScrollView 
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.refreshing}
-                        onRefresh={this.onRefresh}
-                        title="Pull to refresh"
-                    />
-                }
-                style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                            title="Pull to refresh"
+                        />
+                    }
+                    style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                     <PlayerHeader
                         player_profile={this.state.player_profile}
@@ -393,29 +393,33 @@ class ParentHome extends BaseComponent {
 
                     {sessionArray.length != 0 ?
                         <CustomeCard >
-
-
-                            <View
-                                style={{
-                                    borderTopLeftRadius: 10,
-                                    borderTopRightRadius: 10,
-                                    backgroundColor: '#F9FBE9',
-                                    paddingLeft: 12,
-                                    paddingRight: 12,
-                                    paddingTop: 16,
-                                    paddingBottom: 12
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('Batch')
                                 }}
                             >
-                                <Text style={defaultStyle.bold_text_10}>Next Session</Text>
-                            </View>
-                            <View style={{ marginLeft: 12, marginRight: 12 }}>
+
+                                <View
+                                    style={{
+                                        borderTopLeftRadius: 10,
+                                        borderTopRightRadius: 10,
+                                        backgroundColor: '#F9FBE9',
+                                        paddingLeft: 12,
+                                        paddingRight: 12,
+                                        paddingTop: 16,
+                                        paddingBottom: 12
+                                    }}
+                                >
+                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                </View>
+                                <View style={{ marginLeft: 12, marginRight: 12 }}>
 
 
-                                <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
+                                    <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
 
-                                {sessionArray}
-                            </View>
-
+                                    {sessionArray}
+                                </View>
+                            </TouchableOpacity>
                         </CustomeCard>
                         : null}
 
@@ -691,10 +695,10 @@ class ParentHome extends BaseComponent {
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
                                             ratingCount={5}
-                                            imageSize={14}
+                                            imageSize={12}
                                             readonly={true}
                                             startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
-                                            style={{ height: 20, width: 80 }}
+                                            style={{ width: 80 }}
                                         />
 
                                         {/* <Text style={{
@@ -707,7 +711,7 @@ class ParentHome extends BaseComponent {
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
                                         }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
-                                            <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
+                                        <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
 
                                     </View>
                                 </View>
@@ -732,7 +736,9 @@ class ParentHome extends BaseComponent {
 
                                             <View style={{
                                                 alignItems: 'center',
-                                                flexDirection: 'row', marginLeft: 6, marginTop: 4
+                                                flexDirection: 'row',
+                                                marginLeft: 6,
+                                                marginTop: 4
                                             }}>
 
                                                 <Rating
@@ -740,10 +746,10 @@ class ParentHome extends BaseComponent {
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
                                                     ratingCount={5}
-                                                    imageSize={14}
+                                                    imageSize={12}
                                                     readonly={true}
                                                     startingValue={academy_feedback_data.rating}
-                                                    style={{ height: 20, width: 80 }}
+                                                    style={{ width: 80 }}
                                                 />
 
                                                 {/* <Text style={{
@@ -755,7 +761,7 @@ class ParentHome extends BaseComponent {
                                                     borderRadius: 12,
                                                     fontFamily: 'Quicksand-Medium'
                                                 }}>{academy_feedback_data.rating.toFixed(1)}</Text> */}
-                                            <RateViewFill>{academy_feedback_data.rating}</RateViewFill>
+                                                <RateViewFill>{academy_feedback_data.rating}</RateViewFill>
                                             </View>
                                         </View>
 
@@ -813,7 +819,7 @@ class ParentHome extends BaseComponent {
                                     marginLeft: 10,
                                     marginRight: 10,
                                     marginTop: 10,
-                                    marginBottom:10,
+                                    marginBottom: 10,
                                     borderRadius: 12,
                                 }}>
                                 <View
@@ -839,17 +845,21 @@ class ParentHome extends BaseComponent {
                                     }}>
                                         <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{coach_feedback_data.target.name}</Text>
 
-                                        <View style={{ flexDirection: 'row', marginTop: 4 }}>
+                                        <View style={{
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            marginTop: 4
+                                        }}>
 
                                             <Rating
                                                 type='custom'
                                                 ratingColor='#F4FC9A'
                                                 ratingBackgroundColor='#D7D7D7'
                                                 ratingCount={5}
-                                                imageSize={14}
+                                                imageSize={12}
                                                 readonly={true}
                                                 startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
-                                                style={{ height: 20, width: 80 }}
+                                                style={{ width: 80 }}
                                             />
 
                                             {/* <Text style={{
@@ -879,17 +889,21 @@ class ParentHome extends BaseComponent {
                                             }}>
 
                                                 <Text style={[defaultStyle.bold_text_12, { color: '#707070' }]} >{coach_feedback_data.source.name}</Text>
-                                                <View style={{ flexDirection: 'row', marginLeft: 6, marginTop: 4 }}>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    marginLeft: 6, marginTop: 4
+                                                }}>
 
                                                     <Rating
                                                         type='custom'
                                                         ratingColor='#F4FC9A'
                                                         ratingBackgroundColor='#D7D7D7'
                                                         ratingCount={5}
-                                                        imageSize={14}
+                                                        imageSize={12}
                                                         readonly={true}
                                                         startingValue={coach_feedback_data.rating}
-                                                        style={{ height: 20, width: 80 }}
+                                                        style={{ width: 80 }}
                                                     />
 
                                                     {/* <Text style={{
@@ -901,7 +915,7 @@ class ParentHome extends BaseComponent {
                                                         borderRadius: 12,
                                                         fontFamily: 'Quicksand-Medium'
                                                     }}>{coach_feedback_data.rating.toFixed(1)}</Text> */}
-                                    <RateViewFill>{coach_feedback_data.rating}</RateViewFill>
+                                                    <RateViewFill>{coach_feedback_data.rating}</RateViewFill>
                                                 </View>
                                             </View>
 

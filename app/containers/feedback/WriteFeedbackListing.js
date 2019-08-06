@@ -218,8 +218,9 @@ class WriteFeedbackListing extends BaseComponent {
 
     render() {
 
+        let coaches = this.state.coaches
 
-        if (this.props.data.loading && this.state.coaches == null) {
+        if (this.props.data.loading && coaches.length <= 1) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -227,7 +228,6 @@ class WriteFeedbackListing extends BaseComponent {
             )
         }
 
-        let coaches = this.state.coaches
 
 
         return (
@@ -300,18 +300,18 @@ class WriteFeedbackListing extends BaseComponent {
                                     }}>
                                     OK</Text> */}
 
-                    <View  style={{
-                        margin: 16,
-                        alignSelf:'center',
-                        width:100,
-                    }}>
-                            <SkyFilledButton
-                             onPress={() => {
-                                this.setModalVisible(false);
-                                        this.props.navigation.goBack(null);
-                            }}
-                            >OK</SkyFilledButton>
-                            </View>
+                                <View style={{
+                                    margin: 16,
+                                    alignSelf: 'center',
+                                    width: 100,
+                                }}>
+                                    <SkyFilledButton
+                                        onPress={() => {
+                                            this.setModalVisible(false);
+                                            this.props.navigation.goBack(null);
+                                        }}
+                                    >OK</SkyFilledButton>
+                                </View>
 
                             </View>
 
@@ -336,17 +336,17 @@ class WriteFeedbackListing extends BaseComponent {
                             }}>
                             Submit</Text>
                     </View> */}
-            <View  style={{
+                    <View style={{
                         margin: 16,
-                        alignSelf:'center',
-                        width:100,
+                        alignSelf: 'center',
+                        width: 100,
                     }}>
-                            <SkyFilledButton
-                             onPress={() => {
+                        <SkyFilledButton
+                            onPress={() => {
                                 this.submitFeedback()
                             }}
-                            >Submit</SkyFilledButton>
-                            </View>
+                        >Submit</SkyFilledButton>
+                    </View>
 
                 </View>
             </ScrollView >

@@ -12,21 +12,13 @@ import PlayerBatchComponent from './PlayerBatchComponent'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import moment from 'moment'
 
-
-var deviceWidth = Dimensions.get('window').width - 20;
-const FirstRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
-);
-const SecondRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
-);
 class PlayerBatch extends BaseComponent {
 
 
     static navigationOptions = ({ navigation }) => {
 
         return {
-            headerTitle: 'My Batch',
+            headerTitle: 'My Batches',
             headerTitleStyle: defaultStyle.headerStyle,
 
             headerLeft: (
@@ -139,82 +131,10 @@ class PlayerBatch extends BaseComponent {
     }
 
 
-    sessionMangement(operations) {
-
-        sessionArray = [];
-        for (let i = 0; i < operations.next_sessions.length; i++) {
-            const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
-            console.log("is_canceled", { is_canceled })
-            if (is_canceled == true) {
-                sessionArray.push(
-                    <View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{
-                                margin: 10, textDecorationLine: 'line-through'
-                            }}>{routine_name}</Text>
-                            <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
-                                <Text style={{
-                                    margin: 10, color: 'white'
-                                }}>Canceled</Text>
-                            </View>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', margin: 10 }}>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
-                                textDecorationLine: 'line-through'
-                            }}>
-                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
-                            </Text>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
-                                textDecorationLine: 'line-through'
-                            }}>
-                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                    + "  -   " +
-                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
-                            </Text>
-
-                        </View>
-
-                    </View>
-                );
-            } else {
-                sessionArray.push(
-                    <View>
-
-                        <Text style={{
-                            margin: 10,
-                        }}>{routine_name}</Text>
-                        <View style={{ flexDirection: 'row', margin: 10 }}>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
-
-                            }}>
-                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
-
-                            </Text>
-                            <Text style={{
-                                marginRight: 20,
-                                fontSize: 14,
-
-                            }}>
-                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                    + "  -   " +
-                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
-                            </Text>
-
-                        </View>
-
-                    </View>
-                );
-            }
-        }
-    }
-
+    _getLabelText = ({ route, scene }) => (
+        route.title
+      );
+      
     _renderTabBar = props => (
         <TabBar
             {...props}
@@ -252,6 +172,7 @@ class PlayerBatch extends BaseComponent {
                     navigationState={this.state}
                     renderTabBar={this._renderTabBar}
                     renderScene={this.renderScene}
+                    getLabelText={this._getLabelText}
                     onIndexChange={index => this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />

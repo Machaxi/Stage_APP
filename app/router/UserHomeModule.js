@@ -50,14 +50,16 @@ const userHomeModule = createStackNavigator({
     AcademyListing: {
         screen: AcademyListing,
         navigationOptions: ({ navigation }) => ({
-            title: 'Dribble Diaries',
+            title: 'Browse Academies',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
+                showDrawer={true}
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+                navigation={navigation} 
+                showNotification={false}
+                showHome={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -96,10 +98,24 @@ const userHomeModule = createStackNavigator({
     PlayersListing: {
         screen: PlayersListing,
         navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
+            title: "Academy Players",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    ViewPlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Players",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -125,7 +141,7 @@ const userHomeModule = createStackNavigator({
     OtherPlayerDeatils: {
         screen: otherplayerDetails,
         navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
+            title: "Player Detail",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,

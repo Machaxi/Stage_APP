@@ -9,6 +9,8 @@ import { getData } from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
 
+
+
     constructor(props) {
         super(props)
         this.state = {
@@ -81,7 +83,7 @@ class PlayersListing extends BaseComponent {
 
                     <TextInput style={{
                         marginLeft: 8,
-                        height:45,
+                        height: 45,
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'
@@ -114,7 +116,7 @@ class PlayersListing extends BaseComponent {
 
 
 
-        <View style={{ overflow: 'hidden', height: 200, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
+        <View style={{ overflow: 'hidden', height: 180, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
             <TouchableOpacity
                 activeOpacity={.8}
                 onPress={() => {
@@ -123,13 +125,17 @@ class PlayersListing extends BaseComponent {
                         player_id: item.id
                     })
                 }}>
-                <ImageBackground style={{ height: 200, width: '100%' }}
+                <ImageBackground style={{ height: 180, width: '100%' }}
                     source={require('../../images/batch_card.png')}
                 >
                     <Text style={{ justifyContent: 'center', fontFamily: 'Quicksand-Medium', textAlign: 'center', color: '#F4F4F4', fontSize: 6, paddingTop: 6 }}>Score</Text>
-                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontFamily: 'Quicksand-Medium', fontSize: 14 }}>{item.score}</Text>
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontFamily: 'Quicksand-Medium', fontSize: 14 }}>{item.score == '' || item.score == undefined ? "-" : item.score}</Text>
 
-                    <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        paddingTop: 10,
+                        marginLeft: 2, marginRight: 2
+                    }}>
 
                         <Text
                             style={{
@@ -172,8 +178,8 @@ class PlayersListing extends BaseComponent {
 
                     <View style={{
                         position: 'absolute',
-                        marginTop: 116,
-                        width: "100%", height: 20, backgroundColor: 'white'
+                        marginTop: 103,
+                        width: "100%", height: 23, backgroundColor: 'white'
                     }}>
 
                         <Text style={{
@@ -184,28 +190,27 @@ class PlayersListing extends BaseComponent {
                         }}>{formattedName(item.name)}</Text>
                     </View>
 
-                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+                    <View style={{
+                        justifyContent: 'center', alignItems: 'center',
+                        marginTop: 8
+                    }}>
 
                         <ImageBackground
                             style={{
-                                height: 38, width: 25, justifyContent: 'center',
+                                height: 38, width: 57, justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                            source={require('../../images/batch_pink.png')}>
+                            source={require('../../images/single_shield.png')}>
 
 
                             <View style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 flexDirection: 'row',
-                                backgroundColor: '#485FA0', height: 6, width: '120%'
                             }}>
-                                <Image style={{ height: 7, width: 12, marginLeft: -12 }}
-                                    source={require('../../images/left_batch_arrow.png')}></Image>
-
-                                <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>{item.badge == undefined ? ' - ' : item.badge}</Text>
-                                <Image style={{ height: 7, width: 12, marginRight: -12 }}
-                                    source={require('../../images/right_batch_arrow.png')}></Image>
+                                <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>
+                                    {item.badge == undefined ? '' : item.badge}
+                                </Text>
 
                             </View>
                         </ImageBackground>

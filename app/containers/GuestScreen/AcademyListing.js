@@ -423,17 +423,24 @@ class AcademyListing extends BaseComponent {
                         {item.name}
                     </Text>
 
-                    <View style={{ paddingLeft: 12, paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+                    <View style={{
+                        alignItems: 'center',
+                        paddingTop: 12,
+                        paddingBottom: 12,
+                        paddingLeft: 6,
+                        flexDirection: 'row',
+                        flex: 1
+                    }}>
 
                         <Rating
                             type='custom'
                             ratingColor='#F4FC9A'
                             ratingBackgroundColor='#D7D7D7'
                             ratingCount={5}
-                            imageSize={14}
+                            imageSize={12}
                             readonly={true}
                             startingValue={item.ratings}
-                            style={{ height: 30, width: 80 }}
+                            style={{ width: 80 }}
                         />
 
                         {/* <Text style={{

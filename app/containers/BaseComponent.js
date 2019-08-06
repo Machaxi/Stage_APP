@@ -28,6 +28,7 @@ export const EVENT_REFRESH_CHALLENGE = 'EVENT_REFRESH_CHALLENGE'
 
 //STORE KEYS
 export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
+export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
 //
 export default class BaseComponent extends React.Component {
 
