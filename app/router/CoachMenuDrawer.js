@@ -535,7 +535,7 @@ class CoachMenuDrawer extends BaseComponent {
 									fontFamily: 'Quicksand-Medium'
 								}}>{ratings}</Text> */}
 								<RateViewBorder>
-								{ratings}</RateViewBorder>
+									{ratings}</RateViewBorder>
 
 							</View>
 						</View>
@@ -670,7 +670,7 @@ class CoachMenuDrawer extends BaseComponent {
 			</View >)
 	}
 
-	parentCell = (obj) => {
+	parentCell = (obj, show_edit) => {
 		return <View style={{
 			flexDirection: 'row',
 			flex: 1,
@@ -683,13 +683,16 @@ class CoachMenuDrawer extends BaseComponent {
 				style={[defaultStyle.bold_text_14, { width: 90 }]}>{formattedName(obj.name)}</Text>
 			<Text style={defaultStyle.regular_text_12}>{obj.phone_number}</Text>
 
-			<TouchableOpacity
-				onPress={() => {
-					this.props.navigation.navigate('EditOtherProfile', { data: JSON.stringify(obj) })
-				}}
-			>
-				<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
-			</TouchableOpacity>
+			{show_edit ?
+				<TouchableOpacity
+					onPress={() => {
+						this.props.navigation.navigate('EditOtherProfile', { data: JSON.stringify(obj) })
+					}}
+				>
+					<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
+				</TouchableOpacity>
+				: null}
+
 		</View>
 	}
 
@@ -701,7 +704,7 @@ class CoachMenuDrawer extends BaseComponent {
 		let mobileNumber = this.state.mobileNumber
 		let menu;
 		let ratings = 5
-		let academy_rating = this.state.academy_rating==undefined?0:this.state.academy_rating
+		let academy_rating = this.state.academy_rating == undefined ? 0 : this.state.academy_rating
 		//user_type = COACH
 		//signedIn = true
 		let is_parent = user_type == PARENT
@@ -711,6 +714,7 @@ class CoachMenuDrawer extends BaseComponent {
 		}
 		//console.warn('profile_pic', profile_pic)
 
+		let show_edit = is_parent
 
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
@@ -724,7 +728,7 @@ class CoachMenuDrawer extends BaseComponent {
 		for (let i = 0; i < size; i++) {
 			let obj = related_players[i]
 			related_players_array.push(
-				this.parentCell(obj)
+				this.parentCell(obj, show_edit)
 			)
 		}
 
@@ -829,7 +833,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 									<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
 										<Image
-										resizeMode="contain"
+											resizeMode="contain"
 											style={{
 												width: 12,
 												height: 12, borderRadius: 8
@@ -964,7 +968,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				{/* <TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 
 					<View style={styles.drawercell}>
 
@@ -978,7 +982,7 @@ class CoachMenuDrawer extends BaseComponent {
 						/>
 
 					</View>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 
 				<View style={{
@@ -990,9 +994,9 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-					<Text style={defaultStyle.regular_text_10}>
+					{/* <Text style={defaultStyle.regular_text_10}>
 						Academy Feedback
-					</Text>
+					</Text> */}
 
 					<View style={{
 						flexDirection: 'row',
@@ -1034,20 +1038,20 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 
 					<View
-					style={{
-						marginTop:12,
-					}}
+						style={{
+							marginTop: 12,
+						}}
 					>
 
-					<SkyFilledButton
-					onPress={() => {
-						this.props.navigation.navigate('WriteFeedback',
-							{ academy_id: this.state.academy_id, player_id: this.state.player_id })
-					}}
-					
-					>Give Feedback</SkyFilledButton>
-</View>
-					
+						<SkyFilledButton
+							onPress={() => {
+								this.props.navigation.navigate('WriteFeedback',
+									{ academy_id: this.state.academy_id, player_id: this.state.player_id })
+							}}
+
+						>Academy-Coach Feedback</SkyFilledButton>
+					</View>
+
 					{/* <TouchableOpacity
 						activeOpacity={.8}
 						onPress={() => {
@@ -1199,8 +1203,8 @@ class CoachMenuDrawer extends BaseComponent {
 			}
 		}
 
-		
-		
+
+
 		//marginTop:Platform.OS === "ios" ? 24 :0
 		return (
 			<ScrollView style={styles.container}>
@@ -1209,7 +1213,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 					<View
 						style={{
-							marginTop:Platform.OS === "ios" ? 24 :0
+							marginTop: Platform.OS === "ios" ? 24 : 0
 						}}
 					>
 

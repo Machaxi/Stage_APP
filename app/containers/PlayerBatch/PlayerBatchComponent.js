@@ -3,7 +3,8 @@ import React from 'react'
 import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle,SESSION_DATE_FORMAT } from '../BaseComponent';
+import { getData } from "../../components/auth";
 
 class PlayerBatchComponent extends BaseComponent {
 
@@ -12,8 +13,15 @@ class PlayerBatchComponent extends BaseComponent {
         this.state = {
 
             batchdata: null,
-            coactList: []
+            coactList: [],
+            academy_id: ''
         }
+
+        getData('userInfo', (value) => {
+            let userData = JSON.parse(value)
+            this.state.academy_id = userData['academy_id']
+
+        });
 
     }
 
@@ -51,7 +59,10 @@ class PlayerBatchComponent extends BaseComponent {
         <TouchableOpacity key={item} onPress={() => {
 
             console.warn("Touch Press")
-
+            this.props.navigation.navigate('CoachProfileDetail', {
+                academy_id: this.state.academy_id,
+                coach_id: item.id
+            })
             // this.props.navigation.navigate('OrderTracking', {
             //     order_id: item.increment_id
             // })
@@ -118,7 +129,7 @@ class PlayerBatchComponent extends BaseComponent {
         if (is_canceled == true) {
             sessionArray.push(
                 <View style={{
-                    marginTop: 6,
+                    marginTop: 0,
                     marginBottom: 16
                 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -139,11 +150,12 @@ class PlayerBatchComponent extends BaseComponent {
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                    <View style={{ flexDirection: 'row', marginTop: 5 }}>
                         <Text style={[defaultStyle.regular_text_14, {
-                            textDecorationLine: 'line-through'
+                            textDecorationLine: 'line-through',
+                            justifyContent: 'space-between'
                         }]}>
-                            {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, {
                             textDecorationLine: 'line-through',
@@ -161,7 +173,7 @@ class PlayerBatchComponent extends BaseComponent {
         } else {
             sessionArray.push(
                 <View style={{
-                    marginTop: 6,
+                    marginTop: 0,
                     marginBottom: 16
                 }}>
 
@@ -169,8 +181,8 @@ class PlayerBatchComponent extends BaseComponent {
                     }]}>
                         {routine_name}
                     </Text>
-                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                        <Text style={defaultStyle.regular_text_14}>{moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                    <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
+                        <Text style={defaultStyle.regular_text_14}>{moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
                             {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
@@ -226,20 +238,20 @@ class PlayerBatchComponent extends BaseComponent {
                     >
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={defaultStyle.bold_text_10}>Attendance Summary</Text>
-                            <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]} onPress={() => { this.props.navigation.navigate('PlayerAttendance', {batch_id: this.props.jumpTo.batch_id}) }}>View Details </Text>
+                            <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]} onPress={() => { this.props.navigation.navigate('PlayerAttendance', { batch_id: this.props.jumpTo.batch_id }) }}>View Details </Text>
                         </View>
 
                         <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', felx: 1, marginTop: 10, marginBottom: 10 }}>
-                            <View >
+                        <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
+                            <View style={{ marginRight: 12 }} >
                                 <Text style={[defaultStyle.regular_text_10, {
                                     marginBottom: 5
                                 }]}>Overall</Text>
                                 <Text style={defaultStyle.regular_text_14}>{attendance.overall_attendance + '%'}</Text>
                             </View>
                             <View style={{ width: 1, felx: 1, backgroundColor: '#DFDFDF', marginLeft: 10, marginRight: 10 }} />
-                            <View>
+                            <View style={{ marginRight: 12 }}>
                                 <Text style={[defaultStyle.regular_text_10, {
                                     marginBottom: 5
                                 }]}>This Month</Text>
@@ -250,7 +262,7 @@ class PlayerBatchComponent extends BaseComponent {
                                     marginBottom: 5
                                 }]}>Sessions attended</Text>
 
-                                <Text style={defaultStyle.regular_text_14}>{attendance.session_attended + ' of' + attendance.total_session + '(' + attendance.month + ')'}</Text>
+                                <Text style={defaultStyle.regular_text_14}>{attendance.session_attended + ' of ' + attendance.total_session + ' (' + attendance.month + ')'}</Text>
                             </View>
 
                         </View>
@@ -269,13 +281,13 @@ class PlayerBatchComponent extends BaseComponent {
 
                         <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', felx: 1, marginTop: 10, marginBottom: 10 }}>
+                        <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
                             <View style={{ width: '60%' }}>
                                 <Text style={[defaultStyle.regular_text_10, {
                                     marginBottom: 5
                                 }]}>Weekdays</Text>
                                 <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
-                                <Text style={defaultStyle.regular_text_14}>
+                                <Text style={defaultStyle.regular_text_12}>
                                     {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
                                         + ' - ' +
                                         moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
@@ -288,7 +300,7 @@ class PlayerBatchComponent extends BaseComponent {
                                         marginBottom: 5
                                     }]}>Weekends</Text>
                                     <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
-                                    <Text style={defaultStyle.regular_text_14}>
+                                    <Text style={defaultStyle.regular_text_12}>
 
                                         {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
                                             + ' - ' +
@@ -321,7 +333,7 @@ class PlayerBatchComponent extends BaseComponent {
                         </View>
                     </CustomeCard> : null}
 
-                <View style={{ margin: 5 }}>
+                <View>
                     <CustomeCard>
                         <TouchableOpacity onPress={() => {
 
@@ -329,7 +341,7 @@ class PlayerBatchComponent extends BaseComponent {
                             this.props.navigation.navigate('PlayersListing', { batch_id: this.props.jumpTo.batch_id, List_type: 'BATCH' })
 
                         }}>
-                            <View style={{ marginLeft: 10, marginTop: 8, marginBottom: 8, flexDirection: 'row', height: 40 }}>
+                            <View style={{ marginLeft: 8, marginTop: 8, marginBottom: 8, flexDirection: 'row', height: 40 }}>
 
                                 <View style={{ flex: 1 }}>
 

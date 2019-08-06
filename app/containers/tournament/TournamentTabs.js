@@ -30,9 +30,9 @@ export default class TournamentTabs extends BaseComponent {
         this.props.navigation.setParams({ Title: "" });
       }
 
-  });
+    });
 
-   
+
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -100,7 +100,7 @@ export default class TournamentTabs extends BaseComponent {
           return (
             <TouchableOpacity
               indicatorStyle={{ backgroundColor: '#00887A' }}
-              labelStyle={{ color: '#000000' }}
+              labelStyle={{ color: '#000000', }}
               style={styles.tabItem}
               onPress={() => this.setState({ index: i })}>
               <Animated.Text style={{ color }}>{route.title}</Animated.Text>
@@ -130,6 +130,10 @@ export default class TournamentTabs extends BaseComponent {
     }
   };
 
+  _getLabelText = ({ route, scene }) => (
+    route.title
+  );
+
   render() {
     return (
       <TabView
@@ -141,6 +145,7 @@ export default class TournamentTabs extends BaseComponent {
             {...props}
             indicatorStyle={{ backgroundColor: '#667DDB', height: 4 }}
             style={{ backgroundColor: 'white', elevation: 0 }}
+            getLabelText={this._getLabelText}
             labelStyle={{ color: '#404040', fontFamily: 'Quicksand-Regular', }}
           />
         }

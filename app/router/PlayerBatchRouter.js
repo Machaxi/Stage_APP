@@ -8,6 +8,7 @@ import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
 import PlayerAttendance from "../containers/welcome/MyCalendar"
+import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 
 const userBatchModule = createStackNavigator({
 
@@ -31,13 +32,33 @@ const userBatchModule = createStackNavigator({
 
         // })
     },
-    PlayersListing: {
-        screen: PlayersListing,
+    MyBatch: {
+        screen: mybatch,
+
+    },
+    CoachProfileDetail: {
+        screen: CoachProfileDetail,
         navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
+            title: "Coach Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+
+    PlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "My Batchmates",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',

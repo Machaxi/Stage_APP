@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent from '../BaseComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getData } from "../../components/auth";
 import { RateViewFill, } from '../../components/Home/RateViewFill';
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import ReadMoreText from "rn-read-more-text";
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -102,7 +103,11 @@ class CoachProfileDetail extends BaseComponent {
             }}>
 
                 <Text
-                    style={{ color: '#707070', fontSize: 14, flex: 1, fontFamily: 'Quicksand-Medium', }}
+                    style={{
+                        color: '#707070',
+                        fontSize: 14, flex: 1,
+                        fontFamily: 'Quicksand-Medium',
+                    }}
                 >
                     {item.source.name}
                 </Text>
@@ -110,6 +115,7 @@ class CoachProfileDetail extends BaseComponent {
 
                 <View style={{
                     flexDirection: 'row',
+                    alignItems: 'center'
 
                 }}>
 
@@ -118,10 +124,10 @@ class CoachProfileDetail extends BaseComponent {
                         ratingColor='#F4FC9A'
                         ratingBackgroundColor='#D7D7D7'
                         ratingCount={5}
-                        imageSize={14}
+                        imageSize={12}
                         readonly={true}
                         startingValue={item.rating}
-                        style={{ height: 30, width: 80 }}
+                        style={{ width: 80 }}
                     />
 
                     {/* <Text style={{
@@ -138,10 +144,19 @@ class CoachProfileDetail extends BaseComponent {
 
             </View>
 
-            <Text style={{
-                fontSize: 12,
+            <ReadMoreText
+                limitLines={2}
+                renderFooter={this.renderFooter}
+            >
+                <Text style={[defaultStyle.regular_text_12,
+                {
+                    color: '#707070',
+                }]}>{item.review}</Text>
+            </ReadMoreText>
+
+            {/* <Text style={[defaultStyle.regular_text_12, {
                 color: '#707070',
-            }}>{item.review}</Text>
+            }]}>{item.review}</Text> */}
 
         </View>
 
@@ -149,6 +164,23 @@ class CoachProfileDetail extends BaseComponent {
 
     );
 
+    renderFooter = ({ isShowingAll, toggle }) => (
+        <View style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            alignItems: 'flex-end'
+        }}>
+            <Text
+                style={[defaultStyle.regular_text_10, {
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginTop: 0, color: '#667DDB'
+                }]}
+                onPress={() => toggle()}
+            >
+                {isShowingAll ? "Show less" : "Show more"}
+            </Text></View>
+    );
     render() {
 
         let showFeedback = this.state.showFeedback
@@ -181,9 +213,7 @@ class CoachProfileDetail extends BaseComponent {
 
                             <Image style={{ height: 129, width: 129, borderRadius: 16 }}
                                 source={require('../../images/coach_photo.png')}
-                            >
-
-                            </Image>
+                            />
 
                             <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-end' }}>
 
@@ -199,11 +229,13 @@ class CoachProfileDetail extends BaseComponent {
                                         fontSize: 12
                                     }}> My Coach</Text> */}
 
-                                <Text style={{ paddingTop: 12, color: '#707070' }}>{this.state.coachData.name}</Text>
+                                <Text style={[defaultStyle.bold_text_14, { paddingTop: 12, color: '#707070' }]}>
+                                    {this.state.coachData.name}</Text>
 
                                 <View style={{
                                     paddingTop: 8, flex: 1,
                                     flexDirection: 'row',
+                                    alignItems: 'center'
                                 }}>
 
                                     <Rating
@@ -249,32 +281,33 @@ class CoachProfileDetail extends BaseComponent {
                                     {/* <RateViewBorder>{rating}</RateViewBorder> */}
                                 </View>
 
-                                <Text style={{ fontSize: 12, color: '#A3A5AE', marginTop: 10 }}>Experience</Text>
+                                <Text style={
+                                    [defaultStyle.bold_text_12, {
+                                        color: '#A3A5AE',
+                                        marginTop: 6
+                                    }]}>Experience</Text>
 
                                 <View style={{
-                                    paddingTop: 8, flexDirection: 'row',
+                                    paddingTop: 8,
+                                    flexDirection: 'row',
+                                    width: "70%",
                                     flex: 1,
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
-
                                 }}>
 
 
-                                    <Text style={{
-                                        color: '#404040',
-                                        fontSize: 14,
-                                    }}>{year} yr {month} m</Text>
+                                    <Text style={defaultStyle.regular_text_14}>{year} yr {month} m</Text>
 
                                     <TouchableOpacity
                                         style={{ marginLeft: 20, }}
                                         onPress={() => {
                                             this.props.navigation.goBack(null);
                                         }}>
-                                        <Text style={{
+                                        <Text style={[defaultStyle.regular_text_10, {
                                             color: '#667DDB',
-                                            fontSize: 10,
                                             textAlign: 'right',
-                                        }}>View Other Coaches</Text>
+                                        }]}>View Other Coaches</Text>
                                     </TouchableOpacity>
 
                                 </View>
@@ -285,8 +318,12 @@ class CoachProfileDetail extends BaseComponent {
 
                         <View style={{ paddingTop: 16 }}>
 
-                            <Text style={{ fontSize: 12, color: '#A3A5AE', paddingTop: 8 }}>Certifications</Text>
-                            <Text style={{ color: '#404040' }}>{coachData.about}</Text>
+                            <Text style={[defaultStyle.bold_text_10,
+                            {
+                                color: '#A3A5AE', paddingTop: 8,
+                                paddingBottom: 6
+                            }]}>Certifications</Text>
+                            <Text style={defaultStyle.regular_text_14}>{coachData.about}</Text>
                         </View>
 
                     </View>
@@ -348,16 +385,19 @@ class CoachProfileDetail extends BaseComponent {
                                     justifyContent: 'space-between',
                                 }}>
                                     <Text
-                                        style={{ fontSize: 14, color: '#707070' }}
+                                        style={[defaultStyle.bold_text_14, {
+                                            color: '#707070'
+                                        }]}
                                     >
                                         Reviews ({this.state.feedback.length})
                             </Text>
 
-                                    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Text
-                                            style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
-                                        >Latest</Text>
+                                            style={defaultStyle.regular_text_12}
+                                        >Sort </Text>
                                         <Image
+                                            resizeMode="contain"
                                             style={{ width: 24, height: 15, }}
                                             source={require('../../images/filter_rating.png')}
                                         ></Image>

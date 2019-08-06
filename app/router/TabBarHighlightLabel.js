@@ -60,8 +60,8 @@ export default TabBarHighlightLabel = ({
       <Image
       resizeMode="contain"
         style={{
-          width: 34,
-          height: 24,
+          width: 22,
+          height: 22,
           marginBottom: 6
         }}
         source={activeIcon}

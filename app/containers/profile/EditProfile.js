@@ -99,13 +99,15 @@ class EditProfile extends BaseComponent {
                     this.progress(false)
                     let data = this.props.data.profileData.data
                     console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data));
-                    alert('Success.')
+                   // alert('Success.')
                     this.updatePrefData(JSON.stringify(data))
 
 
                     if (this.state.is_navigation_to_tournament) {
                         storeData(TOURNAMENT_REGISTER, '')
                         this.props.navigation.navigate('RegistrationSteps')
+                    }else{
+                        this.props.navigation.goBack()
                     }
 
                 }).catch((response) => {
@@ -227,7 +229,7 @@ class EditProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                                Name
+                                <Text style={{ color: 'red' }}>*</Text>Name
                     </Text>
                             <TextInput
                                 style={style.textinput}
@@ -249,7 +251,7 @@ class EditProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                                Phone Number
+                            <Text style={{ color: 'red' }}>*</Text>Phone Number
                     </Text>
 
                             <TextInput
@@ -292,11 +294,11 @@ class EditProfile extends BaseComponent {
                             />
                         </View>
                         <View style={{ flex: 1, margin: 20, width: '80%' }}>
-                            <CustomeButtonB onPress={() => this.saveUserProfile()}> Update </CustomeButtonB>
+                            <CustomeButtonB onPress={() => this.saveUserProfile()}> Save </CustomeButtonB>
                         </View>
-                        <View style={{ flex: 1, marginTop: -20, width: '80%' }}>
+                        {/* <View style={{ flex: 1, marginTop: -20, width: '80%' }}>
                             <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Skip </SwitchButton>
-                        </View>
+                        </View> */}
 
                     </View>
                 </ScrollView>

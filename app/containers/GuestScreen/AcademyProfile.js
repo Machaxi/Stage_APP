@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, ImageBackground } from 'react-native';
-import { Card, Text, ActivityIndicator } from 'react-native-paper';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
+import { Card, ActivityIndicator } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -140,7 +140,12 @@ class AcademyProfile extends BaseComponent {
             }}>
 
                 <Text
-                    style={{ color: '#707070', fontSize: 14, flex: 1, fontFamily: 'Quicksand-Medium', }}
+                    style={{
+                        color: '#707070',
+                        fontSize: 14, flex: 1,
+                        alignItems: 'center',
+                        fontFamily: 'Quicksand-Medium',
+                    }}
                 >
                     {item.source.name}
                 </Text>
@@ -156,10 +161,10 @@ class AcademyProfile extends BaseComponent {
                         ratingColor='#F4FC9A'
                         ratingBackgroundColor='#D7D7D7'
                         ratingCount={5}
-                        imageSize={14}
+                        imageSize={12}
                         readonly={true}
                         startingValue={item.rating}
-                        style={{ height: 30, width: 80 }}
+                        style={{ width: 80 }}
                     />
 
                     {/* <Text style={{
@@ -182,10 +187,11 @@ class AcademyProfile extends BaseComponent {
                 limitLines={2}
                 renderFooter={this.renderFooter}
             >
-                <Text style={{
-                    fontSize: 12,
-                    color: '#707070',
-                }}>{item.review}</Text>
+                <Text style={
+                    [defaultStyle.regular_text_12,
+                    {
+                        color: '#707070',
+                    }]}>{item.review}</Text>
             </ReadMoreText>
         </View>
 
@@ -231,8 +237,17 @@ class AcademyProfile extends BaseComponent {
                     <ImageBackground style={{ height: 190, width: '100%' }}
                         source={require('../../images/batch_card.png')}
                     >
-                        <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontSize: 8, paddingTop: 6 }}>Score</Text>
-                        <Text style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 13 }}>{top_player.score}</Text>
+                        <Text style={{
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                            fontFamily: 'Quicksand-Medium',
+                            color: 'white',
+                            fontSize: 8, paddingTop: 6
+                        }}>Score</Text>
+                        <Text style={{
+                            justifyContent: 'center', textAlign: 'center',
+                            fontFamily: 'Quicksand-Bold', color: 'white', fontSize: 13
+                        }}>{top_player.score}</Text>
 
                         <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
@@ -248,8 +263,10 @@ class AcademyProfile extends BaseComponent {
                                     textAlign: 'center',
                                     backgroundColor: 'red',
                                     borderRadius: 4,
-                                    fontSize: 8,
-                                    paddingTop: 1
+                                    fontSize: 6,
+                                    paddingTop: 1,
+                                    fontFamily: 'Quicksand-Bold',
+
                                 }}
                             >{top_player.player_category}</Text>
                             <Image
@@ -267,31 +284,31 @@ class AcademyProfile extends BaseComponent {
                                     alignItems: 'center',
                                     alignSelf: 'center',
                                     textAlign: 'center',
-                                    fontSize: 8,
+                                    fontSize: 6,
                                     marginLeft: 4,
                                     marginTop: 16,
+                                    fontFamily: 'Quicksand-Medium',
                                 }}
                             >{top_player.player_level.split(" ").join("\n")}</Text>
                         </View>
 
                         <View style={{
                             position: 'absolute',
-
                             marginTop: 116,
-                            width: "100%", height: 20, backgroundColor: 'white'
+                            width: "100%", height: 24, backgroundColor: 'white'
                         }}>
 
                             <Text style={{
                                 color: '#404040',
-                                fontWeight: 16,
-                                fontWeight: '500',
-                                textAlign: 'center'
+                                fontSize: 16,
+                                textAlign: 'center',
+                                fontFamily: 'Quicksand-Medium',
                             }}>{formattedName(top_player.name)}</Text>
                         </View>
 
                         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
 
-                            <ImageBackground
+                            {/* <ImageBackground
                                 style={{
                                     height: 38, width: 25, justifyContent: 'center',
                                     alignItems: 'center',
@@ -312,8 +329,26 @@ class AcademyProfile extends BaseComponent {
                                         source={require('../../images/right_batch_arrow.png')}></Image>
 
                                 </View>
-                            </ImageBackground>
+                            </ImageBackground> */}
+                            <ImageBackground
+                                style={{
+                                    height: 38, width: 57, justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                                source={require('../../images/single_shield.png')}>
 
+
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                    <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>
+                                        {top_player.badge == undefined ? '' : top_player.badge}
+                                    </Text>
+
+                                </View>
+                            </ImageBackground>
 
 
                         </View>
@@ -398,17 +433,22 @@ class AcademyProfile extends BaseComponent {
                                 fontSize: 18, color: 'gray'
                             }}> {academy.name}</Text>
 
-                            <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+                            <View style={{
+                                alignItems: 'center',
+                                paddingTop: 8,
+                                paddingBottom: 12,
+                                flexDirection: 'row', flex: 1
+                            }}>
 
                                 <Rating
                                     type='custom'
                                     ratingColor='#F4FC9A'
                                     ratingBackgroundColor='#D7D7D7'
                                     ratingCount={5}
-                                    imageSize={14}
+                                    imageSize={12}
                                     readonly={true}
                                     startingValue={academy.ratings}
-                                    style={{ height: 30, width: 80 }}
+                                    style={{ width: 80 }}
                                 />
 
                                 {/* <Text style={{
@@ -426,7 +466,7 @@ class AcademyProfile extends BaseComponent {
 
                                 <TouchableOpacity
                                     activeOpacity={.8}
-                                    style={defaultStyle.rounded_button} onPress={() => {this.props.navigation.navigate('AcademyBatch', { academy_id: this.state.id })}}>
+                                    style={defaultStyle.rounded_button} onPress={() => { this.props.navigation.navigate('AcademyBatch', { academy_id: this.state.id }) }}>
 
                                     <Text
                                         style={[defaultStyle.bold_text_14,
@@ -464,9 +504,16 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ padding: 12 }}>
 
-                            <Text style={defaultStyle.bold_text_10}>Founder Corner</Text>
+                            <Text style={defaultStyle.bold_text_10}>Founder's Corner</Text>
                             <View style={{ marginTop: 8, marginBottom: 8, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+
+                            <ReadMoreText
+                                limitLines={3}
+                                renderFooter={this.renderFooter} >
+
+                                <Text style={defaultStyle.regular_text_14}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+
+                            </ReadMoreText>
                         </View>
 
                     </Card>
@@ -479,7 +526,7 @@ class AcademyProfile extends BaseComponent {
 
                             <Text style={defaultStyle.bold_text_10}>Offering</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={{ fontSize: 14, color: '#404040' }}>{academy.offering} </Text>
+                            <Text style={defaultStyle.regular_text_14}>{academy.offering} </Text>
                         </View>
 
                     </Card>
@@ -492,7 +539,7 @@ class AcademyProfile extends BaseComponent {
 
                             <Text style={defaultStyle.bold_text_10}>Address</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={{ fontSize: 14, color: '#404040' }}>{academy.locality} </Text>
+                            <Text style={defaultStyle.regular_text_14}>{academy.locality} </Text>
                         </View>
 
                     </Card>
@@ -504,7 +551,7 @@ class AcademyProfile extends BaseComponent {
 
                             <Text style={defaultStyle.bold_text_10}>Facilities</Text>
                             <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={{ fontSize: 14, color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                            <Text style={defaultStyle.regular_text_14}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
                         </View>
 
                     </Card>
@@ -515,7 +562,7 @@ class AcademyProfile extends BaseComponent {
                         <View style={{ padding: 12 }}>
 
                             <Text style={defaultStyle.bold_text_10}>Best Player (Badminton)</Text>
-                            <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
+                            <View style={{ marginTop: 6, marginBottom: 6, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
 
                             <View style={{
                                 marginTop: 8,
@@ -538,15 +585,16 @@ class AcademyProfile extends BaseComponent {
                     <TouchableOpacity
                         activeOpacity={.8}
                         onPress={() => {
-                            this.props.navigation.navigate('PlayersListing', { id: academy.id })
+                            this.props.navigation.navigate('ViewPlayersListing', { id: academy.id })
                         }}
                     >
                         <Card
                             style={styles.card_style}>
 
                             <View style={{ padding: 16, flexDirection: 'row' }}>
-                                <Text style={{ fontSize: 14, color: '#404040', width: '90%' }}>View Other Players</Text>
+                                <Text style={[defaultStyle.regular_text_14, { width: '90%' }]}>View Other Players</Text>
                                 <Image
+                                    resizeMode="contain"
                                     style={{ width: 19, height: 13, }}
                                     source={require('../../images/path.png')}
                                 ></Image>
@@ -566,8 +614,9 @@ class AcademyProfile extends BaseComponent {
                             style={styles.card_style}>
 
                             <View style={{ padding: 16, flexDirection: 'row' }}>
-                                <Text style={{ fontSize: 14, color: '#404040', width: '90%' }}>View Coaches</Text>
+                                <Text style={[defaultStyle.regular_text_14, { width: '90%' }]}>View Coaches</Text>
                                 <Image
+                                    resizeMode="contain"
                                     style={{ width: 19, height: 13, }}
                                     source={require('../../images/path.png')}
                                 ></Image>
@@ -648,7 +697,7 @@ class AcademyProfile extends BaseComponent {
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text
                                                 style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
-                                            >Latest </Text>
+                                            >Sort </Text>
                                             <Image
                                                 style={{ width: 24, height: 15, }}
                                                 source={require('../../images/filter_rating.png')}

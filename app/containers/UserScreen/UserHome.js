@@ -8,12 +8,12 @@ import { getData, storeData } from "../../components/auth";
 import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
 import Events from '../../router/events';
 import PlayerHeader from '../../components/custom/PlayerHeader'
-import {RateViewFill} from '../../components/Home/RateViewFill'
+import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder';
 
 var deviceWidth = Dimensions.get('window').width - 20;
@@ -189,7 +189,7 @@ class UserHome extends BaseComponent {
                     })
                 }
 
-                if (user1.data['academy_data'] != null) {
+                if (user1.data['academy_data'] != null && user1.data['academy_data'].feedback) {
                     this.setState({
                         academy_feedback_data: user1.data['academy_data'].feedback[0],
                     })
@@ -342,12 +342,12 @@ class UserHome extends BaseComponent {
                                     </View>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
                                             textDecorationLine: 'line-through'
                                         }]}>
-                                        {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -373,9 +373,9 @@ class UserHome extends BaseComponent {
                                 <Text style={[defaultStyle.bold_text_14, {
                                 }]}>{routine_name}</Text>
 
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
-                                        {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
@@ -414,27 +414,33 @@ class UserHome extends BaseComponent {
                     {sessionArray.length != 0 ?
                         <CustomeCard >
 
-
-                            <View
-                                style={{
-                                    borderTopLeftRadius: 10,
-                                    borderTopRightRadius: 10,
-                                    backgroundColor: '#F9FBE9',
-                                    paddingLeft: 12,
-                                    paddingRight: 12,
-                                    paddingTop: 16,
-                                    paddingBottom: 12
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('Batch')
                                 }}
                             >
-                                <Text style={defaultStyle.bold_text_10}>Next Session</Text>
-                            </View>
-                            <View style={{ marginLeft: 12, marginRight: 12 }}>
+
+                                <View
+                                    style={{
+                                        borderTopLeftRadius: 10,
+                                        borderTopRightRadius: 10,
+                                        backgroundColor: '#F9FBE9',
+                                        paddingLeft: 12,
+                                        paddingRight: 12,
+                                        paddingTop: 16,
+                                        paddingBottom: 12
+                                    }}
+                                >
+                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                </View>
+                                <View style={{ marginLeft: 12, marginRight: 12 }}>
 
 
-                                <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
+                                    <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
 
-                                {sessionArray}
-                            </View>
+                                    {sessionArray}
+                                </View>
+                            </TouchableOpacity>
 
                         </CustomeCard>
                         : null}
@@ -586,21 +592,25 @@ class UserHome extends BaseComponent {
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                     flex: 1,
+                                    alignItems: 'center',
                                     justifyContent: 'space-between'
                                 }}>
                                     <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{academy_feedback_data.target.name}</Text>
 
-                                    <View style={{ flexDirection: 'row', }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
 
                                         <Rating
                                             type='custom'
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
                                             ratingCount={5}
-                                            imageSize={14}
+                                            imageSize={12}
                                             readonly={true}
                                             startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
-                                            style={{ height: 20, width: 80 }}
+                                            style={{ width: 80 }}
                                         />
 
                                         {/* <Text style={{
@@ -637,7 +647,9 @@ class UserHome extends BaseComponent {
 
                                             <View style={{
                                                 alignItems: 'center',
-                                                flexDirection: 'row', marginLeft: 6, marginTop: 4
+                                                flexDirection: 'row',
+                                                marginLeft: 6,
+                                                marginTop: 4
                                             }}>
 
                                                 <Rating
@@ -645,10 +657,10 @@ class UserHome extends BaseComponent {
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
                                                     ratingCount={5}
-                                                    imageSize={14}
+                                                    imageSize={12}
                                                     readonly={true}
                                                     startingValue={academy_feedback_data.rating}
-                                                    style={{ height: 20, width: 80 }}
+                                                    style={{ width: 80 }}
                                                 />
 
                                                 {/* <Text style={{
@@ -738,19 +750,29 @@ class UserHome extends BaseComponent {
                                     flex: 1,
                                     justifyContent: 'space-between'
                                 }}>
-                                    <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{coach_feedback_data.target.name}</Text>
 
-                                    <View style={{ flexDirection: 'row', }}>
+                                    <View style={{ flexDirection: 'row' }}>
+
+                                        <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{coach_feedback_data.target.name}</Text>
+                                        <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 8, marginRight: 0, marginLeft: 6, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 6, marginLeft: 6, textAlign: 'center' }}>Head Coach</Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{
+                                        alignItems: 'center',
+                                        flexDirection: 'row',
+                                    }}>
 
                                         <Rating
                                             type='custom'
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
                                             ratingCount={5}
-                                            imageSize={14}
+                                            imageSize={12}
                                             readonly={true}
                                             startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
-                                            style={{ height: 20, width: 80 }}
+                                            style={{ width: 80 }}
                                         />
 
                                         {/* <Text style={{
@@ -781,17 +803,22 @@ class UserHome extends BaseComponent {
                                         }}>
 
                                             <Text style={[defaultStyle.bold_text_12, { color: '#707070' }]} >{coach_feedback_data.source.name}</Text>
-                                            <View style={{ flexDirection: 'row', marginLeft: 6, marginTop: 4 }}>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                marginLeft: 6,
+                                                marginTop: 4
+                                            }}>
 
                                                 <Rating
                                                     type='custom'
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
                                                     ratingCount={5}
-                                                    imageSize={14}
+                                                    imageSize={12}
                                                     readonly={true}
                                                     startingValue={coach_feedback_data.rating}
-                                                    style={{ height: 20, width: 80 }}
+                                                    style={{ width: 80 }}
                                                 />
 
                                                 {/* <Text style={{
@@ -803,7 +830,7 @@ class UserHome extends BaseComponent {
                                                     borderRadius: 12,
                                                     fontFamily: 'Quicksand-Medium'
                                                 }}>{coach_feedback_data.rating.toFixed(1)}</Text> */}
-                                        <RateViewFill>{coach_feedback_data.rating}</RateViewFill>
+                                                <RateViewFill>{coach_feedback_data.rating}</RateViewFill>
                                             </View>
                                         </View>
                                         <Text style={[defaultStyle.regular_text_12, {
