@@ -36,17 +36,19 @@ class AcademyBatch extends BaseComponent {
             sortType: '',
             type: '',
              proficiency: [
-              { 'value': 'BASIC', 'label': 'BASIC' },
-              { 'value': 'INTERMEDIATE', 'label': 'INTERMEDIATE' },
-              { 'value': 'ADVANCED', 'label': 'ADVANCED' }
+              { 'value': '', 'label': 'All' },
+              { 'value': 'BASIC', 'label': 'Basic' },
+              { 'value': 'INTERMEDIATE', 'label': 'Intermediate' },
+              { 'value': 'ADVANCED', 'label': 'Advanced' }
             ],
             proficiencyValue: '',
             rating: [
+              { 'value': '', 'label': 'All' },
               { 'value': '1', 'label': '1' },
               { 'value': '2', 'label': '2' },
               { 'value': '3', 'label': '3' },
               { 'value': '4', 'label': '4' },
-              { 'value': '5', 'label': '4' }
+              { 'value': '5', 'label': '>4' }
             ],
             ratingValue: '',
             academyId:null,
@@ -90,36 +92,33 @@ class AcademyBatch extends BaseComponent {
           <Card style={styles.batchCardContainer}>
             <Text style={styles.batchCardHeader}>{item.batch_name}</Text>
 
-            <View style={styles.batchLabelOuter}>
-              <Text style={styles.batchLabel}>Weekdays</Text>
-              <Text style={styles.batchLabel}>Weekends</Text>
-            </View>
+            <View style={styles.batchWeekTimeOuter}>
 
-            <View style={styles.batchValueOuter}>
-              {
-                item.operations.weekday ? 
-                <Text style={styles.batchValue}>{item.operations.weekday.days.join()}</Text> : <Text>-</Text>
-              }
-              {
-                item.operations.weekend ? 
-                 <Text style={styles.batchValue}>{item.operations.weekend.days.join()}</Text> : <Text>-</Text>
-              }
-              
-             
-            </View>
+              <View style={{width:'55%'}}>
 
-            <View style={styles.batchValueOuter}>
-              {
-                item.operations.weekday ? 
-                <Text style={styles.batchValue}>{item.operations.weekday.start_time}- {item.operations.weekday.end_time}</Text> :<Text>-</Text>
-              }
+                  <Text style={styles.batchLabel}>Weekdays</Text>
+                  { item.operations.weekday ?
+                    <View style={{marginTop: 10}} ><Text style={styles.batchValue}>{item.operations.weekday.days.join(' ')} </Text></View> : <View><Text>-</Text></View>
+                  }
+                  {
+                    item.operations.weekday ? 
+                    <View style={{marginTop: 10}}><Text style={styles.batchValue}>{item.operations.weekday.start_time}- {item.operations.weekday.end_time}</Text></View> :<View><Text>-</Text></View>
+                  }
+                   
+              </View>
 
-              {
-                 item.operations.weekend ? 
-                 <Text style={styles.batchValue}>{item.operations.weekend.start_time}- {item.operations.weekend.end_time}</Text> : <Text>-</Text>
-              }
-              
-              
+              <View style={{width:'45%'}}>
+                 <Text style={styles.batchLabel}>Weekends</Text>
+                  {
+                    item.operations.weekend ? 
+                    <View style={{marginTop: 10}}><Text style={styles.batchValue}>{item.operations.weekend.days.join(' ')}</Text></View> :<View><Text>-</Text></View>
+                  }
+                  {
+                    item.operations.weekend ? 
+                    <View style={{marginTop: 10}}><Text style={styles.batchValue}>{item.operations.weekend.start_time}- {item.operations.weekend.end_time}</Text></View> : <View><Text>-</Text></View>
+                  }
+              </View>
+
             </View>
 
             <View style={styles.batchLabelOuter}>
@@ -127,12 +126,12 @@ class AcademyBatch extends BaseComponent {
             </View>
 
             <View style={styles.batchValueOuter}>
-              <Text style={styles.batchValuefullWidth}>{item.monthly_fees}</Text>
+              <Text style={styles.batchValuefullWidth}>Rs {item.monthly_fees} onwards</Text>
             </View>
 
             {item.coaches.length>0 &&
               <View style={styles.batchLabelOuter}>
-                <Text style={styles.coachLabel}>Caoch</Text>
+                <Text style={styles.coachLabel}>Coach</Text>
               </View>
             }
             
@@ -144,7 +143,12 @@ class AcademyBatch extends BaseComponent {
 
                 <View style={defaultStyle.line_style} />
 
-            <TouchableOpacity key={item} onPress={() => { console.warn("Touch Press")} }>
+            <TouchableOpacity key={item} onPress={() => { console.warn("Touch Press");
+              this.props.navigation.navigate('CoachProfileDetail', {
+                    academy_id: this.state.academyId,
+                    coach_id: item.id
+                  })
+              } }>
               <View style={styles.coachInfoOuter}>
                   <View style={styles.coachInfo}>
                       <Image source={require('../../images/coach_small_pic.png')} style={styles.coachImg} />
@@ -174,7 +178,7 @@ class AcademyBatch extends BaseComponent {
           }
 
           <View style={styles.challengeBtnOuter}>
-                <Text style={defaultStyle.rounded_button}>Enquire</Text>
+                <Text style={defaultStyle.rounded_button}>Book Trail Session</Text>
               </View>
 
             
@@ -186,7 +190,7 @@ class AcademyBatch extends BaseComponent {
     render() {
 
       let data= this.state.batchDetails;
-      if (this.props.data.loading) {
+      if (this.props.data.loading && !this.state.batchDetails) {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator size="large" color="#67BAF5" />
@@ -202,8 +206,11 @@ class AcademyBatch extends BaseComponent {
               <View style={styles.dropDownFilter}>
 
                 <View style={{width:'45.33%'}}>
+
+                    <View><Text style={styles.filterPlaceholder}>Select Proficiency</Text></View>
+
                     <RNPickerSelect
-                    placeholder={placeholderProf}
+                    placeholder={{}}
                     items={this.state.proficiency}
                     onValueChange={(value) => {
                       console.log(value)
@@ -221,35 +228,43 @@ class AcademyBatch extends BaseComponent {
                       this.inputRefs.proficiencyValue = el;
                     }}
                   />
+
+                  
+
                     <View style={{
-                        width: 150,
+                        width: 100,
                         backgroundColor: '#A3A5AE',
                         height: 1
                     }}></View>
+
+                   
                 </View>
 
                     <View style={{width:'45.33%'}}>
-                    <RNPickerSelect
-                    placeholder={placeholderRating}
-                    items={this.state.rating}
-                    onValueChange={(value) => {
-                      console.log(value)
-                      this.setState({
-                        ratingValue: value,
-                      },()=> {
-                        this.getBatchData();
-                      });
-                      //this.fetchBatchByAcademy(value)
-                    }}
-                    style={pickerSelectStyles}
-                    value={this.state.ratingValue}
-                    useNativeAndroidPickerStyle={false}
-                    ref={(el) => {
-                      this.inputRefs.ratingValue = el;
-                    }}
-                  />
+
+                      <View><Text style={styles.filterPlaceholder}>Coach Rating</Text></View>
+
+                      <RNPickerSelect
+                      placeholder={{}}
+                      items={this.state.rating}
+                      onValueChange={(value) => {
+                        console.log(value)
+                        this.setState({
+                          ratingValue: value,
+                        },()=> {
+                          this.getBatchData();
+                        });
+                        //this.fetchBatchByAcademy(value)
+                      }}
+                      style={pickerSelectStyles}
+                      value={this.state.ratingValue}
+                      useNativeAndroidPickerStyle={false}
+                      ref={(el) => {
+                        this.inputRefs.ratingValue = el;
+                      }}
+                    />
                     <View style={{
-                        width: 150,
+                        width: 100,
                         backgroundColor: '#A3A5AE',
                         height: 1
                     }}></View>
@@ -326,10 +341,15 @@ const styles = StyleSheet.create({
   },
   batchCardHeader: {
     fontSize: 14,
-    fontWeight: '500',
     color: '#404040',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   }, 
+  batchWeekTimeOuter: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 20,
+    marginBottom: 7
+  },
   batchLabelOuter:  {
     display: 'flex',
     flexDirection: 'row',
@@ -340,9 +360,7 @@ const styles = StyleSheet.create({
   batchLabel: {
     fontSize: 10,
     color: '#A3A5AE',
-    fontFamily: 'Quicksand-Regular',
-    fontWeight: '500',
-    width: '33.33%'
+    fontFamily: 'Quicksand-Medium',
   },
   batchValueOuter: {
     display: 'flex',
@@ -354,7 +372,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#404040',
     fontFamily: 'Quicksand-Regular',
-    width: '33.33%'
   },
   batchValuefullWidth: {
     fontSize: 14,
@@ -364,7 +381,7 @@ const styles = StyleSheet.create({
   coachLabel: {
     fontSize: 10,
     color: '#404040',
-    fontFamily: 'Quicksand-Regular',
+    fontFamily: 'Quicksand-Medium',
   },
   coachInfoOuter: {
     flexDirection: 'row', 
@@ -453,8 +470,7 @@ const styles = StyleSheet.create({
   resultLabel: {
     color : '#A3A5AE',
     fontSize: 10,
-    fontWeight: '500',
-    fontFamily: 'Quicksand-Regular',
+    fontFamily: 'Quicksand-Medium',
   },
   filterOuter: {
     padding: 16
@@ -471,6 +487,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  filterPlaceholder: {
+    fontSize: 10,
+    fontFamily: 'Quicksand-Medium',
+    color: '#A3A5AE'
   }
 });
 
@@ -490,8 +511,8 @@ const pickerSelectStyles = StyleSheet.create({
   },
   inputAndroid: {
     fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingHorizontal: 0,
+    paddingVertical: 6,
     fontFamily: 'Quicksand-Regular',
     borderColor: '#614051',
     borderRadius: 8,
