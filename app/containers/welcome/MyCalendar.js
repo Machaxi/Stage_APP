@@ -81,7 +81,7 @@ class MyCalendar extends BaseComponent {
         this.progress(true)
 
         getData('header', (value) => {
-            this.props.getPlayerBatchAttendenceDetails(value, this.state.playerId, 1, month, year).then(() => {
+            this.props.getPlayerBatchAttendenceDetails(value, this.state.playerId, this.state.batchId, month, year).then(() => {
 
                 console.log('getPlayerBatchAttendenceDetails', JSON.stringify(this.props.data.batchdata));
                 let data = this.props.data.batchdata;

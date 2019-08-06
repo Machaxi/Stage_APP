@@ -190,7 +190,7 @@ class AcademyBatch extends BaseComponent {
     render() {
 
       let data= this.state.batchDetails;
-      if (this.props.data.loading && !this.state.batchDetails) {
+      if (this.props.data.loading || !this.state.batchDetails) {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator size="large" color="#67BAF5" />
