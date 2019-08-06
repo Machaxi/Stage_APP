@@ -28,6 +28,7 @@ class MyCalendar extends BaseComponent {
             selectedDate: null,
             monthly_attendance_report: null,
             spinner: false,
+            isAttendanceHappenedInMonth: false
         }
 
         var today = new Date();
@@ -39,7 +40,10 @@ class MyCalendar extends BaseComponent {
         this.state.currentDay = dd
         this.state.currentMonth = mm
         this.state.currentYear = yyyy
-        this.state.today = this.getCurrentDate()
+        this.state.today = this.getCurrentDate();
+        this.state.selectedDate = Date.now();
+        this.state.batchId = this.props.navigation.getParam('batch_id');
+
         //console.warn('monthDays => ', this.monthDays())
 
     }
@@ -60,12 +64,16 @@ class MyCalendar extends BaseComponent {
     }
 
     componentDidMount() {
-        let month = this.state.currentMonth
-        let year = this.state.currentYear
-        this.monthDays()
-        this.state.batchId = "1"//this.props.navigation.getParam('batch_id');
-        this.state.playerId = "1"
-        this.getCalendarData(month, year)
+
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value);
+            this.state.playerId = userData['player_id'];
+            let month = this.state.currentMonth
+            let year = this.state.currentYear
+            this.monthDays()
+            this.getCalendarData(month, year)
+
+        }) 
     }
 
     getCalendarData(month, year) {
@@ -73,15 +81,14 @@ class MyCalendar extends BaseComponent {
         this.progress(true)
 
         getData('header', (value) => {
-            this.props.getPlayerBatchAttendenceDetails(value, 1, 1, month, year).then(() => {
+            this.props.getPlayerBatchAttendenceDetails(value, this.state.playerId, 1, month, year).then(() => {
 
                 console.log('getPlayerBatchAttendenceDetails', JSON.stringify(this.props.data.batchdata));
                 let data = this.props.data.batchdata;
                 let success = data.success
                 if (success) {
 
-                    let monthly_attendance_report = data.data.monthly_attendance_report
-
+                    let monthly_attendance_report = data.data.monthly_attendance_report ? data.data.monthly_attendance_report : null;
                     let calendar_data = data.data.calendar_data
                     console.log('calendar_data ', calendar_data)
                     let array = []
@@ -107,7 +114,8 @@ class MyCalendar extends BaseComponent {
                     this.state.dayArray = dayArray
                     this.setState({
                         dayArray: dayArray,
-                        monthly_attendance_report: monthly_attendance_report
+                        monthly_attendance_report: monthly_attendance_report,
+                        isAttendanceHappenedInMonth: data.data.is_attendance_happened_in_month
                     })
                     this.progress(false)
                     /// console.log('eventsArray', this.state.eventsArray);
@@ -124,17 +132,19 @@ class MyCalendar extends BaseComponent {
 
     attendanceSummary(data) {
 
-        console.warn('attendanceSummary');
+        console.warn('attendanceSummary', data);
+        console.warn('this.state.isAttendanceHappenedInMonth', this.state.isAttendanceHappenedInMonth);
+        console.warn('this.state.selectedDateData', this.state.selectedDateData);
         return (
 
             <Card style={styles.summaryCardOuter}>
 
                 {
-                    data.is_attendance_happened_in_month ?
+                    this.state.isAttendanceHappenedInMonth ?
                         <View>
                             <View style={styles.summaryText}>
                                 <Text style={styles.attendanceText}>Attendance Summary for</Text>
-                                <Text style={styles.dateText}>{data.monthly_attendance_report.month} {data.monthly_attendance_report.year}</Text>
+                                <Text style={styles.dateText}>{data.month} {data.year}</Text>
                             </View>
 
                             <View style={styles.attSessionLabelOuter}>
@@ -142,8 +152,8 @@ class MyCalendar extends BaseComponent {
                                 <Text style={styles.attSessionLabel}>Sessions Attended</Text>
                             </View>
                             <View style={styles.attSessionValueOuter}>
-                                <Text style={styles.attSessionValue}>{data.monthly_attendance_report.attendance} %</Text>
-                                <Text style={styles.attSessionValue}>{data.monthly_attendance_report.session_attended}/{data.monthly_attendance_report.total_session}</Text>
+                                <Text style={styles.attSessionValue}>{data.attendance} %</Text>
+                                <Text style={styles.attSessionValue}>{data.session_attended}/{data.total_session}</Text>
                             </View>
                             {
                                 this.state.selectedDateData != null &&
@@ -161,7 +171,7 @@ class MyCalendar extends BaseComponent {
 
                                                         <View style={styles.attSessionLabelOuter}>
                                                             <Text style={styles.attSessionLabel}>Session</Text>
-                                                            <Text style={styles.attSessionLabel}>Time</Text>
+                                                            <Text style={styles.attSessionLabel}>Status</Text>
                                                             <Text style={styles.attSessionLabel}>Time</Text>
                                                         </View>
                                                         <View style={styles.attSessionValueOuter}>
@@ -219,10 +229,16 @@ class MyCalendar extends BaseComponent {
 
     onDateSelected(item) {
         let date = item
-        let month = this.state.currentMonth
-        let year = this.state.currentYear
+        let day = this.state.currentDay;
+        let month = this.state.currentMonth;
+        let year = this.state.currentYear;
         console.log(date + "/" + (+month) + "/" + year)
-        console.log('onDateSelected', JSON.stringify(item))
+        console.log('onDateSelected', JSON.stringify(item));
+        this.state.selectedDate = new Date(year,(month-1),item.day);
+        console.log(new Date(2019,7,10));
+        console.log(day,day)
+         //console.log(moment.utc(new Date(year,month,day)).local().format("YYYY-MM-DD"))
+        console.log(this.state.selectedDate)
         this.state.selectedDateData = item
         this.setState({
             selectedDateData: item
@@ -391,15 +407,14 @@ class MyCalendar extends BaseComponent {
 
         if (item.session_scheduled) {
 
-            if (item.attendance_happened && item.is_present) {
-                resource = require("../../images/calendar_right.png")
-            } else if (item.attendance_happened && !item.is_cancelled) {
-                resource = require("../../images/calendar_cross.png")
-            } else {
-                //resource = require("../../images/gray_circle.png")
+            if (item.is_cancelled == true || item.attendance_happened==false) {
+                resource = require("../../images/gray_circle.png")
             }
-        } else if (item.session_scheduled == false) {
-            resource = require("../../images/gray_circle.png")
+            else if (item.attendance_happened && item.is_present) {
+                resource = require("../../images/calendar_right.png")
+            } else if (item.attendance_happened && !item.is_present) {
+                resource = require("../../images/calendar_cross.png")
+            }
         }
 
         // let resource = is_show_cross ? require("../../images/calendar_cross.png") : null
@@ -435,8 +450,14 @@ class MyCalendar extends BaseComponent {
 
     render() {
 
+        
+
+
         let dayArray = this.state.dayArray
-        let monthly_data = this.state.monthly_attendance_report
+        let monthly_data = this.state.monthly_attendance_report;
+
+        console.log('dayArray', dayArray);
+        console.log('monthly_data', monthly_data);
 
         return (
             <View style={styles.container}>
@@ -463,8 +484,7 @@ class MyCalendar extends BaseComponent {
                     ListHeaderComponent={this._renderHeaderItem}
                 />
 
-                {monthly_data != null ?
-                    this.attendanceSummary(monthly_data) : null}
+                    {this.attendanceSummary(monthly_data)}
 
             </View>
         );
