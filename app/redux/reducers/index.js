@@ -5,14 +5,15 @@ import SwitchReducer from './switchReducer'
 import DashboardReducer from './dashboardReducer'
 import BatchReducer from './BatchReducer'
 import ProfileReducer from './ProfileReducer'
- import PlayerBatchReducer from './PlayerBatchReducer'
- import TournamentReducer from './TournamentReducer'
- import PerformenceReducer from './PerformenceReducer'
- import FeedbackReducer from './FeedbackReduer'
- import RewardReducer from './RewardReducer'
+import PlayerBatchReducer from './PlayerBatchReducer'
+import TournamentReducer from './TournamentReducer'
+import PerformenceReducer from './PerformenceReducer'
+import FeedbackReducer from './FeedbackReduer'
+import RewardReducer from './RewardReducer'
 import ChallengeReducer from './ChallengeReducer'
 import coachReducer from './CoachReducer'
 import UpcomingTournamentReducer from './UpcomingReducer'
+import TournamentScorerReducer from './TournamentScorer'
 
 // import ShippingAddressReducer from './shippingAddressReducer'
 // import CodReducer from './codReducer'
@@ -23,10 +24,10 @@ import UpcomingTournamentReducer from './UpcomingReducer'
 //import LogoutReducer from './logoutReducer'
 
 const rootReducer = combineReducers({
-     LoginReducer,
-     AcademyReducer,
-     coachReducer,
-     SwitchReducer,
+    LoginReducer,
+    AcademyReducer,
+    coachReducer,
+    SwitchReducer,
     DashboardReducer,
     BatchReducer,
     ProfileReducer,
@@ -36,7 +37,8 @@ const rootReducer = combineReducers({
     FeedbackReducer,
     RewardReducer,
     ChallengeReducer,
-    UpcomingTournamentReducer
+    UpcomingTournamentReducer,
+    TournamentScorerReducer
     // AddressReducer,
     // ShippingReducer,
     // ShippingAddressReducer,

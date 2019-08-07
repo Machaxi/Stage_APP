@@ -23,21 +23,21 @@ export default class PlayerHeader extends BaseComponent {
         let newName = formattedName(name)
 
         return (
-            <View style={{ width: '100%', height: 295, }}>
-                {/* <ImageBackground
-                
+            <View style={{ width: '100%', height: 290, }}>
+                <ImageBackground
+
                     source={require('../../images/RectangleImg.png')}
                     style={{
                         width: '100%',
                         height: '100%',
-                    }}> */}
+                    }}>
 
-                <LinearGradient
+                    {/* <LinearGradient
                     colors={['#332B70', '#24262A']}
                     style={{ flex: 1 }}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 2.5, y: 0 }}
-                >
+                > */}
                     {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
                                 navigation={this.props.navigation} /> */}
 
@@ -196,7 +196,7 @@ export default class PlayerHeader extends BaseComponent {
 
 
                     </View>
-                </LinearGradient>
+                </ImageBackground>
 
             </View>
         )

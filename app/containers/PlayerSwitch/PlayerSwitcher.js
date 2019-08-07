@@ -132,7 +132,7 @@ class PlayerSwitcher extends BaseComponent {
                     <Text style={defaultStyle.bold_text_16}> {item.academy_name}</Text>
                 </View>
                 <View style={{
-                    paddingLeft: 12,
+                    paddingLeft: 6,
                     paddingTop: 8,
                     paddingBottom: 12,
                     alignItems: 'center',
