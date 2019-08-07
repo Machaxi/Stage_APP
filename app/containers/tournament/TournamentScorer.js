@@ -146,218 +146,82 @@ export default class TournamentScorer extends BaseComponent {
                     </View>
 
                     <View style={{
-                        
-                    }}>
 
-                    <View style={{
-                        flex: 1,
-                        marginTop: 10,
-                        alignContent: 'center',
-                        alignItems: 'center',
                     }}>
 
                         <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            flex: 1,
+                            marginTop: 10,
+                            alignContent: 'center',
                             alignItems: 'center',
-                            marginTop: 16,
-                            paddingTop: 4,
-                            paddingBottom: 4,
-                            paddingLeft: 14,
-                            paddingRight: 14,
-                            elevation: 2,
-                            width: 120,
-                            borderRadius: 8,
-                            backgroundColor: 'white'
                         }}>
 
-                            <Text
-                                style={defaultStyle.bold_text_14}>21</Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginTop: 16,
+                                paddingTop: 4,
+                                paddingBottom: 4,
+                                paddingLeft: 14,
+                                paddingRight: 14,
+                                elevation: 2,
+                                width: 120,
+                                borderRadius: 8,
+                                backgroundColor: 'white'
+                            }}>
+
+                                <Text
+                                    style={defaultStyle.bold_text_14}>21</Text>
+
+                                <Text
+                                    style={{
+                                        fontSize: 14,
+                                        color: '#A3A5AE',
+                                        fontFamily: 'Quicksand-Regular',
+                                    }}>Set 1</Text>
+
+                                <Text
+                                    style={defaultStyle.bold_text_14}>12</Text>
+                            </View>
 
                             <Text
                                 style={{
-                                    fontSize: 14,
+                                    marginTop: 14,
+                                    textAlign: 'center',
+                                    width: 120,
+                                    elevation: 2,
+                                    padding: 4,
                                     color: '#A3A5AE',
                                     fontFamily: 'Quicksand-Regular',
-                                }}>Set 1</Text>
+                                    borderRadius: 8,
+                                    backgroundColor: 'white'
+                                }}
+                            >Set 2</Text>
 
                             <Text
-                                style={defaultStyle.bold_text_14}>12</Text>
-                        </View>
-
-                        <Text
-                            style={{
-                                marginTop: 14,
-                                textAlign: 'center',
-                                width: 120,
-                                elevation: 2,
-                                padding: 4,
-                                color: '#A3A5AE',
-                                fontFamily: 'Quicksand-Regular',
-                                borderRadius: 8,
-                                backgroundColor: 'white'
-                            }}
-                        >Set 2</Text>
-
-                        <Text
-                            style={{
-                                marginTop: 14,
-                                textAlign: 'center',
-                                width: 120,
-                                elevation: 2,
-                                padding: 4,
-                                color: '#A3A5AE',
-                                fontFamily: 'Quicksand-Regular',
-                                borderRadius: 8,
-                                backgroundColor: 'white'
-                            }}
-                        >Set 3</Text>
-
-                    </View>
-
-                    <View style={{
-                        marginTop: 30,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignContent: 'center'
-                    }}>
-
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignContent: 'center'
-                        }}>
-
-
-                            <View
                                 style={{
-                                    flex: 1,
-                                    flexDirection: 'row'
-
-                                }}>
-
-                                <Image
-                                    source={require('../../images/ic_minus.png')}
-                                    style={{
-                                        width: 30,
-                                        height: 30,
-                                        padding: 4,
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        color: '#404040',
-                                        fontSize: 46,
-                                        marginLeft: 10,
-                                        fontFamily: 'Quicksand-Medium'
-                                    }}>10</Text>
-
-                            </View>
-
-
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                alignContent: 'center'
-                            }}>
-
-
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        flexDirection: 'row',
-                                        marginTop: 6
-                                    }}>
-
-                                    <View
-                                        style={{
-                                            width: 30,
-                                            height: 30,
-                                            borderRadius: 30 / 2,
-                                            marginBottom: 10,
-                                            alignItems: 'center',
-                                            alignContent: 'center',
-                                            marginTop: 6,
-                                            justifyContent: 'center'
-                                        }}>
-
-                                    </View>
-
-                                    <TouchableOpacity
-                                        activeOpacity={.8}
-                                        onPress={() => {
-                                            console.warn('test')
-                                        }}
-                                    >
-
-
-                                        <Image
-                                            source={require('../../images/ic_plus.png')}
-                                            style={{ width: 40, height: 40 }}
-
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignContent: 'center'
-                        }}>
-
-
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: 'row'
-
-                                }}>
-
-                                {/* <View
-                                    style={{
-                                        
-                                        marginBottom: 10,
-                                        backgroundColor: "#F3F1F1",
-                                        alignItems: 'center',
-                                        alignContent: 'center',
-                                        marginTop: 6,
-                                        justifyContent: 'center'
-                                    }}> */}
-
-
-
-                                <Text style={{
-                                    width: 30,
-                                    backgroundColor: "#F3F1F1",
-                                    height: 30,
-                                    borderRadius: 30 / 2,
-                                    justifyContent: 'center',
+                                    marginTop: 14,
                                     textAlign: 'center',
-                                    alignItems: 'center',
-                                    fontSize: 30,
-                                    fontWeight: "400",
-                                    fontFamily: 'Quicksand-Medium',
-                                    color: '#A3A5AE'
+                                    width: 120,
+                                    elevation: 2,
+                                    padding: 4,
+                                    color: '#A3A5AE',
+                                    fontFamily: 'Quicksand-Regular',
+                                    borderRadius: 8,
+                                    backgroundColor: 'white'
+                                }}
+                            >Set 3</Text>
 
-                                }}>–</Text>
+                        </View>
 
-                                {/* </View> */}
-                                <Text
-                                    style={{
-                                        color: '#404040',
-                                        fontSize: 46,
-                                        marginLeft: 10,
-                                        fontFamily: 'Quicksand-Medium'
-                                    }}>10</Text>
-
-                            </View>
-
+                        <View style={{
+                            marginTop: 30,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            alignContent: 'center'
+                        }}>
 
                             <View style={{
                                 flex: 1,
@@ -371,64 +235,139 @@ export default class TournamentScorer extends BaseComponent {
                                     style={{
                                         flex: 1,
                                         flexDirection: 'row',
-                                        marginTop: 6
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+
                                     }}>
 
-                                    <View
+                                    <Image
+                                        source={require('../../images/ic_minus.png')}
                                         style={{
                                             width: 30,
                                             height: 30,
-                                            borderRadius: 30 / 2,
-                                            marginBottom: 10,
-                                            alignItems: 'center',
-                                            alignContent: 'center',
-                                            marginTop: 6,
-                                            justifyContent: 'center'
-                                        }}>
+                                            marginTop: 5,
+                                        }}
+                                    />
+                                    <Text
+                                        style={{
+                                            color: '#404040',
+                                            fontSize: 46,
+                                            marginLeft: 16,
+                                            fontFamily: 'Quicksand-Medium'
+                                        }}>10</Text>
 
-                                    </View>
+                                </View>
+
+
+                                <View style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    alignContent: 'center',
+                                    marginLeft: 40,
+                                }}>
+
 
                                     <TouchableOpacity
                                         activeOpacity={.8}
                                         onPress={() => {
                                             console.warn('test')
-                                        }}
-                                    >
-
-
+                                        }}>
                                         <Image
                                             source={require('../../images/ic_plus.png')}
-                                            style={{ width: 40, height: 40 }}
+                                            style={{ width: 48, height: 48 }}
 
                                         />
                                     </TouchableOpacity>
+
+
                                 </View>
                             </View>
 
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignContent: 'center'
+                            }}>
+
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+
+                                    }}>
+
+                                    <Image
+                                        source={require('../../images/ic_minus.png')}
+                                        style={{
+                                            width: 30,
+                                            height: 30,
+                                            marginTop: 5,
+                                        }}
+                                    />
+                                    <Text
+                                        style={{
+                                            color: '#404040',
+                                            fontSize: 46,
+                                            marginLeft: 16,
+                                            fontFamily: 'Quicksand-Medium'
+                                        }}>10</Text>
+
+                                </View>
+
+
+                                <View style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    alignContent: 'center',
+                                    marginLeft: 40,
+                                    marginTop: 12,
+                                }}>
+
+
+                                    <TouchableOpacity
+                                        activeOpacity={.8}
+                                        onPress={() => {
+                                            console.warn('test')
+                                        }}>
+                                        <Image
+                                            source={require('../../images/ic_plus.png')}
+                                            style={{ width: 48, height: 48 }}
+
+                                        />
+                                    </TouchableOpacity>
+
+
+                                </View>
+
+
+                            </View>
 
                         </View>
 
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: 20,
+                        }}>
+
+                            <TouchableOpacity activeOpacity={.8}
+                                style={style.rounded_button}
+                                onPress={() => {
+
+                                }}>
+                                <Text style={style.rounded_button_text}>
+                                    Save</Text>
+                            </TouchableOpacity>
+
+                        </View>
                     </View>
 
-                    <View style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: 20,
-                    }}>
-
-                        <TouchableOpacity activeOpacity={.8}
-                            style={style.rounded_button}
-                            onPress={() => {
-
-                            }}>
-                            <Text style={style.rounded_button_text}>
-                                Save</Text>
-                        </TouchableOpacity>
-
-                    </View>
-                    </View>
-                    
                 </View >
 
             </ScrollView >

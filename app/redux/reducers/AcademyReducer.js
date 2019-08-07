@@ -38,12 +38,13 @@ export default function AcademyReducer(state = initialState, action) {
 }
 
 
-export function getAllAcademy() {
+export function getAllAcademy(query) {
+    console.log('getAllAcademy => ',query)
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `global/academy/all`
+                url: `global/academy/all?${query}`
             }
         }
     };

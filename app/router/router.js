@@ -63,6 +63,7 @@ import RegistrationSuccessful from "../containers/tournament/RegistrationSuccess
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
 import MyCalendar from "../containers/welcome/MyCalendar"
+import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -85,8 +86,8 @@ const loginModule = createStackNavigator({
             header: null
         }
     },
-    MyCalendar:{
-        screen:MyCalendar
+    MyCalendar: {
+        screen: MyCalendar
     },
     IntroScreen: {
         screen: IntroScreen,
@@ -140,6 +141,11 @@ const GuestHomeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
+    AcademyFilter: {
+        screen: AcademyFilter,
+
+    },
+
     AcademyProfile: {
         screen: AcademyProfile,
         navigationOptions: ({ navigation }) => ({
@@ -274,7 +280,7 @@ const GuestHomeModule = createStackNavigator({
         screen: AcademyBatch,
         navigationOptions: ({ navigation }) => ({
             title: "View Batches",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true}/>,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -885,12 +891,12 @@ const parentHomeModule = createStackNavigator({
             title: 'Browse Academies',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-            showDrawer={true}
-            showBackAction={true}
+                showDrawer={true}
+                showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showNotification={false}
-                showHome={true}  />,
+                showHome={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },

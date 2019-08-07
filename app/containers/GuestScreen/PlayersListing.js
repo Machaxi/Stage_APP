@@ -154,11 +154,12 @@ class PlayersListing extends BaseComponent {
                             }}
                         >{getFormattedCategory(item.player_category)}</Text>
                         <Image
+                            resizeMode="contain"
                             style={{
                                 height: 80, width: 50,
                                 justifyContent: 'center', alignSelf: 'center'
                             }}
-                            source={require('../../images/player_small.png')}></Image>
+                            source={{ uri: item.profile_pic }}></Image>
 
                         <Text
                             numberOfLines={2}

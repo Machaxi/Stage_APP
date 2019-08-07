@@ -14,7 +14,10 @@ export default class PlayerHeader extends BaseComponent {
 
     render() {
 
-        const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, operations } =
+        const { name, academy_name, badge, rank, score,
+            player_level,
+            reward_point,
+            player_category, operations } =
             this.props.player_profile
 
         let newName = formattedName(name)
@@ -40,7 +43,8 @@ export default class PlayerHeader extends BaseComponent {
 
                     <View style={{ position: 'relative', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../../images/playerimg.png')}
+                            <Image source={require('../../images/male_avatar.png')}
+                                resizeMode="contain"
                                 style={{
                                     width: 201,
                                     height: 238, marginRight: 20, marginTop: 0, display: 'flex'
