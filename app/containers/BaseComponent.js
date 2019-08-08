@@ -104,12 +104,12 @@ export function goToHome() {
         console.log("SplashScreen=> ", JSON.stringify(userData));
         console.warn('userType ', userType == PLAYER)
         console.warn('academy_id ', userData.academy_id)
-        
+
         if (userType == GUEST) {
             this.props.navigation.navigate('GHome')
         }
         else if (userData.academy_id != null) {
-            console.log('data=> ',userData);
+            console.log('data=> ', userData);
             if (userType == GUEST) {
                 this.props.navigation.navigate('GHome')
             } else if (userType == PLAYER) {
@@ -157,6 +157,24 @@ export function getFormattedLevel(level) {
             return "National Level"
     }
     return level
+}
+
+export function getFormattedCategory(category) {
+
+    switch (category) {
+        case "U10":
+            return "U-10"
+
+        case "U13":
+            return "U-13"
+
+        case "U15":
+            return "U-15"
+
+        case "U17":
+            return "U-17"
+    }
+    return category
 }
 
 
@@ -251,7 +269,7 @@ export const defaultStyle = {
         backgroundColor: '#67BAF5',
         color: 'white',
         textAlign: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         fontFamily: 'Quicksand-Regular'
     },
     headerStyle: {

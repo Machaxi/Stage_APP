@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
 import { Card, ActivityIndicator } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -9,6 +9,7 @@ import FilterDialog from './FilterDialog'
 import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
 import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Swiper from 'react-native-swiper'
 
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
@@ -398,6 +399,8 @@ class AcademyProfile extends BaseComponent {
         let feedback = this.state.feedback
         const academy = this.state.academy
         const academy_reviews = this.state.academy.academy_reviews
+        let gallery = this.state.academy.gallery
+
         return (
 
             <ScrollView style={styles.chartContainer}>
@@ -419,39 +422,96 @@ class AcademyProfile extends BaseComponent {
                             elevation: 2,
 
                         }}>
-                        <View style={{ marginLeft: 8, marginRight: 8, marginTop: 4 }}>
+                        <View style={{}}>
 
-                            <Image style={{ height: 130, width: "100%", }}
-                                source={{ uri: academy.cover_pic }}
-                            >
+                            {gallery.length == 0 ?
+                                <Image style={{ height: 150, width: "100%", }}
+                                    source={{ uri: academy.cover_pic }}
+                                /> :
 
-                            </Image>
+                                <View style={{
+                                    position: 'relative',
+                                }}>
 
-                            <Text style={{
-                                fontFamily: 'Quicksand-Medium',
-                                paddingTop: 12,
-                                fontSize: 18, color: 'gray'
-                            }}> {academy.name}</Text>
+                                    <Swiper
+                                        containerStyle={Platform.OS === "ios" ? styles.wrapper : null}
+                                        style={Platform.OS === "ios" ? null : styles.wrapper}
+                                        ref={ref => this.swiper = ref}
+                                        showsPagination={false}
+                                        //onIndexChanged={this.updateState.bind(this)}
+                                        loop={false} >
+                                        {
+                                            gallery.map((item, index) => {
+                                                return (
+                                                    <Image key={index}
+                                                        source={{ uri: item.image }}
+                                                        style={styles.sliderImage} />
+
+                                                )
+                                            })
+                                        }
+                                    </Swiper>
+
+                                    <View style={{
+
+                                        alignItems: 'flex-end',
+                                        justifyContent: 'flex-end',
+                                        alignSelf: 'flex-end',
+                                        position: 'absolute',
+
+                                        flex: 1,
+                                        marginTop: 110,
+                                        marginBottom: 8,
+
+                                    }}>
+                                        <Text style={[defaultStyle.bold_text_12, {
+                                            color: '#FFFFFF',
+                                            flex: 1,
+                                            backgroundColor: '#A6A6A6',
+                                            borderRadius: 8,
+                                            marginRight: 8,
+                                            justifyContent: 'flex-end',
+                                            alignItems: 'flex-end',
+                                            alignSelf: 'flex-end',
+                                            alignContent: 'flex-end',
+                                            padding: 8
+                                        }]}>+{gallery.length}</Text>
+                                    </View>
+
+                                </View>
+
+                            }
 
                             <View style={{
-                                alignItems: 'center',
-                                paddingTop: 8,
-                                paddingBottom: 12,
-                                flexDirection: 'row', flex: 1
+                                marginLeft: 8, marginRight: 8, marginTop: 1
                             }}>
 
-                                <Rating
-                                    type='custom'
-                                    ratingColor='#F4FC9A'
-                                    ratingBackgroundColor='#D7D7D7'
-                                    ratingCount={5}
-                                    imageSize={12}
-                                    readonly={true}
-                                    startingValue={academy.ratings}
-                                    style={{ width: 80 }}
-                                />
 
-                                {/* <Text style={{
+                                <Text style={{
+                                    fontFamily: 'Quicksand-Medium',
+                                    paddingTop: 12,
+                                    fontSize: 18, color: 'gray'
+                                }}> {academy.name}</Text>
+
+                                <View style={{
+                                    alignItems: 'center',
+                                    paddingTop: 8,
+                                    paddingBottom: 12,
+                                    flexDirection: 'row', flex: 1
+                                }}>
+
+                                    <Rating
+                                        type='custom'
+                                        ratingColor='#F4FC9A'
+                                        ratingBackgroundColor='#D7D7D7'
+                                        ratingCount={5}
+                                        imageSize={12}
+                                        readonly={true}
+                                        startingValue={academy.ratings}
+                                        style={{ width: 80 }}
+                                    />
+
+                                    {/* <Text style={{
                                     backgroundColor: '#D6D6D6', height: 19, width: 30, textAlign: 'center',
                                     fontSize: 12,
                                     alignItems: 'center',
@@ -459,41 +519,42 @@ class AcademyProfile extends BaseComponent {
                                     color: '#707070',
                                     borderRadius: 12,
                                 }}>{academy.ratings.toFixed(1)}</Text> */}
-                                <RateViewFill>{academy.ratings}</RateViewFill>
-                            </View>
+                                    <RateViewFill>{academy.ratings}</RateViewFill>
+                                </View>
 
-                            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+                                <View style={{ flexDirection: 'row', marginBottom: 16 }}>
 
-                                <TouchableOpacity
-                                    activeOpacity={.8}
-                                    style={defaultStyle.rounded_button} onPress={() => { this.props.navigation.navigate('AcademyBatch', { academy_id: this.state.id }) }}>
+                                    <TouchableOpacity
+                                        activeOpacity={.8}
+                                        style={defaultStyle.rounded_button} onPress={() => { this.props.navigation.navigate('AcademyBatch', { academy_id: this.state.id }) }}>
 
-                                    <Text
-                                        style={[defaultStyle.bold_text_14,
-                                        { color: 'white' }]}
-                                    >
-                                        View Batches
+                                        <Text
+                                            style={[defaultStyle.bold_text_14,
+                                            { color: 'white' }]}
+                                        >
+                                            View Batches
                                 </Text>
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    activeOpacity={.8}
-                                    style={defaultStyle.rounded_button}>
+                                    <TouchableOpacity
+                                        activeOpacity={.8}
+                                        style={defaultStyle.rounded_button}>
 
-                                    <Text
-                                        style={[defaultStyle.bold_text_14,
-                                        { color: 'white' }]}
-                                    >
-                                        Book Court
+                                        <Text
+                                            style={[defaultStyle.bold_text_14,
+                                            { color: 'white' }]}
+                                        >
+                                            Book Court
                                 </Text>
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
 
-                                {/* <Text
+                                    {/* <Text
                                     style={styles.rounded_button}
                                 >
                                     Book Court
                                 </Text> */}
 
+                                </View>
                             </View>
                         </View>
                     </Card>
@@ -760,6 +821,20 @@ const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
         backgroundColor: '#F7F7F7'
+    },
+    wrapper: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        height: 150,
+        backgroundColor: 'white'
+    },
+    sliderImage: {
+        width: "100%",
+        height: "100%",
+        alignItems: 'center',
+        resizeMode: 'stretch',
+        backgroundColor: 'white'
     },
     rounded_button: {
         width: '48%',

@@ -132,8 +132,12 @@ class PlayerSwitcher extends BaseComponent {
                     <Text style={defaultStyle.bold_text_16}> {item.academy_name}</Text>
                 </View>
                 <View style={{
-                    paddingLeft: 12,
-                    paddingTop: 8, flexDirection: 'row', flex: 1
+                    paddingLeft: 6,
+                    paddingTop: 8,
+                    paddingBottom: 12,
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    flex: 1
                 }}>
 
                     <Rating
@@ -142,9 +146,9 @@ class PlayerSwitcher extends BaseComponent {
                         ratingBackgroundColor='#D7D7D7'
                         ratingCount={5}
                         startingValue={item.academy_rating}
-                        imageSize={14}
+                        imageSize={12}
                         readonly={true}
-                        style={{ height: 30, width: 80 }}
+                        style={{ width: 80 }}
                     />
 
                     {/* <Text style={{

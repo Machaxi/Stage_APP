@@ -25,6 +25,7 @@ class UserHome extends BaseComponent {
     static navigationOptions = ({ navigation }) => {
 
         return {
+
             headerTitle: (
                 <TouchableOpacity
                     style={{
@@ -44,7 +45,8 @@ class UserHome extends BaseComponent {
                             fontSize: 14,
                             color: 'white'
                         }}
-                    >{navigation.getParam('Title', '') + ' ▼'}</Text>
+                    >{navigation.getParam('Title', '') == '' ? '' :
+                        navigation.getParam('Title', '') + ' ▼'}</Text>
                 </TouchableOpacity>
 
             ),
@@ -58,11 +60,13 @@ class UserHome extends BaseComponent {
             //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
             // navigation={navigation} />,
             headerBackground: (
+
                 <LinearGradient
-                    colors={['#332B70', '#24262A']}
+                    colors={['#332B70', '#332B70']}
                     style={{ flex: 1 }}
                     start={{ x: 0, y: 0 }}
-                    end={{ x: 2.5, y: 0 }}
+                    end={{ x: 0.5, y: 1 }}
+                    locations={[0.0, 0.35, 0.99]}
                 />
             ),
             headerLeft: (

@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/AcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent from './../BaseComponent'
+import BaseComponent, { defaultStyle } from './../BaseComponent'
 import { BASE_URL } from '../../../App';
 import PTRView from 'react-native-pull-to-refresh';
 import { RateViewFill } from '../../components/Home/RateViewFill';
+
+var filterData = ''
 
 class AcademyListing extends BaseComponent {
 
@@ -45,12 +47,12 @@ class AcademyListing extends BaseComponent {
         this.getAutoSuggestion()
 
         if (e == '') {
-            this.getAcademyList()
+            this.getAcademyList('')
         }
     }
 
-    getAcademyList() {
-        this.props.getAllAcademy().then(() => {
+    getAcademyList(query) {
+        this.props.getAllAcademy(query).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
@@ -71,7 +73,48 @@ class AcademyListing extends BaseComponent {
 
     componentDidMount() {
 
-        this.getAcademyList()
+        this.getAcademyList('')
+    }
+
+    onFilterSelected(data) {
+        filterData = data
+        
+        if (data != '') {
+            //query_param = query
+            
+            let sport_type = "sport=Badminton"
+            let academy_rating = ""
+            let coach_rating = ""
+            let academy_array = filterData[1]
+            let coach_array = filterData[2]
+
+            for (let i = 0; i < academy_array.data.length; i++) {
+                let obj = academy_array.data[i]
+                if (obj.is_selected) {
+                    academy_rating = academy_rating + "academy_ratings=" + obj.name + "&"
+                }
+            }
+            if (academy_rating.length > 0) {
+                academy_rating = academy_rating.substring(0, academy_rating.length - 1)
+            }
+
+            for (let i = 0; i < coach_array.data.length; i++) {
+                let obj = coach_array.data[i]
+                if (obj.is_selected) {
+                    coach_rating = coach_rating + "coach_ratings=" + obj.name + "&"
+                }
+            }
+            if (coach_rating.length > 0) {
+                coach_rating = coach_rating.substring(0, coach_rating.length - 1)
+            }
+
+            let query = sport_type + "&" + academy_rating + "&" + coach_rating
+            console.warn('selected = > ', query)
+            this.getAcademyList(query)
+        }else{
+            this.getAcademyList('')
+        }
+
     }
 
     find(query) {
@@ -194,7 +237,7 @@ class AcademyListing extends BaseComponent {
     }
 
     onRefresh() {
-        this.setState({ isRefreshing: true }, function () { this.getAcademyList() });
+        this.setState({ isRefreshing: true }, function () { this.getAcademyList('') });
 
     }
     handleKeyDown(e) {
@@ -380,12 +423,24 @@ class AcademyListing extends BaseComponent {
 
                 </Card>
 
-                <Text style={{
-                    marginTop: 55, marginBottom: 4,
-                    textAlign: 'right',
-                    color: '#404040', fontSize: 12,
-                    fontFamily: 'Quicksand-Regular'
-                }} >Filter</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate('AcademyFilter', {
+                            onFilterSelected: this.onFilterSelected.bind(this),
+                            filterData: filterData
+                        })
+                    }}
+                >
+
+                    <Text style={{
+                        marginTop: 55, paddingTop: 4,
+                        paddingLeft: 20,
+                        paddingBottom: 2,
+                        textAlign: 'right',
+                        color: '#404040', fontSize: 12,
+                        fontFamily: 'Quicksand-Regular'
+                    }} >Filter</Text>
+                </TouchableOpacity>
 
                 <View style={{ width: '100%', height: 1, backgroundColor: '#d7d7d7' }}></View>
             </View>
@@ -491,14 +546,19 @@ class AcademyListing extends BaseComponent {
                 {
                     this.listHeader()
                 }
-                <FlatList
-                    onRefresh={() => this.onRefresh()}
-                    refreshing={this.state.isRefreshing}
-                    //ListHeaderComponent={() => this.listHeader()}
-                    data={this.state.academies}
-                    extraData={this.state.academies}
-                    renderItem={this._renderItem}
-                />
+                {this.state.academies.length > 0 ?
+                    <FlatList
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
+                        //ListHeaderComponent={() => this.listHeader()}
+                        data={this.state.academies}
+                        extraData={this.state.academies}
+                        renderItem={this._renderItem}
+                    /> :
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={defaultStyle.regular_text_14}>No Academy Found</Text>
+                    </View>
+                }
             </View>
         );
     }

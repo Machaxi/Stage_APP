@@ -4,7 +4,7 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName, getFormattedCategory } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
@@ -152,13 +152,14 @@ class PlayersListing extends BaseComponent {
                                 fontSize: 8,
                                 paddingTop: 1
                             }}
-                        >{item.player_category}</Text>
+                        >{getFormattedCategory(item.player_category)}</Text>
                         <Image
+                            resizeMode="contain"
                             style={{
                                 height: 80, width: 50,
                                 justifyContent: 'center', alignSelf: 'center'
                             }}
-                            source={require('../../images/player_small.png')}></Image>
+                            source={{ uri: item.profile_pic }}></Image>
 
                         <Text
                             numberOfLines={2}
