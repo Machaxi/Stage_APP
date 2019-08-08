@@ -43,7 +43,7 @@ class DashboardRoute extends BaseComponent {
       getData('header', (value) => {
         this.props.getChallengeDashboard(value, academy_id).then(() => {
           let data = this.props.data.data
-          console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+          //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
           //console.log('data.data.dashboard', data.data.dashboard);
           //console.log('data.data.challenges', data.data.dashboard.challenges)
@@ -74,7 +74,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.acceptChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -95,7 +95,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.cancelChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -116,7 +116,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.dismissChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -137,7 +137,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.abortChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -252,9 +252,84 @@ class DashboardRoute extends BaseComponent {
 
                 </View>
 
+  {/* formInput: {
+        backgroundColor: 'white',
+        fontFamily: 'Quicksand-Regular',
+        borderColor: '#A3A5AE',
+        borderRadius: 4,
+        fontSize: 14,
+        borderWidth: 1,
+        height: 40,
+        width: '45%',
+        color: '#404040',
+    }, */}
+
+                {/* <TextInput
+                placeholder={"Enter Score"}
+                keyboardType={'number-pad'}
+                style={{
+                    textAlign: 'center',
+                    color: '#404040',
+                    width: 100, height: 36,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: '#CECECE'
+                }}
+                onChangeText={(text) => {
+                    //item.input_score = text
+                }}
+
+            >100</TextInput> */}
+
+
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                   <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50%", textAlign: 'center' }}>You</Text>
                   <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50 %", textAlign: 'center' }}>Opponent</Text>
+                </View>
+
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+
+                <View style={{width: '40%'}}>
+                  <TextInput
+                    placeholder={"Enter Score"}
+                    keyboardType={'number-pad'}
+                    style={{
+                        textAlign: 'center',
+                        color: '#404040',
+                        width: '40%', height: 36,
+                        borderRadius: 8,
+                        borderWidth: 1,
+                        borderColor: '#CECECE'
+                    }}
+                    onChangeText={(text) => {
+                        //item.input_score = text
+                    }}
+
+                >100</TextInput>
+                </View>
+
+                <View style={{width: '40%'}}>
+
+                   <TextInput
+                    placeholder={"Enter Score"}
+                    keyboardType={'number-pad'}
+                    style={{
+                        textAlign: 'center',
+                        color: '#404040',
+                        width: '40%', height: 36,
+                        borderRadius: 8,
+                        borderWidth: 1,
+                        borderColor: '#CECECE'
+                    }}
+                    onChangeText={(text) => {
+                        //item.input_score = text
+                    }}
+
+                >100</TextInput>
+
+                </View>
+                  
+                  
                 </View>
 
 
@@ -547,7 +622,7 @@ class DashboardRoute extends BaseComponent {
     // }
 
     let data = this.state.playerData;
-    console.log('data', data);
+    //console.log('data', data);
     return (
 
       <View style={styles.chartContainer}>

@@ -161,7 +161,7 @@ class MyCalendar extends BaseComponent {
                                 (this.state.selectedDateData.session_scheduled == false ?
                                     <View><Text>No session schedule</Text></View> : (
                                         this.state.selectedDateData.is_cancelled == true ?
-                                            <View><Text>Sesson cancelled due to- {this.state.selectedDateData.cancel_reason}</Text></View> : (
+                                            <View><Text>Session cancelled due to - {this.state.selectedDateData.cancellation_reason}</Text></View> : (
                                                 this.state.selectedDateData.attendance_happened == false ? <View><Text>Attendance didn't happen</Text></View> : (
                                                     <View>
                                                         <View style={styles.summaryText}>

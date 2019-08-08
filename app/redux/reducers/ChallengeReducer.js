@@ -152,3 +152,39 @@ export function abortChallenge(header, challenge_id) {
 
 }
 
+export function disputeChallenge(header, challenge_id) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/${challenge_id}/dispute`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getchallengeResults(header, academy_id, month, year) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/results?academy_id=${academy_id}&month=${month}&year=${year}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
