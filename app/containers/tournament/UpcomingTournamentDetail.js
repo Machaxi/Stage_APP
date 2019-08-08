@@ -19,27 +19,12 @@ export default class UpcomingTournamentDetail extends BaseComponent {
         this.state.data = this.props.navigation.getParam('data');
         storeData("detail", JSON.stringify(this.state.data))
 
-        isSignedIn()
-            .then(res => {
-                console.log(res);
-                this.setState({ signedIn: res, })
 
-            })
-            .catch(err => alert("An error occurred"));
 
     }
 
     register() {
-        let signedIn = this.state.signedIn
-        if (signedIn)
-            this.props.navigation.navigate('RegistrationSteps')
-        else {
-            storeData(TOURNAMENT_REGISTER, true)
-            setTimeout(() => {
-                this.props.navigation.navigate('Login')
-            }, 100)
-
-        }
+        this.props.navigation.navigate('RegistrationSteps')
     }
 
 

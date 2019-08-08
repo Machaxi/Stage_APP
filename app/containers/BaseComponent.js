@@ -2,6 +2,7 @@ import React from 'react'
 import { StatusBar, NetInfo } from 'react-native';
 import { getData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
+import Events from '../router/events';
 
 msg = "GUEST"
 
@@ -28,8 +29,13 @@ export const EVENT_REFRESH_CHALLENGE = 'EVENT_REFRESH_CHALLENGE'
 
 //STORE KEYS
 export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
-export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
+export const TEMP_USER_INFO = "TEMP_USER_INFO"
+export const GO_TO_HOME = "GO_TO_HOME"
 //
+
+
+export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
+
 export default class BaseComponent extends React.Component {
 
 
@@ -50,6 +56,9 @@ export default class BaseComponent extends React.Component {
         //StatusBar.setBackgroundColor("#ffffff")
         //StatusBar.setBarStyle('dark-content', true)
 
+        this.refreshEvent = Events.subscribe(GO_TO_HOME, () => {
+            this.goToHome()
+        });
     }
 
     static isUserLoggedIn() {
@@ -88,43 +97,82 @@ export default class BaseComponent extends React.Component {
         />)
     }
 
+    //This function is used when we go for tournament registration and  go back to home 
+    //in that case we have to use this, we are using tournaments in new stack, we cannot
+    // go back on back press.
+    goToHome() {
 
-}
+        getData('userInfo', (value) => {
 
-//This function is used when we go for tournament registration and  go back to home 
-//in that case we have to use this, we are using tournaments in new stack, we cannot
-// go back on back press.
+            if (value != '') {
+                let userData = (JSON.parse(value))
+                // onSignIn()
+                let userType = userData.user['user_type']
+                console.log("SplashScreen1=> ", JSON.stringify(userData));
+                console.warn('userType ', userType)
+                let academy_id = userData.academy_id
+                //console.warn('academy_id ', userData.academy_id)
 
-export function goToHome() {
+                if (userType == GUEST) {
+                    this.props.navigation.navigate('GHome')
+                }
+                else if (academy_id != null) {
 
-    getData('userInfo', (value) => {
-        userData = (JSON.parse(value))
-        // onSignIn()
-        let userType = userData.user['user_type']
-        console.log("SplashScreen=> ", JSON.stringify(userData));
-        console.warn('userType ', userType == PLAYER)
-        console.warn('academy_id ', userData.academy_id)
+                    if (userType == PLAYER) {
+                        this.props.navigation.navigate('UHome')
 
-        if (userType == GUEST) {
-            this.props.navigation.navigate('GHome')
-        }
-        else if (userData.academy_id != null) {
-            console.log('data=> ', userData);
-            if (userType == GUEST) {
+                    } else if (userType == COACH || userType == ACADEMY) {
+                        this.props.navigation.navigate('CHome')
+                    }
+                    else if (userType == PARENT) {
+                        this.props.navigation.navigate('PHome')
+                    }
+                }
+                else {
+                    if (userType == PLAYER) {
+                        //this.props.navigation.navigate('UHome')
+                        if (!userData.has_multiple_acadmies) {
+                            this.props.navigation.navigate('UHome')
+
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: 'PLAYER'
+                            })
+                        }
+                    } else if (userType == COACH || userType == ACADEMY) {
+                        //this.props.navigation.navigate('CHome')
+                        storeData('multiple', userData.has_multiple_acadmies)
+                        if (userData.has_multiple_acadmies == false) {
+                            this.props.navigation.navigate('CHome')
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
+                        }
+                    }
+                    else if (userType == PARENT) {
+                        //this.props.navigation.navigate('PHome')
+                        if (userData.has_multiple_acadmies == false) {
+                            this.props.navigation.navigate('PHome')
+
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: PLAYER
+                            })
+                        }
+                    }
+                }
+            } else {
                 this.props.navigation.navigate('GHome')
-            } else if (userType == PLAYER) {
-                this.props.navigation.navigate('UHome')
-
-            } else if (userType == COACH || userType == ACADEMY) {
-                this.props.navigation.navigate('CHome')
             }
-            else if (userType == PARENT) {
-                this.props.navigation.navigate('PHome')
-            }
-        }
-    });
+        });
 
+    }
 }
+
+
+
+
 export function formattedName(name) {
 
     let array = name.split(' ')

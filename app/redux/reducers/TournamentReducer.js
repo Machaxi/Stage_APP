@@ -135,8 +135,8 @@ export function registerTournament(header, postdata) {
 
 }
 
-export function getPlayerSWitcher(header) { 
-    console.log("getPlayerSWitcher",header)
+export function getPlayerSWitcher(header) {
+    console.log("getPlayerSWitcher", header)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -147,7 +147,7 @@ export function getPlayerSWitcher(header) {
             request: {
                 url: `player/switcher`,
                 method: 'GET',
-               // data: postdata,
+                // data: postdata,
                 headers: {
                     'x-authorization': header
 
@@ -155,5 +155,22 @@ export function getPlayerSWitcher(header) {
             }
         }
     };
-
 }
+
+// export function tournamentLogin(data) {
+//     console.log("tournamentLogin", data)
+//     // var header =
+//     //     getData('header', (value) => {
+//     //         header  = value
+//     //     });
+//     return {
+//         type: types.GET_TOURNAMENT,
+//         payload: {
+//             request: {
+//                 url: `global/tournament-login`,
+//                 method: 'POST',
+//                 data: data,
+//             }
+//         }
+//     };
+// }

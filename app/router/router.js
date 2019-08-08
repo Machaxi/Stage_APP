@@ -64,6 +64,9 @@ import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
 import MyCalendar from "../containers/welcome/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
+import TournamentFixture from "../containers/tournament/TournamentFixture";
+import TournamentScorer from "../containers/tournament/TournamentScorer";
+
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -622,6 +625,41 @@ const coachHomeModule = createStackNavigator({
         })
 
     },
+    TournamentFixture: {
+        screen: TournamentFixture,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Fixture',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentScorer: {
+        screen: TournamentScorer,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tournament Scorer',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
 
 
 
@@ -693,7 +731,9 @@ const tabBarControllerCoach = createBottomTabNavigator(
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
-        },
+        }
+    
+
 
     })
 
@@ -1139,6 +1179,24 @@ const parentDrawer = createDrawerNavigator({
 );
 const TournamentRegistration = createStackNavigator({
 
+    Registration: {
+        screen: Registration,
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Tournament Registration',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={false}
+        //         showDrawer={false}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showNotification={false} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
+
+        //     headerTintColor: '#000',
+        // }),
+    },
     RegistrationSteps: {
         screen: RegistrationSteps,
         // navigationOptions: ({ navigation }) => ({
@@ -1157,24 +1215,7 @@ const TournamentRegistration = createStackNavigator({
         //     headerTintColor: '#000',
         // }),
     },
-    Registration: {
-        screen: Registration,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Registration',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
+    
     AddPartner: {
         screen: AddPartner,
         navigationOptions: ({ navigation }) => ({

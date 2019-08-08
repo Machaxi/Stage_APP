@@ -20,12 +20,14 @@ class TournamentScorer extends BaseComponent {
             player2: null,
             current_set: null,
             currentIndex: -1,
-            match_id: '28',
+            match_id: '30',
             header: '',
             score_call: false, //protect unuseful of progress loader
             start_card_show: false,
             is_shown: false
         }
+
+        //this.state.match_id = this.props.navigation.getParam('match_id', '')
 
     }
 
@@ -159,7 +161,7 @@ class TournamentScorer extends BaseComponent {
             match_scores[currentMatchIndex]['active'] = true
             console.log('currentMatchIndex => ', JSON.stringify(match_scores))
 
-            
+
             currentRound = match_scores[currentMatchIndex]
 
             //show completed card condition
@@ -178,7 +180,7 @@ class TournamentScorer extends BaseComponent {
                     is_shown: false
                 })
             }
-            
+
         } else {
 
             start_card_show = false
@@ -352,12 +354,32 @@ class TournamentScorer extends BaseComponent {
                                 }}
                             >{player1.name}</Text>
 
-                            <Image
-                                resizeMode="contain"
-                                source={{ uri: player1.profile_pic }}
-                                style={{ marginTop: 20, width: 130, height: 180 }}
 
-                            />
+                            <View
+                                style={{
+                                    marginTop: 20,
+                                    position: 'relative'
+                                }}>
+
+                                <Image
+                                    resizeMode="contain"
+                                    source={{ uri: player1.profile_pic }}
+                                    style={{ width: 130, height: 180 }}
+                                />
+
+                                {finalWinner != null && finalWinner.id == player1.id
+                                    ?
+                                    <View style={{
+                                        width: 130, height: 180,
+                                        backgroundColor: '#88a5a5a5',
+                                        position: 'absolute'
+                                    }}>
+                                    </View> : null
+                                }
+
+
+                            </View>
+
                             <Text
                                 style={{
                                     color: '#667DDB',
@@ -421,12 +443,30 @@ class TournamentScorer extends BaseComponent {
                                 }}
                             >{player2.name}</Text>
 
-                            <Image
-                                resizeMode="contain"
-                                source={{ uri: player2.profile_pic }}
-                                style={{ marginTop: 20, width: 130, height: 180 }}
+                            <View
+                                style={{
+                                    marginTop: 20,
+                                    position: 'relative'
+                                }}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={{ uri: player2.profile_pic }}
+                                    style={{ marginTop: 20, width: 130, height: 180 }}
 
-                            />
+                                />
+
+                                {finalWinner != null && finalWinner.id != player2.id
+                                    ?
+                                    <View style={{
+                                        width: 130, height: 180,
+                                        backgroundColor: '#88a5a5a5',
+                                        position: 'absolute'
+                                    }}>
+                                    </View> : null
+                                }
+                            </View>
+
+
                             <Text
                                 style={{
                                     color: '#667DDB',
