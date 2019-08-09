@@ -254,21 +254,21 @@ class DashboardRoute extends BaseComponent {
                         <Text style={styles.playerScore}>{data.score}</Text>
 
                         <View style={styles.middleBox}>
-                          <Text style={styles.playerCategory}>{data.player_category}</Text>
-                          <Image style={styles.playerImage} source={require('../../images/player_small.png')}></Image>
-                          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{data.player_level}</Text>
+                          <Text style={styles.playerCategory}>{getFormattedCategory(data.player_category)}</Text>
+                          <Image style={styles.playerImage} source={{ uri: data.profile_pic }}></Image>
+                          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{data.player_level.split(" ").join("\n")}</Text>
                         </View>
 
                         <View style={styles.playerNameOuter}>
-                          <Text style={styles.playerName}>{data.name}</Text>
+                          <Text style={styles.playerName}>{formattedName(data.name)}</Text>
                         </View>
 
                         <View style={styles.badgeOuter}>
-                          <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                          <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
-                              <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
+                              {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
                               <Text style={styles.badgeValue}>{data.badge}</Text>
-                              <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                              {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
                         </View>
@@ -291,22 +291,22 @@ class DashboardRoute extends BaseComponent {
                             <Text style={styles.playerScore}>{this.state.selectedOpponentData.score}</Text>
 
                             <View style={styles.middleBox}>
-                              <Text style={styles.playerCategory}>{this.state.selectedOpponentData.player_category}</Text>
+                              <Text style={styles.playerCategory}>{getFormattedCategory(this.state.selectedOpponentData.player_category)}</Text>
                               <Image style={styles.playerImage} source={{ uri: this.state.selectedOpponentData.profile_pic }}></Image>
                               <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{this.state.selectedOpponentData.player_level.split(" ").join("\n")}</Text>
                             </View>
 
                             <View style={styles.playerNameOuter}>
-                              <Text style={styles.playerName}>{this.state.selectedOpponentData.name}</Text>
+                              <Text style={styles.playerName}>{formattedName(this.state.selectedOpponentData.name)}</Text>
                             </View>
 
                             <View style={styles.badgeOuter}>
-                              <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                              <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                 <View style={styles.badgeInner}>
-                                  <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
+                                  {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
                                   <Text style={styles.badgeValue}>{this.state.selectedOpponentData.badge}</Text>
-                                  <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
-                                </View>
+                                  {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
+                                </View> 
                               </ImageBackground>
                             </View>
                           </ImageBackground>
@@ -332,29 +332,7 @@ class DashboardRoute extends BaseComponent {
 
                           this.state.matchData.match_scores[0].player1_score =text
 
-                      }}
-                    >{this.state.matchData.match_scores[0].player1_score}</TextInput>
-                      <TextInput
-                        placeholder={"Enter Score"}
-                        keyboardType={'number-pad'}
-                        style={styles.scoreTextbox}
-                        onChangeText={(text) => {
-                            //item.input_score = text
-                            this.state.matchData.match_scores[0].player2_score = text
-                        }}
-
-                    >{this.state.matchData.match_scores[0].player2_score}</TextInput>                  
-                  </View>
-                }
-
-                
-=======
-                        //item.input_score = text
-
-                        this.state.matchData.match_scores[0].player1_score = text
-
-                      }}
-                    >{this.state.matchData.match_scores[0].player1_score}</TextInput>
+                      }}>{this.state.matchData.match_scores[0].player1_score}</TextInput>
                     <TextInput
                       placeholder={"Enter Score"}
                       keyboardType={'number-pad'}
@@ -367,9 +345,6 @@ class DashboardRoute extends BaseComponent {
                     >{this.state.matchData.match_scores[0].player2_score}</TextInput>
                   </View>
                 }
-
-
->>>>>>> 09b7fbe3fc78e3d17e2edfcf3400265c5e908648
 
                 <View style={styles.confirmBtnOuter}>
                   <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Submit</Text>
@@ -430,7 +405,7 @@ class DashboardRoute extends BaseComponent {
             </View>
 
             <View style={styles.opponentCard}>
-              <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList') }}>
+              <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
                 <ImageBackground style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
                   <Text style={styles.addOpponentLabel}>+ Add Opponent</Text>
                 </ImageBackground>
@@ -654,13 +629,13 @@ class DashboardRoute extends BaseComponent {
 
   render() {
 
-    // if (this.props.data.loading || this.state.tournadataments == null) {
-    //   return (
-    //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    //       <ActivityIndicator size="large" color="#67BAF5" />
-    //     </View>
-    //   )
-    // }
+    if (this.props.data.loading || this.state.playerData == null) {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="#67BAF5" />
+        </View>
+      )
+    }
 
     let data = this.state.playerData;
     //console.log('data', data);
@@ -1098,6 +1073,10 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   scoreTextbox: {
+    textAlign: 'center',
+    color: '#404040',
+    width: '40%', 
+    height: 36,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#CECECE'
