@@ -11,6 +11,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from './PlayerBatchComponent'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import moment from 'moment'
+import { PLAYER, FAMILY } from '../../components/Constants';
 
 class PlayerBatch extends BaseComponent {
 
@@ -87,11 +88,11 @@ class PlayerBatch extends BaseComponent {
                 userData: JSON.parse(value)
             });
             console.log("userData.user", userData.user['user_type'])
-            if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') {
-                this.getPlayerBatchData(userData['academy_id'], userData['player_id'])
+            // if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == FAMILY) {
 
-            }
 
+            // }
+            this.getPlayerBatchData(userData['academy_id'], userData['player_id'])
 
         });
     }
@@ -133,8 +134,8 @@ class PlayerBatch extends BaseComponent {
 
     _getLabelText = ({ route, scene }) => (
         route.title
-      );
-      
+    );
+
     _renderTabBar = props => (
         <TabBar
             {...props}
@@ -173,7 +174,7 @@ class PlayerBatch extends BaseComponent {
                     navigationState={this.state}
                     renderTabBar={this._renderTabBar}
                     renderScene={this.renderScene}
-                    
+
                     onIndexChange={index => this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />

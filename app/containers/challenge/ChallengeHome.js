@@ -73,7 +73,9 @@ class ChallengeHome extends BaseComponent {
         }
     };
 
-
+    _getLabelText = ({ route, scene }) => (
+        route.title
+    );
     render() {
         return (
             <TabView
@@ -83,6 +85,7 @@ class ChallengeHome extends BaseComponent {
                 renderTabBar={props =>
                     <TabBar
                         {...props}
+                        getLabelText={this._getLabelText}
                         indicatorStyle={{ backgroundColor: '#667DDB', height: 4 }}
                         style={{ backgroundColor: 'white', elevation: 0 }}
                         labelStyle={{ color: '#404040', fontFamily: 'Quicksand-Regular', }}

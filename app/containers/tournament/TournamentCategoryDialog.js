@@ -14,7 +14,8 @@ class TournamentCategoryDialog extends BaseComponent {
             let obj = array[i]
             view_array.push(
                 <View>
-                    <TouchableOpacity onPress={() => this.props.touchOutside(obj.id)}>
+                    <TouchableOpacity onPress={() => 
+                        this.props.touchOutside(obj.id)}>
                         <Text style={[defaultStyle.bold_text_14, { padding: 8, }]}>
                             {obj.name}
                         </Text>

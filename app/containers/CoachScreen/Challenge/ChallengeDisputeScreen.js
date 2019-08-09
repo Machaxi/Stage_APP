@@ -58,7 +58,6 @@ class ChallengeDisputeScreen extends BaseComponent {
       this.setState({ modalVisible: visible });
     }
 
-
     getAcademyList() {
       getData('header', (value) => {
         this.props.getAcademyListing(value).then(() => {
@@ -139,6 +138,7 @@ class ChallengeDisputeScreen extends BaseComponent {
 
       </Card>
     );
+
   
     render() {       
 
@@ -193,11 +193,11 @@ class ChallengeDisputeScreen extends BaseComponent {
 
                 </View>
 
+
                   <FlatList
                     data={data}
                     renderItem={this._renderItem}
                 />
-
                 {data!=null && this.updateScoreModal()}
 
             </View>);

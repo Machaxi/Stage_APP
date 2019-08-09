@@ -23,6 +23,7 @@ import ParentRewards from '../containers/rewards/ParentRewards'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
 import PlayerAttendance from "../containers/welcome/MyCalendar"
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
+import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 
 const userHomeModule = createStackNavigator({
 
@@ -57,7 +58,7 @@ const userHomeModule = createStackNavigator({
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} 
+                navigation={navigation}
                 showNotification={false}
                 showHome={true} />,
             headerStyle: {

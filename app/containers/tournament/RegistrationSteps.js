@@ -469,7 +469,7 @@ class RegistrationSteps extends BaseComponent {
                                     <Image
                                         resizeMode="contain"
                                         style={{ width: 80, height: 100 }}
-                                        source={{ uri: profile_pic }} /> : null}
+                                        source={{ uri: selected_player.profile_pic }} /> : null}
 
                                 <Text style={[style.text1, { marginTop: 10 }]}>
                                     Gender

@@ -25,14 +25,14 @@ export default function UpcomingTournamentReducer(state = initialState, action) 
     }
 }
 
-export function getUpcomingTournament(header) {
+export function getUpcomingTournament(header,param) {
     console.log("getUpcomingTournament", header)
 
     return {
         type: types.GET_UPCOMING_TOURNAMENT,
         payload: {
             request: {
-                url: `global/tournament/upcoming`,
+                url: `global/tournament/upcoming?${param}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

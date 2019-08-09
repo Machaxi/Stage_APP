@@ -9,7 +9,7 @@ import { CustomeCard } from '../../../components/Home/Card'
 import { getCoachBatchDetails } from "../../../redux/reducers/BatchReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
-import { defaultStyle } from '../../BaseComponent';
+import { defaultStyle, SESSION_DATE_FORMAT } from '../../BaseComponent';
 import moment from 'moment'
 import { COACH, ACADEMY } from '../../../components/Constants';
 
@@ -103,16 +103,20 @@ class BatchDetails extends React.Component {
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', margin: 10 }}>
+                    <View style={{
+                        flexDirection: 'row', marginLeft: 10,
+                        justifyContent: 'space-between',
+                        marginRight: 10,
+                        marginBottom: 10
+                    }}>
                         <Text style={{
                             marginRight: 20,
                             fontSize: 14,
                             textDecorationLine: 'line-through'
                         }}>
-                            {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={{
-                            marginRight: 20,
                             fontSize: 14,
                             textDecorationLine: 'line-through'
                         }}>
@@ -135,17 +139,22 @@ class BatchDetails extends React.Component {
                         fontFamily: 'Quicksand-Medium',
                     }}>{routine_name}</Text>
 
-                    <View style={{ flexDirection: 'row', margin: 10 }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginLeft: 10,
+                        marginRight: 10,
+                        marginBottom: 10
+                    }}>
                         <Text style={{
                             marginRight: 10,
                             fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
                         }}>
-                            {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={{
-                            marginRight: 20,
                             fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',

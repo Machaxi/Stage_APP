@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName,getFormattedCategory } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge, getChallengeScore, updateChallengeScore } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
@@ -38,11 +38,11 @@ class DashboardRoute extends BaseComponent {
 
   }
 
-   progress(status) {
-      this.setState({
-          spinner: status
-      })
-    }
+  progress(status) {
+    this.setState({
+      spinner: status
+    })
+  }
 
   getDashboardData() {
     getData('userInfo', (value) => {
@@ -321,7 +321,7 @@ class DashboardRoute extends BaseComponent {
                   <Text style={styles.challengeScoreLabel}>Opponent</Text>
                 </View>
 
-                {this.state.matchData!=null &&
+                {this.state.matchData != null &&
                   <View style={styles.scoreOuter}>
                     <TextInput
                       placeholder={"Enter Score"}
@@ -348,6 +348,28 @@ class DashboardRoute extends BaseComponent {
                 }
 
                 
+=======
+                        //item.input_score = text
+
+                        this.state.matchData.match_scores[0].player1_score = text
+
+                      }}
+                    >{this.state.matchData.match_scores[0].player1_score}</TextInput>
+                    <TextInput
+                      placeholder={"Enter Score"}
+                      keyboardType={'number-pad'}
+                      style={styles.scoreTextbox}
+                      onChangeText={(text) => {
+                        //item.input_score = text
+                        this.state.matchData.match_scores[0].player2_score = text
+                      }}
+
+                    >{this.state.matchData.match_scores[0].player2_score}</TextInput>
+                  </View>
+                }
+
+
+>>>>>>> 09b7fbe3fc78e3d17e2edfcf3400265c5e908648
 
                 <View style={styles.confirmBtnOuter}>
                   <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Submit</Text>
@@ -379,23 +401,25 @@ class DashboardRoute extends BaseComponent {
                   <Text style={styles.playerScore}>{item.score}</Text>
 
                   <View style={styles.middleBox}>
-                    <Text style={styles.playerCategory}>{item.player_category}</Text>
+                    <Text style={styles.playerCategory}>{getFormattedCategory(item.player_category)}</Text>
                     <Image style={styles.playerImage} source={{ uri: item.profile_pic }}></Image>
                     <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{item.player_level.split(" ").join("\n")}</Text>
                   </View>
 
                   <View style={styles.playerNameOuter}>
-                    <Text style={styles.playerName}>{item.name}</Text>
+                    <Text style={styles.playerName}>{formattedName(item.name)}</Text>
                   </View>
 
                   <View style={styles.badgeOuter}>
-                    <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                    <ImageBackground 
+                      source={require('../../images/single_shield.png')}
+                    style={styles.badgeBackImage} >
                       <View style={styles.badgeInner}>
-                        <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
-                        <Text style={styles.badgeValue}>{item.badge}</Text>
-                        <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                        <Text style={styles.badgeValue}>{item.badge}</Text> 
                       </View>
                     </ImageBackground>
+
+
                   </View>
                 </ImageBackground>
               </TouchableOpacity>
@@ -643,9 +667,9 @@ class DashboardRoute extends BaseComponent {
     return (
 
       <View style={styles.chartContainer}>
-         <Spinner
-            visible={this.state.spinner}
-            textStyle={defaultStyle.spinnerTextStyle}
+        <Spinner
+          visible={this.state.spinner}
+          textStyle={defaultStyle.spinnerTextStyle}
         />
         <FlatList
           data={data}
@@ -714,12 +738,12 @@ const styles = StyleSheet.create({
   },
   playerCard: {
     overflow: 'hidden',
-    height: 200,
+    height: 180,
     width: "35%",
     marginBottom: 16
   },
   playerBackImage: {
-    height: 200,
+    height: 180,
     width: '100%'
   },
   modalPlayerCard: {
@@ -739,10 +763,9 @@ const styles = StyleSheet.create({
   playerScore: {
     justifyContent: 'center',
     textAlign: 'center',
-    fontWeight: 'bold',
-    color: 'white',
-    fontSize: 13,
-    fontFamily: 'Quicksand-Regular'
+    color: '#F4F4F4',
+    fontSize: 14,
+    fontFamily: 'Quicksand-Bold'
   },
   middleBox: {
     flexDirection: 'row',
@@ -766,7 +789,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Regular'
   },
   playerImage: {
-    height: 80,
+    height: 65,
     width: 50,
     justifyContent: 'center',
     alignSelf: 'center'
@@ -776,24 +799,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 8,
+    fontSize: 7,
     marginLeft: 4,
     marginTop: 16,
     fontFamily: 'Quicksand-Regular'
   },
   playerNameOuter: {
     position: 'absolute',
-    marginTop: 116,
+    marginTop: 102,
     width: "100%",
-    height: 20,
+    height: 24,
     backgroundColor: 'white'
   },
   playerName: {
     color: '#404040',
-    fontWeight: 16,
-    fontWeight: '500',
+    fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   badgeOuter: {
     justifyContent: 'center',
@@ -802,7 +824,7 @@ const styles = StyleSheet.create({
   },
   badgeBackImage: {
     height: 38,
-    width: 25,
+    width: 57,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -810,9 +832,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: '#485FA0',
-    height: 6,
-    width: '120%'
   },
   badgeLeftArrow: {
     height: 7,
@@ -821,9 +840,9 @@ const styles = StyleSheet.create({
   },
   badgeValue: {
     fontSize: 5,
-    color: 'white',
+    color: '#F4F4F4',
     textAlign: 'center',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'BebasNeue-Regular'
   },
   badgeRightArrow: {
     height: 7,
@@ -1079,9 +1098,6 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   scoreTextbox: {
-    textAlign: 'center',
-    color: '#404040',
-    width: '40%', height: 36,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#CECECE'

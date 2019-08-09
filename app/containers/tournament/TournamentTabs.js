@@ -6,10 +6,18 @@ import UpcomingRoute from './UpcomingRoute'
 import RegisteredRoute from './RegisteredRoute'
 import ResultsRoute from './ResultsRoute'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
-import { getData } from '../../components/auth';
+import { getData, storeData } from '../../components/auth';
+import { getTournamentFilter, } from "../../redux/reducers/TournamentFilter";
+import { connect } from 'react-redux';
+import { TOURNAMENT_FILTER } from '../../actions/actionTypes';
 
+class TournamentTabs extends BaseComponent {
 
-export default class TournamentTabs extends BaseComponent {
+  constructor(props){
+    super(props)
+    this.getFilterData()
+  }
+
   state = {
     index: 0,
     routes: [
@@ -33,6 +41,26 @@ export default class TournamentTabs extends BaseComponent {
     });
 
 
+
+
+
+  }
+
+  getFilterData() {
+    this.props.getTournamentFilter().then(() => {
+      let data = this.props.data.data
+      console.log(' getTournamentFilter ' + JSON.stringify(data));
+
+      let success = data.success
+      if (success) {
+        let res = data.data
+        console.warn('filter ',JSON.stringify(res))
+        storeData(TOURNAMENT_FILTER, JSON.stringify(res))
+      }
+
+    }).catch((response) => {
+      console.log(response);
+    })
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -154,6 +182,17 @@ export default class TournamentTabs extends BaseComponent {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    data: state.TournamentFilter,
+  };
+};
+const mapDispatchToProps = {
+  getTournamentFilter
+};
+export default connect(mapStateToProps, mapDispatchToProps)(TournamentTabs);
+
 
 const styles = StyleSheet.create({
   container: {

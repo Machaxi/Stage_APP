@@ -36,7 +36,7 @@ class BatchScreen extends BaseComponent {
 
             batchList: null,
             userData: null,
-            isRefreshing:false
+            isRefreshing: false
 
         }
     }
@@ -86,7 +86,7 @@ class BatchScreen extends BaseComponent {
         this.selfComponentDidMount()
     }
 
-    selfComponentDidMount(){
+    selfComponentDidMount() {
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -148,9 +148,7 @@ class BatchScreen extends BaseComponent {
 
 
                 <View style={{
-                    marginLeft: 8,
-                    marginRight: 15,
-                    margin: 10,
+                    margin: 12,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                 }}>
@@ -158,6 +156,7 @@ class BatchScreen extends BaseComponent {
                         {item.batch_name}
                     </Text>
                     <Image source={require('../../../images/forward.png')}
+                        resizeMode="contain"
                         style={{
                             width: 6,
                             height: 13, marginRight: 10, marginTop: 5
@@ -166,7 +165,10 @@ class BatchScreen extends BaseComponent {
 
                 </View>
                 <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10, marginTop: 0 }} />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
+                <View style={{
+                    flexDirection: 'row', justifyContent: 'space-between', marginLeft: 12,
+                    marginRight: 12, marginBottom: 10,
+                }}>
                     {/*<View>*/}
                     {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
                     {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
@@ -190,9 +192,8 @@ class BatchScreen extends BaseComponent {
     );
 
     onRefresh() {
-        this.setState({ isRefreshing: true }, function() 
-        { this.selfComponentDidMount() });
-     }
+        this.setState({ isRefreshing: true }, function () { this.selfComponentDidMount() });
+    }
 
 
     render() {
