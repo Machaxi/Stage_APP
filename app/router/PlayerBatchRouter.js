@@ -75,6 +75,8 @@ const userBatchModule = createStackNavigator({
                 showDrawer={true}
                 showBackAction={true}
             />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },

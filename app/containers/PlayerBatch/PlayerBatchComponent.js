@@ -3,7 +3,7 @@ import React from 'react'
 import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
-import BaseComponent, { defaultStyle,SESSION_DATE_FORMAT } from '../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayerBatchComponent extends BaseComponent {
@@ -96,13 +96,13 @@ class PlayerBatchComponent extends BaseComponent {
                     }}>
                         <Text
                             style={{
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: '#707070',
                                 fontFamily: 'Quicksand-Bold',
                                 marginRight: 10,
                                 marginLeft: 10,
 
-                            }}>{item.ratings}</Text>
+                            }}>{item.ratings.toFixed(1)}</Text>
 
                     </View>
                     <Image source={require('../../images/right_icon.png')}

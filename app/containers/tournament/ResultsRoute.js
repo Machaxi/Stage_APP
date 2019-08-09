@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, ImageBackground, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
 import { getTournamentResultListing, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+
+var filterData = ''
 
 
 class ResultsRoute extends BaseComponent {
@@ -26,13 +28,13 @@ class ResultsRoute extends BaseComponent {
 
     componentDidMount() {
 
-        this.selfComponentDidMount()
+        this.selfComponentDidMount('')
     }
 
-    selfComponentDidMount() {
+    selfComponentDidMount(filter) {
         getData('header', (value) => {
 
-            this.props.getTournamentResultListing(value).then(() => {
+            this.props.getTournamentResultListing(value,filter).then(() => {
                 let data = this.props.data.data
                 console.log(' getTournamentResultListing ' + JSON.stringify(data));
 
@@ -64,6 +66,62 @@ class ResultsRoute extends BaseComponent {
         console.log('regex ', regex)
         return suggestionResult.filter(item => item.name.search(regex) >= 0);
     }
+
+    onFilterSelected(data) {
+        filterData = data
+
+        if (data != '') {
+            //query_param = query
+            //?gender_type=MALE&tournament_type=SINGLE&category_type=U10
+
+            let gtype = ""
+            let ttype = ""
+            let ctype = ""
+
+            let tournament_categories = filterData[0]
+            let gender_types = filterData[1]
+            let tournament_type = filterData[2]
+
+
+            for (let i = 0; i < tournament_categories.data.length; i++) {
+                let obj = tournament_categories.data[i]
+                if (obj.is_selected) {
+                    ctype = ctype + "category_type=" + obj.name + "&"
+                }
+            }
+            if (ctype.length > 0) {
+                ctype = ctype.substring(0, ctype.length - 1)
+            }
+
+            for (let i = 0; i < gender_types.data.length; i++) {
+                let obj = gender_types.data[i]
+                if (obj.is_selected) {
+                    gtype = gtype + "gender_type=" + obj.name + "&"
+                }
+            }
+            if (gtype.length > 0) {
+                gtype = gtype.substring(0, gtype.length - 1)
+            }
+
+            for (let i = 0; i < tournament_type.data.length; i++) {
+                let obj = tournament_type.data[i]
+                if (obj.is_selected) {
+                    ttype = ttype + "tournament_type=" + obj.name + "&"
+                }
+            }
+            if (ttype.length > 0) {
+                ttype = ttype.substring(0, ttype.length - 1)
+            }
+
+            let query = gtype + "&" + ttype + "&" + ctype
+            console.warn('selected = > ', query)
+            this.selfComponentDidMount(query)
+        } else {
+            this.selfComponentDidMount('')
+        }
+
+    }
+    
 
     progress(status) {
         this.setState({
@@ -99,12 +157,20 @@ class ResultsRoute extends BaseComponent {
 
                 </Card>
 
-                <Text style={{
-                    marginTop: 8, marginBottom: 4,
-                    textAlign: 'right',
-                    color: '#404040', fontSize: 12,
-                    fontFamily: 'Quicksand-Regular'
-                }} >Filter</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate('TournamentFilter', {
+                            onFilterSelected: this.onFilterSelected.bind(this),
+                            filterData: filterData
+                        })
+                    }}>
+                    <Text style={{
+                        marginTop: 8, marginBottom: 4,
+                        textAlign: 'right',
+                        color: '#404040', fontSize: 12,
+                        fontFamily: 'Quicksand-Regular'
+                    }} >Filter</Text>
+                </TouchableOpacity>
 
                 <View style={{ width: '100%', height: 1, backgroundColor: '#d7d7d7' }}></View>
             </View>
@@ -220,7 +286,11 @@ class ResultsRoute extends BaseComponent {
                                     {item.month + " " + item.year}
                                 </Text>
 
-                                <Text style={defaultStyle.blue_rounded_4}>{item.academic_type}</Text>
+                                <View style={defaultStyle.blue_rounded_4}>
+                                    <Text style={[defaultStyle.bold_text_10, { color: 'white' }]} >
+                                        {getFormattedTournamentType(item.academic_type)}
+                                    </Text>
+                                </View>
 
                             </View>
 
@@ -307,7 +377,9 @@ class ResultsRoute extends BaseComponent {
                             }}>
                                 <SkyFilledButton
                                     onPress={() => {
-                                        //this.props.navigation.navigate('TournamentFixture')
+                                        this.props.navigation.navigate('TournamentFixture',{
+                                            id:item.id
+                                        })
                                     }}
                                 >View Fixtures</SkyFilledButton>
                             </View>

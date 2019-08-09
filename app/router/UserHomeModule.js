@@ -224,7 +224,10 @@ const userHomeModule = createStackNavigator({
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showDrawer={true}
                 showBackAction={true}
+
             />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },

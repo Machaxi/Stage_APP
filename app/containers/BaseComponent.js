@@ -208,6 +208,18 @@ export function getFormattedLevel(level) {
     return level
 }
 
+export function getFormattedTournamentType(level) {
+
+    switch (level) {
+        case "INTER_ACADEMY":
+            return "Inter-Academy"
+
+        case "INTRA_ACADEMY":
+            return "Intra-Academy"
+    }
+    return level
+}
+
 export function getFormattedCategory(category) {
 
     switch (category) {

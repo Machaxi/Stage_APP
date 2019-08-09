@@ -345,7 +345,7 @@ class CoachHome extends BaseComponent {
 
         scoreArray = [];
         for (let i = 0; i < tournaments.length; i++) {
-            const { name, start_date, end_date, is_canceled, end_time, start_time } = tournaments[i]
+            const { name, start_date, end_date, is_canceled, end_time, start_time, id } = tournaments[i]
             console.log("end_date", end_date)
             let f_start_date = moment.utc(start_date, "DD-MM-YYYY").local().format("DD MMM")
             let f_end_date = moment.utc(end_date, "DD-MM-YYYY").local().format("DD MMM YYYY")
@@ -363,6 +363,12 @@ class CoachHome extends BaseComponent {
                                 moment.utc(start_date + " " + end_time).local().format("hh:mm a")}
                         </Text>
                     </View>
+
+                    <CustomeButtonB onPress={() =>
+                        this.props.navigation.navigate('TournamentFixture', {
+                            id: id
+                        })}>
+                        View Fixtures</CustomeButtonB>
 
                 </View>
             );
@@ -520,10 +526,7 @@ class CoachHome extends BaseComponent {
                                 <View style={defaultStyle.line_style} />
 
                                 {scoreArray}
-                                <CustomeButtonB onPress={() =>
-                                    this.props.navigation.navigate('TournamentFixture')}
-                                >
-                                    View Fixtures</CustomeButtonB>
+
                             </View>
                         </CustomeCard> : null}
 
