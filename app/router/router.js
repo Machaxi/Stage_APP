@@ -64,9 +64,9 @@ import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
 import MyCalendar from "../containers/welcome/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
+import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 import TournamentFixture from "../containers/tournament/TournamentFixture";
 import TournamentScorer from "../containers/tournament/TournamentScorer";
-
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -634,12 +634,24 @@ const coachHomeModule = createStackNavigator({
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+            navigation={navigation} showNotification={true} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
-
             headerTintColor: '#000',
+        })
+    },
+    ChallengeDisputeScreen: {
+        screen: ChallengeDisputeScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "Challenge Dispute",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true}/>,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            }, 
         }),
     },
     TournamentScorer: {
@@ -660,10 +672,6 @@ const coachHomeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
-
-
-
-
 }, {
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
@@ -731,10 +739,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
-        }
-    
-
-
+        }    
     })
 
 

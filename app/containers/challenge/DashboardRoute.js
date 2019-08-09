@@ -4,10 +4,11 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE } from '../BaseComponent'
 import { getData } from "../../components/auth";
-import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge } from "../../redux/reducers/ChallengeReducer";
+import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge, getChallengeScore, updateChallengeScore } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Events from '../../router/events';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class DashboardRoute extends BaseComponent {
 
@@ -20,7 +21,9 @@ class DashboardRoute extends BaseComponent {
       query: '',
       modalVisible: false,
       playerId: null,
-      selectedOpponentData: null
+      selectedOpponentData: null,
+      matchData: null,
+      spinner: false,
     }
   }
 
@@ -35,6 +38,12 @@ class DashboardRoute extends BaseComponent {
 
   }
 
+   progress(status) {
+      this.setState({
+          spinner: status
+      })
+    }
+
   getDashboardData() {
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
@@ -43,10 +52,10 @@ class DashboardRoute extends BaseComponent {
       getData('header', (value) => {
         this.props.getChallengeDashboard(value, academy_id).then(() => {
           let data = this.props.data.data
-          console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+          //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
           //console.log('data.data.dashboard', data.data.dashboard);
-          //console.log('data.data.challenges', data.data.dashboard.challenges)
+          console.log('data.data.challenges', data.data.dashboard.challenges)
 
           let success = data.success
           if (success) {
@@ -74,7 +83,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.acceptChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -95,7 +104,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.cancelChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -116,7 +125,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.dismissChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -137,7 +146,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.abortChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -152,6 +161,61 @@ class DashboardRoute extends BaseComponent {
         console.log(response);
       })
     })
+  }
+
+  getChallengeScoreData(challengeId) {
+
+    console.log('challengeId', challengeId);
+    this.progress(true);
+    getData('header', (value) => {
+      this.props.getChallengeScore(value, challengeId).then(() => {
+        let data = this.props.data.data
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        this.progress(false);
+        let success = data.success
+        if (success) {
+
+          this.setState({
+            matchData: data.data,
+          },() => {
+            this.setModalVisible(true);
+          })
+        }
+
+      }).catch((response) => {
+        this.progress(false);
+        console.log(response);
+      })
+    })
+  }
+
+  saveData() {
+
+    let postData = {}
+    postData['data'] = this.state.matchData;
+
+    console.log('postData',JSON.stringify(postData));
+    
+    this.progress(true);
+    getData('header', (value) => {
+      this.props.updateChallengeScore(value, postData).then(() => {
+        console.log(this.props);
+        let data = this.props.data.data
+        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        this.progress(false);
+        let success = data.success
+        if (success) {
+
+          this.setModalVisible(false);
+
+        }
+
+      }).catch((response) => {
+        this.progress(false);
+        console.log(response);
+      })
+    })
+
   }
 
   // find(query) {
@@ -253,10 +317,37 @@ class DashboardRoute extends BaseComponent {
                 </View>
 
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                  <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50%", textAlign: 'center' }}>You</Text>
-                  <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50 %", textAlign: 'center' }}>Opponent</Text>
+                  <Text style={styles.challengeScoreLabel}>You</Text>
+                  <Text style={styles.challengeScoreLabel}>Opponent</Text>
                 </View>
 
+                {this.state.matchData!=null &&
+                  <View style={styles.scoreOuter}>
+                    <TextInput
+                      placeholder={"Enter Score"}
+                      keyboardType={'number-pad'}
+                      style={styles.scoreTextbox}
+                      onChangeText={(text) => {
+                          //item.input_score = text
+
+                          this.state.matchData.match_scores[0].player1_score =text
+
+                      }}
+                    >{this.state.matchData.match_scores[0].player1_score}</TextInput>
+                      <TextInput
+                        placeholder={"Enter Score"}
+                        keyboardType={'number-pad'}
+                        style={styles.scoreTextbox}
+                        onChangeText={(text) => {
+                            //item.input_score = text
+                            this.state.matchData.match_scores[0].player2_score = text
+                        }}
+
+                    >{this.state.matchData.match_scores[0].player2_score}</TextInput>                  
+                  </View>
+                }
+
+                
 
                 <View style={styles.confirmBtnOuter}>
                   <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Submit</Text>
@@ -407,7 +498,8 @@ class DashboardRoute extends BaseComponent {
                     <View style={styles.challengeBtnOuter}>
                       <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
                       <Text style={defaultStyle.rounded_button_150} onPress={() => {
-                        this.setModalVisible(true);
+                        this.getChallengeScoreData(item.id);
+                        //this.setModalVisible(true);
                         this.setState({
                           selectedOpponentData: item.opponent
                         })
@@ -547,10 +639,14 @@ class DashboardRoute extends BaseComponent {
     // }
 
     let data = this.state.playerData;
-    console.log('data', data);
+    //console.log('data', data);
     return (
 
       <View style={styles.chartContainer}>
+         <Spinner
+            visible={this.state.spinner}
+            textStyle={defaultStyle.spinnerTextStyle}
+        />
         <FlatList
           data={data}
           renderItem={this._renderItem}
@@ -567,7 +663,7 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = {
-  getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge
+  getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge, getChallengeScore, updateChallengeScore
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardRoute);
 
@@ -951,12 +1047,13 @@ const styles = StyleSheet.create({
     //padding: 16,
     borderRadius: 16,
     backgroundColor: 'white',
-    height: 400,
+    height: 470,
   },
   modalHeadingOuter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10
+    padding: 10,
+    marginTop: 10
   },
   modalHeadingText: {
     color: '#707070',
@@ -964,7 +1061,7 @@ const styles = StyleSheet.create({
   },
   confirmBtnOuter: {
     marginHorizontal: 16,
-    marginTop: 20,
+    //marginTop: 20,
     marginBottom: 15
   },
   confirmBtn: {
@@ -974,4 +1071,26 @@ const styles = StyleSheet.create({
     marginRight: 0,
     fontFamily: 'Quicksand-Regular',
   },
+  scoreOuter: {
+    display: 'flex', 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    padding: 18, 
+    marginTop: 5
+  },
+  scoreTextbox: {
+    textAlign: 'center',
+    color: '#404040',
+    width: '40%', height: 36,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#CECECE'
+},
+challengeScoreLabel: { 
+  color: '#404040', 
+  fontSize: 14, 
+  fontFamily: 'Quicksand-Regular', 
+  width: "50%", 
+  textAlign: 'center' 
+}
 });
