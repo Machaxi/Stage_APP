@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 'react-native'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, GO_TO_HOME } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { CustomeButtonB } from '../../components/Home/Card';
 import { getData,storeData } from '../../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
+import Events from './../../router/events';
 
 
 export default class RegistrationSuccessful extends BaseComponent {
@@ -233,58 +234,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     }}>
                                         <CustomeButtonB
                                             onPress={() => {
-                                                getData('userInfo', (value) => {
-                                                    let userData = (JSON.parse(value))
-                                                    // onSignIn()
-                                                    let userType = userData.user['user_type']
-                                                    console.log("SplashScreen=> ", JSON.stringify(userData));
-                                                    console.warn('userType ', userType == PLAYER)
-                                                    //console.warn('academy_id ', userData.academy_id)
-
-                                                    if (userType == GUEST) {
-                                                        this.props.navigation.navigate('GHome')
-                                                    }
-                                                    else {
-                                                        console.log('data=> ', userData);
-                                                        if (userType == GUEST) {
-                                                            this.props.navigation.navigate('GHome')
-                                                        } else {
-                                                          
-                                                            if (userType == PLAYER) {
-                                                                //this.props.navigation.navigate('UHome')
-                                                                if (!userData.has_multiple_acadmies) {
-                                                                    this.props.navigation.navigate('UHome')
-
-                                                                } else {
-                                                                    this.props.navigation.navigate('SwitchPlayer', {
-                                                                        userType: 'PLAYER'
-                                                                    })
-                                                                }
-                                                            } else if (userType == COACH || userType == ACADEMY) {
-                                                                //this.props.navigation.navigate('CHome')
-                                                                storeData('multiple', userData.has_multiple_acadmies)
-                                                                if (userData.has_multiple_acadmies == false) {
-                                                                    this.props.navigation.navigate('CHome')
-                                                                } else {
-                                                                    this.props.navigation.navigate('SwitchPlayer', {
-                                                                        userType: COACH
-                                                                    })
-                                                                }
-                                                            }
-                                                            else if (userType == PARENT) {
-                                                                //this.props.navigation.navigate('PHome')
-                                                                if (userData.has_multiple_acadmies == false) {
-                                                                    this.props.navigation.navigate('PHome')
-
-                                                                } else {
-                                                                    this.props.navigation.navigate('SwitchPlayer', {
-                                                                        userType: PLAYER
-                                                                    })
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                });
+                                                Events.publish(GO_TO_HOME, msg);
                                             }}
                                         >
                                             Finish Registration

@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, goToHome } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, GO_TO_HOME, TEMP_USER_INFO } from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
-import { getData,storeData } from '../../components/auth';
+import { getData, storeData } from '../../components/auth';
 import { registerTournament, getPlayerSWitcher } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -121,7 +121,9 @@ class RegistrationSteps extends BaseComponent {
             new_array: [], // this is for picker,
             selected_player: null,
             alert_msg: '',
-            user_type: ''
+            user_type: '',
+            temp_user: false,
+            profile_pic: null
         }
 
         this.inputRefs = {
@@ -133,6 +135,10 @@ class RegistrationSteps extends BaseComponent {
             showConfirmAlert: this.showConfirmAlert,
             goBackAction: this.goBackAction
         })
+
+        temp_user = this.props.navigation.getParam('temp_user', false)
+        this.state.temp_user = temp_user
+        console.warn('temp_user => ', temp_user)
 
         // getData('userInfo', (value) => {
         //     console.log('userInfo => ' + value)
@@ -207,34 +213,46 @@ class RegistrationSteps extends BaseComponent {
     }
     componentDidMount() {
 
-        getData('userInfo', (value) => {
-            console.log('userInfo=> ', value)
-            userData = JSON.parse(value)
-            let user_type = userData.user['user_type']
-            this.setState({
-                user_type: user_type
-            })
-            if (user_type == PLAYER || user_type == PARENT) {
-                this.getPlayerList()
-            }
-            else if (user_type == GUEST || user_type == COACH) {
+        let key = 'userInfo'
+        if (this.state.temp_user) {
+            key = TEMP_USER_INFO
+        }
+        getData(key, (value) => {
 
-                let name = userData.user['name']
-                //Treating guest as player so setting player object
-                let selected_player = {}
-                selected_player.name = name
-                selected_player.user_id = userData.user['id']
-                this.state.txtname = name
-                this.setState({
-                    selected_player: selected_player
-                })
-                this.setState({
-                    is_player_selected: true
-                })
+            console.log(key + "=== " + value)
 
-            }else{
-                alert('Unknown User Type.')
+            if (value != '') {
+
+                let userData = JSON.parse(value)
+                let user_type = userData.user['user_type']
+                this.setState({
+                    user_type: user_type
+                })
+                if (user_type == PLAYER || user_type == PARENT) {
+                    this.getPlayerList()
+                }
+                else if (user_type == GUEST || user_type == COACH) {
+
+                    let name = userData.user['name']
+                    //Treating guest as player so setting player object
+                    let selected_player = {}
+                    selected_player.name = name
+                    selected_player.genderType = userData.user['genderType']
+                    selected_player.user_id = userData.user['id']
+                    selected_player.profile_pic = userData.user['profile_pic']
+                    this.state.txtname = name
+                    this.setState({
+                        selected_player: selected_player
+                    })
+                    this.setState({
+                        is_player_selected: true
+                    })
+
+                } else {
+                    alert('Unknown User Type.')
+                }
             }
+
         });
 
     }
@@ -344,6 +362,8 @@ class RegistrationSteps extends BaseComponent {
         let is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
         //if there is GUEST then in that case we are not showing picker selection
         let is_player_selected = this.state.is_player_selected
+        let profile_pic = this.state.profile_pic
+        let selected_player = this.state.selected_player
 
         return (
             <ScrollView>
@@ -445,9 +465,12 @@ class RegistrationSteps extends BaseComponent {
                                 }}
                             >
 
-                                <Image
-                                    style={{ width: 80, height: 100 }}
-                                    source={require('../../images/edit_profile_holder.png')} />
+                                {selected_player.profile_pic != null ?
+                                    <Image
+                                        resizeMode="contain"
+                                        style={{ width: 80, height: 100 }}
+                                        source={{ uri: profile_pic }} /> : null}
+
                                 <Text style={[style.text1, { marginTop: 10 }]}>
                                     Gender
                                 </Text>
@@ -458,8 +481,8 @@ class RegistrationSteps extends BaseComponent {
                                     marginTop: 6,
                                     fontFamily: 'Quicksand-Regular',
                                 }}>
-                                    Male
-                    </Text>
+                                    {selected_player.genderType == undefined ? "-" : selected_player.genderType}
+                                </Text>
                             </View>
 
 
@@ -1222,52 +1245,7 @@ class RegistrationSteps extends BaseComponent {
                         })
                         setTimeout(() => {
 
-                            getData('userInfo', (value) => {
-                                let userData = (JSON.parse(value))
-                                // onSignIn()
-                                let userType = userData.user['user_type']
-                                console.log("SplashScreen1=> ", JSON.stringify(userData));
-                                console.warn('userType ', userType)
-                                //console.warn('academy_id ', userData.academy_id)
-
-                                if (userType == GUEST) {
-                                    this.props.navigation.navigate('GHome')
-                                }
-                                else {
-                                    if (userType == PLAYER) {
-                                        //this.props.navigation.navigate('UHome')
-                                        if (!userData.has_multiple_acadmies) {
-                                            this.props.navigation.navigate('UHome')
-
-                                        } else {
-                                            this.props.navigation.navigate('SwitchPlayer', {
-                                                userType: 'PLAYER'
-                                            })
-                                        }
-                                    } else if (userType == COACH || userType == ACADEMY) {
-                                        //this.props.navigation.navigate('CHome')
-                                        storeData('multiple', userData.has_multiple_acadmies)
-                                        if (userData.has_multiple_acadmies == false) {
-                                            this.props.navigation.navigate('CHome')
-                                        } else {
-                                            this.props.navigation.navigate('SwitchPlayer', {
-                                                userType: COACH
-                                            })
-                                        }
-                                    }
-                                    else if (userType == PARENT) {
-                                        //this.props.navigation.navigate('PHome')
-                                        if (userData.has_multiple_acadmies == false) {
-                                            this.props.navigation.navigate('PHome')
-
-                                        } else {
-                                            this.props.navigation.navigate('SwitchPlayer', {
-                                                userType: PLAYER
-                                            })
-                                        }
-                                    }
-                                }
-                            });
+                            Events.publish(GO_TO_HOME, msg);
 
                         }, 100)
 

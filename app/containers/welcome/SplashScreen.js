@@ -17,20 +17,20 @@ class Splash extends BaseComponent {
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
         // first they have to login then register for tournament
-        getData(TOURNAMENT_REGISTER, (value) => {
+        // getData(TOURNAMENT_REGISTER, (value) => {
 
-            console.warn('TOURNAMENT_REGISTER => ', value)
-            if (value != '' && (value == true || value == "true")) {
-                this.props.navigation.navigate('Login')
-            } else {
-                this.moveNext()
-            }
-        });
+        //     console.warn('TOURNAMENT_REGISTER => ', value)
+        //     if (value != '' && (value == true || value == "true")) {
+        //         this.props.navigation.navigate('Login')
+        //     } else {
 
+        //     }
+        // });
+        this.moveNext()
     }
 
     moveNext() {
-        //this.props.navigation.navigate('GHome')
+        //this.props.navigation.navigate('TournamentScorer')
         //return
         var userData;
         // getData('userInfo', (value) => {

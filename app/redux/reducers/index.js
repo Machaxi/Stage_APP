@@ -14,14 +14,7 @@ import ChallengeReducer from './ChallengeReducer'
 import coachReducer from './CoachReducer'
 import UpcomingTournamentReducer from './UpcomingReducer'
 import TournamentScorerReducer from './TournamentScorer'
-
-// import ShippingAddressReducer from './shippingAddressReducer'
-// import CodReducer from './codReducer'
-// import { homeSliderReducer, homeInstaReducer } from './homePage';
-// import productListReducer from './productListing';
-// import filterData from './filterData';
-// import CartCountReducer from './cartCountReducer'
-//import LogoutReducer from './logoutReducer'
+import TournamentRegReducer from './TournamentRegReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -38,14 +31,8 @@ const rootReducer = combineReducers({
     RewardReducer,
     ChallengeReducer,
     UpcomingTournamentReducer,
-    TournamentScorerReducer
-    // AddressReducer,
-    // ShippingReducer,
-    // ShippingAddressReducer,
-    // CodReducer,
-    // filterData,
-    // CartCountReducer,
-    // LogoutReducer
+    TournamentScorerReducer,
+    TournamentRegReducer
 });
 
 export default rootReducer

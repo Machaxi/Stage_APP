@@ -147,6 +147,7 @@ class PlayerBatch extends BaseComponent {
                 right: 5,
                 height: 5,
             }}
+            getLabelText={this._getLabelText}
             style={{ backgroundColor: 'white' }}
             tabStyle={styles.tab}
             labelStyle={defaultStyle.regular_text_14}
@@ -172,7 +173,7 @@ class PlayerBatch extends BaseComponent {
                     navigationState={this.state}
                     renderTabBar={this._renderTabBar}
                     renderScene={this.renderScene}
-                    getLabelText={this._getLabelText}
+                    
                     onIndexChange={index => this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
