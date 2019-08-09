@@ -31,7 +31,9 @@ class ChallengeDisputeScreen extends BaseComponent {
             coach_id: '',
             dues: null,
             alert: false,
-            disputedChallenges: null
+            disputedChallenges: null,
+            modalVisible: false,
+            selectedChallengeData: null
         }
         this.inputRefs = {
             country: null
@@ -51,6 +53,11 @@ class ChallengeDisputeScreen extends BaseComponent {
         this.getAcademyList();
         //this.fetchDisputeListByAcademy(1);
     }
+
+     setModalVisible(visible) {
+      this.setState({ modalVisible: visible });
+    }
+
 
     getAcademyList() {
       getData('header', (value) => {
@@ -119,7 +126,12 @@ class ChallengeDisputeScreen extends BaseComponent {
 
             <View style={styles.resolveBtnOuter}>
                 <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
-                onPress={() => { this.acceptTheChallenge(item.id) }}>
+                onPress={() => { 
+                  this.getChallengeScoreData(item.id);
+                  this.setState({
+                    selectedChallengeData: item
+                  })
+                  //this.setModalVisible(true); }}>
                 <Text style={styles.primaryBtnText}>Resolve</Text>
               </TouchableOpacity>
             </View>
@@ -127,7 +139,6 @@ class ChallengeDisputeScreen extends BaseComponent {
 
       </Card>
     );
-
   
     render() {       
 
@@ -182,15 +193,12 @@ class ChallengeDisputeScreen extends BaseComponent {
 
                 </View>
 
-                {/* {this.state.disputedChallenges!=null && */}
-
                   <FlatList
                     data={data}
                     renderItem={this._renderItem}
                 />
-                {/* } */}
 
-                
+                {data!=null && this.updateScoreModal()}
 
             </View>);
 
