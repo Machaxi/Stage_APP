@@ -64,6 +64,7 @@ import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
 import MyCalendar from "../containers/welcome/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
+import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -622,6 +623,21 @@ const coachHomeModule = createStackNavigator({
         })
 
     },
+    ChallengeDisputeScreen: {
+        screen: ChallengeDisputeScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "Challenge Dispute",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        })
+    }
 
 
 
@@ -693,7 +709,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
-        },
+        }
 
     })
 

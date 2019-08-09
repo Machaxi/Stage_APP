@@ -188,3 +188,39 @@ export function getchallengeResults(header, academy_id, month, year) {
 
 }
 
+export function getChallengeScore(header, challenge_id) {
+    //console.log("createChallenge", header, academy_id)
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/match-scores?challenge_id=${challenge_id}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function updateChallengeScore(header, postData) {
+
+    return {
+        type: types.GET_CHALLENGE,
+        payload: {
+            request: {
+                url: `challenge/update-score`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+

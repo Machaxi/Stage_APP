@@ -26,11 +26,6 @@ export default function coachReducer(state = initialState, action) {
     }
 }
 
-
-
-
-
-
 export function coachListing(academy_id) {
 
     console.log("coachListing => " + academy_id)
@@ -43,6 +38,21 @@ export function coachListing(academy_id) {
         }
     }
 };
+
+export function getDisputedChallenges(header, academy_id) {
+    return {
+        type: types.GET_COACH1,
+        payload: {
+            request: {
+                url: `challenge/disputed?academy_id=${academy_id}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
 
 
 
