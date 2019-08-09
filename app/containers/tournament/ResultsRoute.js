@@ -20,7 +20,7 @@ class ResultsRoute extends BaseComponent {
             tournaments: [],
             query: '',
             spinner: false,
-            isRefreshing:false
+            isRefreshing: false
         }
     }
 
@@ -29,7 +29,7 @@ class ResultsRoute extends BaseComponent {
         this.selfComponentDidMount()
     }
 
-    selfComponentDidMount(){
+    selfComponentDidMount() {
         getData('header', (value) => {
 
             this.props.getTournamentResultListing(value).then(() => {
@@ -72,9 +72,8 @@ class ResultsRoute extends BaseComponent {
     }
 
     onRefresh() {
-        this.setState({ isRefreshing: true }, function() 
-        { this.selfComponentDidMount() });
-     }
+        this.setState({ isRefreshing: true }, function () { this.selfComponentDidMount() });
+    }
 
     listHeader() {
 
@@ -91,7 +90,7 @@ class ResultsRoute extends BaseComponent {
 
                     <TextInput style={{
                         marginLeft: 8,
-                        height:45,
+                        height: 45,
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'
@@ -235,20 +234,33 @@ class ResultsRoute extends BaseComponent {
                             </Text>
 
 
-                            {/* <Image
-                                style={{
-                                    height: 86,
-                                    marginTop: 23,
-                                    marginRight: 12,
-                                    borderRadius: 8,
-                                    marginBottom: 20,
-                                    width: "100%"
-                                }}
-                                resizeMode="contain"
-                                source={require('../../images/view_gallery.png')}
-                            >
+                            {item.gallery && item.gallery.length > 0 ?
+                                <TouchableOpacity
+                                    activeOpacity={.8}
+                                    onPress={() => {
+                                        this.props.navigation.navigate('TournamentGallery', {
+                                            images: item.gallery
+                                        })
+                                    }}
+                                >
 
-                            </Image> */}
+                                    <Image
+                                        style={{
+                                            height: 86,
+                                            marginTop: 23,
+                                            borderRadius: 8,
+                                            marginBottom: 20,
+                                            width: "95%"
+                                        }}
+                                        resizeMode="contain"
+                                        source={require('../../images/view_gallery.png')}
+                                    >
+
+                                    </Image>
+                                </TouchableOpacity> : null
+                            }
+
+
                             {/* <View style={{
                                 color: '#4B4B4B',
                                 justifyContent: 'center',
@@ -288,16 +300,16 @@ class ResultsRoute extends BaseComponent {
                                 </View>
                             </TouchableOpacity> */}
 
-                            <View  style={{
-                        margin: 16,
-                        alignSelf:'center',
-                        width:150,
-                    }}>
-                            <SkyFilledButton
-                             onPress={() => {
-                                //this.props.navigation.navigate('TournamentFixture')
-                            }}
-                            >View Fixtures</SkyFilledButton>
+                            <View style={{
+                                margin: 16,
+                                alignSelf: 'center',
+                                width: 150,
+                            }}>
+                                <SkyFilledButton
+                                    onPress={() => {
+                                        //this.props.navigation.navigate('TournamentFixture')
+                                    }}
+                                >View Fixtures</SkyFilledButton>
                             </View>
                         </View>
 
@@ -331,7 +343,7 @@ class ResultsRoute extends BaseComponent {
 
                 {this.state.tournaments.length != 0 ?
                     <FlatList
-                    onRefresh={() => this.onRefresh()}
+                        onRefresh={() => this.onRefresh()}
                         refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}
                         data={this.state.tournaments}

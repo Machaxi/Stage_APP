@@ -15,6 +15,9 @@ import TournamentTabs from "../containers/tournament/TournamentTabs";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
+import TournamentGallery from '../containers/tournament/TournamentGallery'
+import TournamentFilter from '../containers/tournament/TournamentFilter'
+
 const TournamentModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
     TournamentTabs: {
@@ -126,6 +129,43 @@ const TournamentModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
+    
+    TournamentGallery: {
+        screen: TournamentGallery,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentFilter: {
+        screen: TournamentFilter,
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Filter',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showDrawer={false}
+        //         showBackAction={true}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showNotification={false} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
+
+        //     headerTintColor: '#000',
+        // }),
+    }
 
 })
 

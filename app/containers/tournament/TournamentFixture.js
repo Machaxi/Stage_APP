@@ -45,6 +45,8 @@ class TournamentFixture extends Component {
             is_show_dialog: false
 
         }
+        this.dialogRef = React.createRef();
+
         //let data = this.props.navigation.getParam('data')
         // this.setState({
         //     array : JSON.parse(data)
@@ -90,9 +92,14 @@ class TournamentFixture extends Component {
     }
 
     showFixture(id) {
-        this.setState({
-            is_show_dialog: false
-        })
+
+        setTimeout(() => {
+            this.setState({
+                is_show_dialog: false
+            })
+            this.state.is_show_dialog = false
+            console.warn('show -> ', this.state.is_show_dialog)
+        }, 1000)
         if (id == undefined) {
             return
         }
@@ -145,9 +152,47 @@ class TournamentFixture extends Component {
                             subArray.push(player2)
                         }
 
-                       
+                        if (obj.player1_match == null && player2 == null) {
+                            let newplayer1 = { ...player1 }
+                            newplayer1.name = "To be decided"
+                            subArray.push(newplayer1)
+                        }
+
+                        //================================================
+                        //special condition to check bye guy in first round only
+                        if (playerArray.length == 1 && obj.player1_match == null) {
+
+                            let round1Array = playerArray[0];
+                            let isExists = false
+                            for (let i = 0; i < round1Array.length; i++) {
+
+                                if (round1Array[i].id == player1.id) {
+                                    isExists = true
+                                    break
+                                }
+                            }
+                            if (!isExists) {
+                                let byePlayer = { ...player1, is_bye: true }
+                                let temp_round1_array = [...playerArray[0]]
+                                let newArray = []
+                                newArray.push(byePlayer)
+                                newArray.push(byePlayer)
+                                temp_round1_array.map((element, index) => {
+                                    console.warn('element => ', element)
+                                    newArray.push(temp_round1_array[index])
+                                })
+
+                                //newArray = [...newArray,temp_round1_array]
+                                playerArray[0] = newArray
+                                //playerArray[0].push(byePlayer)
+                                //playerArray[0].push(byePlayer)
+                                console.warn('bye guy => ', + "player1 => " + player1.name)
+                            }
+                        }
+                        //===================== END =============================
+
                     }
-                    console.warn('subArray => ',JSON.stringify(subArray))
+                    console.warn('subArray => ', JSON.stringify(subArray))
                     if (subArray.length > 0)
                         playerArray.push(subArray)
 
@@ -158,6 +203,11 @@ class TournamentFixture extends Component {
             this.setState({
                 array: playerArray
             })
+            // setTimeout(() => {
+            //     this.setState({
+            //         is_show_dialog: false
+            //     })
+            // }, 200)
             //this.props.navigation.navigate('TournamentFixture', { data: JSON.stringify(playerArray) })
 
         } else {
@@ -175,7 +225,7 @@ class TournamentFixture extends Component {
     }
 
     random() {
-        return 0
+        return "00"
         //return Math.floor(Math.random() * 90 + 10)
     }
 
@@ -311,34 +361,52 @@ class TournamentFixture extends Component {
                     //     />
                     // )
 
-                    container.push(
-                        < Circle
-                            cx={x + 10 + 10}
-                            cy={y + 10 + 10}
-                            r="12"
-                            fill="#667DDB"
-                        />)
-                    container.push(
-                        <Text
-                            stroke="white"
-                            strokeWidth="1"
-                            fontSize="11"
-                            fontFamily="Quicksand-Regular"
-                            x={x + 13}
-                            y={y + 24}
-                        >{this.random()}</Text>
-                    )
+                    let is_bye = array[i][j].is_bye
+                    let odd = j % 2 == 1
+                    if (is_bye && odd) {
 
-                    container.push(
-                        <Text
-                            stroke={textColor}
-                            fontSize="12"
-                            fontFamily="Quicksand-Regular"
-                            x={x + 40}
-                            y={y + 25}>
-                            {array[i][j].name}
-                        </Text>
-                    )
+                        container.push(
+                            <Text
+                                stroke={textColor}
+                                fontSize="12"
+                                fontFamily="Quicksand-Regular"
+                                x={x + ((width - 30) / 2)}
+                                y={y + 25}>
+                                BYE
+                            </Text>)
+
+                    } else {
+                        container.push(
+                            < Circle
+                                cx={x + 10 + 10}
+                                cy={y + 10 + 10}
+                                r="12"
+                                fill="#667DDB"
+                            />)
+                        container.push(
+                            <Text
+                                stroke="white"
+                                strokeWidth="1"
+                                fontSize="11"
+                                fontFamily="Quicksand-Regular"
+                                x={x + 13}
+                                y={y + 24}
+                            >{this.random()}</Text>
+                        )
+
+                        container.push(
+                            <Text
+                                stroke={textColor}
+                                fontSize="12"
+                                fontFamily="Quicksand-Regular"
+                                x={x + 40}
+                                y={y + 25}>
+                                {array[i][j].name}
+                            </Text>
+                        )
+                    }
+
+
 
                     //===============ADDING SCORE =============================
                     // for (k = 0; k < 2; k++) {
@@ -487,7 +555,13 @@ class TournamentFixture extends Component {
 
                     <TournamentCategoryDialog
                         tournament_fixture={this.state.tournament_fixtures}
-                        touchOutside={(id) => this.showFixture(id)}
+                        touchOutside={(id) => {
+                            this.state.is_show_dialog=false
+                            // setTimeout(()=>{
+                            //     this.showFixture(id)
+                            // },200)
+                            
+                        }}
                         visible={this.state.is_show_dialog} />
 
                     <View style={{

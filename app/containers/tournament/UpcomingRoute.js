@@ -8,6 +8,9 @@ import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
+var filterData = ''
+
+
 class UpcomingRoute extends BaseComponent {
 
     constructor(props) {
@@ -16,19 +19,20 @@ class UpcomingRoute extends BaseComponent {
         this.state = {
             tournaments: [],
             query: '',
-            isRefreshing:false
+            isRefreshing: false
         }
     }
 
     componentDidMount() {
 
-        this.selfComponentDidMount()
+        this.selfComponentDidMount('')
     }
 
-    selfComponentDidMount(){
+    selfComponentDidMount(filter) {
+
         getData('header', (value) => {
 
-            this.props.getUpcomingTournament(value).then(() => {
+            this.props.getUpcomingTournament(value,filter).then(() => {
                 let data = this.props.data.data
                 console.log(' getUpcomingTournament ' + JSON.stringify(data));
 
@@ -62,9 +66,64 @@ class UpcomingRoute extends BaseComponent {
     }
 
     onRefresh() {
-        this.setState({ isRefreshing: true }, function() 
-        { this.selfComponentDidMount() });
-     }
+        this.setState({ isRefreshing: true }, function () { this.selfComponentDidMount() });
+    }
+
+    onFilterSelected(data) {
+        filterData = data
+        
+        if (data != '') {
+            //query_param = query
+            //?gender_type=MALE&tournament_type=SINGLE&category_type=U10
+
+            let gtype = ""
+            let ttype = ""
+            let ctype = ""
+
+            let tournament_categories = filterData[0]
+            let gender_types = filterData[1]
+            let tournament_type= filterData[2]
+            
+
+            for (let i = 0; i < tournament_categories.data.length; i++) {
+                let obj = tournament_categories.data[i]
+                if (obj.is_selected) {
+                    ctype = ctype + "category_type=" + obj.name + "&"
+                }
+            }
+            if (ctype.length > 0) {
+                ctype = ctype.substring(0, ctype.length - 1)
+            }
+
+            for (let i = 0; i < gender_types.data.length; i++) {
+                let obj = gender_types.data[i]
+                if (obj.is_selected) {
+                    gtype = gtype + "gender_type=" + obj.name + "&"
+                }
+            }
+            if (gtype.length > 0) {
+                gtype = gtype.substring(0, gtype.length - 1)
+            }
+
+            for (let i = 0; i < tournament_type.data.length; i++) {
+                let obj = tournament_type.data[i]
+                if (obj.is_selected) {
+                    ttype = ttype + "tournament_type=" + obj.name + "&"
+                }
+            }
+            if (ttype.length > 0) {
+                ttype = ttype.substring(0, ttype.length - 1)
+            }
+
+            let query = gtype + "&" + ttype + "&" + ctype
+            console.warn('selected = > ', query)
+            this.selfComponentDidMount(query)
+        }else{
+            this.selfComponentDidMount('')
+        }
+
+    }
+
 
     listHeader() {
 
@@ -89,7 +148,7 @@ class UpcomingRoute extends BaseComponent {
                         }}
                         style={{
                             marginLeft: 8,
-                            height:45,
+                            height: 45,
                             backgroundColor: 'white',
                             borderRadius: 16,
                             fontFamily: 'Quicksand-Regular'
@@ -98,13 +157,22 @@ class UpcomingRoute extends BaseComponent {
 
                 </Card>
 
-                <Text style={{
-                    marginTop: 8, marginBottom: 4,
-                    textAlign: 'right',
-                    color: '#404040', fontSize: 12,
-                    fontFamily: 'Quicksand-Regular'
-                }} >Filter</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate('TournamentFilter',{
+                            onFilterSelected: this.onFilterSelected.bind(this),
+                            filterData: filterData
+                        })
+                    }}>
 
+                    <Text style={{
+                        marginTop: 8, marginBottom: 4,
+                        textAlign: 'right',
+                        color: '#404040', fontSize: 12,
+                        fontFamily: 'Quicksand-Regular'
+                    }} >Filter</Text>
+                    
+                </TouchableOpacity>
                 <View style={{ width: '100%', height: 1, backgroundColor: '#d7d7d7' }}></View>
             </View>
         )
@@ -171,8 +239,8 @@ class UpcomingRoute extends BaseComponent {
                             </Text>
 
                             <View style={defaultStyle.blue_rounded_4}>
-                            <Text style={[defaultStyle.regular_text_10,{color:'white'}]} >
-                            {item.academic_type}</Text>
+                                <Text style={[defaultStyle.regular_text_10, { color: 'white' }]} >
+                                    {item.academic_type}</Text>
                             </View>
                         </View>
 

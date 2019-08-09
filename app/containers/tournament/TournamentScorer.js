@@ -20,14 +20,14 @@ class TournamentScorer extends BaseComponent {
             player2: null,
             current_set: null,
             currentIndex: -1,
-            match_id: '30',
+            match_id: '',
             header: '',
             score_call: false, //protect unuseful of progress loader
             start_card_show: false,
             is_shown: false
         }
 
-        //this.state.match_id = this.props.navigation.getParam('match_id', '')
+        this.state.match_id = this.props.navigation.getParam('match_id', '')
 
     }
 
@@ -227,79 +227,131 @@ class TournamentScorer extends BaseComponent {
                 justifyContent = 'space-between'
             }
 
-            match_array.push(<View style={{
-                flexDirection: 'row',
-                justifyContent: justifyContent,
-                alignItems: 'center',
-                marginTop: 12,
-                paddingTop: 4,
-                paddingBottom: 4,
-                paddingLeft: 8,
-                paddingRight: 8,
-                elevation: 2,
-                width: 130,
-                borderRadius: 8,
-                backgroundColor: bgcolor
-            }}>
+            match_array.push(
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: 180,
+                }}>
 
 
-                {element.winner_id ?
+                    <TouchableOpacity
+                        onPress={() => {
+                        }}
+                    >
+
+                        <View
+                            resizeMode="contain"
+                            style={{
+                                width: 10,
+                                height: 10,
+                                marginTop: 8,
+                                marginLeft: 8, marginRight: 8
+                            }}>
+
+                        </View>
+                    </TouchableOpacity>
+
                     <View style={{
+
                         flexDirection: 'row',
+                        justifyContent: justifyContent,
                         alignItems: 'center',
-                    }}>
-
-                        <Image
-                            resizeMode="contain"
-                            style={{
-                                width: 9,
-                                height: 12,
-                                marginTop: 2,
-                                marginRight: 4,
-                            }}
-                            source={element.winner_id == player1.id ?
-                                require('../../images/winner_badge.png') : null}
-                        />
-                        <Text
-                            style={defaultStyle.bold_text_14}>
-                            {element.player1_score}
-                        </Text>
-                    </View>
-                    : null}
-
-                <Text
-                    style={{
-                        fontSize: 14,
-                        color: color,
-                        fontFamily: 'Quicksand-Regular',
-                    }}>Set {element.round}</Text>
-
-                {element.winner_id ?
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center'
+                        marginTop: 12,
+                        paddingTop: 4,
+                        paddingBottom: 4,
+                        paddingLeft: 8,
+                        paddingRight: 8,
+                        elevation: 2,
+                        width: 130,
+                        borderRadius: 8,
+                        backgroundColor: bgcolor
                     }}>
 
 
-                        <Text
-                            style={defaultStyle.bold_text_14}>
-                            {element.player2_score}
-                        </Text>
-                        <Image
-                            resizeMode="contain"
-                            style={{
-                                width: 9,
-                                height: 12,
-                                marginTop: 2,
-                                marginLeft: 4,
-                            }}
-                            source={element.winner_id == player2.id ?
-                                require('../../images/winner_badge.png') : null}
-                        />
-                    </View>
-                    : null}
+                        {element.winner_id ?
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
 
-            </View>)
+                                <Image
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 9,
+                                        height: 12,
+                                        marginTop: 2,
+                                        marginRight: 4,
+                                    }}
+                                    source={element.winner_id == player1.id ?
+                                        require('../../images/winner_badge.png') : null}
+                                />
+                                <Text
+                                    style={defaultStyle.bold_text_14}>
+                                    {element.player1_score}
+                                </Text>
+                            </View>
+                            : null}
+
+                        <Text
+                            style={{
+                                fontSize: 14,
+                                color: color,
+                                fontFamily: 'Quicksand-Regular',
+                            }}>Set {element.round}</Text>
+
+                        {element.winner_id ?
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                            }}>
+
+
+                                <Text
+                                    style={defaultStyle.bold_text_14}>
+                                    {element.player2_score}
+                                </Text>
+                                <Image
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 9,
+                                        height: 12,
+                                        marginTop: 2,
+                                        marginLeft: 4,
+                                    }}
+                                    source={element.winner_id == player2.id ?
+                                        require('../../images/winner_badge.png') : null}
+                                />
+                            </View>
+                            : null}
+
+                    </View>
+
+                    {start_card_show && previousRound != null && previousRound.round ==
+                        element.round ?
+                        <TouchableOpacity
+                            onPress={() => {
+                                    
+                            }}
+                        >
+
+                            <Image
+                                resizeMode="contain"
+                                style={{
+                                    width: 10,
+                                    height: 10,
+                                    marginTop: 8,
+                                    marginLeft: 16, marginRight: 8
+                                }}
+                                // source={
+                                //     require('../../images/edit_profile.png')}
+                            />
+                        </TouchableOpacity>
+                        : null
+                    }
+
+                </View>
+            )
         })
 
 
@@ -367,7 +419,7 @@ class TournamentScorer extends BaseComponent {
                                     style={{ width: 130, height: 180 }}
                                 />
 
-                                {finalWinner != null && finalWinner.id == player1.id
+                                {finalWinner != null && finalWinner.id != player1.id
                                     ?
                                     <View style={{
                                         width: 130, height: 180,
