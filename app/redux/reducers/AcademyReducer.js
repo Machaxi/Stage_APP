@@ -39,7 +39,7 @@ export default function AcademyReducer(state = initialState, action) {
 
 
 export function getAllAcademy(query) {
-    console.log('getAllAcademy => ',query)
+    console.log('getAllAcademy => ', query)
     return {
         type: types.DO_LOGIN,
         payload: {
@@ -80,12 +80,12 @@ export function getAcademyFeedbackList(header, academy_id, page, size, sort, typ
     };
 }
 
-export function getCoachFeedbackList(header, academy_id, coach_id, page, size, sort) {
+export function getCoachFeedbackList(header, academy_id, coach_id, page, size, sort, type) {
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `global/feedback/getByAcademyCoach?academy_id=${academy_id}&coach_id=${coach_id}&page=${page}&size=${size}&sort=${sort}`,
+                url: `global/feedback/getByAcademyCoach?academy_id=${academy_id}&coach_id=${coach_id}&page=${page}&size=${size}&sort=${sort},${type}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -188,28 +188,28 @@ export function getBatchPlayersList(header, batch_id) {
 
 export function getAcademyBatchDetail(academy_id, proficiency, rating, availability) {
 
-    console.log('availability',availability);
+    console.log('availability', availability);
 
     let url;
-    if(proficiency=='' && rating=='' && availability=='') {
+    if (proficiency == '' && rating == '' && availability == '') {
         url = `global/academy/batches?academy_id=${academy_id}`;
     } else {
-        if(proficiency=='' && rating=='') {
+        if (proficiency == '' && rating == '') {
             url = `global/academy/batches?academy_id=${academy_id}&is_available=${availability}`;
         }
-        else if(rating=='' && availability=='') {
+        else if (rating == '' && availability == '') {
             url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}`;
         }
-        else if(proficiency=='' && availability=='') {
+        else if (proficiency == '' && availability == '') {
             url = `global/academy/batches?academy_id=${academy_id}&coachRatings=${rating}`;
         }
-        else if (proficiency=='') {
+        else if (proficiency == '') {
             url = `global/academy/batches?academy_id=${academy_id}&coachRatings=${rating}&is_available=${availability}`;
         }
-        else if(rating=='') {
+        else if (rating == '') {
             url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}&is_available=${availability}`;
         }
-        else if(availability=='') {
+        else if (availability == '') {
             url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}&coachRatings=${rating}`;
         }
         else {

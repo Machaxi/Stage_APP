@@ -73,7 +73,7 @@ class MyCalendar extends BaseComponent {
             this.monthDays()
             this.getCalendarData(month, year)
 
-        }) 
+        })
     }
 
     getCalendarData(month, year) {
@@ -137,14 +137,16 @@ class MyCalendar extends BaseComponent {
         console.warn('this.state.selectedDateData', this.state.selectedDateData);
         return (
 
-            <Card style={styles.summaryCardOuter}>
+            <View style={styles.summaryCardOuter}>
 
                 {
                     this.state.isAttendanceHappenedInMonth ?
-                        <View>
+                        <View style={{
+                            padding: 16
+                        }}>
                             <View style={styles.summaryText}>
                                 <Text style={styles.attendanceText}>Attendance Summary for</Text>
-                                <Text style={styles.dateText}>{data.month} {data.year}</Text>
+                                <Text style={styles.dateText}> {data.month} {data.year}</Text>
                             </View>
 
                             <View style={styles.attSessionLabelOuter}>
@@ -159,14 +161,21 @@ class MyCalendar extends BaseComponent {
                                 this.state.selectedDateData != null &&
 
                                 (this.state.selectedDateData.session_scheduled == false ?
-                                    <View><Text>No session schedule</Text></View> : (
+                                    <View style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        flex: 1
+                                    }}><Text style={
+                                        defaultStyle.regular_text_14
+                                    }>No attendance for this month</Text></View>
+                                    : (
                                         this.state.selectedDateData.is_cancelled == true ?
                                             <View><Text>Session cancelled due to - {this.state.selectedDateData.cancellation_reason}</Text></View> : (
                                                 this.state.selectedDateData.attendance_happened == false ? <View><Text>Attendance didn't happen</Text></View> : (
                                                     <View>
                                                         <View style={styles.summaryText}>
                                                             <Text style={styles.attendanceText}>Attendance </Text>
-                                                            <Text style={styles.dateText}>{moment.utc(this.state.selectedDate).local().format("Do MMM")}</Text>
+                                                            <Text style={styles.dateText}>{moment.utc(this.state.selectedDate).local().format("Do MMM YY")}</Text>
                                                         </View>
 
                                                         <View style={styles.attSessionLabelOuter}>
@@ -187,12 +196,16 @@ class MyCalendar extends BaseComponent {
 
                             }
 
-                        </View> : <View><Text>No attendance for this month</Text></View>
+                        </View> : <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flex: 1
+                        }}><Text style={
+                            defaultStyle.regular_text_14
+                        }>No attendance for this month</Text></View>
                 }
 
-
-
-            </Card>
+            </View>
         )
     }
 
@@ -234,10 +247,10 @@ class MyCalendar extends BaseComponent {
         let year = this.state.currentYear;
         console.log(date + "/" + (+month) + "/" + year)
         console.log('onDateSelected', JSON.stringify(item));
-        this.state.selectedDate = new Date(year,(month-1),item.day);
-        console.log(new Date(2019,7,10));
-        console.log(day,day)
-         //console.log(moment.utc(new Date(year,month,day)).local().format("YYYY-MM-DD"))
+        this.state.selectedDate = new Date(year, (month - 1), item.day);
+        console.log(new Date(2019, 7, 10));
+        console.log(day, day)
+        //console.log(moment.utc(new Date(year,month,day)).local().format("YYYY-MM-DD"))
         console.log(this.state.selectedDate)
         this.state.selectedDateData = item
         this.setState({
@@ -407,7 +420,7 @@ class MyCalendar extends BaseComponent {
 
         if (item.session_scheduled) {
 
-            if (item.is_cancelled == true || item.attendance_happened==false) {
+            if (item.is_cancelled == true || item.attendance_happened == false) {
                 resource = require("../../images/gray_circle.png")
             }
             else if (item.attendance_happened && item.is_present) {
@@ -450,7 +463,7 @@ class MyCalendar extends BaseComponent {
 
     render() {
 
-        
+
 
 
         let dayArray = this.state.dayArray
@@ -460,31 +473,49 @@ class MyCalendar extends BaseComponent {
         console.log('monthly_data', monthly_data);
 
         return (
-            <View style={styles.container}>
 
-                <Spinner
-                    visible={this.state.spinner}
-                    textStyle={defaultStyle.spinnerTextStyle}
-                />
 
-                <FlatList
-                    contentContainerStyle={{
-                        flexGrow: 0
-                    }}
-                    columnWrapperStyle={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}
+            <View style={
+                styles.parent
+            }>
+                <View style={styles.container}>
 
-                    numColumns={7}
-                    data={dayArray}
-                    extraData={this.state.refresh}
-                    renderItem={this._renderItem}
-                    ListHeaderComponent={this._renderHeaderItem}
-                />
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
+
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        scrollEnabled={false}
+                        style={{
+                            height: 300
+                        }}
+                        contentContainerStyle={{
+                            flexGrow: 0,
+
+                        }}
+                        columnWrapperStyle={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}
+
+                        numColumns={7}
+                        data={dayArray}
+                        extraData={this.state.refresh}
+                        renderItem={this._renderItem}
+                        ListHeaderComponent={this._renderHeaderItem}
+                    />
+
+
+                </View>
+
+                <ScrollView>
 
                     {this.attendanceSummary(monthly_data)}
+                </ScrollView>
 
             </View>
         );
@@ -505,11 +536,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(MyCalendar);
 
 
 const styles = StyleSheet.create({
-    container: {
+    parent: {
         backgroundColor: 'white',
         width: '100%',
         height: "100%",
+    },
+    container: {
         padding: 12,
+        backgroundColor: '#F7f7f7'
     },
     text_inner: {
         paddingLeft: 8,
@@ -613,10 +647,10 @@ const styles = StyleSheet.create({
     },
     summaryCardOuter: {
         borderRadius: 16,
-        marginBottom: 8,
-        elevation: 2,
-        paddingHorizontal: 30,
-        paddingVertical: 25
+        elevation: 5,
+        padding: 16,
+        marginBottom: 4,
+        backgroundColor: 'white'
     },
     summaryText: {
         flexDirection: 'row',
@@ -629,23 +663,21 @@ const styles = StyleSheet.create({
     },
     dateText: {
         fontSize: 15,
-        fontFamily: 'Quicksand-Regular',
-        fontWeight: '500',
+        fontFamily: 'Quicksand-Medium',
         color: '#404040',
     },
     attSessionLabelOuter: {
         display: 'flex',
         flexDirection: 'row',
         //justifyContent: 'space-between',
-        marginTop: 20,
+        marginTop: 14,
         marginBottom: 7
     },
     attSessionLabel: {
         fontSize: 10,
         color: '#A3A5AE',
         width: '33.33%',
-        fontFamily: 'Quicksand-Regular',
-        fontWeight: '500'
+        fontFamily: 'Quicksand-Medium',
     },
     attSessionValueOuter: {
         display: 'flex',

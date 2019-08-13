@@ -3,7 +3,7 @@ import React from 'react'
 import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
-import BaseComponent, { defaultStyle,SESSION_DATE_FORMAT } from '../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, checkProfilePic } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayerBatchComponent extends BaseComponent {
@@ -27,7 +27,7 @@ class PlayerBatchComponent extends BaseComponent {
 
     componentDidMount() {
 
-        console.warn('hjhc', this.props.jumpTo)
+        //console.warn('hjhc', this.props.jumpTo)
         this.setState({
             coactList: this.props.jumpTo.coaches
         })
@@ -55,69 +55,73 @@ class PlayerBatchComponent extends BaseComponent {
         //let date = moment.utc("01/01/1970 12:00 PM").local().format("hh:mm a")
         //console.warn(date)
     }
-    renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
+    renderItem = ({ item }) => {
 
-            console.warn("Touch Press")
-            this.props.navigation.navigate('CoachProfileDetail', {
-                academy_id: this.state.academy_id,
-                coach_id: item.id
-            })
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
+        let profile_pic = checkProfilePic(item.profile_pic)
 
-        }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                <View style={{ marginRight: 20, flexDirection: 'row', height: 50, alignItems: 'center' }}>
+        return (
+            <TouchableOpacity key={item} onPress={() => {
 
-                    <Image source={require('../../images/coach_small_pic.png')}
-                        style={{
-                            width: 36,
-                            borderRadius: 6,
-                            height: 36, marginRight: 10
-                        }} />
-                    <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
-                    <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 0, marginLeft: 6, alignItems: 'center', justifyContent: 'center' }}>
-                        {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 6, marginLeft: 6, textAlign: 'center' }}>Head Coach</Text> : null}
-                    </View>
-                </View>
+                console.warn("Touch Press")
+                this.props.navigation.navigate('CoachProfileDetail', {
+                    academy_id: this.state.academy_id,
+                    coach_id: item.id
+                })
+                // this.props.navigation.navigate('OrderTracking', {
+                //     order_id: item.increment_id
+                // })
 
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={require('../../images/ic_star.png')}
-                        style={{
-                            width: 14,
-                            height: 14, marginRight: 6
-                        }} />
-                    <View style={{
-                        borderColor: '#DFDFDF',
-                        marginTop: 2, marginBottom: 2,
-                        borderWidth: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
-                    }}>
-                        <Text
+            }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <View style={{ marginRight: 20, flexDirection: 'row', height: 50, alignItems: 'center' }}>
+
+                        <Image source={profile_pic}
                             style={{
-                                fontSize: 14,
-                                color: '#707070',
-                                fontFamily: 'Quicksand-Bold',
-                                marginRight: 10,
-                                marginLeft: 10,
-
-                            }}>{item.ratings}</Text>
-
+                                width: 36,
+                                borderRadius: 6,
+                                height: 36, marginRight: 10
+                            }} />
+                        <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
+                        <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 0, marginLeft: 6, alignItems: 'center', justifyContent: 'center' }}>
+                            {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 6, marginLeft: 6, textAlign: 'center' }}>Head Coach</Text> : null}
+                        </View>
                     </View>
-                    <Image source={require('../../images/right_icon.png')}
-                        style={{
-                            width: 6,
-                            height: 13,
-                            marginLeft: 10
-                        }} />
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={require('../../images/ic_star.png')}
+                            style={{
+                                width: 14,
+                                height: 14, marginRight: 6
+                            }} />
+                        <View style={{
+                            borderColor: '#DFDFDF',
+                            marginTop: 2, marginBottom: 2,
+                            borderWidth: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
+                        }}>
+                            <Text
+                                style={{
+                                    fontSize: 12,
+                                    color: '#707070',
+                                    fontFamily: 'Quicksand-Bold',
+                                    marginRight: 10,
+                                    marginLeft: 10,
+
+                                }}>{item.ratings.toFixed(1)}</Text>
+
+                        </View>
+                        <Image source={require('../../images/right_icon.png')}
+                            style={{
+                                width: 6,
+                                height: 13,
+                                marginLeft: 10
+                            }} />
+                    </View>
+
                 </View>
 
-            </View>
-
-        </TouchableOpacity>
-
-    );
+            </TouchableOpacity>
+        )
+    };
 
     sessionMangement(operations) {
 

@@ -6,6 +6,7 @@ import { getData } from "../../components/auth";
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
+import { COACH } from '../../components/Constants'
 
 
 import Svg, {
@@ -42,10 +43,30 @@ class TournamentFixture extends Component {
         this.state = {
             array: [],
             tournament_fixtures: [],
-            is_show_dialog: false
+            is_show_dialog: false,
+            tournament_id: '',
+            user_type: '',
+            is_coach: false
 
         }
+
+        getData('userInfo', (value) => {
+
+            if (value != '') {
+
+                let userData = JSON.parse(value)
+                let user_type = userData.user['user_type']
+                this.state.is_coach = user_type == COACH
+                this.setState({
+                    user_type: user_type
+                })
+            }
+        });
+
+
         this.dialogRef = React.createRef();
+        this.state.tournament_id = this.props.navigation.getParam('id')
+        console.warn('ID => ', this.state.tournament_id)
 
         //let data = this.props.navigation.getParam('data')
         // this.setState({
@@ -54,10 +75,12 @@ class TournamentFixture extends Component {
         //this.state.array = JSON.parse(data)
         console.warn('Fxitrue data' + this.state.array)
 
-        this.getFixtureData('3')
+        this.getFixtureData()
     }
 
-    getFixtureData(tournament_id) {
+    getFixtureData() {
+
+        let tournament_id = this.state.tournament_id
 
         getData('header', (value) => {
 
@@ -93,13 +116,6 @@ class TournamentFixture extends Component {
 
     showFixture(id) {
 
-        setTimeout(() => {
-            this.setState({
-                is_show_dialog: false
-            })
-            this.state.is_show_dialog = false
-            console.warn('show -> ', this.state.is_show_dialog)
-        }, 1000)
         if (id == undefined) {
             return
         }
@@ -121,6 +137,7 @@ class TournamentFixture extends Component {
             console.log('fixture array ', fixture_data)
 
             let playerArray = []
+            let firstArray = []
 
             for (var key in fixture_data) {
                 if (fixture_data.hasOwnProperty(key)) {
@@ -152,43 +169,98 @@ class TournamentFixture extends Component {
                             subArray.push(player2)
                         }
 
-                        if (obj.player1_match == null && player2 == null) {
+                        // if (obj.player1_match == null && player2 == null) {
+                        //     let newplayer1 = { ...player1 }
+                        //     newplayer1.name = "To be decided"
+                        //     subArray.push(newplayer1)
+                        // }
+
+                        if (playerArray.length > 0 && obj.player1 == null) {
                             let newplayer1 = { ...player1 }
-                            newplayer1.name = "To be decided"
+                            newplayer1.name = "To be played"
                             subArray.push(newplayer1)
                         }
 
+                        if (playerArray.length > 0 && obj.player2 == null) {
+                            let newplayer1 = { ...player1 }
+                            newplayer1.name = "To be played"
+                            subArray.push(newplayer1)
+                        }
+
+
+
+
+
                         //================================================
                         //special condition to check bye guy in first round only
-                        if (playerArray.length == 1 && obj.player1_match == null) {
 
-                            let round1Array = playerArray[0];
-                            let isExists = false
-                            for (let i = 0; i < round1Array.length; i++) {
+                        if (playerArray.length == 1) {
 
-                                if (round1Array[i].id == player1.id) {
-                                    isExists = true
-                                    break
+                            if (obj.player1_match == null) {
+
+                                let round1Array = playerArray[0];
+                                let isExists = false
+                                for (let i = 0; i < round1Array.length; i++) {
+
+                                    if (round1Array[i].id == player1.id) {
+                                        isExists = true
+                                        break
+                                    }
+                                }
+                                if (!isExists) {
+                                    let byePlayer = { ...player1, is_bye: true }
+
+                                    if (!this.isPlayerExistsInArray(firstArray, byePlayer.id)) {
+                                        firstArray.push(byePlayer)
+                                        firstArray.push(byePlayer)
+                                    }
+
+
+                                    let temp_round1_array = [...playerArray[0]]
+                                    let newArray = []
+                                    newArray.push(byePlayer)
+                                    newArray.push(byePlayer)
+                                    temp_round1_array.map((element, index) => {
+                                        console.warn('element => ', element)
+                                        newArray.push(temp_round1_array[index])
+                                    })
+
+                                    //newArray = [...newArray,temp_round1_array]
+                                    playerArray[0] = newArray
+                                    //playerArray[0].push(byePlayer)
+                                    //playerArray[0].push(byePlayer)
+                                    console.warn('bye guy => ', + "player1 => " + player1.name)
                                 }
                             }
-                            if (!isExists) {
-                                let byePlayer = { ...player1, is_bye: true }
-                                let temp_round1_array = [...playerArray[0]]
-                                let newArray = []
-                                newArray.push(byePlayer)
-                                newArray.push(byePlayer)
-                                temp_round1_array.map((element, index) => {
-                                    console.warn('element => ', element)
-                                    newArray.push(temp_round1_array[index])
-                                })
 
-                                //newArray = [...newArray,temp_round1_array]
-                                playerArray[0] = newArray
-                                //playerArray[0].push(byePlayer)
-                                //playerArray[0].push(byePlayer)
-                                console.warn('bye guy => ', + "player1 => " + player1.name)
+                            if (obj.player1_match) {
+
+                                let temp_player1 = obj.player1_match.player1
+                                let temp_player2 = obj.player1_match.player2
+
+                                if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
+                                    firstArray.push(temp_player1)
+                                }
+
+                                if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
+                                    firstArray.push(temp_player2)
+                                }
+                            }
+
+                            if (obj.player2_match) {
+
+                                let temp_player1 = obj.player2_match.player1
+                                let temp_player2 = obj.player2_match.player2
+                                if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
+                                    firstArray.push(temp_player1)
+                                }
+
+                                if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
+                                    firstArray.push(temp_player2)
+                                }
                             }
                         }
+
                         //===================== END =============================
 
                     }
@@ -196,10 +268,13 @@ class TournamentFixture extends Component {
                     if (subArray.length > 0)
                         playerArray.push(subArray)
 
+                    console.warn('First Round => ', JSON.stringify(firstArray))
                 }
             }
             console.log('Final => ', JSON.stringify(playerArray))
 
+            if (firstArray.length != 0)
+                playerArray[0] = firstArray
             this.setState({
                 array: playerArray
             })
@@ -213,6 +288,18 @@ class TournamentFixture extends Component {
         } else {
             alert('No data found.')
         }
+    }
+
+    isPlayerExistsInArray(array, id) {
+        let isExists = false
+        for (let i = 0; i < array.length; i++) {
+
+            if (array[i].id == id) {
+                isExists = true
+                break
+            }
+        }
+        return isExists
     }
 
     componentDidMount() {
@@ -337,10 +424,12 @@ class TournamentFixture extends Component {
                         ry="4"
                         onPress={() => {
 
-                            console.warn("Match : " + array[i][j].match_id)
-                            this.props.navigation.navigate('TournamentScorer', {
-                                match_id: array[i][j].match_id
-                            })
+                            if (this.state.is_coach) {
+                                console.warn("Match : " + array[i][j].match_id)
+                                this.props.navigation.navigate('TournamentScorer', {
+                                    match_id: array[i][j].match_id
+                                })
+                            }
                         }}
                         fill={color}>
 
@@ -548,6 +637,7 @@ class TournamentFixture extends Component {
                 </View>
             )
         }
+        console.warn('Show => ', this.state.is_show_dialog)
 
         return (
             <ScrollView contentContainerStyle={{ height: 1000 }}>
@@ -556,11 +646,14 @@ class TournamentFixture extends Component {
                     <TournamentCategoryDialog
                         tournament_fixture={this.state.tournament_fixtures}
                         touchOutside={(id) => {
-                            this.state.is_show_dialog=false
-                            // setTimeout(()=>{
-                            //     this.showFixture(id)
-                            // },200)
-                            
+                            this.state.is_show_dialog = false
+                            this.setState({
+                                is_show_dialog: false
+                            })
+                            setTimeout(() => {
+                                this.showFixture(id)
+                            }, 200)
+
                         }}
                         visible={this.state.is_show_dialog} />
 

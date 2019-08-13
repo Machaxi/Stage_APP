@@ -24,6 +24,7 @@ import EditOtherProfile from '../containers/profile/EditOtherProfile'
 import PlayerAttendance from "../containers/welcome/MyCalendar"
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
+import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 
 const userHomeModule = createStackNavigator({
 
@@ -159,7 +160,7 @@ const userHomeModule = createStackNavigator({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -224,7 +225,10 @@ const userHomeModule = createStackNavigator({
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showDrawer={true}
                 showBackAction={true}
+
             />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -232,7 +236,11 @@ const userHomeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
 
-    }
+    },
+    AcademyFilter: {
+        screen: AcademyFilter,
+
+    },
 
 });
 

@@ -2,8 +2,10 @@ import React from "react";
 import { Platform, StatusBar, Image, View, Dimensions, TouchableOpacity, Text, StyleSheet, ImageBackground } from "react-native";
 import { getData, storeData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
+import events from "./events";
+import BaseComponent, {GO_TO_HOME} from "../containers/BaseComponent";
 
-class RightMenuToolbar extends React.Component {
+class RightMenuToolbar extends BaseComponent {
 
     //==================================================================
     //          showNotification = true/false (show/hide)
@@ -30,6 +32,13 @@ class RightMenuToolbar extends React.Component {
             showHome = this.props.showHome
 
 
+        //for balance weightage
+        let show_empty = false
+        if (showHome == false && showNotification == false)
+        {
+            show_empty = true
+            console.warn('show-empty ',show_empty)
+        }    
 
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
@@ -48,65 +57,10 @@ class RightMenuToolbar extends React.Component {
                 {showHome ? <TouchableOpacity
                     activeOpacity={.8}
                     onPress={() => {
+                        setTimeout(() => {
+                            events.publish(GO_TO_HOME, msg);
 
-                        getData('userInfo', (value) => {
-                            let userData = (JSON.parse(value))
-                            // onSignIn()
-                            let userType = userData.user['user_type']
-                            console.log("SplashScreen=> ", JSON.stringify(userData));
-                            console.warn('userType ', userType)
-
-                            //console.warn('academy_id ', userData.academy_id)
-
-                            if (userType == GUEST) {
-                                this.props.navigation.navigate('GHome')
-                            }
-                            else {
-                                console.log('data=> ', userData);
-                                if (userType == GUEST) {
-                                    this.props.navigation.navigate('GHome')
-                                } else {
-
-                                    if (userType == PLAYER) {
-                                        //this.props.navigation.navigate('UHome')
-                                        // if (!userData.has_multiple_acadmies) {
-                                        //     this.props.navigation.navigate('UHome')
-
-                                        // } else {
-                                        //     this.props.navigation.navigate('SwitchPlayer', {
-                                        //         userType: 'PLAYER'
-                                        //     })
-                                        // }
-                                        this.props.navigation.navigate('UHome')
-
-                                    } else if (userType == COACH || userType == ACADEMY) {
-                                        //this.props.navigation.navigate('CHome')
-                                       // storeData('multiple', userData.has_multiple_acadmies)
-                                        // if (userData.has_multiple_acadmies == false) {
-                                        //     this.props.navigation.navigate('CHome')
-                                        // } else {
-                                        //     this.props.navigation.navigate('SwitchPlayer', {
-                                        //         userType: COACH
-                                        //     })
-                                        // }
-                                        this.props.navigation.navigate('CHome')
-                                    }
-                                    else if (userType == PARENT) {
-                                        //this.props.navigation.navigate('PHome')
-                                        // if (userData.has_multiple_acadmies == false) {
-                                        //     this.props.navigation.navigate('PHome')
-
-                                        // } else {
-                                        //     this.props.navigation.navigate('SwitchPlayer', {
-                                        //         userType: PLAYER
-                                        //     })
-                                        // }
-                                        this.props.navigation.navigate('PHome')
-                                    }
-                                }
-                            }
-                        });
-
+                        }, 100)
                     }}>
 
                     <Image
@@ -114,6 +68,12 @@ class RightMenuToolbar extends React.Component {
                         style={{ width: 20, height: 20, marginRight: 12 }}
                     />
                 </TouchableOpacity> : null}
+
+                {show_empty ?
+                    <Image
+                        style={{ width: 20, height: 20, marginRight: 12 }}
+                    />
+                    : null}
 
 
             </View>

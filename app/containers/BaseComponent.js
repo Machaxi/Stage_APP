@@ -172,7 +172,16 @@ export default class BaseComponent extends React.Component {
 }
 
 
+export function checkProfilePic(profile_pic) {
 
+
+    if (profile_pic != null) {
+        profile_pic = { uri: profile_pic }
+    } else {
+        profile_pic = require('../images/coach_photo.png')
+    }
+    return profile_pic
+}
 
 export function formattedName(name) {
 
@@ -208,6 +217,18 @@ export function getFormattedLevel(level) {
     return level
 }
 
+export function getFormattedTournamentType(level) {
+
+    switch (level) {
+        case "INTER_ACADEMY":
+            return "Inter-Academy"
+
+        case "INTRA_ACADEMY":
+            return "Intra-Academy"
+    }
+    return level
+}
+
 export function getFormattedCategory(category) {
 
     switch (category) {
@@ -224,6 +245,22 @@ export function getFormattedCategory(category) {
             return "U-17"
     }
     return category
+}
+
+export function getFormattedTournamentLevel(type) {
+
+    switch (type) {
+        case "SINGLE":
+            return "Single"
+
+        case "DOUBLE":
+            return "Double"
+
+        case "MIX_DOUBLE":
+            return "Mix Double"
+
+    }
+    return type
 }
 
 

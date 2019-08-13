@@ -43,14 +43,14 @@ export function getUpcomingTournament(header) {
 
 }
 
-export function getRegisteredTournament(header) {
-    console.log("getRegisteredTournament", header)
+export function getRegisteredTournament(header,filter) {
+    console.log("getRegisteredTournament", header,filter)
 
     return {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/registered`,
+                url: `tournament/registered?${filter}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -97,14 +97,14 @@ export function getPartnerList(header, tournament_id, page, size) {
 
 }
 
-export function getTournamentResultListing(header) {
-    console.log("getTournamentResultListing", header)
+export function getTournamentResultListing(header,filter) {
+    console.log("getTournamentResultListing", header,filter)
 
     return {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/results`,
+                url: `tournament/results?${filter}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

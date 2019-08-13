@@ -30,7 +30,7 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        //this.props.navigation.navigate('TournamentFixture')
+        //this.props.navigation.navigate('RegistrationSteps')
         //return
         var userData;
         // getData('userInfo', (value) => {
@@ -87,11 +87,9 @@ class Splash extends BaseComponent {
 
                     }
 
-                }, 10)
+                }, 2000)
             })
             .catch(err => alert("An error occurred"));
-
-
 
 
         // if (Platform.OS === 'android') {
@@ -122,8 +120,18 @@ class Splash extends BaseComponent {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
+                <Image
+                    resizeMode="contain"
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: "20%",
+                        width: "70%"
+                    }}
+                    source={require('../../images/dribble_logo.png')}
+                />
 
             </View>
         );

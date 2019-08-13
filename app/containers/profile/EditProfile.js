@@ -3,7 +3,7 @@ import React from 'react'
 import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
 import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
 import { getData, storeData } from "../../components/auth";
@@ -12,7 +12,9 @@ import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
 import moment from 'moment'
-
+import RNFetchBlob from 'rn-fetch-blob';
+import ImagePicker from 'react-native-image-picker';
+import { BASE_URL } from '../../../App'
 
 class EditProfile extends BaseComponent {
 
@@ -23,6 +25,9 @@ class EditProfile extends BaseComponent {
             txtname: '',
             txtphone: '',
             imageData: null,
+            profile_pic: null,
+            path: null,
+            fileName: null,
             is_navigation_to_tournament: false
         }
 
@@ -45,7 +50,8 @@ class EditProfile extends BaseComponent {
             this.setState({
                 txtname: userData.user['name'],
                 txtphone: userData.user['mobile_number'],
-                birthdate: userData.user['dob']
+                birthdate: userData.user['dob'],
+                profile_pic: userData.user['profile_pic']
             })
 
 
@@ -79,42 +85,99 @@ class EditProfile extends BaseComponent {
             alert('Name cannot be empty.')
         } else if (phone_number == '') {
             alert('Phone number can\'t be empty')
-        } else {
+        }
+        else if (birthdate == '') {
+            alert('Birth date is can\'t be empty')
+        }
+        else {
             getData('header', (value) => {
-                var formData = new FormData();
-                var dataDic = {};
+                //var formData = new FormData();
+                //var dataDic = {};
                 // data.append('file', this.state.imageData);
-                var dict = {};
+                // 
                 //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
                 //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
 
+                var dict = {};
                 this.progress(true)
                 dict['phone_number'] = phone_number;
                 dict['name'] = txtname;
                 dict['dob'] = birthdate;
-                formData.append('post', JSON.stringify(dict));
+                //formData.append('post', JSON.stringify(dict));
                 // console.log("header",value,batch_id);
 
-                this.props.saveUserStartupProfile(value, formData).then(() => {
+                let file = null
+                let path = this.state.path
+                let fileName = this.state.fileName
+                if (path != null) {
+                    file = { name: 'file', filename: fileName, data: path }
+                }
+                let param = []
+                if (file != null) {
+                    param.push(file)
+                }
+                let post = { name: 'post', data: JSON.stringify(dict) }
+                param.push(post)
+
+
+                let url = BASE_URL + 'user/profile'
+
+                RNFetchBlob.fetch('POST', url, {
+                    'Content-Type': 'multipart/form-data',
+                    'x-authorization': value,
+                }, param).then((resp) => {
+                    // this.progress(false)
+                    // console.log(resp);
+                    // alert('your image uploaded successfully');
+
                     this.progress(false)
-                    let data = this.props.data.profileData.data
-                    console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data));
-                   // alert('Success.')
-                    this.updatePrefData(JSON.stringify(data))
 
+                    let data = JSON.parse(resp.data)//JSON.parse(resp)
+                    console.warn('suces => ', data.success)
+                    console.log(' saveUserStartupProfile payload ' + data);
 
-                    if (this.state.is_navigation_to_tournament) {
-                        storeData(TOURNAMENT_REGISTER, '')
-                        this.props.navigation.navigate('RegistrationSteps')
-                    }else{
-                        this.props.navigation.goBack()
+                    let success = data.success
+                    if (success) {
+
+                        // alert('Success.')
+                        this.updatePrefData(JSON.stringify(data.data))
+
+                        if (this.state.is_navigation_to_tournament) {
+                            storeData(TOURNAMENT_REGISTER, '')
+                            this.props.navigation.navigate('RegistrationSteps')
+                        } else {
+                            this.props.navigation.goBack()
+                        }
                     }
 
-                }).catch((response) => {
-                    console.log(response);
+                }).catch((error) => {
+                    console.log('error => ', error)
                     this.progress(false)
-                    alert('Something went wrong.')
                 })
+
+
+
+
+                // this.props.saveUserStartupProfile(value, formData).then(() => {
+                //     this.progress(false)
+                //     let data = this.props.data.profileData.data
+                //     console.log(' saveUserStartupProfile payload ' + JSON.stringify(this.props.data));
+                //     // alert('Success.')
+                //     this.updatePrefData(JSON.stringify(data))
+
+
+                //     if (this.state.is_navigation_to_tournament) {
+                //         storeData(TOURNAMENT_REGISTER, '')
+                //         this.props.navigation.navigate('RegistrationSteps')
+                //     } else {
+                //         this.props.navigation.goBack()
+                //     }
+
+                // }).catch((response) => {
+                //     console.log(response);
+                //     this.progress(false)
+                //     alert('Something went wrong.')
+                // })
             })
         }
     }
@@ -138,7 +201,53 @@ class EditProfile extends BaseComponent {
         })
     }
 
+    pickImage() {
+
+        const options = {
+            title: 'Select Images',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                //const source = { uri: response.uri };
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+                let path = response.path
+                let fileName = response.fileName
+                this.setState({
+                    path: path,
+                    fileName: fileName
+                })
+            }
+        });
+
+    }
+
     render() {
+
+        let placeHolder = null
+        let profile_pic = this.state.profile_pic
+        let path = this.state.path
+        if (path != null) {
+            placeHolder = { uri: path }
+        }
+        else if (profile_pic == null) {
+            placeHolder = require('../../images/male_avatar_small.png')
+        } else {
+            placeHolder = { uri: profile_pic }
+        }
+
         return (
 
             <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
@@ -159,19 +268,15 @@ class EditProfile extends BaseComponent {
 
                         }}
                     >
-                        <PhotoUpload containerStyle={{ margin: 10 }}
-                            onPhotoSelect={avatar => {
-                                console.log('Image base64 string: ')
-                                if (avatar) {
-                                    this.setState({
-                                        imageData: avatar
-                                    })
-                                    console.log('Image base64 string: ', avatar)
-                                }
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.pickImage()
                             }}
                         >
+
                             <Image
                                 style={{
+
                                     paddingVertical: 0,
                                     width: 180,
                                     height: 240,
@@ -179,9 +284,9 @@ class EditProfile extends BaseComponent {
                                     // borderRadius: 75
                                 }}
                                 //  resizeMode='cover'
-                                source={require('../../images/edit_profile_holder.png')}
+                                source={placeHolder}
                             />
-                            <View style={{
+                            {/* <View style={{
                                 flex: 1,
                                 justifyContent: 'flex-end', marginBottom: 0,
                             }}>
@@ -203,8 +308,9 @@ class EditProfile extends BaseComponent {
                                         marginTop: 5
                                     }}  > Change Image</Text>
                                 </View>
-                            </View>
-                        </PhotoUpload>
+                            </View> */}
+                        </TouchableOpacity>
+
                         {/*<ImageBackground*/}
                         {/*style={{ width: 180, height: 240 }}*/}
                         {/*source={require('../../images/edit_profile_holder.png')}*/}
@@ -251,7 +357,7 @@ class EditProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                            <Text style={{ color: 'red' }}>*</Text>Phone Number
+                                <Text style={{ color: 'red' }}>*</Text>Phone Number
                     </Text>
 
                             <TextInput

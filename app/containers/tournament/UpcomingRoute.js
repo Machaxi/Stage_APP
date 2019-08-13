@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle, getFormattedTournamentType } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
@@ -32,7 +32,7 @@ class UpcomingRoute extends BaseComponent {
 
         getData('header', (value) => {
 
-            this.props.getUpcomingTournament(value,filter).then(() => {
+            this.props.getUpcomingTournament(value, filter).then(() => {
                 let data = this.props.data.data
                 console.log(' getUpcomingTournament ' + JSON.stringify(data));
 
@@ -71,7 +71,7 @@ class UpcomingRoute extends BaseComponent {
 
     onFilterSelected(data) {
         filterData = data
-        
+
         if (data != '') {
             //query_param = query
             //?gender_type=MALE&tournament_type=SINGLE&category_type=U10
@@ -82,8 +82,8 @@ class UpcomingRoute extends BaseComponent {
 
             let tournament_categories = filterData[0]
             let gender_types = filterData[1]
-            let tournament_type= filterData[2]
-            
+            let tournament_type = filterData[2]
+
 
             for (let i = 0; i < tournament_categories.data.length; i++) {
                 let obj = tournament_categories.data[i]
@@ -118,7 +118,7 @@ class UpcomingRoute extends BaseComponent {
             let query = gtype + "&" + ttype + "&" + ctype
             console.warn('selected = > ', query)
             this.selfComponentDidMount(query)
-        }else{
+        } else {
             this.selfComponentDidMount('')
         }
 
@@ -159,7 +159,7 @@ class UpcomingRoute extends BaseComponent {
 
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate('TournamentFilter',{
+                        this.props.navigation.navigate('TournamentFilter', {
                             onFilterSelected: this.onFilterSelected.bind(this),
                             filterData: filterData
                         })
@@ -171,7 +171,7 @@ class UpcomingRoute extends BaseComponent {
                         color: '#404040', fontSize: 12,
                         fontFamily: 'Quicksand-Regular'
                     }} >Filter</Text>
-                    
+
                 </TouchableOpacity>
                 <View style={{ width: '100%', height: 1, backgroundColor: '#d7d7d7' }}></View>
             </View>
@@ -239,8 +239,9 @@ class UpcomingRoute extends BaseComponent {
                             </Text>
 
                             <View style={defaultStyle.blue_rounded_4}>
-                                <Text style={[defaultStyle.regular_text_10, { color: 'white' }]} >
-                                    {item.academic_type}</Text>
+                                <Text style={[defaultStyle.bold_text_10, { color: 'white' }]} >
+                                    {getFormattedTournamentType(item.academic_type)}
+                                </Text>
                             </View>
                         </View>
 

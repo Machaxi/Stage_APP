@@ -27,7 +27,7 @@ class TournamentScorer extends BaseComponent {
             is_shown: false
         }
 
-        this.state.match_id = this.props.navigation.getParam('match_id', '')
+       this.state.match_id = this.props.navigation.getParam('match_id', '')
 
     }
 

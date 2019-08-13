@@ -18,6 +18,7 @@ import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import EditProfile from '../containers/profile/EditProfile'
 import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
+import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 
 const Switcher = createStackNavigator({
 
@@ -188,7 +189,10 @@ const Switcher = createStackNavigator({
         })
 
     },
+    AcademyFilter: {
+        screen: AcademyFilter,
 
+    },
 }
 );
 export default Switcher;

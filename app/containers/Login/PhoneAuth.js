@@ -86,8 +86,11 @@ class PhoneAuth extends BaseComponent {
             .then(confirmResult => {
                 this.progress(false)
                 this.setState({ confirmResult, message: 'Code has been sent!' })
+
+                console.log('Firebase error ',this.state.message)
             })
             .catch(error => {
+                console.log('Firebase error ',error)
                 this.progress(false)
             });
     };
@@ -552,14 +555,22 @@ class PhoneAuth extends BaseComponent {
                 />
 
 
-                <Text style={[defaultStyle.bold_text_14,
-                { color: "#A3A5AE", marginTop: 0, marginBottom: 10 }]}>
-                    Didn’t receive the OTP?
+                <TouchableOpacity
+                    onPress={() => {
+                        this.signIn()
+                    }}
+                >
+
+                    <Text style={[defaultStyle.bold_text_14,
+                    { color: "#A3A5AE", marginTop: 0, marginBottom: 10 }]}>
+                        Didn’t receive the OTP?
                     <Text style={{
-                        color: "#67BAF5", paddingLeft: 4,
-                        fontFamily: 'Quicksand-Medium',
-                    }}> RESEND</Text>
-                </Text>
+                            color: "#67BAF5", paddingLeft: 4,
+                            fontFamily: 'Quicksand-Medium',
+                        }}> RESEND</Text>
+                    </Text>
+                </TouchableOpacity>
+
 
                 <Text style={styles.rounded_button}
                     onPress={this.confirmCode}>Confirm</Text>
