@@ -102,7 +102,7 @@ class PerformencePlayerList extends BaseComponent {
             console.warn("Touch Press")
 
             this.props.navigation.navigate('UpdatePlayerPerformence', {
-                batch_id: '1', player_id: item.id, 
+                batch_id: this.props.navigation.getParam('batch_id'), player_id: item.id, 
                 month: this.props.navigation.getParam('month'), 
                 year: this.props.navigation.getParam('year'),
                 data:JSON.stringify(item)

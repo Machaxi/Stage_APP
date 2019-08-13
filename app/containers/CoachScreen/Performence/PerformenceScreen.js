@@ -112,7 +112,7 @@ class PerformenceScreen extends BaseComponent {
             <FlatList
                 data={item.batches}
                 renderItem={this.renderItem}
-                keyExtractor1={(item, index) => moment('06-' + item.month + '-' + item.year).format('MMM YY')}
+                keyExtractor2={(item, index) => moment('06-' + item.month + '-' + item.year).format('MMM YY')}
             />
         </View>
 
@@ -181,7 +181,7 @@ class PerformenceScreen extends BaseComponent {
                 <FlatList
                     data={this.state.batchList}
                     renderItem={this.renderItemSection}
-                    keyExtractor={(item, index) => item.id}
+                    keyExtractor4={(item, index) => item.id}
                 />
 
             </View>;
