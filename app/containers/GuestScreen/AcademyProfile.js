@@ -400,6 +400,8 @@ class AcademyProfile extends BaseComponent {
         const academy = this.state.academy
         const academy_reviews = this.state.academy.academy_reviews
         let gallery = this.state.academy.gallery
+        let about = academy.about
+        let facilities = academy.facilities
 
         return (
 
@@ -572,7 +574,7 @@ class AcademyProfile extends BaseComponent {
                                 limitLines={3}
                                 renderFooter={this.renderFooter} >
 
-                                <Text style={defaultStyle.regular_text_14}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                                <Text style={defaultStyle.regular_text_14}>{about}</Text>
 
                             </ReadMoreText>
                         </View>
@@ -605,17 +607,20 @@ class AcademyProfile extends BaseComponent {
 
                     </Card>
 
-                    <Card
-                        style={styles.card_style}>
+                    {facilities != null ?
+                        <Card
+                            style={styles.card_style}>
 
-                        <View style={{ padding: 12 }}>
+                            <View style={{ padding: 12 }}>
 
-                            <Text style={defaultStyle.bold_text_10}>Facilities</Text>
-                            <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={defaultStyle.regular_text_14}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
-                        </View>
+                                <Text style={defaultStyle.bold_text_10}>Facilities</Text>
+                                <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
+                                <Text style={defaultStyle.regular_text_14}>{facilities}</Text>
+                            </View>
 
-                    </Card>
+                        </Card> : null
+                    }
+
 
                     <Card
                         style={styles.card_style}>

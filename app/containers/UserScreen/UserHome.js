@@ -61,12 +61,12 @@ class UserHome extends BaseComponent {
             // navigation={navigation} />,
             headerBackground: (
 
-                <LinearGradient
-                    colors={['#332B70', '#332B70']}
-                    style={{ flex: 1 }}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0.5, y: 1 }}
-                    locations={[0.0, 0.35, 0.91]}
+                <ImageBackground
+                    style={{
+                        width: "100%",
+                        height: "100%"
+                    }}
+                    source={require('../../images/toolbar_bg.png')}
                 />
             ),
             headerLeft: (
@@ -412,6 +412,7 @@ class UserHome extends BaseComponent {
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
                     <PlayerHeader
+                        is_tooblar={true}
                         player_profile={this.state.player_profile}
                     />
 
