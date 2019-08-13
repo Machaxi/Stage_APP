@@ -5,7 +5,7 @@ import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle,checkProfilePic } from '../BaseComponent';
 import { getData } from "../../components/auth";
 import { RateViewFill, } from '../../components/Home/RateViewFill';
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
@@ -19,7 +19,7 @@ class CoachProfileDetail extends BaseComponent {
         super(props)
 
         this.state = {
-            coachData: {},
+            coachData: null,
             academy_id: '',
             coach_id: '',
             showFeedback: false,
@@ -237,6 +237,9 @@ class CoachProfileDetail extends BaseComponent {
         year = Math.floor(year)
         let month = coachData.experience % 12
         let rating = coachData.ratings == undefined ? 0 : coachData.ratings
+
+        let profile_pic = checkProfilePic(coachData.profile_pic)
+
         return (
             <ScrollView
                 contentContainerStyle={{
@@ -257,7 +260,7 @@ class CoachProfileDetail extends BaseComponent {
                         <View style={{ flexDirection: 'row' }}>
 
                             <Image style={{ height: 129, width: 129, borderRadius: 16 }}
-                                source={require('../../images/coach_photo.png')}
+                                source={profile_pic}
                             />
 
                             <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-end' }}>

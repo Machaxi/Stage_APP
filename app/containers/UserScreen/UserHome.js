@@ -431,11 +431,14 @@ class UserHome extends BaseComponent {
                                         backgroundColor: '#F9FBE9',
                                         paddingLeft: 12,
                                         paddingRight: 12,
+                                        justifyContent: 'space-between',
+                                        flexDirection: 'row',
                                         paddingTop: 16,
                                         paddingBottom: 12
                                     }}
                                 >
                                     <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                    <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
                                 </View>
                                 <View style={{ marginLeft: 12, marginRight: 12 }}>
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { createChallenge, getOpponentList } from '../../redux/reducers/ChallengeReducer'
 import { getData } from "../../components/auth";
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, getFormattedCategory, formattedName } from '../BaseComponent'
 import Events from '../../router/events';
 
 class OpponentList extends BaseComponent {
@@ -116,7 +116,9 @@ class OpponentList extends BaseComponent {
                                     <Text></Text>
                                     <Text style={[defaultStyle.bold_text_14, styles.modalHeadingText]}>Create Challenge </Text>
 
-                                    <TouchableOpacity onPress={() => { this.setModalVisible(false); }}>
+                                    <TouchableOpacity
+                                        activeOpacity={.8}
+                                        onPress={() => { this.setModalVisible(false); }}>
                                         <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
                                     </TouchableOpacity>
                                 </View>
@@ -217,35 +219,117 @@ class OpponentList extends BaseComponent {
                     selectedOpponentData: item
                 })
             }}>
-                <ImageBackground style={styles.playerBackImage} source={require('../../images/batch_card.png')}>
-                    <Text style={styles.playerScoreLabel}>Score</Text>
-                    <Text style={styles.playerScore}>{item.score}</Text>
+                <ImageBackground style={{ height: 180, width: '100%' }}
+                    source={require('../../images/batch_card.png')}
+                >
+                    <Text style={{ justifyContent: 'center', fontFamily: 'Quicksand-Medium', textAlign: 'center', color: '#F4F4F4', fontSize: 6, paddingTop: 6 }}>Score</Text>
+                    <Text style={{ justifyContent: 'center', textAlign: 'center', color: 'white', fontFamily: 'Quicksand-Medium', fontSize: 14 }}>{item.score == '' || item.score == undefined ? "-" : item.score}</Text>
 
-                    <View style={styles.middleBox}>
-                        <Text style={styles.playerCategory}>{item.player_category}</Text>
-                        <Image style={styles.playerImage} source={{ uri: item.profile_pic }}></Image>
-                        <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{item.player_level.split(" ").join("\n")}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        paddingTop: 10,
+                        marginLeft: 2, marginRight: 2
+                    }}>
+
+                        <Text
+                            style={{
+                                width: 26,
+                                height: 12,
+                                color: 'white',
+                                marginRight: 4,
+                                marginTop: 16,
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                backgroundColor: 'red',
+                                borderRadius: 4,
+                                fontSize: 8,
+                                paddingTop: 1
+                            }}
+                        >{getFormattedCategory(item.player_category)}</Text>
+                        <Image
+                            resizeMode="contain"
+                            style={{
+                                height: 80, width: 50,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}
+                            source={{ uri: item.profile_pic }}></Image>
+
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode="tail"
+                            style={{
+                                color: 'white',
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                fontSize: 6,
+                                marginLeft: 4,
+                                fontFamily: 'Quicksand-Medium',
+                                marginTop: 16,
+                            }}
+                        >{item.player_level.split(" ").join("\n")}</Text>
                     </View>
 
-                    <View style={styles.playerNameOuter}>
-                        <Text style={styles.playerName}>{item.name}</Text>
+                    <View style={{
+                        position: 'absolute',
+                        marginTop: 103,
+                        width: "100%", height: 23, backgroundColor: 'white'
+                    }}>
+
+                        <Text style={{
+                            color: '#404040',
+                            fontSize: 16,
+                            textAlign: 'center',
+                            fontFamily: 'Quicksand-Medium'
+                        }}>{formattedName(item.name)}</Text>
                     </View>
 
-                    <View style={styles.badgeOuter}>
-                        <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
-                            <View style={styles.badgeInner}>
-                                <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
-                                <Text style={styles.badgeValue}>{item.badge}</Text>
-                                <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                    <View style={{
+                        justifyContent: 'center', alignItems: 'center',
+                        marginTop: 8
+                    }}>
+
+                        <ImageBackground
+                            style={{
+                                height: 38, width: 57, justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            source={require('../../images/single_shield.png')}>
+
+
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                            }}>
+                                <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>
+                                    {item.badge == undefined ? '' : item.badge}
+                                </Text>
+
                             </View>
                         </ImageBackground>
+
+
+
+
                     </View>
+
                 </ImageBackground>
             </TouchableOpacity>
         </View>
     );
 
     render() {
+
+        if (this.props.data.loading && !this.state.opponentData.length==0) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
+
         let data = this.state.opponentData
         return (
             <View style={styles.chartContainer}>
@@ -371,37 +455,36 @@ const styles = StyleSheet.create({
         fontSize: 8,
         paddingTop: 1,
         fontFamily: 'Quicksand-Regular'
-    },
-    playerImage: {
-        height: 80,
+      },
+      playerImage: {
+        height: 65,
         width: 50,
         justifyContent: 'center',
         alignSelf: 'center'
-    },
-    playerLevel: {
+      },
+      playerLevel: {
         color: 'white',
         alignItems: 'center',
         alignSelf: 'center',
         textAlign: 'center',
-        fontSize: 8,
+        fontSize: 7,
         marginLeft: 4,
         marginTop: 16,
         fontFamily: 'Quicksand-Regular'
-    },
-    playerNameOuter: {
+      },
+      playerNameOuter: {
         position: 'absolute',
-        marginTop: 116,
+        marginTop: 102,
         width: "100%",
-        height: 20,
+        height: 24,
         backgroundColor: 'white'
-    },
-    playerName: {
+      },
+      playerName: {
         color: '#404040',
-        fontWeight: 16,
-        fontWeight: '500',
+        fontSize: 16,
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
-    },
+        fontFamily: 'Quicksand-Medium'
+      },
     badgeOuter: {
         justifyContent: 'center',
         alignItems: 'center',

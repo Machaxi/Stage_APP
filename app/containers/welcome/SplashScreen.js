@@ -30,7 +30,7 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        //this.props.navigation.navigate('GHome')
+        //this.props.navigation.navigate('RegistrationSteps')
         //return
         var userData;
         // getData('userInfo', (value) => {

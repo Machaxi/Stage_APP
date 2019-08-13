@@ -240,7 +240,7 @@ const GuestHomeModule = createStackNavigator({
             title: "Edit Profile",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -634,7 +634,7 @@ const coachHomeModule = createStackNavigator({
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-            navigation={navigation} showNotification={false} />,
+                navigation={navigation} showNotification={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -645,13 +645,13 @@ const coachHomeModule = createStackNavigator({
         screen: ChallengeDisputeScreen,
         navigationOptions: ({ navigation }) => ({
             title: "Challenge Dispute",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true}/>,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
-            }, 
+            },
         }),
     },
     TournamentScorer: {
@@ -671,6 +671,10 @@ const coachHomeModule = createStackNavigator({
 
             headerTintColor: '#000',
         }),
+    },
+    AcademyFilter: {
+        screen: AcademyFilter,
+
     },
 }, {
         contentComponent: ({ navigation }) => {
@@ -739,7 +743,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
-        }    
+        }
     })
 
 
@@ -1098,7 +1102,10 @@ const parentHomeModule = createStackNavigator({
         })
 
     },
+    AcademyFilter: {
+        screen: AcademyFilter,
 
+    },
 }
 );
 
@@ -1220,7 +1227,7 @@ const TournamentRegistration = createStackNavigator({
         //     headerTintColor: '#000',
         // }),
     },
-    
+
     AddPartner: {
         screen: AddPartner,
         navigationOptions: ({ navigation }) => ({

@@ -23,14 +23,14 @@ export const getData = async (key, callback) => {
     try {
 
         const value = await AsyncStorage.getItem(key);
-        console.log("GetData", key + " : " + value)
+        //console.log("GetData", key + " : " + value)
         if (value !== null) {
             callback(value)
         }else{
             callback('')
         }
     } catch (error) {
-        console.log("ErrorGetData", key + " Error " + error)
+        //console.log("ErrorGetData", key + " Error " + error)
         callback('')
     }
 };

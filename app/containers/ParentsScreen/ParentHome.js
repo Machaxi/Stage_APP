@@ -61,7 +61,7 @@ class ParentHome extends BaseComponent {
             // navigation={navigation} />,
             headerBackground: (
                 <LinearGradient
-                    colors={['#332B70', '#24262A']}
+                    colors={['#332B70', '#332B70']}
                     style={{ flex: 1 }}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 2.5, y: 0 }}
@@ -406,11 +406,15 @@ class ParentHome extends BaseComponent {
                                         backgroundColor: '#F9FBE9',
                                         paddingLeft: 12,
                                         paddingRight: 12,
+                                        justifyContent: 'space-between',
+                                        flexDirection: 'row',
                                         paddingTop: 16,
                                         paddingBottom: 12
                                     }}
                                 >
                                     <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                    <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
+
                                 </View>
                                 <View style={{ marginLeft: 12, marginRight: 12 }}>
 

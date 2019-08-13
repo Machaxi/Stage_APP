@@ -2,8 +2,10 @@ import React from "react";
 import { Platform, StatusBar, Image, View, Dimensions, TouchableOpacity, Text, StyleSheet, ImageBackground } from "react-native";
 import { getData, storeData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
+import events from "./events";
+import BaseComponent, {GO_TO_HOME} from "../containers/BaseComponent";
 
-class RightMenuToolbar extends React.Component {
+class RightMenuToolbar extends BaseComponent {
 
     //==================================================================
     //          showNotification = true/false (show/hide)
@@ -55,8 +57,10 @@ class RightMenuToolbar extends React.Component {
                 {showHome ? <TouchableOpacity
                     activeOpacity={.8}
                     onPress={() => {
+                        setTimeout(() => {
+                            events.publish(GO_TO_HOME, msg);
 
-
+                        }, 100)
                     }}>
 
                     <Image

@@ -44,6 +44,7 @@
     "redux-axios-middleware": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "rn-fetch-blob": "^0.10.15",
     "rn-read-more-text": "0.0.5"
   },
   "devDependencies": {

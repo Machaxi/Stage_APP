@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, GO_TO_HOME, TEMP_USER_INFO } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel } from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
@@ -688,7 +688,7 @@ class RegistrationSteps extends BaseComponent {
                                                 fontFamily: 'Quicksand-Regular',
                                                 fontWeight: '0'
                                             }}
-                                            title={item.tournament_type}
+                                            title={getFormattedTournamentLevel(item.tournament_type)}
                                             containerStyle={{
                                                 backgroundColor: 'white',
                                                 borderWidth: 0,
@@ -861,7 +861,7 @@ class RegistrationSteps extends BaseComponent {
                                 } else if (!is_double_player_selected) {
                                     //alert()
                                     this.setState({
-                                        alert_msg: 'Please select partner for ' + typeName
+                                        alert_msg: 'Please select partner for ' + getFormattedTournamentLevel(typeName)
                                     })
                                 } else {
                                     this.setState({
@@ -1184,7 +1184,7 @@ class RegistrationSteps extends BaseComponent {
                     fontSize: 10,
                     color: '#A3A5AE'
                 }}>
-                    {item.tournament_type}</Text>
+                    {getFormattedTournamentLevel(item.tournament_type)}</Text>
                 <Text style={{
                     marginTop: 4,
                     fontFamily: 'Quicksand-Regular',

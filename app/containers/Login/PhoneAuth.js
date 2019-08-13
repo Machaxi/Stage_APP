@@ -86,8 +86,11 @@ class PhoneAuth extends BaseComponent {
             .then(confirmResult => {
                 this.progress(false)
                 this.setState({ confirmResult, message: 'Code has been sent!' })
+
+                console.log('Firebase error ',this.state.message)
             })
             .catch(error => {
+                console.log('Firebase error ',error)
                 this.progress(false)
             });
     };

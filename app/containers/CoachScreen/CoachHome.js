@@ -454,11 +454,17 @@ class CoachHome extends BaseComponent {
                                 style={{
                                     marginLeft: 12,
                                     marginRight: 12,
-                                    marginTop: 16
+                                    marginTop: 16,
+
                                 }} >
                                 <View
-                                    style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between'
+                                    }}>
                                     <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
+                                    <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
+
                                     {/* {operations.attendance.attendance != undefined ?
                                     <Text style={{ color: '#667DDB' }}>{'Attendance  - ' + operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
                                     : null
