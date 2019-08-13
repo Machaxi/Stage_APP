@@ -20,13 +20,23 @@ export default class PlayerHeader extends BaseComponent {
             player_category, operations } =
             this.props.player_profile
 
+        // let is_toolbar = this.props.is_toolbar
+        // console.warn('is_toolbar = ',is_toolbar)
+        // if (is_toolbar == undefined)
+        //     is_toolbar = false
+
+        let is_toolbar = false
+        let bg_img = require('../../images/toolbar_bottom.png')//require('../../images/RectangleImg.png')
+        if (is_toolbar) {
+            bg_img = require('../../images/toolbar_bottom.png')
+        }
+
         let newName = formattedName(name)
 
         return (
             <View style={{ width: '100%', height: 290, }}>
                 <ImageBackground
-
-                    source={require('../../images/RectangleImg.png')}
+                    source={bg_img}
                     style={{
                         width: '100%',
                         height: '100%',

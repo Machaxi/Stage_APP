@@ -28,7 +28,8 @@ class EditProfile extends BaseComponent {
             profile_pic: null,
             path: null,
             fileName: null,
-            is_navigation_to_tournament: false
+            is_navigation_to_tournament: false,
+            base64img: null
         }
 
         getData(TOURNAMENT_REGISTER, (value) => {
@@ -76,6 +77,10 @@ class EditProfile extends BaseComponent {
         let txtname = this.state.txtname
         let phone_number = this.state.txtphone
         let birthdate = this.state.birthdate
+        console.warn('Birth ', birthdate)
+
+        if (birthdate == null)
+            birthdate = ''
         if (birthdate != '') {
             birthdate = moment.utc(birthdate).local().format("YYYY-MM-DD")
         }
@@ -85,9 +90,6 @@ class EditProfile extends BaseComponent {
             alert('Name cannot be empty.')
         } else if (phone_number == '') {
             alert('Phone number can\'t be empty')
-        }
-        else if (birthdate == '') {
-            alert('Birth date is can\'t be empty')
         }
         else {
             getData('header', (value) => {
@@ -116,9 +118,11 @@ class EditProfile extends BaseComponent {
                 if (file != null) {
                     param.push(file)
                 }
+                console.warn('file => ', JSON.stringify(file))
                 let post = { name: 'post', data: JSON.stringify(dict) }
                 param.push(post)
 
+                console.log('profile data=> ', JSON.stringify(dict))
 
                 let url = BASE_URL + 'user/profile'
 
@@ -134,7 +138,7 @@ class EditProfile extends BaseComponent {
 
                     let data = JSON.parse(resp.data)//JSON.parse(resp)
                     console.warn('suces => ', data.success)
-                    console.log(' saveUserStartupProfile payload ' + data);
+                    console.log(' saveUserStartupProfile payload ' + JSON.stringify(data));
 
                     let success = data.success
                     if (success) {
@@ -225,10 +229,15 @@ class EditProfile extends BaseComponent {
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
                 let path = response.path
                 let fileName = response.fileName
+                let base64 = 'data:image/jpeg;base64,' + response.data
                 this.setState({
                     path: path,
-                    fileName: fileName
+                    fileName: fileName,
+                    base64img: base64
                 })
+                //console.warn('path => ',this.state.path)
+                //console.warn('fileName => ',this.state.fileName)
+
             }
         });
 
@@ -236,11 +245,12 @@ class EditProfile extends BaseComponent {
 
     render() {
 
+        console.log('base64img => ', base64img)
         let placeHolder = null
         let profile_pic = this.state.profile_pic
-        let path = this.state.path
-        if (path != null) {
-            placeHolder = { uri: path }
+        let base64img = this.state.base64img
+        if (base64img != null) {
+            placeHolder = { uri: base64img }//{path}
         }
         else if (profile_pic == null) {
             placeHolder = require('../../images/male_avatar_small.png')

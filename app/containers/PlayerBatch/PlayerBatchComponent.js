@@ -58,6 +58,10 @@ class PlayerBatchComponent extends BaseComponent {
     renderItem = ({ item }) => {
 
         let profile_pic = checkProfilePic(item.profile_pic)
+        let ratings = item.ratings
+        if (ratings == null)
+            ratings = 0
+        ratings = ratings.toFixed(1)
 
         return (
             <TouchableOpacity key={item} onPress={() => {
@@ -106,7 +110,7 @@ class PlayerBatchComponent extends BaseComponent {
                                     marginRight: 10,
                                     marginLeft: 10,
 
-                                }}>{item.ratings.toFixed(1)}</Text>
+                                }}>{ratings}</Text>
 
                         </View>
                         <Image source={require('../../images/right_icon.png')}

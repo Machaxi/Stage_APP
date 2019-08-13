@@ -42,7 +42,7 @@ class EditOtherProfile extends BaseComponent {
 
         let date = this.state.birthdate
         //console.warn('date = >', date)
-        if (date!=null && date != '') {
+        if (date != null && date != '') {
             date = date.split('T')
             //console.warn('date = >', date[0])
             date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
@@ -64,6 +64,9 @@ class EditOtherProfile extends BaseComponent {
         let txtname = this.state.txtname;
         let txtphone = this.state.txtphone;
         let dob = this.state.birthdate;
+        if (dob == null)
+            dob = ''
+
         if (dob != '') {
             dob = moment.utc(dob).local().format("YYYY-MM-DD")
         }
