@@ -11,6 +11,7 @@ import { RateViewFill, } from '../../components/Home/RateViewFill';
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import ReadMoreText from "rn-read-more-text";
+import FilterDialog from './FilterDialog'
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -22,7 +23,10 @@ class CoachProfileDetail extends BaseComponent {
             academy_id: '',
             coach_id: '',
             showFeedback: false,
-            feedback: []
+            feedback: [],
+            filter_dialog: false,
+            sortType: '',
+            type: '',
         }
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.coach_id = this.props.navigation.getParam('coach_id', '')
@@ -41,15 +45,20 @@ class CoachProfileDetail extends BaseComponent {
         });
     }
 
-    getCoachFeedbacks() {
+    getCoachFeedbacks(sortType, type, showLoading) {
 
+        this.setState({
+            sortType: sortType,
+            type: type
+
+        })
+        let sort = sortType
         let coach_id = this.state.coach_id;
         let academy_id = this.state.academy_id
         let page = 0
         let size = 10
-        let sort = ''
 
-        this.props.getCoachFeedbackList('', academy_id, coach_id, page, size, sort).then(() => {
+        this.props.getCoachFeedbackList('', academy_id, coach_id, page, size, sort, type).then(() => {
             console.log('getCoachFeedbackList=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
             if (status) {
@@ -71,6 +80,7 @@ class CoachProfileDetail extends BaseComponent {
 
         let coach_id = this.state.coach_id
 
+
         this.props.coachDetail(coach_id).then(() => {
             console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
@@ -79,7 +89,11 @@ class CoachProfileDetail extends BaseComponent {
                 this.setState({
                     coachData: coach
                 })
-                this.getCoachFeedbacks()
+
+                let sortType = this.state.sortType
+                let type = this.state.type
+
+                this.getCoachFeedbacks(sortType, type, false)
 
             }
 
@@ -88,6 +102,28 @@ class CoachProfileDetail extends BaseComponent {
         })
 
     }
+
+    sort(id, type) {
+
+        this.state.filter_dialog = false
+        this.setState({
+            filter_dialog: false
+        })
+
+
+        if (id == undefined || type == undefined) {
+            return
+        }
+        this.state.page = 0
+        this.state.clear_feedback_array = true
+
+        setTimeout(() => {
+            this.getCoachFeedbacks(id, type)
+        }, 100)
+
+        // 
+    }
+
 
     _renderRatingItem = ({ item }) => (
 
@@ -181,10 +217,13 @@ class CoachProfileDetail extends BaseComponent {
                 {isShowingAll ? "Show less" : "Show more"}
             </Text></View>
     );
+
     render() {
 
+        let filter_dialog = this.state.filter_dialog
+
         let showFeedback = this.state.showFeedback
-        if (this.props.data.loading || this.state.coachData == null) {
+        if (this.state.coachData == null) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -206,6 +245,12 @@ class CoachProfileDetail extends BaseComponent {
                 style={styles.chartContainer}>
 
                 <View>
+
+                    <FilterDialog
+                        touchOutside={(id, type) => {
+                            this.sort(id, type, true)
+                        }}
+                        visible={filter_dialog} />
 
                     <View style={{ padding: 16 }}>
 
@@ -392,17 +437,27 @@ class CoachProfileDetail extends BaseComponent {
                                         Reviews ({this.state.feedback.length})
                             </Text>
 
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Text
-                                            style={defaultStyle.regular_text_12}
-                                        >Sort </Text>
-                                        <Image
-                                            resizeMode="contain"
-                                            style={{ width: 24, height: 15, }}
-                                            source={require('../../images/filter_rating.png')}
-                                        ></Image>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.setState({
+                                                filter_dialog: true
+                                            })
+                                        }}
+                                    >
 
-                                    </View>
+
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Text
+                                                style={defaultStyle.regular_text_12}
+                                            >Sort </Text>
+                                            <Image
+                                                resizeMode="contain"
+                                                style={{ width: 24, height: 15, }}
+                                                source={require('../../images/filter_rating.png')}
+                                            ></Image>
+
+                                        </View>
+                                    </TouchableOpacity>
 
                                 </View>
 
@@ -415,7 +470,18 @@ class CoachProfileDetail extends BaseComponent {
 
 
                             <FlatList
+                                onEndReachedThreshold={0.5}
+                                onEndReached={({ distanceFromEnd }) => {
+                                    console.log('on end reached ', distanceFromEnd);
+                                    let page = this.state.page
+                                    page = page + 1
+                                    this.state.page = page
 
+                                    console.log('page => ', this.state.page)
+                                    let sortType = this.state.sortType
+                                    let type = this.state.type
+                                    this.getCoachFeedbacks(sortType, type, false)
+                                }}
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}
