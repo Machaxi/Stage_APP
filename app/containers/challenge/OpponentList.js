@@ -21,7 +21,8 @@ class OpponentList extends BaseComponent {
             academy_id: null,
             player_id: null,
             selectedOpponentData: null,
-            playerData: null
+            playerData: null,
+            originalOpponentData: null
         }
         this.state.id = this.props.navigation.getParam('id', '');
         this.state.playerData = this.props.navigation.getParam('playerData');
@@ -48,6 +49,7 @@ class OpponentList extends BaseComponent {
 
                         this.setState({
                             opponentData: data.data.players,
+                            originalOpponentData: data.data.players
                         })
                     }
 
@@ -61,6 +63,17 @@ class OpponentList extends BaseComponent {
 
     setModalVisible(visible) {
         this.setState({ modalVisible: visible });
+    }
+
+     find(query) {
+        const { opponentData } = this.state;
+        console.warn('here =>', opponentData)
+
+        if (query === '') {
+            return this.state.originalOpponentData;
+        }
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        return opponentData.filter(item => item.name.search(regex) >= 0);
     }
 
     saveData() {
@@ -98,7 +111,13 @@ class OpponentList extends BaseComponent {
         return (
             <View style={styles.searchOuter}>
                 <Card style={styles.searchCard}>
-                    <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => { this.state.query = text }}></TextInput>
+                    <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => { this.state.query = text
+                        const data = this.find(this.state.query);
+                        this.state.opponentData = data;
+                        this.setState({
+                            opponentData: data
+                        })
+                     }}></TextInput>
                 </Card>
                 <Text style={styles.filterLabel} >Filter</Text>
             </View>
@@ -133,21 +152,21 @@ class OpponentList extends BaseComponent {
                                                 <Text style={styles.playerScore}>{this.state.playerData.score}</Text>
 
                                                 <View style={styles.middleBox}>
-                                                    <Text style={styles.playerCategory}>{this.state.playerData.player_category}</Text>
-                                                    <Image style={styles.playerImage} source={{ uri: this.state.playerData.profile_pic }}></Image>
+                                                    <Text style={styles.playerCategory}>{getFormattedCategory(this.state.playerData.player_category)}</Text>
+                                                    <Image resizeMode="contain" style={styles.playerImage} source={{ uri: this.state.playerData.profile_pic }}></Image>
                                                     <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{this.state.playerData.player_level.split(" ").join("\n")}</Text>
                                                 </View>
 
                                                 <View style={styles.playerNameOuter}>
-                                                    <Text style={styles.playerName}>{this.state.playerData.name}</Text>
+                                                    <Text style={styles.playerName}>{formattedName(this.state.playerData.name)}</Text>
                                                 </View>
 
                                                 <View style={styles.badgeOuter}>
-                                                    <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                                                    <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                                         <View style={styles.badgeInner}>
-                                                            <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
-                                                            <Text style={styles.badgeValue}>{this.state.playerData.badge}</Text>
-                                                            <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                                                            {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
+                                                            <Text style={[defaultStyle.bebas_text_blue_10,styles.badgeValue]}>{this.state.playerData.badge==undefined ? '': this.state.playerData.badge}</Text>
+                                                            {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                                         </View>
                                                     </ImageBackground>
                                                 </View>
@@ -170,21 +189,21 @@ class OpponentList extends BaseComponent {
                                                         <Text style={styles.playerScore}>{this.state.selectedOpponentData.score}</Text>
 
                                                         <View style={styles.middleBox}>
-                                                            <Text style={styles.playerCategory}>{this.state.selectedOpponentData.player_category}</Text>
-                                                            <Image style={styles.playerImage} source={{ uri: this.state.selectedOpponentData.profile_pic }}></Image>
+                                                            <Text style={styles.playerCategory}>{getFormattedCategory(this.state.selectedOpponentData.player_category)}</Text>
+                                                            <Image resizeMode="contain" style={styles.playerImage} source={{ uri: this.state.selectedOpponentData.profile_pic }}></Image>
                                                             <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{this.state.selectedOpponentData.player_level.split(" ").join("\n")}</Text>
                                                         </View>
 
                                                         <View style={styles.playerNameOuter}>
-                                                            <Text style={styles.playerName}>{this.state.selectedOpponentData.name}</Text>
+                                                            <Text style={styles.playerName}>{formattedName(this.state.selectedOpponentData.name)}</Text>
                                                         </View>
 
                                                         <View style={styles.badgeOuter}>
-                                                            <ImageBackground style={styles.badgeBackImage} source={require('../../images/batch_pink.png')}>
+                                                            <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                                                 <View style={styles.badgeInner}>
-                                                                    <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image>
-                                                                    <Text style={styles.badgeValue}>{this.state.selectedOpponentData.badge}</Text>
-                                                                    <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image>
+                                                                    {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
+                                                                    <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{this.state.selectedOpponentData.badge}</Text>
+                                                                    {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                                                 </View>
                                                             </ImageBackground>
                                                         </View>
@@ -416,28 +435,27 @@ const styles = StyleSheet.create({
         marginBottom: 16
     },
     playerBackImage: {
-        height: 200,
+        height: 182,
         width: '100%'
     },
     playerScoreLabel: {
         justifyContent: 'center',
         textAlign: 'center',
-        color: 'white',
-        fontSize: 8,
+        color: '#F4F4F4',
+        fontSize: 6,
         paddingTop: 6,
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
     playerScore: {
         justifyContent: 'center',
         textAlign: 'center',
-        fontWeight: 'bold',
         color: 'white',
-        fontSize: 13,
-        fontFamily: 'Quicksand-Regular'
+        fontSize: 14,
+        fontFamily: 'Quicksand-Medium'
     },
     middleBox: {
         flexDirection: 'row',
-        paddingTop: 13,
+        paddingTop: 10,
         marginLeft: 2,
         marginRight: 2,
     },
@@ -457,7 +475,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Quicksand-Regular'
       },
       playerImage: {
-        height: 65,
+        height: 80,
         width: 50,
         justifyContent: 'center',
         alignSelf: 'center'
@@ -474,9 +492,9 @@ const styles = StyleSheet.create({
       },
       playerNameOuter: {
         position: 'absolute',
-        marginTop: 102,
+        marginTop: 103,
         width: "100%",
-        height: 24,
+        height: 23,
         backgroundColor: 'white'
       },
       playerName: {
@@ -488,11 +506,11 @@ const styles = StyleSheet.create({
     badgeOuter: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 15
+        marginTop: 8
     },
     badgeBackImage: {
         height: 38,
-        width: 25,
+        width: 57,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -500,9 +518,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        backgroundColor: '#485FA0',
-        height: 6,
-        width: '120%'
     },
     badgeLeftArrow: {
         height: 7,
@@ -512,8 +527,6 @@ const styles = StyleSheet.create({
     badgeValue: {
         fontSize: 5,
         color: 'white',
-        textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
     },
     badgeRightArrow: {
         height: 7,

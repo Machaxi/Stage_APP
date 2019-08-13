@@ -4,7 +4,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Animated from 'react-native-reanimated';
 import DashboardRoute from './DashboardRoute';
 import ResultsRoute from './ResultsRoute'
-import RegisteredRoute from '../tournament/RegisteredRoute'
+import LeaderboardRoute from './LeaderBoardRoute'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { Button } from 'react-native-paper';
 import firebase from "react-native-firebase";
@@ -69,7 +69,7 @@ class ChallengeHome extends BaseComponent {
             case 'second':
                 return <ResultsRoute navigation={this.props.navigation} />
             case 'third':
-                return <RegisteredRoute navigation={this.props.navigation} />
+                return <LeaderboardRoute navigation={this.props.navigation} />
         }
     };
 

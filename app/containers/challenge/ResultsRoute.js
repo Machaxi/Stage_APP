@@ -116,7 +116,7 @@ class ResultsRoute extends BaseComponent {
 
     <View>
       <View style={styles.totalResultsValueOuter}>
-        <Text style={styles.opponentValue}>{item.opponent.name}</Text>
+        <Text style={styles.opponentValue}>{item.challenge_by.name}</Text>
         <Text style={styles.scoreValue}>{item.score}</Text>
         <View style={styles.resultOuter}>
           <View style={{ flex: 1, flexDirection: 'row' }}>

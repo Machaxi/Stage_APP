@@ -83,7 +83,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       this.props.acceptChallenge(value, challengeId).then(() => {
         let data = this.props.data.data
-        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
@@ -239,7 +239,7 @@ class DashboardRoute extends BaseComponent {
                   <Text></Text>
                   <Text style={[defaultStyle.bold_text_14, styles.modalHeadingText]}>Update Score</Text>
 
-                  <TouchableOpacity onPress={() => { this.setModalVisible(false); }}>
+                  <TouchableOpacity activeOpacity={.8} onPress={() => { this.setModalVisible(false); }}>
                     <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
                   </TouchableOpacity>
                 </View>
@@ -251,11 +251,11 @@ class DashboardRoute extends BaseComponent {
                         source={require('../../images/batch_card.png')}
                       >
                         <Text style={styles.playerScoreLabel}>Score</Text>
-                        <Text style={styles.playerScore}>{data.score}</Text>
+                        <Text style={styles.playerScore}>{data.score=='' || data.score==undefined ? "-": data.score}</Text>
 
                         <View style={styles.middleBox}>
                           <Text style={styles.playerCategory}>{getFormattedCategory(data.player_category)}</Text>
-                          <Image style={styles.playerImage} source={{ uri: data.profile_pic }}></Image>
+                          <Image resizeMode="contain" style={styles.playerImage} source={{ uri: data.profile_pic }}></Image>
                           <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{data.player_level.split(" ").join("\n")}</Text>
                         </View>
 
@@ -267,7 +267,7 @@ class DashboardRoute extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={styles.badgeValue}>{data.badge}</Text>
+                              <Text style={[defaultStyle.bebas_text_blue_10,styles.badgeValue]}>{data.badge== undefined ? '' : data.badge}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -363,12 +363,12 @@ class DashboardRoute extends BaseComponent {
 
 
     <View>
-      <TouchableOpacity activeOpacity={.8} onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
+      <TouchableOpacity activeOpacity={.8}>
         <Card style={styles.challengePlayerCard}>
           <Text style={[styles.cardHeading, { marginHorizontal: 16 }]}>Create Challenge</Text>
           <View style={styles.playerCardOuter}>
             <View style={styles.playerCard}>
-              <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
+              <TouchableOpacity>
                 <ImageBackground style={styles.playerBackImage}
                   source={require('../../images/batch_card.png')}
                 >
@@ -428,7 +428,28 @@ class DashboardRoute extends BaseComponent {
 
               {item.opponent.id == this.state.player_id ?
                 <View>
-                  <Text style={styles.cardHeading}>You have been challenged</Text>
+                   <View style={styles.acceptCardHeadingOuter}>
+                    <View style={styles.acceptCardHeading}>
+                      <Text style={styles.acceptCardheadingText}>You have been challenged</Text>
+                      {
+                        item.challenge_status == 'ACCEPTED' &&
+                        <Text style={styles.statusLabel}> Accepted </Text>
+                      }
+                      {
+                        item.challenge_status == 'REJECTED' &&
+                        <Text style={styles.statusErrorLabel}> Rejected </Text>
+                      }
+                    </View>
+                    {
+                      (item.challenge_status == 'ACCEPTED') &&
+
+                    <Text style={styles.actionLabel} onPress={() => { this.abortTheChallenge(item.id) }}>Abort</Text> }
+                    { (item.challenge_status == 'REJECTED') &&
+                        <Text style={styles.actionDismissLabel} onPress={() => { this.dismissTheChallenge(item.id) }}>Dismiss</Text>
+                    }
+
+                  </View>
+                  {/* <Text style={styles.cardHeading}>You have been challenged</Text> */}
                   <Text style={styles.challengePlayerName}>{item.challenge_by.name}</Text>
                   <View style={styles.scoreCatLabelOuter}>
                     <Text style={styles.scoreLabel}>Score</Text>
@@ -441,16 +462,33 @@ class DashboardRoute extends BaseComponent {
                     <Text style={styles.dateValue}>{moment.utc(item.date).local().format("DD/MM/YYYY")}</Text>
                   </View>
 
-                  <View style={styles.challengeBtnOuter}>
-                    <TouchableOpacity activeOpacity={.8} style={styles.rounded_button_white}
-                      onPress={() => { this.cancelTheChallenge(item.id) }}>
-                      <Text style={styles.cancelBtnText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
-                      onPress={() => { this.acceptTheChallenge(item.id) }}>
-                      <Text style={styles.primaryBtnText}>Accept</Text>
-                    </TouchableOpacity>
-                  </View>
+                  {item.challenge_status == 'PENDING' &&
+                    <View style={styles.challengeBtnOuter}>
+                      <TouchableOpacity activeOpacity={.8} style={styles.rounded_button_white}
+                        onPress={() => { this.cancelTheChallenge(item.id) }}>
+                        <Text style={styles.cancelBtnText}>Cancel</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
+                        onPress={() => { this.acceptTheChallenge(item.id) }}>
+                        <Text style={styles.primaryBtnText}>Accept</Text>
+                      </TouchableOpacity>
+                    </View>
+                  }
+
+                  { item.challenge_status == 'ACCEPTED' &&
+                      <View style={styles.challengeBtnOuter}>
+                      <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
+                      <Text style={defaultStyle.rounded_button_150} onPress={() => {
+                        this.getChallengeScoreData(item.id);
+                        //this.setModalVisible(true);
+                        this.setState({
+                          selectedOpponentData: item.challenge_by
+                        })
+                      }}>Update Score</Text>
+                    </View>
+                  }
+
+                  
                 </View>
 
                 :
@@ -713,12 +751,12 @@ const styles = StyleSheet.create({
   },
   playerCard: {
     overflow: 'hidden',
-    height: 180,
+    height: 200,
     width: "35%",
     marginBottom: 16
   },
   playerBackImage: {
-    height: 180,
+    height: 182,
     width: '100%'
   },
   modalPlayerCard: {
@@ -731,20 +769,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     color: 'white',
-    fontSize: 8,
+    fontSize: 6,
     paddingTop: 6,
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium',
   },
   playerScore: {
     justifyContent: 'center',
     textAlign: 'center',
-    color: '#F4F4F4',
+    color: 'white',
     fontSize: 14,
-    fontFamily: 'Quicksand-Bold'
+    fontFamily: 'Quicksand-Medium'
   },
   middleBox: {
     flexDirection: 'row',
-    paddingTop: 13,
+    paddingTop: 10,
     marginLeft: 2,
     marginRight: 2,
   },
@@ -777,13 +815,13 @@ const styles = StyleSheet.create({
     fontSize: 7,
     marginLeft: 4,
     marginTop: 16,
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   playerNameOuter: {
     position: 'absolute',
-    marginTop: 102,
+    marginTop: 103,
     width: "100%",
-    height: 24,
+    height: 23,
     backgroundColor: 'white'
   },
   playerName: {
@@ -795,7 +833,7 @@ const styles = StyleSheet.create({
   badgeOuter: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15
+    marginTop: 22
   },
   badgeBackImage: {
     height: 38,
@@ -815,9 +853,7 @@ const styles = StyleSheet.create({
   },
   badgeValue: {
     fontSize: 5,
-    color: '#F4F4F4',
-    textAlign: 'center',
-    fontFamily: 'BebasNeue-Regular'
+    color: 'white',
   },
   badgeRightArrow: {
     height: 7,
@@ -848,7 +884,7 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   opponentBackImage: {
-    height: 200,
+    height: 180,
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
