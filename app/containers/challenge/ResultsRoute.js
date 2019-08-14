@@ -86,14 +86,13 @@ class ResultsRoute extends BaseComponent {
         let data = this.props.data.data
         console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
-        // let success = data.success
-        // if (success) {
+        let success = data.success
+        if (success) {
 
-        //   this.setState({
-        //     playerData: [data.data.dashboard.player],
-        //     challengeData: data.data.dashboard.challenges,
-        //   })
-        // }
+          this.setState({
+            challengeResultsData: data.data,
+          })
+        }
 
       }).catch((response) => {
         console.log(response);
@@ -120,10 +119,21 @@ class ResultsRoute extends BaseComponent {
         <Text style={styles.scoreValue}>{item.score}</Text>
         <View style={styles.resultOuter}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <Image source={require('../../images/win_badge.png')} style={{ marginRight: 10,marginTop: 3 }}></Image>
+            {
+              item.win ? <Image source={require('../../images/win_badge.png')} style={{ marginRight: 3,marginTop: 3 }}></Image> 
+              :
+              <Image source={require('../../images/win_badge.png')} style={{ marginRight: 2,marginTop: 3, opacity: 0 }}></Image>
+            }
+            
             <Text style={styles.resultValue}>{item.win ? 'Won': 'Lost'}</Text>
           </View>
-          <View style={{paddingTop:3}}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
+          {
+            item.challenge_status == 'DISPUTED' ? <View style={{paddingTop:3}}><Text style={[styles.disputeLabel, {color: '#A3A5AE'}]}>Disputed</Text></View> 
+            :
+            <View style={{paddingTop:3}}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
+
+          }
+          
         </View>
       </View>
     </View>
@@ -195,7 +205,7 @@ class ResultsRoute extends BaseComponent {
           <View style={styles.totalResultsLabelOuter}>
             <Text style={styles.opponentLabel}>Opponent</Text>
             <Text style={styles.scoreLabel}>Score</Text>
-            <Text style={[styles.resultLabel, {marginLeft: 8}]}>Result</Text>
+            <Text style={styles.resultLabel}>Result</Text>
           </View>
         }
 
@@ -250,13 +260,13 @@ const styles = StyleSheet.create({
   scoreLabel: {
     fontSize: 10,
     color: '#A3A5AE',
-    width: '23.33%',
+    width: '20.33%',
     fontFamily: 'Quicksand-Medium'
   },
   resultLabel: {
     fontSize: 10,
     color: '#A3A5AE',
-    width: '33.33%',
+    width: '36.33%',
     fontFamily: 'Quicksand-Medium'
   },
   totalGamesValueOuter: {
@@ -309,11 +319,11 @@ const styles = StyleSheet.create({
   scoreValue: {
     fontSize: 14,
     color: '#404040',
-    width: '23.33%',
+    width: '20.33%',
     fontFamily: 'Quicksand-Regular'
   },
   resultOuter: {
-    width: '33.33%',
+    width: '36.33%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
