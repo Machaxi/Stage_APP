@@ -167,3 +167,21 @@ export function getCoachBatchAttendenceDetails(header,batch_id,date) {
     };
 
 }
+
+export function savePlayerPerformance(header,postData) {
+    return {
+        type: types.GET_BATCHES,
+        payload: {
+            request: {
+                url: `performance/save`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}

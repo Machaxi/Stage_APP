@@ -27,6 +27,9 @@ export const EVENT_SELECT_PLAYER_ADD_NUMBER = 'EVENT_SELECT_PLAYER_ADD_NUMBER'
 //to refresh challenge dashboard
 export const EVENT_REFRESH_CHALLENGE = 'EVENT_REFRESH_CHALLENGE'
 
+//to refresh player listing in performance update
+export const EVENT_REFRESH_PLAYER = 'EVENT_REFRESH_PLAYER'
+
 //STORE KEYS
 export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
 export const TEMP_USER_INFO = "TEMP_USER_INFO"

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE } from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getchallengeResults, disputeChallenge } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
@@ -128,10 +128,13 @@ class ResultsRoute extends BaseComponent {
             <Text style={styles.resultValue}>{item.win ? 'Won': 'Lost'}</Text>
           </View>
           {
-            item.challenge_status == 'DISPUTED' ? <View style={{paddingTop:3}}><Text style={[styles.disputeLabel, {color: '#A3A5AE'}]}>Disputed</Text></View> 
-            :
-            <View style={{paddingTop:3}}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
-
+            item.challenge_status == 'DISPUTED' && <View style={{paddingTop:3}}><Text style={[styles.disputeLabel, {color: '#A3A5AE'}]}>Disputed</Text></View> 
+          }
+          {
+            item.challenge_status == 'COMPLETED' &&  <View style={{paddingTop:3}}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
+          }
+          {
+            item.challenge_status == 'DISPUTE_RESOLVED' && <View style={{paddingTop:3}}><Text ></Text></View>
           }
           
         </View>
