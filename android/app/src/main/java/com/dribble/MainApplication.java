@@ -3,6 +3,7 @@ package com.dribble;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.razorpay.rn.RazorpayPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -36,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RazorpayPackage(),
             new RNFetchBlobPackage(),
             new ImageResizerPackage(),
             new ImagePickerPackage(),

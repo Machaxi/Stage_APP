@@ -25,6 +25,7 @@ import PlayerAttendance from "../containers/welcome/MyCalendar"
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
+import NotificationList from '../containers/notification/NotificationList'
 
 const userHomeModule = createStackNavigator({
 
@@ -239,6 +240,26 @@ const userHomeModule = createStackNavigator({
     },
     AcademyFilter: {
         screen: AcademyFilter,
+
+    },
+    NotificationList: {
+        screen: NotificationList,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Notification',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
 
     },
 

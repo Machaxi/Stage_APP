@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, PAYMENT_KEY, GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel } from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
@@ -13,6 +13,7 @@ import Events from '../../router/events';
 import RNPickerSelect from 'react-native-picker-select'
 import AbortDialog from './AbortDialog'
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
+import RazorpayCheckout from 'react-native-razorpay';
 
 const placeholder = {
     label: 'Select ',
@@ -123,7 +124,9 @@ class RegistrationSteps extends BaseComponent {
             alert_msg: '',
             user_type: '',
             temp_user: false,
-            profile_pic: null
+            profile_pic: null,
+            userData: null,
+            total_amount: 0
         }
 
         this.inputRefs = {
@@ -226,7 +229,8 @@ class RegistrationSteps extends BaseComponent {
                 let userData = JSON.parse(value)
                 let user_type = userData.user['user_type']
                 this.setState({
-                    user_type: user_type
+                    user_type: user_type,
+                    userData: userData
                 })
                 if (user_type == PLAYER || user_type == PARENT) {
                     this.getPlayerList()
@@ -916,7 +920,7 @@ class RegistrationSteps extends BaseComponent {
             }
             element['total'] = total
 
-        }
+        }       
 
         return (
             <ScrollView>
@@ -1027,7 +1031,7 @@ class RegistrationSteps extends BaseComponent {
                                     style={style.rounded_button}
                                     onPress={() => {
 
-                                        this.submitData()
+                                        this.processPaymentGateway()
                                     }}>
                                     <Text style={style.rounded_button_text}>
                                         Next
@@ -1046,6 +1050,66 @@ class RegistrationSteps extends BaseComponent {
             </ScrollView>
 
         )
+    }
+
+    getTotalAmount(){
+        const user_selection = this.state.user_selection
+        let all_total = 0
+        //console.log('user_selection=> ' + JSON.stringify(user_selection))
+        for (let i = 0; i < user_selection.length; i++) {
+
+            let element = user_selection[i]
+            let total = 0
+            let tournament_types = element['tournament_types']
+            for (let j = 0; j < tournament_types.length; j++) {
+
+                let selected = tournament_types[j].selected
+                if (selected) {
+                    total = total + tournament_types[j].fees
+                    all_total = tournament_types[j].fees + all_total
+                }
+            }
+
+        }
+        return all_total       
+    }
+
+    processPaymentGateway() {
+
+        let total = this.getTotalAmount()
+        total = total + '00'
+
+        let userData = this.state.userData
+        let user = userData['user']
+        let name = user['name']
+        let email = user['email']
+        if (name == null || name == undefined)
+            name = ''
+
+        var options = {
+            description: 'Credits towards consultation',
+            image: 'https://i.imgur.com/3g7nmJC.png',
+            currency: 'INR',
+            key: PAYMENT_KEY,
+            amount: total,
+            name: 'Dribble Diary',
+            prefill: {
+                email: email,
+                contact: '',
+                name: name
+            },
+            theme: { color: '#F37254' }
+        }
+        RazorpayCheckout.open(options).then((data) => {
+            // handle success
+            console.log('Razor Rspo ', JSON.stringify(data))
+            alert(`Success: ${data.razorpay_payment_id}`);
+        }).catch((error) => {
+            // handle failure
+            console.log('Razor Rspo ', JSON.stringify(error))
+            alert(`Error: ${error.code} | ${error.description}`);
+        });
+
     }
 
     submitData() {

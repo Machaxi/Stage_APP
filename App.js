@@ -32,8 +32,22 @@ const middleware = compose(applyMiddleware(logger, axiosMiddleware(client), thun
 
 const store = createStore(reducer, middleware);
 
+//This code is used to add addtional header while sending request, we initially
+//added only header but now we have to send more default params, so using this block
+client.interceptors.request.use(
+    config => {
+        config.headers.app_version = '1.0.0';
+        config.headers.os = Platform.OS;
+        return config;
+    },
+    error => Promise.reject(error)
+);
+//==============END=========================================================
 
+///Check for error, there is no handling of response in error case, so we are using 
+//these code
 client.interceptors.response.use(response => {
+    //console.warn('Response ',JSON.stringify(response))
     return response;
 }, error => {
 
@@ -41,7 +55,7 @@ client.interceptors.response.use(response => {
         let status = error.response.data.status
         let msg = error.response.data.error_message
         console.log('status=> ', status)
-        if (status != 401 ) {
+        if (status != 401) {
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
         }
@@ -51,6 +65,7 @@ client.interceptors.response.use(response => {
     }
     return error;
 });
+//================END====================================================
 
 
 const ModifiedDefaultTheme = {

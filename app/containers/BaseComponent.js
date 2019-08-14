@@ -34,6 +34,10 @@ export const GO_TO_HOME = "GO_TO_HOME"
 export const TOURNAMENT_FITLER = 'TOURNAMENT_FITLER'
 //
 
+//PAYMENT_GATEWAY
+export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
+
+///
 
 export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
 

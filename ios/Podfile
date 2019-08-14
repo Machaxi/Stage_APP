@@ -26,6 +26,10 @@ target 'Dribble' do
 
     pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
+    pod 'RNFBCrashlytics', :path => '../node_modules/@react-native-firebase/crashlytics'
+
+    pod 'RNFBAnalytics', :path => '../node_modules/@react-native-firebase/analytics'
+
   end
 
   target 'DribbleTests' do

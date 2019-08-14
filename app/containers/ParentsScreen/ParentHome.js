@@ -21,6 +21,8 @@ import BaseComponent, { getFormattedLevel, defaultStyle, SESSION_DATE_FORMAT } f
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
+var is_show_badge = false
+
 class ParentHome extends BaseComponent {
 
     acedemy_name = ''
@@ -92,17 +94,34 @@ class ParentHome extends BaseComponent {
             ),
             headerRight: (
                 <TouchableOpacity
+                    style={{ marginRight: 8 }}
                     onPress={() => {
-                        //navigation.toggleDrawer();
+                        navigation.navigate('NotificationList')
                     }}
-                    activeOpacity={.8}
-                >
-
-                    <Image
+                    activeOpacity={.8} >
+                    <ImageBackground
                         resizeMode="contain"
                         source={require('../../images/ic_notifications.png')}
-                        style={{ width: 20, height: 20, marginRight: 24 }}
-                    />
+                        style={{
+                            width: 25, height: 25, marginLeft: 12,
+                            marginRight: 12,
+                            alignItems: 'flex-end'
+                        }}>
+
+                        {is_show_badge ? <View style={{
+                            width: 16,
+                            height: 16,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 30 / 2,
+                            backgroundColor: '#ED2638'
+                        }}>
+                            <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                2</Text>
+                        </View> : null}
+
+
+                    </ImageBackground>
                 </TouchableOpacity>
             )
         };
