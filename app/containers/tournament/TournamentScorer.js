@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Modal, TextInput } from 'react-native'
 import BaseComponent, { defaultStyle, ImageBackground } from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Card, ActivityIndicator, } from 'react-native-paper';
@@ -9,6 +9,7 @@ import { getMatchScore, updateMatchScore } from "../../redux/reducers/Tournament
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import EditScore from './EditScore';
 
 class TournamentScorer extends BaseComponent {
 
@@ -20,14 +21,17 @@ class TournamentScorer extends BaseComponent {
             player2: null,
             current_set: null,
             currentIndex: -1,
-            match_id: '',
+            match_id: '28',
             header: '',
             score_call: false, //protect unuseful of progress loader
             start_card_show: false,
-            is_shown: false
+            is_shown: false,
+            modalVisible: false,
+            edit_index: -1,
+            edit_instance: null
         }
 
-       this.state.match_id = this.props.navigation.getParam('match_id', '')
+        //this.state.match_id = this.props.navigation.getParam('match_id', '')
 
     }
 
@@ -62,6 +66,10 @@ class TournamentScorer extends BaseComponent {
         })
     }
 
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
+
     updateScore(isPlayer1) {
         let currentIndex = this.state.currentIndex
         let match_scores = this.state.match_scores
@@ -79,6 +87,18 @@ class TournamentScorer extends BaseComponent {
         })
 
         //================ API CALL========================
+        this.submit(match_scores)
+        //========================END =================================
+    }
+
+    editScore(previousRound) {
+
+        let match_scores = this.state.match_scores
+        console.log('After Update => ', JSON.stringify(match_scores))
+        this.submit(match_scores)
+    }
+
+    submit(match_scores) {
         let match_id = this.state.match_id
         let subData = {}
         subData['match_scores'] = match_scores
@@ -107,12 +127,10 @@ class TournamentScorer extends BaseComponent {
         }).catch((response) => {
             console.log(response);
         })
-        //========================END =================================
     }
 
 
     render() {
-
         if (!this.state.score_call &&
             (this.props.data.loading || this.state.match_scores == null)) {
             return (
@@ -129,6 +147,7 @@ class TournamentScorer extends BaseComponent {
         let is_shown = this.state.is_shown
         let currentRound = null
         let previousRound = null;
+
 
         let is_tournament_completed = true;
         for (let i = match_scores.length - 1; i >= 0; i--) {
@@ -175,6 +194,7 @@ class TournamentScorer extends BaseComponent {
             }
             console.log('previousRound => ', JSON.stringify(previousRound))
 
+
             if (is_shown && (currentRound.player1_score > 0 || currentRound.player2_score > 0)) {
                 this.setState({
                     is_shown: false
@@ -201,16 +221,15 @@ class TournamentScorer extends BaseComponent {
                 finalWinner = player2
             }
         }
+        let edit_instance = this.state.edit_instance
 
-
-
+        //console.warn('previous ', JSON.stringify(previousRound))
 
         ///start_card_show = true
 
         //////////////////////////////////
 
         let match_array = []
-
         match_scores.map((element, index) => {
 
 
@@ -331,7 +350,7 @@ class TournamentScorer extends BaseComponent {
                         element.round ?
                         <TouchableOpacity
                             onPress={() => {
-                                    
+                                this.setModalVisible(true)
                             }}
                         >
 
@@ -343,8 +362,39 @@ class TournamentScorer extends BaseComponent {
                                     marginTop: 8,
                                     marginLeft: 16, marginRight: 8
                                 }}
-                                // source={
-                                //     require('../../images/edit_profile.png')}
+                                source={
+                                    require('../../images/edit_profile.png')}
+                            />
+                        </TouchableOpacity>
+                        : null
+                    }
+                    {is_tournament_completed ?
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({
+                                    edit_instance: match_scores[index],
+                                    edit_index:index,
+                                  
+                                })
+                                setTimeout(()=>{
+                                    this.setModalVisible(true)
+                                },100)
+                                console.warn('Element ', index)
+                                //this.state.modalVisible = true
+                               // this.setModalVisible(true)
+                            }}
+                        >
+
+                            <Image
+                                resizeMode="contain"
+                                style={{
+                                    width: 10,
+                                    height: 10,
+                                    marginTop: 8,
+                                    marginLeft: 16, marginRight: 8
+                                }}
+                                source={
+                                    require('../../images/edit_profile.png')}
                             />
                         </TouchableOpacity>
                         : null
@@ -369,7 +419,6 @@ class TournamentScorer extends BaseComponent {
                     alignContent: 'center',
                     width: "100%",
                 }}>
-
 
 
                     <View style={{
@@ -794,6 +843,28 @@ class TournamentScorer extends BaseComponent {
                         }
                     </View>
 
+                    {previousRound != null || this.state.edit_index != -1 ?
+                        <EditScore
+                            touchOutside={(round) => {
+                                this.state.modalVisible = false
+                                this.setState({
+                                    modalVisible: false
+                                })
+                                if (round == null)
+                                    return
+
+                                setTimeout(() => {
+                                    this.editScore(round)
+                                }, 100)
+                            }}
+                            player1={player1}
+                            player2={player2}
+                            previousRound={is_tournament_completed == true ? 
+                                edit_instance : previousRound}
+                            visible={this.state.modalVisible}
+                        />
+                        : null}
+
                 </View >
 
             </ScrollView >
@@ -829,5 +900,5 @@ const style = {
         alignItems: 'center',
         textAlign: 'center',
         fontFamily: 'Quicksand-Medium'
-    },
+    }
 }

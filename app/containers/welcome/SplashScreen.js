@@ -27,10 +27,12 @@ class Splash extends BaseComponent {
         //     }
         // });
         this.moveNext()
+
+
     }
 
     moveNext() {
-        //this.props.navigation.navigate('RegistrationSteps')
+        //this.props.navigation.navigate('TournamentScorer')
         //return
         var userData;
         // getData('userInfo', (value) => {

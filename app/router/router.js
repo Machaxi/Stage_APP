@@ -67,6 +67,7 @@ import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 import TournamentFixture from "../containers/tournament/TournamentFixture";
 import TournamentScorer from "../containers/tournament/TournamentScorer";
+import NotificationList from '../containers/notification/NotificationList'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -1104,6 +1105,26 @@ const parentHomeModule = createStackNavigator({
     },
     AcademyFilter: {
         screen: AcademyFilter,
+
+    },
+    NotificationList: {
+        screen: NotificationList,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Notification',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
 
     },
 }

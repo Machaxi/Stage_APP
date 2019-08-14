@@ -116,7 +116,8 @@ export function getTournamentResultListing(header,filter) {
 
 
 export function registerTournament(header, postdata) {
-    console.log("registerTournament", header, postdata)
+    console.log("registerTournament", header, )
+    console.log('Request ',JSON.stringify(postdata))
 
     return {
         type: types.GET_TOURNAMENT,
