@@ -167,6 +167,11 @@ class OtherPlayerDetails extends BaseComponent {
                             />
                         </CustomeCard>
                     </View> */}
+
+                <View style={styles.confirmBtnOuter}>
+                  <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.props.navigation.navigate('ChallengeHome') }}>Challenge</Text>
+                </View>
+
                     {this.state.strenthList.length != 0 ?
                         <View style={{ margin: 10 }}>
                             <Card style={{ borderRadius: 12 }}>
@@ -262,7 +267,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
-    }
+    },
+     confirmBtnOuter: {
+        marginHorizontal: 16,
+        //marginTop: 20,
+        marginBottom: 15
+    },
+    confirmBtn: {
+        marginTop: 16,
+        width: "100%",
+        marginLeft: 0,
+        marginRight: 0,
+        fontFamily: 'Quicksand-Regular',
+    },
 
 
 });

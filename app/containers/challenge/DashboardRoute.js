@@ -24,6 +24,7 @@ class DashboardRoute extends BaseComponent {
       selectedOpponentData: null,
       matchData: null,
       spinner: false,
+      academyId: null,
     }
   }
 
@@ -48,7 +49,8 @@ class DashboardRoute extends BaseComponent {
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
       let academy_id = userData['academy_id'];
-      this.state.player_id = userData['player_id'];
+      this.state.playerId = userData['player_id'];
+      this.state.academyId = userData['academy_id'];
       getData('header', (value) => {
         this.props.getChallengeDashboard(value, academy_id).then(() => {
           let data = this.props.data.data
@@ -459,7 +461,7 @@ class DashboardRoute extends BaseComponent {
                   <View style={styles.scoreCatValueOuter}>
                     <Text style={styles.scoreValue}>{item.challenge_by.score}</Text>
                     <Text style={styles.categoryValue}>{item.challenge_by.player_category}</Text>
-                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("DD/MM/YYYY")}</Text>
+                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("Do MMM YYYY")}</Text>
                   </View>
 
                   {item.challenge_status == 'PENDING' &&
@@ -528,7 +530,7 @@ class DashboardRoute extends BaseComponent {
                   <View style={styles.scoreCatValueOuter}>
                     <Text style={styles.scoreValue}>{item.opponent.score}</Text>
                     <Text style={styles.categoryValue}>{item.opponent.player_category}</Text>
-                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("DD/MM/YYYY")}</Text>
+                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("Do MMM YYYY")}</Text>
                   </View>
 
                   {item.challenge_status == 'ACCEPTED' &&
@@ -906,7 +908,7 @@ const styles = StyleSheet.create({
   challengeText: {
     fontSize: 14,
     color: '#707070',
-    fontFamily: 'Quicksand-Regular',
+    fontFamily: 'Quicksand-Medium',
   },
   filterText: {
     fontSize: 12,
@@ -931,14 +933,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#DFDFDF',
     paddingBottom: 15,
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   challengePlayerName: {
     fontSize: 14,
     color: '#404040',
     marginTop: 15,
     marginBottom: 15,
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   scoreCatLabelOuter: {
     display: 'flex',
@@ -949,19 +951,19 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#A3A5AE',
     width: '33.33%',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   categoryLabel: {
     fontSize: 10,
     color: '#A3A5AE',
     width: '33.33%',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   dateLabel: {
     fontSize: 10,
     color: '#A3A5AE',
     width: '33.33%',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   scoreCatValueOuter: {
     display: 'flex',
@@ -973,19 +975,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#404040',
     width: '33.33%',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   categoryValue: {
     fontSize: 14,
     color: '#404040',
     width: '33.33%',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   dateValue: {
     fontSize: 14,
     color: '#404040',
     width: '33.33%',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   challengeBtnOuter: {
     flexDirection: 'row',
@@ -1008,7 +1010,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: '#DFDFDF',
-    paddingBottom: 15
+    paddingBottom: 7
   },
   acceptCardHeading: {
     display: 'flex',
