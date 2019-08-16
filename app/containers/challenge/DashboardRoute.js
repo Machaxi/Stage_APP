@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName,getFormattedCategory } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName,getFormattedCategory, EVENT_REFRESH_RESULTS } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge, getChallengeScore, updateChallengeScore } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
@@ -205,7 +205,7 @@ class DashboardRoute extends BaseComponent {
         this.progress(false);
         let success = data.success
         if (success) {
-
+          Events.publish(EVENT_REFRESH_RESULTS);
           this.setModalVisible(false);
 
         }

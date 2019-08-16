@@ -30,6 +30,9 @@ export const EVENT_REFRESH_CHALLENGE = 'EVENT_REFRESH_CHALLENGE'
 //to refresh player listing in performance update
 export const EVENT_REFRESH_PLAYER = 'EVENT_REFRESH_PLAYER'
 
+//to refresh results in challenge
+export const EVENT_REFRESH_RESULTS = 'EVENT_REFRESH_RESULTS'
+
 //STORE KEYS
 export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
 export const TEMP_USER_INFO = "TEMP_USER_INFO"
