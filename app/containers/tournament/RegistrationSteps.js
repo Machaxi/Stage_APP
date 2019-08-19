@@ -1052,6 +1052,7 @@ class RegistrationSteps extends BaseComponent {
         )
     }
 
+    
     getTotalAmount(){
         const user_selection = this.state.user_selection
         let all_total = 0

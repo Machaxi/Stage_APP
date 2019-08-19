@@ -15,6 +15,9 @@ class Splash extends BaseComponent {
             deepUrl: ""
         };
 
+       
+
+
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
         // first they have to login then register for tournament
         // getData(TOURNAMENT_REGISTER, (value) => {
@@ -28,7 +31,7 @@ class Splash extends BaseComponent {
         // });
         this.moveNext()
 
-
+        //1a476280-04c6-40a5-b76e-6cc4da41669e
     }
 
     moveNext() {
@@ -103,10 +106,6 @@ class Splash extends BaseComponent {
         // }
     }
 
-    componentDidMount() {
-
-
-    }
     // componentWillUnmount() {
     //     Linking.removeEventListener('url', this.handleOpenURL);
 

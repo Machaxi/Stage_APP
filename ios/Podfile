@@ -30,6 +30,8 @@ target 'Dribble' do
 
     pod 'RNFBAnalytics', :path => '../node_modules/@react-native-firebase/analytics'
 
+    pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
   end
 
   target 'DribbleTests' do

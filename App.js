@@ -21,6 +21,10 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NativeEventEmitter, NativeModules, StatusBar } from 'react-native';
 import InfoDialog from './app/components/custom/InfoDialog'
 import Events from './app/router/events';
+import OneSignal from 'react-native-onesignal'; // Import package from node modules
+import RNFirebase from 'react-native-firebase';
+import BaseComponent,{PUSH_TOKEN,ONE_SIGNAL_USERID} from './app/containers/BaseComponent';
+import { storeData } from "./app/components/auth";
 
 export const BASE_URL = 'http://13.233.182.217:8080/api/'
 const client = axios.create({
@@ -78,16 +82,32 @@ const ModifiedDefaultTheme = {
         bold: 'Quicksand-Bold'
     }
 }
+const configurationOptions = {
+    debug: true,
+    promptOnMissingPlayServices: true
+  }
+  const firebase = RNFirebase.initializeApp(configurationOptions)
 
-export default class App extends Component {
+
+export default class App extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
             is_show_alert: false,
             info_msg: ''
+
         }
 
+        firebase.messaging().getToken().then((token) => {
+            //alert('Token ',token)
+            console.log('firebase token ',token)
+         });
+
+        firebase.messaging().onTokenRefresh((token) => {
+            //alert('Token ',token)
+            console.log('firebase token ',token)
+        });
 
         this.refreshEvent = Events.subscribe('ShowDialog', (msg) => {
             this.setState({
@@ -95,6 +115,42 @@ export default class App extends Component {
                 info_msg: msg
             })
         });
+
+        OneSignal.init("1a476280-04c6-40a5-b76e-6cc4da41669e");
+        //OneSignal.setLogLevel(0, 6)
+
+        OneSignal.addEventListener('received', this.onReceived);
+        OneSignal.addEventListener('opened', this.onOpened);
+        OneSignal.addEventListener('ids', this.onIds);
+        OneSignal.configure(); 	// triggers the ids event
+
+    }
+
+    onReceived(notification) {
+        console.log("Notification received: ", notification);
+    }
+
+    onOpened(openResult) {
+        //console.log('Message: ', openResult.notification.payload.body);
+      //  console.log('Data: ', openResult.notification.payload.additionalData);
+       // console.log('isActive: ', openResult.notification.isAppInFocus);
+      //  console.log('openResult: ', openResult);
+    }
+
+    componentDidMount() {
+        OneSignal.removeEventListener('received', this.onReceived);
+        OneSignal.removeEventListener('opened', this.onOpened);
+        OneSignal.removeEventListener('ids', this.onIds);
+
+    }
+    
+    
+   
+    onIds (device){
+        storeData(PUSH_TOKEN,device.pushToken)
+        storeData(ONE_SIGNAL_USERID,device.userId)
+        alert('onIds ',  device.pushToken)
+        console.log('Device info: ', device.pushToken)
     }
 
     render() {
