@@ -3,6 +3,8 @@ package com.dribble;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.branch.rnbranch.RNBranchPackage;
+import io.branch.referral.Branch;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.razorpay.rn.RazorpayPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -40,6 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNBranchPackage(),
             new ReactNativeOneSignalPackage(),
             new RazorpayPackage(),
             new RNFetchBlobPackage(),
@@ -79,5 +82,7 @@ public class MainApplication extends Application implements ReactApplication {
       catch (Exception e) {
       }
     SoLoader.init(this, /* native exopackage */ false);
+    Branch.getAutoInstance(this);
+
   }
 }

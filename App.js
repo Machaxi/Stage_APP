@@ -23,8 +23,9 @@ import InfoDialog from './app/components/custom/InfoDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent,{PUSH_TOKEN,ONE_SIGNAL_USERID} from './app/containers/BaseComponent';
+import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, GO_TO_HOME } from './app/containers/BaseComponent';
 import { storeData } from "./app/components/auth";
+import branch, { BranchEvent } from 'react-native-branch'
 
 export const BASE_URL = 'http://13.233.182.217:8080/api/'
 const client = axios.create({
@@ -85,8 +86,41 @@ const ModifiedDefaultTheme = {
 const configurationOptions = {
     debug: true,
     promptOnMissingPlayServices: true
-  }
-  const firebase = RNFirebase.initializeApp(configurationOptions)
+}
+const firebase = RNFirebase.initializeApp(configurationOptions)
+
+
+branch.subscribe(({ error, params }) => {
+    if (error) {
+        console.error('Error from Branch: ' + error)
+        return
+    }
+
+    // let lastParams =  branch.getLatestReferringParams() // params from last open
+    // let installParams =  branch.getFirstReferringParams() // params from original install
+    //console.log('lastParams=> ', JSON.stringify(branch))
+    // console.log('installParams=> ', JSON.stringify(installParams))
+
+    // console.log('Branch=> ',JSON.stringify(branch))
+
+    // if (params['+non_branch_link']) {
+    //     const nonBranchUrl = params['+non_branch_link']
+    //     console.log('Branch=>', nonBranchUrl)
+    //     let lastParams = branch.getLatestReferringParams() // params from last open
+    //     console.log('lastParams ' + JSON.stringify(lastParams))
+    //     // Route non-Branch URL if appropriate.
+    //     return
+    // }
+    const tournament_id = params.tournament_id
+    console.log('Branchtit=>', JSON.stringify(params))
+    console.log('Branchtit=>', tournament_id)
+    if (tournament_id) {
+        //alert('test')
+        storeData('deep_linking', true)
+        Events.publish('deep_linking', tournament_id);
+
+    }
+})
 
 
 export default class App extends BaseComponent {
@@ -99,14 +133,15 @@ export default class App extends BaseComponent {
 
         }
 
+
         firebase.messaging().getToken().then((token) => {
             //alert('Token ',token)
-            console.log('firebase token ',token)
-         });
+            console.log('firebase token ', token)
+        });
 
         firebase.messaging().onTokenRefresh((token) => {
             //alert('Token ',token)
-            console.log('firebase token ',token)
+            console.log('firebase token ', token)
         });
 
         this.refreshEvent = Events.subscribe('ShowDialog', (msg) => {
@@ -116,7 +151,7 @@ export default class App extends BaseComponent {
             })
         });
 
-        OneSignal.init("1a476280-04c6-40a5-b76e-6cc4da41669e");
+        OneSignal.init("0afba88e-fe31-4da9-9540-412faf6b856b");
         //OneSignal.setLogLevel(0, 6)
 
         OneSignal.addEventListener('received', this.onReceived);
@@ -132,9 +167,9 @@ export default class App extends BaseComponent {
 
     onOpened(openResult) {
         //console.log('Message: ', openResult.notification.payload.body);
-      //  console.log('Data: ', openResult.notification.payload.additionalData);
-       // console.log('isActive: ', openResult.notification.isAppInFocus);
-      //  console.log('openResult: ', openResult);
+        //  console.log('Data: ', openResult.notification.payload.additionalData);
+        // console.log('isActive: ', openResult.notification.isAppInFocus);
+        //  console.log('openResult: ', openResult);
     }
 
     componentDidMount() {
@@ -143,14 +178,14 @@ export default class App extends BaseComponent {
         OneSignal.removeEventListener('ids', this.onIds);
 
     }
-    
-    
-   
-    onIds (device){
-        storeData(PUSH_TOKEN,device.pushToken)
-        storeData(ONE_SIGNAL_USERID,device.userId)
-        alert('onIds ',  device.pushToken)
-        console.log('Device info: ', device.pushToken)
+
+
+
+    onIds(device) {
+        storeData(PUSH_TOKEN, device.pushToken)
+        storeData(ONE_SIGNAL_USERID, device.userId)
+        //alert('onIds ',  device)
+        console.log('Device info: ', device)
     }
 
     render() {

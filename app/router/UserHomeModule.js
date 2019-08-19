@@ -145,7 +145,8 @@ const userHomeModule = createStackNavigator({
         screen: otherplayerDetails,
         navigationOptions: ({ navigation }) => ({
             title: "Player Detail",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,

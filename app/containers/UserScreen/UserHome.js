@@ -636,7 +636,7 @@ class UserHome extends BaseComponent {
                                             ratingCount={5}
                                             imageSize={12}
                                             readonly={true}
-                                            startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            startingValue={5}//academy_feedback_data.target.avgFeedbackEntities[0].avgRating
                                             style={{ width: 80 }}
                                         />
 
@@ -649,8 +649,10 @@ class UserHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
-                                        <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
+                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
+                                        academy_feedback_data.target.avgFeedbackEntities[0].avgRating
+                                        */}
+                                        <RateViewBorder>{5}</RateViewBorder>
                                     </View>
                                 </View>
                                 <View>
@@ -798,7 +800,7 @@ class UserHome extends BaseComponent {
                                             ratingCount={5}
                                             imageSize={12}
                                             readonly={true}
-                                            startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            startingValue={5}//coach_feedback_data.target.avgFeedbackEntities[0].avgRating
                                             style={{ width: 80 }}
                                         />
 
@@ -811,8 +813,9 @@ class UserHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
-                                        <RateViewBorder>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
+                                        }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
+                                        coach_feedback_data.target.avgFeedbackEntities[0].avgRating */}
+                                        <RateViewBorder>{5}</RateViewBorder>
                                     </View>
                                 </View>
                                 <View>

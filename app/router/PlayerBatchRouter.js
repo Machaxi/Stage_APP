@@ -9,6 +9,7 @@ import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
 import PlayerAttendance from "../containers/welcome/MyCalendar"
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 
 const userBatchModule = createStackNavigator({
 
@@ -84,7 +85,22 @@ const userBatchModule = createStackNavigator({
             headerTintColor: '#000',
         }),
 
-    }
+    },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Player Detail",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 
 }
 );

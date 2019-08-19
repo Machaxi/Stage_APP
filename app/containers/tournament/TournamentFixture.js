@@ -271,6 +271,20 @@ class TournamentFixture extends Component {
                     console.warn('First Round => ', JSON.stringify(firstArray))
                 }
             }
+
+            // if (firstArray.length > 8 && firstArray.length < 16) {
+            //     let reminder = 16 % firstArray.length
+            //     console.warn('reminder => ', reminder)
+            //     for (let i = 0; i < reminder; i++) {
+            //         let player = {
+            //             is_bye: true,
+            //             id: 0,
+            //             name: 'Unknown',
+            //             match_id: 0
+            //         }
+            //         firstArray.push(player)
+            //     }
+            // }
             console.log('Final => ', JSON.stringify(playerArray))
 
             if (firstArray.length != 0)
@@ -335,8 +349,6 @@ class TournamentFixture extends Component {
         if (array.length != 0) {
 
 
-
-
             let height = 45
             let width = 200
 
@@ -372,6 +384,10 @@ class TournamentFixture extends Component {
                 let pos = 0;
                 let tempCenter = []
                 for (let j = 0; j < row; j++) {
+
+                    // if (array[i][j].is_bye) {
+                    //     continue
+                    // }
 
                     if (i != 0) {
                         space = 0
@@ -640,8 +656,8 @@ class TournamentFixture extends Component {
         console.warn('Show => ', this.state.is_show_dialog)
 
         return (
-            <ScrollView contentContainerStyle={{ height: 1000 }}>
-                <ScrollView horizontal contentContainerStyle={{ width: 1000 }}>
+            <ScrollView contentContainerStyle={{ height: 1500 }}>
+                <ScrollView horizontal contentContainerStyle={{ width: 1500 }}>
 
                     <TournamentCategoryDialog
                         tournament_fixture={this.state.tournament_fixtures}
@@ -658,7 +674,7 @@ class TournamentFixture extends Component {
                         visible={this.state.is_show_dialog} />
 
                     <View style={{
-                        flex: 1, width: '100%', height: '100%', marginTop: 50
+                        flex: 1, width: "100%", height: "100%", marginTop: 50
                     }}>
 
                         {this.state.array.length != 0

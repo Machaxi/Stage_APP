@@ -101,7 +101,21 @@ class CoachRewardsPoints extends BaseComponent {
                 let user1 = JSON.parse(data)
                 if (user1.success) {
                     let dues = user1.data['dues']
-                    console.warn('dues', dues)
+                    for (let i = 0; i < dues.length; i++) {
+                        let batches = dues[i].batches
+                        let month = dues[i].month
+                        let year = dues[i].year
+
+                        for (let j = 0; j < batches.length; j++) {
+
+                            let batch = batches[j]
+                            batch.month = month
+                            batch.year = year
+                            console.log('batch => ',JSON.stringify(batch))
+                        }
+                    }
+
+                    console.warn('dues', JSON.stringify(dues))
                     this.setState({
                         dues: dues
                     })
@@ -182,10 +196,10 @@ class CoachRewardsPoints extends BaseComponent {
                     <CustomeButtonB onPress={() => {
 
                         this.props.navigation.navigate('CoachGiveRewards', {
-                            month: '6',
-                            year: '2019',
-                            batch_id: '1',//item.batch_id,
-                            academy_id: '1'//item.academy_id
+                            month: item.month,
+                            year: item.year,
+                            batch_id: item.batch_id,
+                            academy_id: item.academy_id
                         })
 
                     }}>Award Players </CustomeButtonB>
@@ -293,8 +307,8 @@ const pickerSelectStyles = StyleSheet.create({
         borderRadius: 8,
         color: 'black',
         marginBottom: 4,
-        alignItems:'center',
-        textAlign:'center',
+        alignItems: 'center',
+        textAlign: 'center',
         fontFamily: 'Quicksand-Regular',
         // to ensure the text is never behind the icon
     },

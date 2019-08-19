@@ -32,6 +32,8 @@ target 'Dribble' do
 
     pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
 
+    pod 'react-native-branch', :path => '../node_modules/react-native-branch'
+
   end
 
   target 'DribbleTests' do

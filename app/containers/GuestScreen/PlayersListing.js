@@ -125,7 +125,9 @@ class PlayersListing extends BaseComponent {
                         player_id: item.id
                     })
                 }}>
-                <ImageBackground style={{ height: 180, width: '100%' }}
+                <ImageBackground
+                    resizeMode='contain'
+                    style={{ height: 180, width: '100%' }}
                     source={require('../../images/batch_card.png')}
                 >
                     <Text style={{ justifyContent: 'center', fontFamily: 'Quicksand-Medium', textAlign: 'center', color: '#F4F4F4', fontSize: 6, paddingTop: 6 }}>Score</Text>

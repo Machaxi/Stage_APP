@@ -8,7 +8,7 @@ import firebase from 'react-native-firebase';
 import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
-import BaseComponent, { defaultStyle, TOURNAMENT_REGISTER } from '../BaseComponent';
+import BaseComponent, { defaultStyle, TOURNAMENT_REGISTER, PUSH_TOKEN, ONE_SIGNAL_USERID } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
@@ -25,7 +25,9 @@ class PhoneAuth extends BaseComponent {
             confirmResult: null,
             isCall: true,
             spinner: false,
-            is_navigation_to_tournament: false
+            is_navigation_to_tournament: false,
+            firebase_token: '',
+            one_signal_device_id: ''
         };
 
         getData(TOURNAMENT_REGISTER, (value) => {
@@ -34,6 +36,18 @@ class PhoneAuth extends BaseComponent {
                 this.setState({
                     is_navigation_to_tournament: value
                 })
+        });
+        getData(PUSH_TOKEN, (value) => {
+
+            this.setState({
+                firebase_token: value
+            })
+        });
+        getData(ONE_SIGNAL_USERID, (value) => {
+
+            this.setState({
+                ONE_SIGNAL_USERID: value
+            })
         });
     }
 
@@ -87,10 +101,10 @@ class PhoneAuth extends BaseComponent {
                 this.progress(false)
                 this.setState({ confirmResult, message: 'Code has been sent!' })
 
-                console.log('Firebase error ',this.state.message)
+                console.log('Firebase error ', this.state.message)
             })
             .catch(error => {
-                console.log('Firebase error ',error)
+                console.log('Firebase error ', error)
                 this.progress(false)
             });
     };
@@ -142,6 +156,9 @@ class PhoneAuth extends BaseComponent {
         if (Platform.OS === 'android') {
             os = "android";
         }
+        let fcm_token = this.state.firebase_token
+        let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
+        
 
         this.setState({
             isCall: false
@@ -152,7 +169,8 @@ class PhoneAuth extends BaseComponent {
         dict['firebase_token'] = token;
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
-        dict['fcm_token'] = 'xyzabcdcc';
+        dict['fcm_token'] =fcm_token;
+        dict['ONE_SIGNAL_USERID'] =ONE_SIGNAL_USERID;
         dict['has_firebase_check'] = false;
 
 
@@ -272,6 +290,10 @@ class PhoneAuth extends BaseComponent {
             os = "android";
         }
 
+        let fcm_token = this.state.firebase_token
+        let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
+       
+        
         this.setState({
             isCall: false
         })
@@ -282,7 +304,8 @@ class PhoneAuth extends BaseComponent {
         dict['firebase_token'] = "token";
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
-        dict['fcm_token'] = 'xyzabcdcc';
+        dict['fcm_token'] =fcm_token;
+        dict['ONE_SIGNAL_USERID'] =ONE_SIGNAL_USERID;
         dict['has_firebase_check'] = false;
 
 
@@ -344,6 +367,7 @@ class PhoneAuth extends BaseComponent {
 
                     }
                     else if (userInfoData.user_type == COACH) {
+                        storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('CHome')
                         } else {
