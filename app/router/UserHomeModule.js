@@ -26,6 +26,7 @@ import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDeta
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import NotificationList from '../containers/notification/NotificationList'
+import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
 
 const userHomeModule = createStackNavigator({
 
@@ -261,6 +262,20 @@ const userHomeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
 
+    },
+    ViewPlayerPerformance: {
+        screen: ViewPlayerPerformance,
+        navigationOptions: ({ navigation }) => ({
+            title: "My Stats",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
 
 });
