@@ -29,6 +29,10 @@ export const GET_UPCOMING_TOURNAMENT = 'upcoming/LOAD';
 export const DO_UPCOMING_TOURNAMENT_SUCCESS = 'upcoming/LOAD_SUCCESS';
 export const DO_UPCOMING_TOURNAMENT_FAIL = 'upcoming/LOAD_FAIL';
 
+export const NOTIFICATION_TOURNAMENT = 'notification/LOAD';
+export const DO_NOTIFICATION_SUCCESS = 'notification/LOAD_SUCCESS';
+export const DO_NOTIFICATION_FAIL = 'notification/LOAD_FAIL';
+
 export const TOURNAMENT_FILTER = 'tournament_filter/LOAD';
 export const TOURNAMENT_FILTER_SUCCESS = 'tournament_filter/LOAD_SUCCESS';
 export const TOURNAMENT_FILTER_FAIL = 'tournament_filter/LOAD_FAIL';

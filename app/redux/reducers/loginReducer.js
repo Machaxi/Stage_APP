@@ -55,6 +55,7 @@ export function doLogin(postdata) {
 
 export function doLoginTest(postdata) {
     console.log("doLogin postdata",postdata)
+    console.log('data => ',JSON.stringify(postdata))
     // var header =
     //     getData('header', (value) => {
     //         header  = value

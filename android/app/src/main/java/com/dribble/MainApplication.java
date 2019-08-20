@@ -3,6 +3,9 @@ package com.dribble;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.branch.rnbranch.RNBranchPackage;
+import io.branch.referral.Branch;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.razorpay.rn.RazorpayPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -20,6 +23,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +42,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNBranchPackage(),
+            new ReactNativeOneSignalPackage(),
             new RazorpayPackage(),
             new RNFetchBlobPackage(),
             new ImageResizerPackage(),
@@ -49,7 +56,9 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new RNGestureHandlerPackage(),
             new RNFirebasePackage(),
-             new RNFirebaseAuthPackage()
+             new RNFirebaseAuthPackage(),
+             new RNFirebaseNotificationsPackage(),
+             new RNFirebaseMessagingPackage()
       );
     }
 
@@ -73,5 +82,7 @@ public class MainApplication extends Application implements ReactApplication {
       catch (Exception e) {
       }
     SoLoader.init(this, /* native exopackage */ false);
+    Branch.getAutoInstance(this);
+
   }
 }

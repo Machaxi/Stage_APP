@@ -118,9 +118,9 @@ class CoachHome extends BaseComponent {
         //in switch case we were getting from previous screen
 
         getData('multiple', (value) => {
-            //console.warn('multiple => '+value)
-            if (value != '' && !value) {
-                //console.warn('multiple1 => '+value)
+            //console.warn('multiple => ' + value)
+            if (value != '' && value == 'false') {
+                //console.warn('multiple1 => ' + value)
                 this.getSwitchData()
             }
         })

@@ -11,7 +11,7 @@ import { getOtherPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
-import BaseComponent, {defaultStyle} from '../BaseComponent';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -36,24 +36,38 @@ class OtherPlayerDetails extends BaseComponent {
     }
 
     componentDidMount() {
-        var userData;
         getData('header', (value) => {
             console.log("header", value);
         });
-
-        
-
         let academy_id = this.props.navigation.getParam('academy_id', '')
         let player_id = this.props.navigation.getParam('player_id', '')
-        if (academy_id == '' || player_id == '') {
-            alert('player id is missing')
+        //alert('academy ' + academy_id)
+        if (academy_id == '') {
+            //console.warn('if=>')
+            getData('userInfo', (value) => {
+                let userData = JSON.parse(value)
+                let academy_id = userData['academy_id']
+               // console.warn('academy_id=>', academy_id)
+
+                this.fetch(academy_id, player_id)
+            });
         } else {
-            this.getPlayerDashboardData(academy_id, player_id)
+            this.fetch(academy_id, player_id)
         }
 
-        console.log("PlayerDashboard academy_id="+academy_id+" player_id"+player_id); 
+        // if (academy_id == '' || player_id == '') {
+        //     alert('player id is missing')
+        // } else {
+
+        // }
+
+        // console.log("PlayerDashboard academy_id=" + academy_id + " player_id" + player_id);
     }
 
+    fetch(academy_id, player_id) {
+        console.log("PlayerDashboard academy_id=" + academy_id + " player_id" + player_id);
+        this.getPlayerDashboardData(academy_id, player_id)
+    }
 
 
 

@@ -3,9 +3,13 @@ import React from 'react'
 import { View, Image, Linking, Platform } from 'react-native'
 import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
-import BaseComponent, { TOURNAMENT_REGISTER } from '../BaseComponent';
+import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
+import Events from '../../router/events';
+
+var is_deep_linking = false
 
 class Splash extends BaseComponent {
+
 
     constructor(props) {
         super(props);
@@ -14,6 +18,11 @@ class Splash extends BaseComponent {
             checkedSignIn: false,
             deepUrl: ""
         };
+
+
+        this.refreshEvent = Events.subscribe('deep_linking', (tournament_id) => {
+            is_deep_linking = true
+        });
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
         // first they have to login then register for tournament
@@ -28,13 +37,15 @@ class Splash extends BaseComponent {
         // });
         this.moveNext()
 
-
+        //1a476280-04c6-40a5-b76e-6cc4da41669e
     }
 
     moveNext() {
-        //this.props.navigation.navigate('TournamentScorer')
-        //return
-        var userData;
+        // this.props.navigation.navigate('TournamentFixture', {
+        //     id: 6
+        // })
+        // return
+        // var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
         // })
@@ -45,6 +56,13 @@ class Splash extends BaseComponent {
                 BaseComponent.isUserLoggedIn = true
 
                 setTimeout(() => {
+
+                    console.warn('is_deep_linking => ', is_deep_linking)
+                    if (is_deep_linking) {
+                        Events.publish(GO_TO_HOME);
+                        return
+                    }
+
 
                     const { checkedSignIn, signedIn } = this.state;
                     console.log("signedIn", signedIn)
@@ -103,10 +121,6 @@ class Splash extends BaseComponent {
         // }
     }
 
-    componentDidMount() {
-
-
-    }
     // componentWillUnmount() {
     //     Linking.removeEventListener('url', this.handleOpenURL);
 

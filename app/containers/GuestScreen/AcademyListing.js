@@ -8,8 +8,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
 import BaseComponent, { defaultStyle } from './../BaseComponent'
 import { BASE_URL } from '../../../App';
-import PTRView from 'react-native-pull-to-refresh';
 import { RateViewFill } from '../../components/Home/RateViewFill';
+import { getData, storeData } from '../../components/auth';
 
 var filterData = ''
 
@@ -73,15 +73,23 @@ class AcademyListing extends BaseComponent {
 
     componentDidMount() {
 
+        getData('deep_linking', (value) => {
+            console.warn('deep->', value)
+            if (value == 'true') {
+                this.props.navigation.navigate('Tournament')
+                storeData('deep_linking', null)
+            }
+        })
+
         this.getAcademyList('')
     }
 
     onFilterSelected(data) {
         filterData = data
-        
+
         if (data != '') {
             //query_param = query
-            
+
             let sport_type = "sport=Badminton"
             let academy_rating = ""
             let coach_rating = ""
@@ -111,7 +119,7 @@ class AcademyListing extends BaseComponent {
             let query = sport_type + "&" + academy_rating + "&" + coach_rating
             console.warn('selected = > ', query)
             this.getAcademyList(query)
-        }else{
+        } else {
             this.getAcademyList('')
         }
 

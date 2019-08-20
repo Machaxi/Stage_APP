@@ -16,6 +16,8 @@ import UpcomingTournamentReducer from './UpcomingReducer'
 import TournamentScorerReducer from './TournamentScorer'
 import TournamentRegReducer from './TournamentRegReducer'
 import TournamentFilter from './TournamentFilter'
+import NotificationReducer from './NotificationReducer'
+
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -34,7 +36,8 @@ const rootReducer = combineReducers({
     UpcomingTournamentReducer,
     TournamentScorerReducer,
     TournamentRegReducer,
-    TournamentFilter
+    TournamentFilter,
+    NotificationReducer
 });
 
 export default rootReducer
