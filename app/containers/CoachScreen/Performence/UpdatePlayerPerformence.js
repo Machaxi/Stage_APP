@@ -3,13 +3,13 @@ import React from 'react'
 
 import { View, TextInput, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
 import { SwitchButton, CustomeButtonB } from '../../../components/Home/SwitchButton'
-import { getPerformenceOption, saveCoachBatchAttendence } from "../../../redux/reducers/PerformenceReducer";
+import { getPerformenceOption, savePlayerPerformance } from "../../../redux/reducers/PerformenceReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { ACADEMY, COACH } from '../../../components/Constants';
-import BaseComponent, { defaultStyle } from '../../BaseComponent';
-
+import BaseComponent, { defaultStyle, EVENT_REFRESH_PLAYER } from '../../BaseComponent';
+import Events from '../../../router/events';
 
 class UpdatePlayerPerformence extends BaseComponent {
 
@@ -20,12 +20,14 @@ class UpdatePlayerPerformence extends BaseComponent {
             billingchecked: false,
             playerList: null,
             batchDetails: null,
-            player_name: ''
+            player_name: '',
         }
         let data = this.props.navigation.getParam('data')
         this.state.player_name = JSON.parse(data).name
         console.log(data)
     }
+
+     
 
     componentDidMount() {
         var userData;
@@ -35,9 +37,10 @@ class UpdatePlayerPerformence extends BaseComponent {
 
         console.log("CoachDashboard");
         getData('userInfo', (value) => {
-            userData = JSON.parse(value)
+            userData = JSON.parse(value);
+            console.log('userData', userData);
             this.setState({
-                userData: JSON.parse(value)
+                userData: JSON.parse(value),
             });
             console.log("userData.user", userData.user['user_type'])
             let userType = userData.user['user_type']
@@ -54,18 +57,26 @@ class UpdatePlayerPerformence extends BaseComponent {
 
     getCoachPerformenceData(btach_id, player_id, month, year) {
         getData('header', (value) => {
-            console.log("header", value, btach_id);
             this.props.getPerformenceOption(value, btach_id, player_id, month, year).then(() => {
-                // console.log(' user response payload ' + JSON.stringify(this.props.data));
-                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.performencedata);
                 console.log(' getPerformenceOption payload ' + user);
-                let user1 = JSON.parse(user)
+                let user1 = JSON.parse(user);
 
                 if (user1.success == true) {
                     this.setState({
                         playerList: user1.data['attributes'],
                         batchDetails: user1.data
+                    },()=>{
+                        console.log('this.state.playerList', this.state.playerList);
+                        this.state.playerList.map((item, index) => {
+
+                            item.parameters.map((newitem,newindex) => {
+                                this.state.playerList[index].parameters[newindex]['score'] = 0;
+                            })
+
+                            
+
+                        })
                     })
                 }
 
@@ -107,6 +118,8 @@ class UpdatePlayerPerformence extends BaseComponent {
                     flex: 1,
                     alignContent: 'center',
                 }}>
+
+
                     <TextInput
                         placeholder={'Enter'}
                         style={{
@@ -120,12 +133,8 @@ class UpdatePlayerPerformence extends BaseComponent {
                             padding: 10
                         }}
                         keyboardType={'number-pad'}
-                        // mode='outlined'
-                        label='name'
-                        // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
-                        value={this.state.txtname}
-                        onChangeText={(txtname) => this.setState({ txtname: txtname })}
-                    />
+                        onChangeText={(txtscore) => { item.score= txtscore }}
+                    >{item.score}</TextInput>
                 </View>
                 <Text style={defaultStyle.regular_text_14}>
                     {item.prev_month_score}
@@ -139,26 +148,40 @@ class UpdatePlayerPerformence extends BaseComponent {
 
 
 
-    savePlayerAttendence() {
+    savePlayerPerformanceToServer() {
 
         getData('header', (value) => {
-            console.log("savePlayerAttendence header", value);
-            const yourDate = Date()
-            console.log("savePlaye", yourDate)
-            const NewDate = moment(yourDate).format('YYYY-MM-DD')
-            console.log("savePlayerAttendence", NewDate);
-            var dataDic = {};
-            var dict = {};
-            dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
-            dict['attendance_date'] = NewDate;
-            dict['players'] = this.state.playerList
+            console.log('new data', this.state.playerList);
+
+            var postData = {};
 
 
+            var data = {};
+            data['month'] = this.props.navigation.getParam('month');
+            data['year'] = this.props.navigation.getParam('year');
+            data['batch_id'] = this.props.navigation.getParam('batch_id');
+            data['player_id'] = this.props.navigation.getParam('player_id');
+            data['progress_score'] = [];
 
-            dataDic['data'] = dict;
-            console.log("dicttttc ", dict)
+            this.state.playerList.map((item, index) => {
 
-            this.props.saveCoachBatchAttendence(value, this.props.navigation.getParam('batch_id'), dataDic).then(() => {
+                item.parameters.map((item1, index1) => {
+                    var scoreData = {};
+                    scoreData['attribute_id'] = item.attribute_id;
+                    scoreData['parameter_id'] = item1.parameter_id;
+                    scoreData['score'] = parseInt(item1.score);
+                    data['progress_score'].push(scoreData);
+                })
+
+                
+                
+            })
+
+           console.log('data',data);
+
+           postData['data'] = data;
+
+            this.props.savePlayerPerformance(value, postData).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.performencedata);
@@ -166,11 +189,9 @@ class UpdatePlayerPerformence extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
-                    this.setState({
-                        playerList: user1.data['attributes'],
-                        batchDetails: user1.data
-
-                    })
+                    console.log('in if');
+                    Events.publish(EVENT_REFRESH_PLAYER);
+                    this.props.navigation.goBack();
                 }
 
             }).catch((response) => {
@@ -207,10 +228,10 @@ class UpdatePlayerPerformence extends BaseComponent {
                         textAlign: 'center',
                         alignContent: 'center'
                     }]}>
-                        {moment(this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM')}
+                        {moment(this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year'),"MM/YYYY").format('MMM')}
                     </Text>
                     <Text style={[defaultStyle.bold_text_12, { color: '#A3A5AE' }]}>
-                        {moment(this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_year).format('MMM')}
+                        {moment(this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_year,"MM/YYYY").format('MMM')}
                     </Text>
                 </View>
             </View>
@@ -259,14 +280,11 @@ class UpdatePlayerPerformence extends BaseComponent {
                                 <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE' }]}>Month </Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                <Text style={defaultStyle.bold_text_14}>{moment('06-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM ’YY')} </Text>
+                                <Text style={defaultStyle.bold_text_14}>{moment( this.props.navigation.getParam('month') + '/' + this.props.navigation.getParam('year'),"MM/YYYY").format('MMM ’YY')} </Text>
                                 <Text style={[defaultStyle.regular_text_14, { color: '#A3A5AE' }]}>(Enter Percentage)</Text>
                             </View>
                         </View>
                     </View>
-
-
-
 
                     <FlatList
                         data={this.state.playerList}
@@ -282,24 +300,25 @@ class UpdatePlayerPerformence extends BaseComponent {
                         marginTop: 20,
                         marginRight: 16,
                         marginLeft: 16,
-                        justifyContent: 'space-between'
+                        justifyContent: 'center',
+                        alignItems: 'center'
                     }}>
 
-                        <View style={{ flex: 1, marginRight: 10 }}>
+                        {/* <View style={{ flex: 1, marginRight: 10 }}>
 
                             <SwitchButton
 
-                                onPress={() => { this.savePlayerAttendence() }}>
+                                onPress={() => { this.savePlayerPerformanceToServer() }}>
                                 Save
                     </SwitchButton>
-                        </View>
+                        </View> */}
 
                         <View style={{ flex: 1, marginLeft: 10 }}>
 
                             <CustomeButtonB
                                 style={{ flex: 1 }}
-                                onPress={() => { this.savePlayerAttendence() }}>
-                                Save and Next
+                                onPress={() => { this.savePlayerPerformanceToServer() }}>
+                                Save
                     </CustomeButtonB>
                         </View>
 
@@ -322,7 +341,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getPerformenceOption, saveCoachBatchAttendence
+    getPerformenceOption, savePlayerPerformance
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UpdatePlayerPerformence);
 

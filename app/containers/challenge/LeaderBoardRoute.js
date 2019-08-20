@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE } from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getchallengeResults, disputeChallenge } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';

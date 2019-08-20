@@ -106,13 +106,13 @@ class PerformenceScreen extends BaseComponent {
         <View>
             <View style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}>
                 <Text style={defaultStyle.bold_text_14}>
-                    {moment('06-' + item.month + '-' + item.year).format('MMM YY')}
+                    {moment(item.month + '/' + item.year,"MM/YYYY").format('MMM YY')}
                 </Text>
             </View>
             <FlatList
                 data={item.batches}
                 renderItem={this.renderItem}
-                keyExtractor2={(item, index) => moment('06-' + item.month + '-' + item.year).format('MMM YY')}
+                keyExtractor2={(item, index) => moment(item.month + '/' + item.year,"MM/YYYY").format('MMM YY')}
             />
         </View>
 

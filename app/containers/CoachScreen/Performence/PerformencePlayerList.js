@@ -12,7 +12,8 @@ import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { COACH, ACADEMY } from '../../../components/Constants';
-import BaseComponent, { defaultStyle } from '../../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_PLAYER } from '../../BaseComponent';
+import Events from '../../../router/events';
 
 class PerformencePlayerList extends BaseComponent {
 
@@ -38,26 +39,22 @@ class PerformencePlayerList extends BaseComponent {
     }
 
     componentDidMount() {
-        var userData;
-        getData('header', (value) => {
-            console.log("header", value);
+
+
+        this.refreshEvent = Events.subscribe(EVENT_REFRESH_PLAYER, () => {
+             this.getPerformencePlayerData(this.props.navigation.getParam('batch_id'), this.props.navigation.getParam('month'), this.props.navigation.getParam('year'))
         });
 
-        console.log("CoachDashboard");
+        var userData;
+
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
-            console.log("userData.user", userData.user['user_type'])
             let userType = userData.user['user_type']
 
             if (userType == COACH || userType == ACADEMY) {
-
-                //const yourDate = Date()
-
-                // const NewDate = moment(this.state.attendenceDate).format('YYYY-MM-DD')
-                // console.log("savePlaye",NewDate)
                 this.getPerformencePlayerData(this.props.navigation.getParam('batch_id'), this.props.navigation.getParam('month'), this.props.navigation.getParam('year'))
 
             }
@@ -195,7 +192,7 @@ class PerformencePlayerList extends BaseComponent {
                         </View>
                         <View style={{ width: 130 }}>
                             <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Month</Text>
-                            <Text style={defaultStyle.regular_text_14}>{moment('06-' + this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year')).format('MMM YY')}</Text>
+                            <Text style={defaultStyle.regular_text_14}>{moment( this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year'),"MM/YYYY").format('MMM YY')}</Text>
                         </View>
 
                     </View>

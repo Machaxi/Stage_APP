@@ -36,6 +36,7 @@ class ChallengeDisputeScreen extends BaseComponent {
             modalVisible: false,
             selectedChallengeData: null,
             matchData: null,
+            academyId: ''
         }
         this.inputRefs = {
             country: null
@@ -145,11 +146,12 @@ class ChallengeDisputeScreen extends BaseComponent {
       this.props.updateChallengeScore(value, postData).then(() => {
         console.log(this.props);
         let data = this.props.data.data
-        //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+        console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
         //this.progress(false);
         let success = data.success
         if (success) {
-          this.setModalVisible(false);
+          this.fetchDisputeListByAcademy(this.state.academyId);
+          this.setModalVisible(false);  
         }
 
       }).catch((response) => {
@@ -182,7 +184,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                         source={require('../../../images/batch_card.png')}
                       >
                         <Text style={styles.playerScoreLabel}>Score</Text>
-                        <Text style={styles.playerScore}>90</Text>
+                        <Text style={styles.playerScore}>{this.state.selectedChallengeData.challenge_by.score}</Text>
 
                         <View style={styles.middleBox}>
                           <Text style={styles.playerCategory}>{getFormattedCategory(this.state.selectedChallengeData.challenge_by.player_category)}</Text>
@@ -198,7 +200,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={styles.badgeValue}>111</Text>
+                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.challenge_by.badge== undefined ? '' : this.state.selectedChallengeData.challenge_by.badge}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -217,7 +219,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                             source={require('../../../images/batch_card.png')}
                           >
                             <Text style={styles.playerScoreLabel}>Score</Text>
-                            <Text style={styles.playerScore}>99</Text>
+                            <Text style={styles.playerScore}>{this.state.selectedChallengeData.opponent.score}</Text>
 
                             <View style={styles.middleBox}>
                               <Text style={styles.playerCategory}>{getFormattedCategory(this.state.selectedChallengeData.opponent.player_category)}</Text>
@@ -233,7 +235,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                               <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
                                 <View style={styles.badgeInner}>
                                   {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                                  <Text style={styles.badgeValue}>111</Text>
+                                  <Text style={styles.badgeValue}>{this.state.selectedChallengeData.opponent.badge== undefined ? '' : this.state.selectedChallengeData.opponent.badge}</Text>
                                   {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                 </View> 
                               </ImageBackground>
@@ -295,7 +297,7 @@ class ChallengeDisputeScreen extends BaseComponent {
             <Text style={styles.cardHeading}>{moment.utc(item.date).local().format("Do MMM YY")}</Text>
             <Text style={styles.challengePlayersName}>{item.challenge_by.name} Vs {item.opponent.name}</Text>
             <View style={styles.challengeStatusOuter}>
-              <Text style={styles.challengeStatus}>Rahul won {item.score}</Text>
+              <Text style={styles.challengeStatus}>{item.winner.name} won {item.score}</Text>
               <Text style={styles.challengeScoreUpdated}>Score updated by {item.score_updated_by}</Text>
             </View>
 
@@ -353,6 +355,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                             console.warn(value)
                             this.setState({
                                 country: value,
+                                academyId: value
                             });
                             this.fetchDisputeListByAcademy(value)
                         }}
@@ -583,20 +586,20 @@ challengeScoreLabel: {
     justifyContent: 'center',
     textAlign: 'center',
     color: 'white',
-    fontSize: 8,
+    fontSize: 6,
     paddingTop: 6,
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   playerScore: {
     justifyContent: 'center',
     textAlign: 'center',
-    color: '#F4F4F4',
+    color: 'white',
     fontSize: 14,
-    fontFamily: 'Quicksand-Bold'
+    fontFamily: 'Quicksand-Medium'
   },
   middleBox: {
     flexDirection: 'row',
-    paddingTop: 13,
+    paddingTop: 10,
     marginLeft: 2,
     marginRight: 2,
   },
@@ -633,9 +636,9 @@ challengeScoreLabel: {
   },
   playerNameOuter: {
     position: 'absolute',
-    marginTop: 102,
+    marginTop: 103,
     width: "100%",
-    height: 24,
+    height: 23,
     backgroundColor: 'white'
   },
   playerName: {
@@ -647,7 +650,7 @@ challengeScoreLabel: {
   badgeOuter: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15
+    marginTop: 22
   },
   badgeBackImage: {
     height: 38,
@@ -668,8 +671,6 @@ challengeScoreLabel: {
   badgeValue: {
     fontSize: 5,
     color: '#F4F4F4',
-    textAlign: 'center',
-    fontFamily: 'BebasNeue-Regular'
   },
   badgeRightArrow: {
     height: 7,
@@ -714,7 +715,7 @@ challengeScoreLabel: {
     fontFamily: 'Quicksand-Regular'
   },
    playerBackImage: {
-    height: 180,
+    height: 182,
     width: '100%'
   },
 });
