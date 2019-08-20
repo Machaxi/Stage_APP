@@ -373,7 +373,7 @@ class CoachHome extends BaseComponent {
                     </View>
 
                     <CustomeButtonB onPress={() =>
-                        this.props.navigation.navigate('TournamentFixture', {
+                        this.props.navigation.navigate('FixtureSelection', {
                             id: id
                         })}>
                         View Fixtures</CustomeButtonB>

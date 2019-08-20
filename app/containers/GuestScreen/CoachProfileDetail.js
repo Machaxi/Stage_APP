@@ -5,7 +5,7 @@ import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle,checkProfilePic } from '../BaseComponent';
+import BaseComponent, { defaultStyle, checkProfilePic } from '../BaseComponent';
 import { getData } from "../../components/auth";
 import { RateViewFill, } from '../../components/Home/RateViewFill';
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
@@ -27,6 +27,7 @@ class CoachProfileDetail extends BaseComponent {
             filter_dialog: false,
             sortType: '',
             type: '',
+            is_feedback_loading: false
         }
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.coach_id = this.props.navigation.getParam('coach_id', '')
@@ -58,6 +59,7 @@ class CoachProfileDetail extends BaseComponent {
         let page = 0
         let size = 10
 
+
         this.props.getCoachFeedbackList('', academy_id, coach_id, page, size, sort, type).then(() => {
             console.log('getCoachFeedbackList=> ' + JSON.stringify(this.props.data.res))
             let status = this.props.data.res.success
@@ -68,9 +70,15 @@ class CoachProfileDetail extends BaseComponent {
                     feedback: feedback
                 })
             }
+            this.setState({
+                is_feedback_loading: false
+            })
 
         }).catch((response) => {
             console.log(response);
+            this.setState({
+                is_feedback_loading: false
+            })
         })
     }
 
@@ -79,27 +87,32 @@ class CoachProfileDetail extends BaseComponent {
     componentDidMount() {
 
         let coach_id = this.state.coach_id
+        getData('header', (value) => {
 
+            this.props.coachDetail(value, coach_id).then(() => {
+                console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
+                let status = this.props.data.res.success
+                if (status) {
+                    let coach = this.props.data.res.data.coach
+                    this.setState({
+                        coachData: coach
+                    })
 
-        this.props.coachDetail(coach_id).then(() => {
-            console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
-            let status = this.props.data.res.success
-            if (status) {
-                let coach = this.props.data.res.data.coach
-                this.setState({
-                    coachData: coach
-                })
+                    let sortType = this.state.sortType
+                    let type = this.state.type
+                    this.setState({
+                        is_feedback_loading: true
+                    })
+                    this.getCoachFeedbacks(sortType, type, false)
 
-                let sortType = this.state.sortType
-                let type = this.state.type
+                }
 
-                this.getCoachFeedbacks(sortType, type, false)
-
-            }
-
-        }).catch((response) => {
-            console.log(response);
+            }).catch((response) => {
+                console.log(response);
+            })
         })
+
+
 
     }
 
@@ -233,6 +246,10 @@ class CoachProfileDetail extends BaseComponent {
 
         let feedback = this.state.feedback
         let coachData = this.state.coachData
+        let user_id = coachData.user_id
+        let is_head = coachData.is_head
+
+
         let year = coachData.experience / 12
         year = Math.floor(year)
         let month = coachData.experience % 12
@@ -265,17 +282,29 @@ class CoachProfileDetail extends BaseComponent {
 
                             <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-end' }}>
 
-                                {/* <Text style={{
-                                        //width: 70,
-                                        padding: 4,
-                                        backgroundColor: '#667DDB',
-                                        color: 'white',
-                                        borderRadius: 4,
-                                        textAlign: 'center',
-                                        justifyContent: 'center',
-                                        alignItem: 'center',
-                                        fontSize: 12
-                                    }}> My Coach</Text> */}
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+
+                                    {is_head ?
+                                        <View style={{
+                                            width: 90,
+                                            borderRadius: 4,
+                                            justifyContent: 'center',
+                                            alignItem: 'center',
+                                            backgroundColor: '#CDB473',
+                                        }}>
+
+                                            <Text style={[defaultStyle.bold_text_12, {
+                                                paddingLeft: 4,
+                                                paddingRight: 4,
+                                                paddingTop: 1,
+                                                paddingBottom: 1,
+                                                color: 'white',
+                                                textAlign: 'center',
+                                            }]}>Head Coach</Text>
+                                        </View> : null}
+                                </View>
 
                                 <Text style={[defaultStyle.bold_text_14, { paddingTop: 12, color: '#707070' }]}>
                                     {this.state.coachData.name}</Text>
@@ -350,7 +379,9 @@ class CoachProfileDetail extends BaseComponent {
                                     <TouchableOpacity
                                         style={{ marginLeft: 20, }}
                                         onPress={() => {
-                                            this.props.navigation.goBack(null);
+                                            this.props.navigation.navigate('CoachListing', { academy_id: this.state.id })
+
+                                            //this.props.navigation.goBack(null);
                                         }}>
                                         <Text style={[defaultStyle.regular_text_10, {
                                             color: '#667DDB',
@@ -371,7 +402,16 @@ class CoachProfileDetail extends BaseComponent {
                                 color: '#A3A5AE', paddingTop: 8,
                                 paddingBottom: 6
                             }]}>Certifications</Text>
-                            <Text style={defaultStyle.regular_text_14}>{coachData.about}</Text>
+
+                            <ReadMoreText
+                                limitLines={3}
+                                renderFooter={this.renderFooter}
+                            >
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {coachData.about}</Text>
+
+                            </ReadMoreText>
+
                         </View>
 
                     </View>
@@ -405,7 +445,7 @@ class CoachProfileDetail extends BaseComponent {
                                     this.props.navigation.navigate('WriteAcademyFeedback',
                                         {
                                             academy_id: this.state.academy_id,
-                                            target_id: this.state.coach_id,
+                                            target_id: user_id,
                                             is_coach: true
                                         })
                                 }}>
@@ -413,7 +453,8 @@ class CoachProfileDetail extends BaseComponent {
                                 Give Feedback</SkyFilledButton></View>
                         : null}
 
-                    {feedback.length != 0 ?
+                    {feedback.length > 0 || this.state.is_feedback_loading
+                        ?
                         <Card
                             style={{
                                 elevation: 2,
@@ -422,76 +463,88 @@ class CoachProfileDetail extends BaseComponent {
                                 marginTop: 10,
                             }}
                         >
-                            <View
-                                style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
-                            >
 
-                                <View style={{
+                            {
+                                this.state.is_feedback_loading == true ?
+                                    <View style={{
+                                        padding: 8
+                                    }}>
+                                        <ActivityIndicator size="small" color="#67BAF5" /></View>
+                                    :
 
-                                    flexDirection: 'row',
-                                    flex: 1,
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <Text
-                                        style={[defaultStyle.bold_text_14, {
-                                            color: '#707070'
-                                        }]}
-                                    >
-                                        Reviews ({this.state.feedback.length})
+                                    <View>
+
+                                        <View
+                                            style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
+                                        >
+
+                                            <View style={{
+
+                                                flexDirection: 'row',
+                                                flex: 1,
+                                                justifyContent: 'space-between',
+                                            }}>
+                                                <Text
+                                                    style={[defaultStyle.bold_text_14, {
+                                                        color: '#707070'
+                                                    }]}
+                                                >
+                                                    Reviews ({this.state.feedback.length})
                             </Text>
 
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            this.setState({
-                                                filter_dialog: true
-                                            })
-                                        }}
-                                    >
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        this.setState({
+                                                            filter_dialog: true
+                                                        })
+                                                    }}
+                                                >
 
 
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Text
-                                                style={defaultStyle.regular_text_12}
-                                            >Sort </Text>
-                                            <Image
-                                                resizeMode="contain"
-                                                style={{ width: 24, height: 15, }}
-                                                source={require('../../images/filter_rating.png')}
-                                            ></Image>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text
+                                                            style={defaultStyle.regular_text_12}
+                                                        >Sort </Text>
+                                                        <Image
+                                                            resizeMode="contain"
+                                                            style={{ width: 24, height: 15, }}
+                                                            source={require('../../images/filter_rating.png')}
+                                                        ></Image>
+
+                                                    </View>
+                                                </TouchableOpacity>
+
+                                            </View>
+
+                                            <View
+                                                style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
+                                            ></View>
+
 
                                         </View>
-                                    </TouchableOpacity>
-
-                                </View>
-
-                                <View
-                                    style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
-                                ></View>
 
 
-                            </View>
+                                        <FlatList
+                                            onEndReachedThreshold={0.5}
+                                            onEndReached={({ distanceFromEnd }) => {
+                                                console.log('on end reached ', distanceFromEnd);
+                                                let page = this.state.page
+                                                page = page + 1
+                                                this.state.page = page
+
+                                                console.log('page => ', this.state.page)
+                                                let sortType = this.state.sortType
+                                                let type = this.state.type
+                                                this.getCoachFeedbacks(sortType, type, false)
+                                            }}
+                                            extraData={feedback}
+                                            data={feedback}
+                                            renderItem={this._renderRatingItem}
+                                        /></View>}
 
 
-                            <FlatList
-                                onEndReachedThreshold={0.5}
-                                onEndReached={({ distanceFromEnd }) => {
-                                    console.log('on end reached ', distanceFromEnd);
-                                    let page = this.state.page
-                                    page = page + 1
-                                    this.state.page = page
+                        </Card> : null}
 
-                                    console.log('page => ', this.state.page)
-                                    let sortType = this.state.sortType
-                                    let type = this.state.type
-                                    this.getCoachFeedbacks(sortType, type, false)
-                                }}
-                                extraData={feedback}
-                                data={feedback}
-                                renderItem={this._renderRatingItem}
-                            />
-
-                        </Card>
-                        : null}
                 </View>
             </ScrollView>
 

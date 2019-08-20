@@ -149,7 +149,7 @@ export function coachListing(academy_id) {
     }
 };
 
-export function coachDetail(coach_id) {
+export function coachDetail(header,coach_id) {
 
     let url = `global/coach/details?coach_id=${coach_id}`
     console.log("search => " + url)
@@ -157,7 +157,12 @@ export function coachDetail(coach_id) {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: url
+                url: url,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+
+                },
             }
         }
     }

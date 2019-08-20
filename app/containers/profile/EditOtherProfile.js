@@ -37,7 +37,8 @@ class EditOtherProfile extends BaseComponent {
             this.state.txtname = name
             this.state.txtphone = phone_number
             this.state.birthdate = dob
-            this.state.id = res.user_id
+            this.state.id = res.user_id,
+                this.state.profile_pic = res.profile_pic
         }
 
         let date = this.state.birthdate
@@ -149,6 +150,7 @@ class EditOtherProfile extends BaseComponent {
                     >
 
                         <Image
+                            resizeMode="contain"
                             style={{ height: 100, width: 100 }}
                             source={{ uri: profile_pic }} />
 

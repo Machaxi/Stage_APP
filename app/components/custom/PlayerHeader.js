@@ -17,6 +17,7 @@ export default class PlayerHeader extends BaseComponent {
         const { name, academy_name, badge, rank, score,
             player_level,
             reward_point,
+            profile_pic,
             player_category, operations } =
             this.props.player_profile
 
@@ -53,7 +54,7 @@ export default class PlayerHeader extends BaseComponent {
 
                     <View style={{ position: 'relative', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Image source={require('../../images/male_avatar.png')}
+                            <Image source={{ uri: profile_pic }}
                                 resizeMode="contain"
                                 style={{
                                     width: 201,
@@ -118,7 +119,7 @@ export default class PlayerHeader extends BaseComponent {
                                         color: 'white',
                                         marginRight: 10,
                                         textAlign: 'center',
-                                        fontSize: 12,
+                                        fontSize: 11,
                                         fontFamily: 'Quicksand-Medium',
 
                                     }}>{getFormattedLevel(player_level)}</Text>

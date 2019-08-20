@@ -429,7 +429,7 @@ class RegisteredRoute extends BaseComponent {
                         }}>
                             <SkyFilledButton
                                 onPress={() => {
-                                    this.props.navigation.navigate('TournamentFixture',{
+                                    this.props.navigation.navigate('FixtureSelection',{
                                         id:item.id
                                     })
                                     //this.getFixtureData(item.id)

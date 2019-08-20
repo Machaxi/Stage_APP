@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 
@@ -90,7 +90,7 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                         paddingTop: 2,
                                         paddingBottom: 2,
                                         fontFamily: 'Quicksand-Medium'
-                                    }}>{data.academic_type}</Text>
+                                    }}>{getFormattedTournamentType(data.academic_type)}</Text>
 
                                 </View>
 

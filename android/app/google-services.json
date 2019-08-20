@@ -1,35 +1,94 @@
 {
   "project_info": {
-    "project_number": "889577335273",
-    "firebase_url": "https://dribble-b8510.firebaseio.com",
-    "project_id": "dribble-b8510",
-    "storage_bucket": "dribble-b8510.appspot.com"
+    "project_number": "445376033321",
+    "firebase_url": "https://dribble-9a3f6.firebaseio.com",
+    "project_id": "dribble-9a3f6",
+    "storage_bucket": "dribble-9a3f6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:889577335273:android:5d4010a8eaf1c4bc",
+        "mobilesdk_app_id": "1:445376033321:android:5d4010a8eaf1c4bc",
         "android_client_info": {
           "package_name": "com.dribble"
         }
       },
       "oauth_client": [
         {
-          "client_id": "889577335273-1dkmiu3f0ddu5oojki845mp0rlsc0l92.apps.googleusercontent.com",
+          "client_id": "445376033321-8na0s0aqm6v5g85iceor9qurq88rr74j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dribble",
+            "certificate_hash": "c0075a07b5315287593d560673aef677fbb6031e"
+          }
+        },
+        {
+          "client_id": "445376033321-3lio9lugvjmgbins26kpsp5nuuj4ju9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dribble",
+            "certificate_hash": "1bde83793268b5a9148b6253085b2b8e8df203a2"
+          }
+        },
+        {
+          "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCgVMpH6tugCOkIrlv6RskLdFqSCdIQSEQ"
+          "current_key": "AIzaSyA_5xPrD2Bod747X6_55traTxGgU955w5s"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "889577335273-1dkmiu3f0ddu5oojki845mp0rlsc0l92.apps.googleusercontent.com",
+              "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "445376033321-or05oq26k0phge5ajne056gbflp3a3vn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.Dribble"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445376033321:android:d345d02fe390d2b0",
+        "android_client_info": {
+          "package_name": "com.example.fcmtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5xPrD2Bod747X6_55traTxGgU955w5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445376033321-or05oq26k0phge5ajne056gbflp3a3vn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.Dribble"
+              }
             }
           ]
         }
