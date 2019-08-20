@@ -636,7 +636,7 @@ class UserHome extends BaseComponent {
                                             ratingCount={5}
                                             imageSize={12}
                                             readonly={true}
-                                            startingValue={5}//academy_feedback_data.target.avgFeedbackEntities[0].avgRating
+                                            startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}//
                                             style={{ width: 80 }}
                                         />
 
@@ -652,7 +652,7 @@ class UserHome extends BaseComponent {
                                         }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
                                         academy_feedback_data.target.avgFeedbackEntities[0].avgRating
                                         */}
-                                        <RateViewBorder>{5}</RateViewBorder>
+                                        <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
                                     </View>
                                 </View>
                                 <View>
@@ -800,7 +800,7 @@ class UserHome extends BaseComponent {
                                             ratingCount={5}
                                             imageSize={12}
                                             readonly={true}
-                                            startingValue={5}//coach_feedback_data.target.avgFeedbackEntities[0].avgRating
+                                            startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}//coach_feedback_data.target.avgFeedbackEntities[0].avgRating
                                             style={{ width: 80 }}
                                         />
 
@@ -815,7 +815,7 @@ class UserHome extends BaseComponent {
                                             fontFamily: 'Quicksand-Medium'
                                         }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
                                         coach_feedback_data.target.avgFeedbackEntities[0].avgRating */}
-                                        <RateViewBorder>{5}</RateViewBorder>
+                                        <RateViewBorder>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
                                     </View>
                                 </View>
                                 <View>

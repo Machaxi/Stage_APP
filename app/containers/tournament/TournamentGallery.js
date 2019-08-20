@@ -30,7 +30,12 @@ export default class TournamentGallery extends BaseComponent {
                 description: ''
             })
         )
-        return <ImageBrowser images={imageURLs} />
+        return <ImageBrowser 
+        infoTitleStyles={{
+            borderColor:'red',
+            borderWidth:4
+        }}
+        images={imageURLs} />
     }
 }
 

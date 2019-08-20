@@ -16,6 +16,8 @@ import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
 import TournamentGallery from '../containers/tournament/TournamentGallery'
+import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
+
 import TournamentFilter from '../containers/tournament/TournamentFilter'
 
 const TournamentModule = createStackNavigator({
@@ -132,6 +134,24 @@ const TournamentModule = createStackNavigator({
 
     TournamentGallery: {
         screen: TournamentGallery,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentGallerySlider: {
+        screen: TournamentGallerySlider,
         navigationOptions: ({ navigation }) => ({
             title: 'Gallery',
             headerTitleStyle: style.headerStyle,

@@ -34,7 +34,7 @@ class CoachMyFeedbackListing extends BaseComponent {
 
                 //console.warn('coach_id', user['coach_id'])
                 this.state.coach_id = user['coach_id']
-
+                this.state.academy_id = user['academy_id']
                 this.fetchData()
 
             })
@@ -91,7 +91,7 @@ class CoachMyFeedbackListing extends BaseComponent {
 
                     <Text
                         style={[defaultStyle.bold_text_14, { flex: 1 }]}>
-                        {item.source.name}
+                        Anonymous
                     </Text>
 
 
