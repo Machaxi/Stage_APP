@@ -6,6 +6,11 @@ import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import io.branch.rnbranch.*; // <-- add this
 import android.content.Intent; // <-- and this
+import com.crashlytics.android.Crashlytics;
+import android.util.Log;
+import android.os.Bundle;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends ReactActivity {
 
@@ -27,6 +32,21 @@ public class MainActivity extends ReactActivity {
         super.onNewIntent(intent);
         setIntent(intent);
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Crashlytics.log(Log.DEBUG, "tag", "message");
+        //Crashlytics.getInstance().crash(); // Force a crash
+//
+//        logReportAndPrint();
+//        logReportOnly();
+//        enableAtRuntime();
+//        enableDebugMode();
+//        forceACrash();
+    }
+
+
 
       @Override
   protected ReactActivityDelegate createReactActivityDelegate() {

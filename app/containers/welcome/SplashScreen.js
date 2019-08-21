@@ -5,6 +5,7 @@ import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth"
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
+import firebase from "react-native-firebase";
 
 var is_deep_linking = false
 
@@ -36,6 +37,12 @@ class Splash extends BaseComponent {
         //     }
         // });
         this.moveNext()
+        firebase.analytics().logEvent("APP_START", {})
+        firebase.analytics().logEvent("testing_dribble", {})
+        firebase.analytics().setCurrentScreen()
+        firebase.analytics().setUserId('testing')
+        //firebase.crashlytics().log('Test Message!');
+
 
         //1a476280-04c6-40a5-b76e-6cc4da41669e
     }

@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, BackHandler, Linking } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux'
 import logger from 'redux-logger'
 import { Provider } from 'react-redux'
@@ -20,15 +20,16 @@ import { SafeAreaView } from 'react-navigation'
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NativeEventEmitter, NativeModules, StatusBar } from 'react-native';
 import InfoDialog from './app/components/custom/InfoDialog'
+import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, GO_TO_HOME } from './app/containers/BaseComponent';
+import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } from './app/containers/BaseComponent';
 import { storeData } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 
 export const BASE_URL = 'http://13.233.182.217:8080/api/'
-const client = axios.create({
+export const client = axios.create({
     baseURL: BASE_URL,
     responseType: 'json'
 });
@@ -41,8 +42,9 @@ const store = createStore(reducer, middleware);
 //added only header but now we have to send more default params, so using this block
 client.interceptors.request.use(
     config => {
-        config.headers.app_version = '1.0.0';
-        config.headers.os = Platform.OS;
+        config.headers.app_version = '1';
+        config.headers.device_type = Platform.OS;
+        //config.headers.fcm_token = FCM_TOKEN
         return config;
     },
     error => Promise.reject(error)
@@ -52,7 +54,7 @@ client.interceptors.request.use(
 ///Check for error, there is no handling of response in error case, so we are using 
 //these code
 client.interceptors.response.use(response => {
-    //console.warn('Response ',JSON.stringify(response))
+    console.info('interceptors ', JSON.stringify(response.request._url))
     return response;
 }, error => {
 
@@ -116,8 +118,8 @@ branch.subscribe(({ error, params }) => {
     console.log('Branchtit=>', tournament_id)
     if (tournament_id) {
         //alert('test')
-       // storeData('deep_linking', true)
-       // Events.publish('deep_linking', tournament_id);
+        // storeData('deep_linking', true)
+        // Events.publish('deep_linking', tournament_id);
 
     }
 })
@@ -125,12 +127,15 @@ branch.subscribe(({ error, params }) => {
 
 export default class App extends BaseComponent {
 
+    //static FCM_TOKEN = ''
+
     constructor(props) {
         super(props)
         this.state = {
             is_show_alert: false,
-            info_msg: ''
-
+            info_msg: '',
+            show_must_update_alert: false,
+            navigation: null
         }
 
 
@@ -150,6 +155,13 @@ export default class App extends BaseComponent {
                 info_msg: msg
             })
         });
+
+        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, () => {
+            this.setState({
+                show_must_update_alert: true,
+            })
+        });
+
 
         OneSignal.init("0afba88e-fe31-4da9-9540-412faf6b856b");
         //OneSignal.setLogLevel(0, 6)
@@ -190,6 +202,7 @@ export default class App extends BaseComponent {
 
     render() {
         let is_show_alert = this.state.is_show_alert
+        let show_must_update_alert = this.state.show_must_update_alert
         let info_msg = this.state.info_msg
         return (
 
@@ -209,11 +222,40 @@ export default class App extends BaseComponent {
                         message={info_msg}
                         visible={is_show_alert} />
 
+                    <UpdateAppDialog
+                        navigation={this.state.navigation}
+                        exitPressed={() => {
+                            this.setState({
+                                show_must_update_alert: false,
+                            })
+                            BackHandler.exitApp()
+                            //this.props.navigation.goBack(null)
+                        }}
+                        updatePressed={() => {
+                            this.setState({
+                                show_must_update_alert: false,
+                            })
+                            this.handleClick()
+                        }}
+                        visible={show_must_update_alert} />
+
                     <AppMain />
                 </Provider>
             </PaperProvider>
             // </SafeAreaView>
         );
+    }
+    handleClick() {
+
+        let link = ''
+        if (Platform.OS == 'ios') {
+            link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
+        } else {
+            link = 'market://details?id=com.whatsapp'
+        }
+        Linking.canOpenURL(link).then(supported => {
+            supported && Linking.openURL(link);
+        }, (err) => console.log(err));
     }
 }
 
