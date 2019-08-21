@@ -4,7 +4,7 @@ import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { coachListing } from '../../redux/reducers/CoachReducer'
-import BaseComponent from '../BaseComponent';
+import BaseComponent,{defaultStyle} from '../BaseComponent';
 
 class CoachListing extends BaseComponent {
 
@@ -56,7 +56,7 @@ class CoachListing extends BaseComponent {
 
                     <TextInput style={{
                         marginLeft: 8,
-                        height:45,
+                        height: 45,
                         backgroundColor: 'white',
                         borderRadius: 16,
                         fontFamily: 'Quicksand-Regular'
@@ -108,22 +108,33 @@ class CoachListing extends BaseComponent {
                     flexDirection: 'row', flex: 1, justifyContent: 'space-between'
                 }}>
 
-                    <Text style={{ color: '#707070' }}>
+                    <Text style={{
+                        color: '#707070',
+                        width: "50%"
+                    }}>
                         {item.name}
                     </Text>
 
-                    {/* {item.isMyCoach ?
-                        <Text style={{
-                            width: '20%', backgroundColor: '#667DDB',
-                            color: 'white',
-                            paddingTop: 2,
+                    {/* {item.is_head ?
+                        <View style={{
+                            width: 90,
                             borderRadius: 4,
-                            textAlign: 'center',
                             justifyContent: 'center',
                             alignItem: 'center',
-                            fontSize: 12
-                        }}> My Coach</Text>
-                        :
+                            backgroundColor: '#CDB473',
+                        }}>
+
+                            <Text style={[defaultStyle.bold_text_12, {
+                                paddingLeft: 4,
+                                paddingRight: 4,
+                                paddingTop: 1,
+                                paddingBottom: 1,
+                                color: 'white',
+                                textAlign: 'center',
+                            }]}>Head Coach</Text>
+                        </View> : null} */}
+
+                    {/* :
                         <Text style={{
                             width: '20%', backgroundColor: '#000000',
                             color: 'white',

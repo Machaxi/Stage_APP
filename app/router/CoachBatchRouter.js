@@ -8,6 +8,9 @@ import { Dimensions, StyleSheet } from "react-native";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
+import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
+import CoachListing from '../containers/GuestScreen/CoachListing'
 
 const coachBatchModule = createStackNavigator({
 
@@ -95,8 +98,50 @@ const coachBatchModule = createStackNavigator({
 
     },
 
+    CoachProfileDetail: {
+        screen: CoachProfileDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Profile",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
 
+    },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Player Detail",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    CoachListing: {
+        screen: CoachListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "Coach Listing",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 
 }, {
         contentComponent: ({ navigation }) => {

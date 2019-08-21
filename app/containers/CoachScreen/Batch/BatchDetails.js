@@ -22,7 +22,8 @@ class BatchDetails extends React.Component {
         this.state = {
             batchDetails: null,
             coactList: null,
-            userData: null
+            userData: null,
+            academy_id: ''
 
         }
     }
@@ -35,12 +36,14 @@ class BatchDetails extends React.Component {
 
         console.log("CoachDashboard");
         getData('userInfo', (value) => {
+            console.log('userInfo => ',value)
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
             });
             console.log("userData.user", this.props.navigation.getParam('batch_id'))
             let userType = userData.user['user_type']
+            this.state.academy_id = userData['academy_id']
 
             if (userType == COACH || userType == ACADEMY) {
                 this.getCoachBatch(this.props.navigation.getParam('batch_id'))
@@ -177,16 +180,17 @@ class BatchDetails extends React.Component {
         <TouchableOpacity key={item} onPress={() => {
 
             console.warn("Touch Press")
-
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
+            this.props.navigation.navigate('CoachProfileDetail', {
+                academy_id: this.state.academy_id,
+                coach_id: item.id
+            })
 
         }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
                 <View style={{ marginRight: 20, flexDirection: 'row', height: 50, alignItems: 'center' }}>
 
                     <Image source={require('../../../images/coach_small_pic.png')}
+                        resizeMode="contain"
                         style={{
                             width: 36,
                             borderRadius: 6,
@@ -211,13 +215,14 @@ class BatchDetails extends React.Component {
                     }}>
                         <Text
                             style={{
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: '#707070',
                                 fontFamily: 'Quicksand-Bold',
                                 marginRight: 10,
                                 marginLeft: 10,
 
-                            }}>{item.ratings}</Text>
+                            }}>{item.ratings == undefined ? "0.0" :
+                                item.ratings.toFixed(1)}</Text>
 
                     </View>
                     <Image source={require('../../../images/right_icon.png')}

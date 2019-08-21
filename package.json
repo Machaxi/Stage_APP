@@ -23,6 +23,7 @@
     "react-native-firebase": "^5.5.6",
     "react-native-gallery": "0.0.17",
     "react-native-gesture-handler": "^1.3.0",
+    "react-native-image-gallery": "^2.1.5",
     "react-native-interactive-image-gallery": "^0.1.2",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-loading-spinner-overlay": "^1.0.1",

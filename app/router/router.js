@@ -209,10 +209,10 @@ const GuestHomeModule = createStackNavigator({
     OtherPlayerDeatils: {
         screen: otherplayerDetails,
         navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
+            title: "Player Detail",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -495,10 +495,10 @@ const coachHomeModule = createStackNavigator({
     OtherPlayerDeatils: {
         screen: otherplayerDetails,
         navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
+            title: "Player Detail",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',

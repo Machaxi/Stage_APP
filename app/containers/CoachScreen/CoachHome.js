@@ -9,7 +9,7 @@ import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
 import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashboardReducer";
-import { getData } from "../../components/auth";
+import { getData, storeData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
 import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent';
@@ -43,7 +43,8 @@ class CoachHome extends BaseComponent {
                             fontSize: 16,
                             color: '#404040'
                         }}
-                    >{navigation.getParam('academy_name', '') + ' ▼'}</Text>
+                    >{navigation.getParam('academy_name', '') == "" ? "" :
+                        navigation.getParam('academy_name', '') + ' ▼'}</Text>
                 </TouchableOpacity>
 
             ),
@@ -138,7 +139,14 @@ class CoachHome extends BaseComponent {
                     let data = user1.data['academies']
                     if (data.length > 0) {
                         let name = data[0].academy_name
+                        let academy_id = data[0].academy_id
                         console.warn('test => ' + name)
+                        // getData('userInfo',(value)=>{
+                        //     console.warn('UserInfo ',value)
+                        //     let json = JSON.parse(value)
+                        //     json.academy_id = academy_id
+                        //     storeData('userInfo',JSON.stringify(json))
+                        // })
                         this.props.navigation.setParams({ 'academy_name': name })
                     }
 
@@ -365,7 +373,7 @@ class CoachHome extends BaseComponent {
                     </View>
 
                     <CustomeButtonB onPress={() =>
-                        this.props.navigation.navigate('TournamentFixture', {
+                        this.props.navigation.navigate('FixtureSelection', {
                             id: id
                         })}>
                         View Fixtures</CustomeButtonB>

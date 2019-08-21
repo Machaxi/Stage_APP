@@ -41,7 +41,7 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('TournamentFixture', {
+        // this.props.navigation.navigate('FixtureSelection', {
         //     id: 6
         // })
         // return
@@ -57,11 +57,11 @@ class Splash extends BaseComponent {
 
                 setTimeout(() => {
 
-                    console.warn('is_deep_linking => ', is_deep_linking)
-                    if (is_deep_linking) {
-                        Events.publish(GO_TO_HOME);
-                        return
-                    }
+                    //console.warn('is_deep_linking => ', is_deep_linking)
+                    // if (is_deep_linking) {
+                    //     Events.publish(GO_TO_HOME);
+                    //     return
+                    // }
 
 
                     const { checkedSignIn, signedIn } = this.state;

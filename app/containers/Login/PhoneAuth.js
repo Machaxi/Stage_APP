@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet, Platform } from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet, BackHandler, Platform } from 'react-native';
 import { doLogin, doFBLogin, doLoginTest } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
@@ -27,7 +27,7 @@ class PhoneAuth extends BaseComponent {
             spinner: false,
             is_navigation_to_tournament: false,
             firebase_token: '',
-            one_signal_device_id: ''
+            one_signal_device_id: '',
         };
 
         getData(TOURNAMENT_REGISTER, (value) => {
@@ -49,7 +49,19 @@ class PhoneAuth extends BaseComponent {
                 ONE_SIGNAL_USERID: value
             })
         });
+
     }
+
+
+
+    handleBackButtonClick() {
+        this.setState({
+            user1: null,
+            confirmResult: null
+        })
+    }
+
+
 
     componentDidMount() {
         // this.signOut()
@@ -79,6 +91,8 @@ class PhoneAuth extends BaseComponent {
 
 
     }
+
+
 
     progress(status) {
         this.setState({
@@ -158,7 +172,7 @@ class PhoneAuth extends BaseComponent {
         }
         let fcm_token = this.state.firebase_token
         let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
-        
+
 
         this.setState({
             isCall: false
@@ -169,8 +183,8 @@ class PhoneAuth extends BaseComponent {
         dict['firebase_token'] = token;
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
-        dict['fcm_token'] =fcm_token;
-        dict['ONE_SIGNAL_USERID'] =ONE_SIGNAL_USERID;
+        dict['fcm_token'] = fcm_token;
+        dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
         dict['has_firebase_check'] = false;
 
 
@@ -292,8 +306,8 @@ class PhoneAuth extends BaseComponent {
 
         let fcm_token = this.state.firebase_token
         let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
-       
-        
+
+
         this.setState({
             isCall: false
         })
@@ -304,8 +318,8 @@ class PhoneAuth extends BaseComponent {
         dict['firebase_token'] = "token";
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
-        dict['fcm_token'] =fcm_token;
-        dict['ONE_SIGNAL_USERID'] =ONE_SIGNAL_USERID;
+        dict['fcm_token'] = fcm_token;
+        dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
         dict['has_firebase_check'] = false;
 
 
@@ -549,14 +563,44 @@ class PhoneAuth extends BaseComponent {
                     An OTP has been sent to your number
                 </Text>
 
-                <Text style={{
-                    color: "#000000",
-                    marginTop: 20,
-                    fontFamily: 'Quicksand-Bold',
-                    marginBottom: 10, fontSize: 18
-                }}>
-                    {this.state.phoneNumber}
-                </Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.handleBackButtonClick()
+                    }}
+                >
+
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 20,
+                        marginBottom: 10,
+
+                    }}>
+
+
+                        <Image
+                            resizeMode="contain"
+                            style={{
+                                width: 12,
+                                height: 12,
+                                marginRight: 8
+                            }}
+                            source={require('../../images/edit_profile.png')}
+                        ></Image>
+
+                        <Text style={{
+                            color: "#000000",
+                            fontFamily: 'Quicksand-Bold',
+                            fontSize: 18
+                        }}>
+                            {this.state.phoneNumber}
+                        </Text>
+
+
+                    </View>
+
+                </TouchableOpacity>
 
 
 

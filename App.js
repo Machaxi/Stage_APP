@@ -116,8 +116,8 @@ branch.subscribe(({ error, params }) => {
     console.log('Branchtit=>', tournament_id)
     if (tournament_id) {
         //alert('test')
-        storeData('deep_linking', true)
-        Events.publish('deep_linking', tournament_id);
+       // storeData('deep_linking', true)
+       // Events.publish('deep_linking', tournament_id);
 
     }
 })

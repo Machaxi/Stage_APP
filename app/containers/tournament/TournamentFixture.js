@@ -42,6 +42,7 @@ class TournamentFixture extends Component {
         super(props)
         this.state = {
             array: [],
+            data: null,
             tournament_fixtures: [],
             is_show_dialog: false,
             tournament_id: '',
@@ -65,7 +66,7 @@ class TournamentFixture extends Component {
 
 
         this.dialogRef = React.createRef();
-        this.state.tournament_id = this.props.navigation.getParam('id')
+        //this.state.tournament_id = this.props.navigation.getParam('id')
         console.warn('ID => ', this.state.tournament_id)
 
         //let data = this.props.navigation.getParam('data')
@@ -75,7 +76,11 @@ class TournamentFixture extends Component {
         //this.state.array = JSON.parse(data)
         console.warn('Fxitrue data' + this.state.array)
 
-        this.getFixtureData()
+        // this.getFixtureData()
+        let data = this.props.navigation.getParam('data')
+        console.log(data)
+        this.state.data = JSON.parse(data)
+        this.showFixture(JSON.parse(data))
     }
 
     getFixtureData() {
@@ -114,22 +119,22 @@ class TournamentFixture extends Component {
 
     }
 
-    showFixture(id) {
+    showFixture(data) {
 
-        if (id == undefined) {
-            return
-        }
+        // if (id == undefined) {
+        //     return
+        // }
 
-        console.warn('ShowFixture = > ', id)
+        // console.warn('ShowFixture = > ', id)
 
-        let data = null
-        let tournament_fixtures = this.state.tournament_fixtures
-        for (let i = 0; i < tournament_fixtures.length; i++) {
-            let obj = tournament_fixtures[i]
-            if (obj.id == id) {
-                data = obj
-            }
-        }
+        // let data = null
+        // let tournament_fixtures = this.state.tournament_fixtures
+        // for (let i = 0; i < tournament_fixtures.length; i++) {
+        //     let obj = tournament_fixtures[i]
+        //     if (obj.id == id) {
+        //         data = obj
+        //     }
+        // }
 
         if (data != null) {
             let fixture_data = data.tournament_matches
@@ -292,6 +297,7 @@ class TournamentFixture extends Component {
             this.setState({
                 array: playerArray
             })
+            this.state.array = playerArray
             // setTimeout(() => {
             //     this.setState({
             //         is_show_dialog: false
@@ -368,6 +374,14 @@ class TournamentFixture extends Component {
                 let space = 0;
                 let topSpace = 0
 
+                let roundName = "Round " + (i + 1)
+                console.log("Round---- " + i + " == " + (col - 1))
+                if (i == col - 1) {
+                    if (array[col - 1].length == 2) {
+                        roundName = "Final Round"
+                    }
+                }
+
                 container.push(
                     <Text
                         stroke="black"
@@ -376,7 +390,7 @@ class TournamentFixture extends Component {
                         fontFamily="Quicksand-Regular"
                         x={x + (width / 2) - 15}
                         y={10}
-                    >Round {i + 1}</Text>
+                    >{roundName}</Text>
                 )
 
 
@@ -646,13 +660,13 @@ class TournamentFixture extends Component {
             }
         }
 
-        if (this.props.data.loading && array.length == 0) {
-            return (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#67BAF5" />
-                </View>
-            )
-        }
+        // if (this.props.data.loading && array.length == 0) {
+        //     return (
+        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        //             <ActivityIndicator size="large" color="#67BAF5" />
+        //         </View>
+        //     )
+        // }
         console.warn('Show => ', this.state.is_show_dialog)
 
         return (

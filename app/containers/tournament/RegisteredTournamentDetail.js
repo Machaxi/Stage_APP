@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
@@ -98,7 +98,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                         paddingTop: 2,
                                         paddingBottom: 2,
                                         fontFamily: 'Quicksand-Medium'
-                                    }}>{data.academic_type}</Text>
+                                    }}>{getFormattedTournamentType(data.academic_type)}</Text>
 
                                 </View>
 
