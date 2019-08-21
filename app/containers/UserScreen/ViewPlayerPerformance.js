@@ -95,7 +95,6 @@ class ViewPlayerPerformance extends BaseComponent {
         navigation={this.props.navigation} />;
   
     };
-
   
     render() {
 
