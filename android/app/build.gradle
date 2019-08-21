@@ -141,6 +141,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-youtube')
+    implementation project(':react-native-webview')
     implementation project(':react-native-branch')
     implementation project(':react-native-onesignal')
     implementation project(':react-native-razorpay')

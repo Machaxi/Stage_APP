@@ -180,7 +180,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                 <View style={styles.playerCardOuter}>
                   <View style={styles.modalPlayerCard}>
                     <TouchableOpacity>
-                      <ImageBackground style={styles.playerBackImage}
+                      <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                         source={require('../../../images/batch_card.png')}
                       >
                         <Text style={styles.playerScoreLabel}>Score</Text>
@@ -215,7 +215,7 @@ class ChallengeDisputeScreen extends BaseComponent {
 
                       <View style={styles.modalPlayerCard}>
                         <TouchableOpacity>
-                          <ImageBackground style={styles.playerBackImage}
+                          <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                             source={require('../../../images/batch_card.png')}
                           >
                             <Text style={styles.playerScoreLabel}>Score</Text>

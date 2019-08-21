@@ -249,7 +249,7 @@ class DashboardRoute extends BaseComponent {
                 <View style={styles.playerCardOuter}>
                   <View style={styles.modalPlayerCard}>
                     <TouchableOpacity>
-                      <ImageBackground style={styles.playerBackImage}
+                      <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                         source={require('../../images/batch_card.png')}
                       >
                         <Text style={styles.playerScoreLabel}>Score</Text>
@@ -286,7 +286,7 @@ class DashboardRoute extends BaseComponent {
                     this.state.selectedOpponentData != null ?
                       <View style={styles.modalPlayerCard}>
                         <TouchableOpacity>
-                          <ImageBackground style={styles.playerBackImage}
+                          <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                             source={require('../../images/batch_card.png')}
                           >
                             <Text style={styles.playerScoreLabel}>Score</Text>
@@ -371,7 +371,7 @@ class DashboardRoute extends BaseComponent {
           <View style={styles.playerCardOuter}>
             <View style={styles.playerCard}>
               <TouchableOpacity>
-                <ImageBackground style={styles.playerBackImage}
+                <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                   source={require('../../images/batch_card.png')}
                 >
                   <Text style={styles.playerScoreLabel}>Score</Text>
@@ -408,7 +408,7 @@ class DashboardRoute extends BaseComponent {
 
             <View style={styles.opponentCard}>
               <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
-                <ImageBackground style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
+                <ImageBackground resizeMode='contain' style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
                   <Text style={styles.addOpponentLabel}>+ Add Opponent</Text>
                 </ImageBackground>
               </TouchableOpacity>

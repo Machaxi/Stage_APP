@@ -145,7 +145,7 @@ class OpponentList extends BaseComponent {
                                 <View style={styles.playerCardOuter}>
                                     <View style={styles.modalPlayerCard}>
                                         <TouchableOpacity>
-                                            <ImageBackground style={styles.playerBackImage}
+                                            <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                                                 source={require('../../images/batch_card.png')}
                                             >
                                                 <Text style={styles.playerScoreLabel}>Score</Text>
@@ -182,7 +182,7 @@ class OpponentList extends BaseComponent {
                                         this.state.selectedOpponentData != null ?
                                             <View style={styles.modalPlayerCard}>
                                                 <TouchableOpacity>
-                                                    <ImageBackground style={styles.playerBackImage}
+                                                    <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                                                         source={require('../../images/batch_card.png')}
                                                     >
                                                         <Text style={styles.playerScoreLabel}>Score</Text>
@@ -238,7 +238,7 @@ class OpponentList extends BaseComponent {
                     selectedOpponentData: item
                 })
             }}>
-                <ImageBackground style={{ height: 180, width: '100%' }}
+                <ImageBackground resizeMode='contain' style={{ height: 180, width: '100%' }}
                     source={require('../../images/batch_card.png')}
                 >
                     <Text style={{ justifyContent: 'center', fontFamily: 'Quicksand-Medium', textAlign: 'center', color: '#F4F4F4', fontSize: 6, paddingTop: 6 }}>Score</Text>

@@ -34,6 +34,10 @@ target 'Dribble' do
 
     pod 'react-native-branch', :path => '../node_modules/react-native-branch'
 
+    pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+    pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
+
   end
 
   target 'DribbleTests' do
