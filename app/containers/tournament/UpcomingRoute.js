@@ -191,8 +191,8 @@ class UpcomingRoute extends BaseComponent {
                     marginRight: 12,
                     marginTop: 8,
                     marginBottom: 8,
-                    elevation: 2
-
+                    elevation: 2,
+                    paddingBottom:10
                 }}>
                 <View>
                     <Image style={{

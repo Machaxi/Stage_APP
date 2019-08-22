@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName,getFormattedCategory, EVENT_REFRESH_RESULTS } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName, getFormattedCategory, EVENT_REFRESH_RESULTS } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge, getChallengeScore, updateChallengeScore } from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
@@ -179,7 +179,7 @@ class DashboardRoute extends BaseComponent {
 
           this.setState({
             matchData: data.data,
-          },() => {
+          }, () => {
             this.setModalVisible(true);
           })
         }
@@ -196,8 +196,8 @@ class DashboardRoute extends BaseComponent {
     let postData = {}
     postData['data'] = this.state.matchData;
 
-    console.log('postData',JSON.stringify(postData));
-    
+    console.log('postData', JSON.stringify(postData));
+
     this.progress(true);
     getData('header', (value) => {
       this.props.updateChallengeScore(value, postData).then(() => {
@@ -253,7 +253,7 @@ class DashboardRoute extends BaseComponent {
                         source={require('../../images/batch_card.png')}
                       >
                         <Text style={styles.playerScoreLabel}>Score</Text>
-                        <Text style={styles.playerScore}>{data.score=='' || data.score==undefined ? "-": data.score}</Text>
+                        <Text style={styles.playerScore}>{data.score == '' || data.score == undefined ? "-" : data.score}</Text>
 
                         <View style={styles.middleBox}>
                           <Text style={styles.playerCategory}>{getFormattedCategory(data.player_category)}</Text>
@@ -269,7 +269,7 @@ class DashboardRoute extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={[defaultStyle.bebas_text_blue_10,styles.badgeValue]}>{data.badge== undefined ? '' : data.badge}</Text>
+                              <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{data.badge == undefined ? '' : data.badge}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -308,7 +308,7 @@ class DashboardRoute extends BaseComponent {
                                   {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
                                   <Text style={styles.badgeValue}>{this.state.selectedOpponentData.badge}</Text>
                                   {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
-                                </View> 
+                                </View>
                               </ImageBackground>
                             </View>
                           </ImageBackground>
@@ -330,9 +330,9 @@ class DashboardRoute extends BaseComponent {
                       keyboardType={'number-pad'}
                       style={styles.scoreTextbox}
                       onChangeText={(text) => {
-                          //item.input_score = text
+                        //item.input_score = text
 
-                          this.state.matchData.match_scores[0].player1_score =text
+                        this.state.matchData.match_scores[0].player1_score = text
 
                       }}>{this.state.matchData.match_scores[0].player1_score}</TextInput>
                     <TextInput
@@ -388,11 +388,11 @@ class DashboardRoute extends BaseComponent {
                   </View>
 
                   <View style={styles.badgeOuter}>
-                    <ImageBackground 
+                    <ImageBackground
                       source={require('../../images/single_shield.png')}
-                    style={styles.badgeBackImage} >
+                      style={styles.badgeBackImage} >
                       <View style={styles.badgeInner}>
-                        <Text style={styles.badgeValue}>{item.badge}</Text> 
+                        <Text style={styles.badgeValue}>{item.badge}</Text>
                       </View>
                     </ImageBackground>
 
@@ -430,7 +430,7 @@ class DashboardRoute extends BaseComponent {
 
               {item.opponent.id == this.state.player_id ?
                 <View>
-                   <View style={styles.acceptCardHeadingOuter}>
+                  <View style={styles.acceptCardHeadingOuter}>
                     <View style={styles.acceptCardHeading}>
                       <Text style={styles.acceptCardheadingText}>You have been challenged</Text>
                       {
@@ -445,9 +445,9 @@ class DashboardRoute extends BaseComponent {
                     {
                       (item.challenge_status == 'ACCEPTED') &&
 
-                    <Text style={styles.actionLabel} onPress={() => { this.abortTheChallenge(item.id) }}>Abort</Text> }
-                    { (item.challenge_status == 'REJECTED') &&
-                        <Text style={styles.actionDismissLabel} onPress={() => { this.dismissTheChallenge(item.id) }}>Dismiss</Text>
+                      <Text style={styles.actionLabel} onPress={() => { this.abortTheChallenge(item.id) }}>Abort</Text>}
+                    {(item.challenge_status == 'REJECTED') &&
+                      <Text style={styles.actionDismissLabel} onPress={() => { this.dismissTheChallenge(item.id) }}>Dismiss</Text>
                     }
 
                   </View>
@@ -477,8 +477,8 @@ class DashboardRoute extends BaseComponent {
                     </View>
                   }
 
-                  { item.challenge_status == 'ACCEPTED' &&
-                      <View style={styles.challengeBtnOuter}>
+                  {item.challenge_status == 'ACCEPTED' &&
+                    <View style={styles.challengeBtnOuter}>
                       <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
                       <Text style={defaultStyle.rounded_button_150} onPress={() => {
                         this.getChallengeScoreData(item.id);
@@ -490,7 +490,7 @@ class DashboardRoute extends BaseComponent {
                     </View>
                   }
 
-                  
+
                 </View>
 
                 :
@@ -1104,26 +1104,26 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Regular',
   },
   scoreOuter: {
-    display: 'flex', 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    padding: 18, 
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 18,
     marginTop: 5
   },
   scoreTextbox: {
     textAlign: 'center',
     color: '#404040',
-    width: '40%', 
+    width: '40%',
     height: 36,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#CECECE'
-},
-challengeScoreLabel: { 
-  color: '#404040', 
-  fontSize: 14, 
-  fontFamily: 'Quicksand-Regular', 
-  width: "50%", 
-  textAlign: 'center' 
-}
+  },
+  challengeScoreLabel: {
+    color: '#404040',
+    fontSize: 14,
+    fontFamily: 'Quicksand-Regular',
+    width: "50%",
+    textAlign: 'center'
+  }
 });

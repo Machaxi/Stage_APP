@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground, Text, TouchableOpacity } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, Image, ActivityIndicator,FlatList, TextInput, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { Card } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'

@@ -230,7 +230,7 @@ class ResultsRoute extends BaseComponent {
             <TouchableOpacity activeOpacity={.8}
                 onPress={() => {
                     this.props.navigation.navigate('ResultsTournamentDetail', {
-                        data: JSON.stringify(item)
+                        id:item.id
                     })
                 }}>
 

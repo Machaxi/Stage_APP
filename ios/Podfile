@@ -38,6 +38,8 @@ target 'Dribble' do
 
     pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
 
+    pod 'RNShare', :path => '../node_modules/react-native-share'
+
   end
 
   target 'DribbleTests' do
