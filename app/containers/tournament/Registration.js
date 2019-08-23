@@ -269,7 +269,7 @@ class Registration extends BaseComponent {
                         })
                         setTimeout(() => {
 
-                            Events.publish(GO_TO_HOME, msg);
+                            Events.publish(GO_TO_HOME, true);
 
                         }, 100)
 

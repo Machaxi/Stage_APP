@@ -105,6 +105,11 @@ class CoachHome extends BaseComponent {
     componentDidMount() {
 
         this.selfComponentDidMount()
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', () => {
+            this.props.navigation.navigate('Tournament')
+        });
+        
     }
 
     selfComponentDidMount() {

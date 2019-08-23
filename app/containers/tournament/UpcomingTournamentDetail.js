@@ -7,21 +7,52 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { storeData, isSignedIn, getData } from '../../components/auth';
 import Share from 'react-native-share';
+import { getTournamentById } from "../../redux/reducers/UpcomingReducer";
+import { connect } from 'react-redux';
 
-
-export default class UpcomingTournamentDetail extends BaseComponent {
+class UpcomingTournamentDetail extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
             data: null,
-            signedIn: false
+            signedIn: false,
+            tournament_id: null
         }
-        this.state.data = this.props.navigation.getParam('data');
-        storeData("detail", JSON.stringify(this.state.data))
+        let data = this.props.navigation.getParam('data');
+        if (data) {
+            this.state.data = data
+            storeData("detail", JSON.stringify(this.state.data))
+        } else {
+            this.state.tournament_id = this.props.navigation.getParam('tournament_id')
 
+        }
+    }
 
+    fetchTournamentData(tournament_id) {
+        getData('header', (value) => {
 
+            this.props.getTournamentById(value, tournament_id).then(() => {
+                let data = this.props.data.data
+                console.log(' getTournamentById ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    //console.log(' getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
+                    let tournament = data.data.tournament
+                    this.setState({
+                        data: tournament
+                    })
+                    this.state.tournament = tournament
+                    storeData("detail", JSON.stringify(tournament))
+                }
+
+            }).catch((response) => {
+                this.setState({ isRefreshing: false })
+                console.log(response);
+            })
+        })
     }
 
     register() {
@@ -73,12 +104,12 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
         return (
 
-            <View>
+            <View style={{
+                flex: 1
+            }}>
 
                 <ScrollView
-                    style={{
-                        flex: 0
-                    }}
+
                 >
 
                     <View style={styles.chartContainer}>
@@ -321,7 +352,8 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
                                         <TouchableOpacity
                                             onPress={() => {
-                                                console.warn('terms')
+                                                this.props.navigation.navigate('TournamentTerms')
+                                                //console.warn('terms')
                                             }}
                                         >
 
@@ -346,12 +378,13 @@ export default class UpcomingTournamentDetail extends BaseComponent {
 
                 </ScrollView>
 
-                {/* <View style={{
-                    elevation: 4
-                }}>
-                    <View style={defaultStyle.line_style}></View>
-                    <View style={{
+                <View style={defaultStyle.line_style}></View>
 
+                <View style={{
+                    elevation: 4,
+                }}>
+                    <View style={{
+                        padding: 12,
                         flexDirection: 'row',
                         //marginLeft: 16,
                         //marginRight: 16,
@@ -392,12 +425,21 @@ export default class UpcomingTournamentDetail extends BaseComponent {
                         </TouchableOpacity>
 
                     </View>
-                </View> */}
+                </View>
 
             </View>
         );
     }
 }
+const mapStateToProps = state => {
+    return {
+        data: state.UpcomingTournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getTournamentById
+};
+export default connect(mapStateToProps, mapDispatchToProps)(UpcomingTournamentDetail);
 
 
 const styles = StyleSheet.create({

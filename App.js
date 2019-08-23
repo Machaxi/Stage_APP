@@ -28,7 +28,9 @@ import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } fro
 import { storeData } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 
-export const BASE_URL = 'http://13.233.182.217:8080/api/'
+//export const BASE_URL = 'http://13.233.182.217:8080/api/'
+export const BASE_URL = 'http://10.0.0.25:8089/api/'
+
 export const client = axios.create({
     baseURL: BASE_URL,
     responseType: 'json'
@@ -98,6 +100,18 @@ branch.subscribe(({ error, params }) => {
         return
     }
 
+    let feature = params['~feature']
+    if (feature) {
+        let id = params['id']
+        let obj = {
+            tournament_id: id,
+            feature: feature
+        }
+        Events.publish('deep_linking', obj);
+        //payment_details
+        //  razorpay_payment_id
+    }
+    //alert(JSON.stringify(params))
     // let lastParams =  branch.getLatestReferringParams() // params from last open
     // let installParams =  branch.getFirstReferringParams() // params from original install
     //console.log('lastParams=> ', JSON.stringify(branch))
@@ -113,15 +127,16 @@ branch.subscribe(({ error, params }) => {
     //     // Route non-Branch URL if appropriate.
     //     return
     // }
-    const tournament_id = params.tournament_id
+    //const tournament_id = params.tournament_id
     console.log('Branchtit=>', JSON.stringify(params))
-    console.log('Branchtit=>', tournament_id)
-    if (tournament_id) {
-        //alert('test')
-        // storeData('deep_linking', true)
-        // Events.publish('deep_linking', tournament_id);
+    // console.log('Branchtit=>', tournament_id)
+    // if (tournament_id) {
+    //     //alert('test')
+    //     // storeData('deep_linking', true)
+    //     // Events.publish('deep_linking', tournament_id);
 
-    }
+    // }
+
 })
 
 
@@ -169,12 +184,15 @@ export default class App extends BaseComponent {
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
         OneSignal.addEventListener('ids', this.onIds);
-        OneSignal.configure(); 	// triggers the ids event
-
+        OneSignal.configure();
+        OneSignal.enableVibrate(true);
+        OneSignal.inFocusDisplaying(2)
     }
 
     onReceived(notification) {
-        console.log("Notification received: ", notification);
+        //alert('test===')
+        Events.publish('NOTIFICATION_CALL');
+        //console.log("Notification received: ", notification);
     }
 
     onOpened(openResult) {
@@ -184,16 +202,17 @@ export default class App extends BaseComponent {
         //  console.log('openResult: ', openResult);
     }
 
-    componentDidMount() {
+    componentWillUnmount() {
         OneSignal.removeEventListener('received', this.onReceived);
         OneSignal.removeEventListener('opened', this.onOpened);
         OneSignal.removeEventListener('ids', this.onIds);
-
     }
 
 
 
+
     onIds(device) {
+        //alert(JSON.stringify(device))
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
         //alert('onIds ',  device)

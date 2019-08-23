@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle, getFormattedTournamentType } from '../BaseComponent'
-import { getData } from "../../components/auth";
+import { getData, storeData } from "../../components/auth";
 import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
 import Moment from 'moment';
+import Events from '../../router/events';
 
 var filterData = ''
 
@@ -21,9 +22,25 @@ class UpcomingRoute extends BaseComponent {
             query: '',
             isRefreshing: false
         }
+
+
+        getData('deep_data', (value) => {
+            storeData('deep_data', null)
+            alert('test==>' + value)
+            if (value != null && value != 'null') {
+                let tournament_id = JSON.parse(value).tournament_id
+                if (tournament_id) {
+                    this.props.navigation.navigate('UpcomingTournamentDetail',
+                        { tournament_id: tournament_id })
+
+                }
+            }
+        })
     }
 
     componentDidMount() {
+
+
 
         this.selfComponentDidMount('')
     }
@@ -39,7 +56,7 @@ class UpcomingRoute extends BaseComponent {
                 let success = data.success
                 if (success) {
 
-                    console.log(' 1getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
+                    //console.log(' getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
 
                     this.setState({
                         tournaments: data.data.tournaments
@@ -192,7 +209,7 @@ class UpcomingRoute extends BaseComponent {
                     marginTop: 8,
                     marginBottom: 8,
                     elevation: 2,
-                    paddingBottom:10
+                    paddingBottom: 10
                 }}>
                 <View>
                     <Image style={{

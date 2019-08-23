@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, Modal, Alert, Image, ScrollView, FlatList } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator,TextInput, Text, Modal, Alert, Image, ScrollView, FlatList } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { connect } from 'react-redux';

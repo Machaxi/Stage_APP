@@ -74,8 +74,8 @@ export default class BaseComponent extends React.Component {
         //StatusBar.setBackgroundColor("#ffffff")
         //StatusBar.setBarStyle('dark-content', true)
 
-        this.refreshEvent = Events.subscribe(GO_TO_HOME, () => {
-            this.goToHome()
+        this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
+            this.goToHome(from_registration)
         });
     }
 
@@ -181,7 +181,7 @@ export default class BaseComponent extends React.Component {
     //This function is used when we go for tournament registration and  go back to home 
     //in that case we have to use this, we are using tournaments in new stack, we cannot
     // go back on back press.
-    goToHome() {
+    goToHome(data) {
 
         getData('userInfo', (value) => {
 
@@ -246,6 +246,9 @@ export default class BaseComponent extends React.Component {
             } else {
                 this.props.navigation.navigate('GHome')
             }
+
+            if (data != null)
+                Events.publish('FROM_REGISTRATION',data);
         });
 
     }
@@ -260,7 +263,7 @@ export function getSettingData(headers) {
             console.log('user-setting' + JSON.stringify(json));
             let success = json.success
             if (success) {
-                
+
 
             }
 

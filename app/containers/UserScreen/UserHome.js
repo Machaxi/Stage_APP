@@ -152,18 +152,38 @@ class UserHome extends BaseComponent {
 
     componentDidMount() {
 
-        getData('userInfo',(value)=>{
-            firebaseAnalytics.logEvent('DASHBOARD',value );
+        // getData('userInfo',(value)=>{
+        //     firebaseAnalytics.logEvent('DASHBOARD',value );
 
-        })
+        // })
 
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
+            this.getNotifications()
+        });
 
+        // this.refreshEvent = Events.subscribe('FROM_REGISTRATION', () => {
+        //     this.props.navigation.navigate('Tournament')
+        // });
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            if (deep_data != null)
+                storeData('deep_data', JSON.stringify(deep_data))
+            setTimeout(() => {
+                this.props.navigation.navigate('Tournament')
+
+            }, 100)
+        });
+
+       
+        this.getNotifications()
+        this.selfComponentDidMount()
+    }
+
+    getNotifications(){
         this.getNotificationCount((count) => {
             this.props.navigation.setParams({ notification_count: count });
             notification_count = count
         })
-
-        this.selfComponentDidMount()
     }
 
     selfComponentDidMount() {

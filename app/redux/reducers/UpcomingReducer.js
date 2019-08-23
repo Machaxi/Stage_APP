@@ -25,7 +25,7 @@ export default function UpcomingTournamentReducer(state = initialState, action) 
     }
 }
 
-export function getUpcomingTournament(header,param) {
+export function getUpcomingTournament(header, param) {
     console.log("getUpcomingTournament", header)
 
     return {
@@ -33,6 +33,24 @@ export function getUpcomingTournament(header,param) {
         payload: {
             request: {
                 url: `global/tournament/upcoming?${param}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getTournamentById(header, tournament_id) {
+    console.log("getUpcomingTournament", header)
+
+    return {
+        type: types.GET_UPCOMING_TOURNAMENT,
+        payload: {
+            request: {
+                url: `global/tournament/${tournament_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

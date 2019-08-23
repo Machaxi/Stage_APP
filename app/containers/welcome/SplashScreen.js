@@ -8,6 +8,7 @@ import Events from '../../router/events';
 import firebase from "react-native-firebase";
 
 var is_deep_linking = false
+var deep_data
 
 class Splash extends BaseComponent {
 
@@ -21,8 +22,9 @@ class Splash extends BaseComponent {
         };
 
 
-        this.refreshEvent = Events.subscribe('deep_linking', (tournament_id) => {
+        this.refreshEvent = Events.subscribe('deep_linking', (data) => {
             is_deep_linking = true
+            deep_data = data
         });
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
@@ -64,11 +66,11 @@ class Splash extends BaseComponent {
 
                 setTimeout(() => {
 
-                    //console.warn('is_deep_linking => ', is_deep_linking)
-                    // if (is_deep_linking) {
-                    //     Events.publish(GO_TO_HOME);
-                    //     return
-                    // }
+                    console.warn('is_deep_linking => ' + is_deep_linking, JSON.stringify(deep_data))
+                    if (is_deep_linking) {
+                        Events.publish(GO_TO_HOME, deep_data);
+                        return
+                    }
 
 
                     const { checkedSignIn, signedIn } = this.state;

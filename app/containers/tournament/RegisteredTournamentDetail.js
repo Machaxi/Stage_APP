@@ -54,7 +54,8 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         let data = this.state.data
         let tournament_types = this.tournament_types(data.tournament_types)
         let mobile_number = data.mobile_number
-         
+        let tournament_link = data.tournament_link
+
 
         // if (this.props.data.loading && !this.state.isAutoSuggest) {
         //     return (
@@ -98,28 +99,32 @@ export default class RegisteredTournamentDetail extends BaseComponent {
 
                                     <View style={{ flexDirection: 'row' }}>
 
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                this.phoneNumberClicked(mobile_number)
-                                            }}>
+                                        {mobile_number != undefined ?
 
-                                            <Image
-                                                resizeMode="contain"
-                                                style={{ width: 20, height: 20, marginRight: 16 }}
-                                                source={require('../../images/ic_call.png')}
-                                            />
-                                        </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.phoneNumberClicked(mobile_number)
+                                                }}>
 
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                this.phoneNumberClicked(phoneNumber)
-                                            }}>
-                                            <Image
-                                                resizeMode="contain"
-                                                style={{ width: 16, height: 18, }}
-                                                source={require('../../images/share.png')}
-                                            />
-                                        </TouchableOpacity>
+                                                <Image
+                                                    resizeMode="contain"
+                                                    style={{ width: 20, height: 20, marginRight: 16 }}
+                                                    source={require('../../images/ic_call.png')}
+                                                />
+                                            </TouchableOpacity>
+                                            : null}
+
+                                        {tournament_link != undefined ?
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.shareLink(tournament_link)
+                                                }}>
+                                                <Image
+                                                    resizeMode="contain"
+                                                    style={{ width: 16, height: 18, }}
+                                                    source={require('../../images/share.png')}
+                                                />
+                                            </TouchableOpacity> : null}
                                     </View>
 
                                 </View>
@@ -308,18 +313,23 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             }}>
                                                 Singles,Doubles
                                             </Text>
-                                            <Text style={{
-                                                paddingTop: 10, fontSize: 10,
-                                                color: '#667DDB',
-                                                width: "20%",
-                                                textAlign: 'center',
-                                                marginTop: 2,
-                                                alignItems: 'center',
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
+
+
+                                            <Text
+                                                onPress={() => {
+                                                    alert('under development')
+                                                }}
+                                                style={{
+                                                    paddingTop: 10, fontSize: 10,
+                                                    color: '#667DDB',
+                                                    width: "20%",
+                                                    textAlign: 'center',
+                                                    marginTop: 2,
+                                                    alignItems: 'center',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
                                                 Edit Partner
                                             </Text>
-
 
                                         </View>
                                     </View>
@@ -358,13 +368,16 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             color: '#404040',
                                             width: "50%",
                                             fontFamily: 'Quicksand-Regular'
-                                        }}>{Moment(data.start_time, "HH:mm:ss").format("hh:mm a")}</Text>
+                                        }}>{data.start_time != undefined ?
+                                            Moment(data.start_time, "HH:mm:ss")
+                                                .format("hh:mm a") : "-"}</Text>
                                         <Text style={{
                                             paddingTop: 10, fontSize: 14,
                                             color: '#404040',
                                             width: "50%",
                                             fontFamily: 'Quicksand-Regular'
-                                        }}>{data.tournament_format}</Text>
+                                        }}>{data.tournament_format != undefined ?
+                                            data.tournament_format : '-'}</Text>
 
                                     </View>
 

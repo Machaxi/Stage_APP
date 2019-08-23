@@ -18,10 +18,12 @@ import { DueView } from '../../components/Home/DueView'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, { getFormattedLevel, defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent'
+import Events from '../../router/events';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
 var is_show_badge = false
+var notification_count = 0
 
 class ParentHome extends BaseComponent {
 
@@ -108,7 +110,7 @@ class ParentHome extends BaseComponent {
                             alignItems: 'flex-end'
                         }}>
 
-                        {is_show_badge ? <View style={{
+                        {navigation.getParam('notification_count', 0) > 0 ? <View style={{
                             width: 16,
                             height: 16,
                             alignItems: 'center',
@@ -117,7 +119,7 @@ class ParentHome extends BaseComponent {
                             backgroundColor: '#ED2638'
                         }}>
                             <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                2</Text>
+                                {navigation.getParam('notification_count', '')}</Text>
                         </View> : null}
 
 
@@ -149,7 +151,26 @@ class ParentHome extends BaseComponent {
 
     componentDidMount() {
         this.selfComponentDidMount()
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
+            this.getNotifications()
+        });
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', () => {
+            this.props.navigation.navigate('Tournament')
+        });
+
+        this.getNotifications()
+
     }
+
+    getNotifications() {
+        this.getNotificationCount((count) => {
+            this.props.navigation.setParams({ notification_count: count });
+            notification_count = count
+        })
+    }
+
 
     selfComponentDidMount() {
         var userData;
