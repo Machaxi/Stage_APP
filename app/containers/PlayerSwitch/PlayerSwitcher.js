@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
-import { Card, ActivityIndicator } from 'react-native-paper'
+import { View,ActivityIndicator, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-paper'
 import { Rating } from 'react-native-ratings';
 import { getData, storeData } from "../../components/auth";
 import { getPlayerSWitcher, getCoachSWitcher } from "../../redux/reducers/switchReducer";

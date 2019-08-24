@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, ActivityIndicator, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/AcademyReducer'
@@ -10,6 +10,7 @@ import BaseComponent, { defaultStyle } from './../BaseComponent'
 import { BASE_URL } from '../../../App';
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData } from '../../components/auth';
+import Events from '../../router/events';
 
 var filterData = ''
 
@@ -73,13 +74,23 @@ class AcademyListing extends BaseComponent {
 
     componentDidMount() {
 
-        getData('deep_linking', (value) => {
-            console.warn('deep->', value)
-            if (value == 'true') {
+        // getData('deep_linking', (value) => {
+        //     console.warn('deep->', value)
+        //     if (value == 'true') {
+        //         this.props.navigation.navigate('Tournament')
+        //         storeData('deep_linking', null)
+        //     }
+        // })
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            if (deep_data != null)
+                storeData('deep_data', JSON.stringify(deep_data))
+            setTimeout(() => {
                 this.props.navigation.navigate('Tournament')
-                storeData('deep_linking', null)
-            }
-        })
+
+            }, 100)
+        });
+
 
         this.getAcademyList('')
     }

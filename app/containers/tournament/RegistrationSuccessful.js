@@ -5,7 +5,7 @@ import BaseComponent, { defaultStyle, GO_TO_HOME } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { CustomeButtonB } from '../../components/Home/Card';
-import { getData,storeData } from '../../components/auth';
+import { getData, storeData } from '../../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
 import Events from './../../router/events';
 
@@ -28,6 +28,7 @@ export default class RegistrationSuccessful extends BaseComponent {
     render() {
 
         let data = JSON.parse(this.state.data)
+        let id = data['id']
         let name = this.state.name
         let tournament_name = data['name']
         let month = data['month'] + " " + data['year']
@@ -234,7 +235,10 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     }}>
                                         <CustomeButtonB
                                             onPress={() => {
-                                                Events.publish(GO_TO_HOME, msg);
+                                                let obj = {
+                                                    tournament_id: id,
+                                                }
+                                                Events.publish(GO_TO_HOME, obj);
                                             }}
                                         >
                                             Finish Registration

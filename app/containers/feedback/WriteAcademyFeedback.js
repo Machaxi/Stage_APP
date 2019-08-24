@@ -7,7 +7,9 @@ import { connect } from 'react-redux';
 import { postFeedback } from '../../redux/reducers/FeedbackReduer'
 import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
-import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import SwipeableRating from 'react-native-swipeable-rating';
+import StarRating from 'react-native-star-rating';
 
 class WriteAcademyFeedback extends BaseComponent {
 
@@ -162,18 +164,18 @@ class WriteAcademyFeedback extends BaseComponent {
                                     }}>
                                     OK</Text> */}
 
-                    <View  style={{
-                        margin: 16,
-                        alignSelf:'center',
-                        width:100,
-                    }}>
-                            <SkyFilledButton
-                             onPress={() => {
-                                this.setModalVisible(false);
-                                        this.props.navigation.goBack(null);
-                            }}
-                            >OK</SkyFilledButton>
-                            </View>
+                                <View style={{
+                                    margin: 16,
+                                    alignSelf: 'center',
+                                    width: 100,
+                                }}>
+                                    <SkyFilledButton
+                                        onPress={() => {
+                                            this.setModalVisible(false);
+                                            this.props.navigation.goBack(null);
+                                        }}
+                                    >OK</SkyFilledButton>
+                                </View>
 
                             </View>
                         </View>
@@ -215,7 +217,7 @@ class WriteAcademyFeedback extends BaseComponent {
                                 Your Feedback
                             </Text>
 
-                            <Rating
+                            {/* <Rating
                                 type='custom'
                                 ratingColor='#F4FC9A'
                                 ratingBackgroundColor='#D7D7D7'
@@ -230,6 +232,47 @@ class WriteAcademyFeedback extends BaseComponent {
                                     paddingTop: 16,
                                 }}
                             />
+
+                            <SwipeableRating
+                                style={{
+                                    marginLeft: -5,
+                                    //height: 30,
+                                    //width: 80,
+                                    paddingTop: 16,
+                                }}
+                                emptyColor={"#A3A5AE"}
+                                color={"#F8F29F"}
+                                rating={this.state.rating}
+                                size={30}
+                                gap={0}
+                                onPress={(rating) => {
+                                    this.setState({ rating });
+                                }}
+
+                            /> */}
+
+
+                            <StarRating
+                                style={{
+                                    paddingTop: 16,
+                                }}
+                                containerStyle={{
+                                    width: 150,
+                                }}
+                                starSize={28}
+                                disabled={false}
+                                emptyStar={'ios-star-outline'}
+                                fullStar={'ios-star'}
+                                halfStar={'ios-star-half'}
+                                iconSet={'Ionicons'}
+                                maxStars={5}
+                                rating={this.state.rating}
+                                selectedStar={(rating) => this.setState({
+                                    rating: rating
+                                })}
+                                fullStarColor={'#F8F29F'}
+                            />
+
 
                             <TextInput
                                 style={{
@@ -274,17 +317,17 @@ class WriteAcademyFeedback extends BaseComponent {
                             Submit</Text>
                     </View> */}
 
-                <View  style={{
+                    <View style={{
                         margin: 16,
-                        alignSelf:'center',
-                        width:100,
+                        alignSelf: 'center',
+                        width: 100,
                     }}>
-                            <SkyFilledButton
-                             onPress={() => {
+                        <SkyFilledButton
+                            onPress={() => {
                                 this.sendFeedback()
                             }}
-                            >Submit</SkyFilledButton>
-                            </View>
+                        >Submit</SkyFilledButton>
+                    </View>
 
                 </View>
             </ScrollView >

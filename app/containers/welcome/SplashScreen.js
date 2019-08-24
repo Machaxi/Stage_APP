@@ -5,8 +5,10 @@ import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth"
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
+import firebase from "react-native-firebase";
 
 var is_deep_linking = false
+var deep_data
 
 class Splash extends BaseComponent {
 
@@ -20,8 +22,9 @@ class Splash extends BaseComponent {
         };
 
 
-        this.refreshEvent = Events.subscribe('deep_linking', (tournament_id) => {
+        this.refreshEvent = Events.subscribe('deep_linking', (data) => {
             is_deep_linking = true
+            deep_data = data
         });
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
@@ -36,12 +39,18 @@ class Splash extends BaseComponent {
         //     }
         // });
         this.moveNext()
+        firebase.analytics().logEvent("APP_START", {})
+        firebase.analytics().logEvent("testing_dribble", {})
+        firebase.analytics().setCurrentScreen()
+        firebase.analytics().setUserId('testing')
+        //firebase.crashlytics().log('Test Message!');
+
 
         //1a476280-04c6-40a5-b76e-6cc4da41669e
     }
 
     moveNext() {
-        // this.props.navigation.navigate('FixtureSelection', {
+        // this.props.navigation.navigate('TournamentTabs', {
         //     id: 6
         // })
         // return
@@ -57,11 +66,11 @@ class Splash extends BaseComponent {
 
                 setTimeout(() => {
 
-                    //console.warn('is_deep_linking => ', is_deep_linking)
-                    // if (is_deep_linking) {
-                    //     Events.publish(GO_TO_HOME);
-                    //     return
-                    // }
+                    console.warn('is_deep_linking => ' + is_deep_linking, JSON.stringify(deep_data))
+                    if (is_deep_linking) {
+                        Events.publish(GO_TO_HOME, deep_data);
+                        return
+                    }
 
 
                     const { checkedSignIn, signedIn } = this.state;

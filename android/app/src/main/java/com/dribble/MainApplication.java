@@ -3,8 +3,11 @@ package com.dribble;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cl.json.RNSharePackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
+
 import io.branch.rnbranch.RNBranchPackage;
 import io.branch.referral.Branch;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
@@ -27,6 +30,7 @@ import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSharePackage(),
             new ReactNativeYouTube(),
             new RNCWebViewPackage(),
             new RNBranchPackage(),
@@ -62,7 +67,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebasePackage(),
              new RNFirebaseAuthPackage(),
              new RNFirebaseNotificationsPackage(),
-             new RNFirebaseMessagingPackage()
+             new RNFirebaseMessagingPackage(),
+             new RNFirebaseAnalyticsPackage()
       );
     }
 
@@ -87,6 +93,7 @@ public class MainApplication extends Application implements ReactApplication {
       }
     SoLoader.init(this, /* native exopackage */ false);
     Branch.getAutoInstance(this);
+    //Branch.getTestInstance();
 
   }
 }

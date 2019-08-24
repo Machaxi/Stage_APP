@@ -6,6 +6,7 @@ import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
 import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
+import { getNotificationCount } from '../../redux/reducers/CommonReducer'
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT } from '../BaseComponent';
@@ -15,10 +16,12 @@ import Events from '../../router/events';
 import PlayerHeader from '../../components/custom/PlayerHeader'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder';
+import firebase from 'react-native-firebase'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
 var is_show_badge = false
+var notification_count = 0
 
 class UserHome extends BaseComponent {
 
@@ -102,7 +105,7 @@ class UserHome extends BaseComponent {
                             alignItems: 'flex-end'
                         }}>
 
-                        {is_show_badge ? <View style={{
+                        {navigation.getParam('notification_count', 0) > 0 ? <View style={{
                             width: 16,
                             height: 16,
                             alignItems: 'center',
@@ -111,7 +114,7 @@ class UserHome extends BaseComponent {
                             backgroundColor: '#ED2638'
                         }}>
                             <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                2</Text>
+                                {navigation.getParam('notification_count', '')}</Text>
                         </View> : null}
 
 
@@ -149,7 +152,38 @@ class UserHome extends BaseComponent {
 
     componentDidMount() {
 
+        // getData('userInfo',(value)=>{
+        //     firebaseAnalytics.logEvent('DASHBOARD',value );
+
+        // })
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
+            this.getNotifications()
+        });
+
+        // this.refreshEvent = Events.subscribe('FROM_REGISTRATION', () => {
+        //     this.props.navigation.navigate('Tournament')
+        // });
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            if (deep_data != null)
+                storeData('deep_data', JSON.stringify(deep_data))
+            setTimeout(() => {
+                this.props.navigation.navigate('Tournament')
+
+            }, 100)
+        });
+
+       
+        this.getNotifications()
         this.selfComponentDidMount()
+    }
+
+    getNotifications(){
+        this.getNotificationCount((count) => {
+            this.props.navigation.setParams({ notification_count: count });
+            notification_count = count
+        })
     }
 
     selfComponentDidMount() {
@@ -179,8 +213,6 @@ class UserHome extends BaseComponent {
             //     this.getParentSwitchingData();
 
             // }
-
-
         });
     }
 
@@ -917,10 +949,11 @@ class UserHome extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.DashboardReducer,
+        common: state.CommonReducer
     };
 };
 const mapDispatchToProps = {
-    getPlayerDashboard,
+    getPlayerDashboard, getNotificationCount
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UserHome);
 

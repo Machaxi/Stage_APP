@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
-import { Card, ActivityIndicator } from 'react-native-paper';
+import { StyleSheet, View,ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
+import { Card,  } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';

@@ -2,34 +2,184 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
+import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
-
-
-export default class ResultsTournamentDetail extends BaseComponent {
+import { connect } from 'react-redux';
+import { getData } from "../../components/auth";
+import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
+import { COACH } from '../../components/Constants'
+import RNPickerSelect from 'react-native-picker-select'
+import Icon from 'react-native-vector-icons'
+const placeholder = {
+    label: 'Select',
+    value: null,
+    color: '#9EA0A4',
+};
+class ResultsTournamentDetail extends BaseComponent {
 
 
     constructor(props) {
         super(props)
         this.state = {
-            data: {}
+            tournament_data: null,
+            data: null,
+            tournament_fixtures: [],
+            is_show_dialog: false,
+            tournament_id: '',
+            user_type: '',
+            is_coach: false,
+            tournament_category: [],
+            selected_tournament_category: '',
+            selected_gender: '',
+            gender: [{ label: 'Male', value: 'Male' },
+            { label: 'Female', value: 'Female' }],
+            fixture_type: []
+
         }
-        this.state.data = JSON.parse(this.props.navigation.getParam('data'));
+
+
+        this.inputRefs = {
+            tournament: null,
+            gender: null
+        };
+
+        getData('userInfo', (value) => {
+
+            if (value != '') {
+
+                let userData = JSON.parse(value)
+                let user_type = userData.user['user_type']
+                this.state.is_coach = user_type == COACH
+                this.setState({
+                    user_type: user_type
+                })
+            }
+        });
+
+
+        this.dialogRef = React.createRef();
+        this.state.tournament_id = this.props.navigation.getParam('id')
+        this.getFixtureData()
 
     }
 
+    getFixtureData() {
+
+        let tournament_id = this.state.tournament_id
+
+        getData('header', (value) => {
+
+            this.props.getTournamentFixture(value, tournament_id).then(() => {
+
+                let data = this.props.data.data
+                console.log(' getTournamentFixture ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    let tournament_data = data.data.tournament
+                    this.state.tournament_data = tournament_data
+                    console.warn('tournament_data =>', JSON.stringify(tournament_data))
+                    let tournament_category = []
+                    let tournament_fixtures = data.data.tournament_fixtures
+                    for (let i = 0; i < tournament_fixtures.length; i++) {
+                        let obj = tournament_fixtures[i]
+                        tournament_category.push(obj.tournament_category)
+                    }
+                    let unique = [...new Set(tournament_category)];
+                    console.warn('unique=> ', unique)
+                    let temp_cat = []
+                    for (let i = 0; i < unique.length; i++) {
+                        let obj = {
+                            label: unique[i],
+                            value: unique[i],
+                        }
+                        temp_cat.push(obj)
+                    }
+                    this.setState({
+                        tournament_category: temp_cat,
+                        tournament: tournament_data
+                    })
+
+
+                    if (tournament_fixtures != null && tournament_fixtures.length > 0) {
+                        console.log(' tournament_fixtures ' + JSON.stringify(data.data.tournament_fixtures));
+                        this.setState({
+                            tournament_fixtures: tournament_fixtures,
+                        })
+                    }
+                    else {
+                        //alert('No data found.')
+                    }
+
+                }
+
+            }).catch((response) => {
+                console.log(response);
+            })
+        })
+    }
+
+    filterMatch() {
+
+        let category = this.state.selected_tournament_category
+        let gender = this.state.selected_gender
+        const filter = []
+
+        if (category != '') {
+
+            const tournament_fixtures = this.state.tournament_fixtures
+            for (let i = 0; i < tournament_fixtures.length; i++) {
+                let obj = tournament_fixtures[i]
+                if (obj.tournament_category == category) {
+
+                    if (gender == '' || gender == null)
+                        filter.push(obj)
+                    else if (obj.gender_type == gender.toUpperCase()) {
+                        filter.push(obj)
+                        //filter.push(obj)
+                    }
+                }
+            }
+            console.log('filter => ', filter.length)
+            this.state.fixture_type = filter
+            this.setState({
+                fixture_type: filter
+            })
+        }
+
+
+    }
+
+    getIconByType(type) {
+        if (type == 'SINGLE') {
+            return require('../../images/single_man.png')
+        }
+        else if (type == 'DOUBLE') {
+            return require('../../images/double.png')
+        }
+        else if (type == 'MIX_DOUBLE') {
+            return require('../../images/mixed_double.png')
+        } else {
+            return require('../../images/single_man.png')
+        }
+    }
 
     render() {
 
-        let data = this.state.data
-        // if (this.props.data.loading && !this.state.isAutoSuggest) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
+        let data = this.state.tournament_data
+        console.warn('data => ', JSON.stringify(data))
+
+        if (this.props.data.loading || data == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
+
+        let size = this.state.tournament_fixtures.length
 
         return (
 
@@ -63,11 +213,11 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                         {data.name}
                                     </Text>
 
-                                    <Image
+                                    {/* <Image
                                         resizeMode="contain"
                                         style={{ width: 16, height: 18, marginRight: 8 }}
                                         source={require('../../images/share.png')}
-                                    />
+                                    /> */}
 
                                 </View>
 
@@ -105,119 +255,184 @@ export default class ResultsTournamentDetail extends BaseComponent {
                                 </Text>
 
 
-                                <Text style={[defaultStyle.bold_text_14, {
-                                    paddingTop: 24,
-                                }]}>
-                                    Fixtures
-                                </Text>
+                                {size > 0 ?
+                                    <View>
 
-                                <View style={{
-                                    flexDirection: 'row',
-                                    marginTop: 12,
+                                        <Text style={[defaultStyle.bold_text_14, {
+                                            paddingTop: 24,
+                                        }]}>
+                                            Fixtures
+                                         </Text>
 
-                                }}>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            marginTop: 12,
 
-                                    <Text style={{
-                                        width: '30%',
-                                        fontSize: 10,
-                                        color: '#A3A5AE',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        Select Category
+                                        }}>
+                                            <View style={{
+                                                width: '25%',
+                                            }}>
+
+                                                <Text style={{
+                                                    fontSize: 10,
+                                                    color: '#A3A5AE',
+                                                    paddingLeft: 2,
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                    Select Category
                                     </Text>
 
-                                    <Text style={{
-                                        width: '30%',
-                                        fontSize: 10,
-                                        color: '#A3A5AE',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        Gender
-                                    </Text>
-
-                                </View>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    marginTop: 4,
-                                }}>
-
-                                    <Text style={{
-                                        width: '30%',
-                                        paddingTop: 6,
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        U-10
-                                 </Text>
-
-                                    <Text style={{
-                                        width: '30%',
-                                        paddingTop: 6,
-                                        fontSize: 14,
-                                        color: '#404040',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}>
-                                        Males
-                                 </Text>
-
-                                </View>
-
-                                <View style={{ marginTop: 12, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
-
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
-
-                                <Card style={styles.card_style}>
-
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-
-                                        <Image
-                                            style={{ width: 18, height: 48, marginLeft: 16 }}
-                                            source={require('../../images/single_man.png')}
-                                        />
-
-                                        <Text style={{
+                                                {/* <Text style={{
                                             fontSize: 14,
+                                            paddingTop: 6,
                                             color: '#404040',
-                                            marginLeft: 12,
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
-                                            Singles
-                                 </Text>
-                                    </View>
-                                </Card>
+                                            U-10
+                                 </Text> */}
+                                                <RNPickerSelect style={{
+                                                }}
+                                                    placeholder={placeholder}
+                                                    items={this.state.tournament_category}
+                                                    onValueChange={(value) => {
+                                                        this.setState({
+                                                            selected_tournament_category: value,
+                                                        });
+                                                        setTimeout(() => {
+                                                            this.filterMatch()
+                                                        }, 100)
+
+                                                    }}
+                                                    style={pickerSelectStyles}
+                                                    value={this.state.selected_tournament_category}
+                                                    useNativeAndroidPickerStyle={false}
+                                                    ref={(el) => {
+                                                        this.inputRefs.tournament = el;
+                                                    }}
+                                                />
+
+                                                <View style={{
+                                                    width: "100%",
+                                                    backgroundColor: '#C7C7CD',
+                                                    height: 1,
+                                                    marginTop: 2
+                                                }}></View>
+                                            </View>
+                                            <View style={{
+                                                marginLeft: 16,
+                                                width: '20%',
+                                            }}>
+
+                                                <Text style={{
+                                                    fontSize: 10,
+                                                    color: '#A3A5AE',
+                                                    paddingLeft: 2,
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                    Gender
+                                    </Text>
+
+                                                <RNPickerSelect style={{
+                                                }}
+                                                    placeholder={placeholder}
+                                                    items={this.state.gender}
+                                                    onValueChange={(value) => {
+                                                        this.setState({
+                                                            selected_gender: value,
+                                                        });
+                                                        setTimeout(() => {
+                                                            this.filterMatch()
+                                                        }, 100)
+                                                    }}
+                                                    style={pickerSelectStyles}
+                                                    value={this.state.selected_gender}
+                                                    useNativeAndroidPickerStyle={false}
+                                                    ref={(el) => {
+                                                        this.inputRefs.gender = el;
+                                                    }}
+                                                    // Icon={() => {
+                                                    //     return (
+                                                    //         <Image
+                                                    //             style={{ width: 8, height: 5 }}
+                                                    //             source={require('../../images/ic_down_arrow.png')} />
+                                                    //     )
+                                                    // }}
+                                                
+                                                />
 
 
-                                <Card style={styles.card_style}>
+                                                <View style={{
+                                                    width: "100%",
+                                                    backgroundColor: '#C7C7CD',
+                                                    height: 1,
+                                                    marginTop: 2
+                                                }}></View>
+                                            </View>
+                                        </View>
+                                        <View style={{ marginTop: 20, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
-                                    <View style={{ flexDirection: 'row', textAlign: 'center', alignItems: 'center' }}>
 
-                                        <Image
+
+                                        <FlatList
                                             style={{
-                                                width: 18, height: 48, marginLeft: 16
+                                                margin: 8,
                                             }}
-                                            source={require('../../images/single_man.png')}
-                                        />
+                                            contentContainerStyle={{
+                                                margin: 8
+                                            }}
+                                            data={this.state.fixture_type}
+                                            numColumns={2}
+                                            renderItem={({ item }) =>
 
-                                        <Text style={{
-                                            justifyContent: 'center',
-                                            textAlign: 'center',
-                                            fontSize: 14,
-                                            marginLeft: 12,
-                                            color: '#404040',
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Singles
-                                        </Text>
-                                    </View>
-                                </Card>
+                                                <View style={{
+                                                    flex: 0.5,
+                                                    marginBottom: 4,
+                                                }}>
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            this.props.navigation.navigate('TournamentFixture', {
+                                                                data: JSON.stringify(item)
+                                                            })
+                                                        }}
+                                                    >
 
+                                                        <Card style={styles.card_style}>
 
+                                                            <View style={{
+                                                                flexDirection: 'row',
+                                                                alignItems: 'center'
+                                                            }}>
+
+                                                                <Image
+                                                                    resizeMode="contain"
+                                                                    style={{ width: 40, height: 48, marginLeft: 16 }}
+                                                                    source={this.getIconByType(item.tournament_type)}
+                                                                />
+
+                                                                <Text style={{
+                                                                    fontSize: 14,
+                                                                    color: '#404040',
+                                                                    marginLeft: 12,
+                                                                    fontFamily: 'Quicksand-Regular'
+                                                                }}>{getFormattedTournamentLevel(item.tournament_type)}</Text>
+                                                            </View>
+                                                        </Card>
+                                                    </TouchableOpacity>
+
+                                                </View>
+
+                                            }
+                                        /></View> :
+
+                                    <Text style={[defaultStyle.bold_text_14, {
+                                        paddingTop: 24,
+                                        flex: 1,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        textAlign: 'center'
+                                    }]}>
+                                        No data found
+                                         </Text>}
                             </View>
 
                         </View>
@@ -227,6 +442,39 @@ export default class ResultsTournamentDetail extends BaseComponent {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        data: state.TournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getRegisteredTournament, getTournamentFixture
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResultsTournamentDetail);
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 14,
+        //paddingVertical: 12,
+        //paddingHorizontal: 10,
+        borderColor: '#614051',
+        borderRadius: 8,
+        color: 'black',
+        marginBottom: 4,
+        alignItems: 'center',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular',
+        // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 14,
+        fontFamily: 'Quicksand-Regular',
+        borderColor: '#614051',
+        borderRadius: 8,
+        color: 'black',
+    },
+});
 
 const styles = StyleSheet.create({
     chartContainer: {
@@ -234,11 +482,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#F7F7F7'
     },
     card_style: {
-        width: "48%",
+        width: "100%",
         paddingTop: 8,
         paddingBottom: 8,
         elevation: 2,
-        marginRight: 4,
+        margin: 4,
         borderRadius: 16
     },
     rounded_button: {

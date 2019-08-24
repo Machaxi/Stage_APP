@@ -184,7 +184,7 @@ class PhoneAuth extends BaseComponent {
         dict['device_type'] = os;
         dict['app_version'] = '1.1.0';
         dict['fcm_token'] = fcm_token;
-        dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
+        dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
         dict['has_firebase_check'] = false;
 
 

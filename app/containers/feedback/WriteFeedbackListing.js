@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, Modal, Alert, Image, ScrollView, FlatList } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TextInput, Text, Modal, Alert, Image, ScrollView, FlatList } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import { getCoachListing, postFeedbackMultiple } from '../../redux/reducers/FeedbackReduer'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import StarRating from 'react-native-star-rating';
 
 
 class WriteFeedbackListing extends BaseComponent {
@@ -137,7 +138,7 @@ class WriteFeedbackListing extends BaseComponent {
         this.setState({ modalVisible: visible });
     }
 
-    _renderItem = ({ item }) => (
+    _renderItem = ({ item, index }) => (
         <Card
             style={{
                 borderRadius: 16,
@@ -176,7 +177,7 @@ class WriteFeedbackListing extends BaseComponent {
                     {item.is_coach ? item.name : "Your Feedback"}
                 </Text>
 
-                <Rating
+                {/* <Rating
                     type='custom'
                     ratingColor='#F4FC9A'
                     ratingBackgroundColor='#D7D7D7'
@@ -185,7 +186,34 @@ class WriteFeedbackListing extends BaseComponent {
                     startingValue={0}
                     onFinishRating={(score) => item.rating = score}
                     style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16, }}
+                /> */}
+                <StarRating
+                    style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16, }}
+                    containerStyle={{
+                        width: 100,
+                    }}
+                    starSize={20}
+                    disabled={false}
+                    emptyStar={'ios-star-outline'}
+                    fullStar={'ios-star'}
+                    halfStar={'ios-star-half'}
+                    iconSet={'Ionicons'}
+                    maxStars={5}
+                    rating={item.rating == undefined ? 0 : item.rating}
+                    selectedStar={(rating) => {
+
+                        let coaches = [...this.state.coaches]
+                        coaches[+index].rating = rating
+                        console.warn('coaches => ', JSON.stringify(coaches))
+                        this.setState({
+                            coaches: coaches
+                        })
+                        //console.warn(rating + '====' + index)
+                        //item.rating = rating
+                    }}
+                    fullStarColor={'#F8F29F'}
                 />
+
 
                 <TextInput
                     style={{

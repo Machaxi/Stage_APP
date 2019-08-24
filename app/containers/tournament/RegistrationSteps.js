@@ -920,7 +920,7 @@ class RegistrationSteps extends BaseComponent {
             }
             element['total'] = total
 
-        }       
+        }
 
         return (
             <ScrollView>
@@ -1052,8 +1052,8 @@ class RegistrationSteps extends BaseComponent {
         )
     }
 
-    
-    getTotalAmount(){
+
+    getTotalAmount() {
         const user_selection = this.state.user_selection
         let all_total = 0
         //console.log('user_selection=> ' + JSON.stringify(user_selection))
@@ -1072,12 +1072,13 @@ class RegistrationSteps extends BaseComponent {
             }
 
         }
-        return all_total       
+        return all_total
     }
 
     processPaymentGateway() {
 
-        let total = this.getTotalAmount()
+        let fees = this.getTotalAmount()
+        let total = fees
         total = total + '00'
 
         let userData = this.state.userData
@@ -1104,7 +1105,11 @@ class RegistrationSteps extends BaseComponent {
         RazorpayCheckout.open(options).then((data) => {
             // handle success
             console.log('Razor Rspo ', JSON.stringify(data))
-            alert(`Success: ${data.razorpay_payment_id}`);
+            //alert(`Success: ${data.razorpay_payment_id}`);
+            let payment_details = {
+                razorpay_payment_id: data.razorpay_payment_id
+            }
+            this.submitData(payment_details, fees)
         }).catch((error) => {
             // handle failure
             console.log('Razor Rspo ', JSON.stringify(error))
@@ -1113,7 +1118,7 @@ class RegistrationSteps extends BaseComponent {
 
     }
 
-    submitData() {
+    submitData(payment_details, fees) {
 
         let tournament_reg_details = [];
 
@@ -1146,6 +1151,9 @@ class RegistrationSteps extends BaseComponent {
         subData['tournament_id'] = tournament_id
         subData['participant_user_id'] = user_id
         subData['tournament_registration_details'] = tournament_reg_details
+        subData['fees'] = fees
+        subData['payment_details'] = payment_details
+
         let data = {}
         data['data'] = subData
         console.log('Data=> ', JSON.stringify(data))
@@ -1310,7 +1318,8 @@ class RegistrationSteps extends BaseComponent {
                         })
                         setTimeout(() => {
 
-                            Events.publish(GO_TO_HOME, msg);
+                            Events.publish(GO_TO_HOME, true);
+
 
                         }, 100)
 

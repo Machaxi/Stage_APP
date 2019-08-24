@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
-import { Card, Text, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator,TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
+import { Card, Text} from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { coachListing } from '../../redux/reducers/CoachReducer'

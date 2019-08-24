@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, ImageBackground, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, ActivityIndicator,View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, ImageBackground, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
 import { getTournamentResultListing, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
@@ -230,7 +230,7 @@ class ResultsRoute extends BaseComponent {
             <TouchableOpacity activeOpacity={.8}
                 onPress={() => {
                     this.props.navigation.navigate('ResultsTournamentDetail', {
-                        data: JSON.stringify(item)
+                        id:item.id
                     })
                 }}>
 

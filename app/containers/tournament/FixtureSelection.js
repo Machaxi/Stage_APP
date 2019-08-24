@@ -350,14 +350,14 @@ class FixtureSelection extends BaseComponent {
                                                     ref={(el) => {
                                                         this.inputRefs.gender = el;
                                                     }}
-                                                    // Icon={() => {
-                                                    //     return (
-                                                    //         <Image
-                                                    //             style={{ width: 8, height: 5 }}
-                                                    //             source={require('../../images/ic_down_arrow.png')} />
-                                                    //     )
-                                                    // }}
-                                                
+                                                // Icon={() => {
+                                                //     return (
+                                                //         <Image
+                                                //             style={{ width: 8, height: 5 }}
+                                                //             source={require('../../images/ic_down_arrow.png')} />
+                                                //     )
+                                                // }}
+
                                                 />
 
 
@@ -375,7 +375,8 @@ class FixtureSelection extends BaseComponent {
 
                                         <FlatList
                                             style={{
-                                                margin: 8,
+                                                marginTop: 8,
+                                                marginBottom: 8
                                             }}
                                             contentContainerStyle={{
                                                 margin: 8
@@ -386,6 +387,7 @@ class FixtureSelection extends BaseComponent {
 
                                                 <View style={{
                                                     flex: 0.5,
+                                                    marginRight: 8,
                                                     marginBottom: 4,
                                                 }}>
                                                     <TouchableOpacity

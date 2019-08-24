@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, ActivityIndicator,View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
 import { CustomeButtonB } from '../../components/Home/Card';
@@ -375,9 +375,8 @@ class RegisteredRoute extends BaseComponent {
                             color: '#FF7373',
                             fontFamily: 'Quicksand-Regular'
                         }}>
-                            Last Date of Registration
-                            <Text style={defaultStyle.bold_text_14}>
-                                {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
+                            Last Date of Registration 
+                            <Text style={defaultStyle.bold_text_14}> {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
                         </Text>
 
 

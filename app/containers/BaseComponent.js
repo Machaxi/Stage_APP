@@ -3,7 +3,9 @@ import { StatusBar, NetInfo } from 'react-native';
 import { getData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 import Events from '../router/events';
-
+import axios from 'axios'
+import { client } from '../../App'
+import { BASE_URL } from '../../App'
 msg = "GUEST"
 
 colors = {
@@ -32,6 +34,8 @@ export const EVENT_REFRESH_PLAYER = 'EVENT_REFRESH_PLAYER'
 
 //to refresh results in challenge
 export const EVENT_REFRESH_RESULTS = 'EVENT_REFRESH_RESULTS'
+
+export const EVENT_UPDATE_DIALOG = 'EVENT_UPDATE_DIALOG'
 
 //STORE KEYS
 export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
@@ -70,13 +74,76 @@ export default class BaseComponent extends React.Component {
         //StatusBar.setBackgroundColor("#ffffff")
         //StatusBar.setBarStyle('dark-content', true)
 
-        this.refreshEvent = Events.subscribe(GO_TO_HOME, () => {
-            this.goToHome()
+        this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
+            this.goToHome(from_registration)
         });
     }
 
     static isUserLoggedIn() {
         return this.isUserLoggedIn;
+    }
+
+    //using top of all dashboard to check notification, this code will hellp
+    // to reduce extra efforts in all cases
+    getNotificationCount(callback) {
+
+        let token = ''
+        let one_singal_userid = ''
+
+        getData('header', (value) => {
+
+            getData(PUSH_TOKEN, (token) => {
+
+
+                getData(ONE_SIGNAL_USERID, (one_singal_userid) => {
+
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'x-authorization': value,
+                        'one_signal_device_id': one_singal_userid,
+                        'fcm_token': token,
+                        'app_version': '1'
+                    };
+
+                    //client.call
+                    client.get('notification/notification-count',
+                        { headers })
+                        .then(function (response) {
+                            let json = response.data
+                            let success = json.success
+                            if (success) {
+                                console.log('notification' + JSON.stringify(json));
+                                let notification_count = json.data.notification_count
+                                callback(notification_count)
+
+
+                                //checking for app update
+                                let must_update = json.data.must_update
+                                if (must_update == true) {
+                                    Events.publish(EVENT_UPDATE_DIALOG);
+                                }
+
+                                //checking sync data
+                                let is_sync = true//json.data.is_sync
+                                if (is_sync == true) {
+                                    getSettingData(headers)
+                                }
+
+
+                            }
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                });
+            });
+
+
+
+
+        })
     }
 
 
@@ -114,7 +181,7 @@ export default class BaseComponent extends React.Component {
     //This function is used when we go for tournament registration and  go back to home 
     //in that case we have to use this, we are using tournaments in new stack, we cannot
     // go back on back press.
-    goToHome() {
+    goToHome(data) {
 
         getData('userInfo', (value) => {
 
@@ -179,11 +246,32 @@ export default class BaseComponent extends React.Component {
             } else {
                 this.props.navigation.navigate('GHome')
             }
+
+            if (data != null)
+                Events.publish('FROM_REGISTRATION',data);
         });
 
     }
 }
 
+export function getSettingData(headers) {
+    console.log('user-setting');
+    client.get(BASE_URL + 'user/settings',
+        { headers })
+        .then(function (response) {
+            let json = response.data
+            console.log('user-setting' + JSON.stringify(json));
+            let success = json.success
+            if (success) {
+
+
+            }
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 export function checkProfilePic(profile_pic) {
 

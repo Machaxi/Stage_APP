@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
-import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
-import { ScrollView } from 'react-native-gesture-handler';
+import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel } from '../BaseComponent'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import { Linking } from 'react-native'
+import Share from 'react-native-share';
 
 
 export default class RegisteredTournamentDetail extends BaseComponent {
@@ -13,15 +15,48 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         super(props)
         this.state = {
             data: {},
-            
+
         }
         this.state.data = JSON.parse(this.props.navigation.getParam('data'));
-        
+
     }
 
+    tournament_types(tournament_types) {
+
+        let str = ''
+        for (let i = 0; i < tournament_types.length; i++) {
+            let tournament_type = tournament_types[i].tournament_type
+            str = str + getFormattedTournamentLevel(tournament_type) + ", "
+        }
+
+        return str.substring(0, str.length - 2);
+    }
+
+    phoneNumberClicked(phoneNumber) {
+        Linking.openURL(`tel:${phoneNumber}`)
+
+    }
+
+    shareLink(url) {
+        const shareOptions = {
+            title: 'Share via',
+            message: 'I\'m using dribble diary app.',
+            url: url,
+            //social: Share.Social.WHATSAPP,
+            //whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
+        };
+        Share.shareSingle(shareOptions);
+    }
 
     render() {
+
+
         let data = this.state.data
+        let tournament_types = this.tournament_types(data.tournament_types)
+        let mobile_number = data.mobile_number
+        let tournament_link = data.tournament_link
+
+
         // if (this.props.data.loading && !this.state.isAutoSuggest) {
         //     return (
         //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -64,17 +99,32 @@ export default class RegisteredTournamentDetail extends BaseComponent {
 
                                     <View style={{ flexDirection: 'row' }}>
 
-                                        <Image
-                                            resizeMode="contain"
-                                            style={{ width: 20, height: 20, marginRight: 16 }}
-                                            source={require('../../images/ic_call.png')}
-                                        />
-                                        <Image
-                                            resizeMode="contain"
-                                            style={{ width: 16, height: 18, }}
-                                            source={require('../../images/share.png')}
-                                        />
+                                        {mobile_number != undefined ?
 
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.phoneNumberClicked(mobile_number)
+                                                }}>
+
+                                                <Image
+                                                    resizeMode="contain"
+                                                    style={{ width: 20, height: 20, marginRight: 16 }}
+                                                    source={require('../../images/ic_call.png')}
+                                                />
+                                            </TouchableOpacity>
+                                            : null}
+
+                                        {tournament_link != undefined ?
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.shareLink(tournament_link)
+                                                }}>
+                                                <Image
+                                                    resizeMode="contain"
+                                                    style={{ width: 16, height: 18, }}
+                                                    source={require('../../images/share.png')}
+                                                />
+                                            </TouchableOpacity> : null}
                                     </View>
 
                                 </View>
@@ -206,16 +256,16 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             color: '#404040',
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
-                                            Singles, Doubles, Mixed Doubles
-                                 </Text>
+                                            {tournament_types}
+                                        </Text>
 
                                         <Text style={{
                                             paddingTop: 6, fontSize: 14,
                                             color: '#404040',
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
-                                            Total 20 players
-                                 </Text>
+                                            Total <Text style={defaultStyle.bold_text_14}>{data.max_registration} players</Text>
+                                        </Text>
                                     </View>
 
 
@@ -230,7 +280,13 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                         }}>
                                             Registered Players
                                     </Text>
-                                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                                        <View style={{
+
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            flex: 1,
+                                            justifyContent: 'space-between'
+                                        }}>
 
                                             <Text style={{
                                                 paddingTop: 10, fontSize: 14,
@@ -257,18 +313,23 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             }}>
                                                 Singles,Doubles
                                             </Text>
-                                            <Text style={{
-                                                paddingTop: 10, fontSize: 10,
-                                                color: '#667DDB',
-                                                width: "20%",
-                                                textAlign: 'center',
-                                                marginTop: 2,
-                                                alignItems: 'center',
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
+
+
+                                            <Text
+                                                onPress={() => {
+                                                    alert('under development')
+                                                }}
+                                                style={{
+                                                    paddingTop: 10, fontSize: 10,
+                                                    color: '#667DDB',
+                                                    width: "20%",
+                                                    textAlign: 'center',
+                                                    marginTop: 2,
+                                                    alignItems: 'center',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
                                                 Edit Partner
                                             </Text>
-
 
                                         </View>
                                     </View>
@@ -307,17 +368,16 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             color: '#404040',
                                             width: "50%",
                                             fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            09:30 am Onwards
-</Text>
+                                        }}>{data.start_time != undefined ?
+                                            Moment(data.start_time, "HH:mm:ss")
+                                                .format("hh:mm a") : "-"}</Text>
                                         <Text style={{
                                             paddingTop: 10, fontSize: 14,
                                             color: '#404040',
                                             width: "50%",
                                             fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Round Robin
-</Text>
+                                        }}>{data.tournament_format != undefined ?
+                                            data.tournament_format : '-'}</Text>
 
                                     </View>
 
@@ -338,9 +398,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             paddingTop: 6, fontSize: 14,
                                             color: '#404040',
                                             fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            Cras quis nulla commodo, aliquam lectus sed, blandit augue.
-                                 </Text>
+                                        }}>{data.address}</Text>
                                     </View>
 
 
@@ -361,17 +419,17 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                         </Text>
 
                                     </View> */}
-                                    <View  style={{
-                        margin: 16,
-                        alignSelf:'center',
-                        width:150,
-                    }}>
-                            <SkyFilledButton
-                             onPress={() => {
-                                //this.getFixtureData(item.id)
-                            }}
-                            >View Fixtures</SkyFilledButton>
-                            </View>
+                                    <View style={{
+                                        margin: 16,
+                                        alignSelf: 'center',
+                                        width: 150,
+                                    }}>
+                                        <SkyFilledButton
+                                            onPress={() => {
+                                                //this.getFixtureData(item.id)
+                                            }}
+                                        >View Fixtures</SkyFilledButton>
+                                    </View>
 
                                 </View>
 

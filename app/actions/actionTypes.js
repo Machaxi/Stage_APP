@@ -29,6 +29,10 @@ export const GET_UPCOMING_TOURNAMENT = 'upcoming/LOAD';
 export const DO_UPCOMING_TOURNAMENT_SUCCESS = 'upcoming/LOAD_SUCCESS';
 export const DO_UPCOMING_TOURNAMENT_FAIL = 'upcoming/LOAD_FAIL';
 
+export const GET_COMMON = 'common/LOAD';
+export const DO_COMMON_SUCCESS = 'common/LOAD_SUCCESS';
+export const DO_COMMON_FAIL = 'common/LOAD_FAIL';
+
 export const NOTIFICATION_TOURNAMENT = 'notification/LOAD';
 export const DO_NOTIFICATION_SUCCESS = 'notification/LOAD_SUCCESS';
 export const DO_NOTIFICATION_FAIL = 'notification/LOAD_FAIL';
