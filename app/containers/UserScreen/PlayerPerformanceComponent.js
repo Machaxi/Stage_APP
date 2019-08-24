@@ -117,7 +117,9 @@ class PlayerPerformanceComponent extends BaseComponent {
             alert: '',
             success_dialog: false,
             name: '',
-            player_history: []
+            player_history: [],
+            error:'',
+            height: 301
         }
 
     }
@@ -153,20 +155,7 @@ class PlayerPerformanceComponent extends BaseComponent {
             </Card>
             <Card style={styles.performanceCard}>
                 <View style={{ width: '100%', height: 300 }}>
-                    <YouTube
-                        apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
-                        videoId='wF_B_aagLfI'   // The YouTube video ID
-                        play                    // control playback of video with true/false
-                        fullscreen              // control whether the video should play in fullscreen or inline
-                        loop                    // control whether the video should loop when ended
-
-                        onReady={e => this.setState({ isReady: true })}
-                        onChangeState={e => this.setState({ status: e.state })}
-                        onChangeQuality={e => this.setState({ quality: e.quality })}
-                        onError={e => this.setState({ error: e.error })}
-
-                        style={{ alignSelf: 'stretch', height: 300 }}
-                    />
+                    
                 </View>
             </Card>
         </View>
@@ -181,6 +170,24 @@ class PlayerPerformanceComponent extends BaseComponent {
 
 
             <View style={styles.performanceContainer}>
+                <YouTube
+                        apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
+                        videoId='wF_B_aagLfI'   // The YouTube video ID
+                        controls={1}
+                        play={true}
+                        onReady={e => {
+                            this.setState({ height: 300 });
+                            this.setState({ isReady: true });
+                           
+                        }}
+                        onChangeState={e => this.setState({ status: e.state })}
+                        onChangeQuality={e => this.setState({ quality: e.quality })}
+                        onError={e => {
+                            console.log('e.error', e.error);
+                        this.setState({ error: e.error })}}
+
+                        style={{ alignSelf: 'stretch', height: this.state.height }}
+                    />
                 <FlatList
                     data={data}
                     renderItem={this._renderItem}
