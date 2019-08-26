@@ -106,7 +106,9 @@ class PlayerPerformanceComponent extends BaseComponent {
 
 
                                 {
-                                    (item.current_parameter.prev_score > item.current_parameter.score) ? <Text style={styles.scoreMinValue}>{item.current_parameter.prev_score} - {item.current_parameter.score} </Text> : <Text style={styles.scoreMinValue}>{item.current_parameter.score} - {item.current_parameter.prev_score} </Text>
+                                    (item.current_parameter.prev_score > item.current_parameter.score) ?
+                                        <Text style={styles.scoreMinValue}>{item.current_parameter.prev_score - item.current_parameter.score} </Text> :
+                                        <Text style={styles.scoreMinValue}>{item.current_parameter.score - item.current_parameter.prev_score} </Text>
                                 }
 
 
