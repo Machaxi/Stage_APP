@@ -28,7 +28,7 @@ class ParentRewards extends BaseComponent {
 
             batchList: ["Test1", "Test2", "Test3"],
             index: 0,
-            routes: [ ],
+            routes: [],
             parent_player_id: '',
             response: []
         }
@@ -107,10 +107,10 @@ class ParentRewards extends BaseComponent {
         />
     );
     renderScene = ({ route, jumpTo }) => {
-        
-        return <ParentRewardComponent jumpTo={this.state.response[route.key]} 
-        name={route.title}
-        navigation={this.props.navigation} />;
+
+        return <ParentRewardComponent jumpTo={this.state.response[route.key]}
+            name={route.title}
+            navigation={this.props.navigation} />;
         // return <PlayerBatchComponent jumpTo = {this.state.batchList[route.key]} navigation= {this.props.navigation} />;
         // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
         //return <FirstRoute jumpTo={jumpTo} />

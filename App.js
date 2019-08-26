@@ -28,8 +28,8 @@ import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } fro
 import { storeData } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 
-//export const BASE_URL = 'http://13.233.182.217:8080/api/'
-export const BASE_URL = 'http://10.0.0.25:8089/api/'
+export const BASE_URL = 'http://13.233.182.217:8080/api/'
+//export const BASE_URL = 'http://10.0.0.25:8089/api/'
 
 export const client = axios.create({
     baseURL: BASE_URL,

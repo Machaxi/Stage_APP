@@ -1,190 +1,279 @@
 import React from 'react'
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
-import { CustomeCard } from '../../components/Home/Card'
-import { Card } from 'react-native-paper'
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import { getData, storeData } from "../../components/auth";
-import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
+import { getPlayerPerformance } from "../../redux/reducers/PerformenceReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT } from '../BaseComponent';
-import { Rating } from 'react-native-ratings';
+import BaseComponent, { defaultStyle } from '../BaseComponent';
 import moment from 'moment'
-import Events from '../../router/events';
-import PlayerHeader from '../../components/custom/PlayerHeader'
-import { RateViewFill } from '../../components/Home/RateViewFill'
-import { RateViewBorder } from '../../components/Home/RateViewBorder';
 import RNPickerSelect from 'react-native-picker-select'
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { TabView, TabBar } from 'react-native-tab-view';
 import PlayerPerformanceComponent from './PlayerPerformanceComponent';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
-var is_show_badge = false
-
 class ViewPlayerPerformance extends BaseComponent {
 
-    constructor(props) {
-        super(props)
-      
-        this.state = {
-            refreshing: false,
-            userData: null,
-            country: undefined,
-            player_profile: null,
-            strenthList: null,
-            acedemy_name: '',
-            academy_feedback_data: null,
-            coach_feedback_data: null,
-            academy_id: '',
-            months: [],
-            month: '',
-            response: [
-              'Parameter 1','Parameter 2','Parameter 3'
-            ],
-            index: 0,
-            routes: [
-              { key: 'first', title: 'Dashboard' },
-              { key: 'second', title: 'Your results' },
-              { key: 'third', title: 'Leader board' }
-            ],
-        }
-        this.inputRefs = {
-          month: null
-        };
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      refreshing: false,
+      months: [],
+      month: '',
+      response: [],
+      index: 0,
+      routes: [],
+      performanceData: null,
+      currentPerformanceData: null,
+      spinner: false,
     }
-
-    componentDidMount() {
-      for(i=0; i< 12; i++) {
-        let obj = {
-          label: moment().month(i).format('MMM') + ' ' + moment().format('YY'),
-          value: (i+1).toString()
-        } 
-        this.state.months.push(obj);
-      };
-
-      this.setState({ 
-        month: moment().format('M')
-      });
-    }
-
-     _getLabelText = ({ route, scene }) => (
-        route.title
-    );
-
-    _renderTabBar = props => (
-
-        <TabBar
-            {...props}
-            scrollEnabled
-            getLabelText={this._getLabelText}
-            indicatorStyle={{
-                backgroundColor: '#667DDB',
-                height: 4,
-            }}
-            style={{ backgroundColor: 'white', elevation: 0 }}
-            tabStyle={styles.tab}
-            labelStyle={defaultStyle.regular_text_14}
-        />
-    );
-    renderScene = ({ route, jumpTo }) => {
-        
-        return <PlayerPerformanceComponent jumpTo={this.state.response[route.key]} 
-        name={route.title}
-        navigation={this.props.navigation} />;
-  
+    this.inputRefs = {
+      month: null
     };
-  
-    render() {
+  }
+
+  componentDidMount() {
+
+    this.state.performanceData = this.props.navigation.getParam('performance_data');
+    for (i = 0; i < 12; i++) {
+      let obj = {
+        label: moment().month(i).format('MMM') + ' ' + moment().format('YY'),
+        value: (i + 1).toString()
+      }
+      this.state.months.push(obj);
+    };
+
+    console.log('this.state.performanceData', this.state.performanceData);
+    this.state.month = this.state.performanceData.month.toString();
+
+    this.getPerformanceData();
+
+  }
+
+  progress(status) {
+    this.setState({
+      spinner: status
+    })
+  }
+
+  onSwipeStart() { }
+
+  getPerformanceData() {
+
+    this.progress(true)
+
+    getData('userInfo', (value) => {
+      userData = JSON.parse(value);
+      getData('header', (value) => {
+        this.props.getPlayerPerformance(value, this.state.performanceData.id, this.state.month, this.state.performanceData.year, this.state.performanceData.batchId, userData['player_id'], this.state.routes.length != 0 ? this.state.routes[this.state.index].key : null).then(() => {
+          this.progress(false);
+          console.log('this.props.data===========', this.props.data);
+          let data = this.props.data.performencedata
+          //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+          let success = data.success
+          if (success) {
+
+            this.setState({
+              response: data.data,
+            })
+
+            let array = data.data.attribute.parameters
+            let newArray = []
+            for (let i = 0; i < array.length; i++) {
+              let row = array[i];
+              let obj = {
+                key: row.parameter_id,
+                title: row.name,
+              }
+              newArray[i] = obj
+            }
+            this.setState({
+              routes: newArray,
+            })
+            console.warn(JSON.stringify(newArray))
+
+          }
+
+        }).catch((response) => {
+          this.progress(false)
+          console.log(response);
+        })
+      })
+    })
+  }
+
+  // getTabData() {
+  //   getData('userInfo', (value) => {
+  //     userData = JSON.parse(value);
+  //     getData('header', (value) => {
+  //       this.props.getPlayerPerformance(value, this.state.response.id, 3, 2019, 4, userData['player_id']).then(() => {
+  //         console.log('this.props.data===========', this.props.data);
+  //         let data = this.props.data.performencedata
+  //         console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+
+  //         let success = data.success
+  //         if (success) {
+
+  //           this.setState({
+  //             response: data.data
+  //           })
+
+  //           let array = data.data.attribute.parameters
+  //           let newArray = []
+  //           for (let i = 0; i < array.length; i++) {
+  //             let row = array[i];
+  //             let obj = {
+  //               key: i,
+  //               title: row.name,
+  //             }
+  //             newArray[i] = obj
+  //           }
+  //           this.setState({
+  //             routes: newArray,
+  //           })
+  //           console.warn(JSON.stringify(newArray))
+
+  //         }
+
+  //       }).catch((response) => {
+  //         console.log(response);
+  //       })
+  //     })
+  //   })
+  // }
+
+  _getLabelText = ({ route, scene }) => (
+    route.title
+  );
+
+  _renderTabBar = props => (
+
+    <TabBar
+      {...props}
+      scrollEnabled
+      getLabelText={this._getLabelText}
+      indicatorStyle={{
+        backgroundColor: '#667DDB',
+        height: 4,
+      }}
+      style={{ backgroundColor: 'white', elevation: 0 }}
+      tabStyle={styles.tab}
+      labelStyle={defaultStyle.regular_text_14}
+    />
+  );
+  renderScene = ({ route, jumpTo }) => {
+
+    return <PlayerPerformanceComponent jumpTo={this.state.response}
+      name={route.title}
+      navigation={this.props.navigation} />;
+
+  };
+
+  render() {
 
 
-        if (this.props.data.loading) {
-            return (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#67BAF5" />
-                </View>
-            )
-        }
-
-        return (
-
-          <View style={styles.performanceContainer}>
-            <View style={styles.statsOuter}>
-
-                <Image source={require('../../images/Mysatus.png')}
-                    style={styles.statsImg} />
-                    
-                <View>
-
-                  <Text style={defaultStyle.bold_text_14}>Core Strength</Text>
-
-                  <View style={styles.statsProgressOuter}>
-                        <Text style={[defaultStyle.bold_text_12,{color: '#A3A5AE'}]}>
-                           Current Score
-                        </Text>
-                        <Text style={defaultStyle.bold_text_12}>
-                           65
-                        </Text>
-                  </View>
-                  <Progress.Bar style={styles.progressBar} progress={65 / 100} width={deviceWidth - 100} height={14} />
-
-                  <View style={{width:'45.33%',marginTop:10,paddingLeft: 2}}>
-
-                      <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
-
-                      <RNPickerSelect
-                        placeholder={{}}
-                        items={this.state.months}
-                        onValueChange={(value) => {
-                          console.log(value)
-                          this.setState({
-                            month: value,
-                          },()=>{
-                            //this.getResultsData()
-                            console.log('test');
-                          });
-                        }}
-                        style={pickerSelectStyles}
-                        value={this.state.month}
-                        useNativeAndroidPickerStyle={false}
-                        ref={(el) => {
-                          this.inputRefs.month = el;
-                        }}
-                      />
-                      <View style={{
-                        width: 80,
-                        backgroundColor: '#A3A5AE',
-                        height: 1
-                      }}></View>
-
-                  </View> 
-
-                </View>
-            </View>
-
-            <View style={{flex:1}}>
-              <TabView
-                  navigationState={this.state}
-                  renderTabBar={this._renderTabBar}
-                  renderScene={this.renderScene}
-                  onIndexChange={index => this.setState({ index })}
-              />
-
-            </View>
-        
-          </View>
-        );
-
+    if (this.state.performanceData == null) {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="#67BAF5" />
+        </View>
+      )
     }
+
+    return (
+
+      <View style={styles.performanceContainer}>
+
+        <Spinner
+          visible={this.state.spinner}
+          textStyle={defaultStyle.spinnerTextStyle}
+        />
+
+        <View style={styles.statsOuter}>
+
+          <Image source={require('../../images/Mysatus.png')}
+            style={styles.statsImg} />
+
+          <View>
+
+            <Text style={defaultStyle.bold_text_14}>{this.state.performanceData.name}</Text>
+
+            <View style={styles.statsProgressOuter}>
+              <Text style={[defaultStyle.bold_text_12, { color: '#A3A5AE' }]}>
+                Current Score
+                        </Text>
+              <Text style={defaultStyle.bold_text_12}>
+                {this.state.performanceData.score}
+              </Text>
+            </View>
+            <Progress.Bar style={styles.progressBar} progress={this.state.performanceData.score / 100} width={deviceWidth - 100} height={14} />
+
+            <View style={{ width: '45.33%', marginTop: 16, paddingLeft: 2 }}>
+
+              <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
+              <RNPickerSelect
+                placeholder={{}}
+                items={this.state.months}
+                onValueChange={(value) => {
+                  console.log(value)
+                  this.setState({
+                    month: value,
+                  }, () => {
+                    this.getPerformanceData();
+                  });
+                }}
+                style={pickerSelectStyles}
+                value={this.state.month}
+                useNativeAndroidPickerStyle={false}
+                ref={(el) => {
+                  this.inputRefs.month = el;
+                }}
+              />
+              <View style={{
+                width: 80,
+                backgroundColor: '#A3A5AE',
+                height: 1
+              }}></View>
+
+            </View>
+
+          </View>
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <TabView
+            navigationState={this.state}
+            renderTabBar={this._renderTabBar}
+            renderScene={this.renderScene}
+            onIndexChange={index => {
+              console.log('index', index);
+              this.setState({ index });
+              this.getPerformanceData();
+
+            }
+
+            }
+          />
+
+        </View>
+
+      </View>
+    );
+
+  }
 }
 const mapStateToProps = state => {
-    return {
-        data: state.DashboardReducer,
-    };
+  return {
+    data: state.PerformenceReducer,
+  };
 };
 const mapDispatchToProps = {
-    getPlayerDashboard,
+  getPlayerPerformance,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ViewPlayerPerformance);
 
@@ -205,17 +294,17 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   statsProgressOuter: {
-     marginBottom: 5,
-     flexDirection: 'row',
-     justifyContent: 'space-between',
+    marginBottom: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   progressBar: {
-    backgroundColor: '#E1E1E1', 
-    color: '#305F82', 
-    borderRadius: 11, 
+    backgroundColor: '#E1E1E1',
+    color: '#305F82',
+    borderRadius: 11,
     borderWidth: 0
   },
-   filterPlaceholder: {
+  filterPlaceholder: {
     fontSize: 10,
     fontFamily: 'Quicksand-Medium',
     color: '#A3A5AE'
