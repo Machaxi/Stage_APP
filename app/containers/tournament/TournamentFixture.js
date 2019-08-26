@@ -462,7 +462,7 @@ class TournamentFixture extends BaseComponent {
                     //console.log("i " + i + " y => " + y + " space => " + height + " space => " + space + " top => " + topSpace)
                     let color = "white"
                     if (j % 2 == 0) {
-                        color = "#F6F6F6"
+                        color = "white"//F6F6F6
                     } else {
                         color = "#F1F1F1"
                     }
@@ -471,7 +471,7 @@ class TournamentFixture extends BaseComponent {
                         onPress={() => {
 
                             let id = array[i][j].id
-                            console.warn("playerid : " +id)
+                            console.warn("playerid : " + id)
                             if (id != undefined) {
                                 this.props.navigation.navigate('OtherPlayerDeatils', {
                                     player_id: id
@@ -483,8 +483,9 @@ class TournamentFixture extends BaseComponent {
                         y={y}
                         width={width}
                         height={height}
-                        stroke={borderColor}
-                        strokeWidth="0"
+                        //stroke={borderColor}
+                        stroke="#DFDFDF"
+                        strokeWidth=".5"
                         rx="4"
                         ry="4"
                         fill={color}>
@@ -544,7 +545,7 @@ class TournamentFixture extends BaseComponent {
                                 onPress={() => {
 
                                     let id = array[i][j].id
-                                    console.warn("playerid : " +id)
+                                    console.warn("playerid : " + id)
                                     if (id != undefined) {
                                         this.props.navigation.navigate('OtherPlayerDeatils', {
                                             player_id: id
@@ -579,7 +580,7 @@ class TournamentFixture extends BaseComponent {
 
                                 let color = "white"
                                 if (j % 2 == 0) {
-                                    color = "#F6F6F6"
+                                    color = "white"
                                 } else {
                                     color = "#F1F1F1"
                                 }

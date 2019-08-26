@@ -1118,7 +1118,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
 

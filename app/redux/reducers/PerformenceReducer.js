@@ -1,5 +1,5 @@
 import * as types from '../../actions/actionTypes';
-import {getData,storeData} from '../../components/auth'
+import { getData, storeData } from '../../components/auth'
 //import {getBatchPlayersList} from "./AcademyReducer";
 
 const initialState = {
@@ -12,10 +12,10 @@ export default function PerformenceReducer(state = initialState, action) {
         case types.GET_PERFORMENCE:
             return { ...state, loading: true };
         case types.DO_PERFORMENCE_SUCCESS:
-            console.log("sucesss",action.payload.data);
+            console.log("sucesss", action.payload.data);
             return { ...state, loading: false, performencedata: action.payload.data };
         case types.DO_PERFORMENCE_FAIL:
-            console.log("fails",action.payload);
+            console.log("fails", action.payload);
             return {
 
                 ...state,
@@ -28,8 +28,8 @@ export default function PerformenceReducer(state = initialState, action) {
     }
 }
 
-export function getCoachPerformenceList(header,academy_id,coach_id) {
-    console.log("postdata getCoachBatch",header)
+export function getCoachPerformenceList(header, academy_id, coach_id) {
+    console.log("postdata getCoachBatch", header)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -51,8 +51,8 @@ export function getCoachPerformenceList(header,academy_id,coach_id) {
 
 }
 
-export function getPerformenceDuePlayer(header,batch_id,month,year) {
-    console.log("postdata",header,batch_id)
+export function getPerformenceDuePlayer(header, batch_id, month, year) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -75,8 +75,8 @@ export function getPerformenceDuePlayer(header,batch_id,month,year) {
 }
 
 
-export function getPerformenceOption(header,batch_id,player_id,month,year) {
-    console.log("getPerformenceOption",header,batch_id,player_id,month,year)
+export function getPerformenceOption(header, batch_id, player_id, month, year) {
+    console.log("getPerformenceOption", header, batch_id, player_id, month, year)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -98,8 +98,8 @@ export function getPerformenceOption(header,batch_id,player_id,month,year) {
 
 }
 
-export function getCoachBatchAttendence(header,batch_id) {
-    console.log("postdata",header,batch_id)
+export function getCoachBatchAttendence(header, batch_id) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -121,8 +121,8 @@ export function getCoachBatchAttendence(header,batch_id) {
 
 }
 
-export function saveCoachBatchAttendence(header,batch_id,postdata) {
-    console.log("postdata",header,batch_id)
+export function saveCoachBatchAttendence(header, batch_id, postdata) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -145,8 +145,8 @@ export function saveCoachBatchAttendence(header,batch_id,postdata) {
 }
 
 
-export function getCoachBatchAttendenceDetails(header,batch_id,date) {
-    console.log("postdata",header,batch_id)
+export function getCoachBatchAttendenceDetails(header, batch_id, date) {
+    console.log("postdata", header, batch_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -168,7 +168,7 @@ export function getCoachBatchAttendenceDetails(header,batch_id,date) {
 
 }
 
-export function savePlayerPerformance(header,postData) {
+export function savePlayerPerformance(header, postData) {
     return {
         type: types.GET_BATCHES,
         payload: {
@@ -176,6 +176,32 @@ export function savePlayerPerformance(header,postData) {
                 url: `performance/save`,
                 method: 'POST',
                 data: postData,
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+
+}
+
+export function getPlayerPerformance(header, attributeId, month, year, batchId, playerId, parameterId) {
+
+    let url;
+
+    if(parameterId==null) {
+        url = `performance/${attributeId}/attribute-detail?month=${month}&year=${year}&batch_id=${batchId}&player_id=${playerId}`
+    } else {
+        url = `performance/${attributeId}/attribute-detail?month=${month}&year=${year}&batch_id=${batchId}&player_id=${playerId}&parameterId=${parameterId}`
+    }
+
+    return {
+        type: types.GET_PERFORMENCE,
+        payload: {
+            request: {
+                url: url,
+                method: 'GET',
                 headers: {
                     'x-authorization': header
 

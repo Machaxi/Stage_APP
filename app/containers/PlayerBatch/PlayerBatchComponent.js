@@ -346,8 +346,8 @@ class PlayerBatchComponent extends BaseComponent {
                         <TouchableOpacity onPress={() => {
 
                             console.warn("Touch Press")
-                            this.props.navigation.navigate('PlayersListing', 
-                            { batch_id: this.props.jumpTo.batch_id, List_type: 'BATCH' })
+                            this.props.navigation.navigate('PlayersListing',
+                                { batch_id: this.props.jumpTo.batch_id, List_type: 'BATCH' })
 
                         }}>
                             <View style={{ marginLeft: 8, marginTop: 8, marginBottom: 8, flexDirection: 'row', height: 40 }}>

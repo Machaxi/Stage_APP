@@ -306,7 +306,9 @@ class UserHome extends BaseComponent {
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press1")
+            console.warn("Touch Press1");
+            this.props.navigation.navigate('ViewPlayerPerformance', { performance_data: item });
+
 
             // this.props.navigation.navigate('OrderTracking', {
             //     order_id: item.increment_id

@@ -6,8 +6,8 @@ export default class WebViewScreen extends BaseComponent {
 
 
     render() {
-        // const uri = 'http://stage.dribblediary.com/';
-        const uri = 'http://www.africau.edu/images/default/sample.pdf'
+         const uri = 'http://stage.dribblediary.com/';
+        //const uri = 'http://www.africau.edu/images/default/sample.pdf'
         return (
             <WebView
                 originWhitelist={['*']}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ScrollView, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, ScrollView, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Image, TextInput, WebView } from 'react-native'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getData, storeData } from "../../components/auth";
@@ -11,92 +11,6 @@ import { Card } from 'react-native-paper';
 import { ECharts } from 'react-native-echarts-wrapper';
 import YouTube from 'react-native-youtube'
 
-config = {
-    rotate: 90,
-    align: 'left',
-    verticalAlign: 'middle',
-    position: 'top',
-    distance: 15,
-};
-
-var labelOption = {
-    normal: {
-        show: true,
-        position: config.position,
-        distance: config.distance,
-        align: config.align,
-        verticalAlign: config.verticalAlign,
-        rotate: config.rotate,
-        formatter: '{c}  {name|{a}}',
-        fontSize: 16,
-        rich: {
-            name: {
-                textBorderColor: '#fff'
-            }
-        }
-    }
-};
-
-option = {
-    color: ['#869BDA', '#FCAB04', '#51DB8E'],
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow'
-        }
-    },
-    legend: {
-        data: ['My Score', 'Batch Average', 'Batch Best']
-    },
-    toolbox: {
-        show: true,
-        orient: 'vertical',
-        left: 'right',
-        top: 'center',
-        feature: {
-            mark: { show: false },
-            dataView: { show: false, readOnly: false },
-            magicType: { show: false, type: ['line', 'bar', 'stack', 'tiled'] },
-            restore: { show: false },
-            saveAsImage: { show: false }
-        }
-    },
-    calculable: true,
-    xAxis: [
-        {
-            type: 'category',
-            axisTick: { show: false },
-            data: ['May', 'June', 'July', 'Aug', 'Sept', 'Oct']
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value'
-        }
-    ],
-    series: [
-        {
-            name: '',
-            type: 'bar',
-            barGap: 0,
-            label: labelOption,
-            data: [50, 60, 70, 80, 20, 30]
-        },
-        {
-            name: '',
-            type: 'bar',
-            label: labelOption,
-            data: [85, 75, 65, 55, 40, 50]
-        },
-        {
-            name: '',
-            type: 'bar',
-            label: labelOption,
-            data: [90, 80, 70, 60, 60, 70]
-        }
-
-    ]
-};
 
 class PlayerPerformanceComponent extends BaseComponent {
 
@@ -117,18 +31,58 @@ class PlayerPerformanceComponent extends BaseComponent {
             alert: '',
             success_dialog: false,
             name: '',
-            player_history: []
+            player_history: [],
+            error: '',
+            height: 301,
+            answer: '',
+            question: ''
         }
 
     }
 
     componentDidMount() {
+        console.log('hiiiiiiiiiiiiiiiiii', this.props.jumpTo)
+    }
+
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
+
+    answerModal() {
+        return (
+
+            <View style={{ backgroundColor: '#F7F7F7' }}>
+                <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
+                    <View style={styles.modalOuter}>
+                        <View style={styles.modalBox}>
+                            <View style={styles.modalHeadingOuter}>
+                                <Text></Text>
+                                <Text style={[defaultStyle.bold_text_14, styles.modalHeadingText]}>{this.state.question}</Text>
+
+                                <TouchableOpacity activeOpacity={.8} onPress={() => { this.setModalVisible(false); }}>
+                                    <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                                </TouchableOpacity>
+
+
+
+
+                            </View>
+                            <ScrollView>
+                                <Text style={styles.answerText}>{this.state.answer}</Text>
+                            </ScrollView>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+
+
+        )
 
     }
 
     _renderItem = ({ item }) => (
         <View>
-            <Card style={styles.performanceCard}>
+            <Card style={[styles.performanceCard, { marginTop: 14 }]}>
                 <Text style={styles.reportCardheadingText}>Report</Text>
                 <View style={styles.scoreBestLabelOuter}>
                     <Text style={styles.scoreLabel}>Score</Text>
@@ -136,11 +90,33 @@ class PlayerPerformanceComponent extends BaseComponent {
                 </View>
                 <View style={styles.scoreBestValueOuter}>
                     <View style={styles.scoreValueOuter}>
-                        <Text style={styles.scoreValue}>65</Text>
-                        <Image style={styles.triangleImg} source={require('../../images/triangle_red.png')} />
-                        <Text style={styles.scoreMinValue}>10</Text>
+                        <Text style={styles.scoreValue}>{item.current_parameter.score}</Text>
+                        {
+                            item.current_parameter.prev_score != 0 &&
+                            <View style={{ flexDirection: 'row' }}>
+
+                                {
+                                    (item.current_parameter.prev_score > item.current_parameter.score) ?
+
+                                        <Image style={styles.triangleImg} source={require('../../images/triangle_red.png')} /> :
+
+                                        <Image style={styles.triangleImg} source={require('../../images/triangle_green.png')} />
+
+                                }
+
+
+                                {
+                                    (item.current_parameter.prev_score > item.current_parameter.score) ?
+                                        <Text style={styles.scoreMinValue}>{item.current_parameter.prev_score - item.current_parameter.score} </Text> :
+                                        <Text style={styles.scoreMinValue}>{item.current_parameter.score - item.current_parameter.prev_score} </Text>
+                                }
+
+
+                            </View>
+                        }
+
                     </View>
-                    <Text style={styles.bestScoreValue}>80</Text>
+                    <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
                 </View>
             </Card>
             <Card style={styles.performanceCard}>
@@ -153,29 +129,185 @@ class PlayerPerformanceComponent extends BaseComponent {
             </Card>
             <Card style={styles.performanceCard}>
                 <View style={{ width: '100%', height: 300 }}>
-                    <YouTube
-                        apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
-                        videoId='wF_B_aagLfI'   // The YouTube video ID
-                        play                    // control playback of video with true/false
-                        fullscreen              // control whether the video should play in fullscreen or inline
-                        loop                    // control whether the video should loop when ended
 
-                        onReady={e => this.setState({ isReady: true })}
-                        onChangeState={e => this.setState({ status: e.state })}
-                        onChangeQuality={e => this.setState({ quality: e.quality })}
-                        onError={e => this.setState({ error: e.error })}
+                    {
+                        <WebView
+                            source={{ uri: `https://www.youtube.com/embed/${item.attribute.intro_video_url.split('=')[1]}` }}
+                            javaScriptEnabled={true}
+                            domStorageEnabled={true}
+                        />
+                    }
 
-                        style={{ alignSelf: 'stretch', height: 300 }}
-                    />
+
+
+
+
+                    {/* <YouTube
+                    apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
+                    videoId='wF_B_aagLfI'   // The YouTube video ID
+                    controls={1}
+                    play={true}
+                    onReady={e => {
+                        this.setState({ height: 300 });
+                        this.setState({ isReady: true });
+
+                    }}
+                    onChangeState={e => this.setState({ status: e.state })}
+                    onChangeQuality={e => this.setState({ quality: e.quality })}
+                    onError={e => {
+                        console.log('e.error', e.error);
+                        this.setState({ error: e.error })
+                    }}
+
+                    style={{ alignSelf: 'stretch', height: this.state.height }}
+                /> */}
+
+                </View>
+                <View style={{ backgroundColor: '#EFEFEF', borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row' }}>
+                    <Image source={require('../../images/shape.png')} />
+                    <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
+                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 11, color: '#A3A5AE' }}>{item.attribute.intro_video_url}</Text>
                 </View>
             </Card>
+
+            {
+                item.attribute.qa.map((element, index) => {
+
+                    return (
+                        <Card style={[styles.performanceCard, { marginBottom: 14 }]} onPress={() => {
+
+                            this.setState({
+                                question: element.question,
+                                answer: element.answer
+                            }, () => {
+                                this.setModalVisible(true);
+                            });
+                        }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={require('../../images/info-bulb.png')} />
+                                <View style={{ height: 25, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
+                                <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>{element.question}</Text>
+                            </View>
+                        </Card>
+                    )
+                })
+            }
+
+
         </View>
     );
 
 
     render() {
 
-        let data = [{ 'name': 'Deepika' }];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Octumber', 'November', 'December'];
+
+        let labels = [];
+        let my_score = [];
+        let batch_avg = [];
+        let batch_best = [];
+
+        this.props.jumpTo.current_parameter.graph_data.map((element, index) => {
+            labels.push(months[element.month - 1]);
+            my_score.push(element.self_score)
+            batch_avg.push(element.avg_score)
+            batch_best.push(element.best_score)
+        })
+
+        config = {
+            rotate: 90,
+            align: 'left',
+            verticalAlign: 'middle',
+            position: 'top',
+            distance: 15,
+        };
+
+        var labelOption = {
+            normal: {
+                show: true,
+                position: config.position,
+                distance: config.distance,
+                align: config.align,
+                verticalAlign: config.verticalAlign,
+                rotate: config.rotate,
+                formatter: '{c}  {name|{a}}',
+                fontSize: 16,
+                rich: {
+                    name: {
+                        textBorderColor: '#fff'
+                    }
+                }
+            }
+        };
+
+        option = {
+            color: ['#5E9AFD', '#FFA800', '#76D190'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['My Score', 'Batch Average', 'Batch Best'],
+                bottom: 3,
+                itemWidth: 14,
+                icon: 'rect'
+            },
+            grid: {
+                top: 40
+            },
+            toolbox: {
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: { show: false },
+                    dataView: { show: false, readOnly: false },
+                    magicType: { show: false, type: ['line', 'bar', 'stack', 'tiled'] },
+                    restore: { show: false },
+                    saveAsImage: { show: false }
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: { show: false },
+                    data: labels
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                }
+            ],
+            series: [
+                {
+                    name: 'My Score',
+                    type: 'bar',
+                    barGap: 0,
+                    label: labelOption,
+                    data: my_score
+                },
+                {
+                    name: 'Batch Average',
+                    type: 'bar',
+                    label: labelOption,
+                    data: batch_avg
+                },
+                {
+                    name: 'Batch Best',
+                    type: 'bar',
+                    label: labelOption,
+                    data: batch_best
+                }
+
+            ]
+        };
+
+        let data = [this.props.jumpTo];
 
         return (
 
@@ -185,6 +317,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     data={data}
                     renderItem={this._renderItem}
                 />
+                {this.answerModal()}
             </View>
 
         )
@@ -214,10 +347,18 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         marginLeft: 12,
         marginRight: 12,
-        marginTop: 14,
+        marginTop: 7,
+        marginBottom: 7,
         elevation: 2,
         paddingHorizontal: 12,
         paddingVertical: 16
+    },
+    videoPlayerCard: {
+        borderRadius: 16,
+        marginLeft: 12,
+        marginRight: 12,
+        marginTop: 14,
+        elevation: 2,
     },
     reportCardheadingText: {
         fontSize: 10,
@@ -279,6 +420,40 @@ const styles = StyleSheet.create({
         marginTop: 17,
         marginLeft: 15,
         marginRight: 5
+    },
+    closeImg: {
+        height: 30,
+        width: 30,
+    },
+    modalOuter: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+        paddingVertical: 16
+    },
+    modalBox: {
+        width: "95%",
+        //margin: 16,
+        paddingHorizontal: 16,
+        paddingVertical: 5,
+        borderRadius: 16,
+        backgroundColor: 'white',
+        height: 470,
+    },
+    modalHeadingOuter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 10,
+        //marginTop: 10,
+    },
+    modalHeadingText: {
+        color: '#000000',
+        fontFamily: 'Quicksand-Bold'
+    },
+    answerText: {
+        fontFamily: 'Quicksand-Regular'
     }
 }
 );

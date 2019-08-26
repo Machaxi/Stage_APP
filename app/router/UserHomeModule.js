@@ -28,7 +28,6 @@ import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import NotificationList from '../containers/notification/NotificationList'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
 import WebViewScreen from '../containers/util/WebViewScreen'
-import PDFExample from '../containers/util/PDFExample'
 
 
 const userHomeModule = createStackNavigator({
