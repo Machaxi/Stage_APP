@@ -162,7 +162,7 @@ class ViewPlayerPerformance extends BaseComponent {
         height: 4,
       }}
       style={{ backgroundColor: 'white', elevation: 0 }}
-      tabStyle={styles.tab}
+      tabStyle={{ width: 143 }}
       labelStyle={defaultStyle.regular_text_14}
     />
   );
