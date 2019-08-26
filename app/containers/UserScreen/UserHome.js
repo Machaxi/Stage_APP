@@ -149,13 +149,23 @@ class UserHome extends BaseComponent {
         //StatusBar.setBarStyle('light-content', true)
 
     }
-
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
+    }
     componentDidMount() {
 
         // getData('userInfo',(value)=>{
         //     firebaseAnalytics.logEvent('DASHBOARD',value );
 
         // })
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.getNotifications()
+            }
+        );
+
 
         this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
             this.getNotifications()
@@ -174,12 +184,15 @@ class UserHome extends BaseComponent {
             }, 100)
         });
 
-       
+        this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD', () => {
+            this.selfComponentDidMount()
+        });
+
         this.getNotifications()
         this.selfComponentDidMount()
     }
 
-    getNotifications(){
+    getNotifications() {
         this.getNotificationCount((count) => {
             this.props.navigation.setParams({ notification_count: count });
             notification_count = count

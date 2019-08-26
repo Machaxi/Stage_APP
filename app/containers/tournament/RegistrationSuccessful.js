@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 'react-native'
-import BaseComponent, { defaultStyle, GO_TO_HOME } from '../BaseComponent';
+import BaseComponent, { defaultStyle, GO_TO_HOME, getFormattedTournamentType } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { CustomeButtonB } from '../../components/Home/Card';
@@ -50,7 +50,7 @@ export default class RegistrationSuccessful extends BaseComponent {
             for (let j = 0; j < tournament_types.length; j++) {
 
                 let type = tournament_types[j]
-                if (type.selected) {
+                if (type.selected && !type.disable) {
 
                     wholeText = wholeText + "          " + type.tournament_type
                 }
@@ -143,7 +143,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                     paddingTop: 2,
                                     paddingBottom: 2,
                                     fontFamily: 'Quicksand-Regular'
-                                }}>{academic_type}</Text>
+                                }}>{getFormattedTournamentType(academic_type)}</Text>
 
                             </View>
 
@@ -183,7 +183,7 @@ export default class RegistrationSuccessful extends BaseComponent {
 
                             <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
-                            <TouchableOpacity activeOpacity={.8}
+                            {/* <TouchableOpacity activeOpacity={.8}
                                 onPress={() => {
                                     this.props.navigation.navigate('RegistrationSteps')
                                     //console.warn('Done')
@@ -199,7 +199,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                         Register another Player?
                                 </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
 
 
                             <TouchableOpacity activeOpacity={.8}

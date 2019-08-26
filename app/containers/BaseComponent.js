@@ -248,7 +248,7 @@ export default class BaseComponent extends React.Component {
             }
 
             if (data != null)
-                Events.publish('FROM_REGISTRATION',data);
+                Events.publish('FROM_REGISTRATION', data);
         });
 
     }
@@ -362,6 +362,15 @@ export function getFormattedTournamentLevel(type) {
 
     }
     return type
+}
+
+export function getFormattedRound(round) {
+
+    switch (round) {
+        case "KNOCK_OUT":
+            return "Knock Out"
+    }
+    return round
 }
 
 

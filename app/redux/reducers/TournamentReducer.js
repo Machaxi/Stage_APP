@@ -43,8 +43,8 @@ export function getUpcomingTournament(header) {
 
 }
 
-export function getRegisteredTournament(header,filter) {
-    console.log("getRegisteredTournament", header,filter)
+export function getRegisteredTournament(header, filter) {
+    console.log("getRegisteredTournament", header, filter)
 
     return {
         type: types.GET_TOURNAMENT,
@@ -97,8 +97,8 @@ export function getPartnerList(header, tournament_id, page, size) {
 
 }
 
-export function getTournamentResultListing(header,filter) {
-    console.log("getTournamentResultListing", header,filter)
+export function getTournamentResultListing(header, filter) {
+    console.log("getTournamentResultListing", header, filter)
 
     return {
         type: types.GET_TOURNAMENT,
@@ -115,15 +115,20 @@ export function getTournamentResultListing(header,filter) {
 }
 
 
-export function registerTournament(header, postdata) {
-    console.log("registerTournament", header, )
-    console.log('Request ',JSON.stringify(postdata))
+export function registerTournament(header, postdata, is_edit_mode) {
+    console.log("registerTournament", header)
+    console.log('Request ', JSON.stringify(postdata))
+
+    let url = 'tournament/register'
+    if (is_edit_mode) {
+        url = 'tournament/update-registration'
+    }
 
     return {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/register`,
+                url: url,
                 method: 'POST',
                 data: postdata,
                 headers: {

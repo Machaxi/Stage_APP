@@ -72,8 +72,17 @@ class MarkAttendence extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
+
+                    let players = user1.data['players']
+                    // for (let i = 0; i < players.length; i++) {
+                    //     let obj = players[i]
+                    //     obj.is_present = false
+                    //     players[i] = obj
+                    // }
+
+
                     this.setState({
-                        playerList: user1.data['players'],
+                        playerList: players,
                         batchDetails: user1.data['batch']
 
                     })
@@ -172,6 +181,8 @@ class MarkAttendence extends BaseComponent {
             dataDic['data'] = dict;
             console.log("dicttttc ", dict)
 
+            console.warn('Save===> ',JSON.stringify(this.state.playerList))
+
             this.props.saveCoachBatchAttendence(value, this.props.navigation.getParam('batch_id'), dataDic).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
@@ -185,6 +196,7 @@ class MarkAttendence extends BaseComponent {
                     //     // batchDetails:user1.data['batch']
                     //
                     // })
+                    this.props.navigation.goBack()
                     Events.publish(EVENT_REFRESH_DASHBOARD);
                 }
 

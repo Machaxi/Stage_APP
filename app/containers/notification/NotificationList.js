@@ -7,7 +7,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getNotificationListing } from "../../redux/reducers/NotificationReducer";
 import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
-
+import Events from '../../router/events';
+import moment from 'moment'
 
 class NotificationList extends BaseComponent {
 
@@ -15,12 +16,20 @@ class NotificationList extends BaseComponent {
         super(props);
         this.state = {
             list: ['', '', '', ''],
-            notifications: []
+            notifications: [],
+            isRefreshing: false
         };
+
     }
 
     componentDidMount() {
 
+        this.selfComponentDidMount()
+
+
+    }
+
+    selfComponentDidMount() {
         getData('header', (value) => {
 
             this.props.getNotificationListing(value).then(() => {
@@ -36,13 +45,24 @@ class NotificationList extends BaseComponent {
                     })
                 }
 
+                this.setState({ isRefreshing: false })
+
             }).catch((response) => {
                 console.log(response);
+                this.setState({ isRefreshing: false })
             })
 
         });
+        Events.publish('NOTIFICATION_CALL');
+    }
 
+    onRefresh() {
+        this.setState({ isRefreshing: true }, function () { this.selfComponentDidMount() });
+    }
 
+    getRelativeTime(date) {
+        let temp = moment(date).fromNow()
+        return temp.replace("a day", "1 day");
     }
 
 
@@ -56,8 +76,8 @@ class NotificationList extends BaseComponent {
         return (
             <Card
                 style={{
-                    margin: 4,
-                    padding: 16,
+                    marginTop: 1,
+                    padding: 20,
                     elevation: 4,
                     backgroundColor: backgroundColor
                 }}
@@ -75,19 +95,23 @@ class NotificationList extends BaseComponent {
                         alignItems: 'center',
                     }}>
 
-                        <Image
+                        {/* <Image
                             resizeMode="contain"
                             style={{
                                 width: 32,
                                 height: 32
                             }}
                             source={require('../../images/ic_notifications.png')}
-                        />
+                        /> */}
 
-                        <View style={{ marginLeft: 8 }}>
+                        <View style={{ marginLeft: 0 }}>
 
-                            <Text style={defaultStyle.bold_text_14}>{item.title}</Text>
+                            {/* <Text style={defaultStyle.bold_text_14}>{item.title}</Text> */}
                             <Text style={defaultStyle.regular_text_12}>{item.body}</Text>
+                            <Text style={[defaultStyle.regular_text_10, {
+                                color: '#727169'
+                            }]}>{this.getRelativeTime(item.created_at)}</Text>
+
                         </View>
 
                     </View>
@@ -113,6 +137,8 @@ class NotificationList extends BaseComponent {
                 <View style={{ flex: 1, }}>
 
                     <FlatList
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         data={data}
                         extraData={data}
                         renderItem={this._renderItem}

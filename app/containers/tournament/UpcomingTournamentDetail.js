@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, getFormattedTournamentLevel } from '../BaseComponent'
+import BaseComponent, {
+    defaultStyle,
+    getFormattedRound,
+    getFormattedTournamentLevel
+} from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { storeData, isSignedIn, getData } from '../../components/auth';
@@ -25,7 +29,8 @@ class UpcomingTournamentDetail extends BaseComponent {
             storeData("detail", JSON.stringify(this.state.data))
         } else {
             this.state.tournament_id = this.props.navigation.getParam('tournament_id')
-
+            console.log('Upcoming Detail => ', this.state.tournament_id)
+            this.fetchTournamentData(this.state.tournament_id)
         }
     }
 
@@ -98,7 +103,18 @@ class UpcomingTournamentDetail extends BaseComponent {
     render() {
 
         let data = this.state.data
+
+        if (this.props.data.loading || data == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
+
+
         let minimumAmount = this.getMinimum(data.tournament_types)
+        let label = minimumAmount == 0 ? 'Free' : 'Rs. ' + minimumAmount + ' Onwards'
         let tournament_types = this.tournament_types(data.tournament_types)
         let tournament_link = data.tournament_link
 
@@ -208,9 +224,9 @@ class UpcomingTournamentDetail extends BaseComponent {
                                             <Text style={{
                                                 paddingTop: 6, fontSize: 14,
                                                 color: '#404040',
-                                                width: "33.33%",
+                                                width: "100%",
                                                 fontFamily: 'Quicksand-Regular'
-                                            }}>Rs. {minimumAmount} Onwards</Text>
+                                            }}>{label}</Text>
 
                                         </View>
 
@@ -231,7 +247,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                                 color: '#404040',
                                                 width: "33.33%",
                                                 fontFamily: 'Quicksand-Regular'
-                                            }}>{data.category_types.join()}</Text>
+                                            }}>{data.category_types.join(', ')}</Text>
 
                                         </View>
 
@@ -325,7 +341,8 @@ class UpcomingTournamentDetail extends BaseComponent {
                                                 color: '#404040',
                                                 width: "50%",
                                                 fontFamily: 'Quicksand-Regular'
-                                            }}>{data.tournament_format}</Text>
+                                            }}>{data.tournament_format != undefined ?
+                                                getFormattedRound(data.tournament_format) : '-'}</Text>
 
                                         </View>
 

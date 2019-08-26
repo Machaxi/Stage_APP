@@ -4,7 +4,7 @@ import { getRegisteredTournament, getTournamentFixture } from "../../redux/reduc
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import { Card, ActivityIndicator, } from 'react-native-paper';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { COACH } from '../../components/Constants'
 
@@ -36,7 +36,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 
 
-class TournamentFixture extends Component {
+class TournamentFixture extends BaseComponent {
 
     constructor(props) {
         super(props)
@@ -47,7 +47,9 @@ class TournamentFixture extends Component {
             is_show_dialog: false,
             tournament_id: '',
             user_type: '',
-            is_coach: false
+            is_coach: false,
+            tournament_name: '',
+            academy_name: 'Test Academy'
 
         }
 
@@ -67,20 +69,26 @@ class TournamentFixture extends Component {
 
         this.dialogRef = React.createRef();
         //this.state.tournament_id = this.props.navigation.getParam('id')
-        console.warn('ID => ', this.state.tournament_id)
+        //console.warn('ID => ', this.state.tournament_id)
 
         //let data = this.props.navigation.getParam('data')
         // this.setState({
         //     array : JSON.parse(data)
         // })s
         //this.state.array = JSON.parse(data)
-        console.warn('Fxitrue data' + this.state.array)
+        //console.warn('Fxitrue data' + this.state.array)
 
         // this.getFixtureData()
         let data = this.props.navigation.getParam('data')
-        console.log(data)
-        this.state.data = JSON.parse(data)
-        this.showFixture(JSON.parse(data))
+        console.log('Tournament Fixture -> ' + data)
+        let json = JSON.parse(data)
+        this.state.tournament_name = json.name
+        //alert('Name ' + json.name)
+        this.setState({
+            tournament_name: json.name
+        })
+        this.state.data = json
+        this.showFixture(json)
     }
 
     getFixtureData() {
@@ -157,6 +165,8 @@ class TournamentFixture extends Component {
                         let obj = tournament_matches[i]
                         let match_id = obj.id
                         console.log('match id => ', obj.id)
+                        console.log('obj => ', JSON.stringify(obj))
+                        console.warn('tournament-match => ', obj.tournament_match_scores)
                         let player1 = obj.player1
                         let player2 = obj.player2
 
@@ -165,12 +175,15 @@ class TournamentFixture extends Component {
                         //subArray[count++] = player1
                         ///subArray[count++] = player2
                         if (player1 != null) {
-                            subArray.push(player1)
                             player1['match_id'] = match_id
+                            player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
+                            subArray.push(player1)
+
                         }
 
                         if (player2 != null) {
                             player2['match_id'] = match_id
+                            player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                             subArray.push(player2)
                         }
 
@@ -226,7 +239,7 @@ class TournamentFixture extends Component {
                                     newArray.push(byePlayer)
                                     newArray.push(byePlayer)
                                     temp_round1_array.map((element, index) => {
-                                        console.warn('element => ', element)
+                                        console.log('element => ', element)
                                         newArray.push(temp_round1_array[index])
                                     })
 
@@ -234,7 +247,7 @@ class TournamentFixture extends Component {
                                     playerArray[0] = newArray
                                     //playerArray[0].push(byePlayer)
                                     //playerArray[0].push(byePlayer)
-                                    console.warn('bye guy => ', + "player1 => " + player1.name)
+                                    console.log('bye guy => ', + "player1 => " + player1.name)
                                 }
                             }
 
@@ -242,6 +255,11 @@ class TournamentFixture extends Component {
 
                                 let temp_player1 = obj.player1_match.player1
                                 let temp_player2 = obj.player1_match.player2
+                                temp_player1['match_id'] = match_id
+                                temp_player2['match_id'] = match_id
+
+                                temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
+                                temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
 
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
@@ -256,6 +274,13 @@ class TournamentFixture extends Component {
 
                                 let temp_player1 = obj.player2_match.player1
                                 let temp_player2 = obj.player2_match.player2
+                                temp_player1['match_id'] = match_id
+                                temp_player2['match_id'] = match_id
+
+                                temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
+                                temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
+
+
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
                                 }
@@ -269,11 +294,11 @@ class TournamentFixture extends Component {
                         //===================== END =============================
 
                     }
-                    console.warn('subArray => ', JSON.stringify(subArray))
+                    console.log('subArray => ', JSON.stringify(subArray))
                     if (subArray.length > 0)
                         playerArray.push(subArray)
 
-                    console.warn('First Round => ', JSON.stringify(firstArray))
+                    console.log('First Round => ', JSON.stringify(firstArray))
                 }
             }
 
@@ -443,6 +468,16 @@ class TournamentFixture extends Component {
                     }
 
                     container.push(<Rect
+                        onPress={() => {
+
+                            let id = array[i][j].id
+                            console.warn("playerid : " +id)
+                            if (id != undefined) {
+                                this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    player_id: id
+                                })
+                            }
+                        }}
                         key={"id_" + (i * 100 + j)}
                         x={x}
                         y={y}
@@ -452,15 +487,6 @@ class TournamentFixture extends Component {
                         strokeWidth="0"
                         rx="4"
                         ry="4"
-                        onPress={() => {
-
-                            if (this.state.is_coach) {
-                                console.warn("Match : " + array[i][j].match_id)
-                                this.props.navigation.navigate('TournamentScorer', {
-                                    match_id: array[i][j].match_id
-                                })
-                            }
-                        }}
                         fill={color}>
 
                         />
@@ -495,32 +521,42 @@ class TournamentFixture extends Component {
                             </Text>)
 
                     } else {
-                        container.push(
-                            < Circle
-                                cx={x + 10 + 10}
-                                cy={y + 10 + 10}
-                                r="12"
-                                fill="#667DDB"
-                            />)
-                        container.push(
-                            <Text
-                                stroke="white"
-                                strokeWidth="1"
-                                fontSize="11"
-                                fontFamily="Quicksand-Regular"
-                                x={x + 13}
-                                y={y + 24}
-                            >{this.random()}</Text>
-                        )
+                        // container.push(
+                        //     < Circle
+                        //         cx={x + 10 + 10}
+                        //         cy={y + 10 + 10}
+                        //         r="12"
+                        //         fill="#667DDB"
+                        //     />)
+                        // container.push(
+                        //     <Text
+                        //         stroke="white"
+                        //         strokeWidth="1"
+                        //         fontSize="11"
+                        //         fontFamily="Quicksand-Regular"
+                        //         x={x + 13}
+                        //         y={y + 24}
+                        //     >{this.random()}</Text>
+                        // )
 
                         container.push(
                             <Text
+                                onPress={() => {
+
+                                    let id = array[i][j].id
+                                    console.warn("playerid : " +id)
+                                    if (id != undefined) {
+                                        this.props.navigation.navigate('OtherPlayerDeatils', {
+                                            player_id: id
+                                        })
+                                    }
+                                }}
                                 stroke={textColor}
                                 fontSize="12"
                                 fontFamily="Quicksand-Regular"
-                                x={x + 40}
+                                x={x + 12}
                                 y={y + 25}>
-                                {array[i][j].name}
+                                {array[i][j].name == 'To be played' ? 'To be played' : formattedName(array[i][j].name)}
                             </Text>
                         )
                     }
@@ -528,47 +564,171 @@ class TournamentFixture extends Component {
 
 
                     //===============ADDING SCORE =============================
-                    // for (k = 0; k < 2; k++) {
 
-                    //     let bgColor
-                    //     if (j % 2 == 0) {
-                    //         if (k % 2 == 0)
-                    //             bgColor = "#F5FFB8"
-                    //         else
-                    //             bgColor = color
-
-                    //     } else {
-                    //         if (k % 2 == 0)
-                    //             bgColor = color
-                    //         else
-                    //             bgColor = "#F5FFB8"
-                    //     }
+                    if (!array[i][j].is_bye) {
 
 
-                    //     container.push(
-                    //         <Rect
-                    //             x={x + width - 30 * (k + 1)}
-                    //             y={y}
-                    //             height={height}
-                    //             width="30"
-                    //             stroke="#DFDFDF"
-                    //             strokeWidth=".5"
-                    //             fill={bgColor} >
+                        let score = array[i][j].tournament_match_scores
+                        console.log('Score-Array=> ', JSON.stringify(score))
 
-                    //         </Rect>
-                    //     )
+                        if (score == undefined || score == null || score.length == 0) {
 
-                    //     container.push(
-                    //         <Text
-                    //             stroke={textColor}
-                    //             fontSize="12"
-                    //             fontFamily="Quicksand-Regular"
-                    //             x={x + width + 10 - (30 * (k + 1))}
-                    //             y={y + 24}>
-                    //             10
-                    //         </Text>
-                    //     )
-                    // }
+                            let length = i > 0 ? 3 : 2
+
+                            for (k = 0; k < length; k++) {
+
+                                let color = "white"
+                                if (j % 2 == 0) {
+                                    color = "#F6F6F6"
+                                } else {
+                                    color = "#F1F1F1"
+                                }
+
+                                let bgColor = color
+                                // if (j % 2 == 0) {
+                                //     if (k % 2 == 0)
+                                //         bgColor = "#F5FFB8"
+                                //     else
+                                //         bgColor = color
+
+                                // } else {
+                                //     if (k % 2 == 0)
+                                //         bgColor = 'color'
+                                //     else
+                                //         bgColor = "#F5FFB8"
+                                // }
+
+
+                                container.push(
+                                    <Rect
+                                        onPress={() => {
+
+                                            if (this.state.is_coach) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        x={x + width - 30 * (k + 1)}
+                                        y={y}
+                                        height={height}
+                                        width="30"
+                                        stroke="#DFDFDF"
+                                        strokeWidth=".5"
+                                        fill={bgColor} >
+
+                                    </Rect>
+                                )
+
+                                container.push(
+                                    <Text
+                                        onPress={() => {
+
+                                            if (this.state.is_coach) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        stroke={textColor}
+                                        fontSize="12"
+                                        fontFamily="Quicksand-Regular"
+                                        x={x + width + 10 - (30 * (k + 1))}
+                                        y={y + 24}>
+
+                                    </Text>
+                                )
+                            }
+
+
+                        } else {
+
+                            let length = score.length
+                            for (k = 0; k < length; k++) {
+
+                                let obj = score[k]
+                                let bgColor
+                                if (j % 2 == 0) {
+                                    if (k % 2 == 0)
+                                        bgColor = "#F5FFB8"
+                                    else
+                                        bgColor = color
+
+                                } else {
+                                    if (k % 2 == 0)
+                                        bgColor = color
+                                    else
+                                        bgColor = "#F5FFB8"
+                                }
+
+                                let player_score = ''
+                                if (i == 0) {
+                                    if (j % 2 == 1) {
+                                        player_score = obj.player1_score == undefined ? '-' : obj.player1_score
+                                    }
+                                    else {
+                                        player_score = obj.player2_score == undefined ? '-' : obj.player2_score
+                                    }
+                                } else {
+
+                                    if (j % 2 == 0) {
+                                        player_score = obj.player1_score == undefined ? '-' : obj.player1_score
+                                    }
+                                    else {
+                                        player_score = obj.player2_score == undefined ? '-' : obj.player2_score
+                                    }
+                                }
+
+
+
+                                container.push(
+                                    <Rect
+                                        onPress={() => {
+
+                                            if (this.state.is_coach) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        x={x + width - 30 * (k + 1)}
+                                        y={y}
+                                        height={height}
+                                        width="30"
+                                        stroke="#DFDFDF"
+                                        strokeWidth=".5"
+                                        fill={bgColor} >
+
+                                    </Rect>
+                                )
+
+                                container.push(
+                                    <Text
+                                        onPress={() => {
+
+                                            if (this.state.is_coach) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        stroke={textColor}
+                                        fontSize="12"
+                                        fontFamily="Quicksand-Regular"
+                                        x={x + width + 10 - (30 * (k + 1))}
+                                        y={y + 24}>
+                                        {player_score}
+                                    </Text>
+                                )
+                            }
+                        }
+
+                    }
+
 
 
 
@@ -673,7 +833,7 @@ class TournamentFixture extends Component {
             <ScrollView contentContainerStyle={{ height: 1500 }}>
                 <ScrollView horizontal contentContainerStyle={{ width: 1500 }}>
 
-                    <TournamentCategoryDialog
+                    {/* <TournamentCategoryDialog
                         tournament_fixture={this.state.tournament_fixtures}
                         touchOutside={(id) => {
                             this.state.is_show_dialog = false
@@ -685,15 +845,22 @@ class TournamentFixture extends Component {
                             }, 200)
 
                         }}
-                        visible={this.state.is_show_dialog} />
+                        visible={this.state.is_show_dialog} /> */}
 
                     <View style={{
-                        flex: 1, width: "100%", height: "100%", marginTop: 50
+                        marginTop: 50,
+                        flex: 1, width: "100%", height: "100%",
                     }}>
+
+                        {/* <Text style={defaultStyle.bold_text_14}>this.state.academy_name</Text>
+                        <Text style={[defaultStyle.bold_text_14, {
+                            marginTop: 4
+                        }]}>this.state.tournament_name</Text> */}
 
                         {this.state.array.length != 0
                             ?
-                            <Svg height="100%" width="100%">
+                            <Svg
+                                height="100%" width="100%">
                                 {container}
                             </Svg>
                             : null}

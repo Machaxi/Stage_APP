@@ -26,7 +26,7 @@ class UpcomingRoute extends BaseComponent {
 
         getData('deep_data', (value) => {
             storeData('deep_data', null)
-            alert('test==>' + value)
+            //alert('test==>' + value)
             if (value != null && value != 'null') {
                 let tournament_id = JSON.parse(value).tournament_id
                 if (tournament_id) {
@@ -198,7 +198,9 @@ class UpcomingRoute extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                this.props.navigation.navigate('UpcomingTournamentDetail', { data: item })
+                this.props.navigation.navigate('UpcomingTournamentDetail', { tournament_id: 
+                    item.id })
+                //this.props.navigation.navigate('UpcomingTournamentDetail', { data: item })
             }}>
 
             <Card

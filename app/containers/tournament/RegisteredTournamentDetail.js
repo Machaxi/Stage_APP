@@ -1,15 +1,50 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
-import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel } from '../BaseComponent'
+import BaseComponent, {
+    defaultStyle, getFormattedTournamentType, getFormattedRound,
+    getFormattedCategory, getFormattedTournamentLevel
+} from '../BaseComponent'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import { Linking } from 'react-native'
 import Share from 'react-native-share';
+import { storeData } from '../../components/auth';
+import NavigationDrawerStructure from '../../router/NavigationDrawerStructure'
 
 
 export default class RegisteredTournamentDetail extends BaseComponent {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: 'Registered Tournament',
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+            />,
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('RegistrationSteps')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 12,
+                            color: '#667DDB'
+                        }}>Edit</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
 
     constructor(props) {
         super(props)
@@ -18,7 +53,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
 
         }
         this.state.data = JSON.parse(this.props.navigation.getParam('data'));
-
+        storeData("detail", JSON.stringify(this.state.data))
     }
 
     tournament_types(tournament_types) {
@@ -48,6 +83,24 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         Share.shareSingle(shareOptions);
     }
 
+    getRegisteredPlayers(tournament_registrations) {
+
+        let array = []
+        let str = ''
+        for (let i = 0; i < tournament_registrations.length; i++) {
+            let name = tournament_registrations[i].player.name
+            array.push(name)
+            //str = str + name + " | "
+        }
+
+        let unique = [...new Set(array)];
+        for (let i = 0; i < unique.length; i++) {
+            let name = unique[i]
+            str = str + name + " | "
+        }
+        return str.substring(0, str.length - 2);
+    }
+
     render() {
 
 
@@ -55,7 +108,71 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         let tournament_types = this.tournament_types(data.tournament_types)
         let mobile_number = data.mobile_number
         let tournament_link = data.tournament_link
+        let registeredPlayer = this.getRegisteredPlayers(data.tournament_registrations)
+        let tournament_registrations = data.tournament_registrations
+        let fees = data.amount_paid
 
+        let registered_array = []
+        for (let i = 0; i < tournament_registrations.length; i++) {
+
+            let obj = tournament_registrations[i]
+
+            registered_array.push(
+                <View style={{
+
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flex: 1,
+                    justifyContent: 'space-between'
+                }}>
+
+                    <Text style={{
+                        paddingTop: 10, fontSize: 14,
+                        color: '#404040',
+                        width: "30%",
+                        fontWeight: '400',
+                        fontFamily: 'Quicksand-Medium'
+                    }}>{obj.player.name}</Text>
+
+                    <Text style={{
+                        paddingTop: 10, fontSize: 14,
+                        color: '#404040',
+                        width: "15%",
+                        fontFamily: 'Quicksand-Regular'
+                    }}>{getFormattedCategory(obj.tournament_category)}</Text>
+
+                    <Text style={{
+                        paddingTop: 10, fontSize: 14,
+                        color: '#404040',
+                        width: "35%",
+                        fontFamily: 'Quicksand-Regular'
+                    }}>{getFormattedTournamentLevel(obj.tournament_type)}</Text>
+
+                    {obj.tournament_type == 'MIX_DOUBLE'
+                        ?
+                        <Text
+                            onPress={() => {
+                                alert('under development')
+                            }}
+                            style={{
+                                paddingTop: 10, fontSize: 10,
+                                color: '#667DDB',
+                                width: "20%",
+                                textAlign: 'center',
+                                marginTop: 2,
+                                alignItems: 'center',
+                                fontFamily: 'Quicksand-Regular'
+                            }}>
+                            Edit Partner
+                    </Text>
+                        : <Text></Text>
+                    }
+
+
+                </View>
+            )
+
+        }
 
         // if (this.props.data.loading && !this.state.isAutoSuggest) {
         //     return (
@@ -190,7 +307,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             Fees Paid
                         </Text>
 
-                                        <Text style={{
+                                        {/* <Text style={{
                                             fontSize: 10,
                                             color: '#A3A5AE',
                                             width: "33.33%",
@@ -206,7 +323,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
                                             Gender
-                        </Text>
+                        </Text> */}
 
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -217,9 +334,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             width: "33.33%",
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
-                                            Rs. 1100/-
+                                            Rs. {fees}/-
                                     </Text>
-                                        <Text style={{
+                                        {/* <Text style={{
                                             paddingTop: 10, fontSize: 14,
                                             color: '#404040',
                                             width: "33.33%",
@@ -234,7 +351,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             fontFamily: 'Quicksand-Regular'
                                         }}>
                                             Male
-                                 </Text>
+                                 </Text> */}
 
                                     </View>
 
@@ -280,63 +397,12 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                         }}>
                                             Registered Players
                                     </Text>
-                                        <View style={{
-
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            flex: 1,
-                                            justifyContent: 'space-between'
-                                        }}>
-
-                                            <Text style={{
-                                                paddingTop: 10, fontSize: 14,
-                                                color: '#404040',
-                                                width: "30%",
-                                                fontWeight: '400',
-                                                fontFamily: 'Quicksand-Medium'
-                                            }}>
-                                                Prithiviraj P
-                                            </Text>
-                                            <Text style={{
-                                                paddingTop: 10, fontSize: 14,
-                                                color: '#404040',
-                                                width: "15%",
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
-                                                U-13
-                                            </Text>
-                                            <Text style={{
-                                                paddingTop: 10, fontSize: 14,
-                                                color: '#404040',
-                                                width: "35%",
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
-                                                Singles,Doubles
-                                            </Text>
-
-
-                                            <Text
-                                                onPress={() => {
-                                                    alert('under development')
-                                                }}
-                                                style={{
-                                                    paddingTop: 10, fontSize: 10,
-                                                    color: '#667DDB',
-                                                    width: "20%",
-                                                    textAlign: 'center',
-                                                    marginTop: 2,
-                                                    alignItems: 'center',
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}>
-                                                Edit Partner
-                                            </Text>
-
-                                        </View>
+                                        {registered_array}
                                     </View>
 
 
 
-                                    <View style={{ marginTop: 12, marginBottom: 12, backgroundColor: '#DFDFDF', height: 1 }}></View>
+                                    <View style={{ marginTop: 16, marginBottom: 12, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
 
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -377,7 +443,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             width: "50%",
                                             fontFamily: 'Quicksand-Regular'
                                         }}>{data.tournament_format != undefined ?
-                                            data.tournament_format : '-'}</Text>
+                                            getFormattedRound(data.tournament_format) : '-'}</Text>
 
                                     </View>
 
@@ -426,7 +492,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     }}>
                                         <SkyFilledButton
                                             onPress={() => {
-                                                //this.getFixtureData(item.id)
+                                                this.props.navigation.navigate('FixtureSelection', {
+                                                    id: data.id
+                                                })
                                             }}
                                         >View Fixtures</SkyFilledButton>
                                     </View>
