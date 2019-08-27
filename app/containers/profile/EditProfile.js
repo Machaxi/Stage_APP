@@ -29,7 +29,8 @@ class EditProfile extends BaseComponent {
             path: null,
             fileName: null,
             is_navigation_to_tournament: false,
-            base64img: null
+            base64img: null,
+            contentType:''
         }
 
         getData(TOURNAMENT_REGISTER, (value) => {
@@ -111,8 +112,14 @@ class EditProfile extends BaseComponent {
                 let file = null
                 let path = this.state.path
                 let fileName = this.state.fileName
+                let type = this.state.contentType
                 if (path != null) {
-                    file = { name: 'file', filename: fileName, data: path }
+                    file = {
+                        name: 'file', 
+                        filename: fileName, 
+                        data: RNFetchBlob.wrap(path),
+                        type: type
+                    }
                 }
                 let param = []
                 if (file != null) {
@@ -151,6 +158,7 @@ class EditProfile extends BaseComponent {
                             this.props.navigation.navigate('RegistrationSteps')
                         } else {
                             this.props.navigation.goBack()
+                            Events.publish('REFRESH_DASHBOARD');
                         }
                     }
 
@@ -230,14 +238,15 @@ class EditProfile extends BaseComponent {
                 let path = response.path
                 let fileName = response.fileName
                 let base64 = 'data:image/jpeg;base64,' + response.data
+                let type = response.type
                 this.setState({
                     path: path,
                     fileName: fileName,
-                    base64img: base64
+                    base64img: base64,
+                    contentType:type
                 })
                 //console.warn('path => ',this.state.path)
                 //console.warn('fileName => ',this.state.fileName)
-
             }
         });
 

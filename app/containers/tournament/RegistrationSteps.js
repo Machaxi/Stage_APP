@@ -126,7 +126,9 @@ class RegistrationSteps extends BaseComponent {
             temp_user: false,
             profile_pic: null,
             userData: null,
-            total_amount: 0
+            total_amount: 0,
+            is_edit_mode: false,
+            registeredTournament: null
         }
 
         this.inputRefs = {
@@ -141,6 +143,7 @@ class RegistrationSteps extends BaseComponent {
 
         temp_user = this.props.navigation.getParam('temp_user', false)
         this.state.temp_user = temp_user
+
         console.warn('temp_user => ', temp_user)
 
         // getData('userInfo', (value) => {
@@ -154,10 +157,10 @@ class RegistrationSteps extends BaseComponent {
 
             console.log('detail=> ', value)
             this.state.data = JSON.parse(value)
+            let data = this.state.data
 
             let array = []
             for (let i = 0; i < this.state.data.category_types.length; i++) {
-
                 let tournament = this.state.data.category_types[i]
                 let obj = { title: tournament, selected: false }
                 array[i] = obj
@@ -171,11 +174,75 @@ class RegistrationSteps extends BaseComponent {
                 tournament_types[i] = obj
             }
 
+            if (data.tournament_registrations) {
+
+                this.state.tournament_registrations = data.tournament_registrations
+                this.state.is_edit_mode = true;
+
+                let tournament_registrations = data.tournament_registrations
+                if (tournament_registrations.length > 0) {
+                    let playerData = tournament_registrations[0].player
+                    playerData['user_id'] = playerData.id
+                    //alert(JSON.stringify(playerData))
+                    //alert(JSON.stringify(playerData))
+                    this.setState({
+                        selected_player: playerData,
+                        txtname: playerData.name,
+                        is_player_selected: true,
+                    })
+                    //this.state.txtname = playerData.name
+                }
+
+
+                console.log('tournament_registrations =>', JSON.stringify(tournament_registrations))
+                for (let i = 0; i < array.length; i++) {
+
+                    let obj = array[i]
+                    console.log('Loop - Obj', JSON.stringify(obj))
+                    for (let j = 0; j < tournament_registrations.length; j++) {
+
+                        let reg = tournament_registrations[j]
+                        console.log('Loop ', reg.tournament_category + "==" + obj.title)
+                        if (reg.tournament_category == obj.title) {
+                            obj.selected = true;
+                            obj.disable = true
+                            break
+                        }
+                    }
+                    array[i] = obj
+                }
+
+                // for (let i = 0; i < tournament_types.length; i++) {
+
+                //     let obj = tournament_types[i]
+                //     console.log('Loop - Obj', JSON.stringify(obj))
+                //     for (let j = 0; j < tournament_registrations.length; j++) {
+
+                //         let reg = tournament_registrations[j]
+                //         console.log('Loop ', reg.tournament_category + "==" + obj.title)
+                //         if (reg.tournament_category == obj.title) {
+                //             obj.selected = true;
+                //             obj.disable = true
+                //             break
+                //         }
+                //     }
+                //     array[i] = obj
+                // }
+            }
+
+
+
+
             this.setState({
                 tournament_selection: array,
                 tournament_types: tournament_types
             })
-            console.log("tournament_types => ", this.state.tournament_types)
+            console.log("tournament_selection => ", JSON.stringify(this.state.tournament_selection))
+            console.log("tournament_types => ", JSON.stringify(this.state.tournament_types))
+
+
+            this.selfComponentDidMount()
+
         })
 
         //============== ADD PLAYER CALLBACK ==========================
@@ -214,7 +281,12 @@ class RegistrationSteps extends BaseComponent {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
     }
-    componentDidMount() {
+
+    selfComponentDidMount() {
+
+
+        let is_edit_mode = this.state.is_edit_mode
+        //alert(is_edit_mode)
 
         let key = 'userInfo'
         if (this.state.temp_user) {
@@ -232,29 +304,38 @@ class RegistrationSteps extends BaseComponent {
                     user_type: user_type,
                     userData: userData
                 })
-                if (user_type == PLAYER || user_type == PARENT) {
-                    this.getPlayerList()
-                }
-                else if (user_type == GUEST || user_type == COACH) {
 
-                    let name = userData.user['name']
-                    //Treating guest as player so setting player object
-                    let selected_player = {}
-                    selected_player.name = name
-                    selected_player.genderType = userData.user['genderType']
-                    selected_player.user_id = userData.user['id']
-                    selected_player.profile_pic = userData.user['profile_pic']
-                    this.state.txtname = name
-                    this.setState({
-                        selected_player: selected_player
-                    })
+                if (is_edit_mode == false) {
+                    if (user_type == PLAYER || user_type == PARENT) {
+                        this.getPlayerList()
+                    }
+                    else if (user_type == GUEST || user_type == COACH) {
+
+                        let name = userData.user['name']
+                        //Treating guest as player so setting player object
+                        let selected_player = {}
+                        selected_player.name = name
+                        selected_player.genderType = userData.user['genderType']
+                        selected_player.user_id = userData.user['id']
+                        selected_player.profile_pic = userData.user['profile_pic']
+                        this.state.txtname = name
+                        this.setState({
+                            selected_player: selected_player
+                        })
+                        this.setState({
+                            is_player_selected: true
+                        })
+
+                    } else {
+                        alert('Unknown User Type.')
+                    }
+                } else {
                     this.setState({
                         is_player_selected: true
                     })
-
-                } else {
-                    alert('Unknown User Type.')
                 }
+
+
             }
 
         });
@@ -366,8 +447,14 @@ class RegistrationSteps extends BaseComponent {
         let is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
         //if there is GUEST then in that case we are not showing picker selection
         let is_player_selected = this.state.is_player_selected
-        let profile_pic = this.state.profile_pic
         let selected_player = this.state.selected_player
+        console.log('selected_player=>', JSON.stringify(selected_player))
+        let profile_pic = null
+        if (selected_player != null) {
+            profile_pic = selected_player.profile_pic
+        }
+        let is_edit_mode = this.state.is_edit_mode
+        //alert('Profile=>'+JSON.stringify(selected_player))
 
         return (
             <ScrollView>
@@ -390,7 +477,7 @@ class RegistrationSteps extends BaseComponent {
                         }}>
 
 
-                        {is_guest ?
+                        {is_guest || is_edit_mode ?
 
                             <View style={{
                                 justifyContent: 'center',
@@ -469,11 +556,11 @@ class RegistrationSteps extends BaseComponent {
                                 }}
                             >
 
-                                {selected_player.profile_pic != null ?
+                                {profile_pic != null ?
                                     <Image
                                         resizeMode="contain"
                                         style={{ width: 80, height: 100 }}
-                                        source={{ uri: selected_player.profile_pic }} /> : null}
+                                        source={{ uri: profile_pic }} /> : null}
 
                                 <Text style={[style.text1, { marginTop: 10 }]}>
                                     Gender
@@ -507,14 +594,19 @@ class RegistrationSteps extends BaseComponent {
                                     data={this.state.tournament_selection}
                                     renderItem={({ item }) =>
                                         <CheckBox
+                                            activeOpacity={item.disable ? 1 : 0.8}
                                             checkedIcon={<Image style={{
                                                 width: 18,
                                                 height: 18
-                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_on.png')} />}
+                                            }} resizeMode="contain"
+                                                source={item.disable ?
+                                                    require('../../images/ic_checkbox_disable.png') :
+                                                    require('../../images/ic_checkbox_on.png')} />}
                                             uncheckedIcon={<Image style={{
                                                 width: 18,
                                                 height: 18
-                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_off.png')} />}
+                                            }} resizeMode="contain"
+                                                source={require('../../images/ic_checkbox_off.png')} />}
                                             containerStyle={{
                                                 backgroundColor: 'white',
                                                 borderWidth: 0,
@@ -525,11 +617,13 @@ class RegistrationSteps extends BaseComponent {
                                             }}
                                             checked={item.selected}
                                             onPress={() => {
-                                                let tournament_selection = [...this.state.tournament_selection];
-                                                let index = tournament_selection.findIndex(el => el.title === item.title);
-                                                tournament_selection[index] = { ...tournament_selection[index], selected: !item.selected };
-                                                this.setState({ tournament_selection });
 
+                                                if (!item.disable) {
+                                                    let tournament_selection = [...this.state.tournament_selection];
+                                                    let index = tournament_selection.findIndex(el => el.title === item.title);
+                                                    tournament_selection[index] = { ...tournament_selection[index], selected: !item.selected };
+                                                    this.setState({ tournament_selection });
+                                                }
                                             }
                                             }
                                             style={{ marginTop: -4 }}
@@ -570,9 +664,56 @@ class RegistrationSteps extends BaseComponent {
                                                 template[count++] = detail
                                             }
                                         }
+
+                                        let is_edit_mode = this.state.is_edit_mode
+                                        if (is_edit_mode) {
+
+
+                                            let registered = this.state.tournament_registrations
+                                            //console.log('registered=>', JSON.stringify(registered))
+                                            for (let i = 0; i < registered.length; i++) {
+                                                let reg_ojb = registered[i]
+                                                //console.log('Steps-1', JSON.stringify(reg_ojb))
+
+                                                for (let j = 0; j < template.length; j++) {
+
+                                                    let title = template[j]
+                                                    //console.log('Steps-2', JSON.stringify(title))
+
+                                                    //console.log('Steps-3', JSON.stringify(title.title) + "== " + JSON.stringify(reg_ojb.tournament_category))
+
+                                                    if (reg_ojb.tournament_category == title.title) {
+                                                        let tournament_types = template[j].tournament_types
+                                                        //console.log('Steps-4=Loop=>', JSON.stringify(reg_ojb) + "== " + JSON.stringify(tournament_types))
+                                                        for (k = 0; k < tournament_types.length; k++) {
+                                                            //console.log('Steps-15=Loopin=>', reg_ojb.tournament_type + "== " + tournament_types[k].tournament_type)
+                                                            let temp = { ...tournament_types[k] }
+                                                            if (reg_ojb.tournament_type == temp.tournament_type) {
+                                                                temp.selected = true
+                                                                temp.partner_name = reg_ojb.partner_name
+                                                                temp.partner_mobile_number = reg_ojb.partner_mobile_number
+                                                                temp.disable = true
+                                                                //console.log('Steps-6=Loopin=>', 'Success=>'+JSON.stringify(tournament_types[k]))
+                                                                tournament_types[k] = temp
+                                                                break
+                                                            }
+
+                                                        }
+
+                                                    }
+
+                                                    //template[j] = title
+                                                }
+
+                                                //registered[i] = reg_ojb
+                                            }
+                                            console.log('Next-FirstStep', JSON.stringify(template))
+                                        }
+
                                         this.state.checked_category = checked_category;
                                         let size = checked_category.length
                                         this.state.user_selection = template
+
 
                                         if (size == 0) {
                                             alert('Please select at least one category')
@@ -614,7 +755,9 @@ class RegistrationSteps extends BaseComponent {
             for (let j = 0; j < tournament_types.length; j++) {
 
                 let selected = tournament_types[j].selected
-                if (selected) {
+                let disable = tournament_types[j].disable
+
+                if (selected && !disable) {
                     total = total + tournament_types[j].fees
                     all_total = tournament_types[j].fees + all_total
                 }
@@ -675,10 +818,14 @@ class RegistrationSteps extends BaseComponent {
                                     }}>
 
                                         <CheckBox
+                                            activeOpacity={item.disable ? 1 : 0.8}
                                             checkedIcon={<Image style={{
                                                 width: 18,
                                                 height: 18
-                                            }} resizeMode="contain" source={require('../../images/ic_checkbox_on.png')} />}
+                                            }} resizeMode="contain"
+                                                source={item.disable ?
+                                                    require('../../images/ic_checkbox_disable.png') :
+                                                    require('../../images/ic_checkbox_on.png')} />}
                                             uncheckedIcon={<Image style={{
                                                 width: 18,
                                                 height: 18
@@ -697,20 +844,25 @@ class RegistrationSteps extends BaseComponent {
                                                 backgroundColor: 'white',
                                                 borderWidth: 0,
                                                 width: "60%",
+                                                fontFamily: 'Quicksand-Regular',
                                             }}
                                             checked={item.selected}
                                             onPress={() => {
-                                                let user_selection = [...this.state.user_selection];
-                                                let tournament_model = user_selection[this.state.subStep]
 
-                                                let index = tournament_model.tournament_types.findIndex(el => el.id === item.id);
-                                                console.log("Tournamen Press =>", index)
-                                                tournament_model.tournament_types[index] =
-                                                    { ...tournament_model.tournament_types[index], selected: !item.selected };
+                                                if (!item.disable) {
+                                                    let user_selection = [...this.state.user_selection];
+                                                    let tournament_model = user_selection[this.state.subStep]
 
-                                                console.log("Tournamen Press =>", tournament_model)
-                                                console.log("Tournamen Press whole => ", this.state.user_selection)
-                                                this.setState({ user_selection })
+                                                    let index = tournament_model.tournament_types.findIndex(el => el.id === item.id);
+                                                    console.log("Tournamen Press =>", index)
+                                                    tournament_model.tournament_types[index] =
+                                                        { ...tournament_model.tournament_types[index], selected: !item.selected };
+
+                                                    console.log("Tournamen Press =>", tournament_model)
+                                                    console.log("Tournamen Press whole => ", this.state.user_selection)
+                                                    this.setState({ user_selection })
+                                                }
+
                                             }}
                                             style={{
                                                 color: '#404040',
@@ -757,7 +909,7 @@ class RegistrationSteps extends BaseComponent {
                                             }}
                                                 numberOfLines={1}
                                             >
-                                                {item.partner_name ? item.partner_name + ' (' + item.partner_phone + ')'
+                                                {item.partner_name ? item.partner_name + ' (' + (item.partner_phone == undefined ? '-' : item.partner_phone) + ')'
                                                     : '+ Add Partner'}
                                             </Text>
                                         </TouchableOpacity>
@@ -831,60 +983,65 @@ class RegistrationSteps extends BaseComponent {
                             onPress={() => {
 
                                 console.log('tournament_types => ', tournament_types)
-                                let is_selected = false
-                                for (let i = 0; i < tournament_types.length; i++) {
+                                if (tournament_types != undefined) {
 
-                                    let type = tournament_types[i]
-                                    if (type.selected) {
-                                        is_selected = true;
-                                        break;
+
+                                    let is_selected = false
+                                    for (let i = 0; i < tournament_types.length; i++) {
+
+                                        let type = tournament_types[i]
+                                        if (type.selected) {
+                                            is_selected = true;
+                                            break;
+                                        }
                                     }
-                                }
 
-                                let is_double_player_selected = true
-                                let typeName = ''
+                                    let is_double_player_selected = true
+                                    let typeName = ''
 
-                                for (let i = 0; i < tournament_types.length; i++) {
+                                    for (let i = 0; i < tournament_types.length; i++) {
 
-                                    let type = tournament_types[i]
-                                    if (type.selected && type.is_partner_required) {
-                                        if (type.partner_name == undefined
-                                            || type.partner_name == '') {
-                                            typeName = type.tournament_type
-                                            is_double_player_selected = false
-                                            break
+                                        let type = tournament_types[i]
+                                        if (type.selected && type.is_partner_required) {
+                                            if (type.partner_name == undefined
+                                                || type.partner_name == '') {
+                                                typeName = type.tournament_type
+                                                is_double_player_selected = false
+                                                break
+                                            }
+                                        }
+                                    }
+
+                                    if (!is_selected) {
+                                        //alert('Please select tournament type')
+                                        this.setState({
+                                            alert_msg: 'Please select tournament type'
+                                        })
+                                    } else if (!is_double_player_selected) {
+                                        //alert()
+                                        this.setState({
+                                            alert_msg: 'Please select partner for ' + getFormattedTournamentLevel(typeName)
+                                        })
+                                    } else {
+                                        this.setState({
+                                            alert_msg: ''
+                                        })
+                                        let user_selection = this.state.user_selection
+                                        console.log('user_selection_two', JSON.stringify(user_selection))
+
+                                        if (this.state.subStep == this.state.selected_tour_size - 1) {
+                                            this.setState({
+                                                step: this.state.step + 1,
+                                                subStep: this.state.subStep + 1
+                                            })
+
+                                        } else {
+                                            this.setState({
+                                                subStep: this.state.subStep + 1
+                                            })
                                         }
                                     }
                                 }
-
-                                if (!is_selected) {
-                                    //alert('Please select tournament type')
-                                    this.setState({
-                                        alert_msg: 'Please select tournament type'
-                                    })
-                                } else if (!is_double_player_selected) {
-                                    //alert()
-                                    this.setState({
-                                        alert_msg: 'Please select partner for ' + getFormattedTournamentLevel(typeName)
-                                    })
-                                } else {
-                                    this.setState({
-                                        alert_msg: ''
-                                    })
-                                    if (this.state.subStep == this.state.selected_tour_size - 1) {
-                                        this.setState({
-                                            step: this.state.step + 1,
-                                            subStep: this.state.subStep + 1
-                                        })
-
-                                    } else {
-                                        this.setState({
-                                            subStep: this.state.subStep + 1
-                                        })
-                                    }
-                                }
-
-
 
                             }}>
                             <Text style={style.rounded_button_text}>
@@ -901,7 +1058,7 @@ class RegistrationSteps extends BaseComponent {
     }
 
     showStepThree() {
-        const user_selection = this.state.user_selection
+        let user_selection = this.state.user_selection
         let all_total = 0
         console.log('user_selection=> ' + JSON.stringify(user_selection))
         for (let i = 0; i < user_selection.length; i++) {
@@ -913,14 +1070,43 @@ class RegistrationSteps extends BaseComponent {
             for (let j = 0; j < tournament_types.length; j++) {
 
                 let selected = tournament_types[j].selected
-                if (selected) {
+                let disable = tournament_types[j].disable
+                if (selected && !disable) {
                     total = total + tournament_types[j].fees
                     all_total = tournament_types[j].fees + all_total
                 }
             }
             element['total'] = total
-
         }
+
+        let is_edit_mode = this.state.is_edit_mode
+        if (is_edit_mode) {
+
+            let newArray = []
+            for (let i = 0; i < user_selection.length; i++) {
+
+                let element = user_selection[i]
+                let new_type = []
+                let tournament_types = element['tournament_types']
+
+                for (let j = 0; j < tournament_types.length; j++) {
+
+                    let selected = tournament_types[j].selected
+                    let disable = tournament_types[j].disable
+                    if (selected && !disable) {
+                        new_type.push(tournament_types[j])
+                    }
+                }
+                if (new_type.length > 0) {
+                    element['tournament_types'] = new_type
+                    newArray.push(element)
+                }
+            }
+
+            user_selection = newArray
+        }
+
+
 
         return (
             <ScrollView>
@@ -1031,7 +1217,8 @@ class RegistrationSteps extends BaseComponent {
                                     style={style.rounded_button}
                                     onPress={() => {
 
-                                        this.processPaymentGateway()
+                                        let user_selection = this.state.user_selection
+                                        this.processPaymentGateway(user_selection)
                                     }}>
                                     <Text style={style.rounded_button_text}>
                                         Next
@@ -1054,7 +1241,7 @@ class RegistrationSteps extends BaseComponent {
 
 
     getTotalAmount() {
-        const user_selection = this.state.user_selection
+        const user_selection = [...this.state.user_selection]
         let all_total = 0
         //console.log('user_selection=> ' + JSON.stringify(user_selection))
         for (let i = 0; i < user_selection.length; i++) {
@@ -1065,19 +1252,25 @@ class RegistrationSteps extends BaseComponent {
             for (let j = 0; j < tournament_types.length; j++) {
 
                 let selected = tournament_types[j].selected
-                if (selected) {
+                let disable = tournament_types[j].disable
+                if (selected && !disable) {
                     total = total + tournament_types[j].fees
                     all_total = tournament_types[j].fees + all_total
                 }
             }
 
         }
-        return all_total
+        return +all_total
     }
 
-    processPaymentGateway() {
+    processPaymentGateway(user_selection) {
 
         let fees = this.getTotalAmount()
+        if (fees == 0) {
+            alert('You can\'t proceed with Rs. 0 payment.')
+            return
+        }
+
         let total = fees
         total = total + '00'
 
@@ -1109,7 +1302,7 @@ class RegistrationSteps extends BaseComponent {
             let payment_details = {
                 razorpay_payment_id: data.razorpay_payment_id
             }
-            this.submitData(payment_details, fees)
+            this.submitData(payment_details, fees, user_selection)
         }).catch((error) => {
             // handle failure
             console.log('Razor Rspo ', JSON.stringify(error))
@@ -1118,14 +1311,16 @@ class RegistrationSteps extends BaseComponent {
 
     }
 
-    submitData(payment_details, fees) {
+    submitData(payment_details, fees, user_selection) {
 
         let tournament_reg_details = [];
 
         let tournament_id = this.state.data['id']
         let user_id = this.state.selected_player['user_id']
 
-        let user_selection = this.state.user_selection
+        //let user_selection = this.state.user_selection
+        console.log('BeforeRequest=>', JSON.stringify(user_selection))
+
         for (let i = 0; i < user_selection.length; i++) {
 
             let element = user_selection[i]
@@ -1156,12 +1351,13 @@ class RegistrationSteps extends BaseComponent {
 
         let data = {}
         data['data'] = subData
-        console.log('Data=> ', JSON.stringify(data))
+        console.log('ReqeustData=> ', JSON.stringify(data))
 
+        let is_edit_mode = this.state.is_edit_mode
         this.progress(true)
         getData('header', (value) => {
 
-            this.props.registerTournament(value, data).then(() => {
+            this.props.registerTournament(value, data, is_edit_mode).then(() => {
                 this.progress(false)
 
                 let data = this.props.data.data
@@ -1317,8 +1513,11 @@ class RegistrationSteps extends BaseComponent {
                             show_alert: false
                         })
                         setTimeout(() => {
-
-                            Events.publish(GO_TO_HOME, true);
+                            let tournament_id = this.state.data['id']
+                            let obj = {
+                                tournament_id: tournament_id
+                            }
+                            Events.publish(GO_TO_HOME, obj);
 
 
                         }, 100)

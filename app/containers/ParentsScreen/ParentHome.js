@@ -152,12 +152,29 @@ class ParentHome extends BaseComponent {
     componentDidMount() {
         this.selfComponentDidMount()
 
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.getNotifications()
+            }
+        );
+
+
         this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
             this.getNotifications()
         });
 
-        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', () => {
-            this.props.navigation.navigate('Tournament')
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            if (deep_data != null)
+                storeData('deep_data', JSON.stringify(deep_data))
+            setTimeout(() => {
+                this.props.navigation.navigate('Tournament')
+
+            }, 100)
+        });
+
+        this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD', () => {
+            this.selfComponentDidMount()
         });
 
         this.getNotifications()

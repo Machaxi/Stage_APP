@@ -3,10 +3,14 @@ import { WebView, Linking } from 'react-native';
 import BaseComponent from '../BaseComponent'
 
 export default class WebViewScreen extends BaseComponent {
+
+
     render() {
-        const uri = 'http://stackoverflow.com/questions/35531679/react-native-open-links-in-browser';
+         const uri = 'http://stage.dribblediary.com/';
+        //const uri = 'http://www.africau.edu/images/default/sample.pdf'
         return (
             <WebView
+                originWhitelist={['*']}
                 ref={(ref) => { this.webview = ref; }}
                 source={{ uri }}
                 onNavigationStateChange={(event) => {

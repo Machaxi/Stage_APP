@@ -15,6 +15,7 @@ import TournamentGallerySlider from '../containers/tournament/TournamentGalleryS
 import FixtureSelection from '../containers/tournament/FixtureSelection'
 import TournamentFilter from '../containers/tournament/TournamentFilter'
 import TournamentTerms from '../containers/tournament/TournamentTerms'
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 
 const TournamentModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
@@ -55,20 +56,20 @@ const TournamentModule = createStackNavigator({
     ,
     RegisteredTournamentDetail: {
         screen: RegisteredTournamentDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Registered Tournament',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Registered Tournament',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={true}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showNotification={false} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-            headerTintColor: '#000',
-        }),
+        //     headerTintColor: '#000',
+        // }),
     },
     ResultsTournamentDetail: {
         screen: ResultsTournamentDetail,
@@ -217,7 +218,21 @@ const TournamentModule = createStackNavigator({
 
             headerTintColor: '#000',
         }),
-    }
+    },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Player Detail",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 
 })
 

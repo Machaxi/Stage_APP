@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator,View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
+import BaseComponent, { defaultStyle, getFormattedTournamentType } from '../BaseComponent'
 import { CustomeButtonB } from '../../components/Home/Card';
 import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
@@ -288,115 +288,117 @@ class RegisteredRoute extends BaseComponent {
             </View>
         )
     }
-    _renderItem = ({ item }) => (
+    _renderItem = ({ item }) => {
 
-        <TouchableOpacity activeOpacity={.8}
-            onPress={() => {
-                this.props.navigation.navigate('RegisteredTournamentDetail', {
-                    data: JSON.stringify(item)
-                })
-            }}>
+        let registeredPlayer = this.getRegisteredPlayers(item.tournament_registrations)
 
-            <Card
-                style={{
-                    borderRadius: 12,
-                    marginLeft: 12,
-                    marginRight: 12,
-                    marginTop: 8,
-                    marginBottom: 8,
-                    elevation: 2
+        return (
 
+            <TouchableOpacity activeOpacity={.8}
+                onPress={() => {
+                    this.props.navigation.navigate('RegisteredTournamentDetail', {
+                        data: JSON.stringify(item)
+                    })
                 }}>
-                <View>
-                    <Image style={{
-                        height: 150, width: "100%",
-                        borderTopLeftRadius: 12,
-                        borderTopRightRadius: 12,
-                    }}
-                        source={{ uri: item.cover_pic }}
-                    >
 
-                    </Image>
+                <Card
+                    style={{
+                        borderRadius: 12,
+                        marginLeft: 12,
+                        marginRight: 12,
+                        marginTop: 8,
+                        marginBottom: 8,
+                        elevation: 2
 
-                    <View style={{
-                        paddingLeft: 16,
-                        paddingTop: 8,
-                        paddingBottom: 8
                     }}>
+                    <View>
+                        <Image style={{
+                            height: 150, width: "100%",
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12,
+                        }}
+                            source={{ uri: item.cover_pic }}
+                        >
 
+                        </Image>
 
                         <View style={{
-                            paddingTop: 12, paddingRight: 12,
-                            flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                            paddingLeft: 16,
+                            paddingTop: 8,
+                            paddingBottom: 8
                         }}>
 
-                            <Text style={defaultStyle.bold_text_14}>
-                                {item.name}
-                            </Text>
 
-                            <Image
-                                resizeMode="contain"
-                                style={{ width: 7, height: 13, }}
-                                source={require('../../images/forward.png')}
-                            >
+                            <View style={{
+                                paddingTop: 12, paddingRight: 12,
+                                flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                            }}>
 
-                            </Image>
-
-                        </View>
-
-
-                        <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
-
-                            <Text style={defaultStyle.bold_text_14}>
-                                {Moment(item.start_date).format('MMM YYYY')}
-                            </Text>
-                            <View style={defaultStyle.blue_rounded_4}>
-                                <Text style={[defaultStyle.bold_text_10, { color: 'white' }]} >
-                                    {getFormattedTournamentType(item.academic_type)}
+                                <Text style={defaultStyle.bold_text_14}>
+                                    {item.name}
                                 </Text>
+
+                                <Image
+                                    resizeMode="contain"
+                                    style={{ width: 7, height: 13, }}
+                                    source={require('../../images/forward.png')}
+                                >
+
+                                </Image>
+
                             </View>
-                            
 
-                        </View>
 
-                        <Text style={{
-                            paddingTop: 6,
-                            fontSize: 14,
-                            color: '#404040',
-                            fontFamily: 'Quicksand-Regular'
-                        }}>
-                            Dates <Text style={defaultStyle.bold_text_14}>
-                                {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
+                            <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+
+                                <Text style={defaultStyle.bold_text_14}>
+                                    {Moment(item.start_date).format('MMM YYYY')}
+                                </Text>
+                                <View style={defaultStyle.blue_rounded_4}>
+                                    <Text style={[defaultStyle.bold_text_10, { color: 'white' }]} >
+                                        {getFormattedTournamentType(item.academic_type)}
+                                    </Text>
+                                </View>
+
+
+                            </View>
+
+                            <Text style={{
+                                paddingTop: 6,
+                                fontSize: 14,
+                                color: '#404040',
+                                fontFamily: 'Quicksand-Regular'
+                            }}>
+                                Dates <Text style={defaultStyle.bold_text_14}>
+                                    {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
+                                </Text>
                             </Text>
-                        </Text>
 
-                        <Text style={{
-                            paddingTop: 6, fontSize: 14,
-                            color: '#FF7373',
-                            fontFamily: 'Quicksand-Regular'
-                        }}>
-                            Last Date of Registration 
+                            <Text style={{
+                                paddingTop: 6, fontSize: 14,
+                                color: '#FF7373',
+                                fontFamily: 'Quicksand-Regular'
+                            }}>
+                                Last Date of Registration
                             <Text style={defaultStyle.bold_text_14}> {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
-                        </Text>
+                            </Text>
 
 
 
-                        <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
+                            <View style={{ marginTop: 8, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
-                        <Text style={{
-                            fontSize: 10,
-                            color: '#A3A5AE',
-                            fontFamily: 'Quicksand-Regular'
-                        }}>
-                            Registered Players
+                            <Text style={{
+                                fontSize: 10,
+                                color: '#A3A5AE',
+                                fontFamily: 'Quicksand-Regular'
+                            }}>
+                                Registered Players
                     </Text>
 
-                        <Text style={
-                            [defaultStyle.bold_text_14, { paddingTop: 10, }]}>
-                            Prithiviraj P | Prithiviraj P | Prithiviraj P
-                    </Text>
+                            <Text style={
+                                [defaultStyle.bold_text_14, { paddingTop: 10, }]}>{registeredPlayer}</Text>
 
-                        {/* <TouchableOpacity activeOpacity={.8}
+                            {/* <TouchableOpacity activeOpacity={.8}
                             onPress={() => {
                                 this.getFixtureData(item.id)
 
@@ -421,28 +423,48 @@ class RegisteredRoute extends BaseComponent {
 
                             </View>
                         </TouchableOpacity> */}
-                        <View style={{
-                            margin: 16,
-                            alignSelf: 'center',
-                            width: 150,
-                        }}>
-                            <SkyFilledButton
-                                onPress={() => {
-                                    this.props.navigation.navigate('FixtureSelection',{
-                                        id:item.id
-                                    })
-                                    //this.getFixtureData(item.id)
-                                }}
-                            >View Fixtures</SkyFilledButton>
+                            <View style={{
+                                margin: 16,
+                                alignSelf: 'center',
+                                width: 150,
+                            }}>
+                                <SkyFilledButton
+                                    onPress={() => {
+                                        this.props.navigation.navigate('FixtureSelection', {
+                                            id: item.id
+                                        })
+                                        //this.getFixtureData(item.id)
+                                    }}
+                                >View Fixtures</SkyFilledButton>
+                            </View>
+
                         </View>
-
                     </View>
-                </View>
 
-            </Card>
-        </TouchableOpacity>
+                </Card>
+            </TouchableOpacity>
 
-    );
+        )
+    };
+
+    getRegisteredPlayers(tournament_registrations) {
+
+        let array = []
+        let str = ''
+        for (let i = 0; i < tournament_registrations.length; i++) {
+            let name = tournament_registrations[i].player.name
+            array.push(name)
+            //str = str + name + " | "
+        }
+        
+        let unique = [...new Set(array)];
+        for (let i = 0; i < unique.length; i++) {
+            let name = unique[i]
+            str = str + name + " | "
+        }
+        return str.substring(0, str.length - 2);
+    }
+
 
     render() {
 
@@ -455,6 +477,7 @@ class RegisteredRoute extends BaseComponent {
         }
 
         const data = this.find(this.state.query);
+
 
         return (
 

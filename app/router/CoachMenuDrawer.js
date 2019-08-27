@@ -638,7 +638,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 				<View style={[defaultStyle.line_style, { marginLeft: 12 }]} ></View>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>About Dribble</Text>
 						<Image
@@ -648,7 +649,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Contact Us</Text>
 						<Image
@@ -1099,7 +1101,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 				<View style={[defaultStyle.line_style, { marginLeft: 12 }]}></View>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
 
@@ -1115,7 +1118,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
 
@@ -1131,7 +1135,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
 

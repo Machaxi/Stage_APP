@@ -23,8 +23,8 @@ class Splash extends BaseComponent {
 
 
         this.refreshEvent = Events.subscribe('deep_linking', (data) => {
-            is_deep_linking = true
-            deep_data = data
+           // is_deep_linking = true
+           // deep_data = data
         });
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
@@ -50,8 +50,8 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('TournamentTabs', {
-        //     id: 6
+        // this.props.navigation.navigate('PDFExample', {
+        //     is_edit_mode: true
         // })
         // return
         // var userData;

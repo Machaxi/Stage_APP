@@ -27,6 +27,8 @@ import TournamentGallerySlider from '../containers/tournament/TournamentGalleryS
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import NotificationList from '../containers/notification/NotificationList'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
+import WebViewScreen from '../containers/util/WebViewScreen'
+
 
 const userHomeModule = createStackNavigator({
 
@@ -278,6 +280,40 @@ const userHomeModule = createStackNavigator({
 
         })
     },
+    WebViewScreen: {
+        screen: WebViewScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "WebView",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    // PDFExample: {
+    //     screen: PDFExample,
+    //     navigationOptions: ({ navigation }) => ({
+    //         title: "WebView",
+    //         headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+    //             showBackAction={true}
+    //             showDrawer={false} />,
+    //         headerRight: <RightMenuToolbar navigationProps={navigation}
+    //             navigation={navigation}
+    //             showHome={false} />,
+    //         headerTitleStyle: style.headerStyle,
+    //         headerStyle: {
+    //             backgroundColor: '#FFFFFF',
+    //         },
+
+    //     })
+    // },
 
 });
 

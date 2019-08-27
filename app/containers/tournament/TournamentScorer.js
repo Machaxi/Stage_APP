@@ -21,17 +21,18 @@ class TournamentScorer extends BaseComponent {
             player2: null,
             current_set: null,
             currentIndex: -1,
-            match_id: '28',
+            match_id: '',
             header: '',
             score_call: false, //protect unuseful of progress loader
             start_card_show: false,
             is_shown: false,
             modalVisible: false,
             edit_index: -1,
-            edit_instance: null
+            edit_instance: null,
+            is_show:false
         }
 
-        //this.state.match_id = this.props.navigation.getParam('match_id', '')
+        this.state.match_id = this.props.navigation.getParam('match_id', '')
 
     }
 
@@ -116,12 +117,19 @@ class TournamentScorer extends BaseComponent {
             let success = data.success
             if (success) {
 
-                this.setState({
-                    match_scores: data.data.match_scores,
-                    player1: data.data.player1,
-                    player2: data.data.player2,
+                if (data.data.player1 == null || data.data.player2 == null) {
+                    alert('Player detail not found')
+                }
+                else{
+                    this.setState({
+                        match_scores: data.data.match_scores,
+                        player1: data.data.player1,
+                        player2: data.data.player2,
+    
+                    })
+                }
 
-                })
+                
             }
 
         }).catch((response) => {
@@ -132,7 +140,7 @@ class TournamentScorer extends BaseComponent {
 
     render() {
         if (!this.state.score_call &&
-            (this.props.data.loading || this.state.match_scores == null)) {
+            (this.props.data.loading || this.state.match_scores == null || this.state.player1 == null)) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -373,15 +381,15 @@ class TournamentScorer extends BaseComponent {
                             onPress={() => {
                                 this.setState({
                                     edit_instance: match_scores[index],
-                                    edit_index:index,
-                                  
+                                    edit_index: index,
+
                                 })
-                                setTimeout(()=>{
+                                setTimeout(() => {
                                     this.setModalVisible(true)
-                                },100)
+                                }, 100)
                                 console.warn('Element ', index)
                                 //this.state.modalVisible = true
-                               // this.setModalVisible(true)
+                                // this.setModalVisible(true)
                             }}
                         >
 
@@ -859,7 +867,7 @@ class TournamentScorer extends BaseComponent {
                             }}
                             player1={player1}
                             player2={player2}
-                            previousRound={is_tournament_completed == true ? 
+                            previousRound={is_tournament_completed == true ?
                                 edit_instance : previousRound}
                             visible={this.state.modalVisible}
                         />

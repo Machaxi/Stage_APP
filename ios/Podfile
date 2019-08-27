@@ -40,6 +40,8 @@ target 'Dribble' do
 
     pod 'RNShare', :path => '../node_modules/react-native-share'
 
+    pod 'react-native-pdf', :path => '../node_modules/react-native-pdf'
+
   end
 
   target 'DribbleTests' do

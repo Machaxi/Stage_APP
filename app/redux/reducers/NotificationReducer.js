@@ -26,13 +26,13 @@ export default function NotificationReducer(state = initialState, action) {
 }
 
 export function getNotificationListing(header) {
-    console.log("getUpcomingTournament", header)
+    console.log("getNotificationListing", header)
 
     return {
         type: types.NOTIFICATION_TOURNAMENT,
         payload: {
             request: {
-                url: `notification/notifications`,
+                url: `notification/notifications?sort=desc`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
