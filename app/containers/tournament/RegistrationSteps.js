@@ -128,7 +128,8 @@ class RegistrationSteps extends BaseComponent {
             userData: null,
             total_amount: 0,
             is_edit_mode: false,
-            registeredTournament: null
+            registeredTournament: null,
+            reg_player_list: []
         }
 
         this.inputRefs = {
@@ -141,8 +142,10 @@ class RegistrationSteps extends BaseComponent {
             goBackAction: this.goBackAction
         })
 
-        temp_user = this.props.navigation.getParam('temp_user', false)
+        const temp_user = this.props.navigation.getParam('temp_user', false)
         this.state.temp_user = temp_user
+
+        const is_edit_mode = this.props.navigation.getParam('is_edit_mode', false)
 
         console.warn('temp_user => ', temp_user)
 
@@ -158,6 +161,10 @@ class RegistrationSteps extends BaseComponent {
             console.log('detail=> ', value)
             this.state.data = JSON.parse(value)
             let data = this.state.data
+            let is_edit_mode = false
+            if(data.is_edit_mode){
+                is_edit_mode = data.is_edit_mode
+            }
 
             let array = []
             for (let i = 0; i < this.state.data.category_types.length; i++) {
@@ -174,43 +181,44 @@ class RegistrationSteps extends BaseComponent {
                 tournament_types[i] = obj
             }
 
-            if (data.tournament_registrations) {
+            if (is_edit_mode) {
 
                 this.state.tournament_registrations = data.tournament_registrations
                 this.state.is_edit_mode = true;
+                this.state.reg_player_list = data.tournament_registrations
 
                 let tournament_registrations = data.tournament_registrations
                 if (tournament_registrations.length > 0) {
-                    let playerData = tournament_registrations[0].player
-                    playerData['user_id'] = playerData.id
-                    //alert(JSON.stringify(playerData))
-                    //alert(JSON.stringify(playerData))
-                    this.setState({
-                        selected_player: playerData,
-                        txtname: playerData.name,
-                        is_player_selected: true,
-                    })
-                    //this.state.txtname = playerData.name
+
+                    //=============WORKING CODE FOR SINGLE CASE=========================
+                    // let playerData = tournament_registrations[0].player
+                    // playerData['user_id'] = playerData.id
+                    // this.setState({
+                    //     selected_player: playerData,
+                    //     txtname: playerData.name,
+                    //     is_player_selected: true,
+                    // })
+                    //========================================================
                 }
 
 
-                console.log('tournament_registrations =>', JSON.stringify(tournament_registrations))
-                for (let i = 0; i < array.length; i++) {
+                // console.log('tournament_registrations =>', JSON.stringify(tournament_registrations))
+                // for (let i = 0; i < array.length; i++) {
 
-                    let obj = array[i]
-                    console.log('Loop - Obj', JSON.stringify(obj))
-                    for (let j = 0; j < tournament_registrations.length; j++) {
+                //     let obj = array[i]
+                //     console.log('Loop - Obj', JSON.stringify(obj))
+                //     for (let j = 0; j < tournament_registrations.length; j++) {
 
-                        let reg = tournament_registrations[j]
-                        console.log('Loop ', reg.tournament_category + "==" + obj.title)
-                        if (reg.tournament_category == obj.title) {
-                            obj.selected = true;
-                            obj.disable = true
-                            break
-                        }
-                    }
-                    array[i] = obj
-                }
+                //         let reg = tournament_registrations[j]
+                //         console.log('Loop ', reg.tournament_category + "==" + obj.title)
+                //         if (reg.tournament_category == obj.title) {
+                //             obj.selected = true;
+                //             obj.disable = true
+                //             break
+                //         }
+                //     }
+                //     array[i] = obj
+                // }
 
                 // for (let i = 0; i < tournament_types.length; i++) {
 
@@ -330,9 +338,39 @@ class RegistrationSteps extends BaseComponent {
                         alert('Unknown User Type.')
                     }
                 } else {
+                    let uniqueArray = []
+                    const tournament_registrations = this.state.reg_player_list
+                    console.log('tournament_registrations=>', JSON.stringify(tournament_registrations))
+                    let itemList = tournament_registrations
+                    for (let i = 0; i < itemList.length; i++) {
+
+                        console.log('Tournament->', JSON.stringify(itemList[i]))
+                        let obj = itemList[i].player
+                        if (!this.isPlayerExists(obj.id, uniqueArray)) {
+                            uniqueArray.push(obj)
+                        }
+                    }
                     this.setState({
-                        is_player_selected: true
+                        players: uniqueArray
                     })
+                    console.warn('uniqueArray => ', JSON.stringify(uniqueArray))
+
+                    let new_array = []
+                    for (let i = 0; i < uniqueArray.length; i++) {
+                        let row = uniqueArray[i];
+                        let obj = {
+                            label: row.name,
+                            value: row.id,
+                        }
+                        new_array[i] = obj
+                    }
+                    this.setState({
+                        new_array: new_array
+                    })
+
+                    // this.setState({
+                    //     is_player_selected: true
+                    // })
                 }
 
 
@@ -409,6 +447,7 @@ class RegistrationSteps extends BaseComponent {
         });
 
     }
+    
     isPlayerExists(id, uniqueArray) {
 
         for (let i = 0; i < uniqueArray.length; i++) {
@@ -440,6 +479,40 @@ class RegistrationSteps extends BaseComponent {
 
     getFeesTotal() {
 
+    }
+
+    //This function will help to mark selected category in edit mode
+    markSelected(player) {
+
+        const is_edit_mode = this.state.is_edit_mode
+        if(is_edit_mode)
+        {
+            const userData = this.state.userData
+            console.log('markSelected=>',JSON.stringify(userData))
+            let array = [...this.state.tournament_selection]
+            let tournament_registrations = [...this.state.tournament_registrations]
+            //console.log('tournament_registrations =>', JSON.stringify(tournament_registrations))
+    
+            for (let i = 0; i < array.length; i++) {
+    
+                let obj = array[i]
+                //console.log('Loop - Obj', JSON.stringify(obj))
+                for (let j = 0; j < tournament_registrations.length; j++) {
+    
+                    let reg = tournament_registrations[j]
+                    //console.log('Loop ', reg.tournament_category + "==" + obj.title)
+                    if (reg.tournament_category == obj.title && player.id == reg.player.id) {
+                        obj.selected = true;
+                        obj.disable = true
+                        break
+                    }
+                }
+                array[i] = obj
+            }
+            this.setState({
+                tournament_selection: array
+            })
+        }
     }
 
     showStepOne() {
@@ -477,7 +550,7 @@ class RegistrationSteps extends BaseComponent {
                         }}>
 
 
-                        {is_guest || is_edit_mode ?
+                        {is_guest ?
 
                             <View style={{
                                 justifyContent: 'center',
@@ -523,12 +596,13 @@ class RegistrationSteps extends BaseComponent {
                                         //console.warn(value)
                                         if (value != null) {
                                             let player = this.getPlayerById(value)
+                                            player['user_id'] = player.id
                                             this.state.txtname = player.name
                                             this.setState({
                                                 country: value,
                                                 selected_player: player,
                                                 is_player_selected: true
-                                            });
+                                            }, this.markSelected(player));
                                         }
                                     }}
                                     style={pickerSelectStyles}
@@ -586,7 +660,7 @@ class RegistrationSteps extends BaseComponent {
                                 }}
                             >
                                 <Text style={style.text1}>
-                                    Select player to play
+                                    Select category to play
                 </Text>
 
 
@@ -1058,7 +1132,7 @@ class RegistrationSteps extends BaseComponent {
     }
 
     showStepThree() {
-        let user_selection = this.state.user_selection
+        let user_selection = [...this.state.user_selection]
         let all_total = 0
         console.log('user_selection=> ' + JSON.stringify(user_selection))
         for (let i = 0; i < user_selection.length; i++) {
@@ -1079,32 +1153,32 @@ class RegistrationSteps extends BaseComponent {
             element['total'] = total
         }
 
-        let is_edit_mode = this.state.is_edit_mode
-        if (is_edit_mode) {
+        // let is_edit_mode = this.state.is_edit_mode
+        // if (is_edit_mode) {
 
-            let newArray = []
-            for (let i = 0; i < user_selection.length; i++) {
+        //     let newArray = []
+        //     for (let i = 0; i < user_selection.length; i++) {
 
-                let element = user_selection[i]
-                let new_type = []
-                let tournament_types = element['tournament_types']
+        //         let element = user_selection[i]
+        //         let new_type = []
+        //         let tournament_types = element['tournament_types']
 
-                for (let j = 0; j < tournament_types.length; j++) {
+        //         for (let j = 0; j < tournament_types.length; j++) {
 
-                    let selected = tournament_types[j].selected
-                    let disable = tournament_types[j].disable
-                    if (selected && !disable) {
-                        new_type.push(tournament_types[j])
-                    }
-                }
-                if (new_type.length > 0) {
-                    element['tournament_types'] = new_type
-                    newArray.push(element)
-                }
-            }
+        //             let selected = tournament_types[j].selected
+        //             let disable = tournament_types[j].disable
+        //             if (selected && !disable) {
+        //                 new_type.push(tournament_types[j])
+        //             }
+        //         }
+        //         if (new_type.length > 0) {
+        //             element['tournament_types'] = new_type
+        //             newArray.push(element)
+        //         }
+        //     }
 
-            user_selection = newArray
-        }
+        //     user_selection = newArray
+        // }
 
 
 
@@ -1217,8 +1291,8 @@ class RegistrationSteps extends BaseComponent {
                                     style={style.rounded_button}
                                     onPress={() => {
 
-                                        let user_selection = this.state.user_selection
-                                        this.processPaymentGateway(user_selection)
+                                        //let user_selection1 = this.state.user_selection
+                                        this.processPaymentGateway()
                                     }}>
                                     <Text style={style.rounded_button_text}>
                                         Next
@@ -1263,8 +1337,10 @@ class RegistrationSteps extends BaseComponent {
         return +all_total
     }
 
-    processPaymentGateway(user_selection) {
-
+    processPaymentGateway() {
+        //const user_selection = this.state.user_selection
+        //console.log('user_selection=> ' + JSON.stringify(user_selection))
+        //return
         let fees = this.getTotalAmount()
         if (fees == 0) {
             alert('You can\'t proceed with Rs. 0 payment.')
@@ -1302,7 +1378,7 @@ class RegistrationSteps extends BaseComponent {
             let payment_details = {
                 razorpay_payment_id: data.razorpay_payment_id
             }
-            this.submitData(payment_details, fees, user_selection)
+            this.submitData(payment_details, fees)
         }).catch((error) => {
             // handle failure
             console.log('Razor Rspo ', JSON.stringify(error))
@@ -1311,14 +1387,15 @@ class RegistrationSteps extends BaseComponent {
 
     }
 
-    submitData(payment_details, fees, user_selection) {
+    submitData(payment_details, fees) {
 
+        //const user_selection = this.state.user_selection
         let tournament_reg_details = [];
 
         let tournament_id = this.state.data['id']
         let user_id = this.state.selected_player['user_id']
 
-        //let user_selection = this.state.user_selection
+        const user_selection = this.state.user_selection
         console.log('BeforeRequest=>', JSON.stringify(user_selection))
 
         for (let i = 0; i < user_selection.length; i++) {
@@ -1446,7 +1523,7 @@ class RegistrationSteps extends BaseComponent {
     renderItem_sub_tournament = ({ item }) => (
 
         <View>
-            {item.selected ? <View style={{ marginTop: 8, marginRight: 12 }}>
+            {item.selected && !item.disable ? <View style={{ marginTop: 8, marginRight: 12 }}>
 
                 <Text style={{
                     fontFamily: 'Quicksand-Regular',

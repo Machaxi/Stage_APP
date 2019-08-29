@@ -25,14 +25,14 @@ export default function NotificationReducer(state = initialState, action) {
     }
 }
 
-export function getNotificationListing(header) {
+export function getNotificationListing(header, page, size) {
     console.log("getNotificationListing", header)
 
     return {
         type: types.NOTIFICATION_TOURNAMENT,
         payload: {
             request: {
-                url: `notification/notifications?sort=desc`,
+                url: `notification/notifications?page=${page}&size=${size}&sort=id,desc`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

@@ -213,7 +213,7 @@ class EditOtherProfile extends BaseComponent {
                                 mode="date"
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
-                                minDate="1950-05-01"
+                                minDate={moment('1920-01-01')}
                                 maxDate={Date.now()}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"

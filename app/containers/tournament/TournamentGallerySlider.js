@@ -11,23 +11,32 @@ export default class TournamentGallerySlider extends BaseComponent {
     constructor(props) {
         super(props)
         this.state = {
-            images: [
-                { url: 'http://i.imgur.com/XP2BE7q.jpg' },
-                { url: 'http://i.imgur.com/5nltiUd.jpg' },
-                { url: 'http://i.imgur.com/6vOahbP.jpg' },
-                { url: 'http://i.imgur.com/kj5VXtG.jpg' },
-                { url: 'http://i.imgur.com/XP2BE7q.jpg' },
-                { url: 'http://i.imgur.com/5nltiUd.jpg' },
-                { url: 'http://i.imgur.com/6vOahbP.jpg' },
-                { url: 'http://i.imgur.com/kj5VXtG.jpg' },
-                { url: 'http://i.imgur.com/XP2BE7q.jpg' },
-                { url: 'http://i.imgur.com/5nltiUd.jpg' },
-                { url: 'http://i.imgur.com/6vOahbP.jpg' },
-                { url: 'http://i.imgur.com/kj5VXtG.jpg' }
-            ],
+            // images: [
+            //     { url: 'http://i.imgur.com/XP2BE7q.jpg' },
+            //     { url: 'http://i.imgur.com/5nltiUd.jpg' },
+            //     { url: 'http://i.imgur.com/6vOahbP.jpg' },
+            //     { url: 'http://i.imgur.com/kj5VXtG.jpg' },
+            //     { url: 'http://i.imgur.com/XP2BE7q.jpg' },
+            //     { url: 'http://i.imgur.com/5nltiUd.jpg' },
+            //     { url: 'http://i.imgur.com/6vOahbP.jpg' },
+            //     { url: 'http://i.imgur.com/kj5VXtG.jpg' },
+            //     { url: 'http://i.imgur.com/XP2BE7q.jpg' },
+            //     { url: 'http://i.imgur.com/5nltiUd.jpg' },
+            //     { url: 'http://i.imgur.com/6vOahbP.jpg' },
+            //     { url: 'http://i.imgur.com/kj5VXtG.jpg' }
+            // ],
+            images: [],
             show_zoom: true
         }
 
+        let images = this.props.navigation.getParam('images')
+        
+        const imageURLs = images.map(
+            (img, index) => ({
+                url: images[index].image,
+            })
+        )
+        this.state.images = imageURLs
     }
 
     componentDidMount() {
@@ -45,9 +54,9 @@ export default class TournamentGallerySlider extends BaseComponent {
                     margin: 2,
                 }}
                 onPress={() => {
-                    this.setState({
-                        show_zoom: true
-                    })
+                    this.props.navigation.navigate('TournamentGallerySliderZoom',
+                        { images: this.state.images }
+                    )
                 }}
             >
                 <Image

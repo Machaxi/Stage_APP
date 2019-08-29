@@ -113,7 +113,7 @@ class CoachHome extends BaseComponent {
         this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD', () => {
             this.selfComponentDidMount()
         });
-        
+
     }
 
     selfComponentDidMount() {
@@ -134,6 +134,18 @@ class CoachHome extends BaseComponent {
                 this.getSwitchData()
             }
         })
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            //alert('event')
+            if (deep_data != null)
+                storeData('deep_data', JSON.stringify(deep_data))
+            setTimeout(() => {
+                this.props.navigation.navigate('Tournament')
+
+            }, 100)
+        });
+
+        
     }
 
     getSwitchData() {
@@ -524,7 +536,8 @@ class CoachHome extends BaseComponent {
 
                             </View>
                             <CustomeButtonB onPress={() => {
-                                alert('under development')
+                                this.props.navigation.navigate('CoachPerformence')
+                                //alert('under development')
                             }}>
                                 Update Progress</CustomeButtonB>
                         </View>
@@ -668,8 +681,8 @@ class CoachHome extends BaseComponent {
                         <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
-                                console.warn("Touch Press")
-
+                                //console.warn("Touch Press")
+                                //this.props.navigation.navigate('JobVacancies')
 
                             }}>
                                 <View style={{

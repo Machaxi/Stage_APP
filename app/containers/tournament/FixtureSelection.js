@@ -350,13 +350,14 @@ class FixtureSelection extends BaseComponent {
                                                     ref={(el) => {
                                                         this.inputRefs.gender = el;
                                                     }}
-                                                // Icon={() => {
-                                                //     return (
-                                                //         <Image
-                                                //             style={{ width: 8, height: 5 }}
-                                                //             source={require('../../images/ic_down_arrow.png')} />
-                                                //     )
-                                                // }}
+                                                    
+                                                    Icon={() => {
+                                                        return (
+                                                            <Image
+                                                                style={{ width: 8, height: 5 }}
+                                                                source={require('../../images/ic_down_arrow.png')} />
+                                                        )
+                                                    }}
 
                                                 />
 
@@ -481,6 +482,7 @@ const pickerSelectStyles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         fontFamily: 'Quicksand-Regular',
+        
         // to ensure the text is never behind the icon
     },
     inputAndroid: {

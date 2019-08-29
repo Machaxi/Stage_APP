@@ -54,7 +54,7 @@ class CoachMenuDrawer extends BaseComponent {
 		this.updateData()
 
 		this.refreshEvent = Events.subscribe(EVENT_EDIT_PROFILE, () => {
-			console.warn(EVENT_EDIT_PROFILE)
+			//console.warn(EVENT_EDIT_PROFILE)
 			this.updateData()
 		});
 	}
@@ -904,7 +904,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('PDFExample')}>
 
 					<View style={styles.drawercell}>
 
@@ -922,7 +923,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('Test')}>
 
 					<View style={styles.drawercell}>
 

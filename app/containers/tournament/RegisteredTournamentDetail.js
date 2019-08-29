@@ -3,15 +3,16 @@ import { StyleSheet, View, Image, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
 import BaseComponent, {
     defaultStyle, getFormattedTournamentType, getFormattedRound,
-    getFormattedCategory, getFormattedTournamentLevel
+    getFormattedCategory, getFormattedTournamentLevel, formattedName
 } from '../BaseComponent'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import { Linking } from 'react-native'
 import Share from 'react-native-share';
-import { storeData } from '../../components/auth';
+import { getData, storeData } from '../../components/auth';
 import NavigationDrawerStructure from '../../router/NavigationDrawerStructure'
+import { PARENT } from '../../components/Constants';
 
 
 export default class RegisteredTournamentDetail extends BaseComponent {
@@ -28,7 +29,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
             headerRight: (
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('RegistrationSteps')
+                        navigation.getParam('editAction')();
                     }}
                     activeOpacity={.8}
                 >
@@ -46,14 +47,39 @@ export default class RegisteredTournamentDetail extends BaseComponent {
 
     };
 
+    editAction = () => {
+        //Setting edit flag forcefully
+        const data = this.state.data
+        data.is_edit_mode = true
+        storeData('detail', JSON.stringify(data))
+        //console.log('EditCAll=>', JSON.stringify(data))
+        setTimeout(() => {
+            this.props.navigation.navigate('RegistrationSteps')
+        }, 100)
+    }
+
     constructor(props) {
         super(props)
         this.state = {
             data: {},
 
         }
+        const { navigation } = this.props
+        navigation.setParams({
+            editAction: this.editAction,
+        })
+
         this.state.data = JSON.parse(this.props.navigation.getParam('data'));
         storeData("detail", JSON.stringify(this.state.data))
+
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value)
+            let user_type = userData.user['user_type']
+            this.setState({
+                user_type: user_type
+            });
+        });
+
     }
 
     tournament_types(tournament_types) {
@@ -61,7 +87,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         let str = ''
         for (let i = 0; i < tournament_types.length; i++) {
             let tournament_type = tournament_types[i].tournament_type
-            str = str + getFormattedTournamentLevel(tournament_type) + ", "
+            str = str + getFormattedTournamentLevel(tournament_type) + 's' + ", "
         }
 
         return str.substring(0, str.length - 2);
@@ -112,6 +138,8 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         let tournament_registrations = data.tournament_registrations
         let fees = data.amount_paid
 
+        let can_register_more = this.state.user_type == PARENT
+
         let registered_array = []
         for (let i = 0; i < tournament_registrations.length; i++) {
 
@@ -132,23 +160,31 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                         width: "30%",
                         fontWeight: '400',
                         fontFamily: 'Quicksand-Medium'
-                    }}>{obj.player.name}</Text>
+                    }}>{formattedName(obj.player.name)}</Text>
 
                     <Text style={{
-                        paddingTop: 10, fontSize: 14,
+                        paddingTop: 10,
+                        fontSize: 14,
                         color: '#404040',
-                        width: "15%",
+                        width: "20%",
+                        textAlign: 'left',
+                        alignItems: 'flex-start',
+                        justifyContent: 'flex-start',
                         fontFamily: 'Quicksand-Regular'
                     }}>{getFormattedCategory(obj.tournament_category)}</Text>
 
                     <Text style={{
-                        paddingTop: 10, fontSize: 14,
+                        paddingTop: 10,
+                        fontSize: 14,
+                        textAlign: 'left',
+                        alignItems: 'flex-start',
+                        justifyContent: 'flex-start',
                         color: '#404040',
-                        width: "35%",
+                        width: "30%",
                         fontFamily: 'Quicksand-Regular'
                     }}>{getFormattedTournamentLevel(obj.tournament_type)}</Text>
 
-                    {obj.tournament_type == 'MIX_DOUBLE'
+                    {obj.tournament_type == 'MIX_DOUBLE' || obj.tournament_type == 'DOUBLE'
                         ?
                         <Text
                             onPress={() => {
@@ -159,13 +195,12 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                 color: '#667DDB',
                                 width: "20%",
                                 textAlign: 'center',
-                                marginTop: 2,
                                 alignItems: 'center',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
                             Edit Partner
                     </Text>
-                        : <Text></Text>
+                        : <Text style={{ width: "20%", }}></Text>
                     }
 
 
@@ -399,6 +434,23 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                     </Text>
                                         {registered_array}
                                     </View>
+
+                                    {can_register_more ?
+                                        <TouchableOpacity
+                                            style={{
+                                                paddingTop: 16,
+                                            }}
+                                            onPress={() => {
+                                                this.props.navigation.navigate('RegistrationSteps')
+                                            }}>
+                                            <Text
+                                                style={{
+                                                    fontSize: 10,
+                                                    color: '#667DDB',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>Register another Player?</Text>
+                                        </TouchableOpacity> : null
+                                    }
 
 
 

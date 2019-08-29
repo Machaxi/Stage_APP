@@ -23,7 +23,7 @@ class WriteFeedbackListing extends BaseComponent {
         };
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.player_id = this.props.navigation.getParam('player_id', '');
-        console.warn("Data " + this.state.academy_id + "" + this.state.player_id)
+        //console.warn("Data " + this.state.academy_id + "" + this.state.player_id)
     }
 
     componentDidMount() {
@@ -32,13 +32,13 @@ class WriteFeedbackListing extends BaseComponent {
         let player_id = this.state.player_id
 
         //adding academy cell manually
-        let list = []
-        let count = 0
-        let newObj = { review: '', rating: 0, is_coach: false }
-        list[count++] = newObj
-        this.setState({
-            coaches: list
-        })
+
+
+        // let newObj = { review: '', rating: 0, is_coach: false }
+        // list[count++] = newObj
+        // this.setState({
+        //     coaches: list
+        // })
 
         getData('header', (value) => {
 
@@ -54,17 +54,26 @@ class WriteFeedbackListing extends BaseComponent {
                     alert("Something went wrong.")
                 }
 
+                let list = []
+                let count = 0
+                let newObj = { review: '', rating: 0, is_coach: false }
+                list[count++] = newObj
+                // this.setState({
+                //     coaches: list
+                // })
+
 
                 for (let i = 0; i < coaches.length; i++) {
 
                     let obj = coaches[i]
-                    let newObj = { ...obj, review: '', rating: 0, is_coach: true }
-                    list[count++] = newObj
+                    let newObj1 = { ...obj, review: '', rating: 0, is_coach: true }
+                    list[count++] = newObj1
                 }
 
                 this.setState({
                     coaches: list
                 })
+
 
             }).catch((response) => {
                 console.log(response);
@@ -364,17 +373,20 @@ class WriteFeedbackListing extends BaseComponent {
                             }}>
                             Submit</Text>
                     </View> */}
-                    <View style={{
-                        margin: 16,
-                        alignSelf: 'center',
-                        width: 100,
-                    }}>
-                        <SkyFilledButton
-                            onPress={() => {
-                                this.submitFeedback()
-                            }}
-                        >Submit</SkyFilledButton>
-                    </View>
+
+                    {coaches.length > 0 ?
+                        < View style={{
+                            margin: 16,
+                            alignSelf: 'center',
+                            width: 100,
+                        }}>
+                            <SkyFilledButton
+                                onPress={() => {
+                                    this.submitFeedback()
+                                }}
+                            >Submit</SkyFilledButton>
+                        </View>
+                        : null}
 
                 </View>
             </ScrollView >

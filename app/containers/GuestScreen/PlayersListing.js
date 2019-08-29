@@ -79,7 +79,8 @@ class PlayersListing extends BaseComponent {
                     marginBottom: 8,
                     borderRadius: 12
                 }}>
-                <Card style={{ borderRadius: 16, elevation: 1 }}>
+                <Card style={{ borderRadius: 16, 
+                    elevation: 1 }}>
 
                     <TextInput style={{
                         marginLeft: 8,
@@ -103,11 +104,11 @@ class PlayersListing extends BaseComponent {
                     ></TextInput>
                 </Card>
 
-                <Text style={{
+                {/* <Text style={{
                     marginTop: 8, marginBottom: 4,
                     textAlign: 'right',
                     color: '#d3d3d3', fontSize: 13
-                }} >Filter</Text>
+                }} >Filter</Text> */}
 
             </View>
         )

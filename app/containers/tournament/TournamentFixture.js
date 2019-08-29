@@ -255,8 +255,8 @@ class TournamentFixture extends BaseComponent {
 
                                 let temp_player1 = obj.player1_match.player1
                                 let temp_player2 = obj.player1_match.player2
-                                temp_player1['match_id'] = match_id
-                                temp_player2['match_id'] = match_id
+                                temp_player1['match_id'] =  obj.player1_match.id
+                                temp_player2['match_id'] = obj.player1_match.id
 
                                 temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                                 temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
@@ -274,8 +274,8 @@ class TournamentFixture extends BaseComponent {
 
                                 let temp_player1 = obj.player2_match.player1
                                 let temp_player2 = obj.player2_match.player2
-                                temp_player1['match_id'] = match_id
-                                temp_player2['match_id'] = match_id
+                                temp_player1['match_id'] = obj.player2_match.id
+                                temp_player2['match_id'] = obj.player2_match.id
 
                                 temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                                 temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores

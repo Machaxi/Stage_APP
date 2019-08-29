@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View,ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
-import { Card,  } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
+import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -37,15 +37,18 @@ class AcademyProfile extends BaseComponent {
             userData = JSON.parse(value)
             this.state.player_id = userData.user['id']
             console.log(this.state.player_id)
-            if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
-                this.setState({
-                    showFeedback: true
-                })
-            } else {
-                this.setState({
-                    showFeedback: false
-                })
-            }
+            // if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+            //     this.setState({
+            //         showFeedback: true
+            //     })
+            // } else {
+            //     this.setState({
+            //         showFeedback: false
+            //     })
+            // }
+            this.setState({
+                showFeedback: true
+            })
         });
     }
     progress(status) {
@@ -154,7 +157,7 @@ class AcademyProfile extends BaseComponent {
 
                 <View style={{
                     flexDirection: 'row',
-
+                    alignItems: 'center'
                 }}>
 
                     <Rating
@@ -235,7 +238,9 @@ class AcademyProfile extends BaseComponent {
 
                 <View style={{ overflow: 'hidden', height: 190, width: 120, paddingRight: 4 }}>
 
-                    <ImageBackground style={{ height: 190, width: '100%' }}
+                    <ImageBackground
+                        resizeMode="contain"
+                        style={{ height: 190, width: '100%' }}
                         source={require('../../images/batch_card.png')}
                     >
                         <Text style={{
@@ -271,11 +276,12 @@ class AcademyProfile extends BaseComponent {
                                 }}
                             >{top_player.player_category}</Text>
                             <Image
+                                resizeMode="contain"
                                 style={{
                                     height: 80, width: 50,
                                     justifyContent: 'center', alignSelf: 'center'
                                 }}
-                                source={require('../../images/player_small.png')}></Image>
+                                source={{ uri: top_player.profile_pic }} />
 
                             <Text
                                 numberOfLines={2}
@@ -439,22 +445,24 @@ class AcademyProfile extends BaseComponent {
                                         containerStyle={Platform.OS === "ios" ? styles.wrapper : null}
                                         style={Platform.OS === "ios" ? null : styles.wrapper}
                                         ref={ref => this.swiper = ref}
-                                        showsPagination={false}
+                                        showsPagination={true}
+                                        activeDotColor="white"
                                         //onIndexChanged={this.updateState.bind(this)}
                                         loop={false} >
                                         {
                                             gallery.map((item, index) => {
                                                 return (
+
                                                     <Image key={index}
                                                         source={{ uri: item.image }}
                                                         style={styles.sliderImage} />
-
                                                 )
                                             })
                                         }
+
                                     </Swiper>
 
-                                    <View style={{
+                                    {/* <View style={{
 
                                         alignItems: 'flex-end',
                                         justifyContent: 'flex-end',
@@ -478,7 +486,7 @@ class AcademyProfile extends BaseComponent {
                                             alignContent: 'flex-end',
                                             padding: 8
                                         }]}>+{gallery.length}</Text>
-                                    </View>
+                                    </View> */}
 
                                 </View>
 
@@ -658,7 +666,7 @@ class AcademyProfile extends BaseComponent {
                             style={styles.card_style}>
 
                             <View style={{ padding: 16, flexDirection: 'row' }}>
-                                <Text style={[defaultStyle.regular_text_14, { width: '90%' }]}>View Other Players</Text>
+                                <Text style={[defaultStyle.regular_text_14, { width: '90%' }]}>View Players</Text>
                                 <Image
                                     resizeMode="contain"
                                     style={{ width: 19, height: 13, }}
@@ -716,12 +724,14 @@ class AcademyProfile extends BaseComponent {
                         <View
                             style={{ margin: 12 }}
                         >
-
                             <SkyFilledButton
                                 onPress={() => {
                                     this.props.navigation.navigate('WriteAcademyFeedback',
 
-                                        { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
+                                        {
+                                            is_coach: false, academy_id: this.state.id,
+                                            target_id: this.state.player_id
+                                        })
                                 }}>
 
                                 Give Feedback</SkyFilledButton></View>
@@ -783,18 +793,18 @@ class AcademyProfile extends BaseComponent {
 
 
                             <FlatList
-                                onEndReachedThreshold={0.5}
-                                onEndReached={({ distanceFromEnd }) => {
-                                    console.log('on end reached ', distanceFromEnd);
-                                    let page = this.state.page
-                                    page = page + 1
-                                    this.state.page = page
+                                // onEndReachedThreshold={0.5}
+                                // onEndReached={({ distanceFromEnd }) => {
+                                //     console.log('on end reached ', distanceFromEnd);
+                                //     let page = this.state.page
+                                //     page = page + 1
+                                //     this.state.page = page
 
-                                    console.log('page => ', this.state.page)
-                                    let sortType = this.state.sortType
-                                    let type = this.state.type
-                                    this.getAcademyFeedbacks(sortType, type, false)
-                                }}
+                                //     console.log('page => ', this.state.page)
+                                //     let sortType = this.state.sortType
+                                //     let type = this.state.type
+                                //     this.getAcademyFeedbacks(sortType, type, false)
+                                // }}
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}

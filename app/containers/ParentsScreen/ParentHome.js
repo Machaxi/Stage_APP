@@ -7,8 +7,7 @@ import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
-import { getCoachSWitcher, getPlayerSWitcher } from "../../redux/reducers/switchReducer";
-import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
+import { getPlayerDashboard, getPlayerSWitcher } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,8 +16,13 @@ import PlayerHeader from '../../components/custom/PlayerHeader'
 import { DueView } from '../../components/Home/DueView'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
-import BaseComponent, { getFormattedLevel, defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent'
+import BaseComponent, {
+    getFormattedLevel,
+    getStatsImageById,
+    defaultStyle, SESSION_DATE_FORMAT
+} from '../BaseComponent'
 import Events from '../../router/events';
+import CustomProgress from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -44,13 +48,35 @@ class ParentHome extends BaseComponent {
                     }}
                     activeOpacity={.8}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Quicksand-Medium',
-                            fontSize: 14,
-                            color: 'white'
-                        }}
-                    >{navigation.getParam('Title', '') + ' ▼'}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
+
+                        <Text
+                            style={{
+                                fontFamily: 'Quicksand-Medium',
+                                fontSize: 14,
+                                color: 'white'
+                            }}
+                        >{navigation.getParam('Title', '') == '' ? '' :
+                            navigation.getParam('Title', '')}</Text>
+
+                        {navigation.getParam('Title', '') == null ? '' :
+                            <Image
+                                source={require('../../images/white_drop_down.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 8,
+                                    marginTop: 4,
+                                    marginLeft: 6,
+                                    height: 6,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            />}
+
+                    </View>
                 </TouchableOpacity>
 
             ),
@@ -105,7 +131,7 @@ class ParentHome extends BaseComponent {
                         resizeMode="contain"
                         source={require('../../images/ic_notifications.png')}
                         style={{
-                            width: 25, height: 25, marginLeft: 12,
+                            width: 22, height: 22, marginLeft: 12,
                             marginRight: 12,
                             alignItems: 'flex-end'
                         }}>
@@ -215,6 +241,51 @@ class ParentHome extends BaseComponent {
                 this.getPlayerDashboardData(userData['academy_id'], userData['player_id'])
             }
 
+
+
+        });
+
+        getData('multiple', (value) => {
+            //console.warn('multiple => ' + value)
+            if (value != '' && value == 'false') {
+                console.warn('multiple1 => ' + value)
+                this.getSwitchData()
+            }
+        })
+    }
+    getSwitchData() {
+        getData('header', (value) => {
+            console.log("header", value);
+            this.props.getPlayerSWitcher(value).then(() => {
+                let user = JSON.stringify(this.props.data.dashboardData);
+                console.log(' getSwitchData payload ' + user);
+                let user1 = JSON.parse(user)
+
+                if (user1.success == true) {
+                    let data = user1.data['players']
+                    if (data.length > 0) {
+                        let name = data[0].academy_name
+                        //let academy_id = data[0].academy_id
+                        console.warn('test => ' + name)
+                        // getData('userInfo',(value)=>{
+                        //     console.warn('UserInfo ',value)
+                        //     let json = JSON.parse(value)
+                        //     json.academy_id = academy_id
+                        //     storeData('userInfo',JSON.stringify(json))
+                        // })
+                        this.props.navigation.setParams({ Title: name })
+                    }
+
+                }
+
+
+
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+
+            })
+
         });
     }
 
@@ -283,10 +354,13 @@ class ParentHome extends BaseComponent {
         }}>
             <View style={{ margin: 10, flexDirection: 'row', height: 60 }}>
 
-                <Image source={require('../../images/Mysatus.png')}
+                <Image
+                    resizeMode="contain"
+                    source={getStatsImageById(item.id)}
                     style={{
                         width: 40,
-                        height: 40, marginRight: 20
+                        height: 40, marginRight: 20,
+                        alignItems: 'center'
                     }} />
                 <View>
 
@@ -304,7 +378,12 @@ class ParentHome extends BaseComponent {
                             {item.score}
                         </Text>
                     </View>
-                    <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} />
+                    {/* <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} /> */}
+                    <CustomProgress
+                        percent={item.score}
+                        width={deviceWidth - 120}
+                        height={14}
+                    />
                 </View>
                 <View style={{
                     height: 50,
@@ -342,6 +421,7 @@ class ParentHome extends BaseComponent {
 
         let academy_feedback_data = this.state.academy_feedback_data
         let coach_feedback_data = this.state.coach_feedback_data
+        const rewards_ui_array = []
 
         if (this.props.data.loading && !this.state.player_profile) {
             return (
@@ -431,6 +511,39 @@ class ParentHome extends BaseComponent {
                         );
                     }
                 }
+
+
+                if (is_reward_point_due) {
+                    console.log('reward_detail => ', JSON.stringify(reward_detail))
+                    for (let i = 0; i < reward_detail.length; i++) {
+
+                        let reward = reward_detail[i]
+                        rewards_ui_array.push(
+                            <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+
+                                <View style={{ width: '50%', flexDirection: 'row', }}>
+                                    <View>
+                                        <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Month</Text>
+                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{moment(reward.month, "M").format("MMMM")}</Text>
+                                    </View>
+
+
+                                    {/* <View style={{ marginLeft: 24 }}>
+                                    <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Available</Text>
+                                    <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{reward_detail.points + 'pts'}</Text>
+                                </View> */}
+                                </View>
+                                <View style={{ width: '40%' }}>
+                                    <CustomeButtonB onPress={() => {
+                                        this.props.navigation.navigate('ParentRewards')
+                                    }}>
+                                        Reward </CustomeButtonB>
+                                </View>
+                            </View>
+                        )
+                    }
+                }
+
             }
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <ScrollView
@@ -509,6 +622,7 @@ class ParentHome extends BaseComponent {
                                         <DueView />
                                     </View>
                                 </View>
+
                                 <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
                             </View>
                             <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
@@ -558,33 +672,27 @@ class ParentHome extends BaseComponent {
                                             <DueView />
                                         </View>
                                     </View>
-                                    <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.props.navigation.navigate('ParentRewards')
+                                        }}
+                                    >
+                                        <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
+                                    </TouchableOpacity>
+
                                 </View>
                                 <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
 
                                 <Text style={[defaultStyle.bold_text_14, { marginRight: 16, }]}>{name}</Text>
 
-                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
 
-                                    <View style={{ width: '50%', flexDirection: 'row', }}>
-                                        <View>
-                                            <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Month</Text>
-                                            <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{reward_detail.month}</Text>
-                                        </View>
+                                {/******** REWARD******************/}
+                                <View>
+                                    {rewards_ui_array}
 
-
-                                        <View style={{ marginLeft: 24 }}>
-                                            <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Available</Text>
-                                            <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{reward_detail.points + 'pts'}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={{ width: '40%' }}>
-                                        <CustomeButtonB onPress={() => {
-                                            this.props.navigation.navigate('ParentRewards')
-                                        }}>
-                                            Reward </CustomeButtonB>
-                                    </View>
                                 </View>
+
+
                             </View>
                         </CustomeCard> : null}
 
@@ -1048,7 +1156,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getPlayerDashboard,
+    getPlayerDashboard, getPlayerSWitcher
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ParentHome);
 

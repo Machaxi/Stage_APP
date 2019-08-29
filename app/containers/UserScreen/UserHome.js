@@ -9,7 +9,11 @@ import { getPlayerDashboard } from "../../redux/reducers/dashboardReducer";
 import { getNotificationCount } from '../../redux/reducers/CommonReducer'
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import BaseComponent, { defaultStyle, getFormattedLevel, EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT } from '../BaseComponent';
+import BaseComponent, {
+    defaultStyle, getFormattedLevel,
+    getStatsImageById,
+    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT
+} from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
 import Events from '../../router/events';
@@ -17,6 +21,7 @@ import PlayerHeader from '../../components/custom/PlayerHeader'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder';
 import firebase from 'react-native-firebase'
+import CustomProgress from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -44,14 +49,36 @@ class UserHome extends BaseComponent {
                     }}
                     activeOpacity={.8}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Quicksand-Medium',
-                            fontSize: 14,
-                            color: 'white'
-                        }}
-                    >{navigation.getParam('Title', '') == '' ? '' :
-                        navigation.getParam('Title', '') + ' ▼'}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
+
+                        <Text
+                            style={{
+                                fontFamily: 'Quicksand-Medium',
+                                fontSize: 14,
+                                color: 'white'
+                            }}
+                        >{navigation.getParam('Title', '') == '' ? '' :
+                            navigation.getParam('Title', '')}</Text>
+
+                        {navigation.getParam('Title', '') == null ? '' :
+                            <Image
+                                source={require('../../images/white_drop_down.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 8,
+                                    marginTop: 4,
+                                    marginLeft: 6,
+                                    height: 6,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            />}
+
+                    </View>
+
                 </TouchableOpacity>
 
             ),
@@ -100,7 +127,7 @@ class UserHome extends BaseComponent {
                         resizeMode="contain"
                         source={require('../../images/ic_notifications.png')}
                         style={{
-                            width: 25, height: 25, marginLeft: 12,
+                            width: 22, height: 22, marginLeft: 12,
                             marginRight: 12,
                             alignItems: 'flex-end'
                         }}>
@@ -176,6 +203,7 @@ class UserHome extends BaseComponent {
         // });
 
         this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            //alert('event')
             if (deep_data != null)
                 storeData('deep_data', JSON.stringify(deep_data))
             setTimeout(() => {
@@ -304,23 +332,25 @@ class UserHome extends BaseComponent {
     }
 
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
+        <TouchableOpacity key={item}
+            activeOpacity={.8}
+            onPress={() => {
+                //console.warn("Touch Press1");
+                this.props.navigation.navigate('ViewPlayerPerformance', { performance_data: item });
+                // this.props.navigation.navigate('OrderTracking', {
+                //     order_id: item.increment_id
+                // })
 
-            console.warn("Touch Press1");
-            this.props.navigation.navigate('ViewPlayerPerformance', { performance_data: item });
-
-
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
-
-        }}>
+            }}>
             <View style={{ margin: 10, flexDirection: 'row', height: 60 }}>
 
-                <Image source={require('../../images/Mysatus.png')}
+                <Image
+                    resizeMode="contain"
+                    source={getStatsImageById(item.id)}
                     style={{
                         width: 40,
-                        height: 40, marginRight: 20
+                        height: 40, marginRight: 20,
+                        alignItems: 'center'
                     }} />
                 <View>
 
@@ -338,11 +368,24 @@ class UserHome extends BaseComponent {
                             {item.score}
                         </Text>
                     </View>
-                    <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} />
+                    {/* <Progress.Bar style={{
+                        backgroundColor: '#E1E1E1',
+                        color: '#305F82', borderRadius: 11, borderWidth: 0
+                    }}
+                        progress={item.score / 100}
+                        width={deviceWidth - 130} height={14} /> */}
+
+                    <CustomProgress
+                        percent={item.score}
+                        width={deviceWidth - 120}
+                        height={14}
+                    />
+
+
                 </View>
                 <View style={{
                     height: 50,
-                    width: 30,
+                    //width: 30,
                     alignItems: 'center',
                     marginTop: 26, marginRight: 10, marginLeft: 20
                 }}>
@@ -557,8 +600,8 @@ class UserHome extends BaseComponent {
                                     <Image source={require('../../images/view_academy_player.png')}
                                         resizeMode="contain"
                                         style={{
-                                            width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
+                                            width: 40,
+                                            height: 40, marginRight: 20, marginTop: 5
                                         }} />
                                     <View style={{ flex: 1 }}>
 
@@ -574,7 +617,9 @@ class UserHome extends BaseComponent {
                                                 View Academy Players
                                         </Text>
 
-                                            <Image source={require('../../images/path.png')}
+                                            <Image
+                                                resizeMode="contain"
+                                                source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
                                                     height: 13, marginRight: 0, marginTop: 5
@@ -600,8 +645,8 @@ class UserHome extends BaseComponent {
                                     <Image source={require('../../images/browse_academy.png')}
                                         resizeMode="contain"
                                         style={{
-                                            width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
+                                            width: 40,
+                                            height: 40, marginRight: 20, marginTop: 5
                                         }} />
                                     <View style={{ flex: 1 }}>
 
@@ -617,7 +662,9 @@ class UserHome extends BaseComponent {
                                                 Browse Academies
                                         </Text>
 
-                                            <Image source={require('../../images/path.png')}
+                                            <Image
+                                                resizeMode="contain"
+                                                source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
                                                     height: 13, marginRight: 0, marginTop: 5

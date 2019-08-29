@@ -6,6 +6,7 @@ import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constant
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
 import firebase from "react-native-firebase";
+import SplashScreen from 'react-native-splash-screen'
 
 var is_deep_linking = false
 var deep_data
@@ -23,8 +24,8 @@ class Splash extends BaseComponent {
 
 
         this.refreshEvent = Events.subscribe('deep_linking', (data) => {
-           // is_deep_linking = true
-           // deep_data = data
+           is_deep_linking = true
+           deep_data = data
         });
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
@@ -38,15 +39,21 @@ class Splash extends BaseComponent {
 
         //     }
         // });
-        this.moveNext()
-        firebase.analytics().logEvent("APP_START", {})
-        firebase.analytics().logEvent("testing_dribble", {})
-        firebase.analytics().setCurrentScreen()
-        firebase.analytics().setUserId('testing')
+        
+        // firebase.analytics().logEvent("APP_START", {})
+        //firebase.analytics().logEvent("testing_dribble", {})
+        firebase.analytics().logEvent("splash_load", {})
+        // firebase.analytics().setCurrentScreen()
+        // firebase.analytics().setUserId('testing')
         //firebase.crashlytics().log('Test Message!');
 
 
         //1a476280-04c6-40a5-b76e-6cc4da41669e
+    }
+
+    componentDidMount(){
+        SplashScreen.hide();
+        this.moveNext()
     }
 
     moveNext() {
@@ -68,6 +75,7 @@ class Splash extends BaseComponent {
 
                     console.warn('is_deep_linking => ' + is_deep_linking, JSON.stringify(deep_data))
                     if (is_deep_linking) {
+                        is_deep_linking = false
                         Events.publish(GO_TO_HOME, deep_data);
                         return
                     }
@@ -116,7 +124,7 @@ class Splash extends BaseComponent {
 
                     }
 
-                }, 2000)
+                }, 100)
             })
             .catch(err => alert("An error occurred"));
 

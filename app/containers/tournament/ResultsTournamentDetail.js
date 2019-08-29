@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -350,14 +350,14 @@ class ResultsTournamentDetail extends BaseComponent {
                                                     ref={(el) => {
                                                         this.inputRefs.gender = el;
                                                     }}
-                                                    // Icon={() => {
-                                                    //     return (
-                                                    //         <Image
-                                                    //             style={{ width: 8, height: 5 }}
-                                                    //             source={require('../../images/ic_down_arrow.png')} />
-                                                    //     )
-                                                    // }}
-                                                
+                                                // Icon={() => {
+                                                //     return (
+                                                //         <Image
+                                                //             style={{ width: 8, height: 5 }}
+                                                //             source={require('../../images/ic_down_arrow.png')} />
+                                                //     )
+                                                // }}
+
                                                 />
 
 
@@ -372,57 +372,69 @@ class ResultsTournamentDetail extends BaseComponent {
                                         <View style={{ marginTop: 20, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
 
 
+                                        {this.state.fixture_type.length > 0 ?
+                                            <FlatList
+                                                style={{
+                                                    margin: 8,
+                                                }}
+                                                contentContainerStyle={{
+                                                    margin: 8
+                                                }}
+                                                data={this.state.fixture_type}
+                                                numColumns={2}
+                                                renderItem={({ item }) =>
 
-                                        <FlatList
-                                            style={{
-                                                margin: 8,
-                                            }}
-                                            contentContainerStyle={{
-                                                margin: 8
-                                            }}
-                                            data={this.state.fixture_type}
-                                            numColumns={2}
-                                            renderItem={({ item }) =>
+                                                    <View style={{
+                                                        flex: 0.5,
+                                                        marginRight: 8,
+                                                        marginBottom: 4,
+                                                    }}>
+                                                        <TouchableOpacity
+                                                            activeOpacity={1}
+                                                            onPress={() => {
+                                                                this.props.navigation.navigate('TournamentFixture', {
+                                                                    data: JSON.stringify(item)
+                                                                })
+                                                            }}
+                                                        >
 
-                                                <View style={{
-                                                    flex: 0.5,
-                                                    marginBottom: 4,
-                                                }}>
-                                                    <TouchableOpacity
-                                                        onPress={() => {
-                                                            this.props.navigation.navigate('TournamentFixture', {
-                                                                data: JSON.stringify(item)
-                                                            })
-                                                        }}
-                                                    >
+                                                            <Card style={styles.card_style}>
 
-                                                        <Card style={styles.card_style}>
+                                                                <View style={{
+                                                                    flexDirection: 'row',
+                                                                    alignItems: 'center'
+                                                                }}>
 
-                                                            <View style={{
-                                                                flexDirection: 'row',
-                                                                alignItems: 'center'
-                                                            }}>
+                                                                    <Image
+                                                                        resizeMode="contain"
+                                                                        style={{ width: 40, height: 48, marginLeft: 16 }}
+                                                                        source={this.getIconByType(item.tournament_type)}
+                                                                    />
 
-                                                                <Image
-                                                                    resizeMode="contain"
-                                                                    style={{ width: 40, height: 48, marginLeft: 16 }}
-                                                                    source={this.getIconByType(item.tournament_type)}
-                                                                />
+                                                                    <Text style={{
+                                                                        fontSize: 14,
+                                                                        color: '#404040',
+                                                                        marginLeft: 12,
+                                                                        fontFamily: 'Quicksand-Regular'
+                                                                    }}>{getFormattedTournamentLevel(item.tournament_type)}</Text>
+                                                                </View>
+                                                            </Card>
+                                                        </TouchableOpacity>
 
-                                                                <Text style={{
-                                                                    fontSize: 14,
-                                                                    color: '#404040',
-                                                                    marginLeft: 12,
-                                                                    fontFamily: 'Quicksand-Regular'
-                                                                }}>{getFormattedTournamentLevel(item.tournament_type)}</Text>
-                                                            </View>
-                                                        </Card>
-                                                    </TouchableOpacity>
+                                                    </View>
 
-                                                </View>
-
-                                            }
-                                        /></View> :
+                                                }
+                                            /> :
+                                            <Text style={[defaultStyle.bold_text_14, {
+                                                paddingTop: 24,
+                                                flex: 1,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                textAlign: 'center'
+                                            }]}>
+                                                {this.state.selected_tournament_category == '' ?
+                                                    'Select Category to see fixture' : 'Fixture not generated'}
+                                            </Text>}</View> :
 
                                     <Text style={[defaultStyle.bold_text_14, {
                                         paddingTop: 24,

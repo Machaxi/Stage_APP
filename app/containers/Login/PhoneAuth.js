@@ -237,6 +237,7 @@ class PhoneAuth extends BaseComponent {
                         }
 
                     } else if (userInfoData.user_type == PARENT) {
+                        storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('PHome')
 
@@ -370,6 +371,7 @@ class PhoneAuth extends BaseComponent {
                         }
 
                     } else if (userInfoData.user_type == PARENT) {
+                        storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('PHome')
 

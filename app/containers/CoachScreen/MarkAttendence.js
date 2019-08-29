@@ -74,11 +74,11 @@ class MarkAttendence extends BaseComponent {
                 if (user1.success == true) {
 
                     let players = user1.data['players']
-                    // for (let i = 0; i < players.length; i++) {
-                    //     let obj = players[i]
-                    //     obj.is_present = false
-                    //     players[i] = obj
-                    // }
+                    for (let i = 0; i < players.length; i++) {
+                        let obj = players[i]
+                        obj.is_present = true
+                        players[i] = obj
+                    }
 
 
                     this.setState({
@@ -120,7 +120,25 @@ class MarkAttendence extends BaseComponent {
                 </Text>
                 <View style={{ backgroundColor: 'white', marginTop: -10 }}>
                     <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                        // title='a'
+                        activeOpacity={.8}
+                        checkedIcon={<Image style={{
+                            width: 18,
+                            height: 18
+                        }} resizeMode="contain"
+                            source={require('../../images/ic_checkbox_on.png')} />}
+                        uncheckedIcon={<Image style={{
+                            width: 18,
+                            height: 18
+                        }} resizeMode="contain"
+                            source={require('../../images/ic_checkbox_off.png')} />}
+                        containerStyle={{
+                            backgroundColor: 'white',
+                            borderWidth: 0,
+                            padding: 4,
+                            margin: 0,
+                            marginTop: 20,
+
+                        }}
                         checked={item.is_present}
                         onPress={() => {
                             console.log("he;eleleo", item.is_present)
@@ -181,7 +199,7 @@ class MarkAttendence extends BaseComponent {
             dataDic['data'] = dict;
             console.log("dicttttc ", dict)
 
-            console.warn('Save===> ',JSON.stringify(this.state.playerList))
+            console.warn('Save===> ', JSON.stringify(this.state.playerList))
 
             this.props.saveCoachBatchAttendence(value, this.props.navigation.getParam('batch_id'), dataDic).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));

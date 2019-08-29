@@ -9,6 +9,7 @@ import android.content.Intent; // <-- and this
 import com.crashlytics.android.Crashlytics;
 import android.util.Log;
 import android.os.Bundle;
+import org.devio.rn.splashscreen.SplashScreen; // here
 
 import io.fabric.sdk.android.Fabric;
 
@@ -35,6 +36,7 @@ public class MainActivity extends ReactActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+      SplashScreen.show(this);  // here
         super.onCreate(savedInstanceState);
         //Crashlytics.log(Log.DEBUG, "tag", "message");
         //Crashlytics.getInstance().crash(); // Force a crash

@@ -308,7 +308,7 @@ class ResultsRoute extends BaseComponent {
                                 <TouchableOpacity
                                     activeOpacity={.8}
                                     onPress={() => {
-                                        this.props.navigation.navigate('TournamentGallery', {
+                                        this.props.navigation.navigate('TournamentGallerySlider', {
                                             images: item.gallery
                                         })
                                     }}

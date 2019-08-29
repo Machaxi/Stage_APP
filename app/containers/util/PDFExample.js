@@ -1,53 +1,26 @@
-// /**
-//  * Copyright (c) 2017-present, Wonday (@wonday.org)
-//  * All rights reserved.
-//  *
-//  * This source code is licensed under the MIT-style license found in the
-//  * LICENSE file in the root directory of this source tree.
-//  */
+import React, { Component } from 'react';
+import { WebView, Linking } from 'react-native';
+import BaseComponent from '../BaseComponent'
 
-// import React from 'react';
-// import { StyleSheet, Dimensions, View } from 'react-native';
+export default class PDFExample extends BaseComponent {
 
-// import Pdf from 'react-native-pdf';
 
-// export default class PDFExample extends React.Component {
-//     render() {
-//         const source = {uri:'http://samples.leanpub.com/thereactnativebook-sample.pdf',cache:true};
-//         //const source = require('./test.pdf');  // ios only
-//         //const source = {uri:'bundle-assets://test.pdf'};
-
-//         //const source = {uri:'file:///sdcard/test.pdf'};
-//         //const source = {uri:"data:application/pdf;base64,..."};
-
-//         return (
-//             <View style={styles.container}>
-//                 <Pdf
-//                     source={source}
-//                     onLoadComplete={(numberOfPages,filePath)=>{
-//                         console.log(`number of pages: ${numberOfPages}`);
-//                     }}
-//                     onPageChanged={(page,numberOfPages)=>{
-//                         console.log(`current page: ${page}`);
-//                     }}
-//                     onError={(error)=>{
-//                         console.log(error);
-//                     }}
-//                     style={styles.pdf}/>
-//             </View>
-//         )
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'flex-start',
-//         alignItems: 'center',
-//         marginTop: 25,
-//     },
-//     pdf: {
-//         flex:1,
-//         width:Dimensions.get('window').width,
-//     }
-// });
+    render() {
+        const uri = 'https://docs.google.com/gview?embedded=true&url=http://www.africau.edu/images/default/sample.pdf';
+        //const uri = 'http://www.africau.edu/images/default/sample.pdf'
+        return (
+            <WebView
+                startInLoadingState={true}
+                originWhitelist={['*']}
+                ref={(ref) => { this.webview = ref; }}
+                source={{ uri }}
+                onNavigationStateChange={(event) => {
+                    if (event.url !== uri) {
+                        this.webview.stopLoading();
+                        Linking.openURL(event.url);
+                    }
+                }}
+            />
+        );
+    }
+}
