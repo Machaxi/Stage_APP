@@ -50,7 +50,7 @@ class ParentHome extends BaseComponent {
                 >
                     <View style={{
                         flexDirection: 'row',
-                        alignItems: 'center'
+                        //alignItems: 'center'
                     }}>
 
                         <Text
@@ -68,9 +68,11 @@ class ParentHome extends BaseComponent {
                                 resizeMode="contain"
                                 style={{
                                     width: 8,
-                                    marginTop: 4,
                                     marginLeft: 6,
                                     height: 6,
+                                    justifyContent: 'center',
+                                    alignSelf: 'center',
+                                    marginTop: 6,
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}
@@ -574,6 +576,7 @@ class ParentHome extends BaseComponent {
                         <CustomeCard >
                             <TouchableOpacity
                                 onPress={() => {
+                                    global.click_batch_id = operations.batch_id;
                                     this.props.navigation.navigate('Batch')
                                 }}
                             >

@@ -447,6 +447,7 @@ class AcademyProfile extends BaseComponent {
                                         ref={ref => this.swiper = ref}
                                         showsPagination={true}
                                         activeDotColor="white"
+                                        paginationStyle={{bottom: 0, left:0, top: 120, right: 0}}
                                         //onIndexChanged={this.updateState.bind(this)}
                                         loop={false} >
                                         {
@@ -855,7 +856,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         fontFamily: 'Quicksand-Medium',
         marginLeft: 4,
         marginRight: 4,

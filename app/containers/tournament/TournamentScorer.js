@@ -8,7 +8,7 @@ import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButto
 import { getMatchScore, updateMatchScore } from "../../redux/reducers/TournamentScorer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
-import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import { SkyFilledButton, SkyBorderButton } from '../../components/Home/SkyFilledButton'
 import EditScore from './EditScore';
 
 class TournamentScorer extends BaseComponent {
@@ -29,7 +29,7 @@ class TournamentScorer extends BaseComponent {
             modalVisible: false,
             edit_index: -1,
             edit_instance: null,
-            is_show:false
+            is_show: false
         }
 
         this.state.match_id = this.props.navigation.getParam('match_id', '')
@@ -120,16 +120,16 @@ class TournamentScorer extends BaseComponent {
                 if (data.data.player1 == null || data.data.player2 == null) {
                     alert('Player detail not found')
                 }
-                else{
+                else {
                     this.setState({
                         match_scores: data.data.match_scores,
                         player1: data.data.player1,
                         player2: data.data.player2,
-    
+
                     })
                 }
 
-                
+
             }
 
         }).catch((response) => {
@@ -560,7 +560,7 @@ class TournamentScorer extends BaseComponent {
                                 <Image
                                     resizeMode="contain"
                                     source={{ uri: player2.profile_pic }}
-                                    style={{ marginTop: 20, width: 130, height: 180 }}
+                                    style={{ width: 130, height: 180 }}
 
                                 />
 
@@ -629,24 +629,50 @@ class TournamentScorer extends BaseComponent {
                                                 {previousRound.player1_score} - {previousRound.player2_score}</Text>
 
                                             <View style={{
-                                                flex: 1,
-                                                width: 100,
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
                                                 marginTop: 20,
+                                                flex: 2
                                             }}>
 
-                                                <SkyFilledButton
-                                                    onPress={() => {
-                                                        this.setState({
-                                                            start_card_show: false,
-                                                            is_shown: true
-                                                        })
-                                                    }}
-                                                >Start Set !</SkyFilledButton>
 
+                                                <View style={{
+                                                    flex: 1,
+                                                    width: 90,
+                                                    marginRight: 8,
+                                                    alignItems: 'center',
+                                                }}>
+
+                                                    <SkyBorderButton
+                                                        onPress={() => {
+                                                            this.setState({
+                                                                start_card_show: false,
+                                                                is_shown: true
+                                                            })
+                                                        }}
+                                                    >Skip Set</SkyBorderButton>
+
+                                                </View>
+
+                                                <View style={{
+                                                    flex: 1,
+                                                    width: 90,
+                                                    marginLeft: 8,
+                                                    alignItems: 'center',
+
+                                                }}>
+
+                                                    <SkyFilledButton
+                                                        onPress={() => {
+                                                            this.setState({
+                                                                start_card_show: false,
+                                                                is_shown: true
+                                                            })
+                                                        }}
+                                                    >Start Set !</SkyFilledButton>
+
+                                                </View>
                                             </View>
-
                                         </View>
                                     </Card>
                                     :

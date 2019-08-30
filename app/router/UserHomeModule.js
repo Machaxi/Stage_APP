@@ -33,6 +33,7 @@ import PDFExample from '../containers/util/PDFExample'
 import ProgressExample from '../containers/util/ProgressExample'
 import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
 import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
+import TestExample from '../containers/welcome/TestExample'
 
 const userHomeModule = createStackNavigator({
 
@@ -405,7 +406,23 @@ const userHomeModule = createStackNavigator({
         })
 
     },
+    TestExample: {
+        screen: TestExample,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+
+    },
 });
 
 export default userHomeModule;

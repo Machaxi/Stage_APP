@@ -95,20 +95,20 @@ const TournamentModule = createStackNavigator({
 
     TournamentFixture: {
         screen: TournamentFixture,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Fixture',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Fixture',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={true}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showNotification={false} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-            headerTintColor: '#000',
-        }),
+        //     headerTintColor: '#000',
+        // }),
     },
 
 

@@ -37,14 +37,36 @@ class CoachHome extends BaseComponent {
                     }}
                     activeOpacity={.8}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Quicksand-Medium',
-                            fontSize: 16,
-                            color: '#404040'
-                        }}
-                    >{navigation.getParam('academy_name', '') == "" ? "" :
-                        navigation.getParam('academy_name', '') + ' ▼'}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        //alignItems: 'center'
+                    }}>
+
+                        <Text
+                            style={{
+                                fontFamily: 'Quicksand-Medium',
+                                fontSize: 16,
+                                color: '#404040'
+                            }}
+                        >{navigation.getParam('academy_name', '') == "" ? "" :
+                            navigation.getParam('academy_name', '')}</Text>
+                        {navigation.getParam('academy_name', '') == null ? '' :
+                            <Image
+                                source={require('../../images/blank_down_arrow.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 8,
+                                    marginLeft: 6,
+                                    height: 6,
+                                    justifyContent: 'center',
+                                    alignSelf: 'center',
+                                    marginTop: 6,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            />}
+                    </View>
+
                 </TouchableOpacity>
 
             ),
@@ -145,7 +167,7 @@ class CoachHome extends BaseComponent {
             }, 100)
         });
 
-        
+
     }
 
     getSwitchData() {
@@ -515,7 +537,7 @@ class CoachHome extends BaseComponent {
                         >
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={defaultStyle.bold_text_10}>Update Player Performance</Text>
-                                <View
+                                {/* <View
                                     style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                     <Text style={{
                                         marginTop: 2,
@@ -526,6 +548,10 @@ class CoachHome extends BaseComponent {
                                         fontFamily: 'Quicksand-Medium',
                                         marginLeft: 10,
                                     }}>Due</Text>
+                                </View> */}
+                                <View
+                                    style={{ marginLeft: 10 }}>
+                                    <DueView />
                                 </View>
                             </View>
                             <View style={defaultStyle.line_style} />

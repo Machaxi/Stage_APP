@@ -12,6 +12,7 @@ import PlayerBatchComponent from './PlayerBatchComponent'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import moment from 'moment'
 import { PLAYER, FAMILY } from '../../components/Constants';
+import Events from '../../router/events';
 
 class PlayerBatch extends BaseComponent {
 
@@ -70,8 +71,13 @@ class PlayerBatch extends BaseComponent {
             country: undefined,
             strenthList: null,
             index: 0,
-            routes: []
+            routes: [],
+            click_batch_id: ''
 
+        }
+        if(global.click_batch_id!=undefined){
+            this.state.click_batch_id = global.click_batch_id
+            global.click_batch_id = null
         }
     }
 
@@ -110,7 +116,13 @@ class PlayerBatch extends BaseComponent {
                 if (user1.success == true) {
                     var temparra = [];
                     for (let i = 0; i < user1.data['batches'].length; i++) {
-                        const obj = { 'key': i, 'title': user1.data.batches[i].batch_name };
+                        let batch = user1.data.batches[i]
+                        //console.log('batch compare ' + this.state.click_batch_id + '==' + batch.batch_id)
+                        if (this.state.click_batch_id == batch.batch_id) {
+                            this.state.index = i
+                            //alert('set')
+                        }
+                        const obj = { 'key': i, 'title': batch.batch_name };
                         temparra.push(obj);
 
                     }

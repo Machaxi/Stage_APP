@@ -44,6 +44,8 @@ target 'Dribble' do
 
     pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+    pod 'RNPinchZoomImage', :path => '../node_modules/react-native-pinch-zoom-image'
+
   end
 
   target 'DribbleTests' do

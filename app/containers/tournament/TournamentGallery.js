@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import BaseComponent, { } from './../BaseComponent'
-import ImageBrowser from 'react-native-interactive-image-gallery'
 
 export default class TournamentGallery extends BaseComponent {
 
@@ -30,35 +29,24 @@ export default class TournamentGallery extends BaseComponent {
                 description: ''
             })
         )
-        return <ImageBrowser 
-        infoTitleStyles={{
-            borderColor:'red',
-            borderWidth:4
-        }}
-        images={imageURLs} />
+        return <ImageBrowser
+            infoTitleStyles={{
+                borderColor: 'red',
+                borderWidth: 4
+            }}
+            images={imageURLs} />
+
     }
 }
 
 
-
-
 const styles = StyleSheet.create({
-    chartContainer: {
+    container: {
         flex: 1,
-        backgroundColor: '#ffffff'
-    },
-    rounded_button: {
-        width: '48%',
-        padding: 10,
-        borderRadius: 20,
-        borderWidth: 1,
-        marginLeft: 4,
-        marginRight: 4,
-        borderColor: '#67BAF5',
-        backgroundColor: '#67BAF5',
-        color: 'white',
-        textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
+
 

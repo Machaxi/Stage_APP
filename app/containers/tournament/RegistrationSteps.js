@@ -1747,7 +1747,7 @@ const style = {
 
     rounded_button: {
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

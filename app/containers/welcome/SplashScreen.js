@@ -57,8 +57,8 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('PDFExample', {
-        //     is_edit_mode: true
+        // this.props.navigation.navigate('TestExample', {
+        //     match_id: '13'
         // })
         // return
         // var userData;

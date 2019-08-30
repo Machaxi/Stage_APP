@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
@@ -7,7 +7,7 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { COACH } from '../../components/Constants'
-
+import { Text as MyText } from 'react-native'
 
 import Svg, {
     Circle,
@@ -33,10 +33,48 @@ import Svg, {
     Mask,
 } from 'react-native-svg';
 import { ScrollView } from 'react-native-gesture-handler';
+import NavigationDrawerStructure from '../../router/NavigationDrawerStructure';
 
 
 
 class TournamentFixture extends BaseComponent {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: (
+                <View style={{
+                    flexDirection: 'row',
+                    //alignItems: 'center'
+                }}><MyText
+                    style={defaultStyle.bold_text_12}>{navigation.getParam('title')}
+                    </MyText></View>),
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true} />
+            ,
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        //navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#667DDB'
+                        }} >Refresh</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
 
     constructor(props) {
         super(props)
@@ -49,7 +87,7 @@ class TournamentFixture extends BaseComponent {
             user_type: '',
             is_coach: false,
             tournament_name: '',
-            academy_name: 'Test Academy'
+            academy_name: 'Test Academy',
 
         }
 
@@ -83,9 +121,15 @@ class TournamentFixture extends BaseComponent {
         console.log('Tournament Fixture -> ' + data)
         let json = JSON.parse(data)
         this.state.tournament_name = json.name
+
+        // let navigation = this.props.navigation
+        // navigation.setParams({
+        //     title: json.name
+        // })
+        let title = this.state.academy_name + " " + json.name
         //alert('Name ' + json.name)
         this.setState({
-            tournament_name: json.name
+            tournament_name: title
         })
         this.state.data = json
         this.showFixture(json)
@@ -176,6 +220,7 @@ class TournamentFixture extends BaseComponent {
                         ///subArray[count++] = player2
                         if (player1 != null) {
                             player1['match_id'] = match_id
+                            player1['player_description'] = obj.player1_description
                             player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                             subArray.push(player1)
 
@@ -183,6 +228,7 @@ class TournamentFixture extends BaseComponent {
 
                         if (player2 != null) {
                             player2['match_id'] = match_id
+                            player2['player_description'] = obj.player2_description
                             player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                             subArray.push(player2)
                         }
@@ -253,10 +299,14 @@ class TournamentFixture extends BaseComponent {
 
                             if (obj.player1_match) {
 
+                                console.log('player_description=>', JSON.stringify(obj))
                                 let temp_player1 = obj.player1_match.player1
                                 let temp_player2 = obj.player1_match.player2
-                                temp_player1['match_id'] =  obj.player1_match.id
+                                temp_player1['match_id'] = obj.player1_match.id
                                 temp_player2['match_id'] = obj.player1_match.id
+                                temp_player1['player_description'] = obj.player1_match.player1_description
+                                temp_player2['player_description'] = obj.player1_match.player2_description
+                                console.log('temp_player_description=>', JSON.stringify(temp_player1))
 
                                 temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                                 temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
@@ -272,10 +322,13 @@ class TournamentFixture extends BaseComponent {
 
                             if (obj.player2_match) {
 
+
                                 let temp_player1 = obj.player2_match.player1
                                 let temp_player2 = obj.player2_match.player2
                                 temp_player1['match_id'] = obj.player2_match.id
                                 temp_player2['match_id'] = obj.player2_match.id
+                                temp_player1['player_description'] = obj.player2_match.player1_description
+                                temp_player2['player_description'] = obj.player2_match.player2_description
 
                                 temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                                 temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
@@ -364,6 +417,23 @@ class TournamentFixture extends BaseComponent {
     componentDidMount() {
     }
 
+    getName(player) {
+        console.log('Player->', JSON.stringify(player))
+        if (player.player_description != undefined) {
+
+            let array = player.player_description.split(", ")
+            console.log('Array=>', JSON.stringify(array))
+            let name = ""
+            for (let i = 0; i < array.length; i++) {
+                name = name + formattedName(array[i]) + ", "
+            }
+            name = name.substring(0, name.length - 2)
+            return name//player.player_description
+        } else {
+            return formattedName(player.name)
+        }
+    }
+
     render() {
 
         // let array = [
@@ -378,6 +448,18 @@ class TournamentFixture extends BaseComponent {
         let container = []
 
         if (array.length != 0) {
+
+
+            // container.push(
+            //     <Text
+            //         stroke="black"
+            //         strokeWidth="1"
+            //         fontSize="14"
+            //         fontFamily="Quicksand-Regular"
+            //         x={10}
+            //         y={10}
+            //     >{this.state.tournament_name}</Text>
+            // )
 
 
             let height = 45
@@ -557,7 +639,7 @@ class TournamentFixture extends BaseComponent {
                                 fontFamily="Quicksand-Regular"
                                 x={x + 12}
                                 y={y + 25}>
-                                {array[i][j].name == 'To be played' ? 'To be played' : formattedName(array[i][j].name)}
+                                {array[i][j].name == 'To be played' ? 'To be played' : this.getName(array[i][j])}
                             </Text>
                         )
                     }

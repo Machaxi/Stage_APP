@@ -69,7 +69,7 @@ class UpcomingTournamentDetail extends BaseComponent {
 
         let minimumAmount = +tournament_types[0].fees
         for (let i = 0; i < tournament_types.length; i++) {
-            if (+tournament_types[i].fees < minimumAmount) {
+            if (+tournament_types[i].fees > 0 && +tournament_types[i].fees < minimumAmount) {
                 minimumAmount = +tournament_types[i].fees
             }
         }
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',
