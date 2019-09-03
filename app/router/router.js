@@ -62,7 +62,7 @@ import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
-import MyCalendar from "../containers/welcome/MyCalendar"
+import MyCalendar from "../containers/PlayerBatch/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 import TournamentFixture from "../containers/tournament/TournamentFixture";
@@ -71,7 +71,7 @@ import NotificationList from '../containers/notification/NotificationList'
 import JobVacancies from '../containers/util/JobVacancies';
 import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
-
+import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -670,6 +670,22 @@ const coachHomeModule = createStackNavigator({
         })
 
     },
+    AcademyFeedbackListing: {
+        screen: AcademyFeedbackListing,
+        // navigationOptions: ({ navigation }) => ({
+        //     title: "Academy Feedback",
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showHome={false} />,
+        //     headerTitleStyle: style.headerStyle,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
+
+        // })
+
+    },
+
     TournamentFixture: {
         screen: TournamentFixture,
         navigationOptions: ({ navigation }) => ({

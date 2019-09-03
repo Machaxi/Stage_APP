@@ -138,7 +138,7 @@ class CoachProfileDetail extends BaseComponent {
         // 
     }
 
-
+    //{item.source.name}
     _renderRatingItem = ({ item }) => (
 
         <View
@@ -157,10 +157,7 @@ class CoachProfileDetail extends BaseComponent {
                         color: '#707070',
                         fontSize: 14, flex: 1,
                         fontFamily: 'Quicksand-Medium',
-                    }}
-                >
-                    {item.source.name}
-                </Text>
+                    }}>Anonymous</Text>
 
 
                 <View style={{
@@ -358,7 +355,7 @@ class CoachProfileDetail extends BaseComponent {
                                         style={{
                                             height: 19,
                                             width: 30,
-                                            marginLeft: 8,  
+                                            marginLeft: 8,
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             borderColor: '#D8D8D8',

@@ -6,6 +6,7 @@ import Events from '../router/events';
 import axios from 'axios'
 import { client } from '../../App'
 import { BASE_URL } from '../../App'
+import moment from 'moment'
 msg = "GUEST"
 
 colors = {
@@ -252,6 +253,14 @@ export default class BaseComponent extends React.Component {
         });
 
     }
+}
+
+export function getFormatTime(time) {
+    return moment.utc(time, 'hh:mm a').local().format("hh:mm a")
+}
+
+export function getFormatTimeDate(date,time) {
+    return moment.utc(date + " " + time).local().format("hh:mm a")
 }
 
 export function getStatsImageById(id) {

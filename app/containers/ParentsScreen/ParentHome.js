@@ -72,7 +72,7 @@ class ParentHome extends BaseComponent {
                                     height: 6,
                                     justifyContent: 'center',
                                     alignSelf: 'center',
-                                    marginTop: 6,
+                                    marginTop: 3,
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}

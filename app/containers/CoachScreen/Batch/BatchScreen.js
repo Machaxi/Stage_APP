@@ -141,38 +141,59 @@ class BatchScreen extends BaseComponent {
             activeOpacity={.8}
             key={item} onPress={() => {
 
-                this.props.navigation.navigate('BatchDetails', { batch_id: item.batch_id })
+                this.props.navigation.navigate('BatchDetails', {
+                    batch_id: item.batch_id,
+                    batch_name: item.batch_name
+                })
 
             }}>
-            <CustomeCard>
-
+            <View style={{
+                marginLeft: 12,
+                marginRight: 12,
+                marginTop: 10,
+                borderRadius: 12,
+                elevation: 2,
+                backgroundColor: 'white',
+                marginBottom: 4
+            }}>
 
                 <View style={{
-                    margin: 12,
+                    padding: 16,
+                    alignItems: 'center',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                 }}>
-                    <Text style={defaultStyle.bold_text_14}>
+                    <Text style={[defaultStyle.bold_text_14, {
+                        width: "70%"
+                    }]}>
                         {item.batch_name}
                     </Text>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        width: "20%",
+                        alignItems: 'center'
+                    }}>
+                        <Text style={[defaultStyle.bold_text_10, {
+                            color: '#A3A5AE',
+                            marginRight: 6
+                        }]}>Player</Text>
+                        <Text style={defaultStyle.regular_text_14}>{item.total_players}</Text>
+                    </View>
+
                     <Image source={require('../../../images/forward.png')}
                         resizeMode="contain"
                         style={{
                             width: 6,
                             height: 13, marginRight: 10, marginTop: 5
                         }} />
-
-
                 </View>
-                <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10, marginTop: 0 }} />
+                {/* <View style={{ height: 1, backgroundColor: '#DFDFDF', margin: 10, marginTop: 0 }} />
                 <View style={{
                     flexDirection: 'row', justifyContent: 'space-between', marginLeft: 12,
                     marginRight: 12, marginBottom: 10,
                 }}>
-                    {/*<View>*/}
-                    {/*<Text style={{fontSize:10,color:'#A3A5AE',marginBottom:10}}>Attendance</Text>*/}
-                    {/*<Text style={{fontSize:14,marginBottom:10}}>80%</Text>*/}
-                    {/*</View>*/}
+                   
                     <View>
                         <Text style={{
                             fontSize: 10, color: '#A3A5AE', marginBottom: 10,
@@ -184,9 +205,9 @@ class BatchScreen extends BaseComponent {
                         <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Player</Text>
                         <Text style={{ fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{item.total_players}</Text>
                     </View>
-                </View>
+                </View> */}
 
-            </CustomeCard>
+            </View>
         </TouchableOpacity>
 
     );

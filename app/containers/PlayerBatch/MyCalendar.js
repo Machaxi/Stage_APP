@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, Dimensions, Platform, ScrollView, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormatTime } from '../BaseComponent';
 import moment from 'moment'
 import { getPlayerBatchAttendenceDetails } from "../../redux/reducers/PlayerBatchReducer";
 import { getData } from "../../components/auth";
@@ -130,11 +130,26 @@ class MyCalendar extends BaseComponent {
 
     }
 
+    getCancelLabel(item) {
+
+        let currentMonth = this.state.currentMonth
+        let currentYear = this.state.currentYear
+        let day = item.day
+        let selectedDate = new Date(day + '-' + currentMonth + '-' + currentYear)
+        var today = new Date();
+
+        if (today.getTime() > selectedDate.getTime()) {
+            return 'Session yet to happen'
+        } else {
+            return 'Attendance didn\'t happen'
+        }
+    }
+
     attendanceSummary(data) {
 
-        console.warn('attendanceSummary', data);
-        console.warn('this.state.isAttendanceHappenedInMonth', this.state.isAttendanceHappenedInMonth);
-        console.warn('this.state.selectedDateData', this.state.selectedDateData);
+        //console.warn('attendanceSummary', data);
+        //console.warn('this.state.isAttendanceHappenedInMonth', this.state.isAttendanceHappenedInMonth);
+        //console.warn('this.state.selectedDateData', this.state.selectedDateData);
         return (
 
             <View style={styles.summaryCardOuter}>
@@ -170,26 +185,34 @@ class MyCalendar extends BaseComponent {
                                     }>No attendance for this month</Text></View>
                                     : (
                                         this.state.selectedDateData.is_cancelled == true ?
-                                            <View><Text>Session cancelled due to - {this.state.selectedDateData.cancellation_reason}</Text></View> : (
-                                                this.state.selectedDateData.attendance_happened == false ? <View><Text>Attendance didn't happen</Text></View> : (
-                                                    <View>
-                                                        <View style={styles.summaryText}>
-                                                            <Text style={styles.attendanceText}>Attendance </Text>
-                                                            <Text style={styles.dateText}>{moment.utc(this.state.selectedDate).local().format("Do MMM YY")}</Text>
-                                                        </View>
+                                            <View>
+                                                <Text style={[defaultStyle.regular_text_14, {
+                                                    color: 'A3A5AE'
+                                                }]}>Session cancelled due to - {this.state.selectedDateData.cancellation_reason}</Text></View> : (
+                                                this.state.selectedDateData.attendance_happened == false ? <View>
+                                                    <Text style={[defaultStyle.regular_text_14, {
+                                                        color: 'A3A5AE'
+                                                    }]}>{this.getCancelLabel(this.state.selectedDateData)}</Text></View> : (
+                                                        <View>
+                                                            <View style={styles.summaryText}>
+                                                                <Text style={styles.attendanceText}>Attendance </Text>
+                                                                <Text style={styles.dateText}>{moment.utc(this.state.selectedDate).local().format("Do MMM YY")}</Text>
+                                                            </View>
 
-                                                        <View style={styles.attSessionLabelOuter}>
-                                                            <Text style={styles.attSessionLabel}>Session</Text>
-                                                            <Text style={styles.attSessionLabel}>Status</Text>
-                                                            <Text style={styles.attSessionLabel}>Time</Text>
+                                                            <View style={styles.attSessionLabelOuter}>
+                                                                <Text style={styles.attSessionLabel}>Session</Text>
+                                                                <Text style={styles.attSessionLabel}>Status</Text>
+                                                                <Text style={styles.attSessionLabel}>Time</Text>
+                                                            </View>
+                                                            <View style={styles.attSessionValueOuter}>
+                                                                <Text style={styles.attSessionValue}>{this.state.selectedDateData.session_name}</Text>
+                                                                <Text style={styles.attSessionValue}>{this.state.selectedDateData.is_present ? 'P' : 'A'}</Text>
+                                                                <Text style={styles.attSessionValue}>
+                                                                    {getFormatTime(this.state.selectedDateData.start_time)} -
+                                                                {getFormatTime(this.state.selectedDateData.end_time)}</Text>
+                                                            </View>
                                                         </View>
-                                                        <View style={styles.attSessionValueOuter}>
-                                                            <Text style={styles.attSessionValue}>{this.state.selectedDateData.session_name}</Text>
-                                                            <Text style={styles.attSessionValue}>{this.state.selectedDateData.is_present ? 'P' : 'A'}</Text>
-                                                            <Text style={styles.attSessionValue}>{this.state.selectedDateData.start_time} - {this.state.selectedDateData.end_time}</Text>
-                                                        </View>
-                                                    </View>
-                                                )
+                                                    )
                                             )
                                     )
                                 )
@@ -282,7 +305,8 @@ class MyCalendar extends BaseComponent {
             <View>
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
                 }}>
 
                     <TouchableOpacity
@@ -420,7 +444,7 @@ class MyCalendar extends BaseComponent {
 
         if (item.session_scheduled) {
 
-            if (item.is_cancelled == true || item.attendance_happened == false) {
+            if (item.is_cancelled == true) {// || item.attendance_happened == false
                 resource = require("../../images/gray_circle.png")
             }
             else if (item.attendance_happened && item.is_present) {
@@ -446,6 +470,7 @@ class MyCalendar extends BaseComponent {
                 }}>
                     <Text style={txt_style}>{item.day}</Text>
                     <Image
+                        resizeMode="contain"
                         style={{
                             width: 12, height: 12,
                             alignContent: 'center',
@@ -654,6 +679,7 @@ const styles = StyleSheet.create({
     },
     summaryText: {
         flexDirection: 'row',
+        alignItems: 'center'
         //justifyContent: 'space-between',
     },
     attendanceText: {
@@ -686,7 +712,7 @@ const styles = StyleSheet.create({
         marginBottom: 25
     },
     attSessionValue: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#404040',
         width: '33.33%',
         fontFamily: 'Quicksand-Regular',

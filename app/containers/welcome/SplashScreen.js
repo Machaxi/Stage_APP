@@ -57,8 +57,8 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('TestExample', {
-        //     match_id: '13'
+        // this.props.navigation.navigate('FixtureSelection', {
+        //     id: '2'
         // })
         // return
         // var userData;

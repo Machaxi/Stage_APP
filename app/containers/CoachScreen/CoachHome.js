@@ -272,8 +272,8 @@ class CoachHome extends BaseComponent {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text style={
                             [defaultStyle.bold_text_14]} >{batch_name}</Text>
-                        <Text style={
-                            [defaultStyle.bold_text_14]}>{batch_category}</Text>
+                        {/* <Text style={
+                            [defaultStyle.bold_text_14]}>{batch_category}</Text> */}
                     </View>
 
                     {is_canceled ?

@@ -106,7 +106,8 @@ export default class RegisteredTournamentDetail extends BaseComponent {
             //social: Share.Social.WHATSAPP,
             //whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
         };
-        Share.shareSingle(shareOptions);
+        Share.open(shareOptions).catch(err => console.log(err))
+
     }
 
     getRegisteredPlayers(tournament_registrations) {

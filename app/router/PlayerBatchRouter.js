@@ -7,7 +7,7 @@ import AppMain from "./router";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
-import PlayerAttendance from "../containers/welcome/MyCalendar"
+import PlayerAttendance from "../containers/PlayerBatch/MyCalendar"
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 

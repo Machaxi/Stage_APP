@@ -88,6 +88,7 @@ class TournamentFixture extends BaseComponent {
             is_coach: false,
             tournament_name: '',
             academy_name: 'Test Academy',
+            winner: null
 
         }
 
@@ -195,9 +196,11 @@ class TournamentFixture extends BaseComponent {
 
             let playerArray = []
             let firstArray = []
+            let last_key = ""
 
             for (var key in fixture_data) {
                 if (fixture_data.hasOwnProperty(key)) {
+                    last_key = key
                     console.log("KEY = >", key)
                     //console.log(data[key].id);
                     let tournament_matches = fixture_data[key]
@@ -354,6 +357,22 @@ class TournamentFixture extends BaseComponent {
                     console.log('First Round => ', JSON.stringify(firstArray))
                 }
             }
+            //==========FOR WINNER FINDING ==============================
+
+            let matches = fixture_data[key]
+            if (matches.length == 1) {
+                if (matches[0].winner) {
+
+                    let obj = { ...matches[0].winner }
+                    obj.winner = true
+                    this.state.winner = obj
+                    // let winnerArray = []
+                    // winnerArray[0] = obj
+                    // playerArray.push(subArray)
+                }
+            }
+
+            //=============END
 
             // if (firstArray.length > 8 && firstArray.length < 16) {
             //     let reminder = 16 % firstArray.length
@@ -900,7 +919,87 @@ class TournamentFixture extends BaseComponent {
 
                 centerOfLast = []
                 centerOfLast = tempCenter
+
+                if ((i == col - 1) && this.state.winner) {
+
+                    const winner = this.state.winner
+
+                    let j = row - 1
+                    let x1 = x + width
+                    let y = height * (j + 1) + space + topSpace
+                    y = y - (height / 2)
+
+                    container.push(
+                        <Text
+                            stroke={textColor}
+                            fontSize="14"
+                            fontFamily="Quicksand-Medium"
+                            x={x1 + marginLeft + 12}
+                            y={y - 10}>
+                            Winner
+                        </Text>
+                    )
+
+                    container.push(<Line
+                        x1={x + width + marginLeft}
+                        y1={y + (height / 2)}
+                        x2={x + width}
+                        y2={y + (height / 2)}
+                        stroke={borderColor}
+                        strokeWidth="1"
+                    />)
+
+                    container.push(<Rect
+                        onPress={() => {
+
+                            // let id = array[i][j].id
+                            // console.warn("playerid : " + id)
+                            // if (id != undefined) {
+                            //     this.props.navigation.navigate('OtherPlayerDeatils', {
+                            //         player_id: id
+                            //     })
+                            // }
+                        }}
+                        key={"id_" + (i * 100 + 0)}
+                        x={x1 + marginLeft}
+                        y={y}
+                        width={width}
+                        height={height}
+                        //stroke={borderColor}
+                        stroke="#DFDFDF"
+                        strokeWidth=".5"
+                        rx="4"
+                        ry="4"
+                        fill="white">
+
+                        />
+                </Rect>)
+
+                    container.push(
+                        <Text
+                            onPress={() => {
+                                // let id = array[i][j].id
+                                // console.warn("playerid : " + id)
+                                // if (id != undefined) {
+                                //     this.props.navigation.navigate('OtherPlayerDeatils', {
+                                //         player_id: id
+                                //     })
+                                // }
+                            }}
+                            stroke={textColor}
+                            fontSize="12"
+                            fontFamily="Quicksand-Regular"
+                            x={x1 + marginLeft + 12}
+                            y={y + 25}>
+                            {winner.name}
+                        </Text>
+                    )
+
+
+                }
             }
+
+
         }
 
         // if (this.props.data.loading && array.length == 0) {
