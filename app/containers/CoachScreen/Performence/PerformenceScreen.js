@@ -25,6 +25,7 @@ class PerformenceScreen extends BaseComponent {
             userData: null
 
         }
+
     }
 
     componentDidMount() {
@@ -104,31 +105,33 @@ class PerformenceScreen extends BaseComponent {
 
     renderItemSection = ({ item }) => (
         <View>
-            <View style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}>
+            <View style={{ marginLeft: 14, marginRight: 14, marginTop: 12 }}>
                 <Text style={defaultStyle.bold_text_14}>
-                    {moment(item.month + '/' + item.year,"MM/YYYY").format('MMM YY')}
+                    {moment(item.month + '/' + item.year, "MM/YYYY").format('MMM YY')}
                 </Text>
             </View>
             <FlatList
                 data={item.batches}
                 renderItem={this.renderItem}
-                keyExtractor2={(item, index) => moment(item.month + '/' + item.year,"MM/YYYY").format('MMM YY')}
+                keyExtractor2={(item, index) => moment(item.month + '/' + item.year, "MM/YYYY").format('MMM YY')}
             />
         </View>
 
     );
 
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
-            // console.warn("Touch Press",index)
-            this.props.navigation.navigate('PlayersListing', { batch_id: item.batch_id, month: item.month, year: item.year })
+        <TouchableOpacity key={item}
+            activeOpacity={.8}
+            onPress={() => {
+                // console.warn("Touch Press",index)
+                this.props.navigation.navigate('PlayersListing', { batch_id: item.batch_id, month: item.month, year: item.year })
 
-        }}>
+            }}>
             <CustomeCard>
 
                 <View style={{
-                    marginLeft: 8,
-                    marginRight: 15,
+                    //marginLeft: 8,
+                    //marginRight: 15,
                     margin: 12,
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -141,13 +144,16 @@ class PerformenceScreen extends BaseComponent {
                         resizeMode="contain"
                         style={{
                             width: 5,
-                            height: 11,
+                            height: 8,
                         }} />
 
 
                 </View>
-                <View style={[defaultStyle.line_style, { marginLeft: 10, marginRight: 10 }]} />
-                <View style={{ flexDirection: 'row', margin: 10 }}>
+                <View style={[defaultStyle.line_style, {
+                    marginTop: 0,
+                    marginLeft: 12, marginRight: 12
+                }]} />
+                <View style={{ flexDirection: 'row', marginLeft: 12, marginRight: 12 }}>
 
                     <View style={{ wdith: '50%' }}>
                         <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Category</Text>

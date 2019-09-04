@@ -34,19 +34,19 @@ const coachBatchModule = createStackNavigator({
     },
     BatchDetails: {
         screen: batchDeatails,
-        navigationOptions: ({ navigation }) => ({
-            title: "Batch Details",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: "Batch Details",
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={true}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showHome={false} />,
+        //     headerTitleStyle: style.headerStyle,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-        })
+        // })
 
     },
     CancelSession: {
@@ -82,19 +82,19 @@ const coachBatchModule = createStackNavigator({
     },
     AttendenceBook: {
         screen: coachAttendenceBook,
-        navigationOptions: ({ navigation }) => ({
-            title: "Batch Details",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: "Batch Details",
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={true}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showHome={false} />,
+        //     headerTitleStyle: style.headerStyle,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-        })
+        // })
 
     },
 

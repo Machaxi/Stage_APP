@@ -6,6 +6,7 @@ import Events from '../router/events';
 import axios from 'axios'
 import { client } from '../../App'
 import { BASE_URL } from '../../App'
+import moment from 'moment'
 msg = "GUEST"
 
 colors = {
@@ -254,6 +255,37 @@ export default class BaseComponent extends React.Component {
     }
 }
 
+export function getFormatTime(time) {
+    return moment.utc(time, 'hh:mm a').local().format("hh:mm a")
+}
+
+export function getFormatTimeDate(date,time) {
+    return moment.utc(date + " " + time).local().format("hh:mm a")
+}
+
+export function getStatsImageById(id) {
+
+    id = id + ""
+    //console.warn('getStatsImageById ', id)
+    switch (id) {
+        case "1":
+            return require('../images/home_footwork.png')
+        case "2":
+            return require('../images/home_stamina.png')
+        case "3":
+            return require('../images/home_agility.png')
+        case "4":
+            return require('../images/home_strokes_and_grips.png')
+        case "5":
+            return require('../images/home_love_game.png')
+        case "6":
+            return require('../images/home_core_strength.png')
+        case "7":
+            return require('../images/home_match_temperament.png')
+    }
+    return require('../images/Mysatus.png')
+
+}
 export function getSettingData(headers) {
     console.log('user-setting');
     client.get(BASE_URL + 'user/settings',
@@ -352,16 +384,31 @@ export function getFormattedTournamentLevel(type) {
 
     switch (type) {
         case "SINGLE":
-            return "Single"
+            return "Singles"
 
         case "DOUBLE":
-            return "Double"
+            return "Doubles"
 
         case "MIX_DOUBLE":
-            return "Mix Double"
+            return "Mix Doubles"
 
     }
     return type
+}
+export function genderCamal(gender) {
+
+    switch (gender) {
+        case "BOTH":
+            return "Both"
+
+        case "MALE":
+            return "Male"
+
+        case "FEMALE":
+            return "Female"
+
+    }
+    return gender
 }
 
 export function getFormattedRound(round) {
@@ -458,7 +505,7 @@ export const defaultStyle = {
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

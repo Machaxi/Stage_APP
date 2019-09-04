@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
     width: '50%',
     padding: 10,
     borderRadius: 20,
-    borderWidth: 1,
+    //borderWidth: 1,
     marginLeft: 4,
     marginRight: 4,
     borderColor: '#67BAF5',

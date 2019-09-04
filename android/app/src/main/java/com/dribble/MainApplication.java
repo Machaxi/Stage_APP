@@ -3,6 +3,7 @@ package com.dribble;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import cl.json.RNSharePackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
@@ -48,6 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new RNSharePackage(),
             new ReactNativeYouTube(),
             new RNCWebViewPackage(),

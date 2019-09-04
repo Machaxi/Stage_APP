@@ -100,17 +100,22 @@ branch.subscribe(({ error, params }) => {
         return
     }
 
-    let feature = params['~feature']
-    if (feature) {
-        let id = params['id']
-        let obj = {
-            tournament_id: id,
-            feature: feature
+    const clicked_branch_link = params['+clicked_branch_link']
+    //alert(clicked_branch_link)
+    if (clicked_branch_link) {
+        let feature = params['~feature']
+        if (feature) {
+            let id = params['id']
+            let obj = {
+                tournament_id: id,
+                feature: feature
+            }
+            Events.publish('deep_linking', obj);
+            //payment_details
+            //  razorpay_payment_id
         }
-        Events.publish('deep_linking', obj);
-        //payment_details
-        //  razorpay_payment_id
     }
+
     //alert(JSON.stringify(params))
     // let lastParams =  branch.getLatestReferringParams() // params from last open
     // let installParams =  branch.getFirstReferringParams() // params from original install

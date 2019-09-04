@@ -308,7 +308,7 @@ class ResultsRoute extends BaseComponent {
                                 <TouchableOpacity
                                     activeOpacity={.8}
                                     onPress={() => {
-                                        this.props.navigation.navigate('TournamentGallery', {
+                                        this.props.navigation.navigate('TournamentGallerySlider', {
                                             images: item.gallery
                                         })
                                     }}
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

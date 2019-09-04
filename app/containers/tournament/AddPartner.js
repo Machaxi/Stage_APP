@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View,ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest } from '../../redux/reducers/AcademyReducer'
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

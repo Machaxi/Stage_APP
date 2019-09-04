@@ -30,7 +30,7 @@ class EditProfile extends BaseComponent {
             fileName: null,
             is_navigation_to_tournament: false,
             base64img: null,
-            contentType:''
+            contentType: ''
         }
 
         getData(TOURNAMENT_REGISTER, (value) => {
@@ -115,8 +115,8 @@ class EditProfile extends BaseComponent {
                 let type = this.state.contentType
                 if (path != null) {
                     file = {
-                        name: 'file', 
-                        filename: fileName, 
+                        name: 'file',
+                        filename: fileName,
                         data: RNFetchBlob.wrap(path),
                         type: type
                     }
@@ -243,7 +243,7 @@ class EditProfile extends BaseComponent {
                     path: path,
                     fileName: fileName,
                     base64img: base64,
-                    contentType:type
+                    contentType: type
                 })
                 //console.warn('path => ',this.state.path)
                 //console.warn('fileName => ',this.state.fileName)
@@ -305,8 +305,7 @@ class EditProfile extends BaseComponent {
                                 //  resizeMode='cover'
                                 source={placeHolder}
                             />
-                            {/* <View style={{
-                                flex: 1,
+                            <View style={{
                                 justifyContent: 'flex-end', marginBottom: 0,
                             }}>
 
@@ -320,14 +319,14 @@ class EditProfile extends BaseComponent {
                                     borderRadius: 23,
                                     marginBottom: 0,
                                 }} >
-                                    <Text style={{
-                                        fontSize: 14,
+                                    <Text style={[defaultStyle.bold_text_14,
+                                    {
                                         color: '#FFFFFF',
                                         textAlign: 'center',
                                         marginTop: 5
-                                    }}  > Change Image</Text>
+                                    }]}> Change Image</Text>
                                 </View>
-                            </View> */}
+                            </View>
                         </TouchableOpacity>
 
                         {/*<ImageBackground*/}
@@ -403,7 +402,7 @@ class EditProfile extends BaseComponent {
                                 mode="date"
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
-                                minDate="2016-05-01"
+                                minDate={moment('1920-01-01')}
                                 maxDate={Date.now()}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
@@ -450,7 +449,7 @@ const style = {
         height: 40,
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

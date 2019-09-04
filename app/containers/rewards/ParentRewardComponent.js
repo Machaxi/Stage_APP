@@ -277,7 +277,7 @@ class ParentRewardComponent extends BaseComponent {
                             flexDirection: 'row',
                             alignItems: 'center'
                         }}>
-                            <Text style={[defaultStyle.regular_text_14, { width: '50%', color: "#707070" }]}>December</Text>
+                            <Text style={[defaultStyle.regular_text_14, { width: '50%', color: "#707070" }]}>{moment.utc(obj.month, "MM").format("MMMM")}</Text>
                             <Text style={[defaultStyle.regular_text_14, { width: '45%', color: "#707070" }]}>{total}</Text>
 
                             {obj.expand ?
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
         width: '90%',
         padding: 8,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

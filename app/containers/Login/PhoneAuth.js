@@ -237,6 +237,7 @@ class PhoneAuth extends BaseComponent {
                         }
 
                     } else if (userInfoData.user_type == PARENT) {
+                        storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('PHome')
 
@@ -370,6 +371,7 @@ class PhoneAuth extends BaseComponent {
                         }
 
                     } else if (userInfoData.user_type == PARENT) {
+                        storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
                             this.props.navigation.navigate('PHome')
 
@@ -683,7 +685,7 @@ const styles = StyleSheet.create({
         width: 150,
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

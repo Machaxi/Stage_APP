@@ -17,7 +17,8 @@ class NotificationList extends BaseComponent {
         this.state = {
             list: ['', '', '', ''],
             notifications: [],
-            isRefreshing: false
+            isRefreshing: false,
+            page: 0,
         };
 
     }
@@ -25,14 +26,19 @@ class NotificationList extends BaseComponent {
     componentDidMount() {
 
         this.selfComponentDidMount()
+        Events.publish('NOTIFICATION_CALL');
 
 
     }
 
     selfComponentDidMount() {
+
+        let page = this.state.page;
+        const size = 20
+
         getData('header', (value) => {
 
-            this.props.getNotificationListing(value).then(() => {
+            this.props.getNotificationListing(value, page, size).then(() => {
                 //console.log('getNotificationListing payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.data);
@@ -40,9 +46,19 @@ class NotificationList extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
-                    this.setState({
-                        notifications: user1.data.notifications
-                    })
+                    if (user1.data.notifications.length > 0) {
+                        let notificationArray = [...this.state.notifications]
+
+                        for (let i = 0; i < user1.data.notifications.length; i++) {
+                            let obj = user1.data.notifications[i]
+                            notificationArray.push(obj)
+                        }
+
+                        this.setState({
+                            notifications: notificationArray
+                        })
+                    }
+
                 }
 
                 this.setState({ isRefreshing: false })
@@ -53,7 +69,6 @@ class NotificationList extends BaseComponent {
             })
 
         });
-        Events.publish('NOTIFICATION_CALL');
     }
 
     onRefresh() {
@@ -76,7 +91,8 @@ class NotificationList extends BaseComponent {
         return (
             <Card
                 style={{
-                    marginTop: 1,
+                    marginTop: .5,
+                    marginBottom: .5,
                     padding: 20,
                     elevation: 4,
                     backgroundColor: backgroundColor
@@ -124,7 +140,7 @@ class NotificationList extends BaseComponent {
     render() {
 
         let data = this.state.notifications
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (this.props.data.loading) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -137,6 +153,14 @@ class NotificationList extends BaseComponent {
                 <View style={{ flex: 1, }}>
 
                     <FlatList
+                        // onEndReachedThreshold={0.5}
+                        // onEndReached={({ distanceFromEnd }) => {
+                        //     console.log('on end reached ', distanceFromEnd);
+                        //     let page = this.state.page
+                        //     page = page + 1
+                        //     this.state.page = page
+                        //     this.selfComponentDidMount()
+                        // }}
                         onRefresh={() => this.onRefresh()}
                         refreshing={this.state.isRefreshing}
                         data={data}

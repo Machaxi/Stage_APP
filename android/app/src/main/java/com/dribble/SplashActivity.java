@@ -15,18 +15,18 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.splashscreen);
+        // setContentView(R.layout.splashscreen);
 
-        /* New Handler to start the Menu-Activity 
-         * and close this Splash-Screen after some seconds.*/
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class);
-                SplashActivity.this.startActivity(mainIntent);
-                SplashActivity.this.finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
+        // /* New Handler to start the Menu-Activity 
+        //  * and close this Splash-Screen after some seconds.*/
+        // new Handler().postDelayed(new Runnable(){
+        //     @Override
+        //     public void run() {
+        //         /* Create an Intent that will start the Menu-Activity. */
+        //         Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class);
+        //         SplashActivity.this.startActivity(mainIntent);
+        //         SplashActivity.this.finish();
+        //     }
+        // }, SPLASH_DISPLAY_LENGTH);
     }
 }

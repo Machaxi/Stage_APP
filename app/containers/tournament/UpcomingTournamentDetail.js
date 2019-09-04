@@ -5,7 +5,8 @@ import { Rating } from 'react-native-ratings';
 import BaseComponent, {
     defaultStyle,
     getFormattedRound,
-    getFormattedTournamentLevel
+    getFormattedTournamentLevel,
+    genderCamal
 } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
@@ -68,7 +69,7 @@ class UpcomingTournamentDetail extends BaseComponent {
 
         let minimumAmount = +tournament_types[0].fees
         for (let i = 0; i < tournament_types.length; i++) {
-            if (+tournament_types[i].fees < minimumAmount) {
+            if (+tournament_types[i].fees > 0 && +tournament_types[i].fees < minimumAmount) {
                 minimumAmount = +tournament_types[i].fees
             }
         }
@@ -211,68 +212,72 @@ class UpcomingTournamentDetail extends BaseComponent {
                                     <View style={{ marginBottom: 8, marginRight: 12 }}>
 
 
-                                        <View>
-
-                                            <Text style={{
-                                                fontSize: 10,
-                                                color: '#A3A5AE',
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
-                                                Registration Fees
-                                            </Text>
-
-                                            <Text style={{
-                                                paddingTop: 6, fontSize: 14,
-                                                color: '#404040',
-                                                width: "100%",
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>{label}</Text>
-
-                                        </View>
-
                                         <View style={{
-                                            marginTop: 12
+                                            justifyContent: 'space-between',
+                                            flexDirection: 'row'
                                         }}>
+                                            <View>
 
-                                            <Text style={{
-                                                fontSize: 10,
-                                                color: '#A3A5AE',
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
-                                                Category
+                                                <Text style={{
+                                                    fontSize: 10,
+                                                    color: '#A3A5AE',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                    Registration Fees
                                             </Text>
 
-                                            <Text style={{
-                                                paddingTop: 6, fontSize: 14,
-                                                color: '#404040',
-                                                width: "33.33%",
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>{data.category_types.join(', ')}</Text>
+                                                <Text style={{
+                                                    paddingTop: 6, fontSize: 14,
+                                                    color: '#404040',
+                                                    //width: "100%",
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>{label}</Text>
 
-                                        </View>
+                                            </View>
 
-                                        <View style={{
-                                            marginTop: 12
-                                        }}>
-
-                                            <Text style={{
-                                                fontSize: 10,
-                                                color: '#A3A5AE',
-                                                fontFamily: 'Quicksand-Regular'
+                                            <View style={{
+                                                //marginTop: 12
                                             }}>
-                                                Gender
+
+                                                <Text style={{
+                                                    fontSize: 10,
+                                                    color: '#A3A5AE',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                    Category
                                             </Text>
 
-                                            <Text style={{
-                                                paddingTop: 6, fontSize: 14,
-                                                color: '#404040',
-                                                width: "33.33%",
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>{data.genderType}</Text>
+                                                <Text style={{
+                                                    paddingTop: 6, fontSize: 14,
+                                                    color: '#404040',
+                                                    //width: "33.33%",
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>{data.category_types.join(', ')}</Text>
+
+                                            </View>
+
+                                            <View style={{
+                                                //marginTop: 12
+                                            }}>
+
+                                                <Text style={{
+                                                    fontSize: 10,
+                                                    color: '#A3A5AE',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                    Gender
+                                            </Text>
+
+                                                <Text style={{
+                                                    paddingTop: 6, fontSize: 14,
+                                                    color: '#404040',
+                                                    //width: "33.33%",
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>{genderCamal(data.genderType)}</Text>
+
+                                            </View>
 
                                         </View>
-
-
 
 
 
@@ -468,7 +473,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

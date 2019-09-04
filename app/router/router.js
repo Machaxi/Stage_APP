@@ -62,12 +62,16 @@ import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
-import MyCalendar from "../containers/welcome/MyCalendar"
+import MyCalendar from "../containers/PlayerBatch/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 import TournamentFixture from "../containers/tournament/TournamentFixture";
 import TournamentScorer from "../containers/tournament/TournamentScorer";
 import NotificationList from '../containers/notification/NotificationList'
+import JobVacancies from '../containers/util/JobVacancies';
+import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
+import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
+import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -284,7 +288,11 @@ const GuestHomeModule = createStackNavigator({
         screen: AcademyBatch,
         navigationOptions: ({ navigation }) => ({
             title: "View Batches",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true} />,
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -293,6 +301,42 @@ const GuestHomeModule = createStackNavigator({
         })
 
     },
+    TournamentGallerySlider: {
+        screen: TournamentGallerySlider,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentGallerySliderZoom: {
+        screen: TournamentGallerySliderZoom,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    }
 })
 
 
@@ -626,6 +670,22 @@ const coachHomeModule = createStackNavigator({
         })
 
     },
+    AcademyFeedbackListing: {
+        screen: AcademyFeedbackListing,
+        // navigationOptions: ({ navigation }) => ({
+        //     title: "Academy Feedback",
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showHome={false} />,
+        //     headerTitleStyle: style.headerStyle,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
+
+        // })
+
+    },
+
     TournamentFixture: {
         screen: TournamentFixture,
         navigationOptions: ({ navigation }) => ({
@@ -677,6 +737,80 @@ const coachHomeModule = createStackNavigator({
         screen: AcademyFilter,
 
     },
+
+    JobVacancies: {
+        screen: JobVacancies,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Job Vacancies',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={true}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false}
+                showHome={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentGallerySlider: {
+        screen: TournamentGallerySlider,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentGallerySliderZoom: {
+        screen: TournamentGallerySliderZoom,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AcademyBatch: {
+        screen: AcademyBatch,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+
 }, {
         contentComponent: ({ navigation }) => {
             return (<CoachMenuDrawer navigation={navigation} />)
@@ -927,7 +1061,7 @@ const parentHomeModule = createStackNavigator({
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
@@ -1127,6 +1261,60 @@ const parentHomeModule = createStackNavigator({
         }),
 
     },
+    TournamentGallerySlider: {
+        screen: TournamentGallerySlider,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentGallerySliderZoom: {
+        screen: TournamentGallerySliderZoom,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AcademyBatch: {
+        screen: AcademyBatch,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+
 }
 );
 

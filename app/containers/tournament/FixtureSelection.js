@@ -180,6 +180,7 @@ class FixtureSelection extends BaseComponent {
         }
 
         let size = this.state.tournament_fixtures.length
+        let name = data.name + " "
 
         return (
 
@@ -350,13 +351,14 @@ class FixtureSelection extends BaseComponent {
                                                     ref={(el) => {
                                                         this.inputRefs.gender = el;
                                                     }}
-                                                // Icon={() => {
-                                                //     return (
-                                                //         <Image
-                                                //             style={{ width: 8, height: 5 }}
-                                                //             source={require('../../images/ic_down_arrow.png')} />
-                                                //     )
-                                                // }}
+
+                                                    Icon={() => {
+                                                        return (
+                                                            <Image
+                                                                style={{ width: 8, height: 5 }}
+                                                                source={require('../../images/ic_down_arrow.png')} />
+                                                        )
+                                                    }}
 
                                                 />
 
@@ -394,7 +396,8 @@ class FixtureSelection extends BaseComponent {
                                                             activeOpacity={1}
                                                             onPress={() => {
                                                                 this.props.navigation.navigate('TournamentFixture', {
-                                                                    data: JSON.stringify(item)
+                                                                    data: JSON.stringify(item),
+                                                                    title: name + item.name
                                                                 })
                                                             }}
                                                         >
@@ -481,6 +484,7 @@ const pickerSelectStyles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         fontFamily: 'Quicksand-Regular',
+
         // to ensure the text is never behind the icon
     },
     inputAndroid: {
@@ -509,7 +513,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

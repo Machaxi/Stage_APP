@@ -213,7 +213,7 @@ class EditOtherProfile extends BaseComponent {
                                 mode="date"
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
-                                minDate="1950-05-01"
+                                minDate={moment('1920-01-01')}
                                 maxDate={Date.now()}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
@@ -257,7 +257,7 @@ const style = {
         height: 40,
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

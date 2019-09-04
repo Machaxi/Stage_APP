@@ -15,6 +15,7 @@ import moment from 'moment';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
 import Events from '../../router/events';
 import { ACADEMY, COACH } from '../../components/Constants';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 class MarkAttendence extends BaseComponent {
@@ -33,6 +34,7 @@ class MarkAttendence extends BaseComponent {
             billingchecked: false,
             playerList: null,
             batchDetails: null,
+            spinner: false
         }
     }
 
@@ -74,11 +76,11 @@ class MarkAttendence extends BaseComponent {
                 if (user1.success == true) {
 
                     let players = user1.data['players']
-                    // for (let i = 0; i < players.length; i++) {
-                    //     let obj = players[i]
-                    //     obj.is_present = false
-                    //     players[i] = obj
-                    // }
+                    for (let i = 0; i < players.length; i++) {
+                        let obj = players[i]
+                        obj.is_present = true
+                        players[i] = obj
+                    }
 
 
                     this.setState({
@@ -96,7 +98,11 @@ class MarkAttendence extends BaseComponent {
         });
 
     }
-
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
 
 
 
@@ -120,7 +126,25 @@ class MarkAttendence extends BaseComponent {
                 </Text>
                 <View style={{ backgroundColor: 'white', marginTop: -10 }}>
                     <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                        // title='a'
+                        activeOpacity={.8}
+                        checkedIcon={<Image style={{
+                            width: 18,
+                            height: 18
+                        }} resizeMode="contain"
+                            source={require('../../images/ic_checkbox_on.png')} />}
+                        uncheckedIcon={<Image style={{
+                            width: 18,
+                            height: 18
+                        }} resizeMode="contain"
+                            source={require('../../images/ic_checkbox_off.png')} />}
+                        containerStyle={{
+                            backgroundColor: 'white',
+                            borderWidth: 0,
+                            padding: 4,
+                            margin: 0,
+                            marginTop: 20,
+
+                        }}
                         checked={item.is_present}
                         onPress={() => {
                             console.log("he;eleleo", item.is_present)
@@ -164,6 +188,8 @@ class MarkAttendence extends BaseComponent {
 
     savePlayerAttendence() {
 
+        this.progress(true)
+
         getData('header', (value) => {
             console.log("savePlayerAttendence header", value);
             const yourDate = Date()
@@ -181,7 +207,7 @@ class MarkAttendence extends BaseComponent {
             dataDic['data'] = dict;
             console.log("dicttttc ", dict)
 
-            console.warn('Save===> ',JSON.stringify(this.state.playerList))
+            console.warn('Save===> ', JSON.stringify(this.state.playerList))
 
             this.props.saveCoachBatchAttendence(value, this.props.navigation.getParam('batch_id'), dataDic).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
@@ -189,6 +215,7 @@ class MarkAttendence extends BaseComponent {
                 let user = JSON.stringify(this.props.data.batchdata);
                 console.log(' user response payload ' + user);
                 let user1 = JSON.parse(user)
+                this.progress(false)
 
                 if (user1.success == true) {
                     // this.setState({
@@ -202,6 +229,7 @@ class MarkAttendence extends BaseComponent {
 
             }).catch((response) => {
                 //handle form errors
+                this.progress(false)
                 console.log(response);
             })
 
@@ -213,7 +241,7 @@ class MarkAttendence extends BaseComponent {
 
 
     render() {
-        if (this.props.data.loading && !this.state.player_profile) {
+        if (this.props.data.loading && !this.state.batchDetails) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -230,11 +258,15 @@ class MarkAttendence extends BaseComponent {
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
 
                 <View style={{ backgroundColor: 'white' }}>
                     <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={defaultStyle.bold_text_14}>Batch 1 : {batch_name} </Text>
-                        <Text style={defaultStyle.bold_text_14}>{batch_category} </Text>
+                        {/* <Text style={defaultStyle.bold_text_14}>{batch_category} </Text> */}
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: -10, }}>
                         <View style={{ marginTop: 5 }}>

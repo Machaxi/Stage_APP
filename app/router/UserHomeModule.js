@@ -21,14 +21,19 @@ import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import userhome from '../containers/UserScreen/UserHome'
 import ParentRewards from '../containers/rewards/ParentRewards'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
-import PlayerAttendance from "../containers/welcome/MyCalendar"
+import PlayerAttendance from "../containers/PlayerBatch/MyCalendar"
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import NotificationList from '../containers/notification/NotificationList'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
 import WebViewScreen from '../containers/util/WebViewScreen'
-
+import PaymentDetail from '../containers/payment/PaymentDetail'
+import PDFExample from '../containers/util/PDFExample'
+import ProgressExample from '../containers/util/ProgressExample'
+import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
+import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
+import TestExample from '../containers/welcome/TestExample'
 
 const userHomeModule = createStackNavigator({
 
@@ -198,7 +203,7 @@ const userHomeModule = createStackNavigator({
             title: "Write Feedbacks",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
@@ -297,24 +302,127 @@ const userHomeModule = createStackNavigator({
 
         })
     },
-    // PDFExample: {
-    //     screen: PDFExample,
-    //     navigationOptions: ({ navigation }) => ({
-    //         title: "WebView",
-    //         headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-    //             showBackAction={true}
-    //             showDrawer={false} />,
-    //         headerRight: <RightMenuToolbar navigationProps={navigation}
-    //             navigation={navigation}
-    //             showHome={false} />,
-    //         headerTitleStyle: style.headerStyle,
-    //         headerStyle: {
-    //             backgroundColor: '#FFFFFF',
-    //         },
+    PaymentDetail: {
+        screen: PaymentDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: "Payment",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-    //     })
-    // },
+        })
+    },
+    PDFExample: {
+        screen: PDFExample,
+        navigationOptions: ({ navigation }) => ({
+            title: "WebView",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+    },
+    ProgressExample: {
+        screen: ProgressExample,
+        navigationOptions: ({ navigation }) => ({
+            title: "Progress Example",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    TournamentGallerySlider: {
+        screen: TournamentGallerySlider,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    TournamentGallerySliderZoom: {
+        screen: TournamentGallerySliderZoom,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Gallery',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AcademyBatch: {
+        screen: AcademyBatch,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    TestExample: {
+        screen: TestExample,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
 });
 
 export default userHomeModule;

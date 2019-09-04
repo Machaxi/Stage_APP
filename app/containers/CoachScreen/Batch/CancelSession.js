@@ -728,7 +728,7 @@ const style = {
         width: '90%',
         padding: 12,
         borderRadius: 24,
-        borderWidth: 1,
+        //borderWidth: 1,
         margin: 20,
         borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',

@@ -335,7 +335,7 @@ class Registration extends BaseComponent {
                         mode="date"
                         placeholder="Birth Date"
                         format="DD-MMM-YYYY"
-                        minDate="2016-05-01"
+                        minDate={moment('1920-01-01')}
                         maxDate={Date.now()}
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
@@ -466,7 +466,7 @@ const style = {
         height: 40,
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

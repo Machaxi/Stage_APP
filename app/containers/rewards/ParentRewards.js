@@ -87,7 +87,9 @@ class ParentRewards extends BaseComponent {
 
     }
 
-
+    _getLabelText = ({ route, scene }) => (
+        route.title
+    );
     _renderTabBar = props => (
 
         <TabBar
@@ -101,6 +103,7 @@ class ParentRewards extends BaseComponent {
                 right: 5,
                 height: 5,
             }}
+            getLabelText={this._getLabelText}
             style={{ backgroundColor: 'white' }}
             tabStyle={styles.tab}
             labelStyle={defaultStyle.regular_text_14}

@@ -37,14 +37,36 @@ class CoachHome extends BaseComponent {
                     }}
                     activeOpacity={.8}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Quicksand-Medium',
-                            fontSize: 16,
-                            color: '#404040'
-                        }}
-                    >{navigation.getParam('academy_name', '') == "" ? "" :
-                        navigation.getParam('academy_name', '') + ' ▼'}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        //alignItems: 'center'
+                    }}>
+
+                        <Text
+                            style={{
+                                fontFamily: 'Quicksand-Medium',
+                                fontSize: 16,
+                                color: '#404040'
+                            }}
+                        >{navigation.getParam('academy_name', '') == "" ? "" :
+                            navigation.getParam('academy_name', '')}</Text>
+                        {navigation.getParam('academy_name', '') == null ? '' :
+                            <Image
+                                source={require('../../images/blank_down_arrow.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 8,
+                                    marginLeft: 6,
+                                    height: 6,
+                                    justifyContent: 'center',
+                                    alignSelf: 'center',
+                                    marginTop: 6,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            />}
+                    </View>
+
                 </TouchableOpacity>
 
             ),
@@ -113,7 +135,7 @@ class CoachHome extends BaseComponent {
         this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD', () => {
             this.selfComponentDidMount()
         });
-        
+
     }
 
     selfComponentDidMount() {
@@ -134,6 +156,18 @@ class CoachHome extends BaseComponent {
                 this.getSwitchData()
             }
         })
+
+        this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
+            //alert('event')
+            if (deep_data != null)
+                storeData('deep_data', JSON.stringify(deep_data))
+            setTimeout(() => {
+                this.props.navigation.navigate('Tournament')
+
+            }, 100)
+        });
+
+
     }
 
     getSwitchData() {
@@ -238,8 +272,8 @@ class CoachHome extends BaseComponent {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text style={
                             [defaultStyle.bold_text_14]} >{batch_name}</Text>
-                        <Text style={
-                            [defaultStyle.bold_text_14]}>{batch_category}</Text>
+                        {/* <Text style={
+                            [defaultStyle.bold_text_14]}>{batch_category}</Text> */}
                     </View>
 
                     {is_canceled ?
@@ -503,7 +537,7 @@ class CoachHome extends BaseComponent {
                         >
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={defaultStyle.bold_text_10}>Update Player Performance</Text>
-                                <View
+                                {/* <View
                                     style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                     <Text style={{
                                         marginTop: 2,
@@ -514,6 +548,10 @@ class CoachHome extends BaseComponent {
                                         fontFamily: 'Quicksand-Medium',
                                         marginLeft: 10,
                                     }}>Due</Text>
+                                </View> */}
+                                <View
+                                    style={{ marginLeft: 10 }}>
+                                    <DueView />
                                 </View>
                             </View>
                             <View style={defaultStyle.line_style} />
@@ -524,7 +562,8 @@ class CoachHome extends BaseComponent {
 
                             </View>
                             <CustomeButtonB onPress={() => {
-                                alert('under development')
+                                this.props.navigation.navigate('CoachPerformence')
+                                //alert('under development')
                             }}>
                                 Update Progress</CustomeButtonB>
                         </View>
@@ -668,8 +707,8 @@ class CoachHome extends BaseComponent {
                         <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
-                                console.warn("Touch Press")
-
+                                //console.warn("Touch Press")
+                                //this.props.navigation.navigate('JobVacancies')
 
                             }}>
                                 <View style={{

@@ -3,7 +3,7 @@ import React from 'react'
 import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, checkProfilePic } from '../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, checkProfilePic, getFormatTimeDate, getFormatTime } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayerBatchComponent extends BaseComponent {
@@ -64,18 +64,20 @@ class PlayerBatchComponent extends BaseComponent {
         ratings = ratings.toFixed(1)
 
         return (
-            <TouchableOpacity key={item} onPress={() => {
+            <TouchableOpacity
+                activeOpacity={.8}
+                key={item} onPress={() => {
 
-                console.warn("Touch Press")
-                this.props.navigation.navigate('CoachProfileDetail', {
-                    academy_id: this.state.academy_id,
-                    coach_id: item.id
-                })
-                // this.props.navigation.navigate('OrderTracking', {
-                //     order_id: item.increment_id
-                // })
+                    console.warn("Touch Press")
+                    this.props.navigation.navigate('CoachProfileDetail', {
+                        academy_id: this.state.academy_id,
+                        coach_id: item.id
+                    })
+                    // this.props.navigation.navigate('OrderTracking', {
+                    //     order_id: item.increment_id
+                    // })
 
-            }}>
+                }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
                     <View style={{ marginRight: 20, flexDirection: 'row', height: 50, alignItems: 'center' }}>
 
@@ -114,6 +116,7 @@ class PlayerBatchComponent extends BaseComponent {
 
                         </View>
                         <Image source={require('../../images/right_icon.png')}
+                            resizeMode="contain"
                             style={{
                                 width: 6,
                                 height: 13,
@@ -169,9 +172,8 @@ class PlayerBatchComponent extends BaseComponent {
                             textDecorationLine: 'line-through',
                             marginLeft: 10,
                         }]}>
-                            {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                + " - " +
-                                moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            {getFormatTimeDate(session_date, start_time)
+                                + " - " + getFormatTimeDate(session_date, end_time)}
                         </Text>
 
                     </View>
@@ -193,9 +195,8 @@ class PlayerBatchComponent extends BaseComponent {
                         <Text style={defaultStyle.regular_text_14}>{moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                            {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
-                                + " - " +
-                                moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                            {getFormatTimeDate(session_date, start_time)
+                                + " - " + getFormatTimeDate(session_date, end_time)}
                         </Text>
 
                     </View>
@@ -246,7 +247,13 @@ class PlayerBatchComponent extends BaseComponent {
                     >
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={defaultStyle.bold_text_10}>Attendance Summary</Text>
-                            <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]} onPress={() => { this.props.navigation.navigate('PlayerAttendance', { batch_id: this.props.jumpTo.batch_id }) }}>View Details </Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('PlayerAttendance',
+                                        { batch_id: this.props.jumpTo.batch_id })
+                                }}>
+                                <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]}>View Details </Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={defaultStyle.line_style} />
@@ -296,9 +303,9 @@ class PlayerBatchComponent extends BaseComponent {
                                 }]}>Weekdays</Text>
                                 <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
                                 <Text style={defaultStyle.regular_text_12}>
-                                    {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
+                                    {getFormatTime(operations.weekday.start_time)
                                         + ' - ' +
-                                        moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
+                                        getFormatTime(operations.weekday.end_time)
                                     }</Text>
                             </View>
                             {operations.weekend ?
@@ -310,9 +317,9 @@ class PlayerBatchComponent extends BaseComponent {
                                     <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
                                     <Text style={defaultStyle.regular_text_12}>
 
-                                        {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
+                                        {getFormatTime(operations.weekend.start_time)
                                             + ' - ' +
-                                            moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
+                                            getFormatTime(operations.weekend.end_time)
                                         }</Text>
                                 </View> : null
                             }

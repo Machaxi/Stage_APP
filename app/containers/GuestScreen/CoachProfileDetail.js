@@ -12,6 +12,7 @@ import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import ReadMoreText from "rn-read-more-text";
 import FilterDialog from './FilterDialog'
+import StarRating from 'react-native-star-rating';
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -137,7 +138,7 @@ class CoachProfileDetail extends BaseComponent {
         // 
     }
 
-
+    //{item.source.name}
     _renderRatingItem = ({ item }) => (
 
         <View
@@ -156,10 +157,7 @@ class CoachProfileDetail extends BaseComponent {
                         color: '#707070',
                         fontSize: 14, flex: 1,
                         fontFamily: 'Quicksand-Medium',
-                    }}
-                >
-                    {item.source.name}
-                </Text>
+                    }}>Anonymous</Text>
 
 
                 <View style={{
@@ -178,6 +176,9 @@ class CoachProfileDetail extends BaseComponent {
                         startingValue={item.rating}
                         style={{ width: 80 }}
                     />
+
+
+
 
                     {/* <Text style={{
                         backgroundColor: '#D6D6D6', height: 19,
@@ -249,7 +250,6 @@ class CoachProfileDetail extends BaseComponent {
         let user_id = coachData.user_id
         let is_head = coachData.is_head
 
-
         let year = coachData.experience / 12
         year = Math.floor(year)
         let month = coachData.experience % 12
@@ -315,16 +315,32 @@ class CoachProfileDetail extends BaseComponent {
                                     alignItems: 'center'
                                 }}>
 
-                                    <Rating
+                                    {/* <Rating
                                         tintColor="#F7F7F7"
                                         type='custom'
                                         ratingColor='#F4FC9A'
                                         ratingBackgroundColor='#D7D7D7'
                                         ratingCount={5}
-                                        onStartRating={5}
+                                        onStartRating={rating}
                                         readonly={true}
                                         imageSize={14}
                                         style={{ height: 24, width: 80, marginTop: 7 }}
+                                    /> */}
+                                    <StarRating
+                                        style={{ height: 24, width: 70, marginTop: 7, marginRight: 12 }}
+                                        containerStyle={{
+                                            width: 70,
+                                        }}
+                                        starSize={14}
+                                        disabled={true}
+                                        emptyStar={'ios-star-outline'}
+                                        fullStar={'ios-star'}
+                                        halfStar={'ios-star-half'}
+                                        iconSet={'Ionicons'}
+                                        maxStars={5}
+                                        rating={rating}
+                                        ratingBackgroundColor={"#ff2200"}
+                                        fullStarColor={'#F4FC9A'}
                                     />
 
                                     {/* <Text style={{
@@ -339,6 +355,7 @@ class CoachProfileDetail extends BaseComponent {
                                         style={{
                                             height: 19,
                                             width: 30,
+                                            marginLeft: 8,
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             borderColor: '#D8D8D8',
@@ -575,7 +592,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

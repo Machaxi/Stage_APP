@@ -12,9 +12,31 @@ import { connect } from 'react-redux';
 import { defaultStyle, SESSION_DATE_FORMAT } from '../../BaseComponent';
 import moment from 'moment'
 import { COACH, ACADEMY } from '../../../components/Constants';
+import NavigationDrawerStructure from '../../../router/NavigationDrawerStructure';
+import RightMenuToolbar from '../../../router/RightMenuToolbar';
 
 
 class BatchDetails extends React.Component {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: navigation.getParam('batch_name', ''),
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: (<NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />
+            ),
+            headerRight: (
+                <RightMenuToolbar navigationProps={navigation}
+                    navigation={navigation} showHome={false} />
+            )
+        };
+
+    };
+
+
 
     constructor(props) {
         super(props)
@@ -26,6 +48,11 @@ class BatchDetails extends React.Component {
             academy_id: ''
 
         }
+        const { navigation } = this.props.navigation;
+        const batch_name = this.props.navigation.getParam('batch_name')
+        this.props.navigation.setParams({
+            batch_name: batch_name
+        })
     }
 
     componentDidMount() {
@@ -36,7 +63,7 @@ class BatchDetails extends React.Component {
 
         console.log("CoachDashboard");
         getData('userInfo', (value) => {
-            console.log('userInfo => ',value)
+            console.log('userInfo => ', value)
             userData = JSON.parse(value)
             this.setState({
                 userData: JSON.parse(value)
@@ -383,8 +410,8 @@ class BatchDetails extends React.Component {
                         <CustomeCard>
                             <TouchableOpacity onPress={() => {
 
-                                console.warn("Touch Press")
-
+                                //console.warn("Touch Press")
+                                this.props.navigation.navigate('Performence')
 
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
@@ -426,7 +453,8 @@ class BatchDetails extends React.Component {
                                 //
                                 this.props.navigation.navigate('AttendenceBook', {
                                     batch_id: this.props.navigation.getParam('batch_id'),
-                                    batch_data: this.state.batchDetails
+                                    batch_data: this.state.batchDetails,
+                                    batch_name:this.props.navigation.getParam('batch_name')
                                 })
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>

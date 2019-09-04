@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 'react-native'
-import BaseComponent, { defaultStyle, GO_TO_HOME, getFormattedTournamentType } from '../BaseComponent';
+import BaseComponent, { defaultStyle, GO_TO_HOME, getFormattedTournamentType,getFormattedTournamentLevel } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { CustomeButtonB } from '../../components/Home/Card';
@@ -52,7 +52,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                 let type = tournament_types[j]
                 if (type.selected && !type.disable) {
 
-                    wholeText = wholeText + "          " + type.tournament_type
+                    wholeText = wholeText + "          " + getFormattedTournamentLevel(type.tournament_type)
                 }
 
 
@@ -265,7 +265,7 @@ const style = {
         height: 40,
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

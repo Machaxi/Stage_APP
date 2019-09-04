@@ -13,20 +13,9 @@ class NavigationDrawerStructure extends React.Component {
         super(props);
         this.state = {
             signedIn: false,
-            checkedSignIn: false,
         };
     }
 
-    componentDidMount() {
-
-        isSignedIn()
-            .then(res => {
-                console.log(res);
-                this.setState({ signedIn: res, checkedSignIn: true })
-            })
-            .catch(err => alert("An error occurred"));
-
-    }
 
     //Structure for the navigatin Drawer
     toggleDrawer = () => {

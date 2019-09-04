@@ -16,9 +16,31 @@ import DatePicker from 'react-native-datepicker'
 import { defaultStyle } from '../../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ACADEMY, COACH } from '../../../components/Constants';
+import NavigationDrawerStructure from '../../../router/NavigationDrawerStructure';
+import RightMenuToolbar from '../../../router/RightMenuToolbar';
 
 
 class CoachAttendenceBook extends React.Component {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: navigation.getParam('batch_name', ''),
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: (<NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />
+            ),
+            headerRight: (
+                <RightMenuToolbar navigationProps={navigation}
+                    navigation={navigation} showHome={false} />
+            )
+        };
+
+    };
+
+
 
     constructor(props) {
         super(props)
@@ -39,6 +61,10 @@ class CoachAttendenceBook extends React.Component {
             spinner: false
         }
         this.state.batch_data = this.props.navigation.getParam('batch_data', undefined)
+        const batch_name = this.props.navigation.getParam('batch_name', '')
+        this.props.navigation.setParams({
+            batch_name: batch_name
+        })
         console.warn('batch_data => ', this.state.batch_data)
     }
 

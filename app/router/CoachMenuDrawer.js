@@ -20,6 +20,7 @@ import Events from '../router/events';
 import { Rating } from 'react-native-ratings';
 import { RateViewBorder } from '../components/Home/RateViewBorder';
 import { SkyFilledButton } from '../components/Home/SkyFilledButton';
+import Share from 'react-native-share';
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png"
 
@@ -54,7 +55,7 @@ class CoachMenuDrawer extends BaseComponent {
 		this.updateData()
 
 		this.refreshEvent = Events.subscribe(EVENT_EDIT_PROFILE, () => {
-			console.warn(EVENT_EDIT_PROFILE)
+			//console.warn(EVENT_EDIT_PROFILE)
 			this.updateData()
 		});
 	}
@@ -553,7 +554,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('AcademyFeedbackListing')}>
 
 					<View style={styles.drawercell}>
 
@@ -638,7 +640,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 				<View style={[defaultStyle.line_style, { marginLeft: 12 }]} ></View>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>About Dribble</Text>
@@ -649,7 +651,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Contact Us</Text>
@@ -904,7 +906,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('PDFExample')}>
 
 					<View style={styles.drawercell}>
 
@@ -922,7 +925,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('Test')}>
 
 					<View style={styles.drawercell}>
 
@@ -1083,7 +1087,9 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					this.shareApp()
+				}}>
 
 					<View style={styles.drawercell}>
 
@@ -1101,7 +1107,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 				<View style={[defaultStyle.line_style, { marginLeft: 12 }]}></View>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
@@ -1118,7 +1124,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
@@ -1135,7 +1141,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
@@ -1170,6 +1176,24 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 			</View>)
+	}
+
+	shareApp() {
+		this.props.navigation.closeDrawer();
+		setTimeout(() => {
+			const url = 'https://play.google.com/store/apps/'
+			const shareOptions = {
+				title: 'Share via',
+				message: 'I\'m using dribble diary app.',
+				url: url,
+				//social: Share.Social.WHATSAPP,
+				//whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
+			};
+			Share.open(shareOptions).catch(err => console.log(err))
+
+		}, 1000)
+
+
 	}
 
 	render() {

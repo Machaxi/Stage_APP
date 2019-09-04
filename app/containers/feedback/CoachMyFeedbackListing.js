@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator,TextInput, Text, Modal, Alert, Image, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, TextInput, Text, Modal, Alert, Image, ScrollView, FlatList } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
@@ -97,7 +97,7 @@ class CoachMyFeedbackListing extends BaseComponent {
 
                     <View style={{
                         flexDirection: 'row',
-
+                        alignItems: 'center'
                     }}>
 
                         <Rating
@@ -108,7 +108,7 @@ class CoachMyFeedbackListing extends BaseComponent {
                             imageSize={14}
                             readonly={true}
                             startingValue={item.rating}
-                            style={{ height: 30, width: 80 }}
+                            style={{ width: 80 }}
                         />
 
                         <Text style={{
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

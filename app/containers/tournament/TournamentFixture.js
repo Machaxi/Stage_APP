@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
@@ -7,7 +7,7 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { COACH } from '../../components/Constants'
-
+import { Text as MyText } from 'react-native'
 
 import Svg, {
     Circle,
@@ -33,10 +33,48 @@ import Svg, {
     Mask,
 } from 'react-native-svg';
 import { ScrollView } from 'react-native-gesture-handler';
+import NavigationDrawerStructure from '../../router/NavigationDrawerStructure';
 
 
 
 class TournamentFixture extends BaseComponent {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: (
+                <View style={{
+                    flexDirection: 'row',
+                    //alignItems: 'center'
+                }}><MyText
+                    style={defaultStyle.bold_text_12}>{navigation.getParam('title')}
+                    </MyText></View>),
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true} />
+            ,
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        //navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#667DDB'
+                        }} >Refresh</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
 
     constructor(props) {
         super(props)
@@ -49,7 +87,8 @@ class TournamentFixture extends BaseComponent {
             user_type: '',
             is_coach: false,
             tournament_name: '',
-            academy_name: 'Test Academy'
+            academy_name: 'Test Academy',
+            winner: null
 
         }
 
@@ -83,9 +122,15 @@ class TournamentFixture extends BaseComponent {
         console.log('Tournament Fixture -> ' + data)
         let json = JSON.parse(data)
         this.state.tournament_name = json.name
+
+        // let navigation = this.props.navigation
+        // navigation.setParams({
+        //     title: json.name
+        // })
+        let title = this.state.academy_name + " " + json.name
         //alert('Name ' + json.name)
         this.setState({
-            tournament_name: json.name
+            tournament_name: title
         })
         this.state.data = json
         this.showFixture(json)
@@ -151,9 +196,11 @@ class TournamentFixture extends BaseComponent {
 
             let playerArray = []
             let firstArray = []
+            let last_key = ""
 
             for (var key in fixture_data) {
                 if (fixture_data.hasOwnProperty(key)) {
+                    last_key = key
                     console.log("KEY = >", key)
                     //console.log(data[key].id);
                     let tournament_matches = fixture_data[key]
@@ -176,6 +223,7 @@ class TournamentFixture extends BaseComponent {
                         ///subArray[count++] = player2
                         if (player1 != null) {
                             player1['match_id'] = match_id
+                            player1['player_description'] = obj.player1_description
                             player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                             subArray.push(player1)
 
@@ -183,6 +231,7 @@ class TournamentFixture extends BaseComponent {
 
                         if (player2 != null) {
                             player2['match_id'] = match_id
+                            player2['player_description'] = obj.player2_description
                             player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                             subArray.push(player2)
                         }
@@ -253,10 +302,14 @@ class TournamentFixture extends BaseComponent {
 
                             if (obj.player1_match) {
 
+                                console.log('player_description=>', JSON.stringify(obj))
                                 let temp_player1 = obj.player1_match.player1
                                 let temp_player2 = obj.player1_match.player2
-                                temp_player1['match_id'] = match_id
-                                temp_player2['match_id'] = match_id
+                                temp_player1['match_id'] = obj.player1_match.id
+                                temp_player2['match_id'] = obj.player1_match.id
+                                temp_player1['player_description'] = obj.player1_match.player1_description
+                                temp_player2['player_description'] = obj.player1_match.player2_description
+                                console.log('temp_player_description=>', JSON.stringify(temp_player1))
 
                                 temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                                 temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
@@ -272,10 +325,13 @@ class TournamentFixture extends BaseComponent {
 
                             if (obj.player2_match) {
 
+
                                 let temp_player1 = obj.player2_match.player1
                                 let temp_player2 = obj.player2_match.player2
-                                temp_player1['match_id'] = match_id
-                                temp_player2['match_id'] = match_id
+                                temp_player1['match_id'] = obj.player2_match.id
+                                temp_player2['match_id'] = obj.player2_match.id
+                                temp_player1['player_description'] = obj.player2_match.player1_description
+                                temp_player2['player_description'] = obj.player2_match.player2_description
 
                                 temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
                                 temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
@@ -301,6 +357,22 @@ class TournamentFixture extends BaseComponent {
                     console.log('First Round => ', JSON.stringify(firstArray))
                 }
             }
+            //==========FOR WINNER FINDING ==============================
+
+            let matches = fixture_data[key]
+            if (matches.length == 1) {
+                if (matches[0].winner) {
+
+                    let obj = { ...matches[0].winner }
+                    obj.winner = true
+                    this.state.winner = obj
+                    // let winnerArray = []
+                    // winnerArray[0] = obj
+                    // playerArray.push(subArray)
+                }
+            }
+
+            //=============END
 
             // if (firstArray.length > 8 && firstArray.length < 16) {
             //     let reminder = 16 % firstArray.length
@@ -364,6 +436,23 @@ class TournamentFixture extends BaseComponent {
     componentDidMount() {
     }
 
+    getName(player) {
+        console.log('Player->', JSON.stringify(player))
+        if (player.player_description != undefined) {
+
+            let array = player.player_description.split(", ")
+            console.log('Array=>', JSON.stringify(array))
+            let name = ""
+            for (let i = 0; i < array.length; i++) {
+                name = name + formattedName(array[i]) + ", "
+            }
+            name = name.substring(0, name.length - 2)
+            return name//player.player_description
+        } else {
+            return formattedName(player.name)
+        }
+    }
+
     render() {
 
         // let array = [
@@ -378,6 +467,18 @@ class TournamentFixture extends BaseComponent {
         let container = []
 
         if (array.length != 0) {
+
+
+            // container.push(
+            //     <Text
+            //         stroke="black"
+            //         strokeWidth="1"
+            //         fontSize="14"
+            //         fontFamily="Quicksand-Regular"
+            //         x={10}
+            //         y={10}
+            //     >{this.state.tournament_name}</Text>
+            // )
 
 
             let height = 45
@@ -557,7 +658,7 @@ class TournamentFixture extends BaseComponent {
                                 fontFamily="Quicksand-Regular"
                                 x={x + 12}
                                 y={y + 25}>
-                                {array[i][j].name == 'To be played' ? 'To be played' : formattedName(array[i][j].name)}
+                                {array[i][j].name == 'To be played' ? 'To be played' : this.getName(array[i][j])}
                             </Text>
                         )
                     }
@@ -818,7 +919,87 @@ class TournamentFixture extends BaseComponent {
 
                 centerOfLast = []
                 centerOfLast = tempCenter
+
+                if ((i == col - 1) && this.state.winner) {
+
+                    const winner = this.state.winner
+
+                    let j = row - 1
+                    let x1 = x + width
+                    let y = height * (j + 1) + space + topSpace
+                    y = y - (height / 2)
+
+                    container.push(
+                        <Text
+                            stroke={textColor}
+                            fontSize="14"
+                            fontFamily="Quicksand-Medium"
+                            x={x1 + marginLeft + 12}
+                            y={y - 10}>
+                            Winner
+                        </Text>
+                    )
+
+                    container.push(<Line
+                        x1={x + width + marginLeft}
+                        y1={y + (height / 2)}
+                        x2={x + width}
+                        y2={y + (height / 2)}
+                        stroke={borderColor}
+                        strokeWidth="1"
+                    />)
+
+                    container.push(<Rect
+                        onPress={() => {
+
+                            // let id = array[i][j].id
+                            // console.warn("playerid : " + id)
+                            // if (id != undefined) {
+                            //     this.props.navigation.navigate('OtherPlayerDeatils', {
+                            //         player_id: id
+                            //     })
+                            // }
+                        }}
+                        key={"id_" + (i * 100 + 0)}
+                        x={x1 + marginLeft}
+                        y={y}
+                        width={width}
+                        height={height}
+                        //stroke={borderColor}
+                        stroke="#DFDFDF"
+                        strokeWidth=".5"
+                        rx="4"
+                        ry="4"
+                        fill="white">
+
+                        />
+                </Rect>)
+
+                    container.push(
+                        <Text
+                            onPress={() => {
+                                // let id = array[i][j].id
+                                // console.warn("playerid : " + id)
+                                // if (id != undefined) {
+                                //     this.props.navigation.navigate('OtherPlayerDeatils', {
+                                //         player_id: id
+                                //     })
+                                // }
+                            }}
+                            stroke={textColor}
+                            fontSize="12"
+                            fontFamily="Quicksand-Regular"
+                            x={x1 + marginLeft + 12}
+                            y={y + 25}>
+                            {winner.name}
+                        </Text>
+                    )
+
+
+                }
             }
+
+
         }
 
         // if (this.props.data.loading && array.length == 0) {

@@ -59,8 +59,9 @@ class TournamentTerms extends BaseComponent {
                             marginTop: 30
                         }}
                         onPress={() => {
-                            this.props.navigation.goBack()
-                        }} >Play</SkyFilledButton>
+                            this.props.navigation.navigate('RegistrationSteps')
+                            //this.props.navigation.goBack()
+                        }} >Register</SkyFilledButton>
 
                 </View>
             </ScrollView>
