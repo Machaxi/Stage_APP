@@ -231,3 +231,20 @@ export function getAcademyBatchDetail(academy_id, proficiency, rating, availabil
     };
 
 }
+
+export function getCourtBookingDetails(header, academy_id, date) {
+
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url:`court/details?academy_id=${academy_id}&date=${date}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    }
+};

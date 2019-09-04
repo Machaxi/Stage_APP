@@ -107,46 +107,6 @@ class ViewPlayerPerformance extends BaseComponent {
     })
   }
 
-  // getTabData() {
-  //   getData('userInfo', (value) => {
-  //     userData = JSON.parse(value);
-  //     getData('header', (value) => {
-  //       this.props.getPlayerPerformance(value, this.state.response.id, 3, 2019, 4, userData['player_id']).then(() => {
-  //         console.log('this.props.data===========', this.props.data);
-  //         let data = this.props.data.performencedata
-  //         console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
-
-  //         let success = data.success
-  //         if (success) {
-
-  //           this.setState({
-  //             response: data.data
-  //           })
-
-  //           let array = data.data.attribute.parameters
-  //           let newArray = []
-  //           for (let i = 0; i < array.length; i++) {
-  //             let row = array[i];
-  //             let obj = {
-  //               key: i,
-  //               title: row.name,
-  //             }
-  //             newArray[i] = obj
-  //           }
-  //           this.setState({
-  //             routes: newArray,
-  //           })
-  //           console.warn(JSON.stringify(newArray))
-
-  //         }
-
-  //       }).catch((response) => {
-  //         console.log(response);
-  //       })
-  //     })
-  //   })
-  // }
-
   _getLabelText = ({ route, scene }) => (
     route.title
   );

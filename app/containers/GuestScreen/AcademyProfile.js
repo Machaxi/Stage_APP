@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View,ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
-import { Card,  } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
+import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -540,7 +540,9 @@ class AcademyProfile extends BaseComponent {
 
                                     <TouchableOpacity
                                         activeOpacity={.8}
-                                        style={defaultStyle.rounded_button}>
+                                        style={defaultStyle.rounded_button} onPress={() => {
+                                            this.props.navigation.navigate('ChooseTimeDate')
+                                        }}>
 
                                         <Text
                                             style={[defaultStyle.bold_text_14,
