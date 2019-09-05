@@ -119,11 +119,11 @@ class PlayerPerformanceComponent extends BaseComponent {
                     <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
                 </View>
             </Card>
-            <Card style={styles.performanceCard}>
+            <Card style={[styles.performanceCard, {paddingBottom: 40}]}>
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
                 <View style={{ width: '100%', height: 300 }}>
                     <ECharts
-                        style={{ width: '100%', height: 300 }}
+                        style={{ width: '100%' }}
                         option={option}></ECharts>
                 </View>
             </Card>
@@ -200,108 +200,148 @@ class PlayerPerformanceComponent extends BaseComponent {
 
     render() {
 
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Octumber', 'November', 'December'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         let labels = [];
         let my_score = [];
         let batch_avg = [];
         let batch_best = [];
 
+
         this.props.jumpTo.current_parameter.graph_data.map((element, index) => {
+            console.log('element.month', months[element.month - 1]);
             labels.push(months[element.month - 1]);
             my_score.push(element.self_score)
             batch_avg.push(element.avg_score)
             batch_best.push(element.best_score)
         })
 
+
+
         config = {
             rotate: 90,
             align: 'left',
             verticalAlign: 'middle',
             position: 'top',
-            distance: 15,
+            distance: 5,
         };
 
-        var labelOption = {
+        labelOption = {
             normal: {
                 show: true,
                 position: config.position,
                 distance: config.distance,
                 align: config.align,
                 verticalAlign: config.verticalAlign,
-                rotate: config.rotate,
-                formatter: '{c}  {name|{a}}',
-                fontSize: 16,
-                rich: {
-                    name: {
-                        textBorderColor: '#fff'
-                    }
-                }
+                //rotate: config.rotate,
+                formatter: '{c}',
+                color: '#7D955C'
+                //fontSize: 16,
+                // rich: {
+                //     name: {
+                //         textBorderColor: 'red'
+                //     }
+                // }
             }
         };
 
         option = {
             color: ['#5E9AFD', '#FFA800', '#76D190'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
+            // tooltip: {
+            //     trigger: 'axis',
+            //     axisPointer: {
+            //         type: 'shadow'
+            //     }
+            // },
             legend: {
                 data: ['My Score', 'Batch Average', 'Batch Best'],
-                bottom: 3,
+                bottom: 0.1,
                 itemWidth: 14,
-                icon: 'rect'
+                icon: 'rect',
+                textStyle: {
+                    color: '#b2b2b2',
+                },
+                padding: [
+                    40,  // up
+                    40, // right
+                    -5,  // down
+                    40, // left
+                ]
             },
             grid: {
                 top: 40
             },
-            toolbox: {
-                show: true,
-                orient: 'vertical',
-                left: 'right',
-                top: 'center',
-                feature: {
-                    mark: { show: false },
-                    dataView: { show: false, readOnly: false },
-                    magicType: { show: false, type: ['line', 'bar', 'stack', 'tiled'] },
-                    restore: { show: false },
-                    saveAsImage: { show: false }
-                }
-            },
+            // toolbox: {
+            //     show: true,
+            //     orient: 'vertical',
+            //     left: 'right',
+            //     top: 'center',
+            //     feature: {
+            //         mark: { show: false },
+            //         dataView: { show: false, readOnly: false },
+            //         magicType: { show: false, type: ['line', 'bar', 'stack', 'tiled'] },
+            //         restore: { show: false },
+            //         saveAsImage: { show: false }
+            //     }
+            // },
             calculable: true,
             xAxis: [
                 {
                     type: 'category',
                     axisTick: { show: false },
-                    data: labels
+                    data: ['Jan', 'Feb'],
+                    axisLine: {
+                        lineStyle: {
+                           color : '#B6B6B6'
+                        }
+                    },
+                    axisLabel: {
+                        color : '#707070',
+                        margin: 15
+                    }
                 }
             ],
             yAxis: [
                 {
                     type: 'value',
+                    offset: -7,
+                    splitLine: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                           color : '#B6B6B6'
+                        }
+                    },
+                    axisLabel: {
+                        color : '#707070',
+                    }
                 }
             ],
             series: [
                 {
                     name: 'My Score',
                     type: 'bar',
-                    barGap: 0,
+                    barGap: '90%',
+                    barWidth: 7,
                     label: labelOption,
-                    data: my_score
+                    data: [20,30,40]
+
                 },
                 {
                     name: 'Batch Average',
                     type: 'bar',
+                    barWidth: 7,
                     label: labelOption,
-                    data: batch_avg
+                    data: [50,70,20]
                 },
                 {
                     name: 'Batch Best',
                     type: 'bar',
+                    barWidth: 7,
+                    barCategoryGap: '70%',
                     label: labelOption,
-                    data: batch_best
+                    data: [80,100,10]
                 }
 
             ]
