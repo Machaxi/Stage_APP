@@ -135,10 +135,14 @@ class MyCalendar extends BaseComponent {
         let currentMonth = this.state.currentMonth
         let currentYear = this.state.currentYear
         let day = item.day
+
         let selectedDate = new Date(day + '-' + currentMonth + '-' + currentYear)
         var today = new Date();
-
-        if (today.getTime() > selectedDate.getTime()) {
+        console.log('SelecedDate->', day + '-' + currentMonth + '-' + currentYear)
+        const selectedTime = moment(currentYear + "/" + currentMonth + "/" + day).format("x");
+        console.log('today->', today.getTime())
+        console.log('selectedTime->', selectedTime)
+        if (selectedTime > today.getTime()) {
             return 'Session yet to happen'
         } else {
             return 'Attendance didn\'t happen'
@@ -187,11 +191,11 @@ class MyCalendar extends BaseComponent {
                                         this.state.selectedDateData.is_cancelled == true ?
                                             <View>
                                                 <Text style={[defaultStyle.regular_text_14, {
-                                                    color: 'A3A5AE'
+                                                    color: '#A3A5AE'
                                                 }]}>Session cancelled due to - {this.state.selectedDateData.cancellation_reason}</Text></View> : (
                                                 this.state.selectedDateData.attendance_happened == false ? <View>
                                                     <Text style={[defaultStyle.regular_text_14, {
-                                                        color: 'A3A5AE'
+                                                        color: '#A3A5AE'
                                                     }]}>{this.getCancelLabel(this.state.selectedDateData)}</Text></View> : (
                                                         <View>
                                                             <View style={styles.summaryText}>
@@ -442,16 +446,26 @@ class MyCalendar extends BaseComponent {
         let txt_style = is_current_date ? styles.text_inner_today : styles.text_inner
         let resource = null
 
-        if (item.session_scheduled) {
+        // if (item.session_scheduled) {
 
-            if (item.is_cancelled == true) {// || item.attendance_happened == false
-                resource = require("../../images/gray_circle.png")
-            }
-            else if (item.attendance_happened && item.is_present) {
-                resource = require("../../images/calendar_right.png")
-            } else if (item.attendance_happened && !item.is_present) {
-                resource = require("../../images/calendar_cross.png")
-            }
+        //     if (item.is_cancelled == true) {// || item.attendance_happened == false
+        //         resource = require("../../images/gray_circle.png")
+        //     }
+        //     else if (item.attendance_happened && item.is_present) {
+        //         resource = require("../../images/calendar_right.png")
+        //     } else if (item.attendance_happened && !item.is_present) {
+        //         resource = require("../../images/calendar_cross.png")
+        //     }
+        // }
+
+        if (item.is_cancelled == true || (item.session_scheduled == true &&
+            item.attendance_happened == false)) {
+            resource = require("../../images/gray_circle.png")
+        }
+        else if (item.attendance_happened && item.is_present) {
+            resource = require("../../images/calendar_right.png")
+        } else if (item.attendance_happened && !item.is_present) {
+            resource = require("../../images/calendar_cross.png")
         }
 
         // let resource = is_show_cross ? require("../../images/calendar_cross.png") : null

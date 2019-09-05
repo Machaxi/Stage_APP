@@ -501,29 +501,39 @@ class CoachHome extends BaseComponent {
 
                     {sessionArray.length > 0 ?
                         <CustomeCard>
-                            <View
-                                style={{
-                                    marginLeft: 12,
-                                    marginRight: 12,
-                                    marginTop: 16,
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('BatchDetails', {
+                                        batch_id: operations.batch_id,
+                                        batch_name: operations.batch_name
+                                    })
+                                }}
+                            >
 
-                                }} >
                                 <View
                                     style={{
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between'
-                                    }}>
-                                    <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
-                                    <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
+                                        marginLeft: 12,
+                                        marginRight: 12,
+                                        marginTop: 16,
 
-                                    {/* {operations.attendance.attendance != undefined ?
+                                    }} >
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between'
+                                        }}>
+                                        <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
+                                        <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
+
+                                        {/* {operations.attendance.attendance != undefined ?
                                     <Text style={{ color: '#667DDB' }}>{'Attendance  - ' + operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
                                     : null
                                 } */}
-                                </View>
-                                <View style={defaultStyle.line_style} />
-                                {sessionArray}
-                            </View>
+                                    </View>
+                                    <View style={defaultStyle.line_style} />
+                                    {sessionArray}
+                                </View></TouchableOpacity>
+
                         </CustomeCard> : null}
 
 

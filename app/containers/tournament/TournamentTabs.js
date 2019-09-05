@@ -10,10 +10,11 @@ import { getData, storeData } from '../../components/auth';
 import { getTournamentFilter, } from "../../redux/reducers/TournamentFilter";
 import { connect } from 'react-redux';
 import { TOURNAMENT_FILTER } from '../../actions/actionTypes';
+import firebase from "react-native-firebase";
 
 class TournamentTabs extends BaseComponent {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.getFilterData()
   }
@@ -27,6 +28,8 @@ class TournamentTabs extends BaseComponent {
     ],
   };
   componentDidMount() {
+
+    firebase.analytics().logEvent("TournamentTabs", {})
 
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
@@ -54,7 +57,7 @@ class TournamentTabs extends BaseComponent {
       let success = data.success
       if (success) {
         let res = data.data
-        console.warn('filter ',JSON.stringify(res))
+        console.warn('filter ', JSON.stringify(res))
         storeData(TOURNAMENT_FILTER, JSON.stringify(res))
       }
 

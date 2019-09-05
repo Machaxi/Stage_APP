@@ -3,7 +3,9 @@ import React from 'react'
 import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, checkProfilePic, getFormatTimeDate, getFormatTime } from '../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, 
+    formattedName,
+    checkProfilePic, getFormatTimeDate, getFormatTime } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayerBatchComponent extends BaseComponent {
@@ -84,10 +86,10 @@ class PlayerBatchComponent extends BaseComponent {
                         <Image source={profile_pic}
                             style={{
                                 width: 36,
-                                borderRadius: 6,
+                                borderRadius: 36,
                                 height: 36, marginRight: 10
                             }} />
-                        <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
+                        <Text style={[defaultStyle.regular_text_14]}>{formattedName(item.name)}</Text>
                         <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 0, marginLeft: 6, alignItems: 'center', justifyContent: 'center' }}>
                             {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 6, marginLeft: 6, textAlign: 'center' }}>Head Coach</Text> : null}
                         </View>

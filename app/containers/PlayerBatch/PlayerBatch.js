@@ -13,6 +13,7 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import moment from 'moment'
 import { PLAYER, FAMILY } from '../../components/Constants';
 import Events from '../../router/events';
+import firebase from "react-native-firebase";
 
 class PlayerBatch extends BaseComponent {
 
@@ -82,6 +83,8 @@ class PlayerBatch extends BaseComponent {
     }
 
     componentDidMount() {
+        firebase.analytics().logEvent("PlayerBatch", {})
+
         var userData;
         getData('header', (value) => {
             console.log("header", value);

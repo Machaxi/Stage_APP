@@ -182,7 +182,7 @@ class UserHome extends BaseComponent {
         this.willFocusSubscription.remove();
     }
     componentDidMount() {
-
+        firebase.analytics().logEvent("PlayerHome", {})
         // getData('userInfo',(value)=>{
         //     firebaseAnalytics.logEvent('DASHBOARD',value );
 

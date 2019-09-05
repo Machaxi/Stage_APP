@@ -9,14 +9,14 @@ import { CustomeCard } from '../../../components/Home/Card'
 import { getCoachBatchDetails } from "../../../redux/reducers/BatchReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
-import { defaultStyle, SESSION_DATE_FORMAT } from '../../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT,formattedName } from '../../BaseComponent';
 import moment from 'moment'
 import { COACH, ACADEMY } from '../../../components/Constants';
 import NavigationDrawerStructure from '../../../router/NavigationDrawerStructure';
 import RightMenuToolbar from '../../../router/RightMenuToolbar';
 
 
-class BatchDetails extends React.Component {
+class BatchDetails extends BaseComponent {
 
     static navigationOptions = ({ navigation }) => {
 
@@ -216,14 +216,14 @@ class BatchDetails extends React.Component {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
                 <View style={{ marginRight: 20, flexDirection: 'row', height: 50, alignItems: 'center' }}>
 
-                    <Image source={require('../../../images/coach_small_pic.png')}
+                    <Image source={{ uri: item.profile_pic }}
                         resizeMode="contain"
                         style={{
                             width: 36,
-                            borderRadius: 6,
+                            borderRadius: 36,
                             height: 36, marginRight: 10
                         }} />
-                    <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
+                    <Text style={[defaultStyle.regular_text_14]}>{formattedName(item.name)}</Text>
                     <View style={{ fontFamily: 'Quicksand-Medium', backgroundColor: '#CDB473', borderRadius: 10, marginRight: 10, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
                         {item.is_head ? <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 10, color: 'white', marginRight: 10, marginLeft: 10, textAlign: 'center' }}>Head Coach</Text> : null}
                     </View>
@@ -454,7 +454,7 @@ class BatchDetails extends React.Component {
                                 this.props.navigation.navigate('AttendenceBook', {
                                     batch_id: this.props.navigation.getParam('batch_id'),
                                     batch_data: this.state.batchDetails,
-                                    batch_name:this.props.navigation.getParam('batch_name')
+                                    batch_name: this.props.navigation.getParam('batch_name')
                                 })
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>

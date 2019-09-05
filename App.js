@@ -157,6 +157,7 @@ export default class App extends BaseComponent {
             show_must_update_alert: false,
             navigation: null
         }
+        console.disableYellowBox = true;
 
 
         firebase.messaging().getToken().then((token) => {
@@ -189,7 +190,7 @@ export default class App extends BaseComponent {
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
         OneSignal.addEventListener('ids', this.onIds);
-        OneSignal.configure();
+        //OneSignal.configure();
         OneSignal.enableVibrate(true);
         OneSignal.inFocusDisplaying(2)
     }

@@ -796,18 +796,18 @@ class AcademyProfile extends BaseComponent {
 
 
                             <FlatList
-                                // onEndReachedThreshold={0.5}
-                                // onEndReached={({ distanceFromEnd }) => {
-                                //     console.log('on end reached ', distanceFromEnd);
-                                //     let page = this.state.page
-                                //     page = page + 1
-                                //     this.state.page = page
+                                onEndReachedThreshold={0.1}
+                                onEndReached={({ distanceFromEnd }) => {
+                                    console.log('on end reached ', distanceFromEnd);
+                                    let page = this.state.page
+                                    page = page + 1
+                                    this.state.page = page
 
-                                //     console.log('page => ', this.state.page)
-                                //     let sortType = this.state.sortType
-                                //     let type = this.state.type
-                                //     this.getAcademyFeedbacks(sortType, type, false)
-                                // }}
+                                    console.log('page => ', this.state.page)
+                                    let sortType = this.state.sortType
+                                    let type = this.state.type
+                                    this.getAcademyFeedbacks(sortType, type, false)
+                                }}
                                 extraData={feedback}
                                 data={feedback}
                                 renderItem={this._renderRatingItem}

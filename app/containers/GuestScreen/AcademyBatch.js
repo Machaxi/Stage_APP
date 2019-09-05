@@ -152,8 +152,12 @@ class AcademyBatch extends BaseComponent {
               }}>
                 <View style={styles.coachInfoOuter}>
                   <View style={styles.coachInfo}>
-                    <Image source={require('../../images/coach_small_pic.png')} style={styles.coachImg} />
-                    <Text style={[defaultStyle.regular_text_14]}>{item.name}</Text>
+                    <Image
+                      resizeMode="contain"
+                      source={{
+                        uri: item.profile_pic
+                      }} style={styles.coachImg} />
+                    <Text style={[defaultStyle.regular_text_14]}>{formattedName(item.name)}</Text>
                     <View style={styles.headCoachOuter}>
                       {item.is_head ? <Text style={styles.headCoachLabel}>Head Coach</Text> : null}
                     </View>
@@ -407,7 +411,7 @@ const styles = StyleSheet.create({
   },
   coachImg: {
     width: 36,
-    borderRadius: 6,
+    borderRadius: 36,
     height: 36,
     marginRight: 10
   },

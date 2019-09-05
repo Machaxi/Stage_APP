@@ -14,6 +14,7 @@ import { storeData, isSignedIn, getData } from '../../components/auth';
 import Share from 'react-native-share';
 import { getTournamentById } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
+import firebase from "react-native-firebase";
 
 class UpcomingTournamentDetail extends BaseComponent {
 
@@ -36,6 +37,10 @@ class UpcomingTournamentDetail extends BaseComponent {
     }
 
     fetchTournamentData(tournament_id) {
+
+        firebase.analytics().logEvent("UpcomingTournament", {})
+
+
         getData('header', (value) => {
 
             this.props.getTournamentById(value, tournament_id).then(() => {

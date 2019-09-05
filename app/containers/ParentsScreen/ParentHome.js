@@ -23,6 +23,7 @@ import BaseComponent, {
 } from '../BaseComponent'
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
+import firebase from "react-native-firebase";
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -62,7 +63,7 @@ class ParentHome extends BaseComponent {
                         >{navigation.getParam('Title', '') == '' ? '' :
                             navigation.getParam('Title', '')}</Text>
 
-                        {navigation.getParam('Title', '') == null ? '' :
+                        {navigation.getParam('Title', '') == '' ? null :
                             <Image
                                 source={require('../../images/white_drop_down.png')}
                                 resizeMode="contain"
@@ -178,6 +179,8 @@ class ParentHome extends BaseComponent {
     }
 
     componentDidMount() {
+        firebase.analytics().logEvent("ParentHome", {})
+
         this.selfComponentDidMount()
 
         this.willFocusSubscription = this.props.navigation.addListener(

@@ -7,7 +7,7 @@ import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimen
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../../components/Home/SwitchButton'
 import { CustomeCard } from '../../../components/Home/Card'
-import { getCoachBatchAttendenceDetails } from "../../../redux/reducers/BatchReducer";
+import { getCoachBatchAttendenceDetails } from "../../../redux/reducers/BatchAttendenceReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
@@ -337,7 +337,7 @@ class CoachAttendenceBook extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        data: state.BatchReducer,
+        data: state.BatchAttendenceReducer,
     };
 };
 const mapDispatchToProps = {
