@@ -64,6 +64,11 @@ class AcademyFeedbackListing extends BaseComponent {
 
     sort(id, type) {
 
+        this.setState({
+            hasMore: true,
+            pagination: true
+        })
+
         this.state.filter_dialog = false
         this.setState({
             filter_dialog: false
@@ -91,7 +96,9 @@ class AcademyFeedbackListing extends BaseComponent {
             sortType: '',
             type: '',
             filter_dialog: false,
-            clear_feedback_array: false
+            clear_feedback_array: false,
+            hasMore: true,
+            pagination: false
         };
 
         getData('academy_id', (value) => {
@@ -138,6 +145,11 @@ class AcademyFeedbackListing extends BaseComponent {
             let status = this.props.data.res.success
             if (status) {
                 let feedback = this.props.data.res.data.feedback
+                if (feedback.length == 0) {
+                    this.setState({
+                        hasMore: false
+                    })
+                }
                 console.log('Feedback load =>', feedback.length)
                 console.log('Feedback => ' + JSON.stringify(feedback))
                 let allfeeback = this.state.feedback
@@ -258,7 +270,7 @@ class AcademyFeedbackListing extends BaseComponent {
     render() {
 
 
-        if (this.props.data.loading && this.state.coaches == null) {
+        if (this.props.data.loading && this.state.pagination == false) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -296,18 +308,26 @@ class AcademyFeedbackListing extends BaseComponent {
                         }}>No Feedback found</Text></View>
                     :
                     <FlatList
-                        // onEndReachedThreshold={0.5}
-                        // onEndReached={({ distanceFromEnd }) => {
-                        //     console.log('on end reached ', distanceFromEnd);
-                        //     let page = this.state.page
-                        //     page = page + 1
-                        //     this.state.page = page
+                        onEndReachedThreshold={0.1}
+                        onEndReached={({ distanceFromEnd }) => {
 
-                        //     console.log('page => ', this.state.page)
-                        //     let sortType = this.state.sortType
-                        //     let type = this.state.type
-                        //     this.getAcademyFeedbacks(sortType, type, false)
-                        // }}
+                            const hasMore = this.state.hasMore
+                            console.log('hasMore',hasMore)
+                            if (hasMore) {
+                                this.setState({
+                                    pagination:true
+                                })
+                                console.log('on end reached ', distanceFromEnd);
+                                let page = this.state.page
+                                page = page + 1
+                                this.state.page = page
+
+                                console.log('page => ', this.state.page)
+                                let sortType = this.state.sortType
+                                let type = this.state.type
+                                this.getAcademyFeedbacks(sortType, type, false)
+                            }
+                        }}
                         data={data}
                         renderItem={this._renderItem}
                     />}

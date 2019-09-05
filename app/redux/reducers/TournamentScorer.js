@@ -61,3 +61,45 @@ export function updateMatchScore(header, data) {
     };
 
 }
+
+
+export function skipSet(header, data) {
+    console.log("SkipSet", header + ' data => ', data)
+
+    return {
+        type: types.GET_TOURNAMENT_SCORER,
+        payload: {
+            request: {
+                url: `tournament/skip-sets`,
+                method: 'POST',
+                data: data,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+
+}
+
+
+export function giveBye(header, data) {
+    console.log("GiveBye", header + ' data => ', data)
+
+    return {
+        type: types.GET_TOURNAMENT_SCORER,
+        payload: {
+            request: {
+                url: `tournament/give-bye                `,
+                method: 'POST',
+                data: data,
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+
+}

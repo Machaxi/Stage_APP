@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { View, Text, Image, Modal, TextInput } from 'react-native'
-import BaseComponent, { defaultStyle, ImageBackground } from '../BaseComponent';
+import { View, Text, ActivityIndicator, Image, Modal, TextInput } from 'react-native'
+import BaseComponent, { defaultStyle, ImageBackground,formattedName} from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
-import { getMatchScore, updateMatchScore } from "../../redux/reducers/TournamentScorer";
+import { getMatchScore, updateMatchScore, skipSet, giveBye } from "../../redux/reducers/TournamentScorer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import { SkyFilledButton, SkyBorderButton } from '../../components/Home/SkyFilledButton'
@@ -17,6 +17,7 @@ class TournamentScorer extends BaseComponent {
         super(props)
         this.state = {
             match_scores: null,
+            winner: null,
             player1: null,
             player2: null,
             current_set: null,
@@ -55,6 +56,7 @@ class TournamentScorer extends BaseComponent {
                         match_scores: data.data.match_scores,
                         player1: data.data.player1,
                         player2: data.data.player2,
+                        winner: data.data.winner
 
                     })
 
@@ -125,6 +127,83 @@ class TournamentScorer extends BaseComponent {
                         match_scores: data.data.match_scores,
                         player1: data.data.player1,
                         player2: data.data.player2,
+                        winner: data.data.winner
+                    })
+                }
+
+
+            }
+
+        }).catch((response) => {
+            console.log(response);
+        })
+    }
+
+    giveBye(bye_to) {
+        let match_id = this.state.match_id
+        let subData = {}
+        subData['bye_to'] = bye_to
+        subData['match_id'] = match_id
+
+        let data = {}
+        data['data'] = subData
+        console.log('giveBye => ', JSON.stringify(data))
+        let header = this.state.header
+        this.props.giveBye(header, data).then(() => {
+            let data = this.props.data.data
+            console.log(' giveBye ' + JSON.stringify(data));
+
+            let success = data.success
+            if (success) {
+
+                if (data.data.player1 == null || data.data.player2 == null) {
+                    alert('Player detail not found')
+                }
+                else {
+                    this.setState({
+                        winner: data.data.winner,
+                        match_scores: data.data.match_scores,
+                        player1: data.data.player1,
+                        player2: data.data.player2,
+                    })
+                }
+
+
+            }
+
+        }).catch((response) => {
+            console.log(response);
+        })
+    }
+
+    skipSet() {
+        let match_scores = this.state.match_scores
+        let match_id = this.state.match_id
+        let subData = {}
+        subData['match_scores'] = match_scores
+        subData['match_id'] = match_id
+
+        let data = {}
+        data['data'] = subData
+        console.log('MatchScore => ', JSON.stringify(data))
+
+        let header = this.state.header
+        this.props.skipSet(header, data).then(() => {
+            let data = this.props.data.data
+            console.log(' skipSet ' + JSON.stringify(data));
+
+            let success = data.success
+            if (success) {
+
+                if (data.data.player1 == null || data.data.player2 == null) {
+                    alert('Player detail not found')
+                }
+                else {
+                    this.setState({
+                        winner: data.data.winner,
+                        match_scores: data.data.match_scores,
+                        player1: data.data.player1,
+                        player2: data.data.player2,
 
                     })
                 }
@@ -155,14 +234,20 @@ class TournamentScorer extends BaseComponent {
         let is_shown = this.state.is_shown
         let currentRound = null
         let previousRound = null;
-
+        const winner = this.state.winner
 
         let is_tournament_completed = true;
-        for (let i = match_scores.length - 1; i >= 0; i--) {
-            let obj = match_scores[i]
-            if (!obj.winner_id) {
-                is_tournament_completed = false
+        console.warn('winner=>', JSON.stringify(winner))
+        if (winner == null) {
+            for (let i = match_scores.length - 1; i >= 0; i--) {
+                let obj = match_scores[i]
+                if (!obj.winner_id) {
+                    is_tournament_completed = false
+                }
             }
+
+        } else {
+            is_tournament_completed = true;
         }
 
         let finalWinner = null
@@ -228,6 +313,10 @@ class TournamentScorer extends BaseComponent {
             } else {
                 finalWinner = player2
             }
+
+            if (winner != null)
+                finalWinner = winner
+
         }
         let edit_instance = this.state.edit_instance
 
@@ -461,7 +550,7 @@ class TournamentScorer extends BaseComponent {
                                     fontSize: 17,
                                     fontFamily: 'Quicksand-Medium'
                                 }}
-                            >{player1.name}</Text>
+                            >{formattedName(player1.name)}</Text>
 
 
                             <View
@@ -489,14 +578,25 @@ class TournamentScorer extends BaseComponent {
 
                             </View>
 
-                            <Text
-                                style={{
-                                    color: '#667DDB',
-                                    fontSize: 10,
-                                    marginTop: 20,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}
-                            >Give bye</Text>
+                            {finalWinner == null ?
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.giveBye(player1.id)
+                                    }}
+                                >
+
+                                    <Text
+                                        style={{
+                                            color: '#667DDB',
+                                            fontSize: 10,
+                                            marginTop: 20,
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}
+                                    >Give bye</Text>
+                                </TouchableOpacity>
+                                : null
+                            }
+
 
 
                         </View>
@@ -550,7 +650,7 @@ class TournamentScorer extends BaseComponent {
                                     fontWeight: "400",
                                     fontFamily: 'Quicksand-Medium'
                                 }}
-                            >{player2.name}</Text>
+                            >{formattedName(player2.name)}</Text>
 
                             <View
                                 style={{
@@ -575,15 +675,21 @@ class TournamentScorer extends BaseComponent {
                                 }
                             </View>
 
-
-                            <Text
-                                style={{
-                                    color: '#667DDB',
-                                    fontSize: 10,
-                                    marginTop: 20,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}
-                            >Give bye</Text>
+                            {finalWinner == null ?
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.giveBye(player2.id)
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: '#667DDB',
+                                            fontSize: 10,
+                                            marginTop: 20,
+                                            fontFamily: 'Quicksand-Regular'
+                                        }}
+                                    >Give bye</Text>
+                                </TouchableOpacity> : null}
 
 
                         </View>
@@ -645,10 +751,7 @@ class TournamentScorer extends BaseComponent {
 
                                                     <SkyBorderButton
                                                         onPress={() => {
-                                                            this.setState({
-                                                                start_card_show: false,
-                                                                is_shown: true
-                                                            })
+                                                            this.skipSet()
                                                         }}
                                                     >Skip Set</SkyBorderButton>
 
@@ -914,7 +1017,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getMatchScore, updateMatchScore
+    getMatchScore, updateMatchScore, skipSet, giveBye
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TournamentScorer);
 

@@ -294,6 +294,7 @@ class EditProfile extends BaseComponent {
                         >
 
                             <Image
+                                resizeMode="contain"
                                 style={{
 
                                     paddingVertical: 0,
@@ -313,9 +314,10 @@ class EditProfile extends BaseComponent {
                                     padding: 10,
                                     backgroundColor: '#67BAF5',
                                     height: 46,
+                                    justifyContent: 'center',
                                     //borderWidth:1,
                                     //borderColor:'#67BAF5',
-
+                                    alignItems: 'center',
                                     borderRadius: 23,
                                     marginBottom: 0,
                                 }} >
@@ -323,7 +325,6 @@ class EditProfile extends BaseComponent {
                                     {
                                         color: '#FFFFFF',
                                         textAlign: 'center',
-                                        marginTop: 5
                                     }]}> Change Image</Text>
                                 </View>
                             </View>

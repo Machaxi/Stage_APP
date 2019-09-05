@@ -13,6 +13,10 @@ export const GET_BATCHES = 'user/LOAD';
 export const DO_BATCHES_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_BATCHES_FAIL = 'user/LOAD_FAIL';
 
+export const GET_BATCHES_ATTENDENCE = 'user_attendence/LOAD';
+export const DO_BATCHES_ATTENDENCE_SUCCESS = 'user_attendence/LOAD_SUCCESS';
+export const DO_BATCHES_ATTENDENCE_FAIL = 'user_attendence/LOAD_FAIL';
+
 export const GET_COACH = 'coach/LOAD';
 export const DO_COACH_SUCCESS = 'coach/LOAD_SUCCESS';
 export const DO_COACH_FAIL = 'coach/LOAD_FAIL';
