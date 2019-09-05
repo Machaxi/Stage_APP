@@ -63,7 +63,7 @@ class ParentHome extends BaseComponent {
                         >{navigation.getParam('Title', '') == '' ? '' :
                             navigation.getParam('Title', '')}</Text>
 
-                        {navigation.getParam('Title', '') == null ? '' :
+                        {navigation.getParam('Title', '') == '' ? null :
                             <Image
                                 source={require('../../images/white_drop_down.png')}
                                 resizeMode="contain"

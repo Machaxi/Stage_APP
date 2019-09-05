@@ -157,6 +157,7 @@ export default class App extends BaseComponent {
             show_must_update_alert: false,
             navigation: null
         }
+        console.disableYellowBox = true;
 
 
         firebase.messaging().getToken().then((token) => {

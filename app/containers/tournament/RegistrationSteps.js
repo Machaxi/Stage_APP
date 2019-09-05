@@ -162,7 +162,7 @@ class RegistrationSteps extends BaseComponent {
             this.state.data = JSON.parse(value)
             let data = this.state.data
             let is_edit_mode = false
-            if(data.is_edit_mode){
+            if (data.is_edit_mode) {
                 is_edit_mode = data.is_edit_mode
             }
 
@@ -447,7 +447,7 @@ class RegistrationSteps extends BaseComponent {
         });
 
     }
-    
+
     isPlayerExists(id, uniqueArray) {
 
         for (let i = 0; i < uniqueArray.length; i++) {
@@ -485,20 +485,19 @@ class RegistrationSteps extends BaseComponent {
     markSelected(player) {
 
         const is_edit_mode = this.state.is_edit_mode
-        if(is_edit_mode)
-        {
+        if (is_edit_mode) {
             const userData = this.state.userData
-            console.log('markSelected=>',JSON.stringify(userData))
+            console.log('markSelected=>', JSON.stringify(userData))
             let array = [...this.state.tournament_selection]
             let tournament_registrations = [...this.state.tournament_registrations]
             //console.log('tournament_registrations =>', JSON.stringify(tournament_registrations))
-    
+
             for (let i = 0; i < array.length; i++) {
-    
+
                 let obj = array[i]
                 //console.log('Loop - Obj', JSON.stringify(obj))
                 for (let j = 0; j < tournament_registrations.length; j++) {
-    
+
                     let reg = tournament_registrations[j]
                     //console.log('Loop ', reg.tournament_category + "==" + obj.title)
                     if (reg.tournament_category == obj.title && player.id == reg.player.id) {
@@ -1338,53 +1337,53 @@ class RegistrationSteps extends BaseComponent {
     }
 
     processPaymentGateway() {
-        //const user_selection = this.state.user_selection
-        //console.log('user_selection=> ' + JSON.stringify(user_selection))
-        //return
+
+        //if fees =0 then not taking to payment gateway, directly calling api
         let fees = this.getTotalAmount()
         if (fees == 0) {
-            alert('You can\'t proceed with Rs. 0 payment.')
-            return
-        }
 
-        let total = fees
-        total = total + '00'
+            this.submitData(null, fees)
 
-        let userData = this.state.userData
-        let user = userData['user']
-        let name = user['name']
-        let email = user['email']
-        if (name == null || name == undefined)
-            name = ''
+        } else {
 
-        var options = {
-            description: 'Credits towards consultation',
-            image: 'https://i.imgur.com/3g7nmJC.png',
-            currency: 'INR',
-            key: PAYMENT_KEY,
-            amount: total,
-            name: 'Dribble Diary',
-            prefill: {
-                email: email,
-                contact: '',
-                name: name
-            },
-            theme: { color: '#F37254' }
-        }
-        RazorpayCheckout.open(options).then((data) => {
-            // handle success
-            console.log('Razor Rspo ', JSON.stringify(data))
-            //alert(`Success: ${data.razorpay_payment_id}`);
-            let payment_details = {
-                razorpay_payment_id: data.razorpay_payment_id
+            let total = fees
+            total = total + '00'
+
+            let userData = this.state.userData
+            let user = userData['user']
+            let name = user['name']
+            let email = user['email']
+            if (name == null || name == undefined)
+                name = ''
+
+            var options = {
+                description: 'Credits towards consultation',
+                image: 'https://i.imgur.com/3g7nmJC.png',
+                currency: 'INR',
+                key: PAYMENT_KEY,
+                amount: total,
+                name: 'Dribble Diary',
+                prefill: {
+                    email: email,
+                    contact: '',
+                    name: name
+                },
+                theme: { color: '#F37254' }
             }
-            this.submitData(payment_details, fees)
-        }).catch((error) => {
-            // handle failure
-            console.log('Razor Rspo ', JSON.stringify(error))
-            alert(`Error: ${error.code} | ${error.description}`);
-        });
-
+            RazorpayCheckout.open(options).then((data) => {
+                // handle success
+                console.log('Razor Rspo ', JSON.stringify(data))
+                //alert(`Success: ${data.razorpay_payment_id}`);
+                let payment_details = {
+                    razorpay_payment_id: data.razorpay_payment_id
+                }
+                this.submitData(payment_details, fees)
+            }).catch((error) => {
+                // handle failure
+                console.log('Razor Rspo ', JSON.stringify(error))
+                alert(`Error: ${error.code} | ${error.description}`);
+            });
+        }
     }
 
     submitData(payment_details, fees) {
@@ -1424,7 +1423,8 @@ class RegistrationSteps extends BaseComponent {
         subData['participant_user_id'] = user_id
         subData['tournament_registration_details'] = tournament_reg_details
         subData['fees'] = fees
-        subData['payment_details'] = payment_details
+        if (payment_details != null)
+            subData['payment_details'] = payment_details
 
         let data = {}
         data['data'] = subData

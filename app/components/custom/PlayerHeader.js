@@ -126,19 +126,20 @@ export default class PlayerHeader extends BaseComponent {
                                     <View
                                         style={{
                                             backgroundColor: 'red',
-                                            paddingLeft: 4,
-                                            paddingRight: 4,
+                                            paddingLeft: 6,
+                                            paddingRight: 6,
                                             height: 22,
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: 20,
+                                            borderRadius:2
 
                                         }}>
                                         <Text style={{
                                             color: 'white',
                                             marginRight: 0,
                                             textAlign: 'center',
-                                            fontSize: 12,
+                                            fontSize: 11,
                                             fontFamily: 'Quicksand-Bold',
                                         }}>{getFormattedCategory(player_category)}</Text>
                                     </View>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { WebView, Linking, View } from 'react-native';
 import BaseComponent from '../BaseComponent'
-import { CustomProgress } from '../../components/custom/CustomProgress'
+import CustomProgress from '../../components/custom/CustomProgress'
 
 export default class ProgressExample extends BaseComponent {
 
@@ -13,6 +13,8 @@ export default class ProgressExample extends BaseComponent {
                 }}>
 
                 <CustomProgress
+                    height="14"
+                    width="300"
                     percent={50}
                 />
 
