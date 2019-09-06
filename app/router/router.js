@@ -72,6 +72,7 @@ import JobVacancies from '../containers/util/JobVacancies';
 import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
+import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -1049,6 +1050,20 @@ const parentHomeModule = createStackNavigator({
             // headerStyle,
             // header: null
         }
+    },
+    ViewPlayerPerformance: {
+        screen: ViewPlayerPerformance,
+        navigationOptions: ({ navigation }) => ({
+            title: "My Stats",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
 
     ParentRewards: {

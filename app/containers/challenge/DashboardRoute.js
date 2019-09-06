@@ -4,7 +4,11 @@ import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName, getFormattedCategory, EVENT_REFRESH_RESULTS, SESSION_DATE_FORMAT } from '../BaseComponent'
 import { getData } from "../../components/auth";
-import { getChallengeDashboard, acceptChallenge, cancelChallenge, dismissChallenge, abortChallenge, getChallengeScore, updateChallengeScore } from "../../redux/reducers/ChallengeReducer";
+import {
+  getChallengeDashboard, acceptChallenge,
+  cancelChallenge, dismissChallenge, abortChallenge,
+  getChallengeScore, updateChallengeScore
+} from "../../redux/reducers/ChallengeReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Events from '../../router/events';
@@ -48,11 +52,12 @@ class DashboardRoute extends BaseComponent {
   getDashboardData() {
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
+      let player_id = global.SELECTED_PLAYER_ID
       let academy_id = userData['academy_id'];
-      this.state.playerId = userData['player_id'];
+      this.state.playerId = player_id//userData['player_id'];
       this.state.academyId = userData['academy_id'];
       getData('header', (value) => {
-        this.props.getChallengeDashboard(value, academy_id).then(() => {
+        this.props.getChallengeDashboard(value, academy_id, player_id).then(() => {
           let data = this.props.data.data
           //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
@@ -83,7 +88,9 @@ class DashboardRoute extends BaseComponent {
 
   acceptTheChallenge(challengeId) {
     getData('header', (value) => {
-      this.props.acceptChallenge(value, challengeId).then(() => {
+      let player_id = global.SELECTED_PLAYER_ID
+
+      this.props.acceptChallenge(value, challengeId, player_id).then(() => {
         let data = this.props.data.data
         console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
@@ -104,7 +111,9 @@ class DashboardRoute extends BaseComponent {
 
   cancelTheChallenge(challengeId) {
     getData('header', (value) => {
-      this.props.cancelChallenge(value, challengeId).then(() => {
+      let player_id = global.SELECTED_PLAYER_ID
+
+      this.props.cancelChallenge(value, challengeId, player_id).then(() => {
         let data = this.props.data.data
         //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
@@ -125,7 +134,9 @@ class DashboardRoute extends BaseComponent {
 
   dismissTheChallenge(challengeId) {
     getData('header', (value) => {
-      this.props.dismissChallenge(value, challengeId).then(() => {
+
+      let player_id = global.SELECTED_PLAYER_ID
+      this.props.dismissChallenge(value, challengeId,player_id).then(() => {
         let data = this.props.data.data
         //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
@@ -146,7 +157,9 @@ class DashboardRoute extends BaseComponent {
 
   abortTheChallenge(challengeId) {
     getData('header', (value) => {
-      this.props.abortChallenge(value, challengeId).then(() => {
+      let player_id = global.SELECTED_PLAYER_ID
+
+      this.props.abortChallenge(value, challengeId,player_id).then(() => {
         let data = this.props.data.data
         //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 

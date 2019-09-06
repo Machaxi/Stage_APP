@@ -25,14 +25,14 @@ export default function ChallengeReducer(state = initialState, action) {
     }
 }
 
-export function getChallengeDashboard(header, academy_id) {
+export function getChallengeDashboard(header, academy_id,player_id) {
     console.log("getChallengeDashboard", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/dashboard?academy_id=${academy_id}`,
+                url: `challenge/dashboard?academy_id=${academy_id}&player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -80,14 +80,14 @@ export function getOpponentList(header, academy_id, page, size) {
 
 }
 
-export function acceptChallenge(header, challenge_id) {
+export function acceptChallenge(header, challenge_id,player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/${challenge_id}/accept`,
+                url: `challenge/${challenge_id}/accept?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -98,14 +98,14 @@ export function acceptChallenge(header, challenge_id) {
 
 }
 
-export function cancelChallenge(header, challenge_id) {
+export function cancelChallenge(header, challenge_id,player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/${challenge_id}/cancel`,
+                url: `challenge/${challenge_id}/cancel?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -116,14 +116,14 @@ export function cancelChallenge(header, challenge_id) {
 
 }
 
-export function dismissChallenge(header, challenge_id) {
+export function dismissChallenge(header, challenge_id,player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/${challenge_id}/dismiss`,
+                url: `challenge/${challenge_id}/dismiss?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -134,14 +134,14 @@ export function dismissChallenge(header, challenge_id) {
 
 }
 
-export function abortChallenge(header, challenge_id) {
+export function abortChallenge(header, challenge_id,player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/${challenge_id}/abort`,
+                url: `challenge/${challenge_id}/abort?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -152,14 +152,14 @@ export function abortChallenge(header, challenge_id) {
 
 }
 
-export function disputeChallenge(header, challenge_id) {
+export function disputeChallenge(header, challenge_id,player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/${challenge_id}/dispute`,
+                url: `challenge/${challenge_id}/dispute?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -170,14 +170,14 @@ export function disputeChallenge(header, challenge_id) {
 
 }
 
-export function getchallengeResults(header, academy_id, month, year) {
+export function getchallengeResults(header, academy_id, month, year,player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/results?academy_id=${academy_id}&month=${month}&year=${year}`,
+                url: `challenge/results?academy_id=${academy_id}&month=${month}&year=${year}&player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

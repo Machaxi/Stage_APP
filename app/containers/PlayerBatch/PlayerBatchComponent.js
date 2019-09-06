@@ -3,9 +3,11 @@ import React from 'react'
 import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, 
+import BaseComponent, {
+    defaultStyle, SESSION_DATE_FORMAT,
     formattedName,
-    checkProfilePic, getFormatTimeDate, getFormatTime } from '../BaseComponent';
+    checkProfilePic, getFormatTimeDate, getFormatTime
+} from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayerBatchComponent extends BaseComponent {
@@ -86,7 +88,7 @@ class PlayerBatchComponent extends BaseComponent {
                         <Image source={profile_pic}
                             style={{
                                 width: 36,
-                                borderRadius: 36,
+                                borderRadius: 8,
                                 height: 36, marginRight: 10
                             }} />
                         <Text style={[defaultStyle.regular_text_14]}>{formattedName(item.name)}</Text>
@@ -134,6 +136,8 @@ class PlayerBatchComponent extends BaseComponent {
 
     sessionMangement(operations) {
 
+
+        console.log('sessionMangement=>', JSON.stringify(operations))
         sessionArray = [];
         // for (let i = 0; i < operations.next_sessions.length; i++)
         // {
@@ -149,7 +153,7 @@ class PlayerBatchComponent extends BaseComponent {
                         <Text style={[defaultStyle.bold_text_14, {
                             textDecorationLine: 'line-through'
                         }]}
-                        >{routine_name}</Text>
+                        >{routine_name == null ? "" : routine_name}</Text>
                         <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                             <Text style={{
                                 fontFamily: 'Quicksand-Medium',
@@ -191,7 +195,7 @@ class PlayerBatchComponent extends BaseComponent {
 
                     <Text style={[defaultStyle.bold_text_14, {
                     }]}>
-                        {routine_name}
+                        {routine_name == null ? "" : routine_name}
                     </Text>
                     <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                         <Text style={defaultStyle.regular_text_14}>{moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
@@ -215,8 +219,8 @@ class PlayerBatchComponent extends BaseComponent {
         // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 
 
-
-        this.sessionMangement(session)
+        if (session != undefined)
+            this.sessionMangement(session)
         // this.scoreMangement(tournaments)
 
         return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
@@ -286,49 +290,50 @@ class PlayerBatchComponent extends BaseComponent {
                     </View>
                 </CustomeCard>
 
-                <CustomeCard >
-                    <View
-                        style={{
-                            marginLeft: 12,
-                            marginRight: 12,
-                            marginTop: 16
-                        }}
-                    >
-                        <Text style={defaultStyle.bold_text_10}>Timing</Text>
+                {operations.weekday || operations.weekend ?
+                    <CustomeCard >
+                        <View
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 12,
+                                marginTop: 16
+                            }}
+                        >
+                            <Text style={defaultStyle.bold_text_10}>Timing</Text>
 
-                        <View style={defaultStyle.line_style} />
+                            <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
-                            <View style={{ width: '60%' }}>
-                                <Text style={[defaultStyle.regular_text_10, {
-                                    marginBottom: 5
-                                }]}>Weekdays</Text>
-                                <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
-                                <Text style={defaultStyle.regular_text_12}>
-                                    {getFormatTime(operations.weekday.start_time)
-                                        + ' - ' +
-                                        getFormatTime(operations.weekday.end_time)
-                                    }</Text>
-                            </View>
-                            {operations.weekend ?
-
-                                <View style={{ width: '40%' }}>
+                            <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
+                                <View style={{ width: '60%' }}>
                                     <Text style={[defaultStyle.regular_text_10, {
                                         marginBottom: 5
-                                    }]}>Weekends</Text>
-                                    <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
+                                    }]}>Weekdays</Text>
+                                    <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
                                     <Text style={defaultStyle.regular_text_12}>
-
-                                        {getFormatTime(operations.weekend.start_time)
+                                        {getFormatTime(operations.weekday.start_time)
                                             + ' - ' +
-                                            getFormatTime(operations.weekend.end_time)
+                                            getFormatTime(operations.weekday.end_time)
                                         }</Text>
-                                </View> : null
-                            }
-                        </View>
-                    </View>
-                </CustomeCard>
+                                </View>
+                                {operations.weekend ?
 
+                                    <View style={{ width: '40%' }}>
+                                        <Text style={[defaultStyle.regular_text_10, {
+                                            marginBottom: 5
+                                        }]}>Weekends</Text>
+                                        <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
+                                        <Text style={defaultStyle.regular_text_12}>
+
+                                            {getFormatTime(operations.weekend.start_time)
+                                                + ' - ' +
+                                                getFormatTime(operations.weekend.end_time)
+                                            }</Text>
+                                    </View> : null
+                                }
+                            </View>
+                        </View>
+                    </CustomeCard> : null
+                }
                 {this.state.coactList.length > 0 ?
                     <CustomeCard>
                         <View

@@ -45,7 +45,7 @@ class ResultsRoute extends BaseComponent {
 
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
-      this.state.playerId = userData['player_id'];
+      this.state.playerId = global.SELECTED_PLAYER_ID//userData['player_id'];
       this.state.academyId = userData['academy_id'];
       this.getResultsData();
 
@@ -61,8 +61,11 @@ class ResultsRoute extends BaseComponent {
   }
 
   getResultsData() {
-    getData('header', (value) => {
-      this.props.getchallengeResults(value, this.state.academyId, this.state.month, moment().format('YYYY')).then(() => {
+     getData('header', (value) => {
+
+      let player_id = global.SELECTED_PLAYER_ID
+      this.props.getchallengeResults(value, this.state.academyId, 
+        this.state.month, moment().format('YYYY'),player_id).then(() => {
         console.log('ggggfgfgfdgfd', this.props.data);
         let data = this.props.data.data
         //console.log('getchallengeResults1111 ' + JSON.stringify(data));
@@ -85,7 +88,9 @@ class ResultsRoute extends BaseComponent {
 
   disputeTheChallenge(challengeId) {
     getData('header', (value) => {
-      this.props.disputeChallenge(value, challengeId).then(() => {
+      let player_id = global.SELECTED_PLAYER_ID
+
+      this.props.disputeChallenge(value, challengeId,player_id).then(() => {
         let data = this.props.data.data
         console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
@@ -203,18 +208,11 @@ class ResultsRoute extends BaseComponent {
 
         <View style={styles.totalGamesValueOuter}>
           <Text style={styles.gameValue}>{data.total_count}</Text>
-          <View style={[styles.wonValue, { flex: 1, flexDirection: 'row' }]}>
+          <View style={[styles.wonValue,{ flex: 1, flexDirection: 'row' }]}>
             <View><Text>{data.win}</Text></View>
-            {
-              data.win != 0 && <View style={{ marginLeft: 5 }}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
-            }
+            <View style={{marginLeft: 5}}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
           </View>
-          <View style={[styles.lostValue, { flex: 1, flexDirection: 'row' }]}>
-            <View><Text>{data.loss}</Text></View>
-            {
-              data.loss != 0 && <View style={{ marginLeft: 5 }}><Image source={require('../../images/lost_badge.png')} style={{ marginTop: 2, width: 12, height: 16 }}></Image></View>
-            }
-          </View>
+          <Text style={styles.lostValue}>{data.loss}</Text>
         </View>
 
         {
@@ -232,6 +230,10 @@ class ResultsRoute extends BaseComponent {
         />
 
       </View>
+
+
+
+
     );
   }
 }

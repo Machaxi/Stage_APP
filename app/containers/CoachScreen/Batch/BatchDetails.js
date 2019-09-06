@@ -9,7 +9,7 @@ import { CustomeCard } from '../../../components/Home/Card'
 import { getCoachBatchDetails } from "../../../redux/reducers/BatchReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT,formattedName } from '../../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, formattedName } from '../../BaseComponent';
 import moment from 'moment'
 import { COACH, ACADEMY } from '../../../components/Constants';
 import NavigationDrawerStructure from '../../../router/NavigationDrawerStructure';
@@ -206,7 +206,6 @@ class BatchDetails extends BaseComponent {
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
 
-            console.warn("Touch Press")
             this.props.navigation.navigate('CoachProfileDetail', {
                 academy_id: this.state.academy_id,
                 coach_id: item.id
@@ -220,7 +219,7 @@ class BatchDetails extends BaseComponent {
                         resizeMode="contain"
                         style={{
                             width: 36,
-                            borderRadius: 36,
+                            borderRadius: 8,
                             height: 36, marginRight: 10
                         }} />
                     <Text style={[defaultStyle.regular_text_14]}>{formattedName(item.name)}</Text>
@@ -279,7 +278,9 @@ class BatchDetails extends BaseComponent {
 
             const { is_attandence_due, is_performance_due, is_reward_point_due, is_scorer, operations, tournaments, session } = this.state.batchDetails
 
-            this.sessionMangement(session);
+            if (session != null)
+                this.sessionMangement(session);
+
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                     <View style={{ marginTop: 20 }}>
@@ -317,17 +318,19 @@ class BatchDetails extends BaseComponent {
 
                             <View style={defaultStyle.line_style} />
 
+
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekdays</Text>
-                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.days.join(' ')}</Text>
-                                    <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
-                                        {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
-                                            + ' - ' +
-                                            moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
-                                        }
-                                    </Text>
-                                </View>
+                                {operations.weekday ?
+                                    <View style={{ width: '50%' }}>
+                                        <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekdays</Text>
+                                        <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.days.join(' ')}</Text>
+                                        <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
+                                            {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
+                                                + ' - ' +
+                                                moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
+                                            }
+                                        </Text>
+                                    </View> : null}
 
                                 {operations.weekend ?
                                     <View style={{ width: '50%' }}>

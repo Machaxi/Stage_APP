@@ -46,6 +46,10 @@ export const TOURNAMENT_FITLER = 'TOURNAMENT_FITLER'
 export const PUSH_TOKEN = "PUSH_TOKEN"
 export const ONE_SIGNAL_USERID = "ONE_SIGNAL_USERID"
 
+//setting GLOBAL VARIABLES
+global.USER_TYPE = ''
+global.SELECTED_PLAYER_ID = ''
+
 //
 
 //PAYMENT_GATEWAY
@@ -259,7 +263,7 @@ export function getFormatTime(time) {
     return moment.utc(time, 'hh:mm a').local().format("hh:mm a")
 }
 
-export function getFormatTimeDate(date,time) {
+export function getFormatTimeDate(date, time) {
     return moment.utc(date + " " + time).local().format("hh:mm a")
 }
 

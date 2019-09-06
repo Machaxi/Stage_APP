@@ -12,6 +12,7 @@ import RNPickerSelect from 'react-native-picker-select'
 import { TabView, TabBar } from 'react-native-tab-view';
 import PlayerPerformanceComponent from './PlayerPerformanceComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomProgress from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -171,7 +172,15 @@ class ViewPlayerPerformance extends BaseComponent {
                 {this.state.performanceData.score}
               </Text>
             </View>
-            <Progress.Bar style={styles.progressBar} progress={this.state.performanceData.score / 100} width={deviceWidth - 100} height={14} />
+            <CustomProgress
+                        percent={this.state.performanceData.score}
+                        width={deviceWidth - 100}
+                        height={14}
+                    />
+
+            {/* <Progress.Bar style={styles.progressBar} 
+            progress={this.state.performanceData.score / 100} 
+            width={deviceWidth - 100} height={14} /> */}
 
             <View style={{ width: '45.33%', marginTop: 16, paddingLeft: 2 }}>
 

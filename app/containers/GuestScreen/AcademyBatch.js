@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
   },
   coachImg: {
     width: 36,
-    borderRadius: 36,
+    borderRadius: 8,
     height: 36,
     marginRight: 10
   },

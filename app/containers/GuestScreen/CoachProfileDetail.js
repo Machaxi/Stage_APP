@@ -28,7 +28,8 @@ class CoachProfileDetail extends BaseComponent {
             filter_dialog: false,
             sortType: '',
             type: '',
-            is_feedback_loading: false
+            is_feedback_loading: false,
+            user_id: ''
         }
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.coach_id = this.props.navigation.getParam('coach_id', '')
@@ -470,7 +471,7 @@ class CoachProfileDetail extends BaseComponent {
                                 Give Feedback</SkyFilledButton></View>
                         : null}
 
-                    {feedback.length > 0 || this.state.is_feedback_loading
+                    {feedback!=null && feedback.length > 0 || this.state.is_feedback_loading
                         ?
                         <Card
                             style={{
