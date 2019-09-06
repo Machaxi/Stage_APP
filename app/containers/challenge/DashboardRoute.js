@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName, getFormattedCategory, EVENT_REFRESH_RESULTS } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName, getFormattedCategory, EVENT_REFRESH_RESULTS, SESSION_DATE_FORMAT } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import {
   getChallengeDashboard, acceptChallenge,
@@ -441,7 +441,7 @@ class DashboardRoute extends BaseComponent {
           return (
             <Card key={index} style={styles.challengeCard}>
 
-              {item.opponent.id == this.state.player_id ?
+              {item.opponent.id == this.state.playerId ?
                 <View>
                   <View style={styles.acceptCardHeadingOuter}>
                     <View style={styles.acceptCardHeading}>
@@ -474,7 +474,7 @@ class DashboardRoute extends BaseComponent {
                   <View style={styles.scoreCatValueOuter}>
                     <Text style={styles.scoreValue}>{item.challenge_by.score}</Text>
                     <Text style={styles.categoryValue}>{item.challenge_by.player_category}</Text>
-                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("Do MMM YYYY")}</Text>
+                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format(SESSION_DATE_FORMAT)}</Text>
                   </View>
 
                   {item.challenge_status == 'PENDING' &&
@@ -543,7 +543,7 @@ class DashboardRoute extends BaseComponent {
                   <View style={styles.scoreCatValueOuter}>
                     <Text style={styles.scoreValue}>{item.opponent.score}</Text>
                     <Text style={styles.categoryValue}>{item.opponent.player_category}</Text>
-                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format("Do MMM YYYY")}</Text>
+                    <Text style={styles.dateValue}>{moment.utc(item.date).local().format(SESSION_DATE_FORMAT)}</Text>
                   </View>
 
                   {item.challenge_status == 'ACCEPTED' &&
