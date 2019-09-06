@@ -230,6 +230,8 @@ class ParentHome extends BaseComponent {
         getData('userInfo', (value) => {
             console.warn(value)
             userData = JSON.parse(value)
+            global.SELECTED_PLAYER_ID = userData['player_id']
+            
             this.state.academy_id = userData['academy_id']
 
             let academy_name = userData.academy_name
@@ -271,13 +273,17 @@ class ParentHome extends BaseComponent {
                     if (data.length > 0) {
                         let name = data[0].academy_name
                         //let academy_id = data[0].academy_id
-                        console.warn('test => ' + name)
-                        // getData('userInfo',(value)=>{
-                        //     console.warn('UserInfo ',value)
-                        //     let json = JSON.parse(value)
-                        //     json.academy_id = academy_id
-                        //     storeData('userInfo',JSON.stringify(json))
-                        // })
+                        // console.warn('test => ' + name)
+
+                        getData('userInfo', (value1) => {
+                            console.warn(value1)
+                            const userData = JSON.parse(value1)
+                            userData['academy_name'] = name
+                            storeData('userInfo', JSON.stringify(userData))
+
+                        });
+
+
                         this.props.navigation.setParams({ Title: name })
                     }
 
@@ -349,12 +355,7 @@ class ParentHome extends BaseComponent {
 
     renderItem = ({ item }) => (
         <TouchableOpacity key={item} onPress={() => {
-
-            console.warn("Touch Press")
-
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
+            this.props.navigation.navigate('ViewPlayerPerformance', { performance_data: item });
 
         }}>
             <View style={{ margin: 10, flexDirection: 'row', height: 60 }}>
@@ -872,7 +873,11 @@ class ParentHome extends BaseComponent {
                                 }}>
                                     <Text style={[defaultStyle.bold_text_14, { color: "#707070" }]}>{academy_feedback_data.target.name}</Text>
 
-                                    <View style={{ flexDirection: 'row', marginTop: 4 }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginTop: 4
+                                    }}>
 
                                         <Rating
                                             type='custom'
@@ -922,7 +927,8 @@ class ParentHome extends BaseComponent {
                                                 alignItems: 'center',
                                                 flexDirection: 'row',
                                                 marginLeft: 6,
-                                                marginTop: 4
+                                                marginTop: 4,
+                                                alignItems: 'center'
                                             }}>
 
                                                 <Rating
@@ -1128,7 +1134,7 @@ class ParentHome extends BaseComponent {
                                     <TouchableOpacity onPress={() => {
                                         this.props.navigation.navigate('CoachProfileDetail', {
                                             academy_id: coach_feedback_data.academyId,
-                                            coach_id: coach_feedback_data.target.id
+                                            coach_id: coach_feedback_data.target.entity_id
                                         })
                                     }}>
                                         <Text

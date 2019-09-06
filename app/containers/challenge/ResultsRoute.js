@@ -61,7 +61,10 @@ class ResultsRoute extends BaseComponent {
 
   getResultsData() {
      getData('header', (value) => {
-      this.props.getchallengeResults(value, this.state.academyId, this.state.month, moment().format('YYYY')).then(() => {
+
+      let player_id = global.SELECTED_PLAYER_ID
+      this.props.getchallengeResults(value, this.state.academyId, 
+        this.state.month, moment().format('YYYY'),player_id).then(() => {
         console.log('ggggfgfgfdgfd', this.props.data);
         let data = this.props.data.data
         console.log('getchallengeResults1111 ' + JSON.stringify(data));
@@ -87,7 +90,9 @@ class ResultsRoute extends BaseComponent {
 
   disputeTheChallenge(challengeId) {
     getData('header', (value) => {
-      this.props.disputeChallenge(value, challengeId).then(() => {
+      let player_id = global.SELECTED_PLAYER_ID
+
+      this.props.disputeChallenge(value, challengeId,player_id).then(() => {
         let data = this.props.data.data
         console.log('getchallengeResults1111 ' + JSON.stringify(data));
 

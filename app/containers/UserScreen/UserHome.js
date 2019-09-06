@@ -238,6 +238,8 @@ class UserHome extends BaseComponent {
         console.log("PlayerDashboard");
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
+            global.SELECTED_PLAYER_ID = userData['player_id']
+
             this.state.academy_id = userData['academy_id']
 
             let academy_name = userData.academy_name
@@ -337,11 +339,8 @@ class UserHome extends BaseComponent {
         <TouchableOpacity key={item}
             activeOpacity={.8}
             onPress={() => {
-                //console.warn("Touch Press1");
-                this.props.navigation.navigate('ViewPlayerPerformance', { performance_data: item });
-                // this.props.navigation.navigate('OrderTracking', {
-                //     order_id: item.increment_id
-                // })
+                this.props.navigation.navigate('ViewPlayerPerformance',
+                    { performance_data: item });
 
             }}>
             <View style={{ margin: 10, flexDirection: 'row', height: 60 }}>
@@ -534,7 +533,7 @@ class UserHome extends BaseComponent {
                                 onPress={() => {
                                     global.click_batch_id = operations.batch_id;
                                     this.props.navigation.navigate('Batch')
-                                   
+
                                 }}
                             >
 
@@ -599,21 +598,25 @@ class UserHome extends BaseComponent {
                                     { id: academy_id })
 
                             }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    margin: 10,
+                                    alignItems: 'center',
+                                    flexDirection: 'row', height: 40
+                                }}>
 
                                     <Image source={require('../../images/view_academy_player.png')}
                                         resizeMode="contain"
                                         style={{
                                             width: 40,
-                                            height: 40, marginRight: 20, marginTop: 5
+                                            height: 40,
+                                            marginRight: 20,
                                         }} />
                                     <View style={{ flex: 1 }}>
 
                                         <View style={{
-                                            marginTop: 10,
                                             flex: 1,
                                             marginRight: 15,
-                                            marginBottom: 5,
+                                            alignItems: 'center',
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
@@ -626,7 +629,7 @@ class UserHome extends BaseComponent {
                                                 source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
+                                                    height: 13, marginRight: 0,
                                                 }} />
 
                                         </View>
@@ -644,22 +647,28 @@ class UserHome extends BaseComponent {
                                 this.props.navigation.navigate('AcademyListing')
 
                             }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    margin: 10,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    height: 40
+                                }}>
 
                                     <Image source={require('../../images/browse_academy.png')}
                                         resizeMode="contain"
                                         style={{
                                             width: 40,
-                                            height: 40, marginRight: 20, marginTop: 5
+                                            height: 40,
+                                            marginRight: 20,
+
                                         }} />
                                     <View style={{ flex: 1 }}>
 
                                         <View style={{
-                                            marginTop: 10,
                                             flex: 1,
                                             marginRight: 15,
-                                            marginBottom: 5,
                                             flexDirection: 'row',
+                                            alignItems: 'center',
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={defaultStyle.bold_text_14}>
@@ -671,7 +680,8 @@ class UserHome extends BaseComponent {
                                                 source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
+                                                    height: 13,
+                                                    marginRight: 0,
                                                 }} />
 
                                         </View>
@@ -776,7 +786,8 @@ class UserHome extends BaseComponent {
                                                 alignItems: 'center',
                                                 flexDirection: 'row',
                                                 marginLeft: 6,
-                                                marginTop: 4
+                                                marginTop: 4,
+                                                alignItems: 'center'
                                             }}>
 
                                                 <Rating
@@ -985,7 +996,7 @@ class UserHome extends BaseComponent {
                                 <TouchableOpacity onPress={() => {
                                     this.props.navigation.navigate('CoachProfileDetail', {
                                         academy_id: coach_feedback_data.academyId,
-                                        coach_id: coach_feedback_data.target.id
+                                        coach_id: coach_feedback_data.target.entity_id
                                     })
                                 }}>
                                     <Text

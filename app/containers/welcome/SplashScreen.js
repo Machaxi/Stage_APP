@@ -57,7 +57,7 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('ProgressExample', {
+        // this.props.navigation.navigate('TestExample', {
         //     match_id: '15'
         // })
         //  return
@@ -97,6 +97,7 @@ class Splash extends BaseComponent {
                             userData = (JSON.parse(value))
                             // onSignIn()
                             let userType = userData.user['user_type']
+                            global.USER_TYPE = userType
                             console.log("SplashScreen=> ", JSON.stringify(userData));
                             if (userType == GUEST) {
                                 console.warn(userType)

@@ -19,6 +19,8 @@ class NotificationList extends BaseComponent {
             notifications: [],
             isRefreshing: false,
             page: 0,
+            hasMore: true,
+            pagingLoader: false
         };
 
     }
@@ -34,7 +36,7 @@ class NotificationList extends BaseComponent {
     selfComponentDidMount() {
 
         let page = this.state.page;
-        const size = 20
+        const size = 10
 
         getData('header', (value) => {
 
@@ -44,9 +46,17 @@ class NotificationList extends BaseComponent {
                 let user = JSON.stringify(this.props.data.data);
                 console.log(' user getNotificationListing ' + user);
                 let user1 = JSON.parse(user)
+                this.setState({
+                    pagingLoader: false
+
+                })
 
                 if (user1.success == true) {
                     if (user1.data.notifications.length > 0) {
+                        this.setState({
+                            hasMore: true,
+
+                        })
                         let notificationArray = [...this.state.notifications]
 
                         for (let i = 0; i < user1.data.notifications.length; i++) {
@@ -56,6 +66,10 @@ class NotificationList extends BaseComponent {
 
                         this.setState({
                             notifications: notificationArray
+                        })
+                    } else {
+                        this.setState({
+                            hasMore: false
                         })
                     }
 
@@ -136,11 +150,22 @@ class NotificationList extends BaseComponent {
         )
     };
 
+    _progressLoader = ({ }) => {
+
+        if (this.state.pagingLoader) {
+            return (
+                <ActivityIndicator size="large" color="#67BAF5" />
+            )
+        }
+        else {
+            return null
+        }
+    }
 
     render() {
 
         let data = this.state.notifications
-        if (this.props.data.loading) {
+        if (this.props.data.loading && !this.state.pagingLoader) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -153,18 +178,24 @@ class NotificationList extends BaseComponent {
                 <View style={{ flex: 1, }}>
 
                     <FlatList
-                        // onEndReachedThreshold={0.5}
-                        // onEndReached={({ distanceFromEnd }) => {
-                        //     console.log('on end reached ', distanceFromEnd);
-                        //     let page = this.state.page
-                        //     page = page + 1
-                        //     this.state.page = page
-                        //     this.selfComponentDidMount()
-                        // }}
+                        onEndReachedThreshold={0.1}
+                        onEndReached={({ distanceFromEnd }) => {
+                            const hasMore = this.state.hasMore
+                            if (hasMore) {
+                                this.state.pagingLoader = true
+                                console.log('on end reached ', distanceFromEnd);
+                                let page = this.state.page
+                                page = page + 1
+                                this.state.page = page
+                                this.selfComponentDidMount()
+                            }
+
+                        }}
                         onRefresh={() => this.onRefresh()}
                         refreshing={this.state.isRefreshing}
                         data={data}
                         extraData={data}
+                        ListFooterComponent={this._progressLoader}
                         renderItem={this._renderItem}
                     />
 

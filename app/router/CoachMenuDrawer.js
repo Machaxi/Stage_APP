@@ -388,6 +388,10 @@ class CoachMenuDrawer extends BaseComponent {
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
 					onSignOut()
 					clearData()
+					global.USER_TYPE = ''
+					global.SELECTED_PLAYER_ID = ''
+
+
 					firebase.auth().signOut();
 					this.props.navigation.navigate('Login')
 				}
@@ -554,7 +558,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('AcademyFeedbackListing')}>
 
 					<View style={styles.drawercell}>

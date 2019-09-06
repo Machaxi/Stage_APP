@@ -107,6 +107,10 @@ class PhoneAuth extends BaseComponent {
     signIn = () => {
 
         const { phoneNumber } = this.state;
+        if (phoneNumber == '') {
+            alert('Invalid phone number')
+            return
+        }
         this.setState({ message: 'Sending code ...' });
         this.progress(true)
 
