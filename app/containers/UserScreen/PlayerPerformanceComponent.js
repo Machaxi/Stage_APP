@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import moment from 'moment'
 import { Card } from 'react-native-paper';
 import { ECharts } from 'react-native-echarts-wrapper';
-import YouTube from 'react-native-youtube'
+import YouTube from 'react-native-youtube';
 
 
 class PlayerPerformanceComponent extends BaseComponent {
@@ -86,7 +86,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                 <Text style={styles.reportCardheadingText}>Report</Text>
                 <View style={styles.scoreBestLabelOuter}>
                     <Text style={styles.scoreLabel}>Score</Text>
-                    <Text style={styles.bestScoreLabel}>Best Score</Text>
+                    <Text style={styles.bestScoreLabel}>Best(Batch) Score</Text>
                 </View>
                 <View style={styles.scoreBestValueOuter}>
                     <View style={styles.scoreValueOuter}>
@@ -96,11 +96,19 @@ class PlayerPerformanceComponent extends BaseComponent {
                             <View style={{ flexDirection: 'row' }}>
 
                                 {
-                                    (item.current_parameter.prev_score > item.current_parameter.score) ?
 
-                                        <Image style={styles.triangleImg} source={require('../../images/triangle_red.png')} /> :
 
-                                        <Image style={styles.triangleImg} source={require('../../images/triangle_green.png')} />
+                                    ((item.current_parameter.prev_score - item.current_parameter.score) != 0 ?
+
+                                        ((item.current_parameter.prev_score > item.current_parameter.score) ?
+
+                                            <Image style={styles.triangleImg} source={require('../../images/triangle_red.png')} /> :
+
+                                            <Image style={styles.triangleImg} source={require('../../images/triangle_green.png')} />)
+
+                                        : <Image style={[styles.triangleImg, { opacity: 0 }]} source={require('../../images/triangle_red.png')} />
+
+                                    )
 
                                 }
 
@@ -119,7 +127,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
                 </View>
             </Card>
-            <Card style={[styles.performanceCard, {paddingBottom: 40}]}>
+            <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
                 <View style={{ width: '100%', height: 300 }}>
                     <ECharts
@@ -235,8 +243,9 @@ class PlayerPerformanceComponent extends BaseComponent {
                 verticalAlign: config.verticalAlign,
                 //rotate: config.rotate,
                 formatter: '{c}',
-                color: '#7D955C'
-                //fontSize: 16,
+                color: '#7D955C',
+                fontSize: 8,
+                fontFamily: 'Quicksand-Regular'
                 // rich: {
                 //     name: {
                 //         textBorderColor: 'red'
@@ -289,14 +298,14 @@ class PlayerPerformanceComponent extends BaseComponent {
                 {
                     type: 'category',
                     axisTick: { show: false },
-                    data: ['Jan', 'Feb'],
+                    data: labels,
                     axisLine: {
                         lineStyle: {
-                           color : '#B6B6B6'
+                            color: '#B6B6B6'
                         }
                     },
                     axisLabel: {
-                        color : '#707070',
+                        color: '#707070',
                         margin: 15
                     }
                 }
@@ -310,11 +319,11 @@ class PlayerPerformanceComponent extends BaseComponent {
                     },
                     axisLine: {
                         lineStyle: {
-                           color : '#B6B6B6'
+                            color: '#B6B6B6'
                         }
                     },
                     axisLabel: {
-                        color : '#707070',
+                        color: '#707070',
                     }
                 }
             ],
@@ -325,7 +334,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     barGap: '90%',
                     barWidth: 7,
                     label: labelOption,
-                    data: [20,30,40]
+                    data: my_score
 
                 },
                 {
@@ -333,7 +342,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     type: 'bar',
                     barWidth: 7,
                     label: labelOption,
-                    data: [50,70,20]
+                    data: batch_avg
                 },
                 {
                     name: 'Batch Best',
@@ -341,7 +350,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     barWidth: 7,
                     barCategoryGap: '70%',
                     label: labelOption,
-                    data: [80,100,10]
+                    data: batch_best
                 }
 
             ]

@@ -31,23 +31,24 @@ class ResultsRoute extends BaseComponent {
 
   componentDidMount() {
 
-    for(i=0; i< 12; i++) {
+    for (i = 0; i < 12; i++) {
       let obj = {
         label: moment().month(i).format('MMM') + ' ' + moment().format('YY'),
-        value: (i+1).toString()
-      } 
+        value: (i + 1).toString()
+      }
       this.state.months.push(obj);
     };
 
-    this.setState({ 
+    this.setState({
       month: moment().format('M')
     });
 
     getData('userInfo', (value) => {
-        userData = JSON.parse(value)
-        this.state.academyId = userData['academy_id'];
-        this.getResultsData();
-        
+      userData = JSON.parse(value)
+      this.state.playerId = userData['player_id'];
+      this.state.academyId = userData['academy_id'];
+      this.getResultsData();
+
     });
 
     this.refreshEvent = Events.subscribe(EVENT_REFRESH_RESULTS, () => {
@@ -60,19 +61,16 @@ class ResultsRoute extends BaseComponent {
   }
 
   getResultsData() {
-     getData('header', (value) => {
+    getData('header', (value) => {
       this.props.getchallengeResults(value, this.state.academyId, this.state.month, moment().format('YYYY')).then(() => {
         console.log('ggggfgfgfdgfd', this.props.data);
         let data = this.props.data.data
-        console.log('getchallengeResults1111 ' + JSON.stringify(data));
-
-        // console.log('data.data.dashboard', data.data.dashboard);
-        // console.log('data.data.challenges', data.data.dashboard.challenges)
+        //console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
         let success = data.success
         if (success) {
 
-          console.log('getchallengeResultssds ' + JSON.stringify(data.data.dashboard));
+          //console.log('getchallengeResultssds ' + JSON.stringify(data.data.dashboard));
 
           this.setState({
             challengeResultsData: data.data,
@@ -119,29 +117,33 @@ class ResultsRoute extends BaseComponent {
   _renderItem = ({ item }) => (
 
     <View>
+
       <View style={styles.totalResultsValueOuter}>
-        <Text style={styles.opponentValue}>{item.challenge_by.name}</Text>
-        <Text style={styles.scoreValue}>{item.score}</Text>
+        {
+          item.opponent.id == this.state.playerId ? <Text style={styles.opponentValue}>{item.challenge_by.name}</Text> : <Text style={styles.opponentValue}>{item.opponent.name}</Text>
+        }
+
+        <Text style={styles.scoreValue}>{item.score.split(':')[0]} - {item.score.split(':')[1]}</Text>
         <View style={styles.resultOuter}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             {
-              item.win ? <Image source={require('../../images/win_badge.png')} style={{ marginRight: 3,marginTop: 3 }}></Image> 
-              :
-              <Image source={require('../../images/win_badge.png')} style={{ marginRight: 2,marginTop: 3, opacity: 0 }}></Image>
+              item.win ? <Image source={require('../../images/win_badge.png')} style={{ marginRight: 3, marginTop: 3, marginRight: 10 }}></Image>
+                :
+                <Image source={require('../../images/lost_badge.png')} style={{ marginRight: 2, marginTop: 3, marginTop: 3, width: 12, height: 16, marginRight: 10 }}></Image>
             }
-            
-            <Text style={styles.resultValue}>{item.win ? 'Won': 'Lost'}</Text>
+
+            <Text style={styles.resultValue}>{item.win ? 'Won' : 'Lost'}</Text>
           </View>
           {
-            item.challenge_status == 'DISPUTED' && <View style={{paddingTop:3}}><Text style={[styles.disputeLabel, {color: '#A3A5AE'}]}>Disputed</Text></View> 
+            item.challenge_status == 'DISPUTED' && <View style={{ paddingTop: 3 }}><Text style={[styles.disputeLabel, { color: '#A3A5AE' }]}>Disputed</Text></View>
           }
           {
-            item.challenge_status == 'COMPLETED' &&  <View style={{paddingTop:3}}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
+            item.challenge_status == 'COMPLETED' && <View style={{ paddingTop: 3 }}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
           }
           {
-            item.challenge_status == 'DISPUTE_RESOLVED' && <View style={{paddingTop:3}}><Text ></Text></View>
+            item.challenge_status == 'DISPUTE_RESOLVED' && <View style={{ paddingTop: 3 }}><Text ></Text></View>
           }
-          
+
         </View>
       </View>
     </View>
@@ -163,7 +165,7 @@ class ResultsRoute extends BaseComponent {
 
       <View style={styles.resultsPageContainer} >
 
-        <View style={{width:'45.33%', paddingLeft: 16}}>
+        <View style={{ width: '45.33%', paddingLeft: 16 }}>
 
           <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
 
@@ -174,7 +176,7 @@ class ResultsRoute extends BaseComponent {
               console.log(value)
               this.setState({
                 month: value,
-              },()=>{
+              }, () => {
                 this.getResultsData()
               });
             }}
@@ -185,13 +187,13 @@ class ResultsRoute extends BaseComponent {
               this.inputRefs.month = el;
             }}
           />
-           <View style={{
+          <View style={{
             width: 80,
             backgroundColor: '#A3A5AE',
             height: 1
           }}></View>
 
-        </View> 
+        </View>
 
         <View style={styles.totalGamesLabelOuter}>
           <Text style={styles.totalLabel}>Total Games</Text>
@@ -201,15 +203,22 @@ class ResultsRoute extends BaseComponent {
 
         <View style={styles.totalGamesValueOuter}>
           <Text style={styles.gameValue}>{data.total_count}</Text>
-          <View style={[styles.wonValue,{ flex: 1, flexDirection: 'row' }]}>
+          <View style={[styles.wonValue, { flex: 1, flexDirection: 'row' }]}>
             <View><Text>{data.win}</Text></View>
-            <View style={{marginLeft: 5}}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
+            {
+              data.win != 0 && <View style={{ marginLeft: 5 }}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
+            }
           </View>
-          <Text style={styles.lostValue}>{data.loss}</Text>
+          <View style={[styles.lostValue, { flex: 1, flexDirection: 'row' }]}>
+            <View><Text>{data.loss}</Text></View>
+            {
+              data.loss != 0 && <View style={{ marginLeft: 5 }}><Image source={require('../../images/lost_badge.png')} style={{ marginTop: 2, width: 12, height: 16 }}></Image></View>
+            }
+          </View>
         </View>
 
         {
-          data.challenges.length>0 && 
+          data.challenges.length > 0 &&
           <View style={styles.totalResultsLabelOuter}>
             <Text style={styles.opponentLabel}>Opponent</Text>
             <Text style={styles.scoreLabel}>Score</Text>
@@ -223,10 +232,6 @@ class ResultsRoute extends BaseComponent {
         />
 
       </View>
-
-
-
-
     );
   }
 }
