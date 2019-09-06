@@ -61,15 +61,15 @@ class LeaderboardRoute extends BaseComponent {
         let data = this.props.data.data
         console.log('getchallengeLeaderboard111 ' + JSON.stringify(data));
 
-        //let success = data.success
-        // if (success) {
+        let success = data.success
+        if (success) {
 
-        //   console.log('getchallengeLeaderboardssds ' + JSON.stringify(data.data.dashboard));
+          console.log('getchallengeLeaderboardssds ' + JSON.stringify(data.data.top_players));
 
-        //   this.setState({
-        //     challengeLeaderboardData: data.data,
-        //   })
-        // }
+          this.setState({
+            challengeLeaderboardData: data.data.top_players
+          })
+        }
 
       }).catch((response) => {
         console.log(response);
@@ -87,25 +87,24 @@ class LeaderboardRoute extends BaseComponent {
   //     return suggestionResult.filter(item => item.name.search(regex) >= 0);
   // }
 
-  // _renderItem = ({ item }) => (
+  _renderItem = ({ item }) => (
 
-  //   <View>
+    <View>
+      <View style={styles.totalResultsValueOuter}>
+        <View style={styles.nameOuter}>
+          <Text style={styles.nameValue}>{item.player.name}</Text>
+        </View>
+        <View style={[styles.winOuter, { marginLeft: 4 }]}>
+          <Text style={styles.nameValue}>1</Text>
+        </View>
+        <View style={[styles.lostOuter, { marginLeft: 1 }]}>
+          <Text style={styles.nameValue}>1</Text>
+        </View>
 
-  //     <View style={styles.totalResultsValueOuter}>
-  //       {
-  //         item.opponent.id == this.state.playerId ? <Text style={styles.opponentValue}>{item.challenge_by.name}</Text> : <Text style={styles.opponentValue}>{item.opponent.name}</Text>
-  //       }
+      </View>
+    </View>
 
-  //       <Text style={styles.scoreValue}>{item.score.split(':')[0]} - {item.score.split(':')[1]}</Text>
-  //       <View style={styles.resultOuter}>
-  //         <View style={{ flex: 1, flexDirection: 'row' }}>
-  //           <Text style={styles.resultValue}>{item.win ? 'Won' : 'Lost'}</Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   </View>
-
-  // );
+  );
 
   render() {
 
@@ -120,7 +119,7 @@ class LeaderboardRoute extends BaseComponent {
     let data = this.state.challengeLeaderboardData
     return (
 
-      <View style={styles.resultsPageContainer} >
+      <View style={styles.dashboardPageContainer} >
 
         <View style={{ width: '45.33%', paddingLeft: 16 }}>
 
@@ -153,18 +152,18 @@ class LeaderboardRoute extends BaseComponent {
         </View>
 
         {
-          data.challenges.length > 0 &&
+          data.length > 0 &&
           <View style={styles.totalResultsLabelOuter}>
-            <Text style={styles.opponentLabel}>Name</Text>
-            <Text style={styles.scoreLabel}>Win</Text>
-            <Text style={styles.resultLabel}>Lost</Text>
+            <Text style={styles.nameLabel}>Name</Text>
+            <Text style={styles.winLabel}>Win</Text>
+            <Text style={styles.lostLabel}>Lost</Text>
           </View>
         }
 
-        {/* <FlatList
-          data={data.challenges}
+        <FlatList
+          data={data}
           renderItem={this._renderItem}
-        /> */}
+        />
 
       </View>
     );
@@ -182,64 +181,26 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(LeaderboardRoute);
 
 const styles = StyleSheet.create({
-  resultsPageContainer: {
+  dashboardPageContainer: {
     flex: 1,
     fontFamily: 'Quicksand-Regular',
   },
-  totalGamesLabelOuter: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30,
-    paddingHorizontal: 16
-  },
-  totalLabel: {
+  nameLabel: {
     fontSize: 10,
     color: '#A3A5AE',
-    width: '33.33%',
+    width: '53.33%',
     fontFamily: 'Quicksand-Medium'
   },
-  opponentLabel: {
+  winLabel: {
     fontSize: 10,
     color: '#A3A5AE',
-    width: '43.33%',
+    width: '23.33%',
     fontFamily: 'Quicksand-Medium'
   },
-  scoreLabel: {
+  lostLabel: {
     fontSize: 10,
     color: '#A3A5AE',
-    width: '20.33%',
-    fontFamily: 'Quicksand-Medium'
-  },
-  resultLabel: {
-    fontSize: 10,
-    color: '#A3A5AE',
-    width: '36.33%',
-    fontFamily: 'Quicksand-Medium'
-  },
-  totalGamesValueOuter: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    paddingHorizontal: 16
-  },
-  gameValue: {
-    fontSize: 14,
-    color: '#404040',
-    width: '33.33%',
-    fontFamily: 'Quicksand-Medium'
-  },
-  wonValue: {
-    fontSize: 14,
-    color: '#404040',
-    width: '33.33%',
-    fontFamily: 'Quicksand-Medium'
-  },
-  lostValue: {
-    fontSize: 14,
-    color: '#404040',
-    width: '33.33%',
+    width: '23.33%',
     fontFamily: 'Quicksand-Medium'
   },
   totalResultsLabelOuter: {
@@ -258,33 +219,19 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingHorizontal: 16
   },
-  opponentValue: {
-    fontSize: 14,
-    color: '#404040',
-    width: '43.33%',
-    fontFamily: 'Quicksand-Regular'
+  nameOuter: {
+    width: '53.33%',
   },
-  scoreValue: {
-    fontSize: 14,
-    color: '#404040',
-    width: '20.33%',
-    fontFamily: 'Quicksand-Regular'
+  winOuter: {
+    width: '23.33%',
   },
-  resultOuter: {
-    width: '36.33%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  lostOuter: {
+    width: '23.33%',
   },
-  resultValue: {
+  nameValue: {
     fontSize: 14,
     color: '#404040',
     fontFamily: 'Quicksand-Regular'
-  },
-  disputeLabel: {
-    fontSize: 12,
-    fontFamily: 'Quicksand-Regular',
-    color: '#667DDB'
   },
   filterPlaceholder: {
     fontSize: 10,
