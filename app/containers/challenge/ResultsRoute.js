@@ -61,28 +61,28 @@ class ResultsRoute extends BaseComponent {
   }
 
   getResultsData() {
-     getData('header', (value) => {
+    getData('header', (value) => {
 
       let player_id = global.SELECTED_PLAYER_ID
-      this.props.getchallengeResults(value, this.state.academyId, 
-        this.state.month, moment().format('YYYY'),player_id).then(() => {
-        console.log('ggggfgfgfdgfd', this.props.data);
-        let data = this.props.data.data
-        //console.log('getchallengeResults1111 ' + JSON.stringify(data));
+      this.props.getchallengeResults(value, this.state.academyId,
+        this.state.month, moment().format('YYYY'), player_id).then(() => {
+          console.log('ggggfgfgfdgfd', this.props.data);
+          let data = this.props.data.data
+          //console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
-        let success = data.success
-        if (success) {
+          let success = data.success
+          if (success) {
 
-          //console.log('getchallengeResultssds ' + JSON.stringify(data.data.dashboard));
+            //console.log('getchallengeResultssds ' + JSON.stringify(data.data.dashboard));
 
-          this.setState({
-            challengeResultsData: data.data,
-          })
-        }
+            this.setState({
+              challengeResultsData: data.data,
+            })
+          }
 
-      }).catch((response) => {
-        console.log(response);
-      })
+        }).catch((response) => {
+          console.log(response);
+        })
     })
   }
 
@@ -90,7 +90,7 @@ class ResultsRoute extends BaseComponent {
     getData('header', (value) => {
       let player_id = global.SELECTED_PLAYER_ID
 
-      this.props.disputeChallenge(value, challengeId,player_id).then(() => {
+      this.props.disputeChallenge(value, challengeId, player_id).then(() => {
         let data = this.props.data.data
         console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
@@ -125,7 +125,30 @@ class ResultsRoute extends BaseComponent {
 
       <View style={styles.totalResultsValueOuter}>
         {
-          item.opponent.id == this.state.playerId ? <Text style={styles.opponentValue}>{item.challenge_by.name}</Text> : <Text style={styles.opponentValue}>{item.opponent.name}</Text>
+          item.opponent.id == this.state.playerId ?
+
+            <TouchableOpacity style={styles.opponentValue}
+              activeOpacity={.8}
+              onPress={() => {
+                this.props.navigation.navigate('OtherPlayerDeatils', {
+                  academy_id: this.state.academyId,
+                  player_id: item.challenge_by.id
+                })
+              }}>
+              <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>{item.challenge_by.name}</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity style={styles.opponentValue}
+              activeOpacity={.8}
+              onPress={() => {
+                this.props.navigation.navigate('OtherPlayerDeatils', {
+                  academy_id: this.state.academyId,
+                  player_id: item.opponent.id
+                })
+              }}>
+              <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>{item.opponent.name}</Text>
+            </TouchableOpacity>
+
         }
 
         <Text style={styles.scoreValue}>{item.score.split(':')[0]} - {item.score.split(':')[1]}</Text>
@@ -151,6 +174,9 @@ class ResultsRoute extends BaseComponent {
 
         </View>
       </View>
+
+
+      {/* </TouchableOpacity> */}
     </View>
 
   );
@@ -208,9 +234,9 @@ class ResultsRoute extends BaseComponent {
 
         <View style={styles.totalGamesValueOuter}>
           <Text style={styles.gameValue}>{data.total_count}</Text>
-          <View style={[styles.wonValue,{ flex: 1, flexDirection: 'row' }]}>
+          <View style={[styles.wonValue, { flex: 1, flexDirection: 'row' }]}>
             <View><Text>{data.win}</Text></View>
-            <View style={{marginLeft: 5}}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
+            <View style={{ marginLeft: 5 }}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
           </View>
           <Text style={styles.lostValue}>{data.loss}</Text>
         </View>

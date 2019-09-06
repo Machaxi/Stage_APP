@@ -16,13 +16,12 @@ class LeaderboardRoute extends BaseComponent {
     super(props)
 
     this.state = {
-      playerData: ['Test'],
       challengeLeaderboardData: null,
       query: '',
-      playerId: null,
       academyId: null,
       months: [],
-      month: ''
+      month: '',
+      initialLeaderboardData: null,
     }
     this.inputRefs = {
       month: null
@@ -67,7 +66,8 @@ class LeaderboardRoute extends BaseComponent {
           console.log('getchallengeLeaderboardssds ' + JSON.stringify(data.data.top_players));
 
           this.setState({
-            challengeLeaderboardData: data.data.top_players
+            challengeLeaderboardData: data.data.top_players,
+            initialLeaderboardData: data.data.top_players
           })
         }
 
@@ -77,31 +77,55 @@ class LeaderboardRoute extends BaseComponent {
     })
   }
 
-  // find(query) {
-  //     if (query === '') {
-  //         return [];
-  //     }
-  //     const { suggestionResult } = this.state;
-  //     const regex = new RegExp(`${query.trim()}`, 'i');
-  //     console.log('regex ', regex)
-  //     return suggestionResult.filter(item => item.name.search(regex) >= 0);
-  // }
+  find(query) {
+    const { challengeLeaderboardData } = this.state;
+    if (query === '') {
+      return this.state.initialLeaderboardData;
+    }
+    const regex = new RegExp(`${query.trim()}`, 'i');
+    return challengeLeaderboardData.filter(item => item.player.name.search(regex) >= 0);
+  }
+
+  listHeader() {
+    return (
+      <View style={styles.searchOuter}>
+        <Card style={styles.searchCard}>
+          <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => {
+            this.state.query = text
+            const data = this.find(this.state.query);
+            this.state.challengeLeaderboardData = data;
+            this.setState({
+              challengeLeaderboardData: data
+            })
+          }}></TextInput>
+        </Card>
+      </View>
+    )
+  }
 
   _renderItem = ({ item }) => (
 
     <View>
-      <View style={styles.totalResultsValueOuter}>
-        <View style={styles.nameOuter}>
-          <Text style={styles.nameValue}>{item.player.name}</Text>
+      <TouchableOpacity
+        activeOpacity={.8}
+        onPress={() => {
+          this.props.navigation.navigate('OtherPlayerDeatils', {
+            academy_id: this.state.academyId,
+            player_id: item.player.id
+          })
+        }}>
+        <View style={styles.totalResultsValueOuter}>
+          <View style={styles.nameOuter}>
+            <Text style={styles.nameValue}>{item.player.name}</Text>
+          </View>
+          <View style={[styles.winOuter, { marginLeft: 4 }]}>
+            <Text style={styles.nameValue}>1</Text>
+          </View>
+          <View style={[styles.lostOuter, { marginLeft: 1 }]}>
+            <Text style={styles.nameValue}>1</Text>
+          </View>
         </View>
-        <View style={[styles.winOuter, { marginLeft: 4 }]}>
-          <Text style={styles.nameValue}>1</Text>
-        </View>
-        <View style={[styles.lostOuter, { marginLeft: 1 }]}>
-          <Text style={styles.nameValue}>1</Text>
-        </View>
-
-      </View>
+      </TouchableOpacity>
     </View>
 
   );
@@ -120,6 +144,8 @@ class LeaderboardRoute extends BaseComponent {
     return (
 
       <View style={styles.dashboardPageContainer} >
+
+        {this.listHeader()}
 
         <View style={{ width: '45.33%', paddingLeft: 16 }}>
 
@@ -184,6 +210,23 @@ const styles = StyleSheet.create({
   dashboardPageContainer: {
     flex: 1,
     fontFamily: 'Quicksand-Regular',
+  },
+  searchOuter: {
+    marginLeft: 12,
+    marginRight: 12,
+    marginTop: 16,
+    marginBottom: 25,
+    borderRadius: 12
+  },
+  searchCard: {
+    borderRadius: 16,
+    elevation: 1
+  },
+  searchBox: {
+    marginLeft: 8,
+    backgroundColor: 'white',
+    borderRadius: 16,
+    fontFamily: 'Quicksand-Regular'
   },
   nameLabel: {
     fontSize: 10,
