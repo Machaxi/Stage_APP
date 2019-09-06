@@ -2,6 +2,7 @@ import React from 'react'
 
 import ChallengeHome from '../containers/challenge/ChallengeHome'
 import OpponentList from '../containers/challenge/OpponentList'
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import { createStackNavigator } from "react-navigation";
 import TournamentTabs from "../containers/tournament/TournamentTabs";
 import NavigationDrawerStructure from './NavigationDrawerStructure'
@@ -67,7 +68,21 @@ const userChallengeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
 
-    }
+    },
+    OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Player Detail",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 
 }
 );
