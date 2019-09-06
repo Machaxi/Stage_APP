@@ -595,7 +595,8 @@ class RegistrationSteps extends BaseComponent {
                                         //console.warn(value)
                                         if (value != null) {
                                             let player = this.getPlayerById(value)
-                                            player['user_id'] = player.id
+                                            if (is_edit_mode)
+                                                player['user_id'] = player.id
                                             this.state.txtname = player.name
                                             this.setState({
                                                 country: value,

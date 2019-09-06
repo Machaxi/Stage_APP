@@ -115,6 +115,7 @@ class BatchDetails extends BaseComponent {
         // for (let i = 0; i < operations.next_sessions.length; i++)
         // {
         const { routine_name, session_date, is_canceled, end_time, start_time } = session
+        console.log('session date,', session_date +' '+ start_time)
 
         console.log("is_canceled", { is_canceled })
         if (is_canceled == true) {
@@ -144,7 +145,7 @@ class BatchDetails extends BaseComponent {
                             fontSize: 14,
                             textDecorationLine: 'line-through'
                         }}>
-                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                            {moment.utc(session_date +' '+ start_time,'EEEE dd MMM yyyy hh:mm a').local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={{
                             fontSize: 14,
@@ -182,7 +183,7 @@ class BatchDetails extends BaseComponent {
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
                         }}>
-                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                            {moment.utc(session_date +' '+ start_time,'EEEE dd MMMM yyyy HH:mm a').local().format(SESSION_DATE_FORMAT)}
                         </Text>
                         <Text style={{
                             fontSize: 14,

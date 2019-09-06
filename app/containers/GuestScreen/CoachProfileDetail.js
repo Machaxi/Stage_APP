@@ -397,7 +397,8 @@ class CoachProfileDetail extends BaseComponent {
                                     <TouchableOpacity
                                         style={{ marginLeft: 20, }}
                                         onPress={() => {
-                                            this.props.navigation.navigate('CoachListing', { academy_id: this.state.id })
+                                            this.props.navigation.navigate('CoachListing',
+                                                { academy_id: this.state.academy_id })
 
                                             //this.props.navigation.goBack(null);
                                         }}>
@@ -471,7 +472,7 @@ class CoachProfileDetail extends BaseComponent {
                                 Give Feedback</SkyFilledButton></View>
                         : null}
 
-                    {feedback!=null && feedback.length > 0 || this.state.is_feedback_loading
+                    {feedback != null && feedback.length > 0 || this.state.is_feedback_loading
                         ?
                         <Card
                             style={{

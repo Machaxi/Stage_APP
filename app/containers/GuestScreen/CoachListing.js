@@ -17,6 +17,12 @@ class CoachListing extends BaseComponent {
             academy_id: ''
         }
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
+        // if(this.state.academy_id==undefined){
+        //     getData('userInfo', (value) => {
+        //         let academy_id = userData['academy_id']
+        //         this.state.academy_id = academy_id
+        //     });
+        // }
     }
 
     componentDidMount() {
