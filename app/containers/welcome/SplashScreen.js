@@ -11,6 +11,7 @@ import SplashScreen from 'react-native-splash-screen'
 var is_deep_linking = false
 var deep_data
 
+
 class Splash extends BaseComponent {
 
 
@@ -52,6 +53,7 @@ class Splash extends BaseComponent {
     }
 
     componentDidMount(){
+
         SplashScreen.hide();
         this.moveNext()
     }

@@ -36,6 +36,18 @@ import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.google.firebase.FirebaseApp;
+import com.dribble.CustomToastPackage;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.utils.L;
+import android.graphics.Bitmap;
+import com.dribble.R;
+
+
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -70,7 +82,8 @@ public class MainApplication extends Application implements ReactApplication {
              new RNFirebaseAuthPackage(),
              new RNFirebaseNotificationsPackage(),
              new RNFirebaseMessagingPackage(),
-             new RNFirebaseAnalyticsPackage()
+             new RNFirebaseAnalyticsPackage(),
+             new CustomToastPackage()
       );
     }
 
@@ -93,9 +106,35 @@ public class MainApplication extends Application implements ReactApplication {
       }
       catch (Exception e) {
       }
+
+      
+
     SoLoader.init(this, /* native exopackage */ false);
     Branch.getAutoInstance(this);
     //Branch.getTestInstance();
+      setImageLoader();
+  }
+
+  public static DisplayImageOptions options;
+
+
+
+  private void setImageLoader(){
+    ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+        L.disableLogging();
+
+        ImageLoader.getInstance().init(config);
+
+        options = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.no_img)
+                .showImageOnFail(R.drawable.no_img)
+                .showImageOnLoading(R.drawable.no_img)
+                .resetViewBeforeLoading(true)
+                .cacheInMemory(true).cacheOnDisk(true).considerExifParams(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+
 
   }
 }
