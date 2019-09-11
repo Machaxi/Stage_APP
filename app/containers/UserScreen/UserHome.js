@@ -12,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, {
     defaultStyle, getFormattedLevel,
     getStatsImageById,
-    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT
+    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, getUtcDateFromTime
 } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
@@ -461,7 +461,8 @@ class UserHome extends BaseComponent {
                                         style={[defaultStyle.regular_text_14, {
                                             textDecorationLine: 'line-through'
                                         }]}>
-                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                                        {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
+                                        {getUtcDateFromTime(session_date,start_time)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -489,7 +490,8 @@ class UserHome extends BaseComponent {
 
                                 <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
-                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                                        {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
+                                        {getUtcDateFromTime(session_date,start_time)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>

@@ -34,18 +34,18 @@ class CoachProfileDetail extends BaseComponent {
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.coach_id = this.props.navigation.getParam('coach_id', '')
 
-        getData('userInfo', (value) => {
-            userData = JSON.parse(value)
-            if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
-                this.setState({
-                    showFeedback: true
-                })
-            } else {
-                this.setState({
-                    showFeedback: false
-                })
-            }
-        });
+        // getData('userInfo', (value) => {
+        //     userData = JSON.parse(value)
+        //     if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+        //         this.setState({
+        //             showFeedback: true
+        //         })
+        //     } else {
+        //         this.setState({
+        //             showFeedback: false
+        //         })
+        //     }
+        // });
     }
 
     getCoachFeedbacks(sortType, type, showLoading) {
@@ -250,6 +250,7 @@ class CoachProfileDetail extends BaseComponent {
         let coachData = this.state.coachData
         let user_id = coachData.user_id
         let is_head = coachData.is_head
+        let isMyCoach = coachData.isMyCoach
 
         let year = coachData.experience / 12
         year = Math.floor(year)
@@ -289,21 +290,37 @@ class CoachProfileDetail extends BaseComponent {
 
                                     {is_head ?
                                         <View style={{
-                                            width: 90,
+                                            width: 70,
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
                                             borderRadius: 4,
-                                            justifyContent: 'center',
                                             alignItem: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: 6,
                                             backgroundColor: '#CDB473',
                                         }}>
 
-                                            <Text style={[defaultStyle.bold_text_12, {
-                                                paddingLeft: 4,
-                                                paddingRight: 4,
-                                                paddingTop: 1,
-                                                paddingBottom: 1,
+                                            <Text style={[defaultStyle.regular_text_10, {
                                                 color: 'white',
                                                 textAlign: 'center',
                                             }]}>Head Coach</Text>
+                                        </View> : null}
+
+                                    {isMyCoach ?
+                                        <View style={{
+                                            width: 70,
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
+                                            borderRadius: 4,
+                                            alignItem: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: '#667DDB',
+                                        }}>
+
+                                            <Text style={[defaultStyle.regular_text_10, {
+                                                color: 'white',
+                                                textAlign: 'center',
+                                            }]}>My Coach</Text>
                                         </View> : null}
                                 </View>
 
@@ -434,7 +451,7 @@ class CoachProfileDetail extends BaseComponent {
                         </View>
 
                     </View>
-                    {showFeedback ?
+                    {isMyCoach ?
                         // <TouchableOpacity
                         //     activeOpacity={.8}
                         //     onPress={() => {

@@ -19,7 +19,7 @@ import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, {
     getFormattedLevel,
     getStatsImageById,
-    defaultStyle, SESSION_DATE_FORMAT
+    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime
 } from '../BaseComponent'
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
@@ -475,7 +475,8 @@ class ParentHome extends BaseComponent {
                                         style={[defaultStyle.regular_text_14, {
                                             textDecorationLine: 'line-through'
                                         }]} >
-                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                                        {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
+                                        {getUtcDateFromTime(session_date,start_time)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -502,7 +503,8 @@ class ParentHome extends BaseComponent {
 
                                 <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
-                                        {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                                        {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
+                                        {getUtcDateFromTime(session_date,start_time)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>

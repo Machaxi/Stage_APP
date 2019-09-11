@@ -424,6 +424,17 @@ export function getFormattedRound(round) {
     return round
 }
 
+export function getUtcDateFromTime(date, time){
+    
+    const format = 'dddd DD MMMM YYYY HH:mm a'
+    console.log('getUtcDateFromTime', date + ' ' + time)
+    // Tuesday 10 September 2019 09:00 AM
+    var localDate2 = date+" "+time
+    let test= moment.utc(localDate2,format).local().format(SESSION_DATE_FORMAT)
+    console.log('localFormat: ', test);
+    return test;
+}
+
 
 export const defaultStyle = {
     spinnerTextStyle: {

@@ -124,7 +124,7 @@ class CoachGiveRewards extends BaseComponent {
 
             const players = this.state.playerList
             let totalScore = 0
-            let rewards = []
+            let rewards = {}
             for (let i = 0; i < players.length; i++) {
 
                 let reward = {}
@@ -133,7 +133,10 @@ class CoachGiveRewards extends BaseComponent {
                 let nId = id + ""
                 let score = player.input_score
                 reward[nId] = score
-                rewards[i] = reward
+                //rewards[i] = reward
+                //rewards = {...rewards,reward}
+                rewards[nId] = score
+                //console.log('rewards = ',JSON.stringify(rewards))
                 totalScore = totalScore + player.input_score
             }
             data["rewards"] = rewards
