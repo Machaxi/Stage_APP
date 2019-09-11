@@ -12,7 +12,7 @@ import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashbo
 import { getData, storeData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime } from '../BaseComponent';
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
 
@@ -279,7 +279,8 @@ class CoachHome extends BaseComponent {
                     {is_canceled ?
                         <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
                             <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
-                                {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}
+                                {/* {moment.utc(session_date).local().format("dddd, DD MMM YYYY")} */}
+                                {getUtcDateFromTime(session_date,start_time)}
                             </Text>
                             <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
                                 {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
@@ -290,7 +291,10 @@ class CoachHome extends BaseComponent {
                         <View>
                             <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
                                 <Text style={defaultStyle.regular_text_14}>
-                                    {moment.utc(session_date).local().format("dddd, DD MMM YYYY")}</Text>
+                                    {/* {moment.utc(session_date).local().format("dddd, DD MMM YYYY")} */}
+                                    {getUtcDateFromTime(session_date,start_time)}
+                                    </Text>
+                                    
                                 <Text style={defaultStyle.regular_text_14}>
                                     {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
                                         + "  -   " +
@@ -345,7 +349,8 @@ class CoachHome extends BaseComponent {
                                     style={[defaultStyle.regular_text_14, {
                                         textDecorationLine: 'line-through'
                                     }]}>
-                                    {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                    {/* {moment.utc(session_date).local().format("ddd, DD MMM YYYY")} */}
+                                    {getUtcDateFromTime(session_date, start_time)}
                                 </Text>
                                 <Text
                                     style={[defaultStyle.regular_text_14, {
@@ -374,7 +379,8 @@ class CoachHome extends BaseComponent {
 
                             <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                 <Text style={defaultStyle.regular_text_14}>
-                                    {moment.utc(session_date).local().format("ddd, DD MMM YYYY")}
+                                    {/* {moment.utc(session_date).local().format("ddd, DD MMM YYYY")} */}
+                                    {getUtcDateFromTime(session_date, start_time)}
                                 </Text>
 
                                 <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>

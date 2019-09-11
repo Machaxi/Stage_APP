@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, FlatList, Platform, Dimensions } from 'react-native';
 import BaseComponent, { } from '../BaseComponent'
 import { Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import ToastExample from '../../native/ToastExample';
 
 
 
@@ -30,7 +31,7 @@ export default class TournamentGallerySlider extends BaseComponent {
         }
 
         let images = this.props.navigation.getParam('images')
-        
+
         const imageURLs = images.map(
             (img, index) => ({
                 url: images[index].image,
@@ -43,7 +44,18 @@ export default class TournamentGallerySlider extends BaseComponent {
 
     }
 
-    _renderItem = ({ item }) => {
+    openFullView(index) {
+        if (Platform.OS == 'android') {
+            const images = this.props.navigation.getParam('images')
+            ToastExample.show(JSON.stringify(images), index);
+        } else {
+            this.props.navigation.navigate('TournamentGallerySliderZoom',
+                { images: this.state.images }
+            )
+        }
+    }
+
+    _renderItem = ({ item, index }) => {
 
         console.log('Item => ', JSON.stringify(item.url))
 
@@ -54,9 +66,8 @@ export default class TournamentGallerySlider extends BaseComponent {
                     margin: 2,
                 }}
                 onPress={() => {
-                    this.props.navigation.navigate('TournamentGallerySliderZoom',
-                        { images: this.state.images }
-                    )
+                    this.openFullView(index)
+
                 }}
             >
                 <Image

@@ -9,7 +9,11 @@ import { CustomeCard } from '../../../components/Home/Card'
 import { getCoachBatchDetails } from "../../../redux/reducers/BatchReducer";
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, formattedName } from '../../BaseComponent';
+import BaseComponent, {
+    defaultStyle,
+    getUtcDateFromTime,
+    SESSION_DATE_FORMAT, formattedName
+} from '../../BaseComponent';
 import moment from 'moment'
 import { COACH, ACADEMY } from '../../../components/Constants';
 import NavigationDrawerStructure from '../../../router/NavigationDrawerStructure';
@@ -108,6 +112,7 @@ class BatchDetails extends BaseComponent {
 
     }
 
+
     sessionMangement(session) {
 
         console.log(session)
@@ -144,7 +149,7 @@ class BatchDetails extends BaseComponent {
                             fontSize: 14,
                             textDecorationLine: 'line-through'
                         }}>
-                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                            {getUtcDateFromTime(session_date, start_time)}
                         </Text>
                         <Text style={{
                             fontSize: 14,
@@ -182,8 +187,7 @@ class BatchDetails extends BaseComponent {
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
                         }}>
-                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
-                        </Text>
+                            {getUtcDateFromTime(session_date, start_time)}                        </Text>
                         <Text style={{
                             fontSize: 14,
                             color: '#404040',

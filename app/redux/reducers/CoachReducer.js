@@ -8,7 +8,7 @@ const initialState = {
 
 export default function coachReducer(state = initialState, action) {
     switch (action.type) {
-       
+
         case types.GET_COACH1:
             return { ...state, loading: true };
         case types.DO_COACH1_SUCCESS:
@@ -26,14 +26,18 @@ export default function coachReducer(state = initialState, action) {
     }
 }
 
-export function coachListing(academy_id) {
+export function coachListing(academy_id, header) {
 
     console.log("coachListing => " + academy_id)
     return {
         type: types.GET_COACH1,
         payload: {
             request: {
-                url: `global/coach/list?academy_id=${academy_id}`
+                url: `global/coach/list?academy_id=${academy_id}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+                },
             }
         }
     }

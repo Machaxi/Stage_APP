@@ -688,8 +688,9 @@ const styles = StyleSheet.create({
     rounded_button: {
         width: 150,
         padding: 10,
-        borderRadius: 20,
+        borderRadius: 23,
         //borderWidth: 1,
+        height: 44,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

@@ -260,27 +260,30 @@ class RegistrationSteps extends BaseComponent {
 
             let user_selection = [...this.state.user_selection]
             let steps_data = user_selection[this.state.subStep]
-            let tournament_types = steps_data.tournament_types
+            if (steps_data.tournament_types) {
 
-            for (let i = 0; i < tournament_types.length; i++) {
+                let tournament_types = steps_data.tournament_types
+
+                for (let i = 0; i < tournament_types.length; i++) {
 
 
-                console.log('tournament_types => ', tournament_types[i])
-                let id = tournament_types[i].id
-                let selected = tournament_types[i].selected
+                    console.log('tournament_types => ', tournament_types[i])
+                    let id = tournament_types[i].id
+                    let selected = tournament_types[i].selected
 
-                if (id == args.id && selected) {
-                    console.log('true => ')
-                    tournament_types[i]['partner_name'] = args.name;
-                    tournament_types[i]['partner_phone'] = args.phone;
+                    if (id == args.id && selected) {
+                        console.log('true => ')
+                        tournament_types[i]['partner_name'] = args.name;
+                        tournament_types[i]['partner_phone'] = args.phone;
 
+                    }
                 }
+                this.setState({
+                    user_selection: user_selection
+                })
+                console.log('steps_data => ', JSON.stringify(steps_data))
+                console.log('user_selection => ', JSON.stringify(user_selection))
             }
-            this.setState({
-                user_selection: user_selection
-            })
-            console.log('steps_data => ', JSON.stringify(steps_data))
-            console.log('user_selection => ', JSON.stringify(user_selection))
 
         });
         ///===============================================================
@@ -595,7 +598,8 @@ class RegistrationSteps extends BaseComponent {
                                         //console.warn(value)
                                         if (value != null) {
                                             let player = this.getPlayerById(value)
-                                            player['user_id'] = player.id
+                                            if (is_edit_mode)
+                                                player['user_id'] = player.id
                                             this.state.txtname = player.name
                                             this.setState({
                                                 country: value,
@@ -1746,7 +1750,7 @@ const pickerSelectStyles = StyleSheet.create({
 const style = {
 
     rounded_button: {
-        borderRadius: 20,
+        borderRadius: 23,
         //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
@@ -1757,8 +1761,9 @@ const style = {
         width: 150,
         padding: 10,
         color: 'white',
+        height: 44,
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
     circle: {
         width: 22,

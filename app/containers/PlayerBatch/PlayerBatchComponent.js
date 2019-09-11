@@ -6,7 +6,7 @@ import moment from 'moment'
 import BaseComponent, {
     defaultStyle, SESSION_DATE_FORMAT,
     formattedName,
-    checkProfilePic, getFormatTimeDate, getFormatTime
+    checkProfilePic, getFormatTimeDate, getFormatTime, getUtcDateFromTime
 } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
@@ -172,7 +172,8 @@ class PlayerBatchComponent extends BaseComponent {
                             textDecorationLine: 'line-through',
                             justifyContent: 'space-between'
                         }]}>
-                            {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                            {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
+                            {getUtcDateFromTime(session_date, start_time)}
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, {
                             textDecorationLine: 'line-through',
@@ -198,7 +199,9 @@ class PlayerBatchComponent extends BaseComponent {
                         {routine_name == null ? "" : routine_name}
                     </Text>
                     <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
-                        <Text style={defaultStyle.regular_text_14}>{moment.utc(session_date).local().format(SESSION_DATE_FORMAT)}
+                        <Text style={defaultStyle.regular_text_14}>
+                            {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
+                            {getUtcDateFromTime(session_date, start_time)}
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
                             {getFormatTimeDate(session_date, start_time)

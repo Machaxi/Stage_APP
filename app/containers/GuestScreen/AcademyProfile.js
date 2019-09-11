@@ -407,6 +407,7 @@ class AcademyProfile extends BaseComponent {
         const academy_reviews = this.state.academy.academy_reviews
         let gallery = this.state.academy.gallery
         let about = academy.about
+        let user_id = academy.user_id
         let facilities = academy.facilities
 
         return (
@@ -733,7 +734,7 @@ class AcademyProfile extends BaseComponent {
 
                                         {
                                             is_coach: false, academy_id: this.state.id,
-                                            target_id: this.state.player_id
+                                            target_id: user_id
                                         })
                                 }}>
 

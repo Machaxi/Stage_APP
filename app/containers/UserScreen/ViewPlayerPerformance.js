@@ -6,7 +6,7 @@ import { getData, storeData } from "../../components/auth";
 import { getPlayerPerformance } from "../../redux/reducers/PerformenceReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle,getStatsImageById } from '../BaseComponent';
 import moment from 'moment'
 import RNPickerSelect from 'react-native-picker-select'
 import { TabView, TabBar } from 'react-native-tab-view';
@@ -146,6 +146,8 @@ class ViewPlayerPerformance extends BaseComponent {
       )
     }
 
+    const statId = this.state.performanceData.id
+
     return (
 
       <View style={styles.performanceContainer}>
@@ -157,7 +159,9 @@ class ViewPlayerPerformance extends BaseComponent {
 
         <View style={styles.statsOuter}>
 
-          <Image source={require('../../images/Mysatus.png')}
+          <Image 
+          resizeMode="contain"
+          source={getStatsImageById(statId)}
             style={styles.statsImg} />
 
           <View>

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator,TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
-import { Card, Text} from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
+import { Card, Text } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { coachListing } from '../../redux/reducers/CoachReducer'
-import BaseComponent,{defaultStyle} from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
+import { getData } from '../../components/auth';
 
 class CoachListing extends BaseComponent {
 
@@ -17,27 +18,38 @@ class CoachListing extends BaseComponent {
             academy_id: ''
         }
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
+        // if(this.state.academy_id==undefined){
+        //     getData('userInfo', (value) => {
+        //         let academy_id = userData['academy_id']
+        //         this.state.academy_id = academy_id
+        //     });
+        // }
     }
 
     componentDidMount() {
 
         let academy_id = this.state.academy_id
 
-        this.props.coachListing(academy_id).then(() => {
-            console.warn('Res=> ' + JSON.stringify(this.props.data.res))
-            let status = this.props.data.res.success
-            if (status) {
-                let list = this.props.data.res.data.coaches
+        getData('header', (value) => {
 
-                this.setState({
-                    coaches: list,
-                    filter: list
-                })
-            }
-
-        }).catch((response) => {
-            console.log(response);
+            this.props.coachListing(academy_id,value).then(() => {
+                console.warn('Res=> ' + JSON.stringify(this.props.data.res))
+                let status = this.props.data.res.success
+                if (status) {
+                    let list = this.props.data.res.data.coaches
+    
+                    this.setState({
+                        coaches: list,
+                        filter: list
+                    })
+                }
+    
+            }).catch((response) => {
+                console.log(response);
+            })
         })
+
+        
 
     }
 
@@ -105,34 +117,54 @@ class CoachListing extends BaseComponent {
                 <View style={{
                     paddingBottom: 8, paddingTop: 8,
                     paddingLeft: 16, paddingRight: 16,
-                    flexDirection: 'row', flex: 1, justifyContent: 'space-between'
+                    flexDirection: 'row', flex: 1,
                 }}>
 
-                    <Text style={{
-                        color: '#707070',
-                        width: "50%"
-                    }}>
+                    <Text
+                        numberOfLines={1}
+                        style={{
+                            color: '#707070',
+                            width: "30%"
+                        }}>
                         {item.name}
                     </Text>
 
-                    {/* {item.is_head ?
-                        <View style={{
-                            width: 90,
-                            borderRadius: 4,
-                            justifyContent: 'center',
-                            alignItem: 'center',
-                            backgroundColor: '#CDB473',
-                        }}>
+                    <View style={{
+                        width: "55%",
+                        flexDirection: 'row'
+                    }}>
 
-                            <Text style={[defaultStyle.bold_text_12, {
-                                paddingLeft: 4,
-                                paddingRight: 4,
-                                paddingTop: 1,
-                                paddingBottom: 1,
-                                color: 'white',
-                                textAlign: 'center',
-                            }]}>Head Coach</Text>
-                        </View> : null} */}
+                        {item.is_head ?
+                            <View style={{
+                                width: 70,
+                                borderRadius: 4,
+                                alignItem: 'center',
+                                justifyContent: 'center',
+                                marginRight: 6,
+                                backgroundColor: '#CDB473',
+                            }}>
+
+                                <Text style={[defaultStyle.regular_text_10, {
+                                    color: 'white',
+                                    textAlign: 'center',
+                                }]}>Head Coach</Text>
+                            </View> : null}
+
+                        {item.isMyCoach ?
+                            <View style={{
+                                width: 70,
+                                borderRadius: 4,
+                                alignItem: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: '#667DDB',
+                            }}>
+
+                                <Text style={[defaultStyle.regular_text_10, {
+                                    color: 'white',
+                                    textAlign: 'center',
+                                }]}>My Coach</Text>
+                            </View> : null}
+                    </View>
 
                     {/* :
                         <Text style={{
@@ -168,10 +200,10 @@ class CoachListing extends BaseComponent {
                             textAlign: 'center',
                             fontSize: 12,
                             color: '#707070',
-                            paddingTop: 2,
                         }}>{item.ratings == undefined ? 0 : item.ratings.toFixed(1)}</Text>
 
                         <Image
+                            resizeMode="contain"
                             style={{ width: 13, height: 13, marginLeft: 2, marginTop: 2 }}
                             source={require('../../images/ic_star.png')}
                         >

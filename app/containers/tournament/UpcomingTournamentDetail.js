@@ -429,7 +429,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                 style={{
                                     color: '#67BAF5',
                                     textAlign: 'center',
-                                    fontFamily: 'Quicksand-Regular'
+                                    fontFamily: 'Quicksand-Medium'
                                 }}
                             >
                                 Close
@@ -446,7 +446,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                 style={{
                                     color: 'white',
                                     textAlign: 'center',
-                                    fontFamily: 'Quicksand-Regular'
+                                    fontFamily: 'Quicksand-Medium'
                                 }}
                             >Register</Text>
                         </TouchableOpacity>
@@ -476,8 +476,9 @@ const styles = StyleSheet.create({
     },
     rounded_button: {
         width: '48%',
+        height:44,
         padding: 10,
-        borderRadius: 20,
+        borderRadius: 23,
         //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
@@ -488,7 +489,8 @@ const styles = StyleSheet.create({
     rounded_button_white: {
         width: '48%',
         padding: 10,
-        borderRadius: 20,
+        borderRadius: 23,
+        borderRadius: 23,
         borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
@@ -496,7 +498,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         color: '#67BAF5',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
 });
 

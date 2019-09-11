@@ -24,7 +24,7 @@ export const RateViewBorder = ({ children }) => {
                 justifyContent: 'center',
                 fontFamily: 'Quicksand-Medium',
                 fontSize: 12,
-            }}>{children.toFixed(1)}
+            }}>{children == undefined ? 0 : children.toFixed(1)}
             </Text>
         </View>
     );

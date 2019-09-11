@@ -18,17 +18,17 @@ xmlns:tools="http://schemas.android.com/tools"
       android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
 
-   <!-- <activity
-        android:theme="@style/SplashAppTheme"
+   <activity
         android:name=".SplashActivity"
         android:screenOrientation="portrait" 
         android:launchMode="singleTop"
-        >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity> -->
+        />
+
+        <activity
+        android:name=".FullImageView"
+        android:screenOrientation="portrait" 
+        android:launchMode="singleTop"
+        />
 
       <activity
         android:screenOrientation="portrait" 
