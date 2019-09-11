@@ -47,7 +47,7 @@ class OtherPlayerDetails extends BaseComponent {
             getData('userInfo', (value) => {
                 let userData = JSON.parse(value)
                 let academy_id = userData['academy_id']
-               // console.warn('academy_id=>', academy_id)
+                // console.warn('academy_id=>', academy_id)
 
                 this.fetch(academy_id, player_id)
             });
@@ -182,9 +182,13 @@ class OtherPlayerDetails extends BaseComponent {
                         </CustomeCard>
                     </View> */}
 
-                <View style={styles.confirmBtnOuter}>
-                  <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.props.navigation.navigate('ChallengeHome') }}>Challenge</Text>
-                </View>
+
+                    <View style={styles.confirmBtnOuter}>
+                        <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                            global.opponentPlayerDetails = this.state.player_profile;
+                            this.props.navigation.navigate('OpponentList')
+                        }}>Challenge</Text>
+                    </View>
 
                     {this.state.strenthList.length != 0 ?
                         <View style={{ margin: 10 }}>
@@ -282,7 +286,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
     },
-     confirmBtnOuter: {
+    confirmBtnOuter: {
         marginHorizontal: 16,
         //marginTop: 20,
         marginBottom: 15
