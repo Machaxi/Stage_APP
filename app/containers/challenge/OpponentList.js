@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground, Touchabl
 import { Card, Text, ActivityIndicator, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
-import { createChallenge, getOpponentList } from '../../redux/reducers/ChallengeReducer'
+import { createChallenge, getOpponentList, getChallengeDashboard } from '../../redux/reducers/ChallengeReducer'
 import { getData } from "../../components/auth";
 import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, getFormattedCategory, formattedName } from '../BaseComponent'
 import Events from '../../router/events';
@@ -25,11 +25,10 @@ class OpponentList extends BaseComponent {
             originalOpponentData: null
         }
         this.state.id = this.props.navigation.getParam('id', '');
-        this.state.playerData = this.props.navigation.getParam('playerData');
-        console.log('this.state.playerData', this.state.playerData);
     }
 
     componentDidMount() {
+        this.getPlayerData();
         getData('userInfo', (value) => {
             userData = JSON.parse(value);
             this.state.academy_id = userData['academy_id'];
@@ -61,11 +60,43 @@ class OpponentList extends BaseComponent {
 
     }
 
+    getPlayerData() {
+        console.log('heyyyyyyyyyyyyyyy,=======', global.opponentPlayerDetails);
+        if (global.opponentPlayerDetails != undefined && global.opponentPlayerDetails != null) {
+            console.log('yipeeeeeeeeeeeeeeeeeee');
+            //this.state.selectedOpponentData = global.opponentPlayerDetails;
+            this.setState({
+                selectedOpponentData: global.opponentPlayerDetails
+            })
+            global.opponentPlayerDetails = null;
+            this.setModalVisible(true)
+        }
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value)
+            let player_id = global.SELECTED_PLAYER_ID
+            let academy_id = userData['academy_id'];
+            getData('header', (value) => {
+                this.props.getChallengeDashboard(value, academy_id, player_id).then(() => {
+                    let data = this.props.data.data
+                    let success = data.success
+                    if (success) {
+                        this.setState({
+                            playerData: data.data.dashboard.player,
+                        })
+                    }
+
+                }).catch((response) => {
+                    console.log(response);
+                })
+            })
+        });
+    }
+
     setModalVisible(visible) {
         this.setState({ modalVisible: visible });
     }
 
-     find(query) {
+    find(query) {
         const { opponentData } = this.state;
         console.warn('here =>', opponentData)
 
@@ -111,13 +142,14 @@ class OpponentList extends BaseComponent {
         return (
             <View style={styles.searchOuter}>
                 <Card style={styles.searchCard}>
-                    <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => { this.state.query = text
+                    <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => {
+                        this.state.query = text
                         const data = this.find(this.state.query);
                         this.state.opponentData = data;
                         this.setState({
                             opponentData: data
                         })
-                     }}></TextInput>
+                    }}></TextInput>
                 </Card>
                 <Text style={styles.filterLabel} >Filter</Text>
             </View>
@@ -165,7 +197,7 @@ class OpponentList extends BaseComponent {
                                                     <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                                         <View style={styles.badgeInner}>
                                                             {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                                                            <Text style={[defaultStyle.bebas_text_blue_10,styles.badgeValue]}>{this.state.playerData.badge==undefined ? '': this.state.playerData.badge}</Text>
+                                                            <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{this.state.playerData.badge == undefined ? '' : this.state.playerData.badge}</Text>
                                                             {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                                         </View>
                                                     </ImageBackground>
@@ -341,7 +373,7 @@ class OpponentList extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && !this.state.opponentData.length==0) {
+        if (this.props.data.loading && !this.state.opponentData.length == 0) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -361,7 +393,7 @@ class OpponentList extends BaseComponent {
                     numColumns={3}
                     renderItem={this._renderItem}
                 />
-                {this.createChallengeModal()}
+                {this.state.playerData != null && this.createChallengeModal()}
 
             </View>
         );
@@ -377,7 +409,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    createChallenge, getOpponentList
+    createChallenge, getOpponentList, getChallengeDashboard
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OpponentList);
@@ -473,14 +505,14 @@ const styles = StyleSheet.create({
         fontSize: 8,
         paddingTop: 1,
         fontFamily: 'Quicksand-Regular'
-      },
-      playerImage: {
+    },
+    playerImage: {
         height: 80,
         width: 50,
         justifyContent: 'center',
         alignSelf: 'center'
-      },
-      playerLevel: {
+    },
+    playerLevel: {
         color: 'white',
         alignItems: 'center',
         alignSelf: 'center',
@@ -489,20 +521,20 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         marginTop: 16,
         fontFamily: 'Quicksand-Regular'
-      },
-      playerNameOuter: {
+    },
+    playerNameOuter: {
         position: 'absolute',
         marginTop: 103,
         width: "100%",
         height: 23,
         backgroundColor: 'white'
-      },
-      playerName: {
+    },
+    playerName: {
         color: '#404040',
         fontSize: 16,
         textAlign: 'center',
         fontFamily: 'Quicksand-Medium'
-      },
+    },
     badgeOuter: {
         justifyContent: 'center',
         alignItems: 'center',
