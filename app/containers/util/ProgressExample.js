@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { WebView, Linking, View } from 'react-native';
+import { Linking, View } from 'react-native';
 import BaseComponent from '../BaseComponent'
 import CustomProgress from '../../components/custom/CustomProgress'
+import { WebView } from 'react-native-webview';
 
 export default class ProgressExample extends BaseComponent {
 

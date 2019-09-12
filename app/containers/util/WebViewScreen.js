@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { WebView, Linking, View, ActivityIndicator } from 'react-native';
+import {  Linking, View, ActivityIndicator } from 'react-native';
 import BaseComponent from '../BaseComponent'
 import Spinner from 'react-native-loading-spinner-overlay';
+import { WebView } from 'react-native-webview';
 
 export default class WebViewScreen extends BaseComponent {
 

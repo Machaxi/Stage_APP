@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar, NetInfo } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import { getData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 import Events from '../router/events';
@@ -176,12 +176,12 @@ export default class BaseComponent extends React.Component {
             this._handleConnectivityChange
         );
     }
-    render() {
-        return (<StatusBar
-            backgroundColor="blue"
-            barStyle="light-content"
-        />)
-    }
+    // render() {
+    //     return (<StatusBar
+    //         backgroundColor="blue"
+    //         barStyle="light-content"
+    //     />)
+    // }
 
     //This function is used when we go for tournament registration and  go back to home 
     //in that case we have to use this, we are using tournaments in new stack, we cannot

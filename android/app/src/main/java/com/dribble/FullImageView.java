@@ -6,8 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,7 +23,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.dribble.R;
 import com.dribble.TouchImageView;
 import com.dribble.MainApplication;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 

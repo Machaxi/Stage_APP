@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ScrollView, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Image, TextInput, WebView } from 'react-native'
+import { View, ScrollView, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Image, TextInput } from 'react-native'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getData, storeData } from "../../components/auth";
@@ -10,6 +10,7 @@ import moment from 'moment'
 import { Card } from 'react-native-paper';
 import { ECharts } from 'react-native-echarts-wrapper';
 import YouTube from 'react-native-youtube';
+import { WebView } from 'react-native-webview';
 
 
 class PlayerPerformanceComponent extends BaseComponent {

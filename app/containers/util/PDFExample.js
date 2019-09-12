@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { WebView, Linking } from 'react-native';
+import { Linking } from 'react-native';
 import BaseComponent from '../BaseComponent'
+import { WebView } from 'react-native-webview';
 
 export default class PDFExample extends BaseComponent {
 

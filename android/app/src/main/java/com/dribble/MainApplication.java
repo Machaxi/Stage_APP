@@ -14,9 +14,9 @@ import io.branch.referral.Branch;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.razorpay.rn.RazorpayPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.rnfs.RNFSPackage;
+//import fr.bamlab.rnimageresizer.ImageResizerPackage;
+//import com.imagepicker.ImagePickerPackage;
+//import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.google.firebase.FirebaseApp;
 import com.dribble.CustomToastPackage;
-
+import com.facebook.react.PackageList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -59,32 +59,64 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new SplashScreenReactPackage(),
-            new RNSharePackage(),
-            new ReactNativeYouTube(),
-            new RNCWebViewPackage(),
-            new RNBranchPackage(),
-            new ReactNativeOneSignalPackage(),
-            new RazorpayPackage(),
-            new RNFetchBlobPackage(),
-            new ImageResizerPackage(),
-            new ImagePickerPackage(),
-            new RNFSPackage(),
-            new SvgPackage(),
-            new ReanimatedPackage(),
-            new LinearGradientPackage(),
-            new AsyncStoragePackage(),
-            new VectorIconsPackage(),
-            new RNGestureHandlerPackage(),
-            new RNFirebasePackage(),
-             new RNFirebaseAuthPackage(),
-             new RNFirebaseNotificationsPackage(),
-             new RNFirebaseMessagingPackage(),
-             new RNFirebaseAnalyticsPackage(),
-             new CustomToastPackage()
-      );
+      // return Arrays.<ReactPackage>asList(
+      //     ,
+      //       ,
+      //      ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //       ,
+      //        ,
+      //        ,
+      //        ,
+      //        ,
+      //        
+      // );
+      @SuppressWarnings("UnnecessaryLocalVariable")
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+      // Packages that cannot be autolinked yet can be added manually here, for example:
+      // packages.add(new MyReactNativePackage());
+
+      // packages.add(new MainReactPackage());
+      // packages.add(new SplashScreenReactPackage());
+      // packages.add( new RNSharePackage());
+      // packages.add(new ReactNativeYouTube());
+      // packages.add(new RNCWebViewPackage());
+      // packages.add(new RNBranchPackage());
+      // packages.add(new ReactNativeOneSignalPackage());
+      // packages.add(new RazorpayPackage());
+      // packages.add(new RNFetchBlobPackage());
+
+      //packages.add(new ImageResizerPackage());
+      //packages.add(new ImagePickerPackage());
+      //packages.add(new RNFSPackage());
+      
+      // packages.add(new SvgPackage());
+      // packages.add(new ReanimatedPackage());
+      // packages.add(new LinearGradientPackage());
+      // packages.add(new AsyncStoragePackage());
+      // packages.add(new VectorIconsPackage());
+      // packages.add(new RNGestureHandlerPackage());
+       //packages.add(new RNFirebasePackage());
+       packages.add(new RNFirebaseAuthPackage());
+       packages.add(new RNFirebaseNotificationsPackage());
+       packages.add(new RNFirebaseMessagingPackage());
+      packages.add(new RNFirebaseAnalyticsPackage());
+      packages.add(new CustomToastPackage());
+      return packages;
     }
 
     @Override
@@ -92,6 +124,7 @@ public class MainApplication extends Application implements ReactApplication {
       return "index";
     }
   };
+
 
   @Override
   public ReactNativeHost getReactNativeHost() {
