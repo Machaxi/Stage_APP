@@ -6,7 +6,7 @@ import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constant
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
 import firebase from "react-native-firebase";
-//import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen'
 
 var is_deep_linking = false
 var deep_data
@@ -54,7 +54,7 @@ class Splash extends BaseComponent {
 
     componentDidMount(){
 
-        //SplashScreen.hide();
+        SplashScreen.hide();
         this.moveNext()
     }
 
