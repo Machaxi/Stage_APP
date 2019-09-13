@@ -1,39 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
   package="com.dribble">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    
 
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@drawable/ic_app_icon"
+      android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      tools:replace="android:appComponentFactory"
-      android:appComponentFactory="whateverString"
-      android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
-
-   <activity
-        android:name=".SplashActivity"
-        android:screenOrientation="portrait" 
-        android:launchMode="singleTop"
-        />
-
-        <activity
-        android:name=".FullImageView"
-        android:screenOrientation="portrait" 
-        android:launchMode="singleTop"
-        />
-
       <activity
-        android:screenOrientation="portrait" 
         android:name=".MainActivity"
-        android:launchMode="singleTop"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
@@ -41,46 +19,7 @@ xmlns:tools="http://schemas.android.com/tools"
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-
-
-       <intent-filter>
-                <data android:scheme="branchandroid" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-
-             
-
-            <!-- Branch App Links (optional) -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="dribble.app.link" />
-            </intent-filter>
-             <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="dribble.test-app.link" />
-            </intent-filter>
-
-
       </activity>
-
-       <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_bfRvSAUUhF3BloaSXj8rNlcovrhMoMv0" />
-        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_biKzNtQRgB5ugoeSXDofHfegFwbSgKPd" />
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
-
-        <!-- Branch install referrer tracking (optional) -->
-        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-
-        
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
 

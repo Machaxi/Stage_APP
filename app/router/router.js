@@ -8,29 +8,29 @@ import {
     createDrawerNavigator,
     TabBarBottom
 } from "react-navigation";
-import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+// import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
+ import Icon from 'react-native-vector-icons/FontAwesome';
+ import LinearGradient from 'react-native-linear-gradient';
 
 import welcome from '../containers/welcome/welcome'
-import coachhome from '../containers/CoachScreen/CoachHome'
-import guesthome from '../containers/GuestScreen/GuestHome'
-import guestdetails from '../containers/GuestScreen/GuestDetails'
-import parenthome from '../containers/ParentsScreen/ParentHome'
+ import coachhome from '../containers/CoachScreen/CoachHome'
+ import guesthome from '../containers/GuestScreen/GuestHome'
+ import guestdetails from '../containers/GuestScreen/GuestDetails'
+ import parenthome from '../containers/ParentsScreen/ParentHome'
 import AcademyListing from '../containers/GuestScreen/AcademyListing'
-import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
-import CoachListing from '../containers/GuestScreen/CoachListing'
-import PlayersListing from '../containers/GuestScreen/PlayersListing'
-import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
-import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
-import CustomHeader from '../components/custom/CustomHeader'
-import spalsh from '../containers/welcome/SplashScreen'
-import IntroScreen from '../containers/welcome/IntroScreen'
+ import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
+ import CoachListing from '../containers/GuestScreen/CoachListing'
+ import PlayersListing from '../containers/GuestScreen/PlayersListing'
+ import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
+ import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
+ import CustomHeader from '../components/custom/CustomHeader'
+ import spalsh from '../containers/welcome/SplashScreen'
+ import IntroScreen from '../containers/welcome/IntroScreen'
 
-import phoneauth from '../containers/Login/PhoneAuth'
-import CoachMenuDrawer from './CoachMenuDrawer'
-import EditProfile from '../containers/profile/EditProfile'
+ import phoneauth from '../containers/Login/PhoneAuth'
+ import CoachMenuDrawer from './CoachMenuDrawer'
+ import EditProfile from '../containers/profile/EditProfile'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import CurrentBooking from '../containers/court_booking/CurrentBooking';
@@ -57,12 +57,12 @@ import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListin
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
 import TabBarHighlightLabel from './TabBarHighlightLabel'
 import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
-import Registration from "../containers/tournament/Registration";
+ import Registration from "../containers/tournament/Registration";
 import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
-import MyCalendar from "../containers/PlayerBatch/MyCalendar"
+ import MyCalendar from "../containers/PlayerBatch/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 import TournamentFixture from "../containers/tournament/TournamentFixture";
