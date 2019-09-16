@@ -149,7 +149,7 @@ export function coachListing(academy_id) {
     }
 };
 
-export function coachDetail(header,coach_id) {
+export function coachDetail(header, coach_id) {
 
     let url = `global/coach/details?coach_id=${coach_id}`
     console.log("search => " + url)
@@ -232,13 +232,20 @@ export function getAcademyBatchDetail(academy_id, proficiency, rating, availabil
 
 }
 
-export function getCourtBookingDetails(header, academy_id, date) {
+export function getCourtBookingDetails(header, academy_id, date, sportsId) {
+
+    var url;
+    if (sportsId == null) {
+        url = `global/court/details?academy_id=${academy_id}&date=${date}`
+    } else {
+        url = `global/court/details?academy_id=${academy_id}&date=${date}&sports_id=${sportsId}`
+    }
 
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url:`court/details?academy_id=${academy_id}&date=${date}`,
+                url: url,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -248,3 +255,23 @@ export function getCourtBookingDetails(header, academy_id, date) {
         }
     }
 };
+
+
+//http://13.233.182.217:8080/api/global/court/details?academy_id=1&date=12-09-201
+
+// export function getCourtBookingDetails(header, academy_id, date) {
+
+//     return {
+//         type: types.DO_LOGIN,
+//         payload: {
+//             request: {
+//                 url: `global/court/details?academy_id=${academy_id}&date=${date}`,
+//                 method: 'GET',
+//                 headers: {
+//                     'x-authorization': header
+
+//                 },
+//             }
+//         }
+//     }
+// };
