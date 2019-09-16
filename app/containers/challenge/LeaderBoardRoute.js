@@ -181,7 +181,7 @@ class LeaderboardRoute extends BaseComponent {
           data.length > 0 &&
           <View style={styles.totalResultsLabelOuter}>
             <Text style={styles.nameLabel}>Name</Text>
-            <Text style={styles.winLabel}>Win</Text>
+            <Text style={styles.winLabel}>Won</Text>
             <Text style={styles.lostLabel}>Lost</Text>
           </View>
         }

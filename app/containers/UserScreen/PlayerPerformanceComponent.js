@@ -12,7 +12,6 @@ import { Card } from 'react-native-paper';
 import YouTube from 'react-native-youtube';
 import { WebView } from 'react-native-webview';
 
-
 class PlayerPerformanceComponent extends BaseComponent {
 
     constructor(props) {
@@ -140,7 +139,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                 <View style={{ width: '100%', height: 300 }}>
 
                     {
-                        <WebView
+                        <ECharts.WebView
                             source={{ uri: `https://www.youtube.com/embed/${item.attribute.intro_video_url.split('=')[1]}` }}
                             javaScriptEnabled={true}
                             domStorageEnabled={true}

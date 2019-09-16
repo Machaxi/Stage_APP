@@ -50,7 +50,7 @@ class CoachHome extends BaseComponent {
                             }}
                         >{navigation.getParam('academy_name', '') == "" ? "" :
                             navigation.getParam('academy_name', '')}</Text>
-                        {navigation.getParam('academy_name', '') == null ? '' :
+                        {navigation.getParam('academy_name', '') == '' ? <Text></Text> :
                             <Image
                                 source={require('../../images/blank_down_arrow.png')}
                                 resizeMode="contain"

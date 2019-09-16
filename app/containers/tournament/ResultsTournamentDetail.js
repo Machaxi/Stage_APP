@@ -433,7 +433,7 @@ class ResultsTournamentDetail extends BaseComponent {
                                                 textAlign: 'center'
                                             }]}>
                                                 {this.state.selected_tournament_category == '' ?
-                                                    'Select Category to see fixture' : 'Fixture not generated'}
+                                                    'Select Category to see fixture' : 'Fixture not available'}
                                             </Text>}</View> :
 
                                     <Text style={[defaultStyle.bold_text_14, {

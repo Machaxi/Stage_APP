@@ -244,13 +244,13 @@ class TournamentFixture extends BaseComponent {
 
                         if (playerArray.length > 0 && obj.player1 == null) {
                             let newplayer1 = { ...player1 }
-                            newplayer1.name = "To be played"
+                            newplayer1.name = "To be decided"
                             subArray.push(newplayer1)
                         }
 
                         if (playerArray.length > 0 && obj.player2 == null) {
                             let newplayer1 = { ...player1 }
-                            newplayer1.name = "To be played"
+                            newplayer1.name = "To be decided"
                             subArray.push(newplayer1)
                         }
 
@@ -508,6 +508,15 @@ class TournamentFixture extends BaseComponent {
                     }
                 }
 
+                container.push(<Rect
+                    x={x + (width / 2) - 30}
+                    y={5}
+                    width={100}
+                    height={25}
+                    rx="8"
+                    ry="8"
+                    fill="#DFDFDF" />
+                )
                 container.push(
                     <Text
                         stroke="black"
@@ -515,9 +524,14 @@ class TournamentFixture extends BaseComponent {
                         fontSize="14"
                         fontFamily="Quicksand-Regular"
                         x={x + (width / 2) - 15}
-                        y={10}
+                        y={20}
                     >{roundName}</Text>
+
+
                 )
+
+
+
 
 
                 let check = false
@@ -929,13 +943,23 @@ class TournamentFixture extends BaseComponent {
                     let y = height * (j + 1) + space + topSpace
                     y = y - (height / 2)
 
+                    container.push(<Rect
+                        x={x1 + marginLeft + 12}
+                        y={5}
+                        width={100}
+                        height={25}
+                        rx="8"
+                        ry="8"
+                        fill="#DFDFDF" />
+                    )
+
                     container.push(
                         <Text
                             stroke={textColor}
                             fontSize="14"
                             fontFamily="Quicksand-Medium"
-                            x={x1 + marginLeft + 12}
-                            y={y - 10}>
+                            x={x1 + marginLeft + 20}
+                            y={20}>
                             Winner
                         </Text>
                     )

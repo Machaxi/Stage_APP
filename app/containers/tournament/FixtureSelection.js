@@ -352,13 +352,13 @@ class FixtureSelection extends BaseComponent {
                                                         this.inputRefs.gender = el;
                                                     }}
 
-                                                    // Icon={() => {
-                                                    //     return (
-                                                    //         <Image
-                                                    //             style={{ width: 8, height: 5 }}
-                                                    //             source={require('../../images/ic_down_arrow.png')} />
-                                                    //     )
-                                                    // }}
+                                                // Icon={() => {
+                                                //     return (
+                                                //         <Image
+                                                //             style={{ width: 8, height: 5 }}
+                                                //             source={require('../../images/ic_down_arrow.png')} />
+                                                //     )
+                                                // }}
 
                                                 />
 
@@ -437,7 +437,7 @@ class FixtureSelection extends BaseComponent {
                                                 textAlign: 'center'
                                             }]}>
                                                 {this.state.selected_tournament_category == '' ?
-                                                    'Select Category to see fixture' : 'Fixture not generated'}
+                                                    'Select Category to see fixture' : 'Fixture not available'}
                                             </Text>
                                         }
 

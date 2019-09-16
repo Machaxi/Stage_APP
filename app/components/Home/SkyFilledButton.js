@@ -33,7 +33,7 @@ export const SkyBorderButton = ({ onPress, children }) => {
                     fontSize: 14,
                     color: '#FFFFFF',
                     textAlign: 'center',
-                    
+                    justifyContent: 'center',
                     fontFamily: 'Quicksand-Medium',
                 }}>
                 {children}
@@ -46,7 +46,7 @@ const styles = {
         // width:'100%',
         // padding: 10,
         // flexShrink: 1,
-        // alignItems: 'stretch',
+        alignItems: 'center',
         // borderRadius: 20,
         // //borderWidth: 1,
         // marginLeft: 4,
@@ -55,7 +55,7 @@ const styles = {
         // backgroundColor: '#67BAF5',
         padding: 10,
         backgroundColor: '#67BAF5',
-        height: 44,
+        height: 42,
         borderRadius: 23,
 
     },
