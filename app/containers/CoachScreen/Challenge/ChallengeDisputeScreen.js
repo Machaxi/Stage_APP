@@ -377,11 +377,21 @@ class ChallengeDisputeScreen extends BaseComponent {
 
                 </View>
 
-
+                
+                {data!=null && data.length>0
+                ?
+              
                   <FlatList
                     data={data}
                     renderItem={this._renderItem}
                 />
+                :
+                
+                <View style={{ padding:16, alignItems: 
+                'center', justifyContent: 'center' }}>
+                <Text style={defaultStyle.regular_text_14}>{data==null?"Select Academy":"No challenge dispute found"}</Text>
+            </View>
+              }
                 {this.state.selectedChallengeData!=null && this.updateScoreModal()}
 
             </View>);

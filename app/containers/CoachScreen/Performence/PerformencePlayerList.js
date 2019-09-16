@@ -173,10 +173,10 @@ class PerformencePlayerList extends BaseComponent {
                             <Text style={defaultStyle.regular_text_14}>{batch_name} </Text>
                         </View>
 
-                        <View style={{ width: 130 }}>
+                        {/* <View style={{ width: 130 }}>
                             <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Category</Text>
                             <Text style={defaultStyle.regular_text_14}>{batch_category}</Text>
-                        </View>
+                        </View> */}
 
                     </View>
 

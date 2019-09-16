@@ -500,34 +500,62 @@ class TournamentFixture extends BaseComponent {
                 let space = 0;
                 let topSpace = 0
 
+                let is_final = 0
                 let roundName = "Round " + (i + 1)
                 console.log("Round---- " + i + " == " + (col - 1))
                 if (i == col - 1) {
                     if (array[col - 1].length == 2) {
                         roundName = "Final Round"
+                        is_final = 20;
                     }
                 }
 
-                container.push(<Rect
+                // container.push(<Rect
+                //     x={x + (width / 2) - 30}
+                //     y={5}
+                //     width={100}
+                //     height={25}
+                //     rx="8"
+                //     ry="8"
+                //     fill="#DFDFDF" />
+                // )
+                // container.push(
+                //     <Text
+                //         stroke="black"
+                //         strokeWidth="1"
+                //         fontSize="14"
+                //         fontFamily="Quicksand-Regular"
+                //         x={x + (width / 2) - 15}
+                //         y={20}
+                //     >{roundName}</Text>
+
+
+                // )
+
+                const fontSize = 14;
+                  container.push(<Rect
                     x={x + (width / 2) - 30}
                     y={5}
-                    width={100}
+                    width={100+is_final}
                     height={25}
                     rx="8"
                     ry="8"
                     fill="#DFDFDF" />
                 )
+
+               
                 container.push(
                     <Text
-                        stroke="black"
-                        strokeWidth="1"
-                        fontSize="14"
+                        fill="black"
                         fontFamily="Quicksand-Regular"
-                        x={x + (width / 2) - 15}
-                        y={20}
-                    >{roundName}</Text>
-
-
+                        fontSize={fontSize}
+                        textAnchor="middle"
+                        x={x + (width / 2)+10+is_final}
+                        y={22}
+                        height={25}
+                        >
+                        {roundName}
+                        </Text>
                 )
 
 
@@ -672,7 +700,7 @@ class TournamentFixture extends BaseComponent {
                                 fontFamily="Quicksand-Regular"
                                 x={x + 12}
                                 y={y + 25}>
-                                {array[i][j].name == 'To be played' ? 'To be played' : this.getName(array[i][j])}
+                                {array[i][j].name == 'To be decided' ? 'To be decided' : this.getName(array[i][j])}
                             </Text>
                         )
                     }
@@ -946,7 +974,7 @@ class TournamentFixture extends BaseComponent {
                     container.push(<Rect
                         x={x1 + marginLeft + 12}
                         y={5}
-                        width={100}
+                        width={80}
                         height={25}
                         rx="8"
                         ry="8"
@@ -957,9 +985,9 @@ class TournamentFixture extends BaseComponent {
                         <Text
                             stroke={textColor}
                             fontSize="14"
-                            fontFamily="Quicksand-Medium"
-                            x={x1 + marginLeft + 20}
-                            y={20}>
+                            fontFamily="Quicksand-Regular"
+                            x={x1 + marginLeft + 30}
+                            y={22}>
                             Winner
                         </Text>
                     )
@@ -1015,7 +1043,7 @@ class TournamentFixture extends BaseComponent {
                             fontFamily="Quicksand-Regular"
                             x={x1 + marginLeft + 12}
                             y={y + 25}>
-                            {winner.name}
+                            {formattedName(winner.name)}
                         </Text>
                     )
 

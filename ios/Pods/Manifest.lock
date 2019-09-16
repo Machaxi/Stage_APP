@@ -211,7 +211,7 @@ PODS:
     - React
   - RNGestureHandler (1.4.1):
     - React
-  - RNReanimated (1.1.0):
+  - RNReanimated (1.2.0):
     - React
   - RNShare (2.0.0):
     - React
@@ -428,7 +428,7 @@ SPEC CHECKSUMS:
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNFS: a8fbe7060fa49157d819466404794ad9c58e58cf
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
-  RNReanimated: 7a52c90473b5e81c13408d40d797b98387eaddde
+  RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
   RNSVG: 2a15d0d14d171ba610db927190604d1ab223f413
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

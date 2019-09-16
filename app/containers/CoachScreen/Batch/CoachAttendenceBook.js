@@ -218,10 +218,10 @@ class CoachAttendenceBook extends React.Component {
 
                 <View style={{ backgroundColor: 'white' }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
-                        <View style={{ justifyContent: 'space-between' }}>
+                        {/* <View style={{ justifyContent: 'space-between' }}>
                             <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 5 }]}>Category</Text>
                             <Text style={defaultStyle.regular_text_14}>{batch_category} </Text>
-                        </View>
+                        </View> */}
 
                         <View style={{ justifyContent: 'space-between' }}>
                             <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 5 }]} > Batch name</Text>

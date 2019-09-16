@@ -51,6 +51,8 @@ target 'Dribble' do
   # (Recommended) Pod for Google Analytics
   pod 'Firebase/Analytics'
   
+  pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+
   target 'DribbleTests' do
     inherit! :search_paths
     # Pods for testing

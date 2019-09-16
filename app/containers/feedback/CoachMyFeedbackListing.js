@@ -6,6 +6,7 @@ import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import { getMyCoachFeedbackListing } from '../../redux/reducers/FeedbackReduer'
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 
 class CoachMyFeedbackListing extends BaseComponent {
@@ -111,7 +112,7 @@ class CoachMyFeedbackListing extends BaseComponent {
                             style={{ width: 80 }}
                         />
 
-                        <Text style={{
+                        {/* <Text style={{
                             backgroundColor: '#D6D6D6',
                             height: 19,
                             width: 30,
@@ -120,7 +121,8 @@ class CoachMyFeedbackListing extends BaseComponent {
                             color: '#707070',
                             fontFamily: 'Quicksand-Medium',
                             borderRadius: 12,
-                        }}>{item.rating}</Text>
+                        }}>{item.rating}</Text> */}
+                        <RateViewFill>{item.rating}</RateViewFill>
 
                     </View>
 

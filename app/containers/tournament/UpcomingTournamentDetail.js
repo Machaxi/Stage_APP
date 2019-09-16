@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
         marginRight: 4,
         borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
-
+        justifyContent:'center'
     },
     rounded_button_white: {
         width: '48%',
@@ -498,7 +498,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         color: '#67BAF5',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Medium'
+        fontFamily: 'Quicksand-Medium',
+        justifyContent:'center'
     },
 });
 

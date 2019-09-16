@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, Dimensions, Platform, ScrollView, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 import Swiper from 'react-native-swiper'
 
@@ -17,6 +18,15 @@ export default class IntroPage extends Component {
                 require('../../images/boarding_6.png'),
                 require('../../images/boarding_7.png'),
             ],
+            // sliderData: [
+            //     '../../images/boarding_1.png',
+            //     '../../images/boarding_2.png',
+            //     '../../images/boarding_3.png',
+            //     '../../images/boarding_4.png',
+            //     '../../images/boarding_5.png',
+            //     '../../images/boarding_6.png',
+            //     '../../images/boarding_7.png',
+            // ],
             selectedIndex: 1,
             label: 1,
         }

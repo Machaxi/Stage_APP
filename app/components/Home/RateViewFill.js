@@ -17,7 +17,7 @@ export const RateViewFill = ({ children }) => {
                 textAlignVertical: 'center'
             }}>
             <Text style={{
-                marginBottom: 1,
+                //marginBottom: 1,
                 color: '#707070',
                 alignItems: 'center',
                 justifyContent: 'center',

@@ -155,11 +155,11 @@ class PerformenceScreen extends BaseComponent {
                 }]} />
                 <View style={{ flexDirection: 'row', marginLeft: 12, marginRight: 12 }}>
 
-                    <View style={{ wdith: '50%' }}>
+                    {/* <View style={{ wdith: '50%' }}>
                         <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Category</Text>
                         <Text style={[defaultStyle.regular_text_14, { marginBottom: 10 }]}>{item.batch_category}</Text>
-                    </View>
-                    <View style={{ wdith: '40%', marginLeft: 100 }}>
+                    </View> */}
+                    <View style={{ wdith: '40%', }}>
                         <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Players to be updated</Text>
                         <Text style={[defaultStyle.regular_text_14, { marginBottom: 10 }]}>{item.remaining_players}</Text>
                     </View>

@@ -475,14 +475,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(FixtureSelection);
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 14,
-        //paddingVertical: 12,
+        paddingVertical: 8,
         //paddingHorizontal: 10,
         borderColor: '#614051',
         borderRadius: 8,
         color: 'black',
-        marginBottom: 4,
-        alignItems: 'center',
-        textAlign: 'center',
+        //marginBottom: 4,
+        //alignItems: 'center',
+        //textAlign: 'center',
         fontFamily: 'Quicksand-Regular',
 
         // to ensure the text is never behind the icon

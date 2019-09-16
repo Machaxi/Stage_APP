@@ -264,14 +264,14 @@ const style = {
         width: '100%',
         height: 40,
         padding: 10,
-        borderRadius: 20,
+        borderRadius: 23,
         //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
-        borderColor: '#67BAF5',
+        //borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
         color: 'white',
-        textAlign: 'center',
+
         fontFamily: 'Quicksand-Regular'
     },
     textinput: {

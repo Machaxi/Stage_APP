@@ -1372,7 +1372,7 @@ class RegistrationSteps extends BaseComponent {
                     contact: '',
                     name: name
                 },
-                theme: { color: '#F37254' }
+                theme: { color: '#67BAF5' }
             }
             RazorpayCheckout.open(options).then((data) => {
                 // handle success
@@ -1754,16 +1754,22 @@ const style = {
         //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
-        borderColor: '#67BAF5',
+        //borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
+        justifyContent:'center',
+        alignItems:'center',
+        height:42,
+        padding: 10,
+        width: 150,
     },
     rounded_button_text: {
-        width: 150,
-        padding: 10,
+        
         color: 'white',
-        height: 44,
+        //height: 42,
         textAlign: 'center',
-        fontFamily: 'Quicksand-Medium'
+        //alignItems:'center',
+        fontFamily: 'Quicksand-Medium',
+        //justifyContent:'center'
     },
     circle: {
         width: 22,

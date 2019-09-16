@@ -12,6 +12,7 @@ import { getData } from "../../components/auth";
 import { getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
 import FilterDialog from './../GuestScreen/FilterDialog'
 import ReadMoreText from "rn-read-more-text";
+import { RateViewFill } from '../../components/Home/RateViewFill';
 
 
 class AcademyFeedbackListing extends BaseComponent {
@@ -193,7 +194,7 @@ class AcademyFeedbackListing extends BaseComponent {
 
                     <Text
                         style={[defaultStyle.bold_text_14, { flex: 1 }]}>
-                        Anonymous
+                        {item.source.name}
                     </Text>
 
 
@@ -213,7 +214,7 @@ class AcademyFeedbackListing extends BaseComponent {
                             style={{ width: 80 }}
                         />
 
-                        <Text style={{
+                        {/* <Text style={{
                             backgroundColor: '#D6D6D6',
                             height: 19,
                             width: 30,
@@ -222,7 +223,8 @@ class AcademyFeedbackListing extends BaseComponent {
                             color: '#707070',
                             fontFamily: 'Quicksand-Medium',
                             borderRadius: 12,
-                        }}>{item.rating}</Text>
+                        }}>{item.rating}</Text> */}
+                        <RateViewFill>{item.rating}</RateViewFill>
 
                     </View>
 

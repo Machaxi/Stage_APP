@@ -216,11 +216,11 @@ class CancelSession extends BaseComponent {
             }}>
 
                 <View style={{
-                    alignItems: 'center',
-                    alignSelf: 'center',
+                    //alignItems: 'center',
+                    //alignSelf: 'center',
                     flex: 1,
-                    width: "33%",
-                    alignContent: 'center',
+                    width: "50%",
+                    //alignContent: 'center',
                 }}>
 
                     <Text
@@ -229,7 +229,7 @@ class CancelSession extends BaseComponent {
                     </Text>
                 </View>
 
-                <View style={{
+                {/* <View style={{
                     alignItems: 'center',
                     alignSelf: 'center',
                     flex: 1,
@@ -241,13 +241,13 @@ class CancelSession extends BaseComponent {
                         style={[defaultStyle.regular_text_14, { color: '#000000' }]}>
                         {item.batch_category}
                     </Text>
-                </View>
+                </View> */}
 
                 <View style={{
                     alignItems: 'center',
                     alignSelf: 'center',
                     flex: 1,
-                    width: "33%",
+                    width: "50%",
                     alignContent: 'center',
                 }}>
 
@@ -621,10 +621,10 @@ class CancelSession extends BaseComponent {
                             }}>
 
                                 <View style={{
-                                    alignItems: 'center',
-                                    alignSelf: 'center',
+                                    //alignItems: 'center',
+                                    //alignSelf: 'center',
                                     flex: 1,
-                                    width: "33%",
+                                    width: "50%",
                                     alignContent: 'center',
                                 }}>
 
@@ -636,7 +636,7 @@ class CancelSession extends BaseComponent {
                             </Text>
                                 </View>
 
-                                <View style={{
+                                {/* <View style={{
                                     alignItems: 'center',
                                     alignSelf: 'center',
                                     flex: 1,
@@ -650,12 +650,12 @@ class CancelSession extends BaseComponent {
                                         }]}>
                                         Type
                             </Text>
-                                </View>
+                                </View> */}
                                 <View style={{
                                     alignItems: 'center',
                                     alignSelf: 'center',
                                     flex: 1,
-                                    width: "33%",
+                                    width: "50%",
                                     alignContent: 'center',
                                 }}>
                                     <Text

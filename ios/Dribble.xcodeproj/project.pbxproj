@@ -32,10 +32,10 @@
 		A2346D61232B607B009565AC /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5D232B607B009565AC /* Quicksand-Bold.ttf */; };
 		A2346D62232B607B009565AC /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5E232B607B009565AC /* Quicksand-Medium.ttf */; };
 		A2346D63232B607B009565AC /* Quicksand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5F232B607B009565AC /* Quicksand-Regular.ttf */; };
-		A2346D6B232B94E9009565AC /* libRazorpayCheckout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2346D6A232B94D7009565AC /* libRazorpayCheckout.a */; };
-		A2346D6D232B9526009565AC /* Razorpay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2346D6C232B9526009565AC /* Razorpay.framework */; };
-		A2346D6E232B9526009565AC /* Razorpay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2346D6C232B9526009565AC /* Razorpay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2A8DD6B232B5EFE00D91CD3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2A8DD6A232B5EFE00D91CD3 /* GoogleService-Info.plist */; };
+		A2CAB429232F62C900ACA14E /* Razorpay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAB428232F62C900ACA14E /* Razorpay.framework */; };
+		A2CAB42A232F62C900ACA14E /* Razorpay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAB428232F62C900ACA14E /* Razorpay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2CAB42B232F62DA00ACA14E /* libRazorpayCheckout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2346D6A232B94D7009565AC /* libRazorpayCheckout.a */; };
 		B5C0272589CA43B3A4365220 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FEDADAE6E61144D581B35959 /* MaterialIcons.ttf */; };
 		B9106352017141B092B21112 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F364B9ADDD5743B5B29B9DBC /* Ionicons.ttf */; };
 		BCD659523BDB4AAEA737BEDF /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDDE3F4DC54D4256A724F01F /* Octicons.ttf */; };
@@ -76,7 +76,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A2346D6E232B9526009565AC /* Razorpay.framework in Embed Frameworks */,
+				A2CAB42A232F62C900ACA14E /* Razorpay.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,8 +120,8 @@
 		A2346D5E232B607B009565AC /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand-Medium.ttf"; sourceTree = "<group>"; };
 		A2346D5F232B607B009565AC /* Quicksand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand-Regular.ttf"; sourceTree = "<group>"; };
 		A2346D64232B94D7009565AC /* RazorpayCheckout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RazorpayCheckout.xcodeproj; path = "../node_modules/react-native-razorpay/ios/RazorpayCheckout.xcodeproj"; sourceTree = "<group>"; };
-		A2346D6C232B9526009565AC /* Razorpay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Razorpay.framework; sourceTree = "<group>"; };
 		A2A8DD6A232B5EFE00D91CD3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A2CAB428232F62C900ACA14E /* Razorpay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Razorpay.framework; path = "../node_modules/react-native-razorpay/ios/Razorpay.framework"; sourceTree = "<group>"; };
 		B5369967490DE19265F67E33 /* libPods-Dribble-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Dribble-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9197A23C7F5479B845E1129 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		BDDE3F4DC54D4256A724F01F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -150,8 +150,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2346D6B232B94E9009565AC /* libRazorpayCheckout.a in Frameworks */,
-				A2346D6D232B9526009565AC /* Razorpay.framework in Frameworks */,
+				A2CAB42B232F62DA00ACA14E /* libRazorpayCheckout.a in Frameworks */,
+				A2CAB429232F62C900ACA14E /* Razorpay.framework in Frameworks */,
 				82A660DBFF2B642015B06671 /* libPods-Dribble.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,7 +270,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				A2346D6C232B9526009565AC /* Razorpay.framework */,
+				A2CAB428232F62C900ACA14E /* Razorpay.framework */,
 				13B07FAE1A68108700A75B9A /* Dribble */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* DribbleTests */,

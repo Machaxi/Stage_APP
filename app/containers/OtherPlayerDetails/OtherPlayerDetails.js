@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
+import CustomProgres from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -95,9 +96,11 @@ class OtherPlayerDetails extends BaseComponent {
     }
 
     renderItem = ({ item }) => (
-        <TouchableOpacity key={item} onPress={() => {
+        <TouchableOpacity 
+        activeOpacity={.8}
+        key={item} onPress={() => {
 
-            console.warn("Touch Press1")
+            //console.warn("Touch Press1")
 
             // this.props.navigation.navigate('OrderTracking', {
             //     order_id: item.increment_id
@@ -127,7 +130,12 @@ class OtherPlayerDetails extends BaseComponent {
                             {item.score}
                         </Text>
                     </View>
-                    <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} />
+                    {/* <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} /> */}
+                    <CustomProgres
+                        percent={item.score}
+                        width={deviceWidth - 120}
+                        height={14}
+                    />                    
                 </View>
                 <View style={{
                     height: 50,

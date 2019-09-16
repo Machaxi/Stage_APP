@@ -15,6 +15,7 @@ import moment from 'moment'
 import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
 import { BASE_URL } from '../../../App'
+import ImageResizer from 'react-native-image-resizer';
 
 class EditProfile extends BaseComponent {
 
@@ -247,9 +248,37 @@ class EditProfile extends BaseComponent {
                 })
                 //console.warn('path => ',this.state.path)
                 //console.warn('fileName => ',this.state.fileName)
+                //this.resizeImage(path)
             }
         });
 
+    }
+
+    resizeImage(path){
+
+        // ImageResizer.createResizedImage(path, 
+        //     50, 
+        //     50, 
+        //     'JPEG', 
+        //     80).then((response) => {
+        //         alert(response.uri)
+        //     // response.uri is the URI of the new image that can now be displayed, uploaded...
+        //     // response.path is the path of the new image
+        //     // response.name is the name of the new image with the extension
+        //     // response.size is the size of the new image
+        //   }).catch((err) => {
+        //       alert(JSON.stringify(err))
+        //     // Oops, something went wrong. Check that the filename is correct and
+        //     // inspect err to get more details.
+        //   });
+        ImageResizer.createResizedImage(path, 8, 6, 'JPEG', 80)
+      .then(({ uri }) => {
+        alert(uri)
+      })
+      .catch(err => {
+        console.log(err);
+        return Alert.alert('Unable to resize the photo', 'Check the console for full the error message');
+      });
     }
 
     render() {
@@ -376,7 +405,7 @@ class EditProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                                <Text style={{ color: 'red' }}>*</Text>Phone Number
+                                <Text style={{ color: 'red' }}>*</Text>Mobile Number
                     </Text>
 
                             <TextInput
@@ -404,7 +433,7 @@ class EditProfile extends BaseComponent {
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
                                 minDate={moment('1920-01-01')}
-                                maxDate={Date.now()}
+                                maxDate={moment(Date.now())}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 customStyles={{

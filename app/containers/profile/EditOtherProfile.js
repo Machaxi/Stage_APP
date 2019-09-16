@@ -185,7 +185,7 @@ class EditOtherProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                                Phone Number
+                            Mobile Number
                     </Text>
 
                             <TextInput
@@ -214,7 +214,7 @@ class EditOtherProfile extends BaseComponent {
                                 placeholder="select date"
                                 format="DD-MMM-YYYY"
                                 minDate={moment('1920-01-01')}
-                                maxDate={Date.now()}
+                                maxDate={moment(Date.now())}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 customStyles={{

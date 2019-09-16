@@ -8,7 +8,7 @@ import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../
 import { connect } from 'react-redux';
 import moment from 'moment'
 import { Card } from 'react-native-paper';
-//import { ECharts } from 'react-native-echarts-wrapper';
+import { ECharts } from 'react-native-echarts-wrapper';
 import YouTube from 'react-native-youtube';
 import { WebView } from 'react-native-webview';
 
@@ -131,6 +131,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
                 <View style={{ width: '100%', height: 300 }}>
                     <ECharts
+                    legacyMode={true}
                         style={{ width: '100%' }}
                         option={option}></ECharts>
                 </View>
@@ -139,7 +140,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                 <View style={{ width: '100%', height: 300 }}>
 
                     {
-                        <ECharts.WebView
+                        <WebView
                             source={{ uri: `https://www.youtube.com/embed/${item.attribute.intro_video_url.split('=')[1]}` }}
                             javaScriptEnabled={true}
                             domStorageEnabled={true}

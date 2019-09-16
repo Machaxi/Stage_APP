@@ -336,7 +336,7 @@ class Registration extends BaseComponent {
                         placeholder="Birth Date"
                         format="DD-MMM-YYYY"
                         minDate={moment('1920-01-01')}
-                        maxDate={Date.now()}
+                        maxDate={moment(Date.now())}
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         customStyles={{

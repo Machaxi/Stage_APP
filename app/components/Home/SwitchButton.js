@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         borderColor: '#67BAF5',
         borderRadius: 23,
         marginBottom: 10,
+        justifyContent:'center'
     },
 
     textStyleB: {
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
         height: 46,
         borderRadius: 23,
         marginBottom: 20,
+        justifyContent:'center'
     }
 });
 

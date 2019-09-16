@@ -13,7 +13,7 @@ export const SkyFilledButton = ({ onPress, children }) => {
                 style={{
                     color: 'white',
                     textAlign: 'center',
-                    fontFamily: 'Quicksand-Medium'
+                    fontFamily: 'Quicksand-Medium',
                 }}>
                 {children}
             </Text>
@@ -47,6 +47,7 @@ const styles = {
         // padding: 10,
         // flexShrink: 1,
         alignItems: 'center',
+        justifyContent:'center',
         // borderRadius: 20,
         // //borderWidth: 1,
         // marginLeft: 4,
@@ -70,6 +71,7 @@ const styles = {
         marginRight: 4,
         borderColor: '#67BAF5',
         backgroundColor: 'white',
+        justifyContent:'center',
 
     },
 }
