@@ -29,7 +29,8 @@ class OtherPlayerDetails extends BaseComponent {
             userData: null,
             country: undefined,
             player_profile: null,
-            strenthList: null
+            strenthList: null,
+            showChallenge: false
         }
 
 
@@ -48,6 +49,13 @@ class OtherPlayerDetails extends BaseComponent {
                 let userData = JSON.parse(value)
                 let academy_id = userData['academy_id']
                 // console.warn('academy_id=>', academy_id)
+
+                if (userData.user['user_type'] == 'PLAYER' && userData.user['user_type'] == 'PARENT') {
+                    this.setState({
+                        showChallenge: true
+                    })
+                }
+
 
                 this.fetch(academy_id, player_id)
             });
@@ -183,12 +191,16 @@ class OtherPlayerDetails extends BaseComponent {
                     </View> */}
 
 
-                    <View style={styles.confirmBtnOuter}>
-                        <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
-                            global.opponentPlayerDetails = this.state.player_profile;
-                            this.props.navigation.navigate('OpponentList')
-                        }}>Challenge</Text>
-                    </View>
+                    {
+                        this.state.showChallenge &&
+                        <View style={styles.confirmBtnOuter}>
+                            <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                                global.opponentPlayerDetails = this.state.player_profile;
+                                this.props.navigation.navigate('OpponentList')
+                            }}>Challenge</Text>
+                        </View>
+                    }
+
 
                     {this.state.strenthList.length != 0 ?
                         <View style={{ margin: 10 }}>
