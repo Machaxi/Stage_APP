@@ -243,8 +243,10 @@ class CoachHome extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
+                    global.rating = user1.data.coach_profile['ratings']
                     this.setState({
                         coach_profile: user1.data['coach_profile'],
+                        
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -280,7 +282,7 @@ class CoachHome extends BaseComponent {
                         <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
                             <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
                                 {/* {moment.utc(session_date).local().format("dddd, DD MMM YYYY")} */}
-                                {getUtcDateFromTime(session_date,start_time)}
+                                {getUtcDateFromTime(session_date, start_time)}
                             </Text>
                             <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
                                 {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
@@ -292,9 +294,9 @@ class CoachHome extends BaseComponent {
                             <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: 'space-between' }}>
                                 <Text style={defaultStyle.regular_text_14}>
                                     {/* {moment.utc(session_date).local().format("dddd, DD MMM YYYY")} */}
-                                    {getUtcDateFromTime(session_date,start_time)}
-                                    </Text>
-                                    
+                                    {getUtcDateFromTime(session_date, start_time)}
+                                </Text>
+
                                 <Text style={defaultStyle.regular_text_14}>
                                     {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
                                         + "  -   " +
@@ -455,6 +457,7 @@ class CoachHome extends BaseComponent {
             { is_attandence_due ? this.attedenceMangement(attandence_batch) : null }
 
             this.sessionMangement(operations)
+
             this.scoreMangement(tournaments)
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
@@ -586,7 +589,7 @@ class CoachHome extends BaseComponent {
                     </CustomeCard> : null}
 
 
-                    {is_scorer ?
+                    {is_scorer && tournaments.length > 0 ?
 
                         <CustomeCard>
                             <View

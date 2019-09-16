@@ -6,7 +6,8 @@ import BaseComponent, {
     defaultStyle,
     getFormattedRound,
     getFormattedTournamentLevel,
-    genderCamal
+    genderCamal,
+    getFormattedCategory
 } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
@@ -106,6 +107,17 @@ class UpcomingTournamentDetail extends BaseComponent {
         //Share.shareSingle(shareOptions);
     }
 
+
+    category_type(category_types) {
+
+        let str = ''
+        for (let i = 0; i < category_types.length; i++) {
+            let type = category_types[i]
+            str = str + getFormattedCategory(type) + ", "
+        }
+        return str.substring(0, str.length - 2);
+    }
+
     render() {
 
         let data = this.state.data
@@ -123,6 +135,7 @@ class UpcomingTournamentDetail extends BaseComponent {
         let label = minimumAmount == 0 ? 'Free' : 'Rs. ' + minimumAmount + ' Onwards'
         let tournament_types = this.tournament_types(data.tournament_types)
         let tournament_link = data.tournament_link
+        let category_type = this.category_type(data.category_types)
 
         return (
 
@@ -257,7 +270,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                                     color: '#404040',
                                                     //width: "33.33%",
                                                     fontFamily: 'Quicksand-Regular'
-                                                }}>{data.category_types.join(', ')}</Text>
+                                                }}>{category_type}</Text>
 
                                             </View>
 

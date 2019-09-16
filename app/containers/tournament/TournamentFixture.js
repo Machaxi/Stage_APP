@@ -366,6 +366,7 @@ class TournamentFixture extends BaseComponent {
                     let obj = { ...matches[0].winner }
                     obj.winner = true
                     this.state.winner = obj
+                    console.log('Winner-> ',JSON.stringify(obj))
                     // let winnerArray = []
                     // winnerArray[0] = obj
                     // playerArray.push(subArray)
@@ -617,7 +618,8 @@ class TournamentFixture extends BaseComponent {
                             console.warn("playerid : " + id)
                             if (id != undefined) {
                                 this.props.navigation.navigate('OtherPlayerDeatils', {
-                                    player_id: id
+                                    player_id: id,
+                                    fixture:true
                                 })
                             }
                         }}
@@ -691,7 +693,8 @@ class TournamentFixture extends BaseComponent {
                                     console.warn("playerid : " + id)
                                     if (id != undefined) {
                                         this.props.navigation.navigate('OtherPlayerDeatils', {
-                                            player_id: id
+                                            player_id: id,
+                                            fixture:true
                                         })
                                     }
                                 }}
@@ -1004,13 +1007,14 @@ class TournamentFixture extends BaseComponent {
                     container.push(<Rect
                         onPress={() => {
 
-                            // let id = array[i][j].id
-                            // console.warn("playerid : " + id)
-                            // if (id != undefined) {
-                            //     this.props.navigation.navigate('OtherPlayerDeatils', {
-                            //         player_id: id
-                            //     })
-                            // }
+                            let id = winner.id
+                            console.warn("playerid : " + id)
+                            if (id != undefined) {
+                                this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    player_id: id,
+                                    fixture:true
+                                })
+                            }
                         }}
                         key={"id_" + (i * 100 + 0)}
                         x={x1 + marginLeft}

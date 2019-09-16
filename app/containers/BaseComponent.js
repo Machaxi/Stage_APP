@@ -1,6 +1,6 @@
 import React from 'react'
 import NetInfo from "@react-native-community/netinfo";
-import { getData } from '../components/auth';
+import { getData, storeData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 import Events from '../router/events';
 import axios from 'axios'
@@ -45,6 +45,7 @@ export const GO_TO_HOME = "GO_TO_HOME"
 export const TOURNAMENT_FITLER = 'TOURNAMENT_FITLER'
 export const PUSH_TOKEN = "PUSH_TOKEN"
 export const ONE_SIGNAL_USERID = "ONE_SIGNAL_USERID"
+export const DRIBBLE_LOGO = "DRIBBLE_LOGO"
 
 //setting GLOBAL VARIABLES
 global.USER_TYPE = ''
@@ -299,8 +300,9 @@ export function getSettingData(headers) {
             console.log('user-setting' + JSON.stringify(json));
             let success = json.success
             if (success) {
-
-
+                const dribble_logo = json.data.settings.dribble_logo
+                console.log('dribble_logo=>', dribble_logo)
+                storeData(DRIBBLE_LOGO, dribble_logo)
             }
 
         })
@@ -380,6 +382,9 @@ export function getFormattedCategory(category) {
 
         case "U17":
             return "U-17"
+
+        case "OPEN":
+            return "Open"
     }
     return category
 }
@@ -424,13 +429,13 @@ export function getFormattedRound(round) {
     return round
 }
 
-export function getUtcDateFromTime(date, time){
-    
+export function getUtcDateFromTime(date, time) {
+
     const format = 'dddd DD MMMM YYYY HH:mm a'
     console.log('getUtcDateFromTime', date + ' ' + time)
     // Tuesday 10 September 2019 09:00 AM
-    var localDate2 = date+" "+time
-    let test= moment.utc(localDate2,format).local().format(SESSION_DATE_FORMAT)
+    var localDate2 = date + " " + time
+    let test = moment.utc(localDate2, format).local().format(SESSION_DATE_FORMAT)
     console.log('localFormat: ', test);
     return test;
 }

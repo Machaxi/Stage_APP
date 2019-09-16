@@ -88,10 +88,11 @@ class CoachProfileDetail extends BaseComponent {
 
     componentDidMount() {
 
+        let academy_id = this.state.academy_id
         let coach_id = this.state.coach_id
         getData('header', (value) => {
 
-            this.props.coachDetail(value, coach_id).then(() => {
+            this.props.coachDetail(value, coach_id,academy_id).then(() => {
                 console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {

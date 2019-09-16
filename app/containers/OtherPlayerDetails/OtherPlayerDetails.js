@@ -7,7 +7,7 @@ import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
 import { getCoachSWitcher, getPlayerSWitcher } from "../../redux/reducers/switchReducer";
-import { getOtherPlayerDashboard } from "../../redux/reducers/dashboardReducer";
+import { getOtherPlayerDashboard,getOtherPlayerWithoutAcademy } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
@@ -42,32 +42,93 @@ class OtherPlayerDetails extends BaseComponent {
         });
         let academy_id = this.props.navigation.getParam('academy_id', '')
         let player_id = this.props.navigation.getParam('player_id', '')
-        //alert('academy ' + academy_id)
-        if (academy_id == '') {
-            //console.warn('if=>')
-            getData('userInfo', (value) => {
-                let userData = JSON.parse(value)
-                let academy_id = userData['academy_id']
-                // console.warn('academy_id=>', academy_id)
+        let is_fixture = this.props.navigation.getParam('fixture', false)
+        
+        if (is_fixture) {
+            this.fetchWithoutAcademy(player_id)
+        }
+        else {
 
+            //alert('academy ' + academy_id)
+            if (academy_id == '') {
+                //console.warn('if=>')
+                getData('userInfo', (value) => {
+                    let userData = JSON.parse(value)
+                    let academy_id = userData['academy_id']
+                    // console.warn('academy_id=>', academy_id)
+
+                    this.fetch(academy_id, player_id)
+                });
+            } else {
                 this.fetch(academy_id, player_id)
-            });
-        } else {
-            this.fetch(academy_id, player_id)
+            }
+
+            // if (academy_id == '' || player_id == '') {
+            //     alert('player id is missing')
+            // } else {
+
+            // }
+
+            // console.log("PlayerDashboard academy_id=" + academy_id + " player_id" + player_id);
+
         }
 
-        // if (academy_id == '' || player_id == '') {
-        //     alert('player id is missing')
-        // } else {
-
-        // }
-
-        // console.log("PlayerDashboard academy_id=" + academy_id + " player_id" + player_id);
     }
 
     fetch(academy_id, player_id) {
         console.log("PlayerDashboard academy_id=" + academy_id + " player_id" + player_id);
         this.getPlayerDashboardData(academy_id, player_id)
+    }
+
+    fetchWithoutAcademy(user_id) {
+        console.log("fetchWithoutAcademy " + user_id);
+        getData('header', (value) => {
+            console.log("header", value);
+            this.props.getOtherPlayerWithoutAcademy(value,user_id).then(() => {
+                // console.log(' user response payload ' + JSON.stringify(this.props.data));
+                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                let user = JSON.stringify(this.props.data.dashboardData);
+                console.log(' user getOtherPlayerDashboard ' + user);
+                let user1 = JSON.parse(user)
+    
+                if (user1.success == true) {
+                    this.setState({
+                        player_profile: user1.data['player_profile'],
+                        strenthList: user1.data.player_profile['stats']
+    
+                    })
+                }
+    
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
+
+        });
+        
+    }
+
+    getUserDashboard(player_id, ) {
+
+        this.props.getOtherPlayerDashboard(academy_id, player_id).then(() => {
+            // console.log(' user response payload ' + JSON.stringify(this.props.data));
+            // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+            let user = JSON.stringify(this.props.data.dashboardData);
+            console.log(' user getOtherPlayerDashboard ' + user);
+            let user1 = JSON.parse(user)
+
+            if (user1.success == true) {
+                this.setState({
+                    player_profile: user1.data['player_profile'],
+                    strenthList: user1.data.player_profile['stats']
+
+                })
+            }
+
+        }).catch((response) => {
+            //handle form errors
+            console.log(response);
+        })
     }
 
 
@@ -96,17 +157,17 @@ class OtherPlayerDetails extends BaseComponent {
     }
 
     renderItem = ({ item }) => (
-        <TouchableOpacity 
-        activeOpacity={.8}
-        key={item} onPress={() => {
+        <TouchableOpacity
+            activeOpacity={.8}
+            key={item} onPress={() => {
 
-            //console.warn("Touch Press1")
+                //console.warn("Touch Press1")
 
-            // this.props.navigation.navigate('OrderTracking', {
-            //     order_id: item.increment_id
-            // })
+                // this.props.navigation.navigate('OrderTracking', {
+                //     order_id: item.increment_id
+                // })
 
-        }}>
+            }}>
             <View style={{ margin: 10, flexDirection: 'row', height: 60 }}>
 
                 <Image source={require('../../images/Mysatus.png')}
@@ -133,11 +194,11 @@ class OtherPlayerDetails extends BaseComponent {
                     {/* <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} /> */}
                     <CustomProgres
                         percent={item.score}
-                        width={deviceWidth - 120}
+                        width={deviceWidth - 100}
                         height={14}
-                    />                    
+                    />
                 </View>
-                <View style={{
+                {/* <View style={{
                     height: 50,
                     width: 30,
                     alignItems: 'center',
@@ -149,7 +210,7 @@ class OtherPlayerDetails extends BaseComponent {
                             width: 5,
                             height: 11, marginRight: 10
                         }} />
-                </View>
+                </View> */}
 
             </View>
         </TouchableOpacity>
@@ -237,7 +298,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getOtherPlayerDashboard,
+    getOtherPlayerDashboard,getOtherPlayerWithoutAcademy
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OtherPlayerDetails);
 

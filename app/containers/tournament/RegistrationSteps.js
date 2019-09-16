@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, PAYMENT_KEY, GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, PAYMENT_KEY, GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel, DRIBBLE_LOGO } from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
@@ -129,8 +129,10 @@ class RegistrationSteps extends BaseComponent {
             total_amount: 0,
             is_edit_mode: false,
             registeredTournament: null,
-            reg_player_list: []
+            reg_player_list: [],
+            dribble_logo: ''
         }
+
 
         this.inputRefs = {
             country: null
@@ -155,6 +157,14 @@ class RegistrationSteps extends BaseComponent {
         //     this.state.user_id = userData.user['id']
         //     console.log('userId= > ', this.state.user_id)
         // });
+
+        getData(DRIBBLE_LOGO, (value) => {
+            //alert(value)
+            if (value != null)
+                this.state.dribble_logo = value
+            else
+                this.state.dribble_logo = 'https://i.imgur.com/3g7nmJC.png'
+        })
 
         getData('detail', (value) => {
 
@@ -1359,14 +1369,15 @@ class RegistrationSteps extends BaseComponent {
             let email = user['email']
             if (name == null || name == undefined)
                 name = ''
+            const logo = this.state.dribble_logo
 
             var options = {
                 description: 'Credits towards consultation',
-                image: 'https://i.imgur.com/3g7nmJC.png',
+                image: logo,
                 currency: 'INR',
                 key: PAYMENT_KEY,
                 amount: total,
-                name: 'Dribble Diary',
+                name: 'Machaxi',
                 prefill: {
                     email: email,
                     contact: '',
@@ -1756,14 +1767,14 @@ const style = {
         marginRight: 4,
         //borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
-        justifyContent:'center',
-        alignItems:'center',
-        height:42,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 42,
         padding: 10,
         width: 150,
     },
     rounded_button_text: {
-        
+
         color: 'white',
         //height: 42,
         textAlign: 'center',

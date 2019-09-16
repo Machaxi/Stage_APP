@@ -65,6 +65,27 @@ export function getOtherPlayerDashboard(academy_id,player_id) {
     };
 }
 
+export function getOtherPlayerWithoutAcademy(header,player_id) {
+    console.log("getOtherPlayerWithoutAcademy ",player_id)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.GET_DASHBOARD,
+        payload: {
+            request: {
+                url: `global/user/user-profile?user_id=${player_id}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
+
+                },
+            }
+        }
+    };
+}
+
 export function getCoachDashboard(header,coach_id,academy_id) {
     console.log("getCoachDashboard",header,coach_id,academy_id)
     // var header =

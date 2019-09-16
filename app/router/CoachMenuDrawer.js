@@ -415,7 +415,7 @@ class CoachMenuDrawer extends BaseComponent {
 		let fullame = this.state.fullName
 		let mobileNumber = this.state.mobileNumber
 		let menu;
-		let ratings = 5
+		let ratings = global.rating == undefined ? 0 : global.rating
 		//user_type = COACH
 		//signedIn = true
 		let profile_pic = this.state.profile_pic

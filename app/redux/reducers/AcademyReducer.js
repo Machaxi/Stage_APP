@@ -149,9 +149,9 @@ export function coachListing(academy_id) {
     }
 };
 
-export function coachDetail(header,coach_id) {
+export function coachDetail(header, coach_id,academy_id) {
 
-    let url = `global/coach/details?coach_id=${coach_id}`
+    let url = `global/coach/details?coach_id=${coach_id}&academy_id=${academy_id}`
     console.log("search => " + url)
     return {
         type: types.DO_LOGIN,
@@ -238,7 +238,7 @@ export function getCourtBookingDetails(header, academy_id, date) {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url:`court/details?academy_id=${academy_id}&date=${date}`,
+                url: `court/details?academy_id=${academy_id}&date=${date}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

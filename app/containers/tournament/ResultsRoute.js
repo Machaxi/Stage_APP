@@ -210,9 +210,9 @@ class ResultsRoute extends BaseComponent {
                                     {data.name}
                                 </Text>
 
-                                <Text style={defaultStyle.regular_text_14}>
+                                {/* <Text style={defaultStyle.regular_text_14}>
                                     1st
-                                </Text>
+                                </Text> */}
 
                                 <Text style={defaultStyle.regular_text_14}>
                                     {"   -   "}

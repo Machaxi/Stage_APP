@@ -142,7 +142,7 @@ class FixtureSelection extends BaseComponent {
                     }
                 }
             }
-            console.log('filter => ', filter.length)
+            console.log('filter => ', JSON.stringify(filter))
             this.state.fixture_type = filter
             this.setState({
                 fixture_type: filter
