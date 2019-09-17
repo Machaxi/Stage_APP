@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator, Linking,View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
@@ -58,7 +58,7 @@ class AcademyListing extends BaseComponent {
     getAcademyList(query) {
 
         const job_vacancy = this.state.job_vacancy
-        this.props.getAllAcademy(query,this.state.job_vacancy).then(() => {
+        this.props.getAllAcademy(query, job_vacancy).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
@@ -556,7 +556,23 @@ class AcademyListing extends BaseComponent {
 
                             </View>
 
-                            <Text style={styles.rounded_button}> Call</Text>
+                            <TouchableOpacity
+                                style={styles.rounded_button}
+                                onPress={() => {
+                                    const phoneNumber = item.academy_contact
+                                    if (phoneNumber != undefined)
+                                        Linking.openURL(`tel:${phoneNumber}`)
+                                }}>
+                                <Text style={[
+                                    defaultStyle.bold_text_14,
+                                    {
+                                        textAlign: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: 14,
+                                        color: 'white'
+                                    }
+                                ]}> Call</Text>
+                            </TouchableOpacity>
 
                         </View> : null}
 

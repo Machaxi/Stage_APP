@@ -252,6 +252,18 @@ class CancelSession extends BaseComponent {
                 }}>
 
                     <CheckBox
+                    activeOpacity={.8}
+                    checkedIcon={<Image style={{
+                        width: 18,
+                        height: 18
+                    }} resizeMode="contain"
+                        source={
+                            require('../../../images/ic_checkbox_on.png')} />}
+                    uncheckedIcon={<Image style={{
+                        width: 18,
+                        height: 18
+                    }} resizeMode="contain" source={require('../../../images/ic_checkbox_off.png')} />}
+                    
                         containerStyle={{
                             backgroundColor: 'white',
                             borderWidth: 0,
@@ -259,6 +271,7 @@ class CancelSession extends BaseComponent {
                             margin: 0,
                             //width: "60%",
                         }}
+
                         onPress={() => {
                             let data = { ...this.state.data };
                             let batches = data.batches

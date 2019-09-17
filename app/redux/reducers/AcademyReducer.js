@@ -38,13 +38,17 @@ export default function AcademyReducer(state = initialState, action) {
 }
 
 
-export function getAllAcademy(query) {
+export function getAllAcademy(query,job_vacancy) {
     console.log('getAllAcademy => ', query)
+    let url = `global/academy/all?${query}`
+    if(job_vacancy){
+        url = `global/academy/all?vacancy=1&${query}`
+    }
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `global/academy/all?${query}`
+                url: url
             }
         }
     };

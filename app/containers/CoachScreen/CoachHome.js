@@ -423,7 +423,7 @@ class CoachHome extends BaseComponent {
                             {/* {moment.utc(start_date + " " + start_time).local().format("hh:mm a")
                                 + " - " +
                                 moment.utc(start_date + " " + end_time).local().format("hh:mm a")} */}
-                                {start_time +" - "+end_time}
+                            {start_time}
                         </Text>
                     </View>
 
