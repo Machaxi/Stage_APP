@@ -27,9 +27,12 @@ class AcademyListing extends BaseComponent {
             suggestionResult: [],
             isAutoSuggest: false,
             isRefreshing: false,
+            job_vacancy: false
 
         }
         this._handleChange = this._handleChange.bind(this)
+        this.state.job_vacancy = this.props.navigation.getParam('vacancy');
+
     }
 
     _refresh() {
@@ -53,7 +56,9 @@ class AcademyListing extends BaseComponent {
     }
 
     getAcademyList(query) {
-        this.props.getAllAcademy(query).then(() => {
+
+        const job_vacancy = this.state.job_vacancy
+        this.props.getAllAcademy(query,this.state.job_vacancy).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
@@ -528,20 +533,32 @@ class AcademyListing extends BaseComponent {
                         <RateViewFill>{item.ratings}</RateViewFill>
                     </View>
 
-                    {/* <View style={{ flexDirection: 'row', margin: 8 }}>
+                    {this.state.job_vacancy ?
+                        <View style={{
+                            flexDirection: 'row',
+                            marginLeft: 16,
+                            marginTop: 0,
+                            marginBottom: 16,
+                            marginRight: 16,
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
 
-                        <Text
-                            style={styles.rounded_button}
-                        >
-                            View Batches
-                                </Text>
-                        <Text
-                            style={styles.rounded_button}
-                        >
-                            Book Court
-                                </Text>
+                            <View style={{
+                                //width: "60%"
+                            }}>
+                                <Text style={[defaultStyle.bold_text_12, {
+                                    color: '#707070'
+                                }]}>Open Positions</Text>
+                                <Text style={[defaultStyle.bold_text_16, {
+                                    color: '#707070'
+                                }]}>Coach</Text>
 
-                    </View> */}
+                            </View>
+
+                            <Text style={styles.rounded_button}> Call</Text>
+
+                        </View> : null}
 
                 </View>
 
@@ -609,12 +626,10 @@ const styles = StyleSheet.create({
         zIndex: 1
     },
     rounded_button: {
-        width: '48%',
+        width: 100,
         padding: 10,
         borderRadius: 20,
         //borderWidth: 1,
-        marginLeft: 4,
-        marginRight: 4,
         borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
         color: 'white',

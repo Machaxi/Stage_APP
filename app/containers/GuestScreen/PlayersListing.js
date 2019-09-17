@@ -4,7 +4,7 @@ import { Card } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle, formattedName, getFormattedCategory } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName,getFormattedBadge, getFormattedCategory } from '../BaseComponent';
 import { getData } from "../../components/auth";
 
 class PlayersListing extends BaseComponent {
@@ -213,7 +213,7 @@ class PlayersListing extends BaseComponent {
                                 flexDirection: 'row',
                             }}>
                                 <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>
-                                    {item.badge == undefined ? '' : item.badge}
+                                    {item.badge == undefined ? '' : getFormattedBadge(item.badge)}
                                 </Text>
 
                             </View>

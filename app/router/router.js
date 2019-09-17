@@ -73,6 +73,7 @@ import TournamentGallerySliderZoom from '../containers/tournament/TournamentGall
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
+import WebViewScreen from '../containers/util/WebViewScreen'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -810,6 +811,24 @@ const coachHomeModule = createStackNavigator({
 
         })
 
+    },
+
+    WebViewScreen: {
+        screen: WebViewScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "WebView",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
 
 }, {

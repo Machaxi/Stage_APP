@@ -591,7 +591,11 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					this.props.navigation.navigate('AcademyListing', {
+						vacancy: true
+					})
+				}}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Find Vacancies</Text>
 						<Image

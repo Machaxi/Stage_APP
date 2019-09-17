@@ -1,7 +1,11 @@
 import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, PAYMENT_KEY, GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel, DRIBBLE_LOGO } from '../BaseComponent';
+import BaseComponent, {
+    defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, PAYMENT_KEY,
+    getFormattedCategory,
+    GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel, DRIBBLE_LOGO
+} from '../BaseComponent';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements'
 import { Card } from 'react-native-paper';
@@ -714,7 +718,7 @@ class RegistrationSteps extends BaseComponent {
                                             }
                                             }
                                             style={{ marginTop: -4 }}
-                                            title={item.title}
+                                            title={getFormattedCategory(item.title)}
                                             style={{
                                                 color: '#404040',
                                                 backgroundColor: 'white',
@@ -883,7 +887,7 @@ class RegistrationSteps extends BaseComponent {
                         fontSize: 14,
                         color: '#000000'
                     }}>
-                        Select Tournament Type for {model.title}
+                        Select Tournament Type for {getFormattedCategory(model.title)}
                     </Text>
 
                     <View>
@@ -1370,7 +1374,7 @@ class RegistrationSteps extends BaseComponent {
             if (name == null || name == undefined)
                 name = ''
             const logo = this.state.dribble_logo
-            const desc = 'Payment for '+this.state.data['name']
+            const desc = 'Payment for ' + this.state.data['name']
 
             var options = {
                 description: desc,
@@ -1494,7 +1498,7 @@ class RegistrationSteps extends BaseComponent {
                 fontSize: 14,
                 color: '#404040'
             }}>
-                {item.title}
+                {getFormattedCategory(item.title)}
             </Text>
 
             <View style={{ flexDirection: 'row' }}>
@@ -1685,7 +1689,7 @@ class RegistrationSteps extends BaseComponent {
                                             color: "#A3A5AE",
                                             fontFamily: 'Quicksand-Regular'
                                         }}
-                                >{item} <Text style={{
+                                >{getFormattedCategory(item)} <Text style={{
                                     fontSize: 10,
                                     color: "#A3A5AE",
                                     fontFamily: 'Quicksand-Regular'

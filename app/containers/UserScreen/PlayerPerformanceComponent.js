@@ -8,7 +8,7 @@ import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../
 import { connect } from 'react-redux';
 import moment from 'moment'
 import { Card } from 'react-native-paper';
-//import { ECharts } from 'react-native-echarts-wrapper';
+import { ECharts } from '../util/echart/index'
 import YouTube from 'react-native-youtube';
 
 
@@ -127,14 +127,15 @@ class PlayerPerformanceComponent extends BaseComponent {
                     <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
                 </View>
             </Card>
-            {/* <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
+            <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
                 <View style={{ width: '100%', height: 300 }}>
                     <ECharts
+                        //legacyMode
                         style={{ width: '100%' }}
                         option={option}></ECharts>
                 </View>
-            </Card> */}
+            </Card>
             {/* <Card style={styles.performanceCard}>
                 <View style={{ width: '100%', height: 300 }}>
 

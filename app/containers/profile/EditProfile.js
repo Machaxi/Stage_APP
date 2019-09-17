@@ -31,7 +31,8 @@ class EditProfile extends BaseComponent {
             fileName: null,
             is_navigation_to_tournament: false,
             base64img: null,
-            contentType: ''
+            contentType: '',
+            is_image_processed: false
         }
 
         getData(TOURNAMENT_REGISTER, (value) => {
@@ -54,7 +55,8 @@ class EditProfile extends BaseComponent {
                 txtname: userData.user['name'],
                 txtphone: userData.user['mobile_number'],
                 birthdate: userData.user['dob'],
-                profile_pic: userData.user['profile_pic']
+                profile_pic: userData.user['profile_pic'],
+                is_image_processed: userData.user['is_image_processed']
             })
 
 
@@ -237,64 +239,59 @@ class EditProfile extends BaseComponent {
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
                 let path = response.path
-                let fileName = response.fileName
-                let base64 = 'data:image/jpeg;base64,' + response.data
-                let type = response.type
-                this.setState({
-                    path: path,
-                    fileName: fileName,
-                    base64img: base64,
-                    contentType: type
-                })
+                // let fileName = response.fileName
+                // let base64 = 'data:image/jpeg;base64,' + response.data
+                // let type = response.type
+                // this.setState({
+                //     path: path,
+                // })
+
+                this.resizeImage(path)
+
                 //console.warn('path => ',this.state.path)
                 //console.warn('fileName => ',this.state.fileName)
-                //this.resizeImage(path)
             }
         });
 
     }
 
-    resizeImage(path){
+    resizeImage(path) {
 
-        // ImageResizer.createResizedImage(path, 
-        //     50, 
-        //     50, 
-        //     'JPEG', 
-        //     80).then((response) => {
-        //         alert(response.uri)
-        //     // response.uri is the URI of the new image that can now be displayed, uploaded...
-        //     // response.path is the path of the new image
-        //     // response.name is the name of the new image with the extension
-        //     // response.size is the size of the new image
-        //   }).catch((err) => {
-        //       alert(JSON.stringify(err))
-        //     // Oops, something went wrong. Check that the filename is correct and
-        //     // inspect err to get more details.
-        //   });
-        ImageResizer.createResizedImage(path, 8, 6, 'JPEG', 80)
-      .then(({ uri }) => {
-        alert(uri)
-      })
-      .catch(err => {
-        console.log(err);
-        return Alert.alert('Unable to resize the photo', 'Check the console for full the error message');
-      });
+        ImageResizer.createResizedImage(path, 625, 400, 'PNG', 80)
+            .then(({ uri }) => {
+
+                var fileName = uri.replace(/^.*[\\\/]/, '')
+                this.setState({
+                    path: uri,
+                    fileName: fileName,
+                    contentType: 'image/png'
+                })
+
+            })
+            .catch(err => {
+                console.log(err);
+                return Alert.alert('Unable to resize the photo', 'Check the console for full the error message');
+            });
     }
 
     render() {
 
-        console.log('base64img => ', base64img)
+        //console.log('base64img => ', base64img)
         let placeHolder = null
         let profile_pic = this.state.profile_pic
-        let base64img = this.state.base64img
+        let base64img = this.state.path
+
         if (base64img != null) {
-            placeHolder = { uri: base64img }//{path}
+            placeHolder = { uri: base64img }
         }
         else if (profile_pic == null) {
             placeHolder = require('../../images/male_avatar_small.png')
         } else {
             placeHolder = { uri: profile_pic }
         }
+
+        const phone = this.state.phone
+        const is_image_processed = this.state.is_image_processed
 
         return (
 
@@ -318,7 +315,8 @@ class EditProfile extends BaseComponent {
                     >
                         <TouchableOpacity
                             onPress={() => {
-                                this.pickImage()
+                                if (is_image_processed != true)
+                                    this.pickImage()
                             }}
                         >
 
@@ -335,28 +333,31 @@ class EditProfile extends BaseComponent {
                                 //  resizeMode='cover'
                                 source={placeHolder}
                             />
-                            <View style={{
-                                justifyContent: 'flex-end', marginBottom: 0,
-                            }}>
-
+                            {is_image_processed != true ?
                                 <View style={{
-                                    padding: 10,
-                                    backgroundColor: '#67BAF5',
-                                    height: 46,
-                                    justifyContent: 'center',
-                                    //borderWidth:1,
-                                    //borderColor:'#67BAF5',
-                                    alignItems: 'center',
-                                    borderRadius: 23,
-                                    marginBottom: 0,
-                                }} >
-                                    <Text style={[defaultStyle.bold_text_14,
-                                    {
-                                        color: '#FFFFFF',
-                                        textAlign: 'center',
-                                    }]}> Change Image</Text>
+                                    justifyContent: 'flex-end', marginBottom: 0,
+                                }}>
+
+                                    <View style={{
+                                        padding: 10,
+                                        backgroundColor: '#67BAF5',
+                                        height: 46,
+                                        justifyContent: 'center',
+                                        //borderWidth:1,
+                                        //borderColor:'#67BAF5',
+                                        alignItems: 'center',
+                                        borderRadius: 23,
+                                        marginBottom: 0,
+                                    }} >
+                                        <Text style={[defaultStyle.bold_text_14,
+                                        {
+                                            color: '#FFFFFF',
+                                            textAlign: 'center',
+                                        }]}> Change Image</Text>
+                                    </View>
                                 </View>
-                            </View>
+                                : null}
+
                         </TouchableOpacity>
 
                         {/*<ImageBackground*/}
@@ -389,7 +390,6 @@ class EditProfile extends BaseComponent {
                                 style={style.textinput}
                                 // mode='outlined'
                                 label='name'
-
                                 // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
                                 value={this.state.txtname}
                                 onChangeText={(txtname) => this.setState({ txtname: txtname })}
@@ -410,7 +410,8 @@ class EditProfile extends BaseComponent {
 
                             <TextInput
                                 value={this.state.txtphone}
-                                style={style.textinput}>
+                                style={style.textinput}
+                                onChangeText={(txtphone) => this.setState({ txtphone: txtphone })}>
 
                             </TextInput>
                         </View>
