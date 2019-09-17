@@ -105,7 +105,7 @@ class PlayerPerformanceComponent extends BaseComponent {
 
     _renderItem = ({ item }) => (
         <View>
-            {/* <Card style={[styles.performanceCard, { marginTop: 14 }]}>
+            <Card style={[styles.performanceCard, { marginTop: 14 }]}>
                 <Text style={styles.reportCardheadingText}>Report</Text>
                 <View style={styles.scoreBestLabelOuter}>
                     <Text style={styles.scoreLabel}>Score</Text>
@@ -149,7 +149,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     </View>
                     <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
                 </View>
-            </Card> */}
+            </Card>
             <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
 
