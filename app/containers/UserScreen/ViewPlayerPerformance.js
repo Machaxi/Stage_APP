@@ -6,13 +6,14 @@ import { getData, storeData } from "../../components/auth";
 import { getPlayerPerformance } from "../../redux/reducers/PerformenceReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import BaseComponent, { defaultStyle,getStatsImageById } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getStatsImageById, EVENT_CLEAR_GRAPH } from '../BaseComponent';
 import moment from 'moment'
 import RNPickerSelect from 'react-native-picker-select'
 import { TabView, TabBar } from 'react-native-tab-view';
 import PlayerPerformanceComponent from './PlayerPerformanceComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomProgress from '../../components/custom/CustomProgress';
+import Events from '../../router/events';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -64,6 +65,8 @@ class ViewPlayerPerformance extends BaseComponent {
   onSwipeStart() { }
 
   getPerformanceData() {
+
+    //Events.publish(EVENT_CLEAR_GRAPH);
 
     this.progress(true)
 
@@ -159,9 +162,9 @@ class ViewPlayerPerformance extends BaseComponent {
 
         <View style={styles.statsOuter}>
 
-          <Image 
-          resizeMode="contain"
-          source={getStatsImageById(statId)}
+          <Image
+            resizeMode="contain"
+            source={getStatsImageById(statId)}
             style={styles.statsImg} />
 
           <View>
@@ -177,10 +180,10 @@ class ViewPlayerPerformance extends BaseComponent {
               </Text>
             </View>
             <CustomProgress
-                        percent={this.state.performanceData.score}
-                        width={deviceWidth - 100}
-                        height={14}
-                    />
+              percent={this.state.performanceData.score}
+              width={deviceWidth - 100}
+              height={14}
+            />
 
             {/* <Progress.Bar style={styles.progressBar} 
             progress={this.state.performanceData.score / 100} 
@@ -197,6 +200,7 @@ class ViewPlayerPerformance extends BaseComponent {
                   this.setState({
                     month: value,
                   }, () => {
+                    Events.publish(EVENT_CLEAR_GRAPH);
                     this.getPerformanceData();
                   });
                 }}
@@ -207,11 +211,33 @@ class ViewPlayerPerformance extends BaseComponent {
                   this.inputRefs.month = el;
                 }}
               />
-              <View style={{
-                width: 80,
-                backgroundColor: '#A3A5AE',
-                height: 1
-              }}></View>
+
+              <View style={{ flexDirection: 'row' }}>
+
+                <View style={{
+                  width: 80,
+                  backgroundColor: '#A3A5AE',
+                  height: 1
+                }}></View>
+
+                <Image
+                  source={require('../../images/triangle.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 8,
+                    marginLeft: -10,
+                    height: 6,
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginTop: -38,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                />
+
+              </View>
+
+
 
             </View>
 

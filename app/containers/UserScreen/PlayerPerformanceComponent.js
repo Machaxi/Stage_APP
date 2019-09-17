@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { View, ScrollView, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Image, TextInput, WebView } from 'react-native'
+import { View, ScrollView, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Image, TextInput } from 'react-native'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_CLEAR_GRAPH } from '../BaseComponent';
 import { getData, storeData } from "../../components/auth";
 import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../../redux/reducers/RewardReducer";
 import { connect } from 'react-redux';
@@ -10,7 +10,8 @@ import moment from 'moment'
 import { Card } from 'react-native-paper';
 import { ECharts } from '../util/echart/index'
 import YouTube from 'react-native-youtube';
-
+import WebView from 'react-native-webview';
+import Events from '../../router/events';
 
 class PlayerPerformanceComponent extends BaseComponent {
 
@@ -41,7 +42,29 @@ class PlayerPerformanceComponent extends BaseComponent {
     }
 
     componentDidMount() {
-        console.log('hiiiiiiiiiiiiiiiiii', this.props.jumpTo)
+        console.log('hiiiiiiiiiiiiiiiiii', this.props.jumpTo);
+        this.refreshEvent = Events.subscribe(EVENT_CLEAR_GRAPH, () => {
+            console.warn(EVENT_CLEAR_GRAPH);
+            console.log('Deepika');
+            if (this.chart)
+                this.chart.clear();
+        });
+        this.initChart();
+
+        // setTimeout(() => {
+        //     this.getPerformanceData();
+
+        //   }, 100)
+    }
+
+    onRef = ref => {
+        if (ref) {
+            this.chart = ref;
+        }
+    };
+
+    initChart = () => {
+        this.chart.setOption(option);
     }
 
     setModalVisible(visible) {
@@ -82,7 +105,7 @@ class PlayerPerformanceComponent extends BaseComponent {
 
     _renderItem = ({ item }) => (
         <View>
-            <Card style={[styles.performanceCard, { marginTop: 14 }]}>
+            {/* <Card style={[styles.performanceCard, { marginTop: 14 }]}>
                 <Text style={styles.reportCardheadingText}>Report</Text>
                 <View style={styles.scoreBestLabelOuter}>
                     <Text style={styles.scoreLabel}>Score</Text>
@@ -126,20 +149,33 @@ class PlayerPerformanceComponent extends BaseComponent {
                     </View>
                     <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
                 </View>
-            </Card>
+            </Card> */}
             <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
+
                 {
                     this.props.jumpTo.current_parameter.graph_data.length > 0 ?
+
                         <View style={{ width: '100%', height: 300 }}>
                             <ECharts
+                                ref={this.onRef}
                                 style={{ width: '100%' }}
                                 option={option}></ECharts>
                         </View> :
-                        <View style={{ marginTop: 30, marginLeft: 40 }}><Text>No data to show</Text></View>
+
+                        <View>
+
+                            <View style={{ width: 0, height: 0 }}>
+                                <ECharts
+                                    ref={this.onRef}
+                                    style={{ width: '100%' }}
+                                    option={option}></ECharts>
+                            </View>
+                            <View style={{ marginTop: 30, marginLeft: 40 }}><Text>No data to show</Text></View>
+
+                        </View>
 
                 }
-
             </Card>
             <Card style={styles.performanceCard}>
                 <View style={{ width: '100%', height: 300 }}>
@@ -211,8 +247,16 @@ class PlayerPerformanceComponent extends BaseComponent {
         </View>
     );
 
+    componentDidUpdate() {
+        console.log('component did update');
+        if (this.props.jumpTo.current_parameter.graph_data.length > 0)
+            this.initChart();
+    }
+
 
     render() {
+
+
 
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -229,6 +273,8 @@ class PlayerPerformanceComponent extends BaseComponent {
             batch_avg.push(element.avg_score)
             batch_best.push(element.best_score)
         })
+
+        console.log('my_score', my_score);
 
 
 
@@ -278,9 +324,9 @@ class PlayerPerformanceComponent extends BaseComponent {
                 },
                 padding: [
                     40,  // up
-                    40, // right
+                    10, // right
                     -5,  // down
-                    40, // left
+                    10, // left
                 ]
             },
             grid: {
@@ -319,7 +365,7 @@ class PlayerPerformanceComponent extends BaseComponent {
             yAxis: [
                 {
                     type: 'value',
-                    offset: -7,
+                    offset: -4,
                     splitLine: {
                         show: false
                     },
@@ -363,6 +409,7 @@ class PlayerPerformanceComponent extends BaseComponent {
         };
 
         let data = [this.props.jumpTo];
+
 
         return (
 
