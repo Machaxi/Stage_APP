@@ -13,6 +13,7 @@ import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import ReadMoreText from "rn-read-more-text";
 import FilterDialog from './FilterDialog'
 import StarRating from 'react-native-star-rating';
+import { COACH } from '../../components/Constants';
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -92,7 +93,7 @@ class CoachProfileDetail extends BaseComponent {
         let coach_id = this.state.coach_id
         getData('header', (value) => {
 
-            this.props.coachDetail(value, coach_id,academy_id).then(() => {
+            this.props.coachDetail(value, coach_id, academy_id).then(() => {
                 console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {
@@ -141,48 +142,56 @@ class CoachProfileDetail extends BaseComponent {
     }
 
     //{item.source.name}
-    _renderRatingItem = ({ item }) => (
+    _renderRatingItem = ({ item }) => {
 
-        <View
-            style={{ margin: 12 }}
-        >
+        let name = ''
+        if (global.USER_TYPE == undefined || global.USER_TYPE == COACH) {
+            name = 'Anonymous'
+        } else {
+            name = item.source.name
+        }
+        return (
 
-            <View style={{
-                flexDirection: 'row',
-                flex: 1,
-                justifyContent: 'space-between',
-
-            }}>
-
-                <Text
-                    style={{
-                        color: '#707070',
-                        fontSize: 14, flex: 1,
-                        fontFamily: 'Quicksand-Medium',
-                    }}>Anonymous</Text>
-
+            <View
+                style={{ margin: 12 }}
+            >
 
                 <View style={{
                     flexDirection: 'row',
-                    alignItems: 'center'
+                    flex: 1,
+                    justifyContent: 'space-between',
 
                 }}>
 
-                    <Rating
-                        type='custom'
-                        ratingColor='#F4FC9A'
-                        ratingBackgroundColor='#D7D7D7'
-                        ratingCount={5}
-                        imageSize={12}
-                        readonly={true}
-                        startingValue={item.rating}
-                        style={{ width: 80 }}
-                    />
+                    <Text
+                        style={{
+                            color: '#707070',
+                            fontSize: 14, flex: 1,
+                            fontFamily: 'Quicksand-Medium',
+                        }}>{name}</Text>
+
+
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+
+                    }}>
+
+                        <Rating
+                            type='custom'
+                            ratingColor='#F4FC9A'
+                            ratingBackgroundColor='#D7D7D7'
+                            ratingCount={5}
+                            imageSize={12}
+                            readonly={true}
+                            startingValue={item.rating}
+                            style={{ width: 80 }}
+                        />
 
 
 
 
-                    {/* <Text style={{
+                        {/* <Text style={{
                         backgroundColor: '#D6D6D6', height: 19,
                         width: 30,
                         textAlign: 'center',
@@ -191,30 +200,31 @@ class CoachProfileDetail extends BaseComponent {
                         color: '#707070',
                         borderRadius: 12,
                     }}>{item.rating}</Text> */}
-                    <RateViewFill>{item.rating}</RateViewFill>
+                        <RateViewFill>{item.rating}</RateViewFill>
+                    </View>
+
                 </View>
 
-            </View>
+                <ReadMoreText
+                    limitLines={2}
+                    renderFooter={this.renderFooter}
+                >
+                    <Text style={[defaultStyle.regular_text_12,
+                    {
+                        color: '#707070',
+                    }]}>{item.review}</Text>
+                </ReadMoreText>
 
-            <ReadMoreText
-                limitLines={2}
-                renderFooter={this.renderFooter}
-            >
-                <Text style={[defaultStyle.regular_text_12,
-                {
-                    color: '#707070',
-                }]}>{item.review}</Text>
-            </ReadMoreText>
-
-            {/* <Text style={[defaultStyle.regular_text_12, {
+                {/* <Text style={[defaultStyle.regular_text_12, {
                 color: '#707070',
             }]}>{item.review}</Text> */}
 
-        </View>
+            </View>
 
 
 
-    );
+        )
+    };
 
     renderFooter = ({ isShowingAll, toggle }) => (
         <View style={{

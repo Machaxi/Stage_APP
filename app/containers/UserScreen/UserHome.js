@@ -239,6 +239,7 @@ class UserHome extends BaseComponent {
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             global.SELECTED_PLAYER_ID = userData['player_id']
+            global.USER_TYPE = userData.user['user_type']
 
             this.state.academy_id = userData['academy_id']
 

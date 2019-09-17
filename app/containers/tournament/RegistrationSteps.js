@@ -1370,9 +1370,10 @@ class RegistrationSteps extends BaseComponent {
             if (name == null || name == undefined)
                 name = ''
             const logo = this.state.dribble_logo
+            const desc = 'Payment for '+this.state.data['name']
 
             var options = {
-                description: 'Credits towards consultation',
+                description: desc,
                 image: logo,
                 currency: 'INR',
                 key: PAYMENT_KEY,

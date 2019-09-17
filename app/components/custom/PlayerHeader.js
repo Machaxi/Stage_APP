@@ -2,7 +2,11 @@ import React from "react";
 import { Header } from "react-navigation";
 import { View, Platform, Text, TouchableOpacity, Image, ImageBackground, Dimensions, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import BaseComponent, { defaultStyle, bebas_text_blue_10, getFormattedCategory, getFormattedLevel, formattedName } from "../../containers/BaseComponent";
+import BaseComponent, {
+    defaultStyle,
+    getFormattedBadge,
+    bebas_text_blue_10, getFormattedCategory, getFormattedLevel, formattedName
+} from "../../containers/BaseComponent";
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -102,7 +106,7 @@ export default class PlayerHeader extends BaseComponent {
                                                 height: 20,
                                                 textAlign: 'center',
                                             }]
-                                        }>{badge}</Text>
+                                        }>{getFormattedBadge(badge)}</Text>
 
 
                                     </View>
@@ -132,7 +136,7 @@ export default class PlayerHeader extends BaseComponent {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             marginRight: 20,
-                                            borderRadius:2
+                                            borderRadius: 2
 
                                         }}>
                                         <Text style={{

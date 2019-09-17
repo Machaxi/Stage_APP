@@ -1091,7 +1091,7 @@ class ChooseTimeDate extends BaseComponent {
 
 
                                             <TouchableOpacity onPress={() => { this.decrementDuration() }}>
-                                                <Image source={require('../../images/minus.png')} style={{}}></Image>
+                                                <Image source={require('../../images/ic_minus.png')} style={{}}></Image>
                                             </TouchableOpacity>
 
 
@@ -1112,7 +1112,7 @@ class ChooseTimeDate extends BaseComponent {
                                             }
 
                                             <TouchableOpacity onPress={() => { this.incrementDuration() }}>
-                                                <Image source={require('../../images/plus.png')} style={{}}></Image>
+                                                <Image source={require('../../images/ic_plus.png')} style={{}}></Image>
                                             </TouchableOpacity>
 
 

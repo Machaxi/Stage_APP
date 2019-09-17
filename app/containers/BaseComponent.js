@@ -338,6 +338,15 @@ export function formattedName(name) {
     return newName
 
 }
+
+export function getFormattedBadge(name) {
+
+    let result = name.replace("LEVEL", "L");
+    result = name.replace("Level", "L");
+    return result
+
+}
+
 export function getFormattedLevel(level) {
 
     switch (level) {

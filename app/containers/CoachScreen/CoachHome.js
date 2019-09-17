@@ -215,6 +215,9 @@ class CoachHome extends BaseComponent {
         console.log("CoachDashboard");
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
+            global.USER_TYPE = userData.user['user_type']
+
+            
             this.setState({
                 userData: JSON.parse(value)
             });
