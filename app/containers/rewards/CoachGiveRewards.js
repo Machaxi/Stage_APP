@@ -8,7 +8,8 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { getAcademyListing, getRewardDue, getRewardMonthlyDue, saveRewardData } from "../../redux/reducers/RewardReducer";
 import { TextInput } from 'react-native-gesture-handler';
 import moment from 'moment'
-import {SkyFilledButton} from '../../components/Home/SkyFilledButton'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import Events from '../../router/events';
 
 
 class CoachGiveRewards extends BaseComponent {
@@ -217,8 +218,8 @@ class CoachGiveRewards extends BaseComponent {
             let player = players[i]
             totalScore = +totalScore + +player.input_score
         }
-        console.log('players ',JSON.stringify(players))
-        console.warn('total => ',totalScore)
+        console.log('players ', JSON.stringify(players))
+        console.warn('total => ', totalScore)
 
         let total = this.state.totalPointsAvailable
         total = total - totalScore
@@ -243,7 +244,7 @@ class CoachGiveRewards extends BaseComponent {
             <Text style={[defaultStyle.bold_text_14, { width: '60%' }]}>{item.name}</Text>
             <TextInput
                 placeholder={"Enter Score"}
-                keyboardType={'number-pad'}
+                keyboardType={'numeric'}
                 style={{
                     textAlign: 'center',
                     color: '#404040',
@@ -346,7 +347,11 @@ class CoachGiveRewards extends BaseComponent {
                                     <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
                                         onPress={() => {
                                             this.setModalVisible(false);
-                                            this.props.navigation.goBack(null);
+                                            Events.publish('REFRESH_REWARDS');
+                                            setTimeout(() => {
+                                                this.props.navigation.goBack(null);
+                                            }, 100)
+
                                         }}>
                                         OK</Text>
 
@@ -451,9 +456,9 @@ class CoachGiveRewards extends BaseComponent {
                             >Award</Text>
                         </TouchableOpacity> */}
                         <SkyFilledButton
-                        onPress={() => {
-                            this.submitScore()
-                        }}
+                            onPress={() => {
+                                this.submitScore()
+                            }}
                         >Award</SkyFilledButton>
 
                     </View>

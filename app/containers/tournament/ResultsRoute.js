@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator,View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, ImageBackground, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, ImageBackground, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle,getFormattedTournamentType } from '../BaseComponent'
+import BaseComponent, { defaultStyle, getFormattedTournamentType } from '../BaseComponent'
 import { getTournamentResultListing, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
@@ -34,7 +34,7 @@ class ResultsRoute extends BaseComponent {
     selfComponentDidMount(filter) {
         getData('header', (value) => {
 
-            this.props.getTournamentResultListing(value,filter).then(() => {
+            this.props.getTournamentResultListing(value, filter).then(() => {
                 let data = this.props.data.data
                 console.log(' getTournamentResultListing ' + JSON.stringify(data));
 
@@ -121,7 +121,7 @@ class ResultsRoute extends BaseComponent {
         }
 
     }
-    
+
 
     progress(status) {
         this.setState({
@@ -215,7 +215,7 @@ class ResultsRoute extends BaseComponent {
                                 </Text> */}
 
                                 <Text style={defaultStyle.regular_text_14}>
-                                    {"   -   "}
+                                    {data.academy_name == undefined ? ' - ' : data.academy_name}
                                 </Text>
 
                             </View>
@@ -230,7 +230,7 @@ class ResultsRoute extends BaseComponent {
             <TouchableOpacity activeOpacity={.8}
                 onPress={() => {
                     this.props.navigation.navigate('ResultsTournamentDetail', {
-                        id:item.id
+                        id: item.id
                     })
                 }}>
 
@@ -377,8 +377,8 @@ class ResultsRoute extends BaseComponent {
                             }}>
                                 <SkyFilledButton
                                     onPress={() => {
-                                        this.props.navigation.navigate('FixtureSelection',{
-                                            id:item.id
+                                        this.props.navigation.navigate('FixtureSelection', {
+                                            id: item.id
                                         })
                                     }}
                                 >View Fixtures</SkyFilledButton>

@@ -217,7 +217,7 @@ class CoachHome extends BaseComponent {
             userData = JSON.parse(value)
             global.USER_TYPE = userData.user['user_type']
 
-            
+
             this.setState({
                 userData: JSON.parse(value)
             });
@@ -249,7 +249,7 @@ class CoachHome extends BaseComponent {
                     global.rating = user1.data.coach_profile['ratings']
                     this.setState({
                         coach_profile: user1.data['coach_profile'],
-                        
+
                         // strenthList:user1.data.player_profile['stats']
 
                     })
@@ -731,6 +731,9 @@ class CoachHome extends BaseComponent {
 
                                 //console.warn("Touch Press")
                                 //this.props.navigation.navigate('JobVacancies')
+                                this.props.navigation.navigate('AcademyListing', {
+                                    vacancy: true
+                                })
 
                             }}>
                                 <View style={{

@@ -1,7 +1,11 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, TouchableOpacity } from 'react-native'
-import BaseComponent, { defaultStyle, GO_TO_HOME, getFormattedTournamentType,getFormattedTournamentLevel } from '../BaseComponent';
+import BaseComponent, {
+    defaultStyle,
+    getFormattedCategory,
+    GO_TO_HOME, getFormattedTournamentType, getFormattedTournamentLevel
+} from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { CustomeButtonB } from '../../components/Home/Card';
@@ -43,7 +47,7 @@ export default class RegistrationSuccessful extends BaseComponent {
         let array = []
         for (let i = 0; i < user_selection.length; i++) {
             let obj = user_selection[i]
-            let title = obj.title
+            let title = getFormattedCategory(obj.title)
             let wholeText = ''
             wholeText = wholeText + title
             let tournament_types = obj.tournament_types

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
 import FilterDialog from './FilterDialog'
 import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName, getFormattedBadge } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Swiper from 'react-native-swiper'
 
@@ -30,9 +30,10 @@ class AcademyProfile extends BaseComponent {
             page: 0,
             sortType: '',
             type: '',
-            clear_feedback_array: false
+            clear_feedback_array: false,
         }
         this.state.id = this.props.navigation.getParam('id', '');
+        
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.state.player_id = userData.user['id']
@@ -315,28 +316,6 @@ class AcademyProfile extends BaseComponent {
 
                         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
 
-                            {/* <ImageBackground
-                                style={{
-                                    height: 38, width: 25, justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                                source={require('../../images/batch_pink.png')}>
-
-                                <View style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    backgroundColor: '#485FA0', height: 6, width: '120%'
-                                }}>
-                                    <Image style={{ height: 7, width: 12, marginLeft: -12 }}
-                                        source={require('../../images/left_batch_arrow.png')}></Image>
-
-                                    <Text style={{ fontSize: 5, color: 'white', textAlign: 'center' }}>{top_player.badge}</Text>
-                                    <Image style={{ height: 7, width: 12, marginRight: -12 }}
-                                        source={require('../../images/right_batch_arrow.png')}></Image>
-
-                                </View>
-                            </ImageBackground> */}
                             <ImageBackground
                                 style={{
                                     height: 38, width: 57, justifyContent: 'center',
@@ -351,7 +330,7 @@ class AcademyProfile extends BaseComponent {
                                     flexDirection: 'row',
                                 }}>
                                     <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>
-                                        {top_player.badge == undefined ? '' : top_player.badge}
+                                        {top_player.badge == undefined ? '' : getFormattedBadge(top_player.badge)}
                                     </Text>
 
                                 </View>
@@ -448,7 +427,7 @@ class AcademyProfile extends BaseComponent {
                                         ref={ref => this.swiper = ref}
                                         showsPagination={true}
                                         activeDotColor="white"
-                                        paginationStyle={{bottom: 0, left:0, top: 120, right: 0}}
+                                        paginationStyle={{ bottom: 0, left: 0, top: 120, right: 0 }}
                                         //onIndexChanged={this.updateState.bind(this)}
                                         loop={false} >
                                         {
@@ -634,31 +613,27 @@ class AcademyProfile extends BaseComponent {
                     }
 
 
-                    <Card
-                        style={styles.card_style}>
+                    {academy.top_player != undefined ?
+                        < Card
+                            style={styles.card_style}>
 
-                        <View style={{ padding: 12 }}>
+                            <View style={{ padding: 12 }}>
 
-                            <Text style={defaultStyle.bold_text_10}>Best Player (Badminton)</Text>
-                            <View style={{ marginTop: 6, marginBottom: 6, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
+                                <Text style={defaultStyle.bold_text_10}>Best Player (Badminton)</Text>
+                                <View style={{ marginTop: 6, marginBottom: 6, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
 
-                            <View style={{
-                                marginTop: 8,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
+                                <View style={{
+                                    marginTop: 8,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
 
-                                {/* <Image style={{ height: 170, width: 130, alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}
-                                    source={require('../../images/best_player_temp.png')}
-                                >
-                                </Image> */}
-                                {this._renderPlayerItem(academy.top_player)}
+                                    {this._renderPlayerItem(academy.top_player)}
 
-
+                                </View>
                             </View>
-                        </View>
 
-                    </Card>
+                        </Card> : null}
 
                     <TouchableOpacity
                         activeOpacity={.8}
@@ -818,7 +793,7 @@ class AcademyProfile extends BaseComponent {
                         : null}
 
                 </View>
-            </ScrollView>
+            </ScrollView >
 
         );
     }

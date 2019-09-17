@@ -67,10 +67,9 @@ class AddPartner extends BaseComponent {
         if (query === '') {
             return players;
         }
-        const { suggestionResult } = this.state;
         const regex = new RegExp(`${query.trim()}`, 'i');
         console.log('regex ', regex)
-        return suggestionResult.filter(item => item.name.search(regex) >= 0);
+        return players.filter(item => item.name.search(regex) >= 0);
     }
 
 
@@ -100,7 +99,9 @@ class AddPartner extends BaseComponent {
                 paddingTop:10, paddingRight:16,paddingBottom:10,
                 paddingLeft:16}}
                 >
-                    <Image style={{ height: 50, width: 45, borderRadius: 16, }}
+                    <Image 
+                    resizeMode="contain"
+                    style={{ height: 50, width: 45, borderRadius: 8, }}
                         source={{uri:item.profile_pic}} />
 
                     <Text style={
@@ -149,7 +150,21 @@ class AddPartner extends BaseComponent {
                             backgroundColor: 'white',
                             borderRadius: 16,
                             fontFamily: 'Quicksand-Regular'
-                        }} placeholder="Search"></TextInput>
+                        }} placeholder="Search"
+                        onChangeText={text => {
+                            this.state.query = text
+                            this.setState({
+                                query:text
+                            })
+                            // console.warn(text)
+                            // const data = this.find(this.state.query);
+                            // this.state.filter = data;
+                            // this.setState({
+                            //     filter: data
+                            // })
+                        }}>
+                        
+                        </TextInput>
 
 
                     </Card>

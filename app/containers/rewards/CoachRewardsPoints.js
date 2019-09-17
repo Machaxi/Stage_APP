@@ -14,6 +14,7 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import RNPickerSelect from 'react-native-picker-select'
 import { getAcademyListing, getRewardDue } from "../../redux/reducers/RewardReducer";
 import moment from 'moment'
+import Events from '../../router/events';
 
 const placeholder = {
     label: 'Select Option ',
@@ -42,7 +43,14 @@ class CoachRewardsPoints extends BaseComponent {
     }
 
     componentDidMount() {
+        this.selfComponentDidMount()
+        this.refreshEvent = Events.subscribe('REFRESH_REWARDS', () => {
+            const value = this.state.country;
+            this.fetchBatchByAcademy(value)
+        });
+    }
 
+    selfComponentDidMount() {
         getData('userInfo', (value) => {
             let userData = JSON.parse(value)
             this.setState({
@@ -111,7 +119,7 @@ class CoachRewardsPoints extends BaseComponent {
                             let batch = batches[j]
                             batch.month = month
                             batch.year = year
-                            console.log('batch => ',JSON.stringify(batch))
+                            console.log('batch => ', JSON.stringify(batch))
                         }
                     }
 

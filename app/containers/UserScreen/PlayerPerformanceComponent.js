@@ -8,7 +8,7 @@ import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../
 import { connect } from 'react-redux';
 import moment from 'moment'
 import { Card } from 'react-native-paper';
-import { ECharts } from 'react-native-echarts-wrapper';
+import { ECharts } from '../util/echart/index'
 import YouTube from 'react-native-youtube';
 
 

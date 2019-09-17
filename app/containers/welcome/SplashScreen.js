@@ -163,10 +163,10 @@ class Splash extends BaseComponent {
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        height: "20%",
-                        width: "70%"
+                        height: "30%",
+                        width: "80%"
                     }}
-                    source={require('../../images/dribble_logo.png')}
+                    source={require('../../images/new_splash_logo.jpg')}
                 />
 
             </View>

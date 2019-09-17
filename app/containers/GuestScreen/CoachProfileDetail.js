@@ -362,9 +362,9 @@ class CoachProfileDetail extends BaseComponent {
                                         }}
                                         starSize={14}
                                         disabled={true}
-                                        emptyStar={'ios-star-outline'}
-                                        fullStar={'ios-star'}
-                                        halfStar={'ios-star-half'}
+                                        emptyStar={require('../../images/ic_empty_star.png')}
+                                        fullStar={require('../../images/ic_star.png')}
+                                        halfStar={require('../../images/ic_half_star.png')}
                                         iconSet={'Ionicons'}
                                         maxStars={5}
                                         rating={rating}
@@ -393,6 +393,7 @@ class CoachProfileDetail extends BaseComponent {
                                             borderRadius: 10
                                         }}>
                                         <Text style={{
+                                            marginBottom: 1,
                                             color: '#707070',
                                             alignItems: 'center',
                                             justifyContent: 'center',

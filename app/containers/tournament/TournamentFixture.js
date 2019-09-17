@@ -6,7 +6,7 @@ import { getData } from "../../components/auth";
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
-import { COACH } from '../../components/Constants'
+import { COACH, PLAYER } from '../../components/Constants'
 import { Text as MyText } from 'react-native'
 
 import Svg, {
@@ -366,7 +366,7 @@ class TournamentFixture extends BaseComponent {
                     let obj = { ...matches[0].winner }
                     obj.winner = true
                     this.state.winner = obj
-                    console.log('Winner-> ',JSON.stringify(obj))
+                    console.log('Winner-> ', JSON.stringify(obj))
                     // let winnerArray = []
                     // winnerArray[0] = obj
                     // playerArray.push(subArray)
@@ -534,29 +534,29 @@ class TournamentFixture extends BaseComponent {
                 // )
 
                 const fontSize = 14;
-                  container.push(<Rect
+                container.push(<Rect
                     x={x + (width / 2) - 30}
                     y={5}
-                    width={100+is_final}
+                    width={100 + is_final}
                     height={25}
                     rx="8"
                     ry="8"
                     fill="#DFDFDF" />
                 )
 
-               
+
                 container.push(
                     <Text
                         fill="black"
                         fontFamily="Quicksand-Regular"
                         fontSize={fontSize}
                         textAnchor="middle"
-                        x={x + (width / 2)+10+is_final}
+                        x={x + (width / 2) + 10 + is_final}
                         y={22}
                         height={25}
-                        >
+                    >
                         {roundName}
-                        </Text>
+                    </Text>
                 )
 
 
@@ -614,14 +614,18 @@ class TournamentFixture extends BaseComponent {
                     container.push(<Rect
                         onPress={() => {
 
-                            let id = array[i][j].id
-                            console.warn("playerid : " + id)
-                            if (id != undefined) {
-                                this.props.navigation.navigate('OtherPlayerDeatils', {
-                                    player_id: id,
-                                    fixture:true
-                                })
+                            const user_type = array[i][j].user_type
+                            if (user_type == PLAYER) {
+                                let id = array[i][j].id
+                                console.warn("playerid : " + id)
+                                if (id != undefined) {
+                                    this.props.navigation.navigate('OtherPlayerDeatils', {
+                                        player_id: id,
+                                        fixture: true
+                                    })
+                                }
                             }
+
                         }}
                         key={"id_" + (i * 100 + j)}
                         x={x}
@@ -689,16 +693,19 @@ class TournamentFixture extends BaseComponent {
                             <Text
                                 onPress={() => {
 
-                                    let id = array[i][j].id
-                                    console.warn("playerid : " + id)
-                                    if (id != undefined) {
-                                        this.props.navigation.navigate('OtherPlayerDeatils', {
-                                            player_id: id,
-                                            fixture:true
-                                        })
+                                    const user_type = array[i][j].user_type
+                                    if (user_type == PLAYER) {
+                                        let id = array[i][j].id
+                                        console.warn("playerid : " + id)
+                                        if (id != undefined) {
+                                            this.props.navigation.navigate('OtherPlayerDeatils', {
+                                                player_id: id,
+                                                fixture: true
+                                            })
+                                        }
                                     }
                                 }}
-                                stroke={textColor}
+                                stroke={array[i][j].user_type == PLAYER ? 'blue' : textColor}
                                 fontSize="12"
                                 fontFamily="Quicksand-Regular"
                                 x={x + 12}
@@ -986,10 +993,10 @@ class TournamentFixture extends BaseComponent {
 
                     container.push(
                         <Text
-                            stroke={textColor}
+                            //stroke={textColor}
                             fontSize="14"
                             fontFamily="Quicksand-Regular"
-                            x={x1 + marginLeft + 30}
+                            x={x1 + marginLeft + 27}
                             y={22}>
                             Winner
                         </Text>
@@ -1007,13 +1014,16 @@ class TournamentFixture extends BaseComponent {
                     container.push(<Rect
                         onPress={() => {
 
-                            let id = winner.id
-                            console.warn("playerid : " + id)
-                            if (id != undefined) {
-                                this.props.navigation.navigate('OtherPlayerDeatils', {
-                                    player_id: id,
-                                    fixture:true
-                                })
+                            const user_type = array[i][j].user_type
+                            if (user_type == PLAYER) {
+                                let id = array[i][j].id
+                                console.warn("playerid : " + id)
+                                if (id != undefined) {
+                                    this.props.navigation.navigate('OtherPlayerDeatils', {
+                                        player_id: id,
+                                        fixture: true
+                                    })
+                                }
                             }
                         }}
                         key={"id_" + (i * 100 + 0)}
@@ -1042,7 +1052,7 @@ class TournamentFixture extends BaseComponent {
                                 //     })
                                 // }
                             }}
-                            stroke={textColor}
+                            stroke={array[i][j].user_type == PLAYER ? 'blue' : textColor}
                             fontSize="12"
                             fontFamily="Quicksand-Regular"
                             x={x1 + marginLeft + 12}

@@ -261,9 +261,9 @@ class WriteAcademyFeedback extends BaseComponent {
                                 }}
                                 starSize={28}
                                 disabled={false}
-                                emptyStar={'ios-star-outline'}
-                                fullStar={'ios-star'}
-                                halfStar={'ios-star-half'}
+                                emptyStar={require('../../images/ic_empty_star.png')}
+                                fullStar={require('../../images/ic_star.png')}
+                                halfStar={require('../../images/ic_half_star.png')}
                                 iconSet={'Ionicons'}
                                 maxStars={5}
                                 rating={this.state.rating}
