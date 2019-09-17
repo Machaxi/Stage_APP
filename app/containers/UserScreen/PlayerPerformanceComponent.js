@@ -129,14 +129,19 @@ class PlayerPerformanceComponent extends BaseComponent {
             </Card>
             <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
                 <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
-                <View style={{ width: '100%', height: 300 }}>
-                    <ECharts
-                        //legacyMode
-                        style={{ width: '100%' }}
-                        option={option}></ECharts>
-                </View>
+                {
+                    this.props.jumpTo.current_parameter.graph_data.length > 0 ?
+                        <View style={{ width: '100%', height: 300 }}>
+                            <ECharts
+                                style={{ width: '100%' }}
+                                option={option}></ECharts>
+                        </View> :
+                        <View style={{ marginTop: 30, marginLeft: 40 }}><Text>No data to show</Text></View>
+
+                }
+
             </Card>
-            {/* <Card style={styles.performanceCard}>
+            <Card style={styles.performanceCard}>
                 <View style={{ width: '100%', height: 300 }}>
 
                     {
@@ -145,13 +150,13 @@ class PlayerPerformanceComponent extends BaseComponent {
                             javaScriptEnabled={true}
                             domStorageEnabled={true}
                         />
-                    } */}
+                    }
 
 
 
 
 
-            {/* <YouTube
+                    {/* <YouTube
                     apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
                     videoId='wF_B_aagLfI'   // The YouTube video ID
                     controls={1}
@@ -171,13 +176,13 @@ class PlayerPerformanceComponent extends BaseComponent {
                     style={{ alignSelf: 'stretch', height: this.state.height }}
                 /> */}
 
-            {/* </View>
+                </View>
                 <View style={{ backgroundColor: '#EFEFEF', borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row' }}>
                     <Image source={require('../../images/shape.png')} />
                     <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
                     <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 11, color: '#A3A5AE' }}>{item.attribute.intro_video_url}</Text>
                 </View>
-            </Card> */}
+            </Card>
 
             {
                 item.attribute.qa.map((element, index) => {

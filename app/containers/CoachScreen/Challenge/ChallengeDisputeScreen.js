@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, Modal, TextInput } from 'react-native';
 import { Card } from 'react-native-paper'
@@ -14,103 +13,103 @@ import { getChallengeScore, updateChallengeScore } from "../../../redux/reducers
 import moment from 'moment'
 
 const placeholder = {
-    label: 'Select Academy ',
-    value: null,
-    color: '#9EA0A4',
+  label: 'Select Academy ',
+  value: null,
+  color: '#9EA0A4',
 };
 
 class ChallengeDisputeScreen extends BaseComponent {
 
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            isFirstInstance: true,
-            batchList: ["Test1", "Test2", "Test3"],
-            country: '',
-            academies: [],
-            coach_id: '',
-            dues: null,
-            alert: false,
-            disputedChallenges: null,
-            modalVisible: false,
-            selectedChallengeData: null,
-            matchData: null,
-            academyId: ''
-        }
-        this.inputRefs = {
-            country: null
-        };
-        console.warn('test')
+  constructor(props) {
+    super(props)
+    this.state = {
+      isFirstInstance: true,
+      batchList: ["Test1", "Test2", "Test3"],
+      country: '',
+      academies: [],
+      coach_id: '',
+      dues: null,
+      alert: false,
+      disputedChallenges: null,
+      modalVisible: false,
+      selectedChallengeData: null,
+      matchData: null,
+      academyId: ''
     }
+    this.inputRefs = {
+      country: null
+    };
+    console.warn('test')
+  }
 
-    componentDidMount() {
+  componentDidMount() {
 
-        getData('userInfo', (value) => {
-            let userData = JSON.parse(value)
-            this.setState({
-                coach_id: userData['coach_id']
-            })
-        })
+    getData('userInfo', (value) => {
+      let userData = JSON.parse(value)
+      this.setState({
+        coach_id: userData['coach_id']
+      })
+    })
 
-        this.getAcademyList();
-        //this.fetchDisputeListByAcademy(1);
-    }
+    this.getAcademyList();
+    //this.fetchDisputeListByAcademy(1);
+  }
 
-     setModalVisible(visible) {
-      this.setState({ modalVisible: visible });
-    }
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
-    getAcademyList() {
-      getData('header', (value) => {
-        this.props.getAcademyListing(value).then(() => {
-            let user = JSON.stringify(this.props.data.data);
-            console.log(' user response payload 11' + user);
-            let user1 = JSON.parse(user)
-            if (user1.success) {
-                let array = user1.data['academies']
-                let newArray = []
-                for (let i = 0; i < array.length; i++) {
-                    let row = array[i];
-                    let obj = {
-                        label: row.academy_name,
-                        value: row.academy_id,
-                    }
-                    newArray[i] = obj
-                }
-                this.setState({
-                    academies: newArray
-                })
+  getAcademyList() {
+    getData('header', (value) => {
+      this.props.getAcademyListing(value).then(() => {
+        let user = JSON.stringify(this.props.data.data);
+        console.log(' user response payload 11' + user);
+        let user1 = JSON.parse(user)
+        if (user1.success) {
+          let array = user1.data['academies']
+          let newArray = []
+          for (let i = 0; i < array.length; i++) {
+            let row = array[i];
+            let obj = {
+              label: row.academy_name,
+              value: row.academy_id,
             }
+            newArray[i] = obj
+          }
+          this.setState({
+            academies: newArray
+          })
+        }
 
-        }).catch((response) => {
-            //handle form errors
-            console.log(response);
-        })
-      });
-    }
+      }).catch((response) => {
+        //handle form errors
+        console.log(response);
+      })
+    });
+  }
 
-    fetchDisputeListByAcademy(academyId) {
-      getData('header', (value) => {
-        this.props.getDisputedChallenges(value, academyId).then(() => {
-          console.log('this.props.disputeData',this.props.disputeData.res);
-            let data = this.props.disputeData.res;
-            console.log(' user response payload 11' + data);
-            if (data.success) {
-              console.log('in if');
-                this.setState({
-                    disputedChallenges: data.data.challenges
-                })
-           }
+  fetchDisputeListByAcademy(academyId) {
+    getData('header', (value) => {
+      this.props.getDisputedChallenges(value, academyId).then(() => {
+        console.log('this.props.disputeData', this.props.disputeData.res);
+        let data = this.props.disputeData.res;
+        console.log(' user response payload 11' + data);
+        if (data.success) {
+          console.log('in if');
+          this.setState({
+            disputedChallenges: data.data.challenges
+          })
+        }
 
-        }).catch((response) => {
-            //handle form errors
-            console.log(response);
-        })
-      });
-    }
+      }).catch((response) => {
+        //handle form errors
+        console.log(response);
+      })
+    });
+  }
 
-   getChallengeScoreData(challengeId) {
+  getChallengeScoreData(challengeId) {
     //this.progress(true);
     getData('header', (value) => {
       this.props.getChallengeScore(value, challengeId).then(() => {
@@ -123,7 +122,7 @@ class ChallengeDisputeScreen extends BaseComponent {
 
           this.setState({
             matchData: data.data,
-          },() => {
+          }, () => {
             this.setModalVisible(true);
           })
         }
@@ -133,15 +132,15 @@ class ChallengeDisputeScreen extends BaseComponent {
         console.log(response);
       })
     })
-   }
+  }
 
   saveData() {
 
     let postData = {}
     postData['data'] = this.state.matchData;
 
-    console.log('postData',JSON.stringify(postData));
-    
+    console.log('postData', JSON.stringify(postData));
+
     getData('header', (value) => {
       this.props.updateChallengeScore(value, postData).then(() => {
         console.log(this.props);
@@ -151,7 +150,7 @@ class ChallengeDisputeScreen extends BaseComponent {
         let success = data.success
         if (success) {
           this.fetchDisputeListByAcademy(this.state.academyId);
-          this.setModalVisible(false);  
+          this.setModalVisible(false);
         }
 
       }).catch((response) => {
@@ -200,7 +199,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.challenge_by.badge== undefined ? '' : this.state.selectedChallengeData.challenge_by.badge}</Text>
+                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.challenge_by.badge == undefined ? '' : this.state.selectedChallengeData.challenge_by.badge}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -213,36 +212,36 @@ class ChallengeDisputeScreen extends BaseComponent {
                     <Text style={styles.versusText}>VS</Text>
                   </View>
 
-                      <View style={styles.modalPlayerCard}>
-                        <TouchableOpacity>
-                          <ImageBackground resizeMode='contain' style={styles.playerBackImage}
-                            source={require('../../../images/batch_card.png')}
-                          >
-                            <Text style={styles.playerScoreLabel}>Score</Text>
-                            <Text style={styles.playerScore}>{this.state.selectedChallengeData.opponent.score}</Text>
+                  <View style={styles.modalPlayerCard}>
+                    <TouchableOpacity>
+                      <ImageBackground resizeMode='contain' style={styles.playerBackImage}
+                        source={require('../../../images/batch_card.png')}
+                      >
+                        <Text style={styles.playerScoreLabel}>Score</Text>
+                        <Text style={styles.playerScore}>{this.state.selectedChallengeData.opponent.score}</Text>
 
-                            <View style={styles.middleBox}>
-                              <Text style={styles.playerCategory}>{getFormattedCategory(this.state.selectedChallengeData.opponent.player_category)}</Text>
-                              <Image style={styles.playerImage} source={{ uri: this.state.selectedChallengeData.opponent.profile_pic }}></Image>
-                              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{this.state.selectedChallengeData.opponent.player_level.split(" ").join("\n")}</Text>
-                            </View>
+                        <View style={styles.middleBox}>
+                          <Text style={styles.playerCategory}>{getFormattedCategory(this.state.selectedChallengeData.opponent.player_category)}</Text>
+                          <Image style={styles.playerImage} source={{ uri: this.state.selectedChallengeData.opponent.profile_pic }}></Image>
+                          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.playerLevel}>{this.state.selectedChallengeData.opponent.player_level.split(" ").join("\n")}</Text>
+                        </View>
 
-                            <View style={styles.playerNameOuter}>
-                              <Text style={styles.playerName}>{formattedName(this.state.selectedChallengeData.opponent.name)}</Text>
-                            </View>
+                        <View style={styles.playerNameOuter}>
+                          <Text style={styles.playerName}>{formattedName(this.state.selectedChallengeData.opponent.name)}</Text>
+                        </View>
 
-                            <View style={styles.badgeOuter}>
-                              <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
-                                <View style={styles.badgeInner}>
-                                  {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                                  <Text style={styles.badgeValue}>{this.state.selectedChallengeData.opponent.badge== undefined ? '' : this.state.selectedChallengeData.opponent.badge}</Text>
-                                  {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
-                                </View> 
-                              </ImageBackground>
+                        <View style={styles.badgeOuter}>
+                          <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
+                            <View style={styles.badgeInner}>
+                              {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
+                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.opponent.badge == undefined ? '' : this.state.selectedChallengeData.opponent.badge}</Text>
+                              {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
-                        </TouchableOpacity>
-                      </View>
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
 
                 </View>
 
@@ -258,9 +257,9 @@ class ChallengeDisputeScreen extends BaseComponent {
                       keyboardType={'number-pad'}
                       style={styles.scoreTextbox}
                       onChangeText={(text) => {
-                          //item.input_score = text
+                        //item.input_score = text
 
-                          this.state.matchData.match_scores[0].player1_score =text
+                        this.state.matchData.match_scores[0].player1_score = text
 
                       }}>{this.state.matchData.match_scores[0].player1_score}</TextInput>
                     <TextInput
@@ -290,124 +289,123 @@ class ChallengeDisputeScreen extends BaseComponent {
   }
 
 
-    _renderItem = ({ item }) => (
+  _renderItem = ({ item }) => (
 
-      <Card style={styles.disputeCard}>   
-          <View>
-            <Text style={styles.cardHeading}>{moment.utc(item.date).local().format("Do MMM YY")}</Text>
-            <Text style={styles.challengePlayersName}>{item.challenge_by.name} Vs {item.opponent.name}</Text>
-            <View style={styles.challengeStatusOuter}>
-              <Text style={styles.challengeStatus}>{item.winner.name} won {item.score}</Text>
-              <Text style={styles.challengeScoreUpdated}>Score updated by {item.score_updated_by}</Text>
-            </View>
+    <Card style={styles.disputeCard}>
+      <View>
+        <Text style={styles.cardHeading}>{moment.utc(item.date).local().format("Do MMM YY")}</Text>
+        <Text style={styles.challengePlayersName}>{item.challenge_by.name} Vs {item.opponent.name}</Text>
+        <View style={styles.challengeStatusOuter}>
+          <Text style={styles.challengeStatus}>{item.winner.name} won {item.score}</Text>
+          <Text style={styles.challengeScoreUpdated}>Score updated by {item.score_updated_by}</Text>
+        </View>
 
-            <View>
-              <Text style={styles.disputePlayer}>{item.disputed_by}<Text style={styles.disputeLabel}> has disputed the score</Text></Text>
-            </View>
+        <View>
+          <Text style={styles.disputePlayer}>{item.disputed_by}<Text style={styles.disputeLabel}> has disputed the score</Text></Text>
+        </View>
 
-            <View style={styles.resolveBtnOuter}>
-                <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
-                onPress={() => { 
-                  this.getChallengeScoreData(item.id);
-                  this.setState({
-                    selectedChallengeData: item
-                  })
+        <View style={styles.resolveBtnOuter}>
+          <TouchableOpacity activeOpacity={.8} style={styles.rounded_button}
+            onPress={() => {
+              this.getChallengeScoreData(item.id);
+              this.setState({
+                selectedChallengeData: item
+              })
 
-                }}>
-                <Text style={styles.primaryBtnText}>Resolve</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+            }}>
+            <Text style={styles.primaryBtnText}>Resolve</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-      </Card>
-    );
+    </Card>
+  );
 
-  
-    render() {       
 
-      console.log('this.state.disputedChallenges', this.state.disputedChallenges);
+  render() {
 
-        if (this.props.data.loading || this.props.disputeData.loading || this.props.challengeData.loading || this.state.academies.length == []) {
-            return (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#67BAF5" />
-                </View>
-            )
+    console.log('this.state.disputedChallenges', this.state.disputedChallenges);
+
+    if (this.props.data.loading || this.props.disputeData.loading || this.props.challengeData.loading || this.state.academies.length == []) {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="#67BAF5" />
+        </View>
+      )
+    }
+
+    let data = this.state.disputedChallenges;
+
+    console.log('data111111111111', data);
+
+    return (
+
+      <View style={{ flex: 1, padding: 16, backgroundColor: '#F7F7F7' }}>
+
+        <View
+          style={{ justifyContent: 'center', alignItems: 'center', }} >
+
+          <RNPickerSelect style={{
+            width: '90%',
+          }}
+            placeholder={placeholder}
+            items={this.state.academies}
+            onValueChange={(value) => {
+              console.warn(value)
+              this.setState({
+                country: value,
+                academyId: value
+              });
+              this.fetchDisputeListByAcademy(value)
+            }}
+            style={pickerSelectStyles}
+            value={this.state.country}
+            useNativeAndroidPickerStyle={false}
+            ref={(el) => {
+              this.inputRefs.country = el;
+            }}
+          />
+
+
+          <View style={{
+            width: 220,
+            backgroundColor: '#A3A5AE',
+            height: 1,
+            marginBottom: 20
+          }}></View>
+
+        </View>
+
+
+
+        {
+          (this.state.disputedChallenges != null && this.state.disputedChallenges.length == 0) ?
+
+            <View style={{ marginTop: 50, marginLeft: 75 }}><Text style={{ fontFamily: 'Quicksand-Medium', color: 'black' }}>No disputed challenges</Text></View> :
+
+            <FlatList
+              data={data}
+              renderItem={this._renderItem} />
+
         }
 
-        let data = this.state.disputedChallenges;
 
-        console.log('data111111111111', data);
+        {this.state.selectedChallengeData != null && this.updateScoreModal()}
 
-        return (
+      </View>);
 
-            <View style={{ flex: 1, padding: 16, backgroundColor: '#F7F7F7' }}>
-
-                <View
-                    style={{ justifyContent: 'center', alignItems: 'center', }} >
-
-                    <RNPickerSelect style={{
-                        width: '90%',
-                    }}
-                        placeholder={placeholder}
-                        items={this.state.academies}
-                        onValueChange={(value) => {
-                            console.warn(value)
-                            this.setState({
-                                country: value,
-                                academyId: value
-                            });
-                            this.fetchDisputeListByAcademy(value)
-                        }}
-                        style={pickerSelectStyles}
-                        value={this.state.country}
-                        useNativeAndroidPickerStyle={false}
-                        ref={(el) => {
-                            this.inputRefs.country = el;
-                        }}
-                    />
-
-
-                    <View style={{
-                        width: 220,
-                        backgroundColor: '#A3A5AE',
-                        height: 1,
-                        marginBottom: 20
-                    }}></View>
-
-                </View>
-
-                
-                {data!=null && data.length>0
-                ?
-              
-                  <FlatList
-                    data={data}
-                    renderItem={this._renderItem}
-                />
-                :
-                
-                <View style={{ padding:16, alignItems: 
-                'center', justifyContent: 'center' }}>
-                <Text style={defaultStyle.regular_text_14}>{data==null?"Select Academy":"No challenge dispute found"}</Text>
-            </View>
-              }
-                {this.state.selectedChallengeData!=null && this.updateScoreModal()}
-
-            </View>);
-
-    }
+  }
 }
 
 const mapStateToProps = state => {
-    return {
-        data: state.RewardReducer,
-        disputeData: state.coachReducer,
-        challengeData: state.ChallengeReducer
-    };
+  return {
+    data: state.RewardReducer,
+    disputeData: state.coachReducer,
+    challengeData: state.ChallengeReducer
+  };
 };
 const mapDispatchToProps = {
-    getAcademyListing, getDisputedChallenges, getChallengeScore, updateChallengeScore
+  getAcademyListing, getDisputedChallenges, getChallengeScore, updateChallengeScore
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChallengeDisputeScreen);
@@ -415,26 +413,26 @@ export default connect(mapStateToProps, mapDispatchToProps)(ChallengeDisputeScre
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-      fontSize: 16,
-      //paddingVertical: 12,
-      //paddingHorizontal: 10,
-      borderColor: '#614051',
-      borderRadius: 8,
-      color: 'black',
-      marginBottom: 4,
-      alignItems:'center',
-      textAlign:'center',
-      fontFamily: 'Quicksand-Regular',
-      // to ensure the text is never behind the icon
+    fontSize: 16,
+    //paddingVertical: 12,
+    //paddingHorizontal: 10,
+    borderColor: '#614051',
+    borderRadius: 8,
+    color: 'black',
+    marginBottom: 4,
+    alignItems: 'center',
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Regular',
+    // to ensure the text is never behind the icon
   },
   inputAndroid: {
-      fontSize: 16,
-      paddingHorizontal: 10,
-      paddingVertical: 8,
-      fontFamily: 'Quicksand-Regular',
-      borderColor: '#614051',
-      borderRadius: 8,
-      color: 'black',
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontFamily: 'Quicksand-Regular',
+    borderColor: '#614051',
+    borderRadius: 8,
+    color: 'black',
   },
 });
 const styles = StyleSheet.create({
@@ -453,7 +451,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     fontFamily: 'Quicksand-Medium'
   },
-   challengePlayersName: {
+  challengePlayersName: {
     fontSize: 14,
     color: '#404040',
     marginTop: 15,
@@ -466,7 +464,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 15
   },
-   challengeStatus: {
+  challengeStatus: {
     fontSize: 14,
     color: '#404040',
     width: '50%',
@@ -556,28 +554,28 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Regular',
   },
   scoreOuter: {
-    display: 'flex', 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    padding: 18, 
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 18,
     marginTop: 5
   },
   scoreTextbox: {
     textAlign: 'center',
     color: '#404040',
-    width: '40%', 
+    width: '40%',
     height: 36,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#CECECE'
-},
-challengeScoreLabel: { 
-  color: '#404040', 
-  fontSize: 14, 
-  fontFamily: 'Quicksand-Regular', 
-  width: "50%", 
-  textAlign: 'center' 
-},
+  },
+  challengeScoreLabel: {
+    color: '#404040',
+    fontSize: 14,
+    fontFamily: 'Quicksand-Regular',
+    width: "50%",
+    textAlign: 'center'
+  },
   playerCardOuter: {
     display: 'flex',
     flexDirection: 'row',
@@ -724,7 +722,7 @@ challengeScoreLabel: {
     color: '#A3A5AE',
     fontFamily: 'Quicksand-Regular'
   },
-   playerBackImage: {
+  playerBackImage: {
     height: 182,
     width: '100%'
   },

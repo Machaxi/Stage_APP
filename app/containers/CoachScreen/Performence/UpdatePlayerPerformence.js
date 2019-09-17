@@ -27,7 +27,7 @@ class UpdatePlayerPerformence extends BaseComponent {
         console.log(data)
     }
 
-     
+
 
     componentDidMount() {
         var userData;
@@ -66,15 +66,15 @@ class UpdatePlayerPerformence extends BaseComponent {
                     this.setState({
                         playerList: user1.data['attributes'],
                         batchDetails: user1.data
-                    },()=>{
+                    }, () => {
                         console.log('this.state.playerList', this.state.playerList);
                         this.state.playerList.map((item, index) => {
 
-                            item.parameters.map((newitem,newindex) => {
-                                this.state.playerList[index].parameters[newindex]['score'] = 0;
+                            item.parameters.map((newitem, newindex) => {
+                                this.state.playerList[index].parameters[newindex]['score'] = '';
                             })
 
-                            
+
 
                         })
                     })
@@ -133,7 +133,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                             padding: 10
                         }}
                         keyboardType={'number-pad'}
-                        onChangeText={(txtscore) => { item.score= txtscore }}
+                        onChangeText={(txtscore) => { item.score = txtscore }}
                     >{item.score}</TextInput>
                 </View>
                 <Text style={defaultStyle.regular_text_14}>
@@ -153,7 +153,7 @@ class UpdatePlayerPerformence extends BaseComponent {
         getData('header', (value) => {
             console.log('new data', this.state.playerList);
 
-            var postData = {};
+            var postData = {}, flag = false;
 
 
             var data = {};
@@ -163,41 +163,47 @@ class UpdatePlayerPerformence extends BaseComponent {
             data['player_id'] = this.props.navigation.getParam('player_id');
             data['progress_score'] = [];
 
+            console.log('this.state.playerList', this.state.playerList);
+
+
             this.state.playerList.map((item, index) => {
 
                 item.parameters.map((item1, index1) => {
                     var scoreData = {};
+                    if (item1.score == '') {
+                        flag = true;
+                    }
                     scoreData['attribute_id'] = item.attribute_id;
                     scoreData['parameter_id'] = item1.parameter_id;
                     scoreData['score'] = parseInt(item1.score);
                     data['progress_score'].push(scoreData);
                 })
 
-                
-                
             })
 
-           console.log('data',data);
+            if (flag) {
+                alert('Kindly rate on all parameters');
+            } else {
 
-           postData['data'] = data;
+                postData['data'] = data;
 
-            this.props.savePlayerPerformance(value, postData).then(() => {
-                // console.log(' user response payload ' + JSON.stringify(this.props.data));
-                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.performencedata);
-                console.log(' user response payload ' + user);
-                let user1 = JSON.parse(user)
+                console.log('postData', postData);
+                this.props.savePlayerPerformance(value, postData).then(() => {
+                    let user = JSON.stringify(this.props.data.performencedata);
+                    console.log(' user response payload ' + user);
+                    let user1 = JSON.parse(user)
 
-                if (user1.success == true) {
-                    console.log('in if');
-                    Events.publish(EVENT_REFRESH_PLAYER);
-                    this.props.navigation.goBack();
-                }
+                    if (user1.success == true) {
+                        console.log('in if');
+                        Events.publish(EVENT_REFRESH_PLAYER);
+                        this.props.navigation.goBack();
+                    }
 
-            }).catch((response) => {
-                //handle form errors
-                console.log(response);
-            })
+                }).catch((response) => {
+                    //handle form errors
+                    console.log(response);
+                })
+            }
 
         });
     }
@@ -228,10 +234,10 @@ class UpdatePlayerPerformence extends BaseComponent {
                         textAlign: 'center',
                         alignContent: 'center'
                     }]}>
-                        {moment(this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year'),"MM/YYYY").format('MMM')}
+                        {moment(this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year'), "MM/YYYY").format('MMM')}
                     </Text>
                     <Text style={[defaultStyle.bold_text_12, { color: '#A3A5AE' }]}>
-                        {moment(this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_year,"MM/YYYY").format('MMM')}
+                        {moment(this.state.batchDetails.prev_month + '-' + this.state.batchDetails.prev_year, "MM/YYYY").format('MMM')}
                     </Text>
                 </View>
             </View>
@@ -280,7 +286,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                                 <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE' }]}>Month </Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                <Text style={defaultStyle.bold_text_14}>{moment( this.props.navigation.getParam('month') + '/' + this.props.navigation.getParam('year'),"MM/YYYY").format('MMM ’YY')} </Text>
+                                <Text style={defaultStyle.bold_text_14}>{moment(this.props.navigation.getParam('month') + '/' + this.props.navigation.getParam('year'), "MM/YYYY").format('MMM ’YY')} </Text>
                                 <Text style={[defaultStyle.regular_text_14, { color: '#A3A5AE' }]}>(Enter Percentage)</Text>
                             </View>
                         </View>

@@ -7,7 +7,7 @@ import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
 import { getCoachSWitcher, getPlayerSWitcher } from "../../redux/reducers/switchReducer";
-import { getOtherPlayerDashboard,getOtherPlayerWithoutAcademy } from "../../redux/reducers/dashboardReducer";
+import { getOtherPlayerDashboard, getOtherPlayerWithoutAcademy } from "../../redux/reducers/dashboardReducer";
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
@@ -30,7 +30,8 @@ class OtherPlayerDetails extends BaseComponent {
             userData: null,
             country: undefined,
             player_profile: null,
-            strenthList: null
+            strenthList: null,
+            showChallenge: false
         }
 
 
@@ -43,7 +44,7 @@ class OtherPlayerDetails extends BaseComponent {
         let academy_id = this.props.navigation.getParam('academy_id', '')
         let player_id = this.props.navigation.getParam('player_id', '')
         let is_fixture = this.props.navigation.getParam('fixture', false)
-        
+
         if (is_fixture) {
             this.fetchWithoutAcademy(player_id)
         }
@@ -56,6 +57,12 @@ class OtherPlayerDetails extends BaseComponent {
                     let userData = JSON.parse(value)
                     let academy_id = userData['academy_id']
                     // console.warn('academy_id=>', academy_id)
+
+                    if (userData.user['user_type'] == 'PLAYER' && userData.user['user_type'] == 'PARENT') {
+                        this.setState({
+                            showChallenge: true
+                        })
+                    }
 
                     this.fetch(academy_id, player_id)
                 });
@@ -84,28 +91,28 @@ class OtherPlayerDetails extends BaseComponent {
         console.log("fetchWithoutAcademy " + user_id);
         getData('header', (value) => {
             console.log("header", value);
-            this.props.getOtherPlayerWithoutAcademy(value,user_id).then(() => {
+            this.props.getOtherPlayerWithoutAcademy(value, user_id).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                 let user = JSON.stringify(this.props.data.dashboardData);
                 console.log(' user getOtherPlayerDashboard ' + user);
                 let user1 = JSON.parse(user)
-    
+
                 if (user1.success == true) {
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         strenthList: user1.data.player_profile['stats']
-    
+
                     })
                 }
-    
+
             }).catch((response) => {
                 //handle form errors
                 console.log(response);
             })
 
         });
-        
+
     }
 
     getUserDashboard(player_id, ) {
@@ -252,13 +259,15 @@ class OtherPlayerDetails extends BaseComponent {
                     </View> */}
 
 
-                    <View style={styles.confirmBtnOuter}>
-                        <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
-                            global.opponentPlayerDetails = this.state.player_profile;
-                            this.props.navigation.navigate('OpponentList')
-                        }}>Challenge</Text>
-                    </View>
-
+                    {
+                        this.state.showChallenge &&
+                        <View style={styles.confirmBtnOuter}>
+                            <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                                global.opponentPlayerDetails = this.state.player_profile;
+                                this.props.navigation.navigate('OpponentList')
+                            }}>Challenge</Text>
+                        </View>
+                    }
                     {this.state.strenthList.length != 0 ?
                         <View style={{ margin: 10 }}>
                             <Card style={{ borderRadius: 12 }}>
@@ -298,7 +307,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getOtherPlayerDashboard,getOtherPlayerWithoutAcademy
+    getOtherPlayerDashboard, getOtherPlayerWithoutAcademy
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OtherPlayerDetails);
 
