@@ -31,6 +31,7 @@ class AcademyProfile extends BaseComponent {
             sortType: '',
             type: '',
             clear_feedback_array: false,
+            feedback_count:0
         }
         this.state.id = this.props.navigation.getParam('id', '');
         
@@ -106,6 +107,7 @@ class AcademyProfile extends BaseComponent {
             let status = this.props.data.res.success
             if (status) {
                 let feedback = this.props.data.res.data.feedback
+                this.state.feedback_count = this.props.data.res.data.count
                 console.log('Feedback load =>', feedback.length)
                 console.log('Feedback => ' + JSON.stringify(feedback))
                 let allfeeback = this.state.feedback
@@ -388,6 +390,7 @@ class AcademyProfile extends BaseComponent {
         let about = academy.about
         let user_id = academy.user_id
         let facilities = academy.facilities
+        const feedback_count = this.state.feedback_count
 
         return (
 
@@ -739,7 +742,7 @@ class AcademyProfile extends BaseComponent {
                                     <Text
                                         style={{ fontSize: 14, color: '#707070' }}
                                     >
-                                        Reviews ({academy_reviews.length})
+                                        Reviews ({feedback_count})
                             </Text>
 
                                     <TouchableOpacity
