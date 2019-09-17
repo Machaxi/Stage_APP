@@ -30,7 +30,8 @@ class CoachProfileDetail extends BaseComponent {
             sortType: '',
             type: '',
             is_feedback_loading: false,
-            user_id: ''
+            user_id: '',
+            feedback_count: 0
         }
         this.state.academy_id = this.props.navigation.getParam('academy_id', '');
         this.state.coach_id = this.props.navigation.getParam('coach_id', '')
@@ -68,6 +69,8 @@ class CoachProfileDetail extends BaseComponent {
             let status = this.props.data.res.success
             if (status) {
                 let feedback = this.props.data.res.data.feedback
+                this.state.feedback_count = this.props.data.res.data.count
+
                 console.warn('Feedback => ' + JSON.stringify(feedback))
                 this.setState({
                     feedback: feedback
@@ -269,6 +272,8 @@ class CoachProfileDetail extends BaseComponent {
         let rating = coachData.ratings == undefined ? 0 : coachData.ratings
 
         let profile_pic = checkProfilePic(coachData.profile_pic)
+        const feedback_count = this.state.feedback_count
+
 
         return (
             <ScrollView
@@ -537,7 +542,7 @@ class CoachProfileDetail extends BaseComponent {
                                                         color: '#707070'
                                                     }]}
                                                 >
-                                                    Reviews ({this.state.feedback.length})
+                                                    Reviews ({feedback_count})
                             </Text>
 
                                                 <TouchableOpacity
