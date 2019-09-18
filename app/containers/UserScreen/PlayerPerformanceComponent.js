@@ -365,7 +365,7 @@ class PlayerPerformanceComponent extends BaseComponent {
             yAxis: [
                 {
                     type: 'value',
-                    offset: -4,
+                    offset: -6,
                     splitLine: {
                         show: false
                     },
@@ -383,8 +383,8 @@ class PlayerPerformanceComponent extends BaseComponent {
                 {
                     name: 'My Score',
                     type: 'bar',
-                    barGap: '90%',
-                    barWidth: 7,
+                    barGap: '80%',
+                    barWidth: 6,
                     label: labelOption,
                     data: my_score
 
@@ -392,15 +392,15 @@ class PlayerPerformanceComponent extends BaseComponent {
                 {
                     name: 'Batch Average',
                     type: 'bar',
-                    barWidth: 7,
+                    barWidth: 6,
                     label: labelOption,
                     data: batch_avg
                 },
                 {
                     name: 'Batch Best',
                     type: 'bar',
-                    barWidth: 7,
-                    barCategoryGap: '70%',
+                    barWidth: 6,
+                    barCategoryGap: '60%',
                     label: labelOption,
                     data: batch_best
                 }
