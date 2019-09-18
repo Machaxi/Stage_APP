@@ -87,7 +87,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         let str = ''
         for (let i = 0; i < tournament_types.length; i++) {
             let tournament_type = tournament_types[i].tournament_type
-            str = str + getFormattedTournamentLevel(tournament_type) + 's' + ", "
+            str = str + getFormattedTournamentLevel(tournament_type) + ", "
         }
 
         return str.substring(0, str.length - 2);
@@ -489,7 +489,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             fontFamily: 'Quicksand-Regular'
                                         }}>{data.start_time != undefined ?
                                             Moment(data.start_time, "HH:mm:ss")
-                                                .format("hh:mm a") : "-"}</Text>
+                                                .format("hh:mm a") +" onwards": "-"}</Text>
                                         <Text style={{
                                             paddingTop: 10, fontSize: 14,
                                             color: '#404040',

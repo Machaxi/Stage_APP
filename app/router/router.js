@@ -74,6 +74,7 @@ import TournamentGallerySlider from '../containers/tournament/TournamentGalleryS
 import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
 import WebViewScreen from '../containers/util/WebViewScreen'
+import DietPlan from '../containers/ParentsScreen/DietPlan'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -1348,7 +1349,10 @@ const parentHomeModule = createStackNavigator({
         })
 
     },
-
+    
+    DietPlan: {
+        screen: DietPlan,
+    },
 }
 );
 

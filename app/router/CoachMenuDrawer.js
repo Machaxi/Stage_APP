@@ -915,7 +915,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('PDFExample')}>
+					this.props.navigation.navigate('DietPlan')}>
 
 					<View style={styles.drawercell}>
 

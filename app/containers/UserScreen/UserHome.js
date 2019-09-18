@@ -440,10 +440,10 @@ class UserHome extends BaseComponent {
                                     marginBottom: 16
                                 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={[defaultStyle.bold_text_14, {
+                                    {/* <Text style={[defaultStyle.bold_text_14, {
                                         textDecorationLine: 'line-through'
                                     }]}
-                                    >{routine_name}</Text>
+                                    >{routine_name}</Text> */}
                                     <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                         <Text style={{
                                             fontFamily: 'Quicksand-Medium',
@@ -486,10 +486,10 @@ class UserHome extends BaseComponent {
                                 marginBottom: 16
                             }}>
 
-                                <Text style={[defaultStyle.bold_text_14, {
-                                }]}>{routine_name}</Text>
+                                {/* <Text style={[defaultStyle.bold_text_14, {
+                                }]}>{routine_name}</Text> */}
 
-                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
                                         {getUtcDateFromTime(session_date,start_time)}
@@ -553,7 +553,7 @@ class UserHome extends BaseComponent {
                                         paddingBottom: 12
                                     }}
                                 >
-                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                    <Text style={defaultStyle.bold_text_10}>Next Session : {operations.next_sessions[0].routine_name}</Text>
                                     <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
                                 </View>
                                 <View style={{ marginLeft: 12, marginRight: 12 }}>

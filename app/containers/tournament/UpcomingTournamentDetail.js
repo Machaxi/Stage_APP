@@ -358,7 +358,12 @@ class UpcomingTournamentDetail extends BaseComponent {
                                                 color: '#404040',
                                                 width: "50%",
                                                 fontFamily: 'Quicksand-Regular'
-                                            }}>{Moment(data.start_time, "HH:mm:ss").format("hh:mm a")}</Text>
+                                            }}>
+                                            {/* {Moment(data.start_time, "HH:mm:ss").format("hh:mm a")} */}
+                                            {data.start_time != undefined ?
+                                            Moment(data.start_time, "HH:mm:ss")
+                                                .format("hh:mm a") +" onwards": "-"}
+                                            </Text>
                                             <Text style={{
                                                 paddingTop: 10, fontSize: 14,
                                                 color: '#404040',

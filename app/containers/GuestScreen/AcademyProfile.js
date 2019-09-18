@@ -256,7 +256,7 @@ class AcademyProfile extends BaseComponent {
                         <Text style={{
                             justifyContent: 'center', textAlign: 'center',
                             fontFamily: 'Quicksand-Bold', color: 'white', fontSize: 13
-                        }}>{top_player.score}</Text>
+                        }}>{top_player.score==0?"-":top_player.score}</Text>
 
                         <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 

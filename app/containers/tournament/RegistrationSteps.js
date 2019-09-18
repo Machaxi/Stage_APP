@@ -979,9 +979,11 @@ class RegistrationSteps extends BaseComponent {
                                         <TouchableOpacity activeOpacity={.8}
 
                                             onPress={() => {
+                                                const user_id = this.state.selected_player['user_id']
                                                 this.props.navigation.navigate('AddPartner', {
                                                     id: item.id,
-                                                    tournament_id: this.state.data['id']
+                                                    tournament_id: this.state.data['id'],
+                                                    user_id:user_id
                                                 })
                                             }}
                                             style={{
@@ -1375,7 +1377,6 @@ class RegistrationSteps extends BaseComponent {
                 name = ''
             const logo = this.state.dribble_logo
             const desc = 'Payment for ' + this.state.data['name']
-
             var options = {
                 description: desc,
                 image: logo,
@@ -1401,7 +1402,8 @@ class RegistrationSteps extends BaseComponent {
             }).catch((error) => {
                 // handle failure
                 console.log('Razor Rspo ', JSON.stringify(error))
-                alert(`Error: ${error.code} | ${error.description}`);
+                //alert(`Error: ${error.code} | ${error.description}`);
+                alert('Payment could not succeed. Please try again.')
             });
         }
     }

@@ -231,7 +231,8 @@ class ParentHome extends BaseComponent {
             console.warn(value)
             userData = JSON.parse(value)
             global.SELECTED_PLAYER_ID = userData['player_id']
-            
+            global.SELECTED_ACADEMY_ID = userData['academy_id']
+
             this.state.academy_id = userData['academy_id']
 
             let academy_name = userData.academy_name
@@ -330,6 +331,7 @@ class ParentHome extends BaseComponent {
 
                     console.log('coach_feedback_data =>', coach_feedback_data)
 
+                    global.SELECTED_PLAYER_NAME = user1.data['player_profile'].name
 
                     this.setState({
                         player_profile: user1.data['player_profile'],
@@ -453,17 +455,17 @@ class ParentHome extends BaseComponent {
                                     marginBottom: 16
                                 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={[defaultStyle.bold_text_14, {
+                                    {/* <Text style={[defaultStyle.bold_text_14, {
                                         textDecorationLine: 'line-through'
                                     }]}
-                                    >{routine_name}</Text>
+                                    >{routine_name}</Text> */}
                                     <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                         <Text style={{
                                             fontFamily: 'Quicksand-Medium',
                                             fontSize: 10,
                                             marginLeft: 10,
                                             marginRight: 10,
-                                            marginTop: 5,
+                                            marginTop: 0,
                                             marginBottom: 5,
                                             color: 'white'
                                         }}>Canceled</Text>
@@ -498,10 +500,10 @@ class ParentHome extends BaseComponent {
                                 marginBottom: 16
                             }}>
 
-                                <Text style={[defaultStyle.bold_text_14, {
-                                }]}>{routine_name}</Text>
+                                {/* <Text style={[defaultStyle.bold_text_14, {
+                                }]}>{routine_name}</Text> */}
 
-                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
                                         {getUtcDateFromTime(session_date,start_time)}
@@ -581,7 +583,7 @@ class ParentHome extends BaseComponent {
                     {sessionArray.length != 0 ?
                         <CustomeCard >
                             <TouchableOpacity
-                                onPress={() => {
+                                onPress={() => {                                  
                                     global.click_batch_id = operations.batch_id;
                                     this.props.navigation.navigate('Batch')
                                 }}
@@ -600,7 +602,7 @@ class ParentHome extends BaseComponent {
                                         paddingBottom: 12
                                     }}
                                 >
-                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                    <Text style={defaultStyle.bold_text_10}>Next Session : {operations.next_sessions[0].routine_name}</Text>
                                     <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
 
                                 </View>

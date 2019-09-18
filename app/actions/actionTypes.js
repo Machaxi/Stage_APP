@@ -61,6 +61,10 @@ export const GET_PROFILE = 'profile/LOAD';
 export const DO_PROFILE_SUCCESS = 'profile/LOAD_SUCCESS';
 export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
 
+export const DIET_PLAN = 'diet_plan/LOAD';
+export const DO_DIET_PLAN_SUCCESS = 'diet_plan/LOAD_SUCCESS';
+export const DO_DIET_PLAN_FAIL = 'diet_plan/LOAD_FAIL';
+
 export const GET_REWARD = 'reward/LOAD';
 export const DO_REWARD_SUCCESS = 'reward/LOAD_SUCCESS';
 export const DO_REWARD_FAIL = 'reward/LOAD_FAIL';
