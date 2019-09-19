@@ -126,11 +126,11 @@ class BatchDetails extends BaseComponent {
             sessionArray.push(
                 <View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{
+                        {/* <Text style={{
                             margin: 10, textDecorationLine: 'line-through',
                             fontFamily: 'Quicksand-Medium',
                             color: '#404040'
-                        }}>{routine_name}</Text>
+                        }}>{routine_name}</Text> */}
                         <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                             <Text style={{
                                 margin: 10, color: 'white'
@@ -168,18 +168,19 @@ class BatchDetails extends BaseComponent {
             sessionArray.push(
                 <View>
 
-                    <Text style={{
+                    {/* <Text style={{
                         margin: 10,
                         color: '#404040',
                         fontFamily: 'Quicksand-Medium',
-                    }}>{routine_name}</Text>
+                    }}>{routine_name}</Text> */}
 
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginLeft: 10,
                         marginRight: 10,
-                        marginBottom: 10
+                        marginBottom: 10,
+                        marginTop: 10,
                     }}>
                         <Text style={{
                             marginRight: 10,
@@ -293,16 +294,20 @@ class BatchDetails extends BaseComponent {
                         <CustomeCard>
                             <View
                                 style={{
-                                    margin: 10,
+                                    marginTop: 10,
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    marginBottom: 6,
                                     color: '#404040',
-
-                                    color: '#404040',
-                                    marginTop: 20, flexDirection: 'row',
+                                    flexDirection: 'row',
                                     justifyContent: 'space-between'
                                 }}>
-                                <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                <Text style={defaultStyle.bold_text_10}>
+                                    Next Session : {session.routine_name == null ? "" : session.routine_name}
+                                </Text>
 
                             </View>
+
                             <View style={{ height: 1, backgroundColor: '#DFDFDF', marginLeft: 10, marginRight: 10 }} />
                             {sessionArray}
 

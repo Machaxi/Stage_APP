@@ -27,6 +27,7 @@ import RNFirebase from 'react-native-firebase';
 import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } from './app/containers/BaseComponent';
 import { storeData } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
+import DropdownAlert from 'react-native-dropdownalert';
 
 export const BASE_URL = 'http://13.233.182.217:8080/api/'
 //export const BASE_URL = 'http://192.168.3.145:8089/api/'
@@ -171,6 +172,7 @@ export default class App extends BaseComponent {
         });
 
         this.refreshEvent = Events.subscribe('ShowDialog', (msg) => {
+            //this.dropDownAlertRef.alertWithType('error', 'Error', msg);
             this.setState({
                 is_show_alert: true,
                 info_msg: msg
@@ -246,6 +248,8 @@ export default class App extends BaseComponent {
                         }}
                         message={info_msg}
                         visible={is_show_alert} />
+
+                    <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
 
                     <UpdateAppDialog
                         navigation={this.state.navigation}

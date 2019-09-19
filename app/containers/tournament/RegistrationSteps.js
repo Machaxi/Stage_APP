@@ -1377,6 +1377,8 @@ class RegistrationSteps extends BaseComponent {
                 name = ''
             const logo = this.state.dribble_logo
             const desc = 'Payment for ' + this.state.data['name']
+            const mobile_number = this.state.userData['user'].mobile_number
+            
             var options = {
                 description: desc,
                 image: logo,
@@ -1386,7 +1388,7 @@ class RegistrationSteps extends BaseComponent {
                 name: 'Machaxi',
                 prefill: {
                     email: email,
-                    contact: '',
+                    contact:mobile_number,
                     name: name
                 },
                 theme: { color: '#67BAF5' }
@@ -1612,13 +1614,15 @@ class RegistrationSteps extends BaseComponent {
                             show_alert: false
                         })
                         setTimeout(() => {
-                            let tournament_id = this.state.data['id']
-                            let obj = {
-                                tournament_id: tournament_id
-                            }
-                            Events.publish(GO_TO_HOME, obj);
+                             let tournament_id = this.state.data['id']
+                            // let obj = {
+                            //     tournament_id: tournament_id
+                            // }
+                            // Events.publish(GO_TO_HOME, obj);
 
-
+                            this.props.navigation.navigate('UpcomingTournamentDetail',{
+                                tournament_id:tournament_id
+                            })
                         }, 100)
 
                     }}
@@ -1691,7 +1695,7 @@ class RegistrationSteps extends BaseComponent {
                                             color: "#A3A5AE",
                                             fontFamily: 'Quicksand-Regular'
                                         }}
-                                >{getFormattedCategory(item)} <Text style={{
+                                >{item} <Text style={{
                                     fontSize: 10,
                                     color: "#A3A5AE",
                                     fontFamily: 'Quicksand-Regular'
@@ -1776,7 +1780,7 @@ const style = {
         backgroundColor: '#67BAF5',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 42,
+        height: 44,
         padding: 10,
         width: 150,
     },

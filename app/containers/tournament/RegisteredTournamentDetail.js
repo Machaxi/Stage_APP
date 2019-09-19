@@ -101,7 +101,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
     shareLink(url) {
         const shareOptions = {
             title: 'Share via',
-            message: 'I\'m using dribble diary app.',
+            message: 'I\'m using Machaxi app.',
             url: url,
             //social: Share.Social.WHATSAPP,
             //whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)

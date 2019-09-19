@@ -303,7 +303,12 @@ class UserHome extends BaseComponent {
                     })
                 }
 
+
+
                 if (user1.success == true) {
+
+                    global.SELECTED_PLAYER_NAME = user1.data['player_profile'].name
+                    
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         //strenthList: user1.data.player_profile['stats'],
@@ -431,12 +436,12 @@ class UserHome extends BaseComponent {
 
                 for (let i = 0; i < operations.next_sessions.length; i++) {
                     const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
-
+                    
                     if (is_canceled == true) {
                         sessionArray.push(
                             <View
                                 style={{
-                                    marginTop: 6,
+                                    //marginTop: 6,
                                     marginBottom: 16
                                 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -482,7 +487,7 @@ class UserHome extends BaseComponent {
                     } else {
                         sessionArray.push(
                             <View style={{
-                                marginTop: 6,
+                                //marginTop: 6,
                                 marginBottom: 16
                             }}>
 

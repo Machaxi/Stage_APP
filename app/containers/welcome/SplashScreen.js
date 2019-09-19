@@ -59,7 +59,7 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('TestExample', {
+        // this.props.navigation.navigate('BookTrial', {
         //     match_id: '15'
         // })
         //  return
@@ -127,7 +127,7 @@ class Splash extends BaseComponent {
 
                     }
 
-                }, 100)
+                }, 10)
             })
             .catch(err => alert("An error occurred"));
 
@@ -158,16 +158,16 @@ class Splash extends BaseComponent {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-                <Image
+                {/* <Image
                     resizeMode="contain"
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        height: "30%",
-                        width: "80%"
+                        height: 220,
+                        width: 312
                     }}
-                    source={require('../../images/new_splash_logo.jpg')}
-                />
+                    source={require('../../images/new_splash_logo.png')}
+                /> */}
 
             </View>
         );

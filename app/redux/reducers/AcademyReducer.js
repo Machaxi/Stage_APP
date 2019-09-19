@@ -38,10 +38,10 @@ export default function AcademyReducer(state = initialState, action) {
 }
 
 
-export function getAllAcademy(query,job_vacancy) {
+export function getAllAcademy(query, job_vacancy) {
     console.log('getAllAcademy => ', query)
     let url = `global/academy/all?${query}`
-    if(job_vacancy){
+    if (job_vacancy) {
         url = `global/academy/all?vacancy=1&${query}`
     }
     return {
@@ -252,6 +252,28 @@ export function getCourtBookingDetails(header, academy_id, date, sportsId) {
                 headers: {
                     'x-authorization': header
 
+                },
+            }
+        }
+    }
+};
+
+export function bookTrial(header, batchId, academy_id, user_id, name, contact) {
+
+    var url;
+    if (user_id != null) {
+        url = `batch/${batchId}/book-trial?academy_id=${academy_id}&user_id=${user_id}`
+    } else {
+        url = `batch/${batchId}/book-trial?academy_id=${academy_id}&name=${name}&contact=${contact}`
+    }
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: url,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header
                 },
             }
         }

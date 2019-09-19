@@ -451,7 +451,7 @@ class ParentHome extends BaseComponent {
                         sessionArray.push(
                             <View
                                 style={{
-                                    marginTop: 6,
+                                    //marginTop: 6,
                                     marginBottom: 16
                                 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -496,7 +496,7 @@ class ParentHome extends BaseComponent {
                     } else {
                         sessionArray.push(
                             <View style={{
-                                marginTop: 6,
+                                //marginTop: 6,
                                 marginBottom: 16
                             }}>
 

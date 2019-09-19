@@ -150,10 +150,10 @@ class PlayerBatchComponent extends BaseComponent {
                     marginBottom: 16
                 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={[defaultStyle.bold_text_14, {
+                        {/* <Text style={[defaultStyle.bold_text_14, {
                             textDecorationLine: 'line-through'
                         }]}
-                        >{routine_name == null ? "" : routine_name}</Text>
+                        >{routine_name == null ? "" : routine_name}</Text> */}
                         <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                             <Text style={{
                                 fontFamily: 'Quicksand-Medium',
@@ -194,10 +194,10 @@ class PlayerBatchComponent extends BaseComponent {
                     marginBottom: 16
                 }}>
 
-                    <Text style={[defaultStyle.bold_text_14, {
+                    {/* <Text style={[defaultStyle.bold_text_14, {
                     }]}>
                         {routine_name == null ? "" : routine_name}
-                    </Text>
+                    </Text> */}
                     <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                         <Text style={defaultStyle.regular_text_14}>
                             {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
@@ -221,7 +221,7 @@ class PlayerBatchComponent extends BaseComponent {
         // const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
         // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 
-
+        //console.log('session=> ',JSON.stringify(session))
         if (session != undefined)
             this.sessionMangement(session)
         // this.scoreMangement(tournaments)
@@ -229,21 +229,25 @@ class PlayerBatchComponent extends BaseComponent {
         return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
             <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 {/*// <View style={{margin: 10}}>*/}
-                <CustomeCard >
-                    <View
-                        style={{
-                            marginLeft: 12,
-                            marginRight: 12,
-                            marginTop: 16
-                        }}
-                    >
-                        <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
+
+                {session != undefined ?
+                    <CustomeCard >
+                        <View
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 12,
+                                marginTop: 16
+                            }}
+                        >
+                            <Text style={defaultStyle.bold_text_10}>
+                                Next Session : {session.routine_name == null ? "" : session.routine_name}
+                            </Text>
 
 
-                        <View style={defaultStyle.line_style} />
-                        {sessionArray}
-                    </View>
-                </CustomeCard>
+                            <View style={defaultStyle.line_style} />
+                            {sessionArray}
+                        </View>
+                    </CustomeCard> : null}
                 {/*</View>*/}
 
                 <CustomeCard>

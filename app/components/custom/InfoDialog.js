@@ -12,7 +12,7 @@ export default class InfoDialog extends BaseComponent {
 
         return (
             <Dialog
-                width={300}
+                width={330}
                 height={200}
                 visible={this.props.visible}
                 dialogStyle={{ borderRadius: 12, }}

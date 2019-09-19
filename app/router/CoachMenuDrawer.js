@@ -131,6 +131,7 @@ class CoachMenuDrawer extends BaseComponent {
 					}}
 				>
 					<Image
+						resizeMode="contain"
 						style={{ width: 128, height: 128, borderRadius: 8 }}
 						source={require('../images/guest_profile.png')}
 					></Image>
@@ -150,7 +151,8 @@ class CoachMenuDrawer extends BaseComponent {
 						}}>
 
 							<Image
-								style={{ height: 25, width: 80, }}
+								resizeMode="contain"
+								style={styles.drawer_logo}
 								source={require('../images/dribble_logo.png')}
 							/>
 
@@ -190,7 +192,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							About Dribble
+							About Machaxi
 						</Text>
 
 						<Image
@@ -266,6 +268,7 @@ class CoachMenuDrawer extends BaseComponent {
 					}}
 				>
 					<Image
+						resizeMode="contain"
 						style={{ width: 128, height: 128, borderRadius: 8 }}
 						source={{ uri: profile_pic }}
 					></Image>
@@ -285,7 +288,8 @@ class CoachMenuDrawer extends BaseComponent {
 						}}>
 
 							<Image
-								style={{ height: 25, width: 80, }}
+								resizeMode="contain"
+								style={styles.drawer_logo}
 								source={require('../images/dribble_logo.png')}
 							/>
 
@@ -354,7 +358,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							About Dribble
+							About Machaxi
 						</Text>
 
 						<Image
@@ -461,7 +465,8 @@ class CoachMenuDrawer extends BaseComponent {
 						}}>
 
 							<Image
-								style={{ height: 25, width: 80, }}
+								resizeMode="contain"
+								style={styles.drawer_logo}
 								source={require('../images/dribble_logo.png')}
 							/>
 
@@ -651,7 +656,7 @@ class CoachMenuDrawer extends BaseComponent {
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 					<View style={styles.drawercell}>
-						<Text style={styles.menu_coach}>About Dribble</Text>
+						<Text style={styles.menu_coach}>About Machaxi</Text>
 						<Image
 							style={styles.arrow_img}
 							source={require('../images/ic_drawer_arrow.png')}
@@ -789,7 +794,8 @@ class CoachMenuDrawer extends BaseComponent {
 						}}>
 
 							<Image
-								style={{ height: 25, width: 80, }}
+								resizeMode="contain"
+								style={styles.drawer_logo}
 								source={require('../images/dribble_logo.png')}
 							/>
 
@@ -934,7 +940,7 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('Test')}>
+					this.props.navigation.navigate('PaymentDetail')}>
 
 					<View style={styles.drawercell}>
 
@@ -1121,7 +1127,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							About Dribble
+							About Machaxi
 						</Text>
 
 						<Image
@@ -1192,7 +1198,7 @@ class CoachMenuDrawer extends BaseComponent {
 			const url = 'https://play.google.com/store/apps/'
 			const shareOptions = {
 				title: 'Share via',
-				message: 'I\'m using dribble diary app.',
+				message: 'I\'m using Machaxi app.',
 				url: url,
 				//social: Share.Social.WHATSAPP,
 				//whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
@@ -1302,6 +1308,10 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		fontSize: 14,
 		fontFamily: 'Quicksand-Regular',
+	},
+	drawer_logo: {
+		height: 30,
+		width: 100,
 	},
 	menu: {
 		color: '#404040',

@@ -25,7 +25,7 @@ const Switcher = createStackNavigator({
     SwitchPlayer1: {
         screen: switchplayer,
         navigationOptions: ({ navigation }) => ({
-            title: "Dribble Diary",
+            title: "Machaxi",
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',

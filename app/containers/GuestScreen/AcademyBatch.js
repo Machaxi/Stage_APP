@@ -188,7 +188,11 @@ class AcademyBatch extends BaseComponent {
 
         <TouchableOpacity
           onPress={() => {
-            alert('Under development')
+            this.props.navigation.navigate('BookTrial', {
+              data: item,
+              academyId: this.state.academyId
+            })
+            //alert('Under development')
           }}
         >
           <View style={styles.challengeBtnOuter}>

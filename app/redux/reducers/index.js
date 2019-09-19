@@ -20,6 +20,7 @@ import NotificationReducer from './NotificationReducer'
 import CommonReducer from './CommonReducer'
 import BatchAttendenceReducer from './BatchAttendenceReducer'
 import DietPlanReducer from './DietPlanReducer'
+import PaymentReducer from './PaymentReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
     NotificationReducer,
     CommonReducer,
     BatchAttendenceReducer,
-    DietPlanReducer
+    DietPlanReducer,
+    PaymentReducer
 });
 
 export default rootReducer

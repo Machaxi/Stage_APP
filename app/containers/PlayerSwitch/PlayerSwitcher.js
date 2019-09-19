@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View,ActivityIndicator, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
+import { View, ActivityIndicator, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper'
 import { Rating } from 'react-native-ratings';
 import { getData, storeData } from "../../components/auth";
@@ -281,20 +281,26 @@ class PlayerSwitcher extends BaseComponent {
                                 this.props.navigation.navigate('CurrentBooking')
 
                             }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{ margin: 10, 
+                                    alignItems:'center',
+                                    justifyContent:'center',
+                                    flexDirection: 'row', height: 40 }}>
 
-                                    <Image source={require('../../images/book_play.png')}
+                                    <Image
+                                        resizeMode="contain"
+                                        source={require('../../images/book_play.png')}
                                         style={{
                                             width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
+                                            height: 30,
+                                            marginRight: 20,
                                         }} />
                                     <View style={{ flex: 1 }}>
 
                                         <View style={{
-                                            marginTop: 10,
                                             flex: 1,
+                                            alignItems:'center',
+                                            justifyContent:'center',
                                             marginRight: 15,
-                                            marginBottom: 5,
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
@@ -302,10 +308,13 @@ class PlayerSwitcher extends BaseComponent {
                                                 Book and Play
                                     </Text>
 
-                                            <Image source={require('../../images/path.png')}
+                                            <Image
+                                                resizeMode="contain"
+                                                source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
+                                                    height: 13,
+                                                    marginRight: 0,
                                                 }} />
 
                                         </View>
@@ -327,31 +336,40 @@ class PlayerSwitcher extends BaseComponent {
 
                             }}>
 
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    margin: 10,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    height: 40
+                                }}>
 
-                                    <Image source={require('../../images/browse_academy.png')}
+                                    <Image
+                                        resizeMode="contain"
+                                        source={require('../../images/browse_academy.png')}
                                         style={{
                                             width: 30,
-                                            height: 30, marginRight: 20, marginTop: 5
+                                            height: 30,
+                                            marginRight: 20,
                                         }} />
                                     <View style={{ flex: 1 }}>
 
                                         <View style={{
-                                            marginTop: 10,
                                             flex: 1,
+                                            alignItems: 'center',
                                             marginRight: 15,
-                                            marginBottom: 5,
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={defaultStyle.bold_text_14}>
                                                 Browse other Academies
-                                    </Text>
+                                            </Text>
 
-                                            <Image source={require('../../images/path.png')}
+                                            <Image
+                                                resizeMode="contain"
+                                                source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
+                                                    height: 13, marginRight: 0,
                                                 }} />
 
                                         </View>
@@ -371,31 +389,39 @@ class PlayerSwitcher extends BaseComponent {
 
 
                             }}>
-                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    margin: 10,
+                                    alignItems: 'center',
+                                    flexDirection: 'row', height: 40
+                                }}>
 
-                                    <Image source={require('../../images/about_dribble.png')}
+                                    <Image
+                                        resizeMode="contain"
+                                        source={require('../../images/about_dribble.png')}
                                         style={{
                                             width: 26,
-                                            height: 26, marginRight: 20, marginTop: 5
+                                            height: 26,
+                                            marginRight: 20,
                                         }} />
                                     <View style={{ flex: 1 }}>
 
                                         <View style={{
-                                            marginTop: 10,
+                                            alignItems: 'center',
                                             flex: 1,
                                             marginRight: 15,
-                                            marginBottom: 5,
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={defaultStyle.bold_text_14}>
-                                                About Dribble Diary
-                                    </Text>
+                                                About Machaxi
+                                            </Text>
 
-                                            <Image source={require('../../images/path.png')}
+                                            <Image
+                                                resizeMode="contain"
+                                                source={require('../../images/path.png')}
                                                 style={{
                                                     width: 19,
-                                                    height: 13, marginRight: 0, marginTop: 5
+                                                    height: 13,
                                                 }} />
 
                                         </View>

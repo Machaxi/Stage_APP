@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Linking,View,ActivityIndicator,Text,TouchableOpacity } from 'react-native';
+import { Linking, View, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { WebView } from 'react-native-webview';
 import { dietPlan } from "../../redux/reducers/DietPlanReducer";
@@ -14,11 +14,15 @@ class DietPlan extends BaseComponent {
 
         return {
             headerTitle: (
+
                 <View style={{
-                    flexDirection: 'row',
-                    //alignItems: 'center'
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+
+                    flex: 1
                 }}><Text
-                    style={defaultStyle.bold_text_12}>Diet Plan ({global.SELECTED_PLAYER_NAME})</Text></View>),
+                    style={defaultStyle.bold_text_16}>Diet Plan ({global.SELECTED_PLAYER_NAME})</Text></View>),
             headerTitleStyle: defaultStyle.headerStyle,
 
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
@@ -46,43 +50,43 @@ class DietPlan extends BaseComponent {
 
     };
 
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-            dietUrl:null,
-            progress:true
+        this.state = {
+            dietUrl: null,
+            progress: true
         }
 
 
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
-        getData('userInfo',(value)=>{
-            console.log('UserInfo-> ',value)
+        getData('userInfo', (value) => {
+            console.log('UserInfo-> ', value)
         })
 
         getData('userInfo', (value) => {
             console.warn(value)
             userData = JSON.parse(value)
             const player_id = userData['player_id']
-            const  academy_id = userData['academy_id']
-            
+            const academy_id = userData['academy_id']
+
             getData('header', (header) => {
 
-                this.props.dietPlan(header,player_id,academy_id).then(() => {
-    
+                this.props.dietPlan(header, player_id, academy_id).then(() => {
+
                     let data = this.props.data.profileData
                     console.log('dietPlan payload ' + JSON.stringify(this.props.data.profileData));
                     if (data.success) {
-    
+
                         const diet = data.data.diet
                         this.setState({
-                            progress:false,
-                            dietUrl:diet
+                            progress: false,
+                            dietUrl: diet
                         })
-                        
+
                     }
                 }).catch((response) => {
                     console.log(response);
@@ -93,11 +97,11 @@ class DietPlan extends BaseComponent {
 
         });
 
-        
+
     }
 
     render() {
-        
+
         if (this.state.progress) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -105,19 +109,19 @@ class DietPlan extends BaseComponent {
                 </View>
             )
         }
-        
-        
-        const uri = this.state.dietUrl//'https://docs.google.com/gview?embedded=true&url=http://www.africau.edu/images/default/sample.pdf';
-        //const uri = 'http://www.africau.edu/images/default/sample.pdf'
-        if(uri==null || uri == ''){
 
-            return(
+        const dietUrl = this.state.dietUrl
+        if (dietUrl == null || dietUrl == '') {
+
+            return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={defaultStyle.bold_text_14}>No Diet Plan Available.</Text>
                 </View>
             )
         }
-        
+        const uri = 'https://docs.google.com/gview?embedded=true&url=' + dietUrl;
+        console.log('NewDietUrl-> ', uri)
+
         return (
             <WebView
                 startInLoadingState={true}
@@ -136,12 +140,12 @@ class DietPlan extends BaseComponent {
 }
 
 const mapStateToProps = state => {
-	return {
-		data: state.DietPlanReducer,
-	};
+    return {
+        data: state.DietPlanReducer,
+    };
 };
 const mapDispatchToProps = {
-	dietPlan
+    dietPlan
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DietPlan);
 
