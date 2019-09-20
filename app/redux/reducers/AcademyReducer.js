@@ -258,20 +258,21 @@ export function getCourtBookingDetails(header, academy_id, date, sportsId) {
     }
 };
 
-export function bookTrial(header, batchId, academy_id, user_id, name, contact) {
+export function bookTrial(header, data) {
 
-    var url;
-    if (user_id != null) {
-        url = `batch/${batchId}/book-trial?academy_id=${academy_id}&user_id=${user_id}`
-    } else {
-        url = `batch/${batchId}/book-trial?academy_id=${academy_id}&name=${name}&contact=${contact}`
-    }
+    // var url;
+    // if (user_id != null) {
+    //     url = `global/book-trial`
+    // } else {
+    //     url = `batch/${batchId}/book-trial?academy_id=${academy_id}&name=${name}&contact=${contact}`
+    // }
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: url,
-                method: 'GET',
+                url: `global/book-trial`,
+                method: 'POST',
+                data: data,
                 headers: {
                     'x-authorization': header
                 },

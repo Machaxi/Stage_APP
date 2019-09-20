@@ -7,6 +7,7 @@ import axios from 'axios'
 import { client } from '../../App'
 import { BASE_URL } from '../../App'
 import moment from 'moment'
+import { StatusBar } from 'react-native';
 msg = "GUEST"
 
 colors = {
@@ -80,8 +81,8 @@ export default class BaseComponent extends React.Component {
             connected = isConnected
         });
 
-        //StatusBar.setBackgroundColor("#ffffff")
-        //StatusBar.setBarStyle('dark-content', true)
+        // StatusBar.setBackgroundColor("#ffffff")
+        // StatusBar.setBarStyle('dark-content', true)
 
         this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
             this.goToHome(from_registration)
@@ -100,6 +101,9 @@ export default class BaseComponent extends React.Component {
         let one_singal_userid = ''
 
         getData('header', (value) => {
+
+            if (value == '')
+                return
 
             getData(PUSH_TOKEN, (token) => {
 
@@ -535,8 +539,8 @@ export const defaultStyle = {
     },
     rounded_button: {
         width: '48%',
-        height:42,
-        justifyContent:'center',
+        height: 42,
+        justifyContent: 'center',
         borderRadius: 23,
         //borderWidth: 1,
         marginLeft: 4,

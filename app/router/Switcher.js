@@ -19,6 +19,7 @@ import EditProfile from '../containers/profile/EditProfile'
 import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
+import BookTrial from '../containers/GuestScreen/BookTrial'
 
 const Switcher = createStackNavigator({
 
@@ -191,6 +192,25 @@ const Switcher = createStackNavigator({
     },
     AcademyFilter: {
         screen: AcademyFilter,
+
+    },
+
+
+    BookTrial: {
+        screen: BookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
 
     },
 }

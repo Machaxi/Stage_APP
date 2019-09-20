@@ -190,6 +190,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                         <Text
                             onPress={() => {
                                 alert('under development')
+                                // this.props.navigation.navigate('EditPartner', {
+                                //     data: this.props.navigation.getParam('data')
+                                // })
                             }}
                             style={{
                                 paddingTop: 10, fontSize: 10,
@@ -489,7 +492,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             fontFamily: 'Quicksand-Regular'
                                         }}>{data.start_time != undefined ?
                                             Moment(data.start_time, "HH:mm:ss")
-                                                .format("hh:mm a") +" onwards": "-"}</Text>
+                                                .format("hh:mm a") + " onwards" : "-"}</Text>
                                         <Text style={{
                                             paddingTop: 10, fontSize: 14,
                                             color: '#404040',

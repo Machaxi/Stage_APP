@@ -174,8 +174,8 @@ class UserHome extends BaseComponent {
             coach_feedback_data: null,
             academy_id: ''
         }
-        //StatusBar.setBackgroundColor("#262051")
-        //StatusBar.setBarStyle('light-content', true)
+        StatusBar.setBackgroundColor("#262051")
+        StatusBar.setBarStyle('light-content', true)
 
     }
     componentWillUnmount() {
@@ -308,7 +308,7 @@ class UserHome extends BaseComponent {
                 if (user1.success == true) {
 
                     global.SELECTED_PLAYER_NAME = user1.data['player_profile'].name
-                    
+
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         //strenthList: user1.data.player_profile['stats'],
@@ -436,7 +436,7 @@ class UserHome extends BaseComponent {
 
                 for (let i = 0; i < operations.next_sessions.length; i++) {
                     const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
-                    
+
                     if (is_canceled == true) {
                         sessionArray.push(
                             <View
@@ -468,7 +468,7 @@ class UserHome extends BaseComponent {
                                             textDecorationLine: 'line-through'
                                         }]}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
-                                        {getUtcDateFromTime(session_date,start_time)}
+                                        {getUtcDateFromTime(session_date, start_time)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -497,7 +497,7 @@ class UserHome extends BaseComponent {
                                 <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
-                                        {getUtcDateFromTime(session_date,start_time)}
+                                        {getUtcDateFromTime(session_date, start_time)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>

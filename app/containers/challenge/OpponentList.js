@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { createChallenge, getOpponentList, getChallengeDashboard } from '../../redux/reducers/ChallengeReducer'
 import { getData } from "../../components/auth";
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, getFormattedCategory, formattedName } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, getFormattedBadge, getFormattedCategory, formattedName } from '../BaseComponent'
 import Events from '../../router/events';
 
 class OpponentList extends BaseComponent {
@@ -197,7 +197,7 @@ class OpponentList extends BaseComponent {
                                                     <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                                         <View style={styles.badgeInner}>
                                                             {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                                                            <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{this.state.playerData.badge == undefined ? '' : this.state.playerData.badge}</Text>
+                                                            <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{this.state.playerData.badge == undefined ? '' : getFormattedBadge(this.state.playerData.badge)}</Text>
                                                             {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                                         </View>
                                                     </ImageBackground>
@@ -234,7 +234,7 @@ class OpponentList extends BaseComponent {
                                                             <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                                                 <View style={styles.badgeInner}>
                                                                     {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                                                                    <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{this.state.selectedOpponentData.badge}</Text>
+                                                                    <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{getFormattedBadge(this.state.selectedOpponentData.badge)}</Text>
                                                                     {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                                                 </View>
                                                             </ImageBackground>
@@ -355,7 +355,7 @@ class OpponentList extends BaseComponent {
                                 flexDirection: 'row',
                             }}>
                                 <Text style={[defaultStyle.bebas_text_blue_10, { fontSize: 5, color: 'white', }]}>
-                                    {item.badge == undefined ? '' : item.badge}
+                                    {item.badge == undefined ? '' : getFormattedBadge(item.badge)}
                                 </Text>
 
                             </View>

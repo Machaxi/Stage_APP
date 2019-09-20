@@ -59,9 +59,12 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('BookTrial', {
-        //     match_id: '15'
+        //  getData('temp', (value) => {
+        //     this.props.navigation.navigate('EditPartner', {
+        //         data: value
+        //     })
         // })
+        
         //  return
         // var userData;
         // getData('userInfo', (value) => {
@@ -158,16 +161,16 @@ class Splash extends BaseComponent {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-                {/* <Image
+                <Image
                     resizeMode="contain"
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        height: 220,
-                        width: 312
+                        height: 200,
+                        width: 290
                     }}
                     source={require('../../images/new_splash_logo.png')}
-                /> */}
+                />
 
             </View>
         );

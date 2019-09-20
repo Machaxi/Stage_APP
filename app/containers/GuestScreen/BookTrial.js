@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Platform, ActivityIndicator, StyleSheet, TouchableOpacity, Image, BackHandler } from 'react-native'
+import { View, ImageBackground, Text, TextInput, Platform, Alert, ActivityIndicator, StyleSheet, TouchableOpacity, Image, BackHandler } from 'react-native'
 import BaseComponent, { defaultStyle, } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { getData, storeData, isSignedIn } from '../../components/auth';
@@ -20,8 +20,36 @@ class BookTrial extends BaseComponent {
             txtphone: '+91',
             spinner: false,
             data: null,
-            academyId: null
+            academyId: null,
+            signedIn: false,
         }
+
+        isSignedIn()
+            .then(res => {
+                if (res == true) {
+                    getData('userInfo', (value) => {
+
+                        if (value != '') {
+
+                            const data = JSON.parse(value)
+                            let name = data['user'].name
+                            let mobile_number = data['user'].mobile_number
+                            this.setState({
+                                signedIn: true,
+                                txtname: name,
+                                txtphone: mobile_number
+                            })
+                        }
+
+                    })
+
+                }
+                this.setState({
+                    signedIn: res
+                })
+            })
+
+
 
         this.state.data = this.props.navigation.getParam('data')
         this.state.academyId = this.props.navigation.getParam('academyId')
@@ -42,7 +70,7 @@ class BookTrial extends BaseComponent {
                 alert_msg: alert_msg
             })
         }
-        else if (txtphone == '') {
+        else if (txtphone == '' || txtphone == '+91') {
             alert_msg = 'Phone number can\'t be blank'
             this.setState({
                 alert_msg: alert_msg
@@ -56,32 +84,67 @@ class BookTrial extends BaseComponent {
             })
 
             this.progress(true)
-            const { data, academyId } = this.state
+            let subData = {}
+
+
+            const { data, academyId, signedIn } = this.state
             const batch_id = data.batch_id
 
-            getData('header', (value) => {
+            subData['academy_id'] = this.state.academyId
+            subData['batch_id'] = batch_id
 
+            if (signedIn) {
 
-
-                this.props.bookTrial(value, batch_id, academyId, null, txtname, txtphone).then(() => {
-                    this.progress(false)
-
-                    let data = JSON.stringify(this.props.data.data);
-                    console.log(' bookTrial 1' + JSON.stringify(data));
-                    let user1 = JSON.parse(data)
-
-                    if (user1.success == true) {
-
-
-                    }
-
-                }).catch((response) => {
-                    this.progress(false)
-                    console.log(response);
+                getData('header', (value) => {
+                    this.submit(value, subData)
                 })
-            })
+
+            } else {
+
+                subData['name'] = txtname
+                subData['contact'] = txtphone
+                this.submit('', subData)
+            }
+
 
         }
+    }
+
+    submit(value, subData) {
+
+        var data = {}
+        data['data'] = subData
+
+        this.props.bookTrial(value, data).then(() => {
+
+            this.progress(false)
+
+            let res = JSON.stringify(this.props.data.res);
+            console.log(' bookTrial 1' + JSON.stringify(res));
+            let user1 = JSON.parse(res)
+
+            if (user1.success == true) {
+
+                const success_message = user1.success_message
+                //alert(success_message)
+                Alert.alert(
+                    '',
+                    success_message,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.props.navigation.goBack()
+                            }
+                        },
+                    ],
+                    { cancelable: false },
+                );
+            }
+
+        }).catch((response) => {
+            this.progress(false)
+            console.log(response);
+        })
     }
 
     progress(status) {

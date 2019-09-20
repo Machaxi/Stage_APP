@@ -10,6 +10,7 @@ import moment from 'moment'
 import { paymentDues } from "../../redux/reducers/PaymentReducer";
 import { connect } from 'react-redux';
 import { getData } from '../../components/auth';
+import InfoDialog from '../../components/custom/InfoDialog'
 
 class PaymentDetail extends BaseComponent {
 
@@ -17,7 +18,9 @@ class PaymentDetail extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            showDialog: false,
+            message: ''
         };
 
         getData('userInfo', (value) => {
@@ -108,6 +111,13 @@ class PaymentDetail extends BaseComponent {
                             //alignItems: 'flex-end'
                         }}>
                             <CustomeButtonB onPress={() => {
+
+                                const upaId = item.upaId
+                                if (upaId) {
+                                    let msg = 'Please make payment on this UPI ID : ' + upaId
+                                    alert(msg)
+                                }
+
                             }}>Pay</CustomeButtonB>
                         </View>
                     </View>
@@ -134,6 +144,11 @@ class PaymentDetail extends BaseComponent {
             <View style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
 
                 <View>
+                    {/* 
+                    <InfoDialog
+                        visible={this.state.showDialog}
+                        message={this.state.message}
+                    /> */}
 
                     <TouchableOpacity onPress={() =>
                         this.props.navigation.navigate('tes')

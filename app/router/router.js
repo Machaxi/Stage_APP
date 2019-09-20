@@ -814,6 +814,23 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    BookTrial: {
+        screen: BookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
 
 }, {
         contentComponent: ({ navigation }) => {
@@ -1335,6 +1352,23 @@ const parentHomeModule = createStackNavigator({
 
     DietPlan: {
         screen: DietPlan,
+    },
+    BookTrial: {
+        screen: BookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
     },
 }
 );
