@@ -311,17 +311,20 @@ class PlayerBatchComponent extends BaseComponent {
                             <View style={defaultStyle.line_style} />
 
                             <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
-                                <View style={{ width: '60%' }}>
-                                    <Text style={[defaultStyle.regular_text_10, {
-                                        marginBottom: 5
-                                    }]}>Weekdays</Text>
-                                    <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
-                                    <Text style={defaultStyle.regular_text_12}>
-                                        {getFormatTime(operations.weekday.start_time)
-                                            + ' - ' +
-                                            getFormatTime(operations.weekday.end_time)
-                                        }</Text>
-                                </View>
+                                {operations.weekday ?
+                                    <View style={{ width: '60%' }}>
+                                        <Text style={[defaultStyle.regular_text_10, {
+                                            marginBottom: 5
+                                        }]}>Weekdays</Text>
+                                        <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
+                                        <Text style={defaultStyle.regular_text_12}>
+                                            {getFormatTime(operations.weekday.start_time)
+                                                + ' - ' +
+                                                getFormatTime(operations.weekday.end_time)
+                                            }</Text>
+                                    </View>
+                                    : null}
+                                    
                                 {operations.weekend ?
 
                                     <View style={{ width: '40%' }}>
