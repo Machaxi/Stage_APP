@@ -372,7 +372,7 @@ class ChooseTimeDate extends BaseComponent {
                         console.log('sportsData', this.state.sportsData);
                     });
 
-                    var courtTimings = [], courtBookings = [], courtAvailability = [], minMaxTime = {}, minTime, maxTime, timeRange = {}, allCourtsDeadSlots = [], finalDeadSlots = [], sliderData = [];
+                    var courtTimings = [], courtBookings = [], courtAvailability1 = [], minMaxTime = {}, minTime, maxTime, timeRange = {}, allCourtsDeadSlots = [], finalDeadSlots = [], courtAvailability = [], sliderData = [];
 
 
                     /* split court data to timings and bookings array and convert time to minutes*/
@@ -380,7 +380,7 @@ class ChooseTimeDate extends BaseComponent {
                     courtBookings = this.convertArrayHoursToMinutes(bookingDetails, 'court_bookings');
 
                     /* get all available courts from court bookings and court timings*/
-                    courtAvailability = this.getAllAvailableCourts(courtTimings, courtBookings);
+                    courtAvailability1 = this.getAllAvailableCourts(courtTimings, courtBookings);
 
                     /*get min and max time to plot slider, get data for showing time range */
                     minMaxTime = this.getMinAndMaxTimeofSlider(courtTimings);
@@ -402,6 +402,8 @@ class ChooseTimeDate extends BaseComponent {
 
                     /* get final dead slots to show on slider*/
                     finalDeadSlots = this.getFinalDeadSlots(allCourtsDeadSlots);
+
+                    courtAvailability = this.getFinalCourtAvailability(finalDeadSlots, courtAvailability1);
 
                     /* make slider data to show slider*/
                     sliderData = this.makeSliderData(finalDeadSlots);
@@ -486,8 +488,10 @@ class ChooseTimeDate extends BaseComponent {
             var newflag = 1;
             var tflag = false;
             var elseflag = 0;
+            var cTime = false;
 
             ele['court_timings'].map((element, index) => {
+                cTime = false;
 
                 for (i = flag; i < courtBookings[ind]['court_bookings'].length; i++) {
 
@@ -503,10 +507,10 @@ class ChooseTimeDate extends BaseComponent {
 
                         console.log('heyyy');
                         if (element1.startTime < element.endTime) {
-                            console.log('in if 1');
+                            //console.log('in if 1');
                             if (element1.startTime != courtBookings[ind]['court_bookings'][i - 1].endTime) {
-                                console.log('in if 2');
-                                console.log(courtBookings[ind]['court_bookings'][i - 1].endTime);
+                                // console.log('in if 2');
+                                //console.log(courtBookings[ind]['court_bookings'][i - 1].endTime);
                                 var timing = {};
                                 timing['startTime'] = courtBookings[ind]['court_bookings'][i - 1].endTime;
                                 timing['endTime'] = element1.startTime;
@@ -514,32 +518,37 @@ class ChooseTimeDate extends BaseComponent {
                                 item['court_availability'].push(timing);
                                 newflag = i;
                                 elseflag = elseflag + 1;
+                                cTime = true;
                             }
                             if (courtBookings[ind]['court_bookings'].length > i + 1 && courtBookings[ind]['court_bookings'][i + 1].startTime > element.endTime) {
-                                console.log('in if 3');
+                                //console.log('in if 3');
                                 if (element1.endTime != element.endTime) {
-                                    console.log('in if 4');
+                                    //console.log('in if 4');
                                     var timing = {};
                                     timing['startTime'] = element1.endTime;
                                     timing['endTime'] = element.endTime;
+                                    console.log('timimggggggggggg11', timing);
                                     item['court_availability'].push(timing);
+                                    cTime = true;
                                 }
-                                console.log('in else');
+                                // console.log('in else');
                                 flag = i + 1;
                                 tflag = true;
                                 elseflag = 0;
                                 break;
                             }
                             else if (courtBookings[ind]['court_bookings'].length == i + 1 && element1.startTime < element.endTime) {
-                                console.log('in if 5');
+                                //console.log('in if 5');
                                 if (element1.endTime != element.endTime) {
-                                    console.log('in if 6');
+                                    //console.log('in if 6');
                                     var timing = {};
                                     timing['startTime'] = element1.endTime;
                                     timing['endTime'] = element.endTime;
+                                    console.log('timimggggggggggg22', timing);
                                     item['court_availability'].push(timing);
+                                    cTime = true;
                                 }
-                                console.log('in else');
+                                //console.log('in else');
                                 flag = i + 1;
                                 tflag = true;
                                 elseflag = 0;
@@ -558,40 +567,56 @@ class ChooseTimeDate extends BaseComponent {
                             elseflag = 0;
                         }
                         if (element.startTime != element1.startTime && element1.startTime > element.startTime && element1.endTime <= element.endTime) {
-                            console.log('in else 1');
+                            //console.log('in else 1');
                             var timing = {};
                             timing['startTime'] = element.startTime;
                             timing['endTime'] = element1.startTime;
+                            console.log('timimggggggggggg33', timing);
                             item['court_availability'].push(timing);
+                            cTime = true;
                         }
                         if ((element.endTime != element1.endTime) && (element1.startTime >= element.startTime && element1.endTime < element.endTime) && (courtBookings[ind]['court_bookings'].length == 1 || courtBookings[ind]['court_bookings'].length - 1 == i)) {
-                            console.log('in else 2')
+                            //console.log('in else 2')
                             var timing = {};
                             timing['startTime'] = element1.endTime;
                             timing['endTime'] = element.endTime;
+                            console.log('timimggggggggggg44', timing);
                             item['court_availability'].push(timing);
+                            cTime = true;
                         }
-                        if ((element.startTime != element1.startTime && element.endTime != element1.endTime)) {
+                        /*if ((element.startTime != element1.startTime && element.endTime != element1.endTime)) {
+                            //&& (ele['court_timings'].length==1 || courtBookings[ind]['court_bookings'].length)
                             console.log('in else 3')
                             //console.log(element1.startTime < element.startTime)
                             //console.log(element1.startTime < element.startTime)
                             if ((element1.startTime < element.startTime) && (element1.endTime < element.startTime)) {
-                                console.log('in else 4')
+                                //console.log('in else 4')
                                 var timing = {};
                                 timing['startTime'] = element.startTime;
                                 timing['endTime'] = element.endTime;
+                                console.log('timimggggggggggg55', timing);
                                 item['court_availability'].push(timing);
                             }
-                            if ((element1.startTime > element.startTime) && (element1.endTime > element.endTime)) {
-                                console.log('in else 5')
+                            if ((element1.startTime > element.endTime) && (element1.endTime > element.endTime)) {
+                                //console.log('in else 5')
                                 var timing = {};
                                 timing['startTime'] = element.startTime;
                                 timing['endTime'] = element.endTime;
+                                console.log('timimggggggggggg66', timing);
                                 item['court_availability'].push(timing);
                             }
-                        }
+                        }*/
                     }
 
+                }
+
+                if (cTime == false) {
+                    console.log('in false');
+                    var timing = {};
+                    timing['startTime'] = element.startTime;
+                    timing['endTime'] = element.endTime;
+                    console.log('timimggggggggggg55', timing);
+                    item['court_availability'].push(timing);
                 }
 
                 if (i == 0) {
@@ -785,18 +810,24 @@ class ChooseTimeDate extends BaseComponent {
 
         this.state.finalDeadSlots.map((element, index) => {
             console.log(selectedTimeRange['startTime']);
-            if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime) {
+            console.log(selectedTimeRange['endTime']);
+            if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime || (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['startTime'] < element.endTime) || (selectedTimeRange['endTime'] <= element.startTime && selectedTimeRange['endTime'] > element.startTime)) {
                 console.log('in iffffffffffffffffffff');
                 msg = 'Sorry, all courts are closed for the selected time and duration.';
             }
         })
+
+        console.log('this.state.courtAvailability', this.state.courtAvailability);
 
         if (msg == '') {
             this.state.courtAvailability.map((element, index) => {
                 element.court_availability.map((element1, index1) => {
 
                     if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
+                        console.log(element1.startTime)
+                        console.log(element1.endTime)
                         element['selected'] = false;
+                        console.log('in if');
                         courts.push(element);
                     }
                 })
@@ -900,6 +931,73 @@ class ChooseTimeDate extends BaseComponent {
         return newArray;
 
     }
+
+    getFinalCourtAvailability(arr1, arr2) {
+
+        var newArray = JSON.parse(JSON.stringify(arr2));
+
+
+        arr2.map((element, index) => {
+            var temparray = [];
+            arr1.map((element1, index1) => {
+                element['court_availability'].map((element2, index2) => {
+
+                    if (element1.startTime == element2.startTime && element1.endTime == element2.endTime) {
+                        console.log(index2);
+                        var timing = {};
+                        timing['startTime'] = element2.startTime;
+                        timing['endTime'] = element2.endTime;
+                        temparray.push(timing);
+                        //newArray[index]['court_availability'].splice(index2, 1);
+                    }
+                    else if (element1.startTime >= element2.startTime && element1.startTime < element2.endTime) {
+                        console.log(element1.startTime, element2.startTime)
+                        console.log(element1.startTime, element2.endTime)
+                        var timing = {};
+                        timing['startTime'] = element2.startTime;
+                        timing['endTime'] = element2.endTime;
+                        temparray.push(timing);
+                        console.log(index2)
+                        //newArray[index]['court_availability'].splice(index2, 1);
+                    }
+                    else if (element1.endTime <= element2.endTime && element1.endTime > element2.startTime) {
+                        var timing = {};
+                        timing['startTime'] = element2.startTime;
+                        timing['endTime'] = element2.endTime;
+                        temparray.push(timing);
+                        console.log(index2)
+                        //newArray[index]['court_availability'].splice(index2, 1);
+                    }
+
+                })
+
+
+
+            })
+
+            console.log('temparray', temparray);
+
+
+            temparray.map((element, index4) => {
+                newArray[index]['court_availability'].map((element1, index1) => {
+                    if (element.startTime == element1.startTime && element.endTime == element1.endTime)
+                        newArray[index]['court_availability'].splice(index1, 1)
+                })
+            })
+
+
+
+        })
+
+
+
+
+        console.log('newArray111111111111111', newArray);
+
+        return newArray;
+
+    }
+
 
     progress(status) {
         this.setState({
