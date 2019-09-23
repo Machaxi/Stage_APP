@@ -9,6 +9,7 @@ import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import FastImage from 'react-native-fast-image'
 
 var filterData = ''
 
@@ -245,7 +246,7 @@ class ResultsRoute extends BaseComponent {
 
                     }}>
                     <View>
-                        <Image style={{
+                        {/* <Image style={{
 
                             height: 150,
                             width: "100%",
@@ -255,7 +256,15 @@ class ResultsRoute extends BaseComponent {
                             source={{ uri: item.cover_pic }}
                         >
 
-                        </Image>
+                        </Image> */}
+                        <FastImage
+                        style={{
+                            height: 150, width: "100%",
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12,
+                        }}
+                        source={{ uri: item.cover_pic }}
+                    />
 
                         <View style={{
                             paddingLeft: 16,

@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Image, ActivityIndicator,FlatList, TextInput, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, ActivityIndicator, FlatList, TextInput, ImageBackground, Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle, formattedName,getFormattedBadge, getFormattedCategory } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName, getFormattedBadge, getFormattedCategory } from '../BaseComponent';
 import { getData } from "../../components/auth";
+import FastImage from 'react-native-fast-image'
 
 class PlayersListing extends BaseComponent {
 
@@ -79,8 +80,10 @@ class PlayersListing extends BaseComponent {
                     marginBottom: 8,
                     borderRadius: 12
                 }}>
-                <Card style={{ borderRadius: 16, 
-                    elevation: 1 }}>
+                <Card style={{
+                    borderRadius: 16,
+                    elevation: 1
+                }}>
 
                     <TextInput style={{
                         marginLeft: 8,
@@ -156,13 +159,22 @@ class PlayersListing extends BaseComponent {
                                 paddingTop: 1
                             }}
                         >{getFormattedCategory(item.player_category)}</Text>
-                        <Image
+                        {/* <Image
                             resizeMode="contain"
                             style={{
                                 height: 80, width: 50,
                                 justifyContent: 'center', alignSelf: 'center'
                             }}
-                            source={{ uri: item.profile_pic }}></Image>
+                            source={{ uri: item.profile_pic }}></Image> */}
+
+                        <FastImage
+                            resizeMode={FastImage.resizeMode.contain}
+                            style={{
+                                height: 80, width: 50,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}
+                            source={{ uri: profile_pic }}
+                        />
 
                         <Text
                             numberOfLines={2}

@@ -1,14 +1,14 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
-import { Card } from 'react-native-paper';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Modal } from 'react-native'
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getCourtBookingDetails } from '../../redux/reducers/AcademyReducer';
+import { getCourtBookingDetails, createBooking } from '../../redux/reducers/AcademyReducer';
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
-import moment from 'moment'
+import moment from 'moment';
+import Carousel from 'react-native-snap-carousel';
 
 class ChooseTimeDate extends BaseComponent {
 
@@ -16,8 +16,8 @@ class ChooseTimeDate extends BaseComponent {
         super(props);
         this.state = {
             academyId: '',
+            academyName: '',
             courtBookingDetails: null,
-            courtSlots: null,
             spinner: false,
             currentDay: '',
             currentMonth: '',
@@ -26,31 +26,38 @@ class ChooseTimeDate extends BaseComponent {
             selectedDate: '',
             showDays: 7,
             calendarData: null,
-            selectedTimeSlots: [],
-            selectedCourt: null,
-            selectedSlotIndex: null,
-            allCourts: null,
-            showCourts: false,
             bookingDetails: null,
             sportsData: null,
             selectedSportsId: null,
             selectedSportTimeData: null,
-            selectedDuration: null
+            selectedDuration: null,
+            selectedIndex: 0,
+            selectedTimeRange: {},
+            minTime: null,
+            maxTime: null,
+            courtAvailability: [],
+            sliderData: null,
+            availableCourts: null,
+            finalDeadSlots: [],
+            selectedCourtIds: [],
+            selectedCourtNames: [],
+            totalCost: 0,
+            totalNoOfHours: 0,
+            courtInfoMessage: '',
+            modalVisible: false,
+            paymentData: null,
         };
+
 
         var today = new Date();
         this.state.currentDay = String(today.getDate()).padStart(2, '0');
         this.state.currentMonth = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         this.state.currentYear = today.getFullYear();
         this.state.today = this.state.currentDay + "-" + this.state.currentMonth + "-" + this.state.currentYear;
-        //this.state.selectedDate = Date.now();
         this.state.selectedDate = this.state.today;
-        console.log('Date.now()', Date.now());
         this.getCalendar();
 
     }
-
-
 
 
     getCalendar() {
@@ -73,8 +80,6 @@ class ChooseTimeDate extends BaseComponent {
             } else {
                 dateObj['selected'] = false;
             }
-
-
             if (curDay == days) {
                 curDay = 1;
                 if (currentMonth == 12) {
@@ -90,26 +95,22 @@ class ChooseTimeDate extends BaseComponent {
             }
 
             dateObjArray.push(dateObj);
-
-
         }
 
         this.state.calendarData = dateObjArray;
 
         console.log('hellllllllllllllllllllo', this.state.calendarData);
-
-        // this.setState({
-        //     calendarData: dateObjArray
-        // })
-
         console.log('dateObjArray', dateObjArray);
 
     }
 
     componentDidMount() {
+        console.log('hiiiiiiiiiiiiiiiiiiiiii');
         getData('userInfo', (value) => {
-            userData = JSON.parse(value)
+            userData = JSON.parse(value);
+            console.log('userData', userData);
             this.state.academyId = userData['academy_id'];
+            this.state.academyName = userData['academy_name'];
             this.getBookingDetails(this.state.today, this.state.selectedSportsId);
 
         });
@@ -151,19 +152,14 @@ class ChooseTimeDate extends BaseComponent {
         else {
             if (h >= 1 && m > 0) {
                 res = h + ' hrs ' + m + ' min'
-
             }
             else if (h > 1) {
                 res = h + ' hrs'
-
             }
             else {
                 res = m + ' min'
             }
-
         }
-
-        console.log('res', res);
         return res;
     }
 
@@ -180,50 +176,16 @@ class ChooseTimeDate extends BaseComponent {
         this.progress(true)
         getData('header', (value) => {
             this.props.getCourtBookingDetails(value, this.state.academyId, this.state.selectedDate, sportsId).then(() => {
-                this.progress(false)
+                //this.progress(false)
                 let data = this.props.data.res
-                //console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
                 console.log('data.data.challenges', data.data);
 
                 let success = data.success
                 if (success) {
 
-                    // "sports": [
-                    //     {
-                    //         "id": 1,
-                    //         "name": "Badminton",
-                    //         "min_booking_time": 30,
-                    //         "max_booking_time": 180,
-                    //         "incremental_time": 30
-                    //     }
-                    // ],
-
-                    //var bookingDetails = data.data.courts;
-
-                    data.data.sports = [
-                        {
-                            "id": 1,
-                            "name": "Badminton",
-                            "min_booking_time": 30,
-                            "max_booking_time": 180,
-                            "incremental_time": 30,
-                            "selected": true
-                        },
-                        {
-                            "id": 2,
-                            "name": "Cricket",
-                            "min_booking_time": 30,
-                            "max_booking_time": 180,
-                            "incremental_time": 30,
-                            "selected": false
-                        }
-                    ]
-
-                    //selectedSportTimeData
-
                     data.data.sports.map((element, index) => {
-                        if (element.selected == true) {
+                        if (element.is_selected == true) {
                             this.setState({
                                 selectedSportTimeData: element,
                                 selectedDuration: element.min_booking_time
@@ -231,19 +193,8 @@ class ChooseTimeDate extends BaseComponent {
                         }
                     });
 
-                    // data.data.sports.map((element, index) => {
-                    //     var temp = element;
-                    //     element['selected'] = false;
-                    // });
+                    //var bookingDetails = data.data.courts;
 
-                    this.setState({
-                        sportsData: data.data.sports,
-                        courtBookingDetails: data.data.courts,
-                    }, () => {
-                        console.log('sportsData', this.state.sportsData);
-                    })
-
-                    //console.log('ddd');
 
 
                     var bookingDetails = [
@@ -252,7 +203,7 @@ class ChooseTimeDate extends BaseComponent {
                             "court_id": 9,
                             "court_timings": [
                                 {
-                                    "open_time": "06:30:00",
+                                    "open_time": "06:00:00",
                                     "close_time": "09:00:00"
                                 },
                                 {
@@ -265,8 +216,46 @@ class ChooseTimeDate extends BaseComponent {
                                 }
                             ],
                             "court_bookings": [
+                                {
+                                    "open_time": "08:00:00",
+                                    "close_time": "09:00:00"
+                                },
+                                {
+                                    "open_time": "15:00:00",
+                                    "close_time": "15:30:00"
+                                }
                             ],
                             "pricing_plan": [
+                                {
+                                    "id": 1,
+                                    "price": 500.0,
+                                    "time_interval": 30
+                                },
+                                {
+                                    "id": 2,
+                                    "price": 1000.0,
+                                    "time_interval": 60
+                                },
+                                {
+                                    "id": 3,
+                                    "price": 1500.0,
+                                    "time_interval": 90
+                                },
+                                {
+                                    "id": 4,
+                                    "price": 2000.0,
+                                    "time_interval": 120
+                                },
+                                {
+                                    "id": 5,
+                                    "price": 2500.0,
+                                    "time_interval": 150
+                                },
+                                {
+                                    "id": 6,
+                                    "price": 3000.0,
+                                    "time_interval": 180
+                                }
                             ]
                         },
                         {
@@ -289,6 +278,36 @@ class ChooseTimeDate extends BaseComponent {
                             "court_bookings": [
                             ],
                             "pricing_plan": [
+                                {
+                                    "id": 1,
+                                    "price": 500.0,
+                                    "time_interval": 30
+                                },
+                                {
+                                    "id": 2,
+                                    "price": 1000.0,
+                                    "time_interval": 60
+                                },
+                                {
+                                    "id": 3,
+                                    "price": 1500.0,
+                                    "time_interval": 90
+                                },
+                                {
+                                    "id": 4,
+                                    "price": 2000.0,
+                                    "time_interval": 120
+                                },
+                                {
+                                    "id": 5,
+                                    "price": 2500.0,
+                                    "time_interval": 150
+                                },
+                                {
+                                    "id": 6,
+                                    "price": 3000.0,
+                                    "time_interval": 180
+                                }
                             ]
                         },
                         {
@@ -305,274 +324,108 @@ class ChooseTimeDate extends BaseComponent {
                                 }
                             ],
                             "court_bookings": [
+                                {
+                                    "open_time": "12:30:00",
+                                    "close_time": "13:00:00"
+                                }
                             ],
                             "pricing_plan": [
+                                {
+                                    "id": 1,
+                                    "price": 500.0,
+                                    "time_interval": 30
+                                },
+                                {
+                                    "id": 2,
+                                    "price": 1000.0,
+                                    "time_interval": 60
+                                },
+                                {
+                                    "id": 3,
+                                    "price": 1500.0,
+                                    "time_interval": 90
+                                },
+                                {
+                                    "id": 4,
+                                    "price": 2000.0,
+                                    "time_interval": 120
+                                },
+                                {
+                                    "id": 5,
+                                    "price": 2500.0,
+                                    "time_interval": 150
+                                },
+                                {
+                                    "id": 6,
+                                    "price": 3000.0,
+                                    "time_interval": 180
+                                }
                             ]
                         }
-                    ]
+                    ];
 
 
+                    this.setState({
+                        sportsData: [data.data.sports[0]],
+                        courtBookingDetails: bookingDetails,
+                    }, () => {
+                        console.log('sportsData', this.state.sportsData);
+                    });
+
+                    var courtTimings = [], courtBookings = [], courtAvailability = [], minMaxTime = {}, minTime, maxTime, timeRange = {}, allCourtsDeadSlots = [], finalDeadSlots = [], sliderData = [];
 
 
+                    /* split court data to timings and bookings array and convert time to minutes*/
+                    courtTimings = this.convertArrayHoursToMinutes(bookingDetails, 'court_timings');
+                    courtBookings = this.convertArrayHoursToMinutes(bookingDetails, 'court_bookings');
 
-                    var courtTimings = [];
-                    var courtBookings = [];
-                    var courtAvailability = [];
+                    /* get all available courts from court bookings and court timings*/
+                    courtAvailability = this.getAllAvailableCourts(courtTimings, courtBookings);
 
-
-
-                    bookingDetails.map((element, index) => {
-                        var item1 = {};
-                        var item2 = {};
-                        item1['name'] = element.name;
-                        item1['court_id'] = element.court_id;
-                        item1['court_timings'] = [];
-                        item2['name'] = element.name;
-                        item2['court_id'] = element.court_id;
-                        item2['court_bookings'] = [];
-                        element.court_timings.map((element1, index1) => {
-                            var timing = {};
-                            timing['startTime'] = this.convertTimeStringToMins(element1.open_time);
-                            timing['endTime'] = this.convertTimeStringToMins(element1.close_time);
-
-                            item1['court_timings'].push(timing);
-                        })
-                        courtTimings.push(item1);
-                        element.court_bookings.map((element2, index2) => {
-                            var timing = {};
-                            timing['startTime'] = this.convertTimeStringToMins(element2.start_time);
-                            timing['endTime'] = this.convertTimeStringToMins(element2.end_time);
-                            item2['court_bookings'].push(timing);
-                        })
-                        courtBookings.push(item2);
+                    /*get min and max time to plot slider, get data for showing time range */
+                    minMaxTime = this.getMinAndMaxTimeofSlider(courtTimings);
+                    minTime = minMaxTime['minTime'];
+                    maxTime = minMaxTime['maxTime']
+                    this.state.minTime = minTime;
+                    this.state.maxTime = maxTime;
+                    timeRange['startTime'] = minTime;
+                    timeRange['endTime'] = minTime + this.state.selectedDuration;
+                    this.setState({
+                        selectedTimeRange: timeRange
+                    }, () => {
+                        console.log('selectedTimeRange', this.state.selectedTimeRange);
                     })
+
+
+                    /* get dead slots of all individual courts*/
+                    allCourtsDeadSlots = this.getAllCourtsDeadSlots(courtTimings);
+
+                    /* get final dead slots to show on slider*/
+                    finalDeadSlots = this.getFinalDeadSlots(allCourtsDeadSlots);
+
+                    /* make slider data to show slider*/
+                    sliderData = this.makeSliderData(finalDeadSlots);
+
+                    this.setState({
+                        courtAvailability: courtAvailability,
+                        sliderData: sliderData,
+                        finalDeadSlots: finalDeadSlots
+                    }, () => {
+                        console.log('courtAvailability', this.state.courtAvailability);
+                    });
+
+                    /*check if any court is available in the selected timings*/
+                    this.checkCourtAvailability();
+
+
 
                     console.log('courtTimings', courtTimings);
                     console.log('courtBookings', courtBookings);
-
-                    courtTimings.map((ele, ind) => {
-
-                        var item = {};
-                        item['name'] = ele.name;
-                        item['court_id'] = ele.court_id;
-                        item['court_availability'] = [];
-                        var flag = 0;
-                        var newflag = 1;
-                        var tflag = false;
-                        var elseflag = 0;
-
-                        ele['court_timings'].map((element, index) => {
-
-                            for (i = flag; i < courtBookings[ind]['court_bookings'].length; i++) {
-
-                                var element1 = courtBookings[ind]['court_bookings'][i];
-
-                                console.log('i', i, ' newflag', newflag);
-                                console.log('elseflsg', elseflag);
-                                if (elseflag > 0) {
-                                    console.log('in new condition');
-                                    newflag = i;
-                                }
-                                if (i > 0 && newflag == i) {
-
-                                    console.log('heyyy');
-                                    if (element1.startTime < element.endTime) {
-                                        console.log('in if 1');
-                                        if (element1.startTime != courtBookings[ind]['court_bookings'][i - 1].endTime) {
-                                            console.log('in if 2');
-                                            console.log(courtBookings[ind]['court_bookings'][i - 1].endTime);
-                                            var timing = {};
-                                            timing['startTime'] = courtBookings[ind]['court_bookings'][i - 1].endTime;
-                                            timing['endTime'] = element1.startTime;
-                                            console.log('timimggggggggggg', timing);
-                                            item['court_availability'].push(timing);
-                                            newflag = i;
-                                            elseflag = elseflag + 1;
-                                        }
-                                        if (courtBookings[ind]['court_bookings'].length > i + 1 && courtBookings[ind]['court_bookings'][i + 1].startTime > element.endTime) {
-                                            console.log('in if 3');
-                                            if (element1.endTime != element.endTime) {
-                                                console.log('in if 4');
-                                                var timing = {};
-                                                timing['startTime'] = element1.endTime;
-                                                timing['endTime'] = element.endTime;
-                                                item['court_availability'].push(timing);
-                                            }
-                                            console.log('in else');
-                                            flag = i + 1;
-                                            tflag = true;
-                                            elseflag = 0;
-                                            break;
-                                        }
-                                        else if (courtBookings[ind]['court_bookings'].length == i + 1 && element1.startTime < element.endTime) {
-                                            console.log('in if 5');
-                                            if (element1.endTime != element.endTime) {
-                                                console.log('in if 6');
-                                                var timing = {};
-                                                timing['startTime'] = element1.endTime;
-                                                timing['endTime'] = element.endTime;
-                                                item['court_availability'].push(timing);
-                                            }
-                                            console.log('in else');
-                                            flag = i + 1;
-                                            tflag = true;
-                                            elseflag = 0;
-                                            break;
-                                        }
-                                    }
-
-
-
-                                }
-                                else {
-                                    //console.log('---------111111111-', tflag, newflag, 'i', i)
-                                    if (tflag) {
-                                        //console.log('----------', newflag, 'i', i)
-                                        newflag = i + 1;
-                                        elseflag = 0;
-                                    }
-                                    if (element.startTime != element1.startTime && element1.startTime > element.startTime && element1.endTime <= element.endTime) {
-                                        console.log('in else 1')
-                                        var timing = {};
-                                        timing['startTime'] = element.startTime;
-                                        timing['endTime'] = element1.startTime;
-                                        item['court_availability'].push(timing);
-                                    }
-                                    if ((element.endTime != element1.endTime) && (element1.startTime >= element.startTime && element1.endTime < element.endTime) && (courtBookings[ind]['court_bookings'].length == 1 || courtBookings[ind]['court_bookings'].length - 1 == i)) {
-                                        console.log('in else 2')
-                                        var timing = {};
-                                        timing['startTime'] = element1.endTime;
-                                        timing['endTime'] = element.endTime;
-                                        item['court_availability'].push(timing);
-                                    }
-                                    if ((element.startTime != element1.startTime && element.endTime != element1.endTime)) {
-                                        console.log('in else 3')
-                                        //console.log(element1.startTime < element.startTime)
-                                        //console.log(element1.startTime < element.startTime)
-                                        if ((element1.startTime < element.startTime) && (element1.endTime < element.startTime)) {
-                                            console.log('in else 4')
-                                            var timing = {};
-                                            timing['startTime'] = element.startTime;
-                                            timing['endTime'] = element.endTime;
-                                            item['court_availability'].push(timing);
-                                        }
-                                        if ((element1.startTime > element.startTime) && (element1.endTime > element.endTime)) {
-                                            console.log('in else 5')
-                                            var timing = {};
-                                            timing['startTime'] = element.startTime;
-                                            timing['endTime'] = element.endTime;
-                                            item['court_availability'].push(timing);
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            if (i == 0) {
-                                var timing = {};
-                                timing['startTime'] = element.startTime;
-                                timing['endTime'] = element.endTime;
-                                item['court_availability'].push(timing);
-                            }
-
-
-                        })
-
-                        courtAvailability.push(item);
-
-                    })
-
-                    var minTime, maxTime;
-
-                    //find min and max time of courts
-
-                    courtTimings.map((ele, index) => {
-
-                        var length = ele['court_timings'].length;
-
-                        if (index == 0) {
-                            minTime = ele['court_timings'][0].startTime;
-                            maxTime = ele['court_timings'][length - 1].endTime;
-                        }
-                        else {
-                            if (ele['court_timings'][0].startTime < minTime) {
-                                minTime = ele['court_timings'][0].startTime;
-                            }
-                            if (ele['court_timings'][length - 1].endTime > maxTime) {
-                                console.log('end time');
-                                console.log('length-1', length - 1);
-                                console.log(ele['court_timings'][length - 1].endTime);
-                                console.log(courtTimings[index - 1]['court_timings'][length - 1].endTime);
-                                maxTime = ele['court_timings'][length - 1].endTime;
-                            }
-                        }
-
-
-                    })
-
-                    this.state.minTime = minTime;
-                    this.state.maxTime = maxTime;
-
                     console.log('minTime', minTime, this.convertMinsToHrsMins_sql(minTime));
                     console.log('maxTime', maxTime, this.convertMinsToHrsMins_sql(maxTime));
-
-
-                    var allCourtsDeadSlots = [];
-
-                    courtTimings.map((ele, index) => {
-
-                        var item = {};
-                        item['name'] = ele.name;
-                        item['court_id'] = ele.court_id;
-                        item['dead_slots'] = [];
-
-                        var courtDeadSlots = this.getSingleCourtDeadSlots(ele['court_timings']);
-                        item['dead_slots'] = courtDeadSlots;
-
-                        allCourtsDeadSlots.push(item);
-                    });
-
-
                     console.log('allCourtsDeadSlots', allCourtsDeadSlots);
-
-                    allCourtsDeadSlots.map((element, index) => {
-                        element.dead_slots.map((element1, index1) => {
-                            element1['startTime'] = this.convertMinsToHrsMins_sql(element1.startTime);
-                            element1['endTime'] = this.convertMinsToHrsMins_sql(element1.endTime);
-                            // console.log('element', element);
-                        })
-                    })
-
-                    var intersect;
-
-                    var finalDeadSlots = [];
-
-                    allCourtsDeadSlots.map((ele, index) => {
-
-
-                        if (allCourtsDeadSlots.length == 1) {
-                            intersect = ele.dead_slots
-                        } else {
-                            if (index == 0) {
-                                intersect = this.getIntersectingDeadSlots(ele.dead_slots, allCourtsDeadSlots[index + 1].dead_slots);
-                            }
-                            else if (index <= allCourtsDeadSlots.length - 2) {
-                                intersect = this.getIntersectingDeadSlots(intersect, allCourtsDeadSlots[index + 1].dead_slots);
-                            }
-                        }
-
-                    })
-
-                    finalDeadSlots = intersect;
-
-
                     console.log('finalDeadSlots======', finalDeadSlots);
-
-
-
-
-
-                    //console.log('courtAvailability', courtAvailability);
+                    console.log('sliderData======', sliderData);
 
                     // courtAvailability.map((element, index) => {
                     //     console.log(element.court_id);
@@ -583,6 +436,8 @@ class ChooseTimeDate extends BaseComponent {
                     //     })
                     // })
 
+                    this.progress(false);
+
                 }
 
             }).catch((response) => {
@@ -590,6 +445,382 @@ class ChooseTimeDate extends BaseComponent {
                 console.log(response);
             })
         })
+    }
+
+    convertArrayHoursToMinutes(bookingDetails, name) {
+        var newArray = [];
+        bookingDetails.map((element, index) => {
+
+            var item = {};
+            item['name'] = element.name;
+            item['court_id'] = element.court_id;
+            item['pricing_plan'] = element.pricing_plan;
+            item[name] = [];
+
+            element[name].map((element1, index1) => {
+                var timing = {};
+                timing['startTime'] = this.convertTimeStringToMins(element1.open_time);
+                timing['endTime'] = this.convertTimeStringToMins(element1.close_time);
+
+                item[name].push(timing);
+            })
+
+            newArray.push(item);
+        })
+
+        return newArray;
+    }
+
+    getAllAvailableCourts(courtTimings, courtBookings) {
+
+        var newArray = [];
+
+        courtTimings.map((ele, ind) => {
+
+            var item = {};
+            item['name'] = ele.name;
+            item['court_id'] = ele.court_id;
+            item['pricing_plan'] = ele.pricing_plan;
+            item['court_availability'] = [];
+            var flag = 0;
+            var newflag = 1;
+            var tflag = false;
+            var elseflag = 0;
+
+            ele['court_timings'].map((element, index) => {
+
+                for (i = flag; i < courtBookings[ind]['court_bookings'].length; i++) {
+
+                    var element1 = courtBookings[ind]['court_bookings'][i];
+
+                    console.log('i', i, ' newflag', newflag);
+                    console.log('elseflsg', elseflag);
+                    if (elseflag > 0) {
+                        console.log('in new condition');
+                        newflag = i;
+                    }
+                    if (i > 0 && newflag == i) {
+
+                        console.log('heyyy');
+                        if (element1.startTime < element.endTime) {
+                            console.log('in if 1');
+                            if (element1.startTime != courtBookings[ind]['court_bookings'][i - 1].endTime) {
+                                console.log('in if 2');
+                                console.log(courtBookings[ind]['court_bookings'][i - 1].endTime);
+                                var timing = {};
+                                timing['startTime'] = courtBookings[ind]['court_bookings'][i - 1].endTime;
+                                timing['endTime'] = element1.startTime;
+                                console.log('timimggggggggggg', timing);
+                                item['court_availability'].push(timing);
+                                newflag = i;
+                                elseflag = elseflag + 1;
+                            }
+                            if (courtBookings[ind]['court_bookings'].length > i + 1 && courtBookings[ind]['court_bookings'][i + 1].startTime > element.endTime) {
+                                console.log('in if 3');
+                                if (element1.endTime != element.endTime) {
+                                    console.log('in if 4');
+                                    var timing = {};
+                                    timing['startTime'] = element1.endTime;
+                                    timing['endTime'] = element.endTime;
+                                    item['court_availability'].push(timing);
+                                }
+                                console.log('in else');
+                                flag = i + 1;
+                                tflag = true;
+                                elseflag = 0;
+                                break;
+                            }
+                            else if (courtBookings[ind]['court_bookings'].length == i + 1 && element1.startTime < element.endTime) {
+                                console.log('in if 5');
+                                if (element1.endTime != element.endTime) {
+                                    console.log('in if 6');
+                                    var timing = {};
+                                    timing['startTime'] = element1.endTime;
+                                    timing['endTime'] = element.endTime;
+                                    item['court_availability'].push(timing);
+                                }
+                                console.log('in else');
+                                flag = i + 1;
+                                tflag = true;
+                                elseflag = 0;
+                                break;
+                            }
+                        }
+
+
+
+                    }
+                    else {
+                        //console.log('---------111111111-', tflag, newflag, 'i', i)
+                        if (tflag) {
+                            //console.log('----------', newflag, 'i', i)
+                            newflag = i + 1;
+                            elseflag = 0;
+                        }
+                        if (element.startTime != element1.startTime && element1.startTime > element.startTime && element1.endTime <= element.endTime) {
+                            console.log('in else 1');
+                            var timing = {};
+                            timing['startTime'] = element.startTime;
+                            timing['endTime'] = element1.startTime;
+                            item['court_availability'].push(timing);
+                        }
+                        if ((element.endTime != element1.endTime) && (element1.startTime >= element.startTime && element1.endTime < element.endTime) && (courtBookings[ind]['court_bookings'].length == 1 || courtBookings[ind]['court_bookings'].length - 1 == i)) {
+                            console.log('in else 2')
+                            var timing = {};
+                            timing['startTime'] = element1.endTime;
+                            timing['endTime'] = element.endTime;
+                            item['court_availability'].push(timing);
+                        }
+                        if ((element.startTime != element1.startTime && element.endTime != element1.endTime)) {
+                            console.log('in else 3')
+                            //console.log(element1.startTime < element.startTime)
+                            //console.log(element1.startTime < element.startTime)
+                            if ((element1.startTime < element.startTime) && (element1.endTime < element.startTime)) {
+                                console.log('in else 4')
+                                var timing = {};
+                                timing['startTime'] = element.startTime;
+                                timing['endTime'] = element.endTime;
+                                item['court_availability'].push(timing);
+                            }
+                            if ((element1.startTime > element.startTime) && (element1.endTime > element.endTime)) {
+                                console.log('in else 5')
+                                var timing = {};
+                                timing['startTime'] = element.startTime;
+                                timing['endTime'] = element.endTime;
+                                item['court_availability'].push(timing);
+                            }
+                        }
+                    }
+
+                }
+
+                if (i == 0) {
+                    var timing = {};
+                    timing['startTime'] = element.startTime;
+                    timing['endTime'] = element.endTime;
+                    item['court_availability'].push(timing);
+                }
+
+
+            })
+
+            newArray.push(item);
+
+        })
+
+        return newArray;
+
+
+    }
+
+    //find min and max time of courts
+    getMinAndMaxTimeofSlider(courtTimings) {
+
+        var newObj = {};
+        var minTime, maxTime;
+
+        courtTimings.map((ele, index) => {
+            var length = ele['court_timings'].length;
+            if (index == 0) {
+                minTime = ele['court_timings'][0].startTime;
+                maxTime = ele['court_timings'][length - 1].endTime;
+            }
+            else {
+                if (ele['court_timings'][0].startTime < minTime) {
+                    minTime = ele['court_timings'][0].startTime;
+                }
+                if (ele['court_timings'][length - 1].endTime > maxTime) {
+                    maxTime = ele['court_timings'][length - 1].endTime;
+                }
+            }
+        })
+
+        newObj['minTime'] = minTime;
+        newObj['maxTime'] = maxTime;
+
+        return newObj;
+    }
+
+    getAllCourtsDeadSlots(courtTimings) {
+        var newArray = [];
+        courtTimings.map((ele, index) => {
+            var item = {};
+            item['name'] = ele.name;
+            item['court_id'] = ele.court_id;
+            item['pricing_plan'] = ele.pricing_plan;
+            item['dead_slots'] = [];
+
+            var courtDeadSlots = this.getSingleCourtDeadSlots(ele['court_timings']);
+            item['dead_slots'] = courtDeadSlots;
+
+            newArray.push(item);
+        });
+        return newArray;
+    }
+
+    getSingleCourtDeadSlots(arr) {
+
+        var newArray = [];
+
+        arr.map((element, index) => {
+
+            if (arr.length == 1) {
+                if (element.startTime > this.state.minTime) {
+                    var timing = {};
+                    timing['startTime'] = this.state.minTime;
+                    timing['endTime'] = element.startTime;
+                    newArray.push(timing);
+                }
+                if (element.endTime < this.state.maxTime) {
+                    var timing = {};
+                    timing['startTime'] = element.endTime;
+                    timing['endTime'] = this.state.maxTime;
+                    newArray.push(timing);
+                }
+            }
+            else {
+                if (index == 0) {
+                    if (element.startTime > this.state.minTime) {
+                        var timing = {};
+                        timing['startTime'] = this.state.minTime;
+                        timing['endTime'] = element.startTime;
+                        newArray.push(timing);
+                    }
+                }
+                if (index == arr.length - 1) {
+                    if (element.endTime < this.state.maxTime) {
+                        var timing = {};
+                        timing['startTime'] = element.endTime;
+                        timing['endTime'] = this.state.maxTime;
+                        newArray.push(timing);
+                    }
+                }
+
+                if (index <= (arr.length - 2) && element.endTime != arr[index + 1].startTime) {
+                    var timing = {};
+                    timing['startTime'] = element.endTime;
+                    timing['endTime'] = arr[index + 1].startTime;
+                    newArray.push(timing);
+                }
+
+            }
+
+        });
+
+        return newArray;
+    }
+
+    getFinalDeadSlots(allCourtsDeadSlots) {
+        var intersect;
+        allCourtsDeadSlots.map((ele, index) => {
+            if (allCourtsDeadSlots.length == 1) {
+                intersect = ele.dead_slots
+            } else {
+                if (index == 0) {
+                    intersect = this.getIntersectingDeadSlots(ele.dead_slots, allCourtsDeadSlots[index + 1].dead_slots);
+                }
+                else if (index <= allCourtsDeadSlots.length - 2) {
+                    intersect = this.getIntersectingDeadSlots(intersect, allCourtsDeadSlots[index + 1].dead_slots);
+                }
+            }
+
+        })
+
+        return intersect;
+    }
+
+    makeSliderData(finalDeadSlots) {
+
+        var sliderData = [];
+        sliderData[0] = null;
+        sliderData[1] = null;
+        sliderData[2] = null;
+        sliderData[3] = null;
+
+        var index = 4;
+        var time = this.state.minTime;
+
+        while (time != this.state.maxTime) {
+            var minutes, time;
+            if (index == 2) {
+                time = this.state.minTime;
+                newtime = this.convertMinsToHrsMins(time);
+            } else {
+                time = time + 15;
+                newtime = this.convertMinsToHrsMins(time);
+            }
+            var temp = {};
+            temp['title'] = newtime;
+            temp['minutes'] = time;
+            temp['deadslot'] = false;
+            if (index % 2 == 0)
+                temp['showLabel'] = true;
+            else
+                temp['showLabel'] = false;
+            sliderData.push(temp);
+            index++;
+
+        };
+
+        sliderData.map((element, index) => {
+            if (element != null) {
+                finalDeadSlots.map((element1, index1) => {
+                    if (element.minutes == element1.startTime || element.minutes == element1.endTime || (element.minutes > element1.startTime && element.minutes < element1.endTime)) {
+                        sliderData[index]['deadslot'] = true
+                    }
+                })
+            }
+        })
+
+        return sliderData;
+
+    }
+
+    checkCourtAvailability() {
+
+        var courts = [];
+
+        var selectedTimeRange = this.state.selectedTimeRange;
+        var msg = '';
+
+        console.log('this.state.finalDeadSlots', this.state.finalDeadSlots);
+
+
+        this.state.finalDeadSlots.map((element, index) => {
+            console.log(selectedTimeRange['startTime']);
+            if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime) {
+                console.log('in iffffffffffffffffffff');
+                msg = 'Sorry, all courts are closed for the selected time and duration.';
+            }
+        })
+
+        if (msg == '') {
+            this.state.courtAvailability.map((element, index) => {
+                element.court_availability.map((element1, index1) => {
+
+                    if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
+                        element['selected'] = false;
+                        courts.push(element);
+                    }
+                })
+            })
+            if (courts.length == 0) {
+                msg = 'Sorry, no courts available for selected time and duration.';
+            }
+
+        }
+
+
+        this.setState({
+            availableCourts: courts,
+            courtInfoMessage: msg
+        }, () => {
+            console.log('availableCourts', this.state.availableCourts);
+            if (this.state.availableCourts.length == 0) {
+
+            }
+        })
+
     }
 
     getIntersectingDeadSlots(arr1, arr2) {
@@ -673,62 +904,6 @@ class ChooseTimeDate extends BaseComponent {
 
     }
 
-    getSingleCourtDeadSlots(arr) {
-
-        var newArray = [];
-
-        arr.map((element, index) => {
-
-            if (arr.length == 1) {
-
-                if (element.startTime > this.state.minTime) {
-                    var timing = {};
-                    timing['startTime'] = this.state.minTime;
-                    timing['endTime'] = element.startTime;
-                    newArray.push(timing);
-                }
-                if (element.endTime < this.state.maxTime) {
-                    var timing = {};
-                    timing['startTime'] = element.endTime;
-                    timing['endTime'] = this.state.maxTime;
-                    newArray.push(timing);
-                }
-            }
-            else {
-                if (index == 0) {
-                    if (element.startTime > this.state.minTime) {
-                        var timing = {};
-                        timing['startTime'] = this.state.minTime;
-                        timing['endTime'] = element.startTime;
-                        newArray.push(timing);
-                    }
-                }
-                if (index == arr.length - 1) {
-                    if (element.endTime < this.state.maxTime) {
-                        var timing = {};
-                        timing['startTime'] = element.endTime;
-                        timing['endTime'] = this.state.maxTime;
-                        newArray.push(timing);
-                    }
-                }
-                //else {
-                //console.log('in else 5');
-
-                if (index <= (arr.length - 2) && element.endTime != arr[index + 1].startTime) {
-                    var timing = {};
-                    timing['startTime'] = element.endTime;
-                    timing['endTime'] = arr[index + 1].startTime;
-                    newArray.push(timing);
-                }
-                //}
-
-            }
-
-        });
-
-        return newArray;
-    }
-
     progress(status) {
         this.setState({
             spinner: status
@@ -742,10 +917,10 @@ class ChooseTimeDate extends BaseComponent {
             var sportsPickerData = this.state.sportsData;
             this.state.sportsData.map((element, index) => {
                 if (selectedId == element.id) {
-                    sportsPickerData[index].selected = true;
+                    sportsPickerData[index].is_selected = true;
                 }
                 else {
-                    sportsPickerData[index].selected = false;
+                    sportsPickerData[index].is_selected = false;
                 }
             })
 
@@ -784,35 +959,65 @@ class ChooseTimeDate extends BaseComponent {
             })
 
         }
+    }
+
+    courtSelector(selectedIndex) {
+        console.log('selectedIndex', selectedIndex);
+        var courts = this.state.availableCourts;
+        console.log('courts', courts);
+        courts[selectedIndex].selected = !courts[selectedIndex].selected;
+
+        var totalCost = this.state.totalCost;
+        var courtIds = this.state.selectedCourtIds;
+        var courtNames = this.state.selectedCourtNames;
+        var totalNoOfHours = this.state.totalNoOfHours;
+
+        if (courts[selectedIndex].selected == true) {
+            courtIds.push(courts[selectedIndex].court_id);
+            courtNames.push(courts[selectedIndex].name);
+            courts[selectedIndex]['pricing_plan'].map((element, index) => {
+                if (element.time_interval == this.state.selectedDuration) {
+                    totalCost = totalCost + element.price;
+                    totalNoOfHours = totalNoOfHours + element.time_interval;
+                }
+            })
+        } else {
+
+            this.state.availableCourts.map((element, index) => {
+                if (element.court_id == courts[selectedIndex].court_id) {
+                    courtIds.splice(index, 1);
+                    courtNames.splice(index, 1);
+                }
+                courts[selectedIndex]['pricing_plan'].map((element, index) => {
+                    if (element.time_interval == this.state.selectedDuration) {
+                        totalCost = totalCost - element.price;
+                        totalNoOfHours = totalNoOfHours - element.time_interval;
+                    }
+                })
+
+            })
 
 
+        }
 
-
-        // var datePickerData = this.state.calendarData;
-        // this.state.calendarData.map((element, index) => {
-        //     if (selectedIndex == index && datePickerData[selectedIndex].selected == false) {
-        //         datePickerData[selectedIndex].selected = !datePickerData[index].selected;
-        //     }
-        //     else if (selectedIndex != index) {
-        //         datePickerData[index].selected = false;
-        //     }
-        // })
-
-        // this.setState({
-        //     calendarData: datePickerData,
-        //     selectedDate: datePickerData[selectedIndex].date
-        // }, () => {
-        //     this.getBookingDetails(this.state.selectedDate, this.state.selectedSportsId)
-        // })
-
+        console.log('totalCost', totalCost);
+        console.log('courtIds', courtIds);
+        this.setState({
+            selectedCourtIds: courtIds,
+            selectedCourtNames: courtNames,
+            totalCost: totalCost,
+            totalNoOfHours: totalNoOfHours,
+            availableCourts: courts
+        }, () => {
+            console.log('this.state.selectedCourt', this.state.selectedCourtIds);
+            console.log('this.state.selectedCourt', this.state.totalCost);
+            console.log('allCourts', this.state.availableCourts);
+        })
     }
 
     incrementDuration() {
 
-        console.log('hiiiiiiiiiiiiiiiiiii');
-
-
-
+        var selectedTimeRange = this.state.selectedTimeRange;
         var selectedDuration = this.state.selectedDuration;
 
         console.log(this.state.selectedSportTimeData.max_booking_time)
@@ -820,12 +1025,15 @@ class ChooseTimeDate extends BaseComponent {
 
         if (this.state.selectedSportTimeData.max_booking_time != selectedDuration) {
             selectedDuration = selectedDuration + this.state.selectedSportTimeData.incremental_time;
+            selectedTimeRange['endTime'] = selectedTimeRange['startTime'] + selectedDuration;
         }
 
 
         this.setState({
-            selectedDuration: selectedDuration
+            selectedDuration: selectedDuration,
+            selectedTimeRange: selectedTimeRange
         }, () => {
+            this.checkCourtAvailability();
             console.log(this.state.selectedDuration);
         })
 
@@ -833,160 +1041,70 @@ class ChooseTimeDate extends BaseComponent {
 
     decrementDuration() {
 
-        console.log('eeeeeeeeeeeeeeeeeeeeee');
-
+        var selectedTimeRange = this.state.selectedTimeRange;
         var selectedDuration = this.state.selectedDuration;
 
         if (this.state.selectedSportTimeData.min_booking_time != selectedDuration) {
             selectedDuration = selectedDuration - this.state.selectedSportTimeData.incremental_time;
+            selectedTimeRange['endTime'] = selectedTimeRange['startTime'] + selectedDuration;
         }
 
         this.setState({
-            selectedDuration: selectedDuration
+            selectedDuration: selectedDuration,
+            selectedTimeRange: selectedTimeRange
+        }, () => {
+            this.checkCourtAvailability();
         })
 
     }
 
-
-    timeSlotSelector(selectedIndex) {
-
-
-
-
-        var timePickerData = this.state.courtBookingDetails;
-
-        var courts = this.state.allCourts;
-
-        this.state.allCourts.map((element, index) => {
-            var flag = 0;
-            timePickerData[selectedIndex].courts.map((element1, index1) => {
-                if (element.court_id == element1.court_id) {
-                    flag = 1
-                }
-            })
-            if (flag == 1) {
-                if (element.is_booked == false && element.selected == false) {
-                    courts[index].disabled = false;
-                } else {
-                    courts[index].disabled = true;
-                }
-            }
-            else {
-                courts[index].disabled = true;
-            }
-        })
-
-
-
-
-        // this.timePickerData[selectedIndex].courts.map((element, index) => {
-        //     if(element.court_id==)
-        // })
-
-        timePickerData[selectedIndex].selected = !timePickerData[selectedIndex].selected;
-
-        var slots = this.state.selectedTimeSlots;
-        if (timePickerData[selectedIndex].selected == true) {
-            slots.push(timePickerData[selectedIndex].slot_id);
-        } else {
-
-            this.state.allCourts.map((element, index) => {
-                courts[index].disabled = true;
-            })
-
-            this.state.selectedTimeSlots.map((element, index) => {
-
-                if (element == timePickerData[selectedIndex].slot_id) {
-                    slots.splice(index, 1);
-                }
-
-            })
-        }
-
-        if (slots.length == 0) {
-
-            timePickerData.map((element, index) => {
-                element.courts.map((element1, index1) => {
-                    timePickerData[index].courts[index1].selected = false;
-                })
-            })
-
-        }
-
-        this.setState({
-            //selectedSlotIndex: selectedIndex,
-            showCourts: true,
-            courtBookingDetails: timePickerData,
-            selectedTimeSlots: slots,
-            allCourts: courts
-        }, () => {
-            console.log('this.state.allCourts', this.state.allCourts);
-        })
-
-        // console.log('this.state.courtBookingDetails[this.state.selectedSlotIndex].courts', this.state.courtBookingDetails[selectedIndex].courts)
-
+    showPaymentModal() {
+        //var courtNames = this.state.availableCourts.map(data => data.name);
+        console.log('courtNames', this.state.selectedCourtNames);
+        console.log('date', this.state.selectedDate);
+        console.log('date', this.state.selectedTimeRange);
+        console.log('totalNoOfHours', this.state.totalNoOfHours);
+        console.log('totalNoOfHours', this.state.totalCost);
+        this.setModalVisible(true);
     }
 
-    courtSelector(selectedIndex) {
+    payAndCreateCourtBooking() {
+        // getData('header', (value) => {
+        //     this.props.createBooking(value, academy_id, player_id).then(() => {
 
-        console.log('selectedIndex', selectedIndex);
-
-        var courts = this.state.allCourts;
-
-        console.log('courts', courts);
-
-
-        this.state.allCourts.map((element, index) => {
-
-            console.log('index', index);
-            console.log('courts[selectedIndex].selected', courts[selectedIndex].selected);
-
-            if (selectedIndex == index && courts[selectedIndex].selected == false) {
-                courts[index].selected = !courts[index].selected;
-            }
-            else if (selectedIndex != index) {
-                courts[index].selected = false
-            }
-
-        })
+        //         console.log('this.props', this.props);
+        //         //let data = this.props.data.data
 
 
-        //var timePickerData = this.state.courtBookingDetails;
-        // this.state.courtBookingDetails[this.state.selectedSlotIndex].courts.map((element, index) =>{
-        //     if(selectedIndex == index && timePickerData[this.state.selectedSlotIndex].courts[selectedIndex].selected==false) {
-        //         timePickerData[this.state.selectedSlotIndex].courts[selectedIndex].selected= !timePickerData[this.state.selectedSlotIndex].courts[selectedIndex].selected;
-        //     }
-        //     else if(selectedIndex != index) {
-        //         timePickerData[this.state.selectedSlotIndex].courts[selectedIndex].selected= false; 
-        //     }
+        //         let success = data.success
+        //         if (success) {
+
+
+        //             console.log('success;')
+        //         }
+
+        //     }).catch((response) => {
+        //         console.log(response);
+        //     })
         // })
+    }
 
-
-        this.setState({
-            selectedCourt: courts[selectedIndex].court_id,
-            allCourts: courts
-            //courtBookingDetails: timePickerData,
-        }, () => {
-            console.log('this.state.selectedCourt', this.state.selectedCourt);
-            console.log('allCourts', this.state.allCourts);
-        })
-
-        //console.log()
-
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
     }
 
 
     render() {
 
-        console.log('this.state.calendarData', this.state.calendarData)
+        console.log('this.state.calendarData', this.state.calendarData);
+        console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
 
+        const itemWidth = 38.5
         return (
-
 
             <View style={styles.bookingContainer}>
                 <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
                 />
-
                 <ScrollView>
                     <View style={styles.sportPickerLabel}>
                         <Text style={styles.headingLabel}>Pick a Sport</Text>
@@ -1000,10 +1118,10 @@ class ChooseTimeDate extends BaseComponent {
                                 this.state.sportsData.map((element, index) => {
 
                                     let pickerStyle;
-                                    if (element.selected == true) {
+                                    if (element.is_selected == true) {
                                         pickerStyle = styles.sportPickerSelected;
                                     }
-                                    else if (element.selected == false) {
+                                    else if (element.is_selected == false) {
                                         pickerStyle = styles.sportPickerUnselected;
                                     }
 
@@ -1027,6 +1145,7 @@ class ChooseTimeDate extends BaseComponent {
                     <View style={styles.datePickerLabel}>
                         <Text style={styles.headingLabel}>Pick a Date</Text>
                     </View>
+
                     {
                         this.state.calendarData != null &&
                         <ScrollView horizontal={true} style={styles.datePicker}>
@@ -1073,28 +1192,20 @@ class ChooseTimeDate extends BaseComponent {
                         <View>
 
                             <View style={styles.slotsLabelOuter}>
-                                {/* <Text style={styles.slotsLabel}>{this.state.courtBookingDetails.length}>Duration</Text> */}
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ width: '37.33%', }}><Text style={[styles.slotsLabel, { marginBottom: 10 }]}>Duration</Text></View>
                                     <View style={{ width: '62.66%', }}><Text style={[styles.slotsLabel, { marginBottom: 10 }]}>Time Range</Text></View >
 
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-
-
-
                                     {
-
                                         this.state.selectedSportTimeData != null &&
 
                                         <View style={{ flexDirection: 'row', width: '37.33%' }}>
 
-
                                             <TouchableOpacity onPress={() => { this.decrementDuration() }}>
-                                                <Image source={require('../../images/ic_minus.png')} style={{}}></Image>
+                                                <Image source={require('../../images/minus.png')} style={{}}></Image>
                                             </TouchableOpacity>
-
-
 
                                             <View style={{ marginHorizontal: 12, marginTop: -5 }}>
                                                 <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 20, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[0]}</Text>
@@ -1112,46 +1223,119 @@ class ChooseTimeDate extends BaseComponent {
                                             }
 
                                             <TouchableOpacity onPress={() => { this.incrementDuration() }}>
-                                                <Image source={require('../../images/ic_plus.png')} style={{}}></Image>
+                                                <Image source={require('../../images/plus.png')} style={{}}></Image>
                                             </TouchableOpacity>
-
 
                                         </View>
 
-
-
                                     }
 
-
-
-
-
-
-
-                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 20, color: '#404040' }}>08:00 am - 09:00 am</Text></View>
+                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 20, color: '#404040' }}>{this.convertMinsToHrsMins(this.state.selectedTimeRange.startTime)} - {this.convertMinsToHrsMins(this.state.selectedTimeRange.endTime)}</Text></View>
                                 </View>
                             </View>
 
+                            {/* Time slider starts */}
+
                             {
-                                this.state.showCourts &&
+                                this.state.sliderData != null &&
+
+                                <View>
+                                    <View>
+                                        <Image resizeMode="contain" style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', width: 50, height: 50 }} source={require('../../images/ic_navigation.png')} />
+                                    </View>
+
+                                    <Carousel
+                                        ref={(c) => { this._carousel = c; }}
+                                        data={this.state.sliderData}
+                                        loop={false}
+                                        renderItem={this.renderItem}
+                                        itemWidth={itemWidth}
+                                        onSnapToItem={(index) => {
+                                            console.log("Moved to=====> " + index)
+                                            this.state.selectedIndex = index;
+                                            this.setState({
+                                                selectedIndex: index
+
+                                            }, () => {
+                                                var timing = {};
+                                                if (this.state.sliderData[this.state.selectedIndex + 2]) {
+
+                                                    timing['startTime'] = this.state.sliderData[this.state.selectedIndex + 4].minutes;
+                                                    timing['endTime'] = this.state.sliderData[this.state.selectedIndex + 4].minutes + this.state.selectedDuration;
+                                                    this.setState({
+                                                        selectedTimeRange: timing,
+                                                        totalNoOfHours: 0,
+                                                        totalCost: 0
+                                                    }, () => {
+                                                        this.checkCourtAvailability();
+                                                    })
+                                                }
+                                            })
+                                        }}
+                                        onScroll={(event) => {
+                                            // 114 is the item width
+
+                                            if (event.nativeEvent.contentOffset.x % itemWidth === 0) {
+                                                if (this.state.selectedIndex + 4 == this.state.sliderData.length - 1) {
+                                                    //alert('last')
+                                                    // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
+                                                    //   event.nativeEvent.contentOffset.y});
+                                                }
+                                                //ReactNativeHapticFeedback.trigger('impactLight', true)
+                                                //console.log('onScroll-> ', event.nativeEvent.contentOffset.x)
+                                                let val = (this.state.sliderData.length - 5) * itemWidth
+                                                console.log('onScroll-> ', event.nativeEvent.contentOffset.x + "== " + val)
+                                                if (event.nativeEvent.contentOffset.x >= val) {
+                                                    // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
+                                                    //   event.nativeEvent.contentOffset.y});
+                                                    //alert('outside')
+                                                    console.log('outside')
+                                                    this._carousel.snapToItem(this.state.sliderData.length - 5)
+                                                    setTimeout(() => {
+                                                        this._carousel.snapToItem(this.state.sliderData.length - 5)
+                                                    }, 100)
+                                                }
+                                            }
+                                        }}
+                                        //onScroll={(event) => this.handleScroll(event)}
+                                        itemHeight={80}
+                                        lockScrollWhileSnapping={false}
+                                        sliderWidth={Dimensions.get('window').width}
+                                        inactiveSlideOpacity={1}
+                                        inactiveSlideScale={1}
+                                        activeSlideAlignment={'start'}
+                                        //slideStyle={{ marginLeft: 14 }}
+                                        loopClonesPerSide={10}
+                                        useScrollView={true}
+                                    />
+
+                                </View>
+                            }
+
+
+                            {
+                                (this.state.availableCourts != null && this.state.availableCourts.length > 0) &&
                                 <View style={{ marginTop: 30, paddingLeft: 12, marginBottom: 10 }}>
                                     <Text style={styles.headingLabel}>Select Court</Text>
+                                </View>
+                            }
+
+                            {
+                                (this.state.availableCourts != null && this.state.courtInfoMessage != '' && this.state.availableCourts.length == 0) &&
+
+                                <View style={{ paddingHorizontal: 12, marginTop: 30 }}>
+                                    <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#A3A5AE' }}>{this.state.courtInfoMessage}</Text>
                                 </View>
                             }
 
                             <ScrollView horizontal={true} style={styles.courtPicker}>
 
                                 {
+                                    this.state.availableCourts != null &&
 
-                                    this.state.showCourts &&
-
-                                    this.state.allCourts.map((element, index) => {
-
-                                        console.log('element', element);
-
+                                    this.state.availableCourts.map((element, index) => {
 
                                         let pickerStyle, textStyleLarge;
-
                                         if (element.disabled == true) {
                                             pickerStyle = styles.courtPickerDisabled;
                                             textStyleLarge = defaultStyle.bold_text_14;
@@ -1165,30 +1349,16 @@ class ChooseTimeDate extends BaseComponent {
                                             textStyleLarge = defaultStyle.bold_text_14;
                                         }
 
-
-
-
                                         return (
 
-                                            <TouchableOpacity onPress={() => { element.disabled == false && this.courtSelector(index) }}>
+                                            <TouchableOpacity onPress={() => { this.courtSelector(index) }}>
                                                 <View style={pickerStyle}>
                                                     <View style={{ marginBottom: 6 }}>
                                                         <Text style={textStyleLarge}>{element.name}</Text>
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>
-
-
-
-                                            // <View style={styles.courtPickerUnSelected}>
-                                            //     <View style={{ marginBottom: 6 }}>
-                                            //         <Text style={defaultStyle.bold_text_14}>Court 2</Text>
-                                            //     </View>
-                                            // </View>
                                         )
-
-
-
                                     })
                                 }
                             </ScrollView>
@@ -1214,48 +1384,222 @@ class ChooseTimeDate extends BaseComponent {
                                 </View>
                             </View> */}
                         </View>
-
-
                     }
-
-
-
                 </ScrollView>
-                {/* <View style={{padding: 12}}>
-                    <View style={{flexDirection:'row'}}>
-                        <View>
-                            <View><Text style={{fontFamily:'Quicksand-Medium', fontSize: 14, color: '#A3A5AE'}}>Your Booking</Text></View>
-                            <View><Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>Number of hours 01</Text></View>
-                        </View>
-                        <View>
-                            <View><Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}} >Cost per hour Rs 600</Text></View>
-                            <View><Text style={{fontFamily:'Quicksand-Medium', fontSize: 14, color: '#404040'}}>Total cost Rs 600</Text></View>
-                        </View>
-                    </View>
-               </View> */}
                 <View style={{ padding: 12, borderRadius: 1, elevation: 1.5, shadowOpacity: 0.32, shadowOffset: { width: 0, height: 1, borderBottomRadius: 0 } }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                         <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#A3A5AE' }}>Your Booking</Text>
-                        <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }} >Cost per hour Rs 600</Text>
+                        {/* <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }} >Cost per hour Rs 600</Text> */}
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                        <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>Number of hours 01</Text>
-                        <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#404040' }}>Total cost Rs 600</Text>
+                        <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>Total Duration {this.convertMinsToHrs(this.state.totalNoOfHours)}</Text>
+                        <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#404040' }}>Total cost Rs {this.state.totalCost}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row',
                         marginTop: 25
                     }}>
 
-                        <Text onPress={() => {
-                            //this.props.navigation.navigate('CourtAcademyListing')
-                        }} style={styles.rounded_button}>Book</Text>
+                        {
+                            this.state.selectedCourtIds.length == 0 ?
+                                <Text style={[styles.rounded_button, { backgroundColor: '#DDDDDD' }]}>Book</Text> :
+
+                                <Text onPress={() => {
+                                    this.showPaymentModal();
+                                }} style={styles.rounded_button}>Book</Text>
+                        }
+
+
 
                     </View>
                 </View>
+
+                {this.paymentModal()}
+
             </View>
 
         );
+
+    }
+
+    renderItem = ({ item, index }) => {
+
+        const fullWidth = 52
+        const singleWidth = 26
+
+        let prevsBlock = false
+        let nextBlock = false
+        if (index != 0) {
+            if (this.state.sliderData[index - 1] != null) {
+                prevsBlock = this.state.sliderData[index - 1].deadslot
+            }
+            if (this.state.sliderData.length > index && this.state.sliderData[index + 1] != null) {
+                nextBlock = this.state.sliderData[index + 1].deadslot
+            }
+        }
+
+
+        return (
+
+            <View>
+                {item != null ?
+                    <View style={{
+                        paddingTop: 8,
+                        paddingBottom: 16,
+                    }}>
+                        <View style={{ flexDirection: 'row' }}>
+
+
+                            {this.state.sliderData[index - 1] != null ?
+
+                                (prevsBlock ?
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "red" }}></View> :
+
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "#758272" }}></View>)
+
+                                : <View style={{ height: 3, width: singleWidth }}></View>
+
+                            }
+
+
+
+                            {
+                                item['deadslot'] ?
+
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "red" }}></View> :
+
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "#758272" }}></View>
+                            }
+                        </View>
+
+
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                width: fullWidth,
+                                marginTop: 6
+                            }}>
+
+                            {item.showLabel ?
+                                < View style={{
+                                    width: 2,
+                                    height: 7, backgroundColor: "#758272"
+                                }}></View>
+                                :
+                                <View style={{
+                                    width: 2,
+                                    height: 7, backgroundColor: "#758272"
+                                }}></View>
+                            }
+                        </View>
+
+                        {
+                            item.showLabel &&
+
+                            <TouchableOpacity
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    textAlign: 'center',
+                                    width: fullWidth,
+                                    paddingBottom: 8,
+                                }}
+                                onPress={() => { }}>
+
+                                <View
+                                    style={{
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                        width: fullWidth,
+                                        paddingBottom: 8,
+                                    }}>
+
+                                    <View style={{
+                                        width: 4,
+                                        height: 4,
+                                        borderRadius: 2,
+                                        marginTop: 5,
+                                        marginBottom: 0,
+                                        backgroundColor: '#758272'
+                                    }}>
+
+                                    </View>
+                                    <Text style={[defaultStyle.regular_text_10, {
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                        width: "100%",
+                                        //fontSize: 8,
+                                        //width: fullWidth
+                                    }]}>{item.title}</Text>
+                                </View>
+
+
+                            </TouchableOpacity>
+                        }
+
+                    </View>
+                    :
+                    <View style={{ width: fullWidth }}></View>
+                }
+            </View>
+
+        );
+    }
+
+    paymentModal() {
+        return (
+            <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
+                <View>
+                    <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
+                        <View style={styles.modalOuter}>
+                            <View style={styles.modalBox}>
+                                <View style={styles.modalHeadingOuter}>
+                                    <Text style={defaultStyle.bold_text_14}>Your Booking</Text>
+                                    <TouchableOpacity activeOpacity={.8} onPress={() => { this.setModalVisible(false); }}>
+                                        <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                                    </TouchableOpacity>
+                                </View>
+                                <View>
+                                    <View style={styles.paymentLabelOuter}>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Place</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Courts</Text></View>
+                                    </View>
+                                    <View style={styles.paymentValueOuter}>
+                                        <View style={styles.paymentLabelWidth}><Text style={defaultStyle.regular_text_14}>{this.state.academyName}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{this.state.selectedCourtNames.join(',')}</Text></View>
+                                    </View>
+                                    <View style={styles.paymentLabelOuter}>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Date</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Time</Text></View>
+                                    </View>
+                                    <View style={styles.paymentValueOuter}>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{moment.utc(new Date(this.state.selectedDate.split('-')[2], this.state.selectedDate.split('-')[1], this.state.selectedDate.split('-')[0])).local().format("DD MMM'YY")}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{this.convertMinsToHrsMins(this.state.selectedTimeRange['startTime'])}- {this.convertMinsToHrsMins(this.state.selectedTimeRange['endTime'])}</Text></View>
+                                    </View>
+                                    <View style={styles.paymentLabelOuter}>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Duration</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Cost</Text></View>
+                                    </View>
+                                    <View style={styles.paymentValueOuter}>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{this.convertMinsToHrs(this.state.totalNoOfHours)}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>Rs {this.state.totalCost}</Text></View>
+                                    </View>
+                                </View>
+
+                                <View style={styles.confirmBtnOuter}>
+                                    <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.payAndCreateCourtBooking() }}>Pay</Text>
+                                </View>
+
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
+            </ScrollView >
+        )
 
     }
 
@@ -1267,7 +1611,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getCourtBookingDetails
+    getCourtBookingDetails, createBooking
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseTimeDate);
@@ -1446,5 +1790,66 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12
+    },
+    closeImg: {
+        height: 30,
+        width: 30,
+    },
+    modalOuter: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+        paddingVertical: 16
+    },
+    modalBox: {
+        width: "95%",
+        //margin: 16,
+        //padding: 16,
+        borderRadius: 16,
+        backgroundColor: 'white',
+        height: 336,
+    },
+    modalHeadingOuter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 12,
+        paddingTop: 16
+    },
+    paymentLabelOuter: {
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        marginTop: 21
+    },
+    paymentLabel: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 10,
+        color: '#A3A5AE'
+    },
+    paymentValueOuter: {
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        marginTop: 8
+    },
+    paymentValue: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 14,
+        color: '#404040'
+    },
+    paymentLabelWidth: {
+        width: '49.33%'
+    },
+    confirmBtnOuter: {
+        marginHorizontal: 12,
+        marginTop: 30,
+        marginBottom: 0
+    },
+    confirmBtn: {
+        marginTop: 16,
+        width: "100%",
+        marginLeft: 0,
+        marginRight: 0,
+        fontFamily: 'Quicksand-Regular',
     }
 }

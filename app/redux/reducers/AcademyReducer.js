@@ -241,7 +241,7 @@ export function getCourtBookingDetails(header, academy_id, date, sportsId) {
     if (sportsId == null) {
         url = `global/court/details?academy_id=${academy_id}&date=${date}`
     } else {
-        url = `global/court/details?academy_id=${academy_id}&date=${date}&sports_id=${sportsId}`
+        url = `global/court/details?academy_id=${academy_id}&date=${date}&sport_id=${sportsId}`
     }
     return {
         type: types.DO_LOGIN,

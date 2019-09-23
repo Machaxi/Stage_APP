@@ -11,6 +11,7 @@ import Moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import FastImage from 'react-native-fast-image'
 
 var filterData = ''
 
@@ -312,7 +313,7 @@ class RegisteredRoute extends BaseComponent {
 
                     }}>
                     <View>
-                        <Image style={{
+                        {/* <Image style={{
                             height: 150, width: "100%",
                             borderTopLeftRadius: 12,
                             borderTopRightRadius: 12,
@@ -320,7 +321,15 @@ class RegisteredRoute extends BaseComponent {
                             source={{ uri: item.cover_pic }}
                         >
 
-                        </Image>
+                        </Image> */}
+                        <FastImage
+                            style={{
+                                height: 150, width: "100%",
+                                borderTopLeftRadius: 12,
+                                borderTopRightRadius: 12,
+                            }}
+                            source={{ uri: item.cover_pic }}
+                        />
 
                         <View style={{
                             paddingLeft: 16,
@@ -456,7 +465,7 @@ class RegisteredRoute extends BaseComponent {
             array.push(name)
             //str = str + name + " | "
         }
-        
+
         let unique = [...new Set(array)];
         for (let i = 0; i < unique.length; i++) {
             let name = unique[i]

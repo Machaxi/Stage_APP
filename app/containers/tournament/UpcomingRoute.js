@@ -8,6 +8,7 @@ import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
 import Moment from 'moment';
 import Events from '../../router/events';
+import FastImage from 'react-native-fast-image'
 
 var filterData = ''
 
@@ -198,8 +199,10 @@ class UpcomingRoute extends BaseComponent {
 
         <TouchableOpacity activeOpacity={.8}
             onPress={() => {
-                this.props.navigation.navigate('UpcomingTournamentDetail', { tournament_id: 
-                    item.id })
+                this.props.navigation.navigate('UpcomingTournamentDetail', {
+                    tournament_id:
+                        item.id
+                })
                 //this.props.navigation.navigate('UpcomingTournamentDetail', { data: item })
             }}>
 
@@ -214,7 +217,7 @@ class UpcomingRoute extends BaseComponent {
                     paddingBottom: 10
                 }}>
                 <View>
-                    <Image style={{
+                    {/* <Image style={{
                         height: 150, width: "100%",
                         borderTopLeftRadius: 12,
                         borderTopRightRadius: 12,
@@ -222,7 +225,15 @@ class UpcomingRoute extends BaseComponent {
                         source={{ uri: item.cover_pic }}
                     >
 
-                    </Image>
+                    </Image> */}
+                    <FastImage
+                        style={{
+                            height: 150, width: "100%",
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12,
+                        }}
+                        source={{ uri: item.cover_pic }}
+                    />
 
                     <View style={{
                         paddingLeft: 16,

@@ -534,6 +534,13 @@ class UserHome extends BaseComponent {
                         player_profile={this.state.player_profile}
                     />
 
+                    {/* <View style={[styles.confirmBtnOuter, {marginTop: 20}]}>
+                        <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                            //global.opponentPlayerDetails = this.state.player_profile;
+                            this.props.navigation.navigate('ChooseTimeDate')
+                        }}>Book Court</Text>
+                    </View> */}
+
                     {sessionArray.length != 0 ?
                         <CustomeCard >
 
@@ -1126,7 +1133,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
-    }
+    },
+    confirmBtnOuter: {
+        marginHorizontal: 16,
+        //marginTop: 20,
+        marginBottom: 15
+    },
+
 
 
 });

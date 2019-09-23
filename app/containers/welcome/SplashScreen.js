@@ -25,8 +25,8 @@ class Splash extends BaseComponent {
 
 
         this.refreshEvent = Events.subscribe('deep_linking', (data) => {
-           is_deep_linking = true
-           deep_data = data
+            is_deep_linking = true
+            deep_data = data
         });
 
         //checking for tournamnet registraion, guest can skip, when they go to upcoming tournament
@@ -40,7 +40,7 @@ class Splash extends BaseComponent {
 
         //     }
         // });
-        
+
         // firebase.analytics().logEvent("APP_START", {})
         //firebase.analytics().logEvent("testing_dribble", {})
         firebase.analytics().logEvent("SplashScreen", {})
@@ -52,20 +52,15 @@ class Splash extends BaseComponent {
         //1a476280-04c6-40a5-b76e-6cc4da41669e
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
         SplashScreen.hide();
         this.moveNext()
     }
 
     moveNext() {
-        //  getData('temp', (value) => {
-        //     this.props.navigation.navigate('EditPartner', {
-        //         data: value
-        //     })
-        // })
-        
-        //  return
+        this.props.navigation.navigate('ChooseTimeDate')
+        return
         // var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)
