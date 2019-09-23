@@ -463,7 +463,7 @@ class UserHome extends BaseComponent {
                                             textDecorationLine: 'line-through'
                                         }]}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
-                                        {getUtcDateFromTime(session_date,start_time)}
+                                        {getUtcDateFromTime(session_date, start_time)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -492,7 +492,7 @@ class UserHome extends BaseComponent {
                                 <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
-                                        {getUtcDateFromTime(session_date,start_time)}
+                                        {getUtcDateFromTime(session_date, start_time)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
@@ -528,6 +528,13 @@ class UserHome extends BaseComponent {
                         is_tooblar={true}
                         player_profile={this.state.player_profile}
                     />
+
+                    <View style={[styles.confirmBtnOuter, {marginTop: 20}]}>
+                        <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                            //global.opponentPlayerDetails = this.state.player_profile;
+                            this.props.navigation.navigate('ChooseTimeDate')
+                        }}>Book Court</Text>
+                    </View>
 
                     {sessionArray.length != 0 ?
                         <CustomeCard >
@@ -1121,7 +1128,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
-    }
+    },
+    confirmBtnOuter: {
+        marginHorizontal: 16,
+        //marginTop: 20,
+        marginBottom: 15
+    },
+
 
 
 });
