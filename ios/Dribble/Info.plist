@@ -27,6 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>branchexample</string>
 				<string>com.googleusercontent.apps.445376033321-or05oq26k0phge5ajne056gbflp3a3vn</string>
 			</array>
 		</dict>
@@ -85,10 +86,12 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>branch_app_domain</key>
+	<string>dribble.app.link</string>
+	<key>branch_key</key>
+	<string>key_live_bfRvSAUUhF3BloaSXj8rNlcovrhMoMv0</string>
 </dict>
 </plist>

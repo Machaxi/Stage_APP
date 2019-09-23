@@ -38,13 +38,17 @@ export default function AcademyReducer(state = initialState, action) {
 }
 
 
-export function getAllAcademy(query) {
+export function getAllAcademy(query, job_vacancy) {
     console.log('getAllAcademy => ', query)
+    let url = `global/academy/all?${query}`
+    if (job_vacancy) {
+        url = `global/academy/all?vacancy=1&${query}`
+    }
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `global/academy/all?${query}`
+                url: url
             }
         }
     };
@@ -254,22 +258,45 @@ export function getCourtBookingDetails(header, academy_id, date, sportsId) {
     }
 };
 
-export function createBooking(header, postData) {
-    //console.log("createChallenge", header, academy_id)
+export function bookTrial(header, data) {
 
+    // var url;
+    // if (user_id != null) {
+    //     url = `global/book-trial`
+    // } else {
+    //     url = `batch/${batchId}/book-trial?academy_id=${academy_id}&name=${name}&contact=${contact}`
+    // }
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `court/book`,
+                url: `global/book-trial`,
                 method: 'POST',
-                data: postData,
+                data: data,
                 headers: {
                     'x-authorization': header
                 },
             }
         }
-    };
+    }
+};
 
-}
 
+//http://13.233.182.217:8080/api/global/court/details?academy_id=1&date=12-09-201
+
+// export function getCourtBookingDetails(header, academy_id, date) {
+
+//     return {
+//         type: types.DO_LOGIN,
+//         payload: {
+//             request: {
+//                 url: `global/court/details?academy_id=${academy_id}&date=${date}`,
+//                 method: 'GET',
+//                 headers: {
+//                     'x-authorization': header
+
+//                 },
+//             }
+//         }
+//     }
+// };

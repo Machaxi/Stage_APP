@@ -27,6 +27,7 @@ import RNFirebase from 'react-native-firebase';
 import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } from './app/containers/BaseComponent';
 import { storeData } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
+import DropdownAlert from 'react-native-dropdownalert';
 
 export const BASE_URL = 'http://13.233.182.217:8080/api/'
 //export const BASE_URL = 'http://192.168.3.145:8089/api/'
@@ -171,6 +172,7 @@ export default class App extends BaseComponent {
         });
 
         this.refreshEvent = Events.subscribe('ShowDialog', (msg) => {
+            //this.dropDownAlertRef.alertWithType('error', 'Error', msg);
             this.setState({
                 is_show_alert: true,
                 info_msg: msg
@@ -225,6 +227,18 @@ export default class App extends BaseComponent {
         console.log('Device info: ', device)
     }
 
+    getActiveRouteName(navigationState) {
+        if (!navigationState) {
+            return null;
+        }
+        const route = navigationState.routes[navigationState.index];
+        // dive into nested navigators
+        if (route.routes) {
+            return this.getActiveRouteName(route);
+        }
+        return route.routeName;
+    }
+
     render() {
         let is_show_alert = this.state.is_show_alert
         let show_must_update_alert = this.state.show_must_update_alert
@@ -247,6 +261,8 @@ export default class App extends BaseComponent {
                         message={info_msg}
                         visible={is_show_alert} />
 
+                    <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
+
                     <UpdateAppDialog
                         navigation={this.state.navigation}
                         exitPressed={() => {
@@ -264,7 +280,25 @@ export default class App extends BaseComponent {
                         }}
                         visible={show_must_update_alert} />
 
-                    <AppMain />
+                    <AppMain
+                        onNavigationStateChange={(prevState, currentState, action) => {
+                            const currentScreen = this.getActiveRouteName(currentState);
+                            const prevScreen = this.getActiveRouteName(prevState);
+
+                            if (Platform.OS == 'android') {
+
+                                if (prevScreen !== currentScreen) {
+                                    if (currentScreen == 'UserHome' || currentScreen == 'ParentHome') {
+                                        StatusBar.setBackgroundColor("#332B70")
+                                        StatusBar.setBarStyle('light-content', true)
+                                    } else {
+                                        StatusBar.setBackgroundColor("#ffffff")
+                                        StatusBar.setBarStyle('dark-content', true)
+                                    }
+                                }
+                            }
+                        }}
+                    />
                 </Provider>
             </PaperProvider>
             // </SafeAreaView>

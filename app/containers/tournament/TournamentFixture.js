@@ -454,6 +454,13 @@ class TournamentFixture extends BaseComponent {
         }
     }
 
+    getColor(player) {
+        if (player.user_type == PLAYER && player.name != 'To be decided')
+            return 'blue'
+        else
+            return 'black'
+    }
+
     render() {
 
         // let array = [
@@ -615,7 +622,7 @@ class TournamentFixture extends BaseComponent {
                         onPress={() => {
 
                             const user_type = array[i][j].user_type
-                            if (user_type == PLAYER) {
+                            if (user_type == PLAYER && array[i][j].name != 'To be decided') {
                                 let id = array[i][j].id
                                 console.warn("playerid : " + id)
                                 if (id != undefined) {
@@ -694,7 +701,7 @@ class TournamentFixture extends BaseComponent {
                                 onPress={() => {
 
                                     const user_type = array[i][j].user_type
-                                    if (user_type == PLAYER) {
+                                    if (user_type == PLAYER && array[i][j].name != 'To be decided') {
                                         let id = array[i][j].id
                                         console.warn("playerid : " + id)
                                         if (id != undefined) {
@@ -705,7 +712,7 @@ class TournamentFixture extends BaseComponent {
                                         }
                                     }
                                 }}
-                                stroke={array[i][j].user_type == PLAYER ? 'blue' : textColor}
+                                stroke={this.getColor(array[i][j])}
                                 fontSize="12"
                                 fontFamily="Quicksand-Regular"
                                 x={x + 12}

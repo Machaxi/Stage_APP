@@ -60,10 +60,12 @@ class CoachAttendenceBook extends React.Component {
             batch_data: null,
             spinner: false
         }
-        this.state.batch_data = this.props.navigation.getParam('batch_data', undefined)
+        const batch_data = this.props.navigation.getParam('batch_data', undefined)
+        this.state.batch_data = batch_data
+        console.log('Batch-Data=>', this.state.batch_data)
         const batch_name = this.props.navigation.getParam('batch_name', '')
         this.props.navigation.setParams({
-            batch_name: batch_name
+            batch_name: batch_name,
         })
         console.warn('batch_data => ', this.state.batch_data)
     }
@@ -197,12 +199,15 @@ class CoachAttendenceBook extends React.Component {
         // }
         // const { batch_name, batch_category, batch_id, session } = this.state.batchDetails
 
-        let batch_name = this.state.batch_data.batch_name
-        let batch_category = this.state.batch_data.batch_category
-        let session = this.state.batch_data.session
-        let batch_id = this.state.batch_data.batch_id
+        console.log('batch_data => ',JSON.stringify(this.state.batch_data))
+        if (this.state.batch_data) {
 
-        if (this.state.batchDetails) {
+            const batchDetails = this.state.batchDetails
+            let batch_name = this.state.batch_data.batch_name
+            let batch_category = this.state.batch_data.batch_category
+            let session = this.state.batch_data.session
+            let batch_id = this.state.batch_data.batch_id
+
 
             // this.attedenceMangement(attandence_batch)
             //
@@ -286,7 +291,7 @@ class CoachAttendenceBook extends React.Component {
                     <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Session </Text>
                 </View>
 
-                {this.state.batchDetails.length != 0 ?
+                {batchDetails!=null && batchDetails.length != 0 ?
                     <View style={{
                         backgroundColor: 'white',
                     }}>

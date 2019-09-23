@@ -759,7 +759,10 @@ class ChooseTimeDate extends BaseComponent {
         var sliderData = [];
         sliderData[0] = null;
         sliderData[1] = null;
-        var index = 2;
+        sliderData[2] = null;
+        sliderData[3] = null;
+
+        var index = 4;
         var time = this.state.minTime;
 
         while (time != this.state.maxTime) {
@@ -1192,8 +1195,9 @@ class ChooseTimeDate extends BaseComponent {
     render() {
 
         console.log('this.state.calendarData', this.state.calendarData);
-        const itemWidth = 70
+        console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
 
+        const itemWidth = 38.5
         return (
 
             <View style={styles.bookingContainer}>
@@ -1352,52 +1356,55 @@ class ChooseTimeDate extends BaseComponent {
 
                                             }, () => {
                                                 var timing = {};
-                                                timing['startTime'] = this.state.sliderData[this.state.selectedIndex + 2].minutes;
-                                                timing['endTime'] = this.state.sliderData[this.state.selectedIndex + 2].minutes + this.state.selectedDuration;
-                                                this.setState({
-                                                    selectedTimeRange: timing,
-                                                    totalNoOfHours: 0,
-                                                    totalCost: 0
-                                                }, () => {
-                                                    this.checkCourtAvailability();
-                                                })
+                                                if (this.state.sliderData[this.state.selectedIndex + 2]) {
+
+                                                    timing['startTime'] = this.state.sliderData[this.state.selectedIndex + 4].minutes;
+                                                    timing['endTime'] = this.state.sliderData[this.state.selectedIndex + 4].minutes + this.state.selectedDuration;
+                                                    this.setState({
+                                                        selectedTimeRange: timing,
+                                                        totalNoOfHours: 0,
+                                                        totalCost: 0
+                                                    }, () => {
+                                                        this.checkCourtAvailability();
+                                                    })
+                                                }
                                             })
                                         }}
                                         onScroll={(event) => {
                                             // 114 is the item width
 
                                             if (event.nativeEvent.contentOffset.x % itemWidth === 0) {
-                                                if (this.state.selectedIndex + 2 == this.state.sliderData.length - 1) {
+                                                if (this.state.selectedIndex + 4 == this.state.sliderData.length - 1) {
                                                     //alert('last')
                                                     // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
                                                     //   event.nativeEvent.contentOffset.y});
                                                 }
                                                 //ReactNativeHapticFeedback.trigger('impactLight', true)
                                                 //console.log('onScroll-> ', event.nativeEvent.contentOffset.x)
-                                                let val = (this.state.sliderData.length - 3) * itemWidth
+                                                let val = (this.state.sliderData.length - 5) * itemWidth
                                                 console.log('onScroll-> ', event.nativeEvent.contentOffset.x + "== " + val)
                                                 if (event.nativeEvent.contentOffset.x >= val) {
                                                     // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
                                                     //   event.nativeEvent.contentOffset.y});
                                                     //alert('outside')
                                                     console.log('outside')
-                                                    this._carousel.snapToItem(this.state.sliderData.length - 3)
+                                                    this._carousel.snapToItem(this.state.sliderData.length - 5)
                                                     setTimeout(() => {
-                                                        this._carousel.snapToItem(this.state.sliderData.length - 3)
+                                                        this._carousel.snapToItem(this.state.sliderData.length - 5)
                                                     }, 100)
                                                 }
                                             }
                                         }}
                                         //onScroll={(event) => this.handleScroll(event)}
-                                        itemHeight={50}
-                                        //lockScrollWhileSnapping={true}
+                                        itemHeight={80}
+                                        lockScrollWhileSnapping={false}
                                         sliderWidth={Dimensions.get('window').width}
                                         inactiveSlideOpacity={1}
                                         inactiveSlideScale={1}
                                         activeSlideAlignment={'start'}
                                         //slideStyle={{ marginLeft: 14 }}
                                         loopClonesPerSide={10}
-                                        useScrollView={false}
+                                        useScrollView={true}
                                     />
 
                                 </View>
@@ -1515,42 +1522,126 @@ class ChooseTimeDate extends BaseComponent {
 
     renderItem = ({ item, index }) => {
 
+        const fullWidth = 52
+        const singleWidth = 26
+
+        let prevsBlock = false
+        let nextBlock = false
+        if (index != 0) {
+            if (this.state.sliderData[index - 1] != null) {
+                prevsBlock = this.state.sliderData[index - 1].deadslot
+            }
+            if (this.state.sliderData.length > index && this.state.sliderData[index + 1] != null) {
+                nextBlock = this.state.sliderData[index + 1].deadslot
+            }
+        }
+
+
         return (
 
             <View>
                 {item != null ?
-                    <View>
+                    <View style={{
+                        paddingTop: 8,
+                        paddingBottom: 16,
+                    }}>
                         <View style={{ flexDirection: 'row' }}>
+
+
                             {this.state.sliderData[index - 1] != null ?
 
-                                (item['deadslot'] == true ? <View style={{ height: 3, width: 40, backgroundColor: "red" }}></View> : <View style={{ height: 3, width: 40, backgroundColor: "#758272" }}></View>)
+                                (prevsBlock ?
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "red" }}></View> :
 
-                                : <View style={{ height: 3, width: 40 }}></View>
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "#758272" }}></View>)
+
+                                : <View style={{ height: 3, width: singleWidth }}></View>
+
                             }
+
+
+
                             {
-                                item.showLabel &&
-                                <View style={{ width: 2, height: 12, backgroundColor: "#758272" }}></View>
+                                item['deadslot'] ?
+
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "red" }}></View> :
+
+                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "#758272" }}></View>
                             }
-                            {
-                                item['deadslot'] == true ?
+                        </View>
 
-                                    <View style={{ height: 3, width: 40, backgroundColor: "red" }}></View> :
 
-                                    <View style={{ height: 3, width: 40, backgroundColor: "#758272" }}></View>
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                width: fullWidth,
+                                marginTop: 6
+                            }}>
+
+                            {item.showLabel ?
+                                < View style={{
+                                    width: 2,
+                                    height: 7, backgroundColor: "#758272"
+                                }}></View>
+                                :
+                                <View style={{
+                                    width: 2,
+                                    height: 7, backgroundColor: "#758272"
+                                }}></View>
                             }
                         </View>
 
                         {
                             item.showLabel &&
 
-                            <TouchableOpacity onPress={() => { }}>
-                                <Text style={[defaultStyle.regular_text_10, { alignItems: 'center', justifyContent: 'center', textAlign: 'center', width: 82 }]}>{item.title}</Text>
+                            <TouchableOpacity
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    textAlign: 'center',
+                                    width: fullWidth,
+                                    paddingBottom: 8,
+                                }}
+                                onPress={() => { }}>
+
+                                <View
+                                    style={{
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                        width: fullWidth,
+                                        paddingBottom: 8,
+                                    }}>
+
+                                    <View style={{
+                                        width: 4,
+                                        height: 4,
+                                        borderRadius: 2,
+                                        marginTop: 5,
+                                        marginBottom: 0,
+                                        backgroundColor: '#758272'
+                                    }}>
+
+                                    </View>
+                                    <Text style={[defaultStyle.regular_text_10, {
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                        width: "100%",
+                                        //fontSize: 8,
+                                        //width: fullWidth
+                                    }]}>{item.title}</Text>
+                                </View>
+
+
                             </TouchableOpacity>
                         }
 
                     </View>
                     :
-                    <View style={{ width: 82 }}></View>
+                    <View style={{ width: fullWidth }}></View>
                 }
             </View>
 

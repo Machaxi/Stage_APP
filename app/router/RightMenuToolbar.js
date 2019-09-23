@@ -57,10 +57,10 @@ class RightMenuToolbar extends BaseComponent {
                 {showHome ? <TouchableOpacity
                     activeOpacity={.8}
                     onPress={() => {
-                        setTimeout(() => {
-                            events.publish(GO_TO_HOME, msg);
-
-                        }, 100)
+                        this.props.navigation.navigate('EmptyScreen')
+                        // setTimeout(() => {
+                        //     events.publish(GO_TO_HOME, null);
+                        // }, 10)
                     }}>
 
                     <Image

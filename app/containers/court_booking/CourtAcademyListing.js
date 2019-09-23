@@ -333,7 +333,7 @@ class CourtAcademyListing extends BaseComponent {
                         }}
                         style={styles.rounded_button}
                     >
-                        Book a Court
+                        Book Court
                                 </Text>
 
                 </View>

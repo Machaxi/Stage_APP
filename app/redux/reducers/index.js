@@ -19,6 +19,8 @@ import TournamentFilter from './TournamentFilter'
 import NotificationReducer from './NotificationReducer'
 import CommonReducer from './CommonReducer'
 import BatchAttendenceReducer from './BatchAttendenceReducer'
+import DietPlanReducer from './DietPlanReducer'
+import PaymentReducer from './PaymentReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -40,7 +42,9 @@ const rootReducer = combineReducers({
     TournamentFilter,
     NotificationReducer,
     CommonReducer,
-    BatchAttendenceReducer
+    BatchAttendenceReducer,
+    DietPlanReducer,
+    PaymentReducer
 });
 
 export default rootReducer

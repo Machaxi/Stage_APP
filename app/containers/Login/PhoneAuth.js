@@ -447,7 +447,8 @@ class PhoneAuth extends BaseComponent {
         return (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Image
-                    style={{ width: 200, height: 60 }}
+                    resizeMode="contain"
+                    style={{ width: 270, height: 80 }}
                     source={require('../../images/dribble_logo.png')}
                 />
                 <TextInput

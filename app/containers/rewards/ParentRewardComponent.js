@@ -278,7 +278,7 @@ class ParentRewardComponent extends BaseComponent {
                             alignItems: 'center'
                         }}>
                             <Text style={[defaultStyle.regular_text_14, { width: '50%', color: "#707070" }]}>{moment.utc(obj.month, "MM").format("MMMM")}</Text>
-                            <Text style={[defaultStyle.regular_text_14, { width: '45%', color: "#707070" }]}>{total}</Text>
+                            <Text style={[defaultStyle.regular_text_14, { width: '45%', color: "#707070" }]}>{~~total}</Text>
 
                             {obj.expand ?
                                 <Image
@@ -313,12 +313,12 @@ class ParentRewardComponent extends BaseComponent {
 
                             <View style={{ marginRight: 50 }}>
                                 <Text style={[defaultStyle.bold_text_10, {}]}>Parents</Text>
-                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{family} pts</Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~family} pts</Text>
 
                             </View>
                             <View style={{ marginRight: 70 }}>
                                 <Text style={[defaultStyle.bold_text_10, {}]}>Coach</Text>
-                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{coach} pts</Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~coach} pts</Text>
 
                             </View>
 

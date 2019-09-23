@@ -87,7 +87,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         let str = ''
         for (let i = 0; i < tournament_types.length; i++) {
             let tournament_type = tournament_types[i].tournament_type
-            str = str + getFormattedTournamentLevel(tournament_type) + 's' + ", "
+            str = str + getFormattedTournamentLevel(tournament_type) + ", "
         }
 
         return str.substring(0, str.length - 2);
@@ -101,7 +101,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
     shareLink(url) {
         const shareOptions = {
             title: 'Share via',
-            message: 'I\'m using dribble diary app.',
+            message: 'I\'m using Machaxi app.',
             url: url,
             //social: Share.Social.WHATSAPP,
             //whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
@@ -190,6 +190,9 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                         <Text
                             onPress={() => {
                                 alert('under development')
+                                // this.props.navigation.navigate('EditPartner', {
+                                //     data: this.props.navigation.getParam('data')
+                                // })
                             }}
                             style={{
                                 paddingTop: 10, fontSize: 10,
@@ -489,7 +492,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                                             fontFamily: 'Quicksand-Regular'
                                         }}>{data.start_time != undefined ?
                                             Moment(data.start_time, "HH:mm:ss")
-                                                .format("hh:mm a") : "-"}</Text>
+                                                .format("hh:mm a") + " onwards" : "-"}</Text>
                                         <Text style={{
                                             paddingTop: 10, fontSize: 14,
                                             color: '#404040',

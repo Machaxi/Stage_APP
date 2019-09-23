@@ -13,26 +13,26 @@ import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDeta
 
 const userBatchModule = createStackNavigator({
 
-    UserHome: {
-        screen: mybatch,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: "My Batch",
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //         showBackAction={false}
-        //     />,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showHome={false} />,
-        //     headerTitleStyle: {
-        //         color: 'black'
-        //     },
-        //     // headerStyle: {
-        //     //     elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
-        //     //
-        //     // },
+    // mybatch: {
+    //     screen: mybatch,
+    //     // navigationOptions: ({ navigation }) => ({
+    //     //     title: "My Batch",
+    //     //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+    //     //         showBackAction={false}
+    //     //     />,
+    //     //     headerRight: <RightMenuToolbar navigationProps={navigation}
+    //     //         navigation={navigation} showHome={false} />,
+    //     //     headerTitleStyle: {
+    //     //         color: 'black'
+    //     //     },
+    //     //     // headerStyle: {
+    //     //     //     elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+    //     //     //
+    //     //     // },
 
 
-        // })
-    },
+    //     // })
+    // },
     MyBatch: {
         screen: mybatch,
 

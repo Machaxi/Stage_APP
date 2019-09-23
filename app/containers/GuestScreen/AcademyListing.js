@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator, Linking, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ import { BASE_URL } from '../../../App';
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData } from '../../components/auth';
 import Events from '../../router/events';
+import FastImage from 'react-native-fast-image'
 
 var filterData = ''
 
@@ -58,7 +59,7 @@ class AcademyListing extends BaseComponent {
     getAcademyList(query) {
 
         const job_vacancy = this.state.job_vacancy
-        this.props.getAllAcademy(query,this.state.job_vacancy).then(() => {
+        this.props.getAllAcademy(query, job_vacancy).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
@@ -488,11 +489,17 @@ class AcademyListing extends BaseComponent {
 
                 }}>
                 <View>
-                    <Image style={{ height: 130, width: "100%", borderRadius: 16, }}
+                    {/* <Image style={{ height: 130, width: "100%", borderRadius: 16, }}
                         source={{ uri: item.cover_pic }}
                     >
 
-                    </Image>
+                    </Image> */}
+
+                    <FastImage
+                        resizeMode={FastImage.resizeMode.contain}
+                        style={{ height: 130, width: "100%", borderRadius: 16, }}
+                        source={{ uri: item.cover_pic }}
+                    />
 
                     <Text style={{
                         paddingTop: 12, paddingLeft: 12, fontSize: 16,
@@ -556,7 +563,23 @@ class AcademyListing extends BaseComponent {
 
                             </View>
 
-                            <Text style={styles.rounded_button}> Call</Text>
+                            <TouchableOpacity
+                                style={styles.rounded_button}
+                                onPress={() => {
+                                    const phoneNumber = item.academy_contact
+                                    if (phoneNumber != undefined)
+                                        Linking.openURL(`tel:${phoneNumber}`)
+                                }}>
+                                <Text style={[
+                                    defaultStyle.bold_text_14,
+                                    {
+                                        textAlign: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: 14,
+                                        color: 'white'
+                                    }
+                                ]}> Call</Text>
+                            </TouchableOpacity>
 
                         </View> : null}
 

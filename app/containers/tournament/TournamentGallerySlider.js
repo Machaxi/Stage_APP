@@ -4,6 +4,7 @@ import BaseComponent, { } from '../BaseComponent'
 import { Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ToastExample from '../../native/ToastExample';
+import FastImage from 'react-native-fast-image'
 
 
 
@@ -70,11 +71,20 @@ export default class TournamentGallerySlider extends BaseComponent {
 
                 }}
             >
-                <Image
+                {/* <Image
                     style={{
                         width: "100%",
                         height: 150,
 
+                    }}
+                    source={{ uri: item.url }}
+                /> */}
+
+                <FastImage
+                    resizeMode={FastImage.resizeMode.contain}
+                    style={{
+                        width: "100%",
+                        height: 150,
                     }}
                     source={{ uri: item.url }}
                 />

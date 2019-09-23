@@ -242,7 +242,10 @@ export default class RegistrationSuccessful extends BaseComponent {
                                                 let obj = {
                                                     tournament_id: id,
                                                 }
-                                                Events.publish(GO_TO_HOME, obj);
+                                                //Events.publish(GO_TO_HOME, obj);
+                                                this.props.navigation.navigate('UpcomingTournamentDetail', {
+                                                    tournament_id: id
+                                                })
                                             }}
                                         >
                                             Finish Registration

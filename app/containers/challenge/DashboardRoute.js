@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName, getFormattedCategory, EVENT_REFRESH_RESULTS, SESSION_DATE_FORMAT } from '../BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, formattedName, getFormattedCategory, EVENT_REFRESH_RESULTS, SESSION_DATE_FORMAT, getFormattedBadge } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import {
   getChallengeDashboard, acceptChallenge,
@@ -136,7 +136,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
 
       let player_id = global.SELECTED_PLAYER_ID
-      this.props.dismissChallenge(value, challengeId,player_id).then(() => {
+      this.props.dismissChallenge(value, challengeId, player_id).then(() => {
         let data = this.props.data.data
         //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
@@ -159,7 +159,7 @@ class DashboardRoute extends BaseComponent {
     getData('header', (value) => {
       let player_id = global.SELECTED_PLAYER_ID
 
-      this.props.abortChallenge(value, challengeId,player_id).then(() => {
+      this.props.abortChallenge(value, challengeId, player_id).then(() => {
         let data = this.props.data.data
         //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
@@ -282,7 +282,7 @@ class DashboardRoute extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{data.badge == undefined ? '' : data.badge}</Text>
+                              <Text style={[defaultStyle.bebas_text_blue_10, styles.badgeValue]}>{data.badge == undefined ? '' : getFormattedBadge(data.badge)}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -319,7 +319,7 @@ class DashboardRoute extends BaseComponent {
                               <ImageBackground style={styles.badgeBackImage} source={require('../../images/single_shield.png')}>
                                 <View style={styles.badgeInner}>
                                   {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                                  <Text style={styles.badgeValue}>{this.state.selectedOpponentData.badge}</Text>
+                                  <Text style={styles.badgeValue}>{getFormattedBadge(this.state.selectedOpponentData.badge)}</Text>
                                   {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                                 </View>
                               </ImageBackground>
@@ -405,7 +405,7 @@ class DashboardRoute extends BaseComponent {
                       source={require('../../images/single_shield.png')}
                       style={styles.badgeBackImage} >
                       <View style={styles.badgeInner}>
-                        <Text style={styles.badgeValue}>{item.badge}</Text>
+                        <Text style={styles.badgeValue}>{getFormattedBadge(item.badge)}</Text>
                       </View>
                     </ImageBackground>
 
@@ -433,7 +433,7 @@ class DashboardRoute extends BaseComponent {
 
       <View style={styles.filterOuter}>
         <Text style={styles.challengeText}>Challenges</Text>
-        <Text style={styles.filterText}>Filter</Text>
+        {/* <Text style={styles.filterText}>Filter</Text> */}
       </View>
 
       {

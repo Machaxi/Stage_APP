@@ -7,6 +7,7 @@ import BaseComponent, {
     getFormattedBadge,
     bebas_text_blue_10, getFormattedCategory, getFormattedLevel, formattedName
 } from "../../containers/BaseComponent";
+import FastImage from 'react-native-fast-image'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -58,14 +59,23 @@ export default class PlayerHeader extends BaseComponent {
 
                     <View style={{ position: 'relative', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Image source={{ uri: profile_pic }}
+                            {/* <Image source={{ uri: profile_pic }}
                                 resizeMode="contain"
                                 style={{
                                     width: 201,
                                     height: 238, marginRight: 20, marginTop: 0, display: 'flex'
-                                }}>
+                                }}> 
+                                </Image>*/}
 
-                            </Image>
+                            <FastImage
+                                resizeMode={FastImage.resizeMode.contain}
+                                style={{
+                                    width: 201,
+                                    height: 238, marginRight: 20, marginTop: 0, display: 'flex'
+                                }}
+                                source={{ uri: profile_pic }}
+                            />
+
                             <View style={{ display: 'flex', flex: 1, marginBottom: 120 }}>
                                 <Text style={{
                                     width: 120,
@@ -214,7 +224,7 @@ export default class PlayerHeader extends BaseComponent {
                     </View>
                 </ImageBackground>
 
-            </View>
+            </View >
         )
 
     }

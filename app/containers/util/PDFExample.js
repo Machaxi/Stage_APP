@@ -7,7 +7,7 @@ export default class PDFExample extends BaseComponent {
 
 
     render() {
-        const uri = 'https://docs.google.com/gview?embedded=true&url=http://www.africau.edu/images/default/sample.pdf';
+        const uri = 'https://docs.google.com/gview?embedded=true&url=https://diet-plan.s3.ap-south-1.amazonaws.com/1568805384094_sample.pdf';
         //const uri = 'http://www.africau.edu/images/default/sample.pdf'
         return (
             <WebView

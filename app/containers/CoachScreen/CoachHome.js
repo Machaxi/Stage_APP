@@ -328,14 +328,14 @@ class CoachHome extends BaseComponent {
                     sessionArray.push(
                         <View
                             style={{
-                                marginTop: 6,
+                                //marginTop: 6,
                                 marginBottom: 16
                             }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={[defaultStyle.bold_text_14, {
+                                {/* <Text style={[defaultStyle.bold_text_14, {
                                     textDecorationLine: 'line-through'
                                 }]}
-                                >{routine_name}</Text>
+                                >{routine_name}</Text> */}
                                 <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                     <Text style={{
                                         fontFamily: 'Quicksand-Medium',
@@ -375,14 +375,14 @@ class CoachHome extends BaseComponent {
                     sessionArray.push(
 
                         <View style={{
-                            marginTop: 6,
+                            //marginTop: 6,
                             marginBottom: 16
                         }}>
 
-                            <Text style={[defaultStyle.bold_text_14, {
-                            }]}>{routine_name}</Text>
+                            {/* <Text style={[defaultStyle.bold_text_14, {
+                            }]}>{routine_name}</Text> */}
 
-                            <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+                            <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                                 <Text style={defaultStyle.regular_text_14}>
                                     {/* {moment.utc(session_date).local().format("ddd, DD MMM YYYY")} */}
                                     {getUtcDateFromTime(session_date, start_time)}
@@ -423,7 +423,7 @@ class CoachHome extends BaseComponent {
                             {/* {moment.utc(start_date + " " + start_time).local().format("hh:mm a")
                                 + " - " +
                                 moment.utc(start_date + " " + end_time).local().format("hh:mm a")} */}
-                                {start_time +" - "+end_time}
+                            {start_time +" onwards"}
                         </Text>
                     </View>
 
@@ -535,7 +535,7 @@ class CoachHome extends BaseComponent {
                                             flexDirection: 'row',
                                             justifyContent: 'space-between'
                                         }}>
-                                        <Text style={defaultStyle.bold_text_10}>Next Session:</Text>
+                                        <Text style={defaultStyle.bold_text_10}>Next Session : {operations.next_sessions[0].routine_name}</Text>
                                         <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
 
                                         {/* {operations.attendance.attendance != undefined ?

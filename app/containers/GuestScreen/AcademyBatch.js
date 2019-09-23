@@ -10,6 +10,7 @@ import { getAcademyBatchDetail } from '../../redux/reducers/AcademyReducer'
 import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNPickerSelect from 'react-native-picker-select';
+import moment from 'moment'
 
 const placeholderProf = {
   label: 'Select Proficiency',
@@ -102,7 +103,9 @@ class AcademyBatch extends BaseComponent {
             }
             {
               item.operations.weekday ?
-                <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>{item.operations.weekday.start_time}- {item.operations.weekday.end_time}</Text></View> : <View><Text>-</Text></View>
+                <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>
+                  {moment.utc(item.operations.weekday.start_time, 'hh:mm a').local().format("hh:mm a")} - {moment.utc(item.operations.weekday.end_time, 'hh:mm a').local().format("hh:mm a")}
+                </Text></View> : <View><Text>-</Text></View>
             }
 
           </View>
@@ -115,7 +118,11 @@ class AcademyBatch extends BaseComponent {
             }
             {
               item.operations.weekend ?
-                <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>{item.operations.weekend.start_time}- {item.operations.weekend.end_time}</Text></View> : <View><Text>-</Text></View>
+                <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>
+                  {/* {item.operations.weekend.start_time}- {item.operations.weekend.end_time} */}
+                  {moment.utc(item.operations.weekend.start_time, 'hh:mm a').local().format("hh:mm a")} - {moment.utc(item.operations.weekend.end_time, 'hh:mm a').local().format("hh:mm a")}
+
+                </Text></View> : <View><Text>-</Text></View>
             }
           </View>
 
@@ -186,15 +193,29 @@ class AcademyBatch extends BaseComponent {
 
         }
 
-        <TouchableOpacity
-          onPress={() => {
-            alert('Under development')
-          }}
-        >
-          <View style={styles.challengeBtnOuter}>
-            <Text style={defaultStyle.rounded_button}>Book Trial Session</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+
+          <TouchableOpacity
+            activeOpacity={.8}
+            onPress={() => {
+              this.props.navigation.navigate('BookTrial', {
+                data: item,
+                academyId: this.state.academyId
+              })
+              //alert('Under development')
+            }}
+          >
+            <View style={[styles.challengeBtnOuter, {
+              width: 150,
+            }]}>
+              <Text style={defaultStyle.rounded_button_150}>Book Trial Session</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
 
       </Card>

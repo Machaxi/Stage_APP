@@ -17,7 +17,7 @@ import TournamentTerms from '../containers/tournament/TournamentTerms'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
-
+import EditPartner from '../containers/tournament/EditPartner'
 
 const TournamentModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
@@ -253,7 +253,20 @@ const TournamentModule = createStackNavigator({
 
         })
     },
+    EditPartner: {
+        screen: EditPartner,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Partner",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+    },
 })
 
 export default TournamentModule;

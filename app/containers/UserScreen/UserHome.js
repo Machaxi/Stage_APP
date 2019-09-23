@@ -174,8 +174,8 @@ class UserHome extends BaseComponent {
             coach_feedback_data: null,
             academy_id: ''
         }
-        //StatusBar.setBackgroundColor("#262051")
-        //StatusBar.setBarStyle('light-content', true)
+        StatusBar.setBackgroundColor("#262051")
+        StatusBar.setBarStyle('light-content', true)
 
     }
     componentWillUnmount() {
@@ -303,7 +303,12 @@ class UserHome extends BaseComponent {
                     })
                 }
 
+
+
                 if (user1.success == true) {
+
+                    global.SELECTED_PLAYER_NAME = user1.data['player_profile'].name
+
                     this.setState({
                         player_profile: user1.data['player_profile'],
                         //strenthList: user1.data.player_profile['stats'],
@@ -436,14 +441,14 @@ class UserHome extends BaseComponent {
                         sessionArray.push(
                             <View
                                 style={{
-                                    marginTop: 6,
+                                    //marginTop: 6,
                                     marginBottom: 16
                                 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={[defaultStyle.bold_text_14, {
+                                    {/* <Text style={[defaultStyle.bold_text_14, {
                                         textDecorationLine: 'line-through'
                                     }]}
-                                    >{routine_name}</Text>
+                                    >{routine_name}</Text> */}
                                     <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
                                         <Text style={{
                                             fontFamily: 'Quicksand-Medium',
@@ -482,14 +487,14 @@ class UserHome extends BaseComponent {
                     } else {
                         sessionArray.push(
                             <View style={{
-                                marginTop: 6,
+                                //marginTop: 6,
                                 marginBottom: 16
                             }}>
 
-                                <Text style={[defaultStyle.bold_text_14, {
-                                }]}>{routine_name}</Text>
+                                {/* <Text style={[defaultStyle.bold_text_14, {
+                                }]}>{routine_name}</Text> */}
 
-                                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
                                         {getUtcDateFromTime(session_date, start_time)}
@@ -529,12 +534,12 @@ class UserHome extends BaseComponent {
                         player_profile={this.state.player_profile}
                     />
 
-                    <View style={[styles.confirmBtnOuter, {marginTop: 20}]}>
+                    {/* <View style={[styles.confirmBtnOuter, {marginTop: 20}]}>
                         <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
                             //global.opponentPlayerDetails = this.state.player_profile;
                             this.props.navigation.navigate('ChooseTimeDate')
                         }}>Book Court</Text>
-                    </View>
+                    </View> */}
 
                     {sessionArray.length != 0 ?
                         <CustomeCard >
@@ -560,7 +565,7 @@ class UserHome extends BaseComponent {
                                         paddingBottom: 12
                                     }}
                                 >
-                                    <Text style={defaultStyle.bold_text_10}>Next Session</Text>
+                                    <Text style={defaultStyle.bold_text_10}>Next Session : {operations.next_sessions[0].routine_name}</Text>
                                     <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
                                 </View>
                                 <View style={{ marginLeft: 12, marginRight: 12 }}>

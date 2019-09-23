@@ -20,11 +20,13 @@ class AddPartner extends BaseComponent {
             players: [],
             query: '',
             item_id:'',
-            tournament_id:''
+            tournament_id:'',
+            user_id:''
         }
         this.state.item_id = this.props.navigation.getParam('id','')
         this.state.tournament_id = this.props.navigation.getParam('tournament_id','')
-        
+        this.state.user_id = this.props.navigation.getParam('user_id','')
+
         this.refreshEvent = Events.subscribe('AddPartner', (args) => {
             Events.publish(EVENT_SELECT_PLAYER_TOURNAMENT,
                args);
@@ -43,15 +45,27 @@ class AddPartner extends BaseComponent {
 
             this.props.getPartnerList(value,tournament_id,page,size).then(() => {
                 let data = this.props.data.data
-                console.log(' getTournamentResultListing ' + JSON.stringify(data));
+                //console.log(' getPartnerList ' + JSON.stringify(data));
 
                 let success = data.success
                 if (success) {
 
-                    console.log(' getTournamentResultListing ' + JSON.stringify(data.data.tournaments));
+                    console.log(' getPartnerList ' + JSON.stringify(data.data.tournaments));
+                    const array = data.data.players
+                    let players = []
+                    const user_id = this.state.user_id
+
+                    for(let i =0;i<array.length;i++){
+
+                        let obj = array[i]
+                        //console.log('PLayerList=> '+user_id+" == "+obj.user_id)
+                        if(user_id==null || user_id != obj.user_id){
+                            players.push(obj)   
+                        }
+                    }
 
                     this.setState({
-                        players: data.data.players
+                        players: players
                     })
                 }
 
@@ -143,10 +157,13 @@ class AddPartner extends BaseComponent {
                         marginBottom: 8,
                         borderRadius: 12
                     }}>
-                    <Card style={{ borderRadius: 16, elevation: 1 }}>
+                    <Card style={{ 
+                        borderRadius: 16, 
+                        elevation: 1 }}>
 
                         <TextInput style={{
                             marginLeft: 8,
+                            height: 45,
                             backgroundColor: 'white',
                             borderRadius: 16,
                             fontFamily: 'Quicksand-Regular'

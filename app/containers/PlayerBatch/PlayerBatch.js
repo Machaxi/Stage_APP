@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
@@ -80,6 +80,8 @@ class PlayerBatch extends BaseComponent {
             this.state.click_batch_id = global.click_batch_id
             global.click_batch_id = null
         }
+
+        
     }
 
     componentDidMount() {

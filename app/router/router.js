@@ -10,27 +10,27 @@ import {
 } from "react-navigation";
 // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
- import Icon from 'react-native-vector-icons/FontAwesome';
- import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import LinearGradient from 'react-native-linear-gradient';
 
 import welcome from '../containers/welcome/welcome'
- import coachhome from '../containers/CoachScreen/CoachHome'
- import guesthome from '../containers/GuestScreen/GuestHome'
- import guestdetails from '../containers/GuestScreen/GuestDetails'
- import parenthome from '../containers/ParentsScreen/ParentHome'
+import coachhome from '../containers/CoachScreen/CoachHome'
+import guesthome from '../containers/GuestScreen/GuestHome'
+import guestdetails from '../containers/GuestScreen/GuestDetails'
+import parenthome from '../containers/ParentsScreen/ParentHome'
 import AcademyListing from '../containers/GuestScreen/AcademyListing'
- import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
- import CoachListing from '../containers/GuestScreen/CoachListing'
- import PlayersListing from '../containers/GuestScreen/PlayersListing'
- import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
- import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
- import CustomHeader from '../components/custom/CustomHeader'
- import spalsh from '../containers/welcome/SplashScreen'
- import IntroScreen from '../containers/welcome/IntroScreen'
+import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
+import CoachListing from '../containers/GuestScreen/CoachListing'
+import PlayersListing from '../containers/GuestScreen/PlayersListing'
+import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
+import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
+import CustomHeader from '../components/custom/CustomHeader'
+import spalsh from '../containers/welcome/SplashScreen'
+import IntroScreen from '../containers/welcome/IntroScreen'
 
- import phoneauth from '../containers/Login/PhoneAuth'
- import CoachMenuDrawer from './CoachMenuDrawer'
- import EditProfile from '../containers/profile/EditProfile'
+import phoneauth from '../containers/Login/PhoneAuth'
+import CoachMenuDrawer from './CoachMenuDrawer'
+import EditProfile from '../containers/profile/EditProfile'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import CurrentBooking from '../containers/court_booking/CurrentBooking';
@@ -57,12 +57,12 @@ import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListin
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
 import TabBarHighlightLabel from './TabBarHighlightLabel'
 import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
- import Registration from "../containers/tournament/Registration";
+import Registration from "../containers/tournament/Registration";
 import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
- import MyCalendar from "../containers/PlayerBatch/MyCalendar"
+import MyCalendar from "../containers/PlayerBatch/MyCalendar"
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
 import TournamentFixture from "../containers/tournament/TournamentFixture";
@@ -74,6 +74,9 @@ import TournamentGallerySlider from '../containers/tournament/TournamentGalleryS
 import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
 import WebViewScreen from '../containers/util/WebViewScreen'
+import DietPlan from '../containers/ParentsScreen/DietPlan'
+import EmptyScreen from '../containers/util/EmptyScreen'
+import BookTrial from '../containers/GuestScreen/BookTrial'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -303,42 +306,23 @@ const GuestHomeModule = createStackNavigator({
         })
 
     },
-    TournamentGallerySlider: {
-        screen: TournamentGallerySlider,
+    BookTrial: {
+        screen: BookTrial,
         navigationOptions: ({ navigation }) => ({
-            title: 'Gallery',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+            title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
                 showDrawer={false}
-                showBackAction={true}
-            />,
+                navigationProps={navigation} showBackAction={true} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
-            headerTintColor: '#000',
-        }),
+        })
+
     },
-    TournamentGallerySliderZoom: {
-        screen: TournamentGallerySliderZoom,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Gallery',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    }
 })
 
 
@@ -829,6 +813,23 @@ const coachHomeModule = createStackNavigator({
             },
 
         })
+    },
+    BookTrial: {
+        screen: BookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
     },
 
 }, {
@@ -1349,6 +1350,26 @@ const parentHomeModule = createStackNavigator({
 
     },
 
+    DietPlan: {
+        screen: DietPlan,
+    },
+    BookTrial: {
+        screen: BookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
 }
 );
 
@@ -1527,6 +1548,14 @@ const TournamentRegistration = createStackNavigator({
     },
 })
 
+const EmptyStack = createStackNavigator({
+
+    EmptyScreen: {
+        screen: EmptyScreen
+    },
+
+})
+
 const BaseNavigator = createSwitchNavigator({
     // Main: {
     //     screen: InitialNavigator
@@ -1564,9 +1593,10 @@ const BaseNavigator = createSwitchNavigator({
     // }
     RegistrationSteps: {
         screen: TournamentRegistration
+    },
+    EmptyScreen: {
+        screen: EmptyStack
     }
-
-
 });
 
 

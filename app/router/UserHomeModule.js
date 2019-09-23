@@ -34,6 +34,7 @@ import ProgressExample from '../containers/util/ProgressExample'
 import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
 import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
 import TestExample from '../containers/welcome/TestExample'
+import BookTrial from '../containers/GuestScreen/BookTrial'
 
 const userHomeModule = createStackNavigator({
 
@@ -410,6 +411,24 @@ const userHomeModule = createStackNavigator({
         screen: TestExample,
         navigationOptions: ({ navigation }) => ({
             title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    
+    BookTrial: {
+        screen: BookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Book Trial",
             headerLeft: <NavigationDrawerStructure
                 showDrawer={false}
                 navigationProps={navigation} showBackAction={true} />,
