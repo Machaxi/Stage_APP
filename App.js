@@ -296,6 +296,9 @@ export default class App extends BaseComponent {
                                         StatusBar.setBarStyle('dark-content', true)
                                     }
                                 }
+                            }else{
+                                StatusBar.setBarStyle('dark-content', true)
+  
                             }
                         }}
                     />

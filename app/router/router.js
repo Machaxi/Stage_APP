@@ -77,6 +77,8 @@ import WebViewScreen from '../containers/util/WebViewScreen'
 import DietPlan from '../containers/ParentsScreen/DietPlan'
 import EmptyScreen from '../containers/util/EmptyScreen'
 import BookTrial from '../containers/GuestScreen/BookTrial'
+import PaymentDetail from '../containers/payment/PaymentDetail'
+import PaymentHistory from '../containers/payment/PaymentHistory'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -1357,6 +1359,40 @@ const parentHomeModule = createStackNavigator({
         screen: BookTrial,
         navigationOptions: ({ navigation }) => ({
             title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    PaymentDetail: {
+        screen: PaymentDetail,
+        navigationOptions: ({ navigation }) => ({
+            title: "Payment",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    PaymentHistory: {
+        screen: PaymentHistory,
+        navigationOptions: ({ navigation }) => ({
+            title: "Payment History",
             headerLeft: <NavigationDrawerStructure
                 showDrawer={false}
                 navigationProps={navigation} showBackAction={true} />,

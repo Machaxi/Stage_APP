@@ -32,10 +32,29 @@ export function paymentDues(header, player_id) {
         type: types.PAYMENT_DUES,
         payload: {
             request: {
-                url: `player/payment-dues?player_id=${player_id}`,
+                url: `payment/payment-dues?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header,
+                },
+            }
+        }
+    };
+
+}
+
+export function getPlayerSWitcher(header) {
+    console.log("getPlayerSWitcher",header)
+   
+    return {
+        type: types.PAYMENT_DUES,
+        payload: {
+            request: {
+                url: `player/switcher`,
+                method: 'GET',
+               // data: postdata,
+                headers: {
+                    'x-authorization': header
                 },
             }
         }

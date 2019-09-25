@@ -83,7 +83,7 @@ export default class EditPartner extends BaseComponent {
                 }
                 
                 let tempCat = {cat:cat,type:type}
-                category[j] = 
+                category[j] = [...category[j],tempCat]
                 playerTemp[i].category = category[j] 
             }
         }
