@@ -135,7 +135,7 @@ class RegistrationSteps extends BaseComponent {
             registeredTournament: null,
             reg_player_list: [],
             dribble_logo: '',
-            tournament_id:''
+            tournament_id: ''
         }
 
 
@@ -420,38 +420,38 @@ class RegistrationSteps extends BaseComponent {
 
         getData('header', (value) => {
             console.log("header", value);
-            this.props.getPlayerSWitcher(value,tournament_id).then(() => {
+            this.props.getPlayerSWitcher(value, tournament_id).then(() => {
 
                 this.progress(false)
 
                 let user = JSON.stringify(this.props.data.data);
                 console.log(' getPlayerSWitcher payload1 ' + user);
                 let user1 = JSON.parse(user)
-                if(user1.success){
+                if (user1.success) {
                     const players = user1.data.players
-                    console.log('players=>',JSON.stringify(players.length))
-                    if(players.length == 0){
+                    console.log('players=>', JSON.stringify(players.length))
+                    if (players.length == 0) {
                         alert('No new player found to register in tournament.')
-                    }else{
+                    } else {
                         this.setState({
                             players: players
-                                 })
-                                 const uniqueArray = players
-                                     let new_array = []
-                    for (let i = 0; i < uniqueArray.length; i++) {
-                        let row = uniqueArray[i];
-                        let obj = {
-                            label: row.name,
-                            value: row.id,
+                        })
+                        const uniqueArray = players
+                        let new_array = []
+                        for (let i = 0; i < uniqueArray.length; i++) {
+                            let row = uniqueArray[i];
+                            let obj = {
+                                label: row.name,
+                                value: row.id,
+                            }
+                            new_array[i] = obj
                         }
-                        new_array[i] = obj
-                    }
-                    this.setState({
-                        new_array: new_array
-                    })
+                        this.setState({
+                            new_array: new_array
+                        })
                     }
                 }
-                
+
 
                 // let uniqueArray = []
                 // if (user1.success == true) {
@@ -560,8 +560,16 @@ class RegistrationSteps extends BaseComponent {
 
     showStepOne() {
 
-        let is_guest = this.state.user_type == GUEST || this.state.user_type == COACH 
-        || this.state.user_type == PLAYER
+        let is_edit_mode = this.state.is_edit_mode
+        let is_guest = false
+        if (is_edit_mode) {
+            is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
+
+        } else {
+            is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
+                || this.state.user_type == PLAYER
+        }
+
         //if there is GUEST then in that case we are not showing picker selection
         let is_player_selected = this.state.is_player_selected
         let selected_player = this.state.selected_player
@@ -570,7 +578,6 @@ class RegistrationSteps extends BaseComponent {
         if (selected_player != null) {
             profile_pic = selected_player.profile_pic
         }
-        let is_edit_mode = this.state.is_edit_mode
         //alert('Profile=>'+JSON.stringify(selected_player))
 
         return (
@@ -1011,7 +1018,7 @@ class RegistrationSteps extends BaseComponent {
                                                 this.props.navigation.navigate('AddPartner', {
                                                     id: item.id,
                                                     tournament_id: this.state.data['id'],
-                                                    user_id:user_id
+                                                    user_id: user_id
                                                 })
                                             }}
                                             style={{
@@ -1406,7 +1413,7 @@ class RegistrationSteps extends BaseComponent {
             const logo = this.state.dribble_logo
             const desc = 'Payment for ' + this.state.data['name']
             const mobile_number = this.state.userData['user'].mobile_number
-            
+
             var options = {
                 description: desc,
                 image: logo,
@@ -1416,7 +1423,7 @@ class RegistrationSteps extends BaseComponent {
                 name: 'Machaxi',
                 prefill: {
                     email: email,
-                    contact:mobile_number,
+                    contact: mobile_number,
                     name: name
                 },
                 theme: { color: '#67BAF5' }
@@ -1642,14 +1649,14 @@ class RegistrationSteps extends BaseComponent {
                             show_alert: false
                         })
                         setTimeout(() => {
-                             let tournament_id = this.state.data['id']
+                            let tournament_id = this.state.data['id']
                             // let obj = {
                             //     tournament_id: tournament_id
                             // }
                             // Events.publish(GO_TO_HOME, obj);
 
-                            this.props.navigation.navigate('UpcomingTournamentDetail',{
-                                tournament_id:tournament_id
+                            this.props.navigation.navigate('UpcomingTournamentDetail', {
+                                tournament_id: tournament_id
                             })
                         }, 100)
 

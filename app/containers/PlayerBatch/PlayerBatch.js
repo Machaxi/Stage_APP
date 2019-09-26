@@ -14,6 +14,7 @@ import moment from 'moment'
 import { PLAYER, FAMILY } from '../../components/Constants';
 import Events from '../../router/events';
 import firebase from "react-native-firebase";
+import PTRView from 'react-native-pull-to-refresh';
 
 class PlayerBatch extends BaseComponent {
 
@@ -76,16 +77,21 @@ class PlayerBatch extends BaseComponent {
             click_batch_id: ''
 
         }
-        if(global.click_batch_id!=undefined){
+        if (global.click_batch_id != undefined) {
             this.state.click_batch_id = global.click_batch_id
             global.click_batch_id = null
         }
 
-        
+
     }
 
     componentDidMount() {
         firebase.analytics().logEvent("PlayerBatch", {})
+
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount() {
 
         var userData;
         getData('header', (value) => {
@@ -176,6 +182,16 @@ class PlayerBatch extends BaseComponent {
         // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
 
     };
+
+    _refresh = () => {
+        this.selfComponentDidMount()
+        setTimeout(() => {
+        }, 500)
+        return new Promise((resolve) => {
+            resolve()
+        });
+    }
+
     render() {
         if (this.props.data.loading && !this.state.player_profile) {
             return (
@@ -187,14 +203,17 @@ class PlayerBatch extends BaseComponent {
         if (this.state.batchList && this.state.batchList.length > 0) {
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                <TabView
-                    navigationState={this.state}
-                    renderTabBar={this._renderTabBar}
-                    renderScene={this.renderScene}
+                <PTRView onRefresh={this._refresh} >
 
-                    onIndexChange={index => this.setState({ index })}
-                    initialLayout={{ width: Dimensions.get('window').width }}
-                />
+                    <TabView
+                        navigationState={this.state}
+                        renderTabBar={this._renderTabBar}
+                        renderScene={this.renderScene}
+
+                        onIndexChange={index => this.setState({ index })}
+                        initialLayout={{ width: Dimensions.get('window').width }}
+                    />
+                </PTRView>
 
             </View>;
         } else {

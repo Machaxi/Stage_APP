@@ -44,15 +44,32 @@ export function paymentDues(header, player_id) {
 }
 
 export function getPlayerSWitcher(header) {
-    console.log("getPlayerSWitcher",header)
-   
+    console.log("getPlayerSWitcher", header)
+
     return {
         type: types.PAYMENT_DUES,
         payload: {
             request: {
                 url: `player/switcher`,
                 method: 'GET',
-               // data: postdata,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+
+}
+
+export function getPaymentHistory(header, month, year, academy_id, player_user_id) {
+    console.log("getPaymentHistory", header)
+
+    return {
+        type: types.PAYMENT_DUES,
+        payload: {
+            request: {
+                url: `payment/payment-history?month=${month}&year=${year}&academy_id=${academy_id}&player_user_id=${player_user_id}`,
+                method: 'GET',
                 headers: {
                     'x-authorization': header
                 },

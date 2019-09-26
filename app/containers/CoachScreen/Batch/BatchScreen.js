@@ -60,21 +60,23 @@ class BatchScreen extends BaseComponent {
                 </TouchableOpacity>
             ),
             headerRight: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('SwitchPlayer')
-                    }}
-                    activeOpacity={.8}
-                >
-                    <Text
-                        style={{
-                            marginRight: 12,
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 10,
-                            color: '#667DDB'
+                navigation.getParam('user_type') != ACADEMY ?
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('SwitchPlayer')
                         }}
-                    >Switch Academy</Text>
-                </TouchableOpacity>
+                        activeOpacity={.8}
+                    >
+                        <Text
+                            style={{
+                                marginRight: 12,
+                                fontFamily: 'Quicksand-Regular',
+                                fontSize: 10,
+                                color: '#667DDB'
+                            }}
+                        >Switch Player</Text>
+                    </TouchableOpacity>
+                    : <Text></Text>
 
             )
         };
@@ -100,6 +102,10 @@ class BatchScreen extends BaseComponent {
             });
             let userType = userData.user['user_type']
             console.log("userData.user", userType)
+
+            this.props.navigation.setParams({
+                user_type: userData.user['user_type']
+            })
 
             if (userType == COACH || userType == ACADEMY) {
                 this.getCoachBatchList(userData['academy_id'], userData['coach_id'])

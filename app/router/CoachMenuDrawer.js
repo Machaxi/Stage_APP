@@ -14,7 +14,7 @@ import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
 import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, formattedName } from '../containers/BaseComponent'
-import { getRelationsDetails } from "../redux/reducers/ProfileReducer";
+import { getRelationsDetails, logout } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
 import { Rating } from 'react-native-ratings';
@@ -390,14 +390,9 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
-					onSignOut()
-					clearData()
-					global.USER_TYPE = ''
-					global.SELECTED_PLAYER_ID = ''
 
+					this.callApi()
 
-					firebase.auth().signOut();
-					this.props.navigation.navigate('Login')
 				}
 				}>
 					<View style={styles.drawercell}>
@@ -411,6 +406,31 @@ class CoachMenuDrawer extends BaseComponent {
 
 			</View>)
 	}
+
+	callApi() {
+		getData('header', (value) => {
+
+			onSignOut()
+			clearData()
+			global.USER_TYPE = ''
+			global.SELECTED_PLAYER_ID = ''
+
+
+			firebase.auth().signOut();
+			this.props.navigation.navigate('Login')
+
+
+			this.props.logout(value).then(() => {
+				let data = this.props.data.profileData
+				console.log('logout payload ' + JSON.stringify(this.props.data.profileData));
+
+			}).catch((response) => {
+				console.log(response);
+			})
+		});
+	}
+
+
 
 	getCoachMenu() {
 
@@ -676,10 +696,11 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
-					onSignOut()
-					clearData()
-					firebase.auth().signOut();
-					this.props.navigation.navigate('Login')
+					// onSignOut()
+					// clearData()
+					// firebase.auth().signOut();
+					// this.props.navigation.navigate('Login')
+					this.callApi()
 				}
 				}>
 					<View style={styles.drawercell}>
@@ -1173,10 +1194,11 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
-					onSignOut()
-					clearData()
-					firebase.auth().signOut();
-					this.props.navigation.navigate('Login')
+					// onSignOut()
+					// clearData()
+					// firebase.auth().signOut();
+					// this.props.navigation.navigate('Login')
+					this.callApi()
 				}
 				}>
 
@@ -1296,7 +1318,7 @@ const mapStateToProps = state => {
 	};
 };
 const mapDispatchToProps = {
-	getRelationsDetails
+	getRelationsDetails, logout
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CoachMenuDrawer);
 

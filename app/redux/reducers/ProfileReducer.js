@@ -41,7 +41,7 @@ export function saveUserStartupProfile(header, postdata) {
                 headers: {
                     'x-authorization': header,
                     'Content-Type': 'multipart/form-data; charset=utf-8; ',
-                    
+
                 },
             }
         }
@@ -99,6 +99,24 @@ export function getRelationsDetails(header) {
         payload: {
             request: {
                 url: `user/relations`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+}
+
+export function logout(header) {
+    console.log("logout ", header)
+
+    return {
+        type: types.GET_PROFILE,
+        payload: {
+            request: {
+                url: `logout`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header,

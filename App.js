@@ -97,7 +97,7 @@ const firebase = RNFirebase.initializeApp(configurationOptions)
 
 branch.subscribe(({ error, params }) => {
     if (error) {
-        console.error('Error from Branch: ' + error)
+        //console.error('Error from Branch: ' + error)
         return
     }
 

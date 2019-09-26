@@ -231,7 +231,9 @@ class ParentRewardComponent extends BaseComponent {
                 }}>
                     <CustomeButtonB onPress={() => {
                         this.setState({
-                            selected_item: item
+                            selected_item: item,
+                            month: item.month,
+                            year: item.year
                         })
                         this.setModalVisible(true);
 
@@ -333,6 +335,9 @@ class ParentRewardComponent extends BaseComponent {
 
         }
 
+        const selected_item = this.state.selected_item
+        console.log('selected_item => ', JSON.stringify(selected_item))
+
         return (
             <ScrollView
                 style={{ backgroundColor: '#F7F7F7' }}>
@@ -428,8 +433,17 @@ class ParentRewardComponent extends BaseComponent {
                                         placeholder="Love for the game"
                                         keyboardType={'number-pad'}
                                         placeholderTextColor='#A3A5AE'
-                                        onChangeText={(text) => this.setState({ love_game: text })}
-                                        value={this.state.text}
+                                        onChangeText={(text) => {
+
+                                            if (text != '') {
+                                                const NON_DIGIT = '/[^\d]/g';
+                                                const intValue = parseInt(text.toString().replace(NON_DIGIT, ''));
+                                                this.setState({ love_game: intValue })
+                                            } else {
+                                                this.setState({ love_game: '' })
+                                            }
+                                        }}
+                                        value={this.state.love_game}
                                     ></TextInput>
 
                                 </View>
@@ -441,7 +455,11 @@ class ParentRewardComponent extends BaseComponent {
 
 
 
-                                <Text style={[defaultStyle.rounded_button, { marginTop: 16, width: "100%", marginLeft: 0, marginRight: 0 }]}
+                                <Text style={[defaultStyle.rounded_button, {
+                                    marginTop: 16, width: "100%",
+                                    alignItems: 'center',
+                                    marginLeft: 0, marginRight: 0
+                                }]}
                                     onPress={() => {
                                         this.saveData()
 
