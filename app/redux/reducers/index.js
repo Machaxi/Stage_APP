@@ -21,6 +21,7 @@ import CommonReducer from './CommonReducer'
 import BatchAttendenceReducer from './BatchAttendenceReducer'
 import DietPlanReducer from './DietPlanReducer'
 import PaymentReducer from './PaymentReducer'
+import CourtBookingReducer from './CourtBookingReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -44,7 +45,8 @@ const rootReducer = combineReducers({
     CommonReducer,
     BatchAttendenceReducer,
     DietPlanReducer,
-    PaymentReducer
+    PaymentReducer,
+    CourtBookingReducer
 });
 
 export default rootReducer

@@ -14,6 +14,7 @@ import PlayerPerformanceComponent from './PlayerPerformanceComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomProgress from '../../components/custom/CustomProgress';
 import Events from '../../router/events';
+import MonthYearDialog from '../../components/custom/MonthYearDialog'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -32,6 +33,7 @@ class ViewPlayerPerformance extends BaseComponent {
       performanceData: null,
       currentPerformanceData: null,
       spinner: false,
+      visible: false
     }
     this.inputRefs = {
       month: null
@@ -160,6 +162,8 @@ class ViewPlayerPerformance extends BaseComponent {
           textStyle={defaultStyle.spinnerTextStyle}
         />
 
+        {/* <MonthYearDialog visible={this.state.visible} /> */}
+
         <View style={styles.statsOuter}>
 
           <Image
@@ -189,57 +193,68 @@ class ViewPlayerPerformance extends BaseComponent {
             progress={this.state.performanceData.score / 100} 
             width={deviceWidth - 100} height={14} /> */}
 
-            <View style={{ width: '45.33%', marginTop: 16, paddingLeft: 2 }}>
+            <TouchableOpacity onPress={() => {
+              console.log('this.state.visible', this.state.visible)
+              this.setState({
+                visible: true
+              })
+            }}>
 
-              <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
-              <RNPickerSelect
-                placeholder={{}}
-                items={this.state.months}
-                onValueChange={(value) => {
-                  console.log(value)
-                  this.setState({
-                    month: value,
-                  }, () => {
-                    Events.publish(EVENT_CLEAR_GRAPH);
-                    this.getPerformanceData();
-                  });
-                }}
-                style={pickerSelectStyles}
-                value={this.state.month}
-                useNativeAndroidPickerStyle={false}
-                ref={(el) => {
-                  this.inputRefs.month = el;
-                }}
-              />
+              <View style={{ width: '45.33%', marginTop: 16, paddingLeft: 2 }} >
 
-              <View style={{ flexDirection: 'row' }}>
-
-                <View style={{
-                  width: 80,
-                  backgroundColor: '#A3A5AE',
-                  height: 1
-                }}></View>
-
-                <Image
-                  source={require('../../images/triangle.png')}
-                  resizeMode="contain"
-                  style={{
-                    width: 8,
-                    marginLeft: -10,
-                    height: 6,
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    marginTop: -38,
-                    alignItems: 'center',
-                    justifyContent: 'center'
+                <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
+                <RNPickerSelect
+                  placeholder={{}}
+                  items={this.state.months}
+                  onValueChange={(value) => {
+                    console.log(value)
+                    this.setState({
+                      month: value,
+                    }, () => {
+                      Events.publish(EVENT_CLEAR_GRAPH);
+                      this.getPerformanceData();
+                    });
+                  }}
+                  style={pickerSelectStyles}
+                  value={this.state.month}
+                  useNativeAndroidPickerStyle={false}
+                  ref={(el) => {
+                    this.inputRefs.month = el;
                   }}
                 />
 
+                <View style={{ flexDirection: 'row' }}>
+
+                  <View style={{
+                    width: 80,
+                    backgroundColor: '#A3A5AE',
+                    height: 1
+                  }}></View>
+
+                  <Image
+                    source={require('../../images/triangle.png')}
+                    resizeMode="contain"
+                    style={{
+                      width: 8,
+                      marginLeft: -10,
+                      height: 6,
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                      marginTop: -38,
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  />
+
+                </View>
+
+
+
               </View>
 
+            </TouchableOpacity>
 
 
-            </View>
 
           </View>
         </View>

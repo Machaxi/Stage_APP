@@ -147,4 +147,8 @@ export const GET_CHALLENGE = 'challenge/LOAD';
 export const DO_CHALLENGE_SUCCESS = 'challenge/LOAD_SUCCESS';
 export const DO_CHALLENGE_FAIL = 'challenge/LOAD_FAIL';
 
+export const GET_BOOKING = 'booking/LOAD';
+export const DO_BOOKING_SUCCESS = 'booking/LOAD_SUCCESS';
+export const DO_BOOKING_FAIL = 'booking/LOAD_FAIL';
+
 export const LOGOUT = 'user/LOGOUT';

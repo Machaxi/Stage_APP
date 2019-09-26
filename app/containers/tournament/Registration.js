@@ -87,7 +87,9 @@ class Registration extends BaseComponent {
             gender: [
                 { label: 'Male', value: 'MALE' },
                 { label: 'Female', value: 'FEMALE' }
-            ]
+            ],
+            fromPage: '',
+            courtPaymentData: null
         }
 
         //If user is already registered then we will not show him/her registration
@@ -117,8 +119,8 @@ class Registration extends BaseComponent {
         })
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-
-
+        this.state.fromPage = this.props.navigation.getParam('fromPage', '');
+        this.state.courtPaymentData = this.props.navigation.getParam('paymentData', '');
     }
 
     componentWillMount() {
@@ -130,9 +132,13 @@ class Registration extends BaseComponent {
     }
 
     handleBackButtonClick() {
-        this.setState({
-            show_alert: true
-        })
+        if (this.state.fromPage == 'Booking') {
+            this.props.navigation.goBack();
+        } else {
+            this.setState({
+                show_alert: true
+            })
+        }
         return true;
     }
 
@@ -214,12 +220,18 @@ class Registration extends BaseComponent {
                     var userData = user1['data'];
                     var userInfoData = userData['user'];
                     storeData(TEMP_USER_INFO, JSON.stringify(userData))
-                    setTimeout(() => {
-                        this.props.navigation.navigate('RegistrationSteps', {
-                            temp_user: true
-                        })
-                    }, 100)
+                    if (this.state.fromPage == 'Booking') {
+                        this.props.navigation.navigate('PaymentPage', {
+                            paymentData: this.state.courtPaymentData
+                        });
+                    } else {
+                        setTimeout(() => {
+                            this.props.navigation.navigate('RegistrationSteps', {
+                                temp_user: true
+                            })
+                        }, 100)
 
+                    }
                 }
 
             }).catch((response) => {

@@ -3,9 +3,9 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Modal } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getCourtBookingDetails, createBooking } from '../../redux/reducers/AcademyReducer';
+import { getCourtBookingDetails, createBooking } from '../../redux/reducers/CourtBookingReducer';
 import { connect } from 'react-redux';
-import { getData } from "../../components/auth";
+import { getData, isSignedIn } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import moment from 'moment';
 import Carousel from 'react-native-snap-carousel';
@@ -106,14 +106,22 @@ class ChooseTimeDate extends BaseComponent {
 
     componentDidMount() {
         console.log('hiiiiiiiiiiiiiiiiiiiiii');
-        getData('userInfo', (value) => {
-            userData = JSON.parse(value);
-            console.log('userData', userData);
-            this.state.academyId = userData['academy_id'];
-            this.state.academyName = userData['academy_name'];
-            this.getBookingDetails(this.state.today, this.state.selectedSportsId);
+        // getData('userInfo', (value) => {
+        //     userData = JSON.parse(value);
+        //     console.log('userData', userData);
+        //     this.state.academyId = userData['academy_id'];
+        //     console.log('this.state.academyId', this.state.academyId);
+        //     this.state.academyName = userData['academy_name'];
 
-        });
+
+        // });
+
+        console.log(this.props.navigation.getParam('id', ''))
+        console.log(this.props.navigation.getParam('name', ''))
+
+        this.state.academyId = this.props.navigation.getParam('id', '');
+        this.state.academyName = this.props.navigation.getParam('name', '');
+        this.getBookingDetails(this.state.today, this.state.selectedSportsId);
     }
 
     convertTimeStringToMins(time) {
@@ -177,6 +185,7 @@ class ChooseTimeDate extends BaseComponent {
         getData('header', (value) => {
             this.props.getCourtBookingDetails(value, this.state.academyId, this.state.selectedDate, sportsId).then(() => {
                 //this.progress(false)
+                console.log('this.props.data', this.props.data);
                 let data = this.props.data.res
 
                 console.log('data.data.challenges', data.data);
@@ -193,11 +202,11 @@ class ChooseTimeDate extends BaseComponent {
                         }
                     });
 
-                    //var bookingDetails = data.data.courts;
+                    var bookingDetails = data.data.courts;
 
 
 
-                    var bookingDetails = [
+                    /*var bookingDetails = [
                         {
                             "name": "court1",
                             "court_id": 9,
@@ -362,11 +371,11 @@ class ChooseTimeDate extends BaseComponent {
                                 }
                             ]
                         }
-                    ];
+                    ];*/
 
 
                     this.setState({
-                        sportsData: [data.data.sports[0]],
+                        sportsData: data.data.sports,
                         courtBookingDetails: bookingDetails,
                     }, () => {
                         console.log('sportsData', this.state.sportsData);
@@ -381,6 +390,8 @@ class ChooseTimeDate extends BaseComponent {
 
                     /* get all available courts from court bookings and court timings*/
                     courtAvailability1 = this.getAllAvailableCourts(courtTimings, courtBookings);
+
+                    console.log('courtAvailability111111111111111111111111111111', courtAvailability1);
 
                     /*get min and max time to plot slider, get data for showing time range */
                     minMaxTime = this.getMinAndMaxTimeofSlider(courtTimings);
@@ -461,9 +472,13 @@ class ChooseTimeDate extends BaseComponent {
 
             element[name].map((element1, index1) => {
                 var timing = {};
-                timing['startTime'] = this.convertTimeStringToMins(element1.open_time);
-                timing['endTime'] = this.convertTimeStringToMins(element1.close_time);
-
+                if (name == 'court_timings') {
+                    timing['startTime'] = this.convertTimeStringToMins(element1.open_time);
+                    timing['endTime'] = this.convertTimeStringToMins(element1.close_time);
+                } else if (name == 'court_bookings') {
+                    timing['startTime'] = this.convertTimeStringToMins(element1.start_time);
+                    timing['endTime'] = this.convertTimeStringToMins(element1.end_time);
+                }
                 item[name].push(timing);
             })
 
@@ -617,12 +632,14 @@ class ChooseTimeDate extends BaseComponent {
                     timing['endTime'] = element.endTime;
                     console.log('timimggggggggggg55', timing);
                     item['court_availability'].push(timing);
+                    console.log('item.court_availability', item['court_availability']);
                 }
 
-                if (i == 0) {
+                else if (i == 0) {
                     var timing = {};
                     timing['startTime'] = element.startTime;
                     timing['endTime'] = element.endTime;
+                    console.log('timimggggggggggg66', timing);
                     item['court_availability'].push(timing);
                 }
 
@@ -767,7 +784,7 @@ class ChooseTimeDate extends BaseComponent {
 
         while (time != this.state.maxTime) {
             var minutes, time;
-            if (index == 2) {
+            if (index == 4) {
                 time = this.state.minTime;
                 newtime = this.convertMinsToHrsMins(time);
             } else {
@@ -825,6 +842,9 @@ class ChooseTimeDate extends BaseComponent {
         if (msg == '') {
             this.state.courtAvailability.map((element, index) => {
                 element.court_availability.map((element1, index1) => {
+
+                    console.log('selectedTimeRange.startTime', selectedTimeRange['startTime'])
+                    console.log('selectedTimeRange.endTime', selectedTimeRange['endTime'])
 
                     if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
                         console.log(element1.startTime)
@@ -1166,25 +1186,42 @@ class ChooseTimeDate extends BaseComponent {
         this.setModalVisible(true);
     }
 
-    payAndCreateCourtBooking() {
-        // getData('header', (value) => {
-        //     this.props.createBooking(value, academy_id, player_id).then(() => {
-
-        //         console.log('this.props', this.props);
-        //         //let data = this.props.data.data
+    checkUserLoggedIn() {
 
 
-        //         let success = data.success
-        //         if (success) {
 
+        console.log('this.state.selectedCourtIds', this.state.selectedCourtIds);
+        console.log('date', this.state.selectedDate);
+        console.log('date', this.state.selectedTimeRange);
+        console.log('totalNoOfHours', this.state.totalNoOfHours);
+        console.log('totalNoOfHours', this.state.totalCost);
 
-        //             console.log('success;')
-        //         }
+        var paymentData = {
+            court_ids: this.state.selectedCourtIds,
+            academy_id: this.state.academyId,
+            fees: this.state.totalCost,
+            start_time: this.convertMinsToHrsMins_sql(this.state.selectedTimeRange.startTime),
+            end_time: this.convertMinsToHrsMins_sql(this.state.selectedTimeRange.endTime),
+        };
 
-        //     }).catch((response) => {
-        //         console.log(response);
-        //     })
-        // })
+        isSignedIn()
+            .then(res => {
+                console.log('isSignedIn => ', res);
+                let signedIn = res
+                if (signedIn) {
+                    this.setModalVisible(false);
+                    this.props.navigation.navigate('PaymentPage', {
+                        paymentData: paymentData
+                    });
+                } else {
+                    this.setModalVisible(false);
+                    this.props.navigation.navigate('Registration', {
+                        fromPage: 'Booking',
+                        paymentData: paymentData
+                    });
+                }
+            })
+            .catch(err => alert("An error occurred"));
     }
 
     setModalVisible(visible) {
@@ -1218,19 +1255,21 @@ class ChooseTimeDate extends BaseComponent {
                                     let pickerStyle;
                                     if (element.is_selected == true) {
                                         pickerStyle = styles.sportPickerSelected;
+                                        textStyle = [defaultStyle.bold_text_12, styles.whiteColor]
                                     }
                                     else if (element.is_selected == false) {
                                         pickerStyle = styles.sportPickerUnselected;
+                                        textStyle = defaultStyle.bold_text_12
                                     }
 
                                     return (
                                         <TouchableOpacity onPress={() => { this.toggleSportsSelector(element.id) }}>
                                             <View style={pickerStyle}>
-                                                <View style={{ marginBottom: 6, paddingVertical: 15 }}>
-                                                    <Image source={require('../../images/info-bulb.png')} style={{}} ></Image>
+                                                <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
+                                                    <Image source={require('../../images/soccer-ball.png')} style={{}} ></Image>
                                                 </View>
-                                                <View style={{ backgroundColor: 'white' }}>
-                                                    <Text style={[defaultStyle.bold_text_10]}>{element.name}</Text>
+                                                <View style={{ marginVertical: 17, maxWidth: 65, marginRight: 18 }}>
+                                                    <Text style={textStyle}>{element.name}</Text>
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
@@ -1306,7 +1345,7 @@ class ChooseTimeDate extends BaseComponent {
                                             </TouchableOpacity>
 
                                             <View style={{ marginHorizontal: 12, marginTop: -5 }}>
-                                                <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 20, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[0]}</Text>
+                                                <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[0]}</Text>
                                                 <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 12, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[1]}</Text>
                                             </View>
 
@@ -1314,7 +1353,7 @@ class ChooseTimeDate extends BaseComponent {
                                                 this.convertMinsToHrs(this.state.selectedDuration).split(' ')[2] &&
 
                                                 <View style={{ marginTop: -5 }}>
-                                                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 20, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[2]}</Text>
+                                                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[2]}</Text>
                                                     <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 12, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[3]}</Text>
                                                 </View>
 
@@ -1328,7 +1367,7 @@ class ChooseTimeDate extends BaseComponent {
 
                                     }
 
-                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 20, color: '#404040' }}>{this.convertMinsToHrsMins(this.state.selectedTimeRange.startTime)} - {this.convertMinsToHrsMins(this.state.selectedTimeRange.endTime)}</Text></View>
+                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>{this.convertMinsToHrsMins(this.state.selectedTimeRange.startTime)} - {this.convertMinsToHrsMins(this.state.selectedTimeRange.endTime)}</Text></View>
                                 </View>
                             </View>
 
@@ -1413,7 +1452,7 @@ class ChooseTimeDate extends BaseComponent {
 
                             {
                                 (this.state.availableCourts != null && this.state.availableCourts.length > 0) &&
-                                <View style={{ marginTop: 30, paddingLeft: 12, marginBottom: 10 }}>
+                                <View style={{ paddingLeft: 12, marginBottom: 10 }}>
                                     <Text style={styles.headingLabel}>Select Court</Text>
                                 </View>
                             }
@@ -1485,30 +1524,23 @@ class ChooseTimeDate extends BaseComponent {
                     }
                 </ScrollView>
                 <View style={{ padding: 12, borderRadius: 1, elevation: 1.5, shadowOpacity: 0.32, shadowOffset: { width: 0, height: 1, borderBottomRadius: 0 } }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                        <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#A3A5AE' }}>Your Booking</Text>
-                        {/* <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }} >Cost per hour Rs 600</Text> */}
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                        <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>Total Duration {this.convertMinsToHrs(this.state.totalNoOfHours)}</Text>
-                        <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#404040' }}>Total cost Rs {this.state.totalCost}</Text>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        marginTop: 25
-                    }}>
 
-                        {
-                            this.state.selectedCourtIds.length == 0 ?
-                                <Text style={[styles.rounded_button, { backgroundColor: '#DDDDDD' }]}>Book</Text> :
-
-                                <Text onPress={() => {
-                                    this.showPaymentModal();
-                                }} style={styles.rounded_button}>Book</Text>
-                        }
-
-
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                        <View style={{ display: 'flex' }}>
+                            <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 12, color: '#404040' }}>Total Cost</Text>
+                            <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#404040' }}>Rs {this.state.totalCost}</Text>
+                        </View>
+                        <View style={{ width: '48%' }}>
+                            {
+                                this.state.selectedCourtIds.length == 0 ?
+                                    <Text style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} onPress={() => {
+                                        this.showPaymentModal();
+                                    }}>Save</Text> :
+                                    <Text style={styles.rounded_button_half} onPress={() => {
+                                        this.showPaymentModal();
+                                    }}>Save</Text>
+                            }
+                        </View>
                     </View>
                 </View>
 
@@ -1689,7 +1721,9 @@ class ChooseTimeDate extends BaseComponent {
                                 </View>
 
                                 <View style={styles.confirmBtnOuter}>
-                                    <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.payAndCreateCourtBooking() }}>Pay</Text>
+                                    <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                                        this.checkUserLoggedIn();
+                                    }}>Pay</Text>
                                 </View>
 
                             </View>
@@ -1705,7 +1739,7 @@ class ChooseTimeDate extends BaseComponent {
 
 const mapStateToProps = state => {
     return {
-        data: state.AcademyReducer,
+        data: state.CourtBookingReducer,
     };
 };
 const mapDispatchToProps = {
@@ -1736,24 +1770,22 @@ const styles = {
         height: 75
     },
     sportPickerSelected: {
-        //height: 63,
-        width: 56,
-        backgroundColor: '#efefef',
-        borderRadius: 2,
-        justifyContent: 'center',
+        //width: 136,
+        flexDirection: 'row',
+        borderRadius: 12,
         alignItems: 'center',
-        marginRight: 12,
-        elevation: 1.5,
-        shadowOpacity: 0.32,
-        shadowOffset: { width: 0, height: 1 }
+        backgroundColor: '#667DDB',
+        marginRight: 15
     },
     sportPickerUnselected: {
-        //height: 63,
-        width: 56,
-        borderRadius: 2,
-        justifyContent: 'center',
+        //width: 136,
+        flexDirection: 'row',
+        borderRadius: 12,
         alignItems: 'center',
-        marginRight: 12,
+        elevation: 1.5,
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 },
+        marginRight: 15
     },
     datePickerLabel: {
         marginBottom: 10,
@@ -1769,6 +1801,19 @@ const styles = {
         flexGrow: 0,
         paddingLeft: 12,
         height: 75
+    },
+    rounded_button_half: {
+        //width: '70%',
+        padding: 10,
+        borderRadius: 20,
+        //borderWidth: 1,
+        marginLeft: 4,
+        //marginRight: 4,
+        borderColor: '#67BAF5',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Regular'
     },
     rounded_button: {
         width: '100%',
