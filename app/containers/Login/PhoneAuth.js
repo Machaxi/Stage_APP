@@ -458,7 +458,7 @@ class PhoneAuth extends BaseComponent {
                         fontFamily: 'Quicksand-Regular',
                         height: 40, borderBottomColor: '#BDBDBD',
                         borderBottomWidth: 1,
-                        marginTop: 100, marginBottom: 15
+                        marginTop: 50, marginBottom: 15
                     }}
                     //keyboardType={"phone-pad"}
                     onChangeText={value => this.setState({ phoneNumber: value })}
@@ -561,7 +561,8 @@ class PhoneAuth extends BaseComponent {
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
                 <Image
-                    style={{ width: 200, height: 60, }}
+                    resizeMode="contain"
+                    style={{ width: 270, height: 80 }}
                     source={require('../../images/dribble_logo.png')}
                 />
 

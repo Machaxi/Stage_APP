@@ -59,8 +59,8 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        this.props.navigation.navigate('ChooseTimeDate')
-        return
+        //  this.props.navigation.navigate('PaymentHistory')
+        //  return
         // var userData;
         // getData('userInfo', (value) => {
         //     console.log("value", value)

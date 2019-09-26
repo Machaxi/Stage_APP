@@ -496,7 +496,7 @@ class AcademyListing extends BaseComponent {
                     </Image> */}
 
                     <FastImage
-                        resizeMode={FastImage.resizeMode.contain}
+                        //resizeMode={FastImage.resizeMode.contain}
                         style={{ height: 130, width: "100%", borderRadius: 16, }}
                         source={{ uri: item.cover_pic }}
                     />

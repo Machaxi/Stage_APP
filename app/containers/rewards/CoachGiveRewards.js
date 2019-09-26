@@ -234,7 +234,7 @@ class CoachGiveRewards extends BaseComponent {
         // }
     }
 
-    _renderItem = ({ item }) => (
+    _renderItem = ({ item, index }) => (
 
         <View style={{
             padding: 16,
@@ -244,7 +244,7 @@ class CoachGiveRewards extends BaseComponent {
             <Text style={[defaultStyle.bold_text_14, { width: '60%' }]}>{item.name}</Text>
             <TextInput
                 placeholder={"Enter Score"}
-                keyboardType={'numeric'}
+                keyboardType={'number-pad'}
                 style={{
                     textAlign: 'center',
                     color: '#404040',
@@ -255,6 +255,17 @@ class CoachGiveRewards extends BaseComponent {
                 }}
                 onChangeText={(text) => {
                     item.input_score = text
+                    // const NON_DIGIT = '/[^\d]/g';
+                    // const intValue = parseInt(text.toString().replace(NON_DIGIT, ''));
+                    // item.input_score = intValue
+                    // //alert(intValue)
+                    // const playerList = this.state.playerList
+                    // playerList[index] = {...item}
+                    // console.log('oNChangeText => ',JSON.stringify(playerList))
+                    // this.setState({
+                    //     playerList: [...playerList]
+                    // })
+
                     this.subtractRewardPoints(text)
                 }}
 
@@ -419,6 +430,7 @@ class CoachGiveRewards extends BaseComponent {
 
                             <FlatList
                                 data={data}
+                                extraData={data}
                                 ListHeaderComponent={this._renderHeaderItem}
                                 renderItem={this._renderItem}
                             />

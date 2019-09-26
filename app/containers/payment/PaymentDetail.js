@@ -151,7 +151,7 @@ class PaymentDetail extends BaseComponent {
                     /> */}
 
                     <TouchableOpacity onPress={() =>
-                        this.props.navigation.navigate('tes')
+                        this.props.navigation.navigate('PaymentHistory')
                     }>
                         <Text style={{
                             color: '#667DDB',

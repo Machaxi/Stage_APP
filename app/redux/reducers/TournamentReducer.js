@@ -141,7 +141,7 @@ export function registerTournament(header, postdata, is_edit_mode) {
 
 }
 
-export function getPlayerSWitcher(header) {
+export function getPlayerSWitcher(header, tournament_id) {
     console.log("getPlayerSWitcher", header)
     // var header =
     //     getData('header', (value) => {
@@ -151,7 +151,7 @@ export function getPlayerSWitcher(header) {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `player/switcher`,
+                url: `tournament/player-switcher?tournament_id=${tournament_id}`,
                 method: 'GET',
                 // data: postdata,
                 headers: {

@@ -254,6 +254,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - OneSignal (< 3.0, >= 2.9.3)
   - RCTYouTube (from `../node_modules/react-native-youtube`)
   - React (from `../node_modules/react-native/`)
   - React-Core (from `../node_modules/react-native/React`)
@@ -470,6 +471,6 @@ SPEC CHECKSUMS:
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
   YoutubePlayer-in-WKWebView: f9c20a456c5d99e5f5248e4d2079a5d3b6950d13
 
-PODFILE CHECKSUM: 76b2fb8d5bfb7ca98b9332e074cb3aea15f4ba65
+PODFILE CHECKSUM: 340385c4326fa38db186aea856bcc204d77d8135
 
 COCOAPODS: 1.7.4

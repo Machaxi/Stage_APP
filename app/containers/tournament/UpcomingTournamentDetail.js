@@ -136,6 +136,14 @@ class UpcomingTournamentDetail extends BaseComponent {
         let tournament_types = this.tournament_types(data.tournament_types)
         let tournament_link = data.tournament_link
         let category_type = this.category_type(data.category_types)
+        let last_date = Moment(data.registration_last_date).format("X")
+        var today = new Date();
+        let today_time = Moment(today).format("X")
+        console.log('last_date => ', last_date)
+        console.log('last_date => 1', today_time)
+        let show_register = true;
+        if (today_time > last_date)
+            show_register = false
 
         return (
 
@@ -359,10 +367,10 @@ class UpcomingTournamentDetail extends BaseComponent {
                                                 width: "50%",
                                                 fontFamily: 'Quicksand-Regular'
                                             }}>
-                                            {/* {Moment(data.start_time, "HH:mm:ss").format("hh:mm a")} */}
-                                            {data.start_time != undefined ?
-                                            Moment(data.start_time, "HH:mm:ss")
-                                                .format("hh:mm a") +" onwards": "-"}
+                                                {/* {Moment(data.start_time, "HH:mm:ss").format("hh:mm a")} */}
+                                                {data.start_time != undefined ?
+                                                    Moment(data.start_time, "HH:mm:ss")
+                                                        .format("hh:mm a") + " onwards" : "-"}
                                             </Text>
                                             <Text style={{
                                                 paddingTop: 10, fontSize: 14,
@@ -455,9 +463,16 @@ class UpcomingTournamentDetail extends BaseComponent {
                         </TouchableOpacity>
 
                         <TouchableOpacity activeOpacity={.8}
-                            style={styles.rounded_button}
+                            style={[styles.rounded_button, {
+                                backgroundColor: show_register ? '#67BAF5' : 'gray',
+                            }]}
                             onPress={() => {
-                                this.register();
+
+                                if (show_register)
+                                    this.register();
+                                else {
+                                    alert('Registrations are closed.')
+                                }
 
                             }}>
                             <Text
@@ -494,15 +509,15 @@ const styles = StyleSheet.create({
     },
     rounded_button: {
         width: '48%',
-        height:44,
+        height: 44,
         padding: 10,
         borderRadius: 23,
         //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
-        borderColor: '#67BAF5',
+        //borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     rounded_button_white: {
         width: '48%',
@@ -517,7 +532,7 @@ const styles = StyleSheet.create({
         color: '#67BAF5',
         textAlign: 'center',
         fontFamily: 'Quicksand-Medium',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
 });
 

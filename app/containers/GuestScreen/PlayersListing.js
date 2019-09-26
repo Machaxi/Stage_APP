@@ -173,7 +173,7 @@ class PlayersListing extends BaseComponent {
                                 height: 80, width: 50,
                                 justifyContent: 'center', alignSelf: 'center'
                             }}
-                            source={{ uri: profile_pic }}
+                            source={{ uri: item.profile_pic }}
                         />
 
                         <Text

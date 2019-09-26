@@ -31,12 +31,14 @@ export default class MonthYearDialog extends BaseComponent {
         }
     }
 
-    _renderItem = ({ item }) => {
-        console.log('item->', item)
+    _renderItem = ({ item, index }) => {
+        //console.log('item->', item)
         return (
             <TouchableOpacity
                 onPress={() => {
-                    //this.props.touchOutside();
+                    const year = this.state.year
+                    const month = (index + 1)
+                    this.props.touchOutside(month,year);
                 }}
                 style={{
                     width: 70,

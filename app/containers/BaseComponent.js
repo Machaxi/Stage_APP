@@ -79,6 +79,11 @@ export default class BaseComponent extends React.Component {
         );
         NetInfo.isConnected.fetch().done((isConnected) => {
             connected = isConnected
+            if (!isConnected && global.NO_INTERNT_SHOWN == undefined) {
+                global.NO_INTERNT_SHOWN = true
+                alert('No Internet Connection.')
+            }
+
         });
 
         // StatusBar.setBackgroundColor("#ffffff")
@@ -348,6 +353,8 @@ export function formattedName(name) {
 
 export function getFormattedBadge(name) {
 
+    if (name == null || name == undefined)
+        return ''
     let result = name.replace("LEVEL", "L");
     result = name.replace("Level", "L");
     return result
@@ -531,6 +538,7 @@ export const defaultStyle = {
         width: 150,
         padding: 10,
         borderRadius: 20,
+        alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#67BAF5',
         color: 'white',
@@ -539,7 +547,8 @@ export const defaultStyle = {
     },
     rounded_button: {
         width: '48%',
-        height: 42,
+        //height: 42,
+        padding: 10,
         justifyContent: 'center',
         borderRadius: 23,
         //borderWidth: 1,
@@ -548,8 +557,9 @@ export const defaultStyle = {
         //borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
         color: 'white',
-        //textAlign: 'center',
+        textAlign: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
         fontFamily: 'Quicksand-Regular'
     },
     headerStyle: {

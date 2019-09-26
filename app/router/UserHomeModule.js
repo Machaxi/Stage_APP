@@ -35,6 +35,7 @@ import TournamentGallerySliderZoom from '../containers/tournament/TournamentGall
 import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
 import TestExample from '../containers/welcome/TestExample'
 import BookTrial from '../containers/GuestScreen/BookTrial'
+import PaymentHistory from '../containers/payment/PaymentHistory'
 
 const userHomeModule = createStackNavigator({
 
@@ -429,6 +430,23 @@ const userHomeModule = createStackNavigator({
         screen: BookTrial,
         navigationOptions: ({ navigation }) => ({
             title: "Book Trial",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+
+    },
+    PaymentHistory: {
+        screen: PaymentHistory,
+        navigationOptions: ({ navigation }) => ({
+            title: "Payment History",
             headerLeft: <NavigationDrawerStructure
                 showDrawer={false}
                 navigationProps={navigation} showBackAction={true} />,

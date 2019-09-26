@@ -189,10 +189,10 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                         ?
                         <Text
                             onPress={() => {
-                                alert('under development')
-                                // this.props.navigation.navigate('EditPartner', {
-                                //     data: this.props.navigation.getParam('data')
-                                // })
+                                //alert('under development')
+                                this.props.navigation.navigate('EditPartner', {
+                                    data: this.props.navigation.getParam('data')
+                                })
                             }}
                             style={{
                                 paddingTop: 10, fontSize: 10,

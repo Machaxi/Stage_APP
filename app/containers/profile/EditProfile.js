@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
+import { View, ImageBackground, Text, TextInput, Image, Alert, Platform } from 'react-native'
 import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -110,10 +110,15 @@ class EditProfile extends BaseComponent {
                 dict['name'] = txtname;
                 dict['dob'] = birthdate;
                 //formData.append('post', JSON.stringify(dict));
-                // console.log("header",value,batch_id);
 
                 let file = null
                 let path = this.state.path
+                console.log("path",path);
+                if(Platform.OS=='ios'){
+                    path = path.replace('file:///','/')
+                    console.log("path",path);    
+                }
+                
                 let fileName = this.state.fileName
                 let type = this.state.contentType
                 if (path != null) {
@@ -239,6 +244,9 @@ class EditProfile extends BaseComponent {
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
                 let path = response.path
+                if(Platform.OS=='ios'){
+                    path = response.uri
+                }
                 // let fileName = response.fileName
                 // let base64 = 'data:image/jpeg;base64,' + response.data
                 // let type = response.type
@@ -257,6 +265,7 @@ class EditProfile extends BaseComponent {
 
     resizeImage(path) {
 
+        
         ImageResizer.createResizedImage(path, 625, 400, 'PNG', 80)
             .then(({ uri }) => {
 

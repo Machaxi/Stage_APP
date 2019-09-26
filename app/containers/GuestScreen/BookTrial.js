@@ -83,7 +83,7 @@ class BookTrial extends BaseComponent {
                 alert_msg: alert_msg
             })
 
-            this.progress(true)
+            //this.progress(true)
             let subData = {}
 
 
@@ -117,7 +117,7 @@ class BookTrial extends BaseComponent {
 
         this.props.bookTrial(value, data).then(() => {
 
-            this.progress(false)
+            //this.progress(false)
 
             let res = JSON.stringify(this.props.data.res);
             console.log(' bookTrial 1' + JSON.stringify(res));
@@ -125,21 +125,39 @@ class BookTrial extends BaseComponent {
 
             if (user1.success == true) {
 
-                const success_message = user1.success_message
+                let success_message = user1.success_message
+                const array = user1.data.data
+                let classes = ''
+                for(let i =0;i<array.length;i++){
+
+                    let obj = array[i]
+                    classes = classes+ this.spaceCount(obj['weekday']) + "  "+obj['start_time']+ " - "+obj['end_time']+"\n"
+
+                }
+                //success_message = success_message+"\\n"
+                //success_message+classes
+                console.log('classes=> ',classes)
                 //alert(success_message)
-                Alert.alert(
-                    '',
-                    success_message,
-                    [
-                        {
-                            text: 'OK', onPress: () => {
-                                this.props.navigation.goBack()
-                            }
-                        },
-                    ],
-                    { cancelable: false },
-                );
+                setTimeout(()=>{
+                    Alert.alert(
+                        success_message,
+                        classes,
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.props.navigation.goBack()
+                                }
+                            },
+                        ],
+                        { cancelable: false },
+                    );
+
+                },100)
+                
             }
+
+            //this.progress(false)
+
 
         }).catch((response) => {
             this.progress(false)
@@ -147,16 +165,31 @@ class BookTrial extends BaseComponent {
         })
     }
 
+    spaceCount(weekday){
+        let count = 10 - weekday.length
+        let extraSpace = ''
+        for(let i=0;i<count;i++){
+            extraSpace = extraSpace + ' '
+        }
+        return weekday+extraSpace
+    }
+
     progress(status) {
-        this.setState({
-            spinner: status
-        })
+        setTimeout(()=>{
+            console.log('Progress=> ',status)
+            this.setState({
+                spinner: status
+            })
+            this.state.spinner= status
+        },100)
+        
     }
 
     render() {
 
         let alert_msg = this.state.alert_msg
         let progress = this.state.progress
+        console.log('SpinnerState => ',this.state.spinner)
 
         if (progress) {
             return (

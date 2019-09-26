@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Dribble</string>
+	<string>Machaxi</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,10 +27,10 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>branchexample</string>
-				<string>com.googleusercontent.apps.445376033321-or05oq26k0phge5ajne056gbflp3a3vn</string>
+				<string>com.googleusercontent.apps.445376033321-9fsofml577vf7g85nau2ckqol9i24ddh</string>
 			</array>
 		</dict>
+		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -52,7 +52,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>UIAppFonts</key>
@@ -76,6 +76,11 @@
 		<string>Quicksand-Regular.ttf</string>
 		<string>Quicksand-Medium.ttf</string>
 		<string>BebasNeue-Regular.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
