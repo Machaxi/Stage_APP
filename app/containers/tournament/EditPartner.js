@@ -64,10 +64,36 @@ export default class EditPartner extends BaseComponent {
         }
         console.log('pLayerList => ', JSON.stringify(playerTemp))
         console.log('bewPlayer => ', JSON.stringify(new_player))
+
+        const final_array = []
+        for (let i = 0; i < new_player.length; i++) {
+
+            let temp = new_player[i]
+            let playerObj = this.getPlayerById(temp.id, registrations)
+            console.log('playerObj=> ',JSON.stringify(playerObj))
+            const player = { player: playerObj, list: temp.list }
+            playerTemp[i] = { ...player }
+            final_array.push(player)
+        }
+
+        console.log('final_array => ', JSON.stringify(final_array))
+
+
         this.setState({
-            players: new_player
+            players: final_array
         })
-        this.state.players = new_player
+        this.state.players = final_array
+
+
+
+    }
+
+    getPlayerById(id, registrations) {
+        for (let i = 0; i < registrations.length; i++) {
+            if(registrations[i].player.id == id){
+                return registrations[i].player
+            }
+        }
     }
 
     getPlayerMatch(registrations, playerId, cat) {
@@ -161,7 +187,7 @@ export default class EditPartner extends BaseComponent {
             <View>
                 <Text style={[defaultStyle.heavy_bold_text_14, {
                     paddingTop: 10,
-                }]}>{item.id}
+                }]}>{item.player.name}
                 </Text>
                 <FlatList
                     data={item.list}
@@ -180,7 +206,7 @@ export default class EditPartner extends BaseComponent {
 
             <View>
                 <Text style={[defaultStyle.heavy_bold_text_14, {
-                    paddingTop: 6,
+                    paddingTop: 10,
                 }]}>{getFormattedCategory(item.tournament_category)}
                 </Text>
                 <FlatList
@@ -200,7 +226,8 @@ export default class EditPartner extends BaseComponent {
             <View style={{
                 flex: 1,
                 flexDirection: 'row',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginTop: 6
             }}>
                 <Text style={[defaultStyle.regular_text_14, {
                     width: "40%"
@@ -211,7 +238,7 @@ export default class EditPartner extends BaseComponent {
                 <Text
                     numberOfLines={1}
                     style={[defaultStyle.heavy_bold_text_14, {
-                        width: "30%"
+                        width: "40%"
                     }]}>
                     {item.partner_name}
                 </Text>
@@ -220,8 +247,8 @@ export default class EditPartner extends BaseComponent {
                 <TouchableOpacity>
 
                     <Text style={[defaultStyle.regular_text_12, {
-                        width: "30%",
-                        //marginLeft: 8,
+                        //width: "30%",
+                        marginLeft: 12,
                         color: '#67BAF5'
                     }]}>
                         Edit
