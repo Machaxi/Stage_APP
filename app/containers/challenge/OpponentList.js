@@ -151,7 +151,7 @@ class OpponentList extends BaseComponent {
                         })
                     }}></TextInput>
                 </Card>
-                <Text style={styles.filterLabel} >Filter</Text>
+                {/* <Text style={styles.filterLabel} >Filter</Text> */}
             </View>
         )
     }

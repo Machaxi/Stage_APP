@@ -33,7 +33,8 @@ class ViewPlayerPerformance extends BaseComponent {
       performanceData: null,
       currentPerformanceData: null,
       spinner: false,
-      visible: false
+      show_month_dialog: false,
+      year: ''
     }
     this.inputRefs = {
       month: null
@@ -53,6 +54,7 @@ class ViewPlayerPerformance extends BaseComponent {
 
     console.log('this.state.performanceData', this.state.performanceData);
     this.state.month = this.state.performanceData.month.toString();
+    this.state.year = this.state.performanceData.year.toString();
 
     this.getPerformanceData();
 
@@ -75,7 +77,7 @@ class ViewPlayerPerformance extends BaseComponent {
     getData('userInfo', (value) => {
       userData = JSON.parse(value);
       getData('header', (value) => {
-        this.props.getPlayerPerformance(value, this.state.performanceData.id, this.state.month, this.state.performanceData.year, this.state.performanceData.batchId, userData['player_id'], this.state.routes.length != 0 ? this.state.routes[this.state.index].key : null).then(() => {
+        this.props.getPlayerPerformance(value, this.state.performanceData.id, this.state.month, this.state.year, this.state.performanceData.batchId, userData['player_id'], this.state.routes.length != 0 ? this.state.routes[this.state.index].key : null).then(() => {
           this.progress(false);
           console.log('this.props.data===========', this.props.data);
           let data = this.props.data.performencedata
@@ -151,7 +153,11 @@ class ViewPlayerPerformance extends BaseComponent {
       )
     }
 
-    const statId = this.state.performanceData.id
+    const statId = this.state.performanceData.id;
+    if (this.state.month != '' && this.state.performanceData.year != '') {
+      formatted_date = moment(this.state.month + "/" + this.state.performanceData.year, 'MM-YYYY').format("MMM'YY")
+      //alert(formatted_date)
+    }
 
     return (
 
@@ -163,6 +169,46 @@ class ViewPlayerPerformance extends BaseComponent {
         />
 
         {/* <MonthYearDialog visible={this.state.visible} /> */}
+
+        {/* <RNPickerSelect
+                  placeholder={{}}
+                  items={this.state.months}
+                  onValueChange={(value) => {
+                    console.log(value)
+                    this.setState({
+                      month: value,
+                    }, () => {
+                      Events.publish(EVENT_CLEAR_GRAPH);
+                      this.getPerformanceData();
+                    });
+                  }}
+                  style={pickerSelectStyles}
+                  value={this.state.month}
+                  useNativeAndroidPickerStyle={false}
+                  ref={(el) => {
+                    this.inputRefs.month = el;
+                  }}
+                />
+ */}
+
+
+        <MonthYearDialog
+          touchOutside={(month, year) => {
+            if (month != undefined && year != undefined) {
+              this.setState({
+                month: month,
+                year: year
+              }, () => {
+                Events.publish(EVENT_CLEAR_GRAPH);
+                this.getPerformanceData();
+              });
+            }
+            this.setState({
+              show_month_dialog: false
+            })
+          }}
+          visible={this.state.show_month_dialog}
+        />
 
         <View style={styles.statsOuter}>
 
@@ -193,36 +239,16 @@ class ViewPlayerPerformance extends BaseComponent {
             progress={this.state.performanceData.score / 100} 
             width={deviceWidth - 100} height={14} /> */}
 
-            <TouchableOpacity onPress={() => {
+            {/* <TouchableOpacity onPress={() => {
               console.log('this.state.visible', this.state.visible)
               this.setState({
-                visible: true
+                show_month_dialog: true
               })
             }}>
 
               <View style={{ width: '45.33%', marginTop: 16, paddingLeft: 2 }} >
 
                 <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
-                <RNPickerSelect
-                  placeholder={{}}
-                  items={this.state.months}
-                  onValueChange={(value) => {
-                    console.log(value)
-                    this.setState({
-                      month: value,
-                    }, () => {
-                      Events.publish(EVENT_CLEAR_GRAPH);
-                      this.getPerformanceData();
-                    });
-                  }}
-                  style={pickerSelectStyles}
-                  value={this.state.month}
-                  useNativeAndroidPickerStyle={false}
-                  ref={(el) => {
-                    this.inputRefs.month = el;
-                  }}
-                />
-
                 <View style={{ flexDirection: 'row' }}>
 
                   <View style={{
@@ -252,7 +278,61 @@ class ViewPlayerPerformance extends BaseComponent {
 
               </View>
 
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+
+            <View>
+
+              <Text style={{
+                fontSize: 10,
+                color: '#A3A5AE',
+                paddingLeft: 2,
+                marginTop: 16,
+                fontFamily: 'Quicksand-Medium'
+              }}>
+                Showing for
+            </Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    show_month_dialog: true
+                  })
+                }}
+              >
+
+
+                <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 8,
+                  width: 90,
+                  justifyContent: 'space-between'
+                }}>
+
+                  <Text style={{
+                    fontSize: 14,
+                    color: '#404040',
+                    paddingLeft: 2,
+                    fontFamily: 'Quicksand-Medium'
+                  }}>
+                    {formatted_date}
+                  </Text>
+
+                  <Image
+                    style={{ width: 8, height: 5 }}
+                    source={require('../../images/ic_down_arrow.png')} />
+                </View>
+                <View
+                  style={{
+                    width: 90,
+                    marginTop: 4,
+                    backgroundColor: '#A3A5AE',
+                    height: 1
+                  }}
+                ></View>
+              </TouchableOpacity>
+
+            </View>
 
 
 
