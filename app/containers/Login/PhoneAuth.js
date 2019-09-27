@@ -648,8 +648,22 @@ class PhoneAuth extends BaseComponent {
                 </TouchableOpacity>
 
 
-                <Text style={styles.rounded_button}
-                    onPress={this.confirmCode}>Confirm</Text>
+                <TouchableOpacity activeOpacity={.8}
+                    style={[defaultStyle.rounded_button,
+                    {
+                        marginTop: 16,
+                        width: 150
+                    }]}
+                    onPress={this.confirmCode}>
+                    <Text
+                        style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            fontFamily: 'Quicksand-Regular'
+                        }}>Confirm</Text>
+                </TouchableOpacity>
+                {/* <Text style={styles.rounded_button}
+                    onPress={this.confirmCode}>Confirm</Text> */}
             </View>
 
 

@@ -185,8 +185,7 @@ export default class App extends BaseComponent {
             })
         });
 
-
-        OneSignal.init("0afba88e-fe31-4da9-9540-412faf6b856b");
+        OneSignal.init("0afba88e-fe31-4da9-9540-412faf6b856b",{kOSSettingsKeyAutoPrompt : true});
         //OneSignal.setLogLevel(0, 6)
 
         OneSignal.addEventListener('received', this.onReceived);

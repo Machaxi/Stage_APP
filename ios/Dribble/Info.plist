@@ -27,10 +27,25 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>machaxi</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>dribble.test-app.link</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
 				<string>com.googleusercontent.apps.445376033321-9fsofml577vf7g85nau2ckqol9i24ddh</string>
 			</array>
 		</dict>
-		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -95,8 +110,13 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>branch_app_domain</key>
-	<string>dribble.app.link</string>
+	<string>dribble.test-app.link</string>
 	<key>branch_key</key>
-	<string>key_live_bfRvSAUUhF3BloaSXj8rNlcovrhMoMv0</string>
+	<dict>
+		<key>live</key>
+		<string>key_live_bfRvSAUUhF3BloaSXj8rNlcovrhMoMv0</string>
+		<key>test</key>
+		<string>key_test_biKzNtQRgB5ugoeSXDofHfegFwbSgKPd</string>
+	</dict>
 </dict>
 </plist>
