@@ -311,8 +311,12 @@ class TournamentFixture extends BaseComponent {
                                 temp_player2['player_description'] = obj.player1_match.player2_description
                                 console.log('temp_player_description=>', JSON.stringify(temp_player1))
 
-                                temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
-                                temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
+                                const temp_obj = fixture_data[last_key]
+                                //console.log('TempObj => ', JSON.stringify(temp_obj))
+                                //temp_player1.tournament_match_scores = temp_obj.player1_match.tournament_match_scores == undefined ? [] : temp_obj.player1_match.tournament_match_scores
+                                //temp_player2.tournament_match_scores = temp_obj.player2_match.tournament_match_scores == undefined ? [] : temp_obj.player2_match.tournament_match_scores
+                                temp_player1.tournament_match_scores = this.getMatchScoreById(obj.player1_match.id, temp_obj)
+                                temp_player2.tournament_match_scores = this.getMatchScoreById(obj.player1_match.id, temp_obj)
 
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
@@ -333,9 +337,13 @@ class TournamentFixture extends BaseComponent {
                                 temp_player1['player_description'] = obj.player2_match.player1_description
                                 temp_player2['player_description'] = obj.player2_match.player2_description
 
-                                temp_player1.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
-                                temp_player2.tournament_match_scores = obj.tournament_match_scores == undefined ? [] : obj.tournament_match_scores
 
+
+                                const temp_obj = fixture_data[last_key]
+                                //temp_player1.tournament_match_scores = temp_obj.player1_match.tournament_match_scores == undefined ? [] : temp_obj.player1_match.tournament_match_scores
+                                //temp_player2.tournament_match_scores = temp_obj.player2_match.tournament_match_scores == undefined ? [] : temp_obj.player2_match.tournament_match_scores
+                                temp_player1.tournament_match_scores = this.getMatchScoreById(obj.player2_match.id, temp_obj)
+                                temp_player2.tournament_match_scores = this.getMatchScoreById(obj.player2_match.id, temp_obj)
 
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
@@ -395,6 +403,8 @@ class TournamentFixture extends BaseComponent {
             this.setState({
                 array: playerArray
             })
+            console.log('Final-modify => ', JSON.stringify(playerArray))
+
             this.state.array = playerArray
             // setTimeout(() => {
             //     this.setState({
@@ -407,6 +417,28 @@ class TournamentFixture extends BaseComponent {
             alert('No data found.')
         }
     }
+
+    getMatchScoreById(matchid, array) {
+        console.log('getMatchScoreById => ' + matchid)
+        console.log('getMatchScoreById => ' + JSON.stringify(array))
+
+        if (array[0].player1_match) {
+            if (array[0].player1_match.id == matchid) {
+                return array[0].player1_match.tournament_match_scores
+            }
+        }
+        else {
+            return []
+        }
+
+        if (array[0].player2_match) {
+            if (array[0].player2_match.id == matchid) {
+                return array[0].player2_match.tournament_match_scores
+            }
+        }
+        else return []
+    }
+
 
     isPlayerExistsInArray(array, id) {
         let isExists = false
@@ -807,9 +839,23 @@ class TournamentFixture extends BaseComponent {
                         } else {
 
                             let length = score.length
+                            let tempScore = []
+                            for(let x=length-1;x>=0;x--){
+                                tempScore.push(score[x])
+                            }
+                            score = tempScore
+
                             for (k = 0; k < length; k++) {
 
                                 let obj = score[k]
+                                console.log('Match Score11 => ' + JSON.stringify(obj))
+
+                                if (j % 2 == 0) {
+                                    console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player1_score)
+                                }
+                                else {
+                                    console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player2_score)
+                                }
                                 let bgColor
                                 if (j % 2 == 0) {
                                     if (k % 2 == 0)
@@ -825,23 +871,28 @@ class TournamentFixture extends BaseComponent {
                                 }
 
                                 let player_score = ''
-                                if (i == 0) {
-                                    if (j % 2 == 1) {
-                                        player_score = obj.player1_score == undefined ? '-' : obj.player1_score
-                                    }
-                                    else {
-                                        player_score = obj.player2_score == undefined ? '-' : obj.player2_score
-                                    }
-                                } else {
+                                // if (i == 0) {
+                                //     if (j % 2 == 1) {
+                                //         player_score = obj.player1_score == undefined ? '-' : obj.player1_score
+                                //     }
+                                //     else {
+                                //         player_score = obj.player2_score == undefined ? '-' : obj.player2_score
+                                //     }
+                                // } else {
 
-                                    if (j % 2 == 0) {
-                                        player_score = obj.player1_score == undefined ? '-' : obj.player1_score
-                                    }
-                                    else {
-                                        player_score = obj.player2_score == undefined ? '-' : obj.player2_score
-                                    }
+                                //     if (j % 2 == 0) {
+                                //         player_score = obj.player1_score == undefined ? '-' : obj.player1_score
+                                //     }
+                                //     else {
+                                //         player_score = obj.player2_score == undefined ? '-' : obj.player2_score
+                                //     }
+                                // }
+                                if (j % 2 == 0) {
+                                    player_score = obj.player1_score == undefined ? '-' : obj.player1_score
                                 }
-
+                                else {
+                                    player_score = obj.player2_score == undefined ? '-' : obj.player2_score
+                                }
 
 
                                 container.push(

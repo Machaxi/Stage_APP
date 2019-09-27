@@ -321,7 +321,7 @@ class FixtureSelection extends BaseComponent {
                                             </View>
                                             <View style={{
                                                 marginLeft: 16,
-                                                width: '20%',
+                                                width: '30%',
                                             }}>
 
                                                 <Text style={{
@@ -488,6 +488,7 @@ const pickerSelectStyles = StyleSheet.create({
         // to ensure the text is never behind the icon
     },
     inputAndroid: {
+        paddingVertical: 4,
         fontSize: 14,
         fontFamily: 'Quicksand-Regular',
         borderColor: '#614051',
