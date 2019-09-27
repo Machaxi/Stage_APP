@@ -115,7 +115,7 @@ class NotificationList extends BaseComponent {
                 <TouchableOpacity
                     activeOpacity={.8}
                     onPress={() => {
-                        this.props.navigation.navigate('Batch')
+                        //this.props.navigation.navigate('Batch')
                     }}
                 >
 
