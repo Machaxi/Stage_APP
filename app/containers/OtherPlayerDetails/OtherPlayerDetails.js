@@ -58,7 +58,8 @@ class OtherPlayerDetails extends BaseComponent {
                     let academy_id = userData['academy_id']
                     // console.warn('academy_id=>', academy_id)
 
-                    if (userData.user['user_type'] == 'PLAYER' && userData.user['user_type'] == 'PARENT') {
+
+                    if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') {
                         this.setState({
                             showChallenge: true
                         })
@@ -67,6 +68,14 @@ class OtherPlayerDetails extends BaseComponent {
                     this.fetch(academy_id, player_id)
                 });
             } else {
+                getData('userInfo', (value) => {
+                    let userData = JSON.parse(value)
+                    if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') {
+                        this.setState({
+                            showChallenge: true
+                        })
+                    }
+                });
                 this.fetch(academy_id, player_id)
             }
 
@@ -260,9 +269,10 @@ class OtherPlayerDetails extends BaseComponent {
 
 
                     {
+
                         this.state.showChallenge &&
                         <View style={styles.confirmBtnOuter}>
-                            <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                            <Text style={[styles.rounded_button]} onPress={() => {
                                 global.opponentPlayerDetails = this.state.player_profile;
                                 this.props.navigation.navigate('OpponentList')
                             }}>Challenge</Text>
@@ -369,12 +379,20 @@ const styles = StyleSheet.create({
         //marginTop: 20,
         marginBottom: 15
     },
-    confirmBtn: {
+    rounded_button: {
+        padding: 10,
+        borderRadius: 20,
+        //borderWidth: 1,
+        marginLeft: 4,
+        marginRight: 4,
+        borderColor: '#67BAF5',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        alignItems: 'center',
+        fontFamily: 'Quicksand-Regular',
         marginTop: 16,
         width: "100%",
-        marginLeft: 0,
-        marginRight: 0,
-        fontFamily: 'Quicksand-Regular',
     },
 
 

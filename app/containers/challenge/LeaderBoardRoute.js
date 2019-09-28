@@ -119,10 +119,10 @@ class LeaderboardRoute extends BaseComponent {
             <Text style={styles.nameValue}>{item.player.name}</Text>
           </View>
           <View style={[styles.winOuter, { marginLeft: 4 }]}>
-            <Text style={styles.nameValue}>1</Text>
+            <Text style={styles.nameValue}>{item.win_count}</Text>
           </View>
           <View style={[styles.lostOuter, { marginLeft: 1 }]}>
-            <Text style={styles.nameValue}>1</Text>
+            <Text style={styles.nameValue}>{item.loss_count}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -186,10 +186,19 @@ class LeaderboardRoute extends BaseComponent {
           </View>
         }
 
-        <FlatList
-          data={data}
-          renderItem={this._renderItem}
-        />
+        {data.length == 0 ?
+
+          <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 50 }}><Text style={{ fontFamily: 'Quicksand-Medium', color: 'black' }}>No Challenges</Text></View>
+
+          :
+
+          <FlatList
+            data={data}
+            renderItem={this._renderItem}
+          />
+        }
+
+
 
       </View>
     );

@@ -235,28 +235,6 @@ export function getAcademyBatchDetail(academy_id, proficiency, rating, availabil
     };
 
 }
-export function getCourtBookingDetails(header, academy_id, date, sportsId) {
-
-    var url;
-    if (sportsId == null) {
-        url = `global/court/details?academy_id=${academy_id}&date=${date}`
-    } else {
-        url = `global/court/details?academy_id=${academy_id}&date=${date}&sport_id=${sportsId}`
-    }
-    return {
-        type: types.DO_LOGIN,
-        payload: {
-            request: {
-                url: url,
-                method: 'GET',
-                headers: {
-                    'x-authorization': header
-
-                },
-            }
-        }
-    }
-};
 
 export function bookTrial(header, data) {
 
@@ -280,23 +258,3 @@ export function bookTrial(header, data) {
         }
     }
 };
-
-
-//http://13.233.182.217:8080/api/global/court/details?academy_id=1&date=12-09-201
-
-// export function getCourtBookingDetails(header, academy_id, date) {
-
-//     return {
-//         type: types.DO_LOGIN,
-//         payload: {
-//             request: {
-//                 url: `global/court/details?academy_id=${academy_id}&date=${date}`,
-//                 method: 'GET',
-//                 headers: {
-//                     'x-authorization': header
-
-//                 },
-//             }
-//         }
-//     }
-// };

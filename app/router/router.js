@@ -33,9 +33,6 @@ import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
-import CurrentBooking from '../containers/court_booking/CurrentBooking';
-import CourtAcademyListing from '../containers/court_booking/CourtAcademyListing'
-import ChooseTimeDate from '../containers/court_booking/ChooseTimeDate'
 
 import { isSignedIn } from "../components/auth";
 import BaseComponent from '../containers/BaseComponent';
@@ -77,6 +74,8 @@ import WebViewScreen from '../containers/util/WebViewScreen'
 import DietPlan from '../containers/ParentsScreen/DietPlan'
 import EmptyScreen from '../containers/util/EmptyScreen'
 import BookTrial from '../containers/GuestScreen/BookTrial'
+import BookPlayModule from './CourtBookingRouter'
+import LeaderboardRoute from '../containers/challenge/LeaderBoardRoute'
 import PaymentDetail from '../containers/payment/PaymentDetail'
 import PaymentHistory from '../containers/payment/PaymentHistory'
 
@@ -377,7 +376,7 @@ const tabBarController = createBottomTabNavigator(
 
         },
         BookandPlay: {
-            screen: GuestHomeModule,
+            screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 tabBarLabel: ({ focused }) =>
@@ -833,6 +832,17 @@ const coachHomeModule = createStackNavigator({
         })
 
     },
+    LeaderboardRoute: {
+        screen: LeaderboardRoute,
+        navigationOptions: ({ navigation }) => ({
+            title: "Challenge Leaderboard",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        }),
+    },
 
 }, {
         contentComponent: ({ navigation }) => {
@@ -892,7 +902,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
 
         },
         BookandPlay: {
-            screen: GuestHomeModule,
+            screen: BookPlayModule,
             navigationOptions: {
                 tabBarLabel: 'Book and Play',
                 tabBarLabel: ({ focused }) =>
@@ -901,7 +911,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
 
-        }
+        },
     })
 
 
@@ -923,65 +933,6 @@ const coachDrawer = createDrawerNavigator({
         drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
-
-const BookPlayModule = createStackNavigator({
-    //All the screen from the Screen1 will be indexed here
-    CurrentBooking: {
-        screen: CurrentBooking,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={true}
-                showBackAction={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    CourtAcademyListing: {
-        screen: CourtAcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    ChooseTimeDate: {
-        screen: ChooseTimeDate,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-
-})
 
 const tabBarControllerGuest = createBottomTabNavigator(
     {
@@ -1007,7 +958,6 @@ const tabBarControllerGuest = createBottomTabNavigator(
             }
 
         },
-
         BookandPlay: {
             screen: BookPlayModule,
             navigationOptions: {
