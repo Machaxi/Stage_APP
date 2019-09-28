@@ -1087,7 +1087,7 @@ class TournamentFixture extends BaseComponent {
                         key={"id_" + (i * 100 + 0)}
                         x={x1 + marginLeft}
                         y={y}
-                        width={width}
+                        width={100}
                         height={height}
                         //stroke={borderColor}
                         stroke="#DFDFDF"

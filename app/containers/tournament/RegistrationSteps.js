@@ -563,7 +563,7 @@ class RegistrationSteps extends BaseComponent {
         let is_edit_mode = this.state.is_edit_mode
         let is_guest = false
         if (is_edit_mode) {
-            is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
+            is_guest = this.state.user_type == COACH
 
         } else {
             is_guest = this.state.user_type == GUEST || this.state.user_type == COACH
@@ -1650,14 +1650,14 @@ class RegistrationSteps extends BaseComponent {
                         })
                         setTimeout(() => {
                             let tournament_id = this.state.data['id']
-                            // let obj = {
-                            //     tournament_id: tournament_id
-                            // }
-                            // Events.publish(GO_TO_HOME, obj);
-
-                            this.props.navigation.navigate('UpcomingTournamentDetail', {
+                            let obj = {
                                 tournament_id: tournament_id
-                            })
+                            }
+                            Events.publish(GO_TO_HOME, obj);
+
+                            // this.props.navigation.navigate('UpcomingTournamentDetail', {
+                            //     tournament_id: tournament_id
+                            // })
                         }, 100)
 
                     }}

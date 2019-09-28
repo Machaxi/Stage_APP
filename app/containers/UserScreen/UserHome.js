@@ -284,10 +284,15 @@ class UserHome extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.data['coach_data'] != null && user1.data['coach_data']) {
-
-                    this.setState({
-                        coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
-                    })
+                    try {
+                        this.setState({
+                            coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
+                        })
+                      }
+                      catch(err) {
+                        //document.getElementById("demo").innerHTML = err.message;
+                      }
+                    
                 }
 
                 if (user1.data['academy_data'] != null && user1.data['academy_data'].feedback) {
@@ -432,7 +437,7 @@ class UserHome extends BaseComponent {
 
             const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, operations } = this.state.player_profile
             sessionArray = [];
-            if (operations.next_sessions != null) {
+            if (operations!=null && operations.next_sessions != null) {
 
                 for (let i = 0; i < operations.next_sessions.length; i++) {
                     const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]

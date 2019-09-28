@@ -141,7 +141,7 @@ const GuestHomeModule = createStackNavigator({
     AcademyListing: {
         screen: AcademyListing,
         navigationOptions: ({ navigation }) => ({
-            title: 'Dribble Diaries',
+            title: 'Machaxi',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={false}
@@ -324,6 +324,24 @@ const GuestHomeModule = createStackNavigator({
         })
 
     },
+    WebViewScreen: {
+        screen: WebViewScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "WebView",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
 })
 
 
@@ -416,7 +434,7 @@ const coachHomeModule = createStackNavigator({
     CoachHome: {
         screen: coachhome,
         navigationOptions: ({ navigation }) => ({
-            title: "Dribble",
+            title: "Machaxi",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={false}
             />,
@@ -540,7 +558,7 @@ const coachHomeModule = createStackNavigator({
     AcademyListing: {
         screen: AcademyListing,
         navigationOptions: ({ navigation }) => ({
-            title: 'Dribble Diaries',
+            title: 'Machaxi',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showDrawer={false}

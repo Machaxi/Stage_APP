@@ -174,20 +174,28 @@ class CoachMenuDrawer extends BaseComponent {
 								}}>
 								Guest</Text>
 
-							<Text
-								style={{
-									color: '#667DDB',
-									fontFamily: 'Quicksand-Medium',
-									fontSize: 14, marginTop: 8,
-								}}>
-								Sign In</Text>
+							<TouchableOpacity
+								onPress={() => {
+									this.props.navigation.navigate('Login')
+								}}
+							>
+
+								<Text
+									style={{
+										color: '#667DDB',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 8,
+									}}>
+									Sign In</Text></TouchableOpacity>
+
 						</View>
 
 
 					</View>
 				</View>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
 
@@ -205,7 +213,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
 

@@ -83,7 +83,7 @@ class BookTrial extends BaseComponent {
                 alert_msg: alert_msg
             })
 
-            //this.progress(true)
+            this.progress(true)
             let subData = {}
 
 
@@ -117,7 +117,7 @@ class BookTrial extends BaseComponent {
 
         this.props.bookTrial(value, data).then(() => {
 
-            //this.progress(false)
+            this.progress(false)
 
             let res = JSON.stringify(this.props.data.res);
             console.log(' bookTrial 1' + JSON.stringify(res));

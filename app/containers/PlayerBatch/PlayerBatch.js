@@ -219,7 +219,9 @@ class PlayerBatch extends BaseComponent {
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={defaultStyle.regular_text_14}>No Batch Found</Text>
+                    <Text style={defaultStyle.regular_text_14}>
+                        {this.state.batchList ? 'No Batch Found' : ''}
+                    </Text>
                 </View>
             )
         }

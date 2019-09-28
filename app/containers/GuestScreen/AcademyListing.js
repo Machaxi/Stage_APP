@@ -92,7 +92,7 @@ class AcademyListing extends BaseComponent {
             if (deep_data != null)
                 storeData('deep_data', JSON.stringify(deep_data))
             setTimeout(() => {
-                this.props.navigation.navigate('Tournament')
+                this.props.navigation.navigate('UpcomingTournamentDetail',deep_data)
 
             }, 100)
         });

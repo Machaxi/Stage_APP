@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, Text } from 'react-native';
 import { getData, storeData } from '../../components/auth'
 
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,genderCamal, getFormattedCategory,getFormattedTournamentLevel } from '../BaseComponent'
 import { CheckBox } from 'react-native-elements'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import { TOURNAMENT_FILTER } from '../../actions/actionTypes';
@@ -89,7 +89,7 @@ export default class TournamentFilter extends BaseComponent {
                 let new_gender_types = []
                 for (let i = 0; i < gender_types.length; i++) {
                     let obj = {
-                        pid: 2  , name: gender_types[i],
+                        pid: 2, name: gender_types[i],
                         is_selected: false, rating: false
                     }
                     new_gender_types.push(obj)
@@ -205,6 +205,12 @@ export default class TournamentFilter extends BaseComponent {
             refresh: false
         })
 
+        let name = item.name;
+        name = getFormattedCategory(name)
+        name = getFormattedTournamentLevel(name)
+        name = genderCamal(name)
+
+
         return (
 
 
@@ -267,7 +273,7 @@ export default class TournamentFilter extends BaseComponent {
                     }}>
 
                         <Text style={[defaultStyle.regular_text_14, {
-                        }]}>{item.name}</Text>
+                        }]}>{name}</Text>
 
                         {item.rating ?
                             <Image

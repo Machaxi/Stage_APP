@@ -126,15 +126,15 @@ class ParentRewardComponent extends BaseComponent {
         let following_diet = this.state.following_diet == '' ? 0 : this.state.following_diet
         let sum = +love_game + +following_diet
         console.warn('sum => ', sum)
-        if (following_diet == 0) {
+        // if (following_diet == 0) {
+        //     this.setState({
+        //         alert: 'Following diet field is empty'
+        //     })
+        //     //alert('Following diet field is empty')
+        // }
+         if (love_game == 0 && following_diet == 0) {
             this.setState({
-                alert: 'Following diet field is empty'
-            })
-            //alert('Following diet field is empty')
-        }
-        else if (love_game == 0) {
-            this.setState({
-                alert: 'Love for the game field is empty'
+                alert: 'Reward field is empty'
             })
             //alert('Love for the game field is empty')
         } else if (sum > 500) {
@@ -154,7 +154,7 @@ class ParentRewardComponent extends BaseComponent {
             data["batch_id"] = item.id
             data["player_id"] = item.playerId
             data["parent_player_id"] = this.state.parent_player_id
-            let reward = { loveForGame: this.state.love_game, dietInTake: this.state.following_diet }
+            let reward = { loveForGame: love_game, dietInTake: following_diet }
             data["reward_detail"] = reward
             let req = {}
             req['data'] = data

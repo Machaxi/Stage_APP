@@ -48,31 +48,37 @@ class WriteFeedbackListing extends BaseComponent {
                 console.warn('Res=> ' + JSON.stringify(this.props.data))
                 let data = this.props.data.data
                 if (data.success) {
-                    coaches = data.data.coach_data.coaches
+
+                    let list = []
+                    let count = 0
+                    let newObj = { review: '', rating: 0, is_coach: false }
+                    list[count++] = newObj
+                    // this.setState({
+                    //     coaches: list
+                    // })
+
+                    if (data.data.coach_data!=null) {
+
+                        coaches = data.data.coach_data.coaches
+
+                        for (let i = 0; i < coaches.length; i++) {
+
+                            let obj = coaches[i]
+                            let newObj1 = { ...obj, review: '', rating: 0, is_coach: true }
+                            list[count++] = newObj1
+                        }
+                    }
+
+
+                    this.setState({
+                        coaches: list
+                    })
+
 
                 } else {
                     alert("Something went wrong.")
                 }
 
-                let list = []
-                let count = 0
-                let newObj = { review: '', rating: 0, is_coach: false }
-                list[count++] = newObj
-                // this.setState({
-                //     coaches: list
-                // })
-
-
-                for (let i = 0; i < coaches.length; i++) {
-
-                    let obj = coaches[i]
-                    let newObj1 = { ...obj, review: '', rating: 0, is_coach: true }
-                    list[count++] = newObj1
-                }
-
-                this.setState({
-                    coaches: list
-                })
 
 
             }).catch((response) => {

@@ -32,24 +32,24 @@ class CoachListing extends BaseComponent {
 
         getData('header', (value) => {
 
-            this.props.coachListing(academy_id,value).then(() => {
+            this.props.coachListing(academy_id, value).then(() => {
                 console.warn('Res=> ' + JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {
                     let list = this.props.data.res.data.coaches
-    
+
                     this.setState({
                         coaches: list,
                         filter: list
                     })
                 }
-    
+
             }).catch((response) => {
                 console.log(response);
             })
         })
 
-        
+
 
     }
 
@@ -85,15 +85,15 @@ class CoachListing extends BaseComponent {
                     ></TextInput>
                 </Card>
 
-                <Text style={{
+                {/* <Text style={{
                     marginTop: 8, marginBottom: 4,
                     textAlign: 'right',
                     color: '#d3d3d3', fontSize: 13
                 }} >Filter</Text>
 
                 <View style={{ width: '100%', height: 1, backgroundColor: '#d7d7d7' }}></View>
+          */}
             </View>
-
 
 
         )

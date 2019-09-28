@@ -412,7 +412,28 @@ class ParentHome extends BaseComponent {
 
     );
 
+    filterRewards(reward_detail) {
+        let temp_reward = []
+        for (let i = 0; i < reward_detail.length; i++) {
 
+            let month = reward_detail[i].month
+            let year = reward_detail[i].year
+
+            let is_exists = false
+            for (let j = 0; j < temp_reward.length; j++) {
+
+                if (temp_reward[j].month == month && temp_reward[j].year == year) {
+                    is_exists = true
+                    break
+                }
+            }
+            if (is_exists == false) {
+                temp_reward.push(reward_detail[i])
+            }
+
+        }
+        return temp_reward
+    }
 
 
     onRefresh = () => {
@@ -443,7 +464,7 @@ class ParentHome extends BaseComponent {
                 is_payment_due, reward_detail, payment_detail, operations } = this.state.player_profile
 
             sessionArray = [];
-            if (operations.next_sessions != null) {
+            if (operations!=null && operations.next_sessions != null) {
                 for (let i = 0; i < operations.next_sessions.length; i++) {
                     const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
                     console.log("is_canceled", { is_canceled })
@@ -478,7 +499,7 @@ class ParentHome extends BaseComponent {
                                             textDecorationLine: 'line-through'
                                         }]} >
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
-                                        {getUtcDateFromTime(session_date,start_time)}
+                                        {getUtcDateFromTime(session_date, start_time)}
                                     </Text>
                                     <Text
                                         style={[defaultStyle.regular_text_14, {
@@ -506,7 +527,7 @@ class ParentHome extends BaseComponent {
                                 <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                                     <Text style={defaultStyle.regular_text_14}>
                                         {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
-                                        {getUtcDateFromTime(session_date,start_time)}
+                                        {getUtcDateFromTime(session_date, start_time)}
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
@@ -525,9 +546,13 @@ class ParentHome extends BaseComponent {
 
                 if (is_reward_point_due) {
                     console.log('reward_detail => ', JSON.stringify(reward_detail))
-                    for (let i = 0; i < reward_detail.length; i++) {
 
-                        let reward = reward_detail[i]
+                     let temp_reward_detail = this.filterRewards(reward_detail)
+
+
+                    for (let i = 0; i < temp_reward_detail.length; i++) {
+
+                        let reward = temp_reward_detail[i]
                         rewards_ui_array.push(
                             <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
 
@@ -583,7 +608,7 @@ class ParentHome extends BaseComponent {
                     {sessionArray.length != 0 ?
                         <CustomeCard >
                             <TouchableOpacity
-                                onPress={() => {                                  
+                                onPress={() => {
                                     global.click_batch_id = operations.batch_id;
                                     this.props.navigation.navigate('Batch')
                                 }}
