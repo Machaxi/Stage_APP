@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, FlatList, TextInput, ImageBackground, TouchableOpacity, ScrollView, Modal } from 'react-native';
-import { Card, Text, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, Image, FlatList, TextInput, ImageBackground, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { Card, Text, } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { createChallenge, getOpponentList, getChallengeDashboard } from '../../redux/reducers/ChallengeReducer'
@@ -34,7 +34,7 @@ class OpponentList extends BaseComponent {
             this.state.academy_id = userData['academy_id'];
             this.state.player_id = userData['player_id'];
             getData('header', (value) => {
-                this.props.getOpponentList(value, userData['academy_id'], 0, 10).then(() => {
+                this.props.getOpponentList(value, userData['academy_id'], 0, 20).then(() => {
                     let data = this.props.data.data
                     console.log(' getOpponentList ' + JSON.stringify(data));
 
@@ -61,9 +61,9 @@ class OpponentList extends BaseComponent {
     }
 
     getPlayerData() {
-        console.log('heyyyyyyyyyyyyyyy,=======', global.opponentPlayerDetails);
+        //console.log('heyyyyyyyyyyyyyyy,=======', global.opponentPlayerDetails);
         if (global.opponentPlayerDetails != undefined && global.opponentPlayerDetails != null) {
-            console.log('yipeeeeeeeeeeeeeeeeeee');
+            //console.log('yipeeeeeeeeeeeeeeeeeee');
             //this.state.selectedOpponentData = global.opponentPlayerDetails;
             this.setState({
                 selectedOpponentData: global.opponentPlayerDetails
@@ -264,12 +264,14 @@ class OpponentList extends BaseComponent {
 
     _renderItem = ({ item }) => (
         <View style={styles.playerCard}>
-            <TouchableOpacity onPress={() => {
-                this.setModalVisible(true)
-                this.setState({
-                    selectedOpponentData: item
-                })
-            }}>
+            <TouchableOpacity
+                activeOpacity={.8}
+                onPress={() => {
+                    this.setModalVisible(true)
+                    this.setState({
+                        selectedOpponentData: item
+                    })
+                }}>
                 <ImageBackground resizeMode='contain' style={{ height: 180, width: '100%' }}
                     source={require('../../images/batch_card.png')}
                 >

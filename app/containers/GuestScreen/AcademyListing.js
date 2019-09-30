@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, Linking, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator, Linking, View, ImageBackground, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
@@ -9,13 +9,93 @@ import axios from 'axios'
 import BaseComponent, { defaultStyle } from './../BaseComponent'
 import { BASE_URL } from '../../../App';
 import { RateViewFill } from '../../components/Home/RateViewFill';
-import { getData, storeData } from '../../components/auth';
+import { getData, storeData, isSignedIn } from '../../components/auth';
 import Events from '../../router/events';
 import FastImage from 'react-native-fast-image'
+import { GUEST } from '../../components/Constants';
 
 var filterData = ''
+var notification_count = 0
 
 class AcademyListing extends BaseComponent {
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: (
+                <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    flex: 1,
+                }}>
+
+                    <Text
+                        style={{
+
+                            fontFamily: 'Quicksand-Medium',
+                            fontSize: 16,
+                            color: '#404040'
+                        }}>{navigation.getParam('title') == undefined ? 'Machaxi' :
+                            navigation.getParam('title')}</Text></View>
+
+
+            ),
+            headerStyle: {
+                elevation: 2, shadowOpacity: 1, borderBottomWidth: 0,
+            },
+            headerTitleStyle: styles.headerStyle,
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        source={require('../../images/hamburger.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                navigation.getParam('show_bell') == undefined ?
+                    <View></View> :
+                    <TouchableOpacity
+                        style={{ marginRight: 8 }}
+                        onPress={() => {
+                            navigation.navigate('NotificationList')
+                        }}
+                        activeOpacity={.8} >
+                        <ImageBackground
+                            resizeMode="contain"
+                            source={require('../../images/bellicon.png')}
+                            style={{
+                                width: 22, height: 22, marginLeft: 12,
+                                marginRight: 12,
+                                alignItems: 'flex-end'
+                            }}>
+
+                            {navigation.getParam('notification_count', 0) > 0 ? <View style={{
+                                width: 16,
+                                height: 16,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 30 / 2,
+                                backgroundColor: '#ED2638'
+                            }}>
+                                <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                    {navigation.getParam('notification_count', '')}</Text>
+                            </View> : null}
+
+
+                        </ImageBackground>
+                    </TouchableOpacity>
+
+            )
+        };
+
+    };
+
 
     constructor(props) {
         super(props)
@@ -33,6 +113,7 @@ class AcademyListing extends BaseComponent {
         }
         this._handleChange = this._handleChange.bind(this)
         this.state.job_vacancy = this.props.navigation.getParam('vacancy');
+
 
     }
 
@@ -88,17 +169,71 @@ class AcademyListing extends BaseComponent {
         //     }
         // })
 
+        isSignedIn()
+            .then(res => {
+
+                if (res) {
+
+                    getData('userInfo', (value) => {
+
+                        if (value != '') {
+                            const data = JSON.parse(value)
+                            const user_type = data['user'].user_type
+                            if (user_type == GUEST) {
+                                this.props.navigation.setParams({
+                                    title: 'Machaxi',
+                                    show_bell: true
+                                });
+
+                            } else {
+                                navigation.setParams({
+                                    title: 'Browse Academies'
+                                })
+                            }
+                        } else {
+                            navigation.setParams({
+                                title: 'Browse Academies'
+                            })
+                        }
+
+                    })
+                } else {
+                    navigation.setParams({
+                        title: 'Browse Academies'
+                    })
+                }
+            })
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.getNotifications()
+            }
+        );
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
+            this.getNotifications()
+        });
+
+
         this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
             if (deep_data != null)
                 storeData('deep_data', JSON.stringify(deep_data))
             setTimeout(() => {
-                this.props.navigation.navigate('UpcomingTournamentDetail',deep_data)
+                this.props.navigation.navigate('UpcomingTournamentDetail', deep_data)
 
             }, 100)
         });
 
 
         this.getAcademyList('')
+    }
+
+    getNotifications() {
+        this.getNotificationCount((count) => {
+            this.props.navigation.setParams({ notification_count: count });
+            notification_count = count
+        })
     }
 
     onFilterSelected(data) {
@@ -229,10 +364,12 @@ class AcademyListing extends BaseComponent {
         console.warn(this.state.query)
         if (hardSearch) {
             search_query = this.state.query
+            locality_id = this.state.locality_id
         } else {
             locality_id = this.state.query
         }
 
+        search_query = encodeURI(search_query);
         this.props.search(search_query, locality_id).then(() => {
             console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
@@ -350,6 +487,7 @@ class AcademyListing extends BaseComponent {
                                                     query: item.name
                                                 })
                                                 this.state.query = item.name
+                                                this.state.locality_id = item.id
                                                 this.getAcademicSearchResult(true)
                                             } else {
                                                 this.props.navigation.navigate('AcademyProfile', { id: item.id })

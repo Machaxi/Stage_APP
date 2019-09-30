@@ -64,10 +64,6 @@ class DietPlan extends BaseComponent {
     componentDidMount() {
 
         getData('userInfo', (value) => {
-            console.log('UserInfo-> ', value)
-        })
-
-        getData('userInfo', (value) => {
             console.warn(value)
             userData = JSON.parse(value)
             const player_id = userData['player_id']
@@ -93,11 +89,7 @@ class DietPlan extends BaseComponent {
                 })
             });
 
-
-
         });
-
-
     }
 
     render() {
@@ -115,7 +107,11 @@ class DietPlan extends BaseComponent {
 
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={defaultStyle.bold_text_14}>No Diet Plan Available.</Text>
+                    <Text style={[defaultStyle.bold_text_14, {
+                        textAlign: 'center',
+                        padding:16
+                    }]}>
+                        Diet plan not available. Please get in touch with the academy to upload it.</Text>
                 </View>
             )
         }

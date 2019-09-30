@@ -2,12 +2,14 @@ import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Card, } from 'react-native-paper';
 import BaseComponent, {
+    EVENT_SELECT_PLAYER_TOURNAMENT,
     defaultStyle, getFormattedTournamentType, getFormattedRound,
     getFormattedCategory, getFormattedTournamentLevel, formattedName
 } from '../BaseComponent'
 import Moment from 'moment';
 import { getData } from '../../components/auth';
 import { FlatList } from 'react-native-gesture-handler';
+import Events from '../../router/events';
 
 
 export default class EditPartner extends BaseComponent {
@@ -16,7 +18,8 @@ export default class EditPartner extends BaseComponent {
         super(props)
         this.state = {
             data: {},
-            players: null
+            players: null,
+            show_enable: false
         }
 
         this.state.data = JSON.parse(this.props.navigation.getParam('data'));
@@ -52,6 +55,7 @@ export default class EditPartner extends BaseComponent {
                 let cat = tempCategory[j]
                 let obj = this.getPlayerMatch(registrations, player, cat);
                 if (obj != null) {
+                    obj= { ...obj, tournament_id: player.id }
                     category_array.push(obj)
                 }
             }
@@ -70,7 +74,7 @@ export default class EditPartner extends BaseComponent {
 
             let temp = new_player[i]
             let playerObj = this.getPlayerById(temp.id, registrations)
-            console.log('playerObj=> ',JSON.stringify(playerObj))
+            console.log('playerObj=> ', JSON.stringify(playerObj))
             const player = { player: playerObj, list: temp.list }
             playerTemp[i] = { ...player }
             final_array.push(player)
@@ -88,9 +92,19 @@ export default class EditPartner extends BaseComponent {
 
     }
 
+    componentDidMount() {
+
+        this.refreshEvent = Events.subscribe(EVENT_SELECT_PLAYER_TOURNAMENT, (args) => {
+            console.log(EVENT_SELECT_PLAYER_TOURNAMENT)
+            console.log('args - > ' + JSON.stringify(args))
+
+        });
+
+    }
+
     getPlayerById(id, registrations) {
         for (let i = 0; i < registrations.length; i++) {
-            if(registrations[i].player.id == id){
+            if (registrations[i].player.id == id) {
                 return registrations[i].player
             }
         }
@@ -244,7 +258,16 @@ export default class EditPartner extends BaseComponent {
                 </Text>
 
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+
+                        this.props.navigation.navigate('AddPartner', {
+                            id: item.id,
+                            tournament_id: this.state.data['id'],
+                            user_id: ''
+                        })
+                    }}
+                >
 
                     <Text style={[defaultStyle.regular_text_12, {
                         //width: "30%",
@@ -260,7 +283,7 @@ export default class EditPartner extends BaseComponent {
     }
     render() {
 
-
+        const show_enable = this.state.show_enable
         let data = this.state.data
         let players = this.state.players
         console.log('players => ', JSON.stringify(players))
@@ -335,11 +358,43 @@ export default class EditPartner extends BaseComponent {
                                     </Text>
 
                                         {players != null ?
-                                            <FlatList
-                                                data={players}
-                                                extraData={players}
-                                                renderItem={this._renderItem}
-                                            />
+
+                                            <View>
+
+                                                <FlatList
+                                                    data={players}
+                                                    extraData={players}
+                                                    renderItem={this._renderItem}
+                                                />
+                                                <View style={{
+                                                    justifyContent: 'center',
+                                                    padding: 16,
+                                                    marginTop: 20,
+                                                    alignItems: 'center'
+                                                }}>
+
+                                                    <TouchableOpacity activeOpacity={.8}
+                                                        style={[styles.rounded_button, {
+                                                            backgroundColor: show_enable ? '#67BAF5' : 'gray',
+                                                        }]}
+                                                        onPress={() => {
+
+                                                            if (show_enable) {
+
+                                                            }
+                                                        }}>
+                                                        <Text
+                                                            style={{
+                                                                color: 'white',
+                                                                textAlign: 'center',
+                                                                fontFamily: 'Quicksand-Medium'
+                                                            }}
+                                                        >Save</Text>
+                                                    </TouchableOpacity></View>
+
+                                            </View>
+
+
                                             : null}
                                     </View>
 
@@ -362,7 +417,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F7F7F7'
     },
     rounded_button: {
-        width: '48%',
+        width: '40%',
         padding: 10,
         borderRadius: 20,
         //borderWidth: 1,

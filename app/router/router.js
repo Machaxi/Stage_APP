@@ -140,20 +140,20 @@ const GuestHomeModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
     AcademyListing: {
         screen: AcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Machaxi',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Machaxi',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={false}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showNotification={true} />,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-            headerTintColor: '#000',
-        }),
+        //     headerTintColor: '#000',
+        // }),
     },
     AcademyFilter: {
         screen: AcademyFilter,
@@ -341,6 +341,26 @@ const GuestHomeModule = createStackNavigator({
 
         })
     },
+    NotificationList: {
+        screen: NotificationList,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Notification',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+
+    },
 
 })
 
@@ -433,19 +453,19 @@ const coachHomeModule = createStackNavigator({
 
     CoachHome: {
         screen: coachhome,
-        navigationOptions: ({ navigation }) => ({
-            title: "Machaxi",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        // navigationOptions: ({ navigation }) => ({
+        //     title: "Machaxi",
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showBackAction={false}
+        //     />,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showHome={false} />,
+        //     headerTitleStyle: style.headerStyle,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-        })
+        // })
 
 
     },
@@ -860,6 +880,26 @@ const coachHomeModule = createStackNavigator({
                 backgroundColor: '#FFFFFF',
             },
         }),
+    },
+    NotificationList: {
+        screen: NotificationList,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Notification',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+
     },
 
 }, {

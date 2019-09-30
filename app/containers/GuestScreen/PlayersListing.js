@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, ActivityIndicator, FlatList, TextInput, ImageB
 import { Card } from 'react-native-paper';
 import { connect } from 'react-redux';
 
-import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/AcademyReducer'
+import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/PlayerReducer'
 import BaseComponent, { defaultStyle, formattedName, getFormattedBadge, getFormattedCategory } from '../BaseComponent';
 import { getData } from "../../components/auth";
 import FastImage from 'react-native-fast-image'
@@ -291,7 +291,7 @@ class PlayersListing extends BaseComponent {
 
 const mapStateToProps = state => {
     return {
-        data: state.AcademyReducer,
+        data: state.PlayerReducer,
 
     };
 };

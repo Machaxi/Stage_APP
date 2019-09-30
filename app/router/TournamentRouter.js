@@ -18,6 +18,8 @@ import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDeta
 import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
 import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
 import EditPartner from '../containers/tournament/EditPartner'
+import AddPartner from "../containers/tournament/AddPartner";
+import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
 
 const TournamentModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
@@ -266,6 +268,42 @@ const TournamentModule = createStackNavigator({
             },
 
         })
+    },
+    AddPartner: {
+        screen: AddPartner,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Add Partner',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
+    },
+    AddPartnerWithPhone: {
+        screen: AddPartnerWithPhone,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Add Partner',
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={true} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+            headerTintColor: '#000',
+        }),
     },
 })
 

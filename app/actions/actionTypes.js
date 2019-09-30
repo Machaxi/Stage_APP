@@ -5,6 +5,10 @@ export const GET_SWITCHING = 'user/LOAD';
 export const DO_SWITCHING_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_SWITCHING_FAIL = 'user/LOAD_FAIL';
 
+export const GET_PLAYER_LISTING = 'player_listing/LOAD';
+export const DO_PLAYER_LISTING_SUCCESS = 'player_listing/LOAD_SUCCESS';
+export const DO_PLAYER_LISTING_FAIL = 'player_listing/LOAD_FAIL';
+
 export const GET_COACH1 = 'coach1/LOAD';
 export const DO_COACH1_SUCCESS = 'coach1/LOAD_SUCCESS';
 export const DO_COACH1_FAIL = 'coach1/LOAD_FAIL';
@@ -146,6 +150,14 @@ export const MENU_DRAWER_METHOD_FAIL = 'menuDrawer/LOAD_FAIL';
 export const GET_CHALLENGE = 'challenge/LOAD';
 export const DO_CHALLENGE_SUCCESS = 'challenge/LOAD_SUCCESS';
 export const DO_CHALLENGE_FAIL = 'challenge/LOAD_FAIL';
+
+export const GET_CHALLENGE_RESULT = 'challenge_result/LOAD';
+export const DO_CHALLENGE__RESULT_SUCCESS = 'challenge_result/LOAD_SUCCESS';
+export const DO_CHALLENGE__RESULT_FAIL = 'challenge_result/LOAD_FAIL';
+
+export const GET_CHALLENGE_LEADERBOARD = 'challenge_leaderboard/LOAD';
+export const DO_CHALLENGE__LEADERBOARD_SUCCESS = 'challenge_leaderboard/LOAD_SUCCESS';
+export const DO_CHALLENGE__LEADERBOARD_FAIL = 'challenge_leaderboard/LOAD_FAIL';
 
 export const GET_BOOKING = 'booking/LOAD';
 export const DO_BOOKING_SUCCESS = 'booking/LOAD_SUCCESS';

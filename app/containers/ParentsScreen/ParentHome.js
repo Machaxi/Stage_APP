@@ -19,7 +19,7 @@ import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, {
     getFormattedLevel,
     getStatsImageById,
-    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime
+    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime, RATING_UPDATE
 } from '../BaseComponent'
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
@@ -282,6 +282,11 @@ class ParentHome extends BaseComponent {
                             userData['academy_name'] = name
                             storeData('userInfo', JSON.stringify(userData))
 
+                            let obj = {
+                                academy_name: data[0].academy_name,
+                                academy_rating: data[0].academy_rating,
+                            }
+                            Events.publish(RATING_UPDATE, obj);
                         });
 
 
@@ -464,7 +469,7 @@ class ParentHome extends BaseComponent {
                 is_payment_due, reward_detail, payment_detail, operations } = this.state.player_profile
 
             sessionArray = [];
-            if (operations!=null && operations.next_sessions != null) {
+            if (operations != null && operations.next_sessions != null) {
                 for (let i = 0; i < operations.next_sessions.length; i++) {
                     const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
                     console.log("is_canceled", { is_canceled })
@@ -547,7 +552,7 @@ class ParentHome extends BaseComponent {
                 if (is_reward_point_due) {
                     console.log('reward_detail => ', JSON.stringify(reward_detail))
 
-                     let temp_reward_detail = this.filterRewards(reward_detail)
+                    let temp_reward_detail = this.filterRewards(reward_detail)
 
 
                     for (let i = 0; i < temp_reward_detail.length; i++) {

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
+import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle } from '../BaseComponent'
 import { getData } from "../../components/auth";
-import { getchallengeLeaderboard } from "../../redux/reducers/ChallengeReducer";
+import { getchallengeLeaderboard } from "../../redux/reducers/ChallengeLeaderboardReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Events from '../../router/events';
 import RNPickerSelect from 'react-native-picker-select'
+import MonthYearDialog from '../../components/custom/MonthYearDialog'
 
 class LeaderboardRoute extends BaseComponent {
 
@@ -22,6 +23,8 @@ class LeaderboardRoute extends BaseComponent {
       months: [],
       month: '',
       initialLeaderboardData: null,
+      selected_month: '',
+      selected_year: ''
     }
     this.inputRefs = {
       month: null
@@ -38,9 +41,15 @@ class LeaderboardRoute extends BaseComponent {
       this.state.months.push(obj);
     };
 
-    this.setState({
-      month: moment().format('M')
-    });
+    // this.setState({
+    //   month: moment().format('M')
+    // });
+    var today = new Date();
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    this.state.selected_month = mm
+    this.state.selected_year = yyyy
 
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
@@ -55,25 +64,26 @@ class LeaderboardRoute extends BaseComponent {
 
   getLeaderboardData() {
     getData('header', (value) => {
-      this.props.getchallengeLeaderboard(value, this.state.academyId, this.state.month, moment().format('YYYY')).then(() => {
-        console.log('ggggfgfgfdgfd', this.props.data);
-        let data = this.props.data.data
-        console.log('getchallengeLeaderboard111 ' + JSON.stringify(data));
+      this.props.getchallengeLeaderboard(value, this.state.academyId,
+        this.state.selected_month, this.state.selected_year).then(() => {
+          console.log('ggggfgfgfdgfd', this.props.data);
+          let data = this.props.data.data
+          console.log('getchallengeLeaderboard111 ' + JSON.stringify(data));
 
-        let success = data.success
-        if (success) {
+          let success = data.success
+          if (success) {
 
-          console.log('getchallengeLeaderboardssds ' + JSON.stringify(data.data.top_players));
+            console.log('getchallengeLeaderboardssds ' + JSON.stringify(data.data.top_players));
 
-          this.setState({
-            challengeLeaderboardData: data.data.top_players,
-            initialLeaderboardData: data.data.top_players
-          })
-        }
+            this.setState({
+              challengeLeaderboardData: data.data.top_players,
+              initialLeaderboardData: data.data.top_players
+            })
+          }
 
-      }).catch((response) => {
-        console.log(response);
-      })
+        }).catch((response) => {
+          console.log(response);
+        })
     })
   }
 
@@ -140,6 +150,14 @@ class LeaderboardRoute extends BaseComponent {
       )
     }
 
+    const month = this.state.selected_month
+    const year = this.state.selected_year
+    let formatted_date = ''
+    if (month != '' && year != '') {
+      formatted_date = moment(month + "/" + year, 'MM-YYYY').format("MMM'YY")
+      //alert(formatted_date)
+    }
+
     let data = this.state.challengeLeaderboardData
     return (
 
@@ -151,7 +169,26 @@ class LeaderboardRoute extends BaseComponent {
 
           <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
 
-          <RNPickerSelect
+          <MonthYearDialog
+            touchOutside={(month, year) => {
+              if (month != undefined && year != undefined) {
+                //alert(month + "-" + year)
+                this.state.selected_month = month
+                this.state.selected_year = year
+                setTimeout(() => {
+                  this.getLeaderboardData()
+                }, 50)
+              }
+              this.setState({
+                show_month_dialog: false
+              })
+             
+
+            }}
+            visible={this.state.show_month_dialog}
+          />
+
+          {/* <RNPickerSelect
             placeholder={{}}
             items={this.state.months}
             onValueChange={(value) => {
@@ -168,12 +205,50 @@ class LeaderboardRoute extends BaseComponent {
             ref={(el) => {
               this.inputRefs.month = el;
             }}
-          />
-          <View style={{
+          /> */}
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({
+                show_month_dialog: true
+              })
+            }}
+          >
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 8,
+              width: 90,
+              justifyContent: 'space-between'
+            }}>
+
+              <Text style={{
+                fontSize: 14,
+                color: '#404040',
+                paddingLeft: 2,
+                fontFamily: 'Quicksand-Medium'
+              }}>
+                {formatted_date}
+              </Text>
+
+              <Image
+                style={{ width: 8, height: 5 }}
+                source={require('../../images/ic_down_arrow.png')} />
+            </View>
+            <View
+              style={{
+                width: 90,
+                marginTop: 4,
+                backgroundColor: '#A3A5AE',
+                height: 1
+              }}
+            ></View>
+          </TouchableOpacity>
+
+          {/* <View style={{
             width: 80,
             backgroundColor: '#A3A5AE',
             height: 1
-          }}></View>
+          }}></View> */}
 
         </View>
 
@@ -207,7 +282,7 @@ class LeaderboardRoute extends BaseComponent {
 
 const mapStateToProps = state => {
   return {
-    data: state.ChallengeReducer,
+    data: state.ChallengeLeaderboardReducer,
   };
 };
 const mapDispatchToProps = {

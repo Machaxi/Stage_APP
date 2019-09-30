@@ -22,6 +22,9 @@ import BatchAttendenceReducer from './BatchAttendenceReducer'
 import DietPlanReducer from './DietPlanReducer'
 import PaymentReducer from './PaymentReducer'
 import CourtBookingReducer from './CourtBookingReducer'
+import PlayerReducer from './PlayerReducer'
+import ChallengeResultReducer from './ChallengeResultReducer'
+import ChallengeLeaderboardReducer from './ChallengeLeaderboardReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -46,7 +49,10 @@ const rootReducer = combineReducers({
     BatchAttendenceReducer,
     DietPlanReducer,
     PaymentReducer,
-    CourtBookingReducer
+    CourtBookingReducer,
+    PlayerReducer,
+    ChallengeResultReducer,
+    ChallengeLeaderboardReducer
 });
 
 export default rootReducer

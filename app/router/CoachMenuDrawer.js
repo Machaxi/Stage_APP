@@ -13,7 +13,7 @@ import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, formattedName } from '../containers/BaseComponent'
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
 import { getRelationsDetails, logout } from "../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
@@ -58,6 +58,20 @@ class CoachMenuDrawer extends BaseComponent {
 			//console.warn(EVENT_EDIT_PROFILE)
 			this.updateData()
 		});
+
+		this.refreshEvent = Events.subscribe(RATING_UPDATE, (obj) => {
+
+			if (obj) {
+				this.setState({
+					academy_rating: obj.academy_rating,
+					academy_name: obj.academy_name
+				})
+				//alert(obj.academy_rating)
+			}
+
+
+		});
+
 	}
 
 	updateData() {
@@ -194,7 +208,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</View>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
@@ -213,7 +227,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('WebViewScreen')}>
 
 					<View style={styles.drawercell}>
@@ -515,9 +529,18 @@ class CoachMenuDrawer extends BaseComponent {
 									color: 'black',
 									fontFamily: 'Quicksand-Medium',
 									fontSize: 14,
-									marginTop: 16
+									marginTop: 8
 								}}>
 								{fullame}</Text>
+
+							<Text
+								style={{
+									color: 'black',
+									fontFamily: 'Quicksand-Medium',
+									fontSize: 10,
+									marginTop: 4
+								}}>
+								({user_type})</Text>
 
 							<View style={{ marginTop: 8 }}>
 								<TouchableOpacity activeOpacity={.8} onPress={() => {
@@ -866,9 +889,18 @@ class CoachMenuDrawer extends BaseComponent {
 										color: 'black',
 										fontFamily: 'Quicksand-Medium',
 										fontSize: 14,
-										marginTop: 16
+										marginTop: 8
 									}}>
 									{fullame}</Text>
+
+								<Text
+									style={{
+										color: 'black',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 10,
+										marginTop: 4
+									}}>
+									({user_type})</Text>
 
 								<Text
 									style={{

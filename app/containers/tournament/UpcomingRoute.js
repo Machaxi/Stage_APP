@@ -324,19 +324,20 @@ class UpcomingRoute extends BaseComponent {
 
                 {this.listHeader()}
 
-                {this.state.tournaments.length != 0 ?
-                    <FlatList
-                        onRefresh={() => this.onRefresh()}
-                        refreshing={this.state.isRefreshing}
-                        data={data}
-                        extraData={data}
-                        renderItem={this._renderItem}
-                    /> :
+
+                <FlatList
+                    onRefresh={() => this.onRefresh()}
+                    refreshing={this.state.isRefreshing}
+                    data={data}
+                    extraData={data}
+                    renderItem={this._renderItem}
+                />
+                {this.state.tournaments.length == 0 ?
                     <View
                         style={{
 
                             alignSelf: 'center',
-                            marginTop: 150,
+                            marginTop: 0,
                             justifyContent: 'center', flex: 1, alignItems: 'center'
                         }}
                     >
@@ -345,7 +346,8 @@ class UpcomingRoute extends BaseComponent {
                             justifyContent: 'center',
                             flex: 1, textAlign: 'center',
                         }]}>No Tournament found</Text></View>
-                }
+                    : null}
+
 
             </View>
         );

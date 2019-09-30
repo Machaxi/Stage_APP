@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
-import { Card, ActivityIndicator, } from 'react-native-paper';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
+import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_RESULTS } from '../BaseComponent'
 import { getData } from "../../components/auth";
-import { getchallengeResults, disputeChallenge } from "../../redux/reducers/ChallengeReducer";
+import { getchallengeResults, disputeChallenge } from "../../redux/reducers/ChallengeResultReducer";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Events from '../../router/events';
 import RNPickerSelect from 'react-native-picker-select'
+import MonthYearDialog from '../../components/custom/MonthYearDialog'
 
 class ResultsRoute extends BaseComponent {
 
@@ -22,7 +23,9 @@ class ResultsRoute extends BaseComponent {
       playerId: null,
       academyId: null,
       months: [],
-      month: ''
+      month: '',
+      selected_month: '',
+      selected_year: ''
     }
     this.inputRefs = {
       month: null
@@ -39,9 +42,16 @@ class ResultsRoute extends BaseComponent {
       this.state.months.push(obj);
     };
 
-    this.setState({
-      month: moment().format('M')
-    });
+    // this.setState({
+    //   month: moment().format('M')
+    // });
+
+    var today = new Date();
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    this.state.selected_month = mm
+    this.state.selected_year = yyyy
 
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
@@ -64,9 +74,12 @@ class ResultsRoute extends BaseComponent {
     getData('header', (value) => {
 
       let player_id = global.SELECTED_PLAYER_ID
-      this.props.getchallengeResults(value, this.state.academyId,
-        this.state.month, moment().format('YYYY'), player_id).then(() => {
-          console.log('ggggfgfgfdgfd', this.props.data);
+      this.props.getchallengeResults(value,
+        this.state.academyId,
+        this.state.selected_month,
+        this.state.selected_year,
+        player_id).then(() => {
+          console.log('getchallengeResults', JSON.stringify(this.props.data));
           let data = this.props.data.data
           //console.log('getchallengeResults1111 ' + JSON.stringify(data));
 
@@ -119,67 +132,96 @@ class ResultsRoute extends BaseComponent {
   //     return suggestionResult.filter(item => item.name.search(regex) >= 0);
   // }
 
-  _renderItem = ({ item }) => (
+  _renderItem = ({ item }) => {
 
-    <View>
 
-      <View style={styles.totalResultsValueOuter}>
-        {
-          item.opponent.id == this.state.playerId ?
+    return (
 
-            <TouchableOpacity style={styles.opponentValue}
-              activeOpacity={.8}
-              onPress={() => {
-                this.props.navigation.navigate('OtherPlayerDeatils', {
-                  academy_id: this.state.academyId,
-                  player_id: item.challenge_by.id
-                })
-              }}>
-              <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>{item.challenge_by.name}</Text>
-            </TouchableOpacity>
-            :
-            <TouchableOpacity style={styles.opponentValue}
-              activeOpacity={.8}
-              onPress={() => {
-                this.props.navigation.navigate('OtherPlayerDeatils', {
-                  academy_id: this.state.academyId,
-                  player_id: item.opponent.id
-                })
-              }}>
-              <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>{item.opponent.name}</Text>
-            </TouchableOpacity>
+      <View>
 
-        }
+        <View style={styles.totalResultsValueOuter}>
+          {
+            item.opponent.id == this.state.playerId ?
 
-        <Text style={styles.scoreValue}>{item.score.split(':')[0]} - {item.score.split(':')[1]}</Text>
-        <View style={styles.resultOuter}>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+              <TouchableOpacity style={styles.opponentValue}
+                activeOpacity={.8}
+                onPress={() => {
+                  this.props.navigation.navigate('OtherPlayerDeatils', {
+                    academy_id: this.state.academyId,
+                    player_id: item.challenge_by.id
+                  })
+                }}>
+                <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>
+                  {item.opponent.name} - {item.challenge_by.name}
+                </Text>
+              </TouchableOpacity>
+              :
+              <TouchableOpacity style={styles.opponentValue}
+                activeOpacity={.8}
+                onPress={() => {
+                  this.props.navigation.navigate('OtherPlayerDeatils', {
+                    academy_id: this.state.academyId,
+                    player_id: item.opponent.id
+                  })
+                }}>
+                <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>
+                  {item.challenge_by.name} - {item.opponent.name}
+                </Text>
+              </TouchableOpacity>
+
+          }
+
+          <Text style={styles.scoreValue}>{item.score.split(':')[0]} - {item.score.split(':')[1]}</Text>
+          <View style={styles.resultOuter}>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              {
+                item.win ?
+                  <Image source={require('../../images/win_badge.png')}
+                    resizeMode='contain'
+                    style={{
+                      marginRight: 3, width: 12,
+                      height: 16, marginTop: 3, marginRight: 10
+                    }}></Image>
+                  :
+                  <Image source={require('../../images/lost_badge.png')}
+                    resizeMode='contain'
+                    style={{
+                      marginRight: 2, marginTop: 3, marginTop: 3,
+                      width: 12,
+                      height: 16, marginRight: 10
+                    }}></Image>
+              }
+
+              <Text style={styles.resultValue}>{item.win ? 'Won' : 'Lost'}</Text>
+            </View>
             {
-              item.win ? <Image source={require('../../images/win_badge.png')} style={{ marginRight: 3, marginTop: 3, marginRight: 10 }}></Image>
-                :
-                <Image source={require('../../images/lost_badge.png')} style={{ marginRight: 2, marginTop: 3, marginTop: 3, width: 12, height: 16, marginRight: 10 }}></Image>
+              item.challenge_status == 'DISPUTED' && <View style={{ paddingTop: 3 }}><Text style={[styles.disputeLabel, { color: '#A3A5AE' }]}>Disputed</Text></View>
+            }
+            {
+              item.challenge_status == 'COMPLETED' && <View style={{ paddingTop: 3 }}>
+                <Text onPress={() => {
+
+                  if (item.can_dispute) {
+                    this.disputeTheChallenge(item.id)
+                  }
+                  else {
+                    alert('Dispute can be done with in 7 days.')
+                  }
+                }}
+                  style={styles.disputeLabel}>Dispute</Text></View>
+            }
+            {
+              item.challenge_status == 'DISPUTE_RESOLVED' && <View style={{ paddingTop: 3 }}><Text ></Text></View>
             }
 
-            <Text style={styles.resultValue}>{item.win ? 'Won' : 'Lost'}</Text>
           </View>
-          {
-            item.challenge_status == 'DISPUTED' && <View style={{ paddingTop: 3 }}><Text style={[styles.disputeLabel, { color: '#A3A5AE' }]}>Disputed</Text></View>
-          }
-          {
-            item.challenge_status == 'COMPLETED' && <View style={{ paddingTop: 3 }}><Text onPress={() => { this.disputeTheChallenge(item.id) }} style={styles.disputeLabel}>Dispute</Text></View>
-          }
-          {
-            item.challenge_status == 'DISPUTE_RESOLVED' && <View style={{ paddingTop: 3 }}><Text ></Text></View>
-          }
-
         </View>
+
+
+        {/* </TouchableOpacity> */}
       </View>
-
-
-      {/* </TouchableOpacity> */}
-    </View>
-
-  );
+    )
+  };
 
   render() {
 
@@ -192,6 +234,14 @@ class ResultsRoute extends BaseComponent {
     }
 
     let data = this.state.challengeResultsData
+    const month = this.state.selected_month
+    const year = this.state.selected_year
+    let formatted_date = ''
+    if (month != '' && year != '') {
+      formatted_date = moment(month + "/" + year, 'MM-YYYY').format("MMM'YY")
+      //alert(formatted_date)
+    }
+
     return (
 
       <View style={styles.resultsPageContainer} >
@@ -199,8 +249,63 @@ class ResultsRoute extends BaseComponent {
         <View style={{ width: '45.33%', paddingLeft: 16 }}>
 
           <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
+          <MonthYearDialog
+            touchOutside={(month, year) => {
+              if (month != undefined && year != undefined) {
+                //alert(month + "-" + year)
+                this.state.selected_month = month
+                this.state.selected_year = year
+                setTimeout(() => {
+                  this.getResultsData()
+                }, 50)
+              }
+              this.setState({
+                show_month_dialog: false
+              })
 
-          <RNPickerSelect
+
+            }}
+            visible={this.state.show_month_dialog}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({
+                show_month_dialog: true
+              })
+            }}
+          >
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 8,
+              width: 90,
+              justifyContent: 'space-between'
+            }}>
+
+              <Text style={{
+                fontSize: 14,
+                color: '#404040',
+                paddingLeft: 2,
+                fontFamily: 'Quicksand-Medium'
+              }}>
+                {formatted_date}
+              </Text>
+
+              <Image
+                style={{ width: 8, height: 5 }}
+                source={require('../../images/ic_down_arrow.png')} />
+            </View>
+            <View
+              style={{
+                width: 90,
+                marginTop: 4,
+                backgroundColor: '#A3A5AE',
+                height: 1
+              }}
+            ></View>
+          </TouchableOpacity>
+
+          {/* <RNPickerSelect
             placeholder={{}}
             items={this.state.months}
             onValueChange={(value) => {
@@ -217,12 +322,13 @@ class ResultsRoute extends BaseComponent {
             ref={(el) => {
               this.inputRefs.month = el;
             }}
-          />
-          <View style={{
+          /> */}
+
+          {/* <View style={{
             width: 80,
             backgroundColor: '#A3A5AE',
             height: 1
-          }}></View>
+          }}></View> */}
 
         </View>
 
@@ -236,7 +342,13 @@ class ResultsRoute extends BaseComponent {
           <Text style={styles.gameValue}>{data.total_count}</Text>
           <View style={[styles.wonValue, { flex: 1, flexDirection: 'row' }]}>
             <View><Text>{data.win}</Text></View>
-            <View style={{ marginLeft: 5 }}><Image source={require('../../images/win_badge.png')} style={{ marginTop: 2 }}></Image></View>
+            <View style={{ marginLeft: 5 }}><Image
+              resizeMode='contain'
+              source={require('../../images/win_badge.png')} style={{
+                marginTop: 2,
+                width: 12,
+                height: 16,
+              }}></Image></View>
           </View>
           <Text style={styles.lostValue}>{data.loss}</Text>
         </View>
@@ -244,7 +356,7 @@ class ResultsRoute extends BaseComponent {
         {
           data.challenges.length > 0 &&
           <View style={styles.totalResultsLabelOuter}>
-            <Text style={styles.opponentLabel}>Opponent</Text>
+            <Text style={styles.opponentLabel}>Match</Text>
             <Text style={styles.scoreLabel}>Score</Text>
             <Text style={styles.resultLabel}>Result</Text>
           </View>
@@ -266,7 +378,7 @@ class ResultsRoute extends BaseComponent {
 
 const mapStateToProps = state => {
   return {
-    data: state.ChallengeReducer,
+    data: state.ChallengeResultReducer,
   };
 };
 const mapDispatchToProps = {

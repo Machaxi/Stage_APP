@@ -7,7 +7,7 @@ import { getData, storeData, isSignedIn } from '../../components/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { bookTrial } from "../../redux/reducers/AcademyReducer";
 import { connect } from 'react-redux';
-
+import moment from 'moment'
 
 class BookTrial extends BaseComponent {
 
@@ -120,28 +120,30 @@ class BookTrial extends BaseComponent {
             this.progress(false)
 
             let res = JSON.stringify(this.props.data.res);
-            console.log(' bookTrial 1' + JSON.stringify(res));
+            console.log(' bookTrial 1' + res);
             let user1 = JSON.parse(res)
 
             if (user1.success == true) {
 
-                let success_message = user1.success_message
-                const array = user1.data.data
+                let success_message = user1.data.Success
+                const array = user1.data.Timings
                 let classes = ''
-                for(let i =0;i<array.length;i++){
+                for (let i = 0; i < array.length; i++) {
 
                     let obj = array[i]
-                    classes = classes+ this.spaceCount(obj['weekday']) + "  "+obj['start_time']+ " - "+obj['end_time']+"\n"
+                    classes = classes + this.spaceCount(obj['weekday']) + "  "
+                        + moment.utc(obj['start_time'], 'hh:mm a').local().format("hh:mm a") + " - "
+                        + moment.utc(obj['end_time'], 'hh:mm a').local().format("hh:mm a") + "\n"
 
                 }
                 //success_message = success_message+"\\n"
                 //success_message+classes
-                console.log('classes=> ',classes)
+                console.log('classes=> ', classes)
                 //alert(success_message)
-                setTimeout(()=>{
+                setTimeout(() => {
                     Alert.alert(
-                        success_message,
-                        classes,
+                        '',
+                        success_message + '\n\n' + classes,
                         [
                             {
                                 text: 'OK', onPress: () => {
@@ -152,8 +154,8 @@ class BookTrial extends BaseComponent {
                         { cancelable: false },
                     );
 
-                },100)
-                
+                }, 100)
+
             }
 
             //this.progress(false)
@@ -165,31 +167,31 @@ class BookTrial extends BaseComponent {
         })
     }
 
-    spaceCount(weekday){
-        let count = 10 - weekday.length
+    spaceCount(weekday) {
+        let count = 13 - weekday.length
         let extraSpace = ''
-        for(let i=0;i<count;i++){
+        for (let i = 0; i < count; i++) {
             extraSpace = extraSpace + ' '
         }
-        return weekday+extraSpace
+        return weekday + extraSpace
     }
 
     progress(status) {
-        setTimeout(()=>{
-            console.log('Progress=> ',status)
+        setTimeout(() => {
+            console.log('Progress=> ', status)
             this.setState({
                 spinner: status
             })
-            this.state.spinner= status
-        },100)
-        
+            this.state.spinner = status
+        }, 100)
+
     }
 
     render() {
 
         let alert_msg = this.state.alert_msg
         let progress = this.state.progress
-        console.log('SpinnerState => ',this.state.spinner)
+        console.log('SpinnerState => ', this.state.spinner)
 
         if (progress) {
             return (

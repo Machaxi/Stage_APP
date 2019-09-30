@@ -32,6 +32,8 @@ export default function AcademyReducer(state = initialState, action) {
                 loading: false,
                 error: 'Error while fetching user'
             };
+
+       
         default:
             return state;
     }
@@ -102,7 +104,7 @@ export function getCoachFeedbackList(header, academy_id, coach_id, page, size, s
 
 export function getAcademyPlayersList(id) {
     return {
-        type: types.DO_LOGIN,
+        type: types.GET_PLAYER_LISTING,
         payload: {
             request: {
                 url: `global/academy/${id}/players`
@@ -179,7 +181,7 @@ export function getBatchPlayersList(header, batch_id) {
     //         header  = value
     //     });
     return {
-        type: types.DO_LOGIN,
+        type: types.GET_PLAYER_LISTING,
         payload: {
             request: {
                 url: `batch/${batch_id}/players`,

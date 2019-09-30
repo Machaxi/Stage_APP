@@ -450,7 +450,7 @@ class FixtureSelection extends BaseComponent {
                                         alignItems: 'center',
                                         textAlign: 'center'
                                     }]}>
-                                        No data found
+                                        Fixture not available
                                          </Text>}
                             </View>
 

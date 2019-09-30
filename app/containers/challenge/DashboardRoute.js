@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Events from '../../router/events';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DropdownAlert from 'react-native-dropdownalert';
 
 class DashboardRoute extends BaseComponent {
 
@@ -29,6 +30,7 @@ class DashboardRoute extends BaseComponent {
       matchData: null,
       spinner: false,
       academyId: null,
+      isRefreshing: false
     }
   }
 
@@ -57,6 +59,9 @@ class DashboardRoute extends BaseComponent {
       this.state.playerId = player_id//userData['player_id'];
       this.state.academyId = userData['academy_id'];
       getData('header', (value) => {
+        this.setState({ isRefreshing: false })
+
+
         this.props.getChallengeDashboard(value, academy_id, player_id).then(() => {
           let data = this.props.data.data
           //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
@@ -77,6 +82,8 @@ class DashboardRoute extends BaseComponent {
 
         }).catch((response) => {
           console.log(response);
+          this.setState({ isRefreshing: false })
+
         })
       })
     });
@@ -143,6 +150,9 @@ class DashboardRoute extends BaseComponent {
         let success = data.success
         if (success) {
 
+          const success_message = data.success_message
+          this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
+          
           this.setState({
             playerData: [data.data.dashboard.player],
             challengeData: data.data.dashboard.challenges,
@@ -165,6 +175,10 @@ class DashboardRoute extends BaseComponent {
 
         let success = data.success
         if (success) {
+
+          const success_message = data.success_message
+          this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
+
 
           this.setState({
             playerData: [data.data.dashboard.player],
@@ -206,6 +220,15 @@ class DashboardRoute extends BaseComponent {
 
   saveData() {
 
+    let player1_score = +this.state.matchData.match_scores[0].player1_score
+    let player2_score = +this.state.matchData.match_scores[0].player2_score
+
+    if (player1_score != 21 && player2_score != 21) {
+      alert('Please submit the valid score.')
+      return
+    }
+
+
     let postData = {}
     postData['data'] = this.state.matchData;
 
@@ -222,7 +245,7 @@ class DashboardRoute extends BaseComponent {
         if (success) {
           Events.publish(EVENT_REFRESH_RESULTS);
           this.setModalVisible(false);
-
+          this.getDashboardData()
         }
 
       }).catch((response) => {
@@ -431,11 +454,13 @@ class DashboardRoute extends BaseComponent {
       </TouchableOpacity>
 
 
-      <View style={styles.filterOuter}>
-        <Text style={styles.challengeText}>Challenges</Text>
-        {/* <Text style={styles.filterText}>Filter</Text> */}
-      </View>
-
+      {this.state.challengeData.length > 0 ?
+        < View style={styles.filterOuter}>
+          <Text style={styles.challengeText}>Challenges</Text>
+          {/* <Text style={styles.filterText}>Filter</Text> */}
+        </View>
+        : null
+      }
       {
         this.state.challengeData.map((item, index) => {
           return (
@@ -473,7 +498,7 @@ class DashboardRoute extends BaseComponent {
                   </View>
                   <View style={styles.scoreCatValueOuter}>
                     <Text style={styles.scoreValue}>{item.challenge_by.score}</Text>
-                    <Text style={styles.categoryValue}>{item.challenge_by.player_category}</Text>
+                    <Text style={styles.categoryValue}>{getFormattedCategory(item.challenge_by.player_category)}</Text>
                     <Text style={styles.dateValue}>{moment.utc(item.date).local().format(SESSION_DATE_FORMAT)}</Text>
                   </View>
 
@@ -542,7 +567,7 @@ class DashboardRoute extends BaseComponent {
                   </View>
                   <View style={styles.scoreCatValueOuter}>
                     <Text style={styles.scoreValue}>{item.opponent.score}</Text>
-                    <Text style={styles.categoryValue}>{item.opponent.player_category}</Text>
+                    <Text style={styles.categoryValue}>{getFormattedCategory(item.opponent.player_category)}</Text>
                     <Text style={styles.dateValue}>{moment.utc(item.date).local().format(SESSION_DATE_FORMAT)}</Text>
                   </View>
 
@@ -676,9 +701,15 @@ class DashboardRoute extends BaseComponent {
           </View>
         </View>
       </Card> */}
-    </View>
+    </View >
 
   );
+
+  onRefresh() {
+    this.setState({ isRefreshing: true }, function () { this.getDashboardData(); });
+  }
+
+
 
   render() {
 
@@ -699,8 +730,15 @@ class DashboardRoute extends BaseComponent {
           visible={this.state.spinner}
           textStyle={defaultStyle.spinnerTextStyle}
         />
+
+        <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
+
+
         <FlatList
+          onRefresh={() => this.onRefresh()}
+          refreshing={this.state.isRefreshing}
           data={data}
+          extraData={data}
           renderItem={this._renderItem}
         />
         {data.length > 0 && this.updateScoreModal(data[0])}

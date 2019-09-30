@@ -16,6 +16,7 @@ import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTim
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
 
+var notification_count = 0
 
 class CoachHome extends BaseComponent {
 
@@ -71,7 +72,7 @@ class CoachHome extends BaseComponent {
 
             ),
             headerStyle: {
-                elevation: 0, shadowOpacity: 0, borderBottomWidth: 0,
+                elevation: 2, shadowOpacity: 1, borderBottomWidth: 0,
             },
             headerTitleStyle: styles.headerStyle,
             headerLeft: (
@@ -81,21 +82,41 @@ class CoachHome extends BaseComponent {
                     }}
                     activeOpacity={.8}>
                     <Image
-                        source={require('../../images/hamburger_white.png')}
+                        source={require('../../images/hamburger.png')}
                         style={{ width: 20, height: 16, marginLeft: 12 }}
                     />
                 </TouchableOpacity>
             ),
             headerRight: (
                 <TouchableOpacity
+                    style={{ marginRight: 8 }}
                     onPress={() => {
-                        console.warn('test')
+                        navigation.navigate('NotificationList')
                     }}
-                    activeOpacity={.8}>
-                    <Image
-                        source={require('../../images/ic_notifications.png')}
-                        style={{ width: 20, height: 20, marginRight: 12 }}
-                    />
+                    activeOpacity={.8} >
+                    <ImageBackground
+                        resizeMode="contain"
+                        source={require('../../images/bellicon.png')}
+                        style={{
+                            width: 22, height: 22, marginLeft: 12,
+                            marginRight: 12,
+                            alignItems: 'flex-end'
+                        }}>
+
+                        {navigation.getParam('notification_count', 0) > 0 ? <View style={{
+                            width: 16,
+                            height: 16,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 30 / 2,
+                            backgroundColor: '#ED2638'
+                        }}>
+                            <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                {navigation.getParam('notification_count', '')}</Text>
+                        </View> : null}
+
+
+                    </ImageBackground>
                 </TouchableOpacity>
             )
         };
@@ -126,6 +147,17 @@ class CoachHome extends BaseComponent {
 
     componentDidMount() {
 
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.getNotifications()
+            }
+        );
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
+            this.getNotifications()
+        });
+
         this.selfComponentDidMount()
 
         this.refreshEvent = Events.subscribe('FROM_REGISTRATION', () => {
@@ -136,6 +168,13 @@ class CoachHome extends BaseComponent {
             this.selfComponentDidMount()
         });
 
+    }
+
+    getNotifications() {
+        this.getNotificationCount((count) => {
+            this.props.navigation.setParams({ notification_count: count });
+            notification_count = count
+        })
     }
 
     selfComponentDidMount() {
