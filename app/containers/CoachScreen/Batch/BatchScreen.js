@@ -264,7 +264,9 @@ class BatchScreen extends BaseComponent {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={defaultStyle.regular_text_14}>No Batch Found.</Text>
+                        <Text style={defaultStyle.regular_text_14}>
+                            {this.state.batchList ? 'No Batch Found' : ''}
+                        </Text>
                     </View>
                 </View>
             )

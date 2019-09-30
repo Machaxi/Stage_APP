@@ -71,6 +71,7 @@ export default class PlayerHeader extends BaseComponent {
                                 resizeMode={FastImage.resizeMode.contain}
                                 style={{
                                     width: 201,
+                                    marginLeft:10,
                                     height: 238, marginRight: 20, marginTop: 0, display: 'flex'
                                 }}
                                 source={{ uri: profile_pic }}

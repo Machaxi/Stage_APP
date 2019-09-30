@@ -21,6 +21,7 @@ import { Rating } from 'react-native-ratings';
 import { RateViewBorder } from '../components/Home/RateViewBorder';
 import { SkyFilledButton } from '../components/Home/SkyFilledButton';
 import Share from 'react-native-share';
+import FastImage from 'react-native-fast-image'
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png"
 
@@ -784,9 +785,7 @@ class CoachMenuDrawer extends BaseComponent {
 		//signedIn = true
 		let is_parent = user_type == PARENT
 		let profile_pic = this.state.profile_pic
-		if (profile_pic == '') {
-			profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
-		}
+
 		//console.warn('profile_pic', profile_pic)
 
 		let show_edit = is_parent
@@ -827,10 +826,18 @@ class CoachMenuDrawer extends BaseComponent {
 						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
 					}}
 				>
-					<Image
+					{/* <Image
 						style={{ width: 128, height: 128, borderRadius: 8 }}
 						source={{ uri: profile_pic }}
-					></Image>
+					></Image> */}
+
+					<FastImage
+						//resizeMode={FastImage.resizeMode.contain}
+						style={{
+							width: 128, height: 128, borderRadius: 8 
+						}}
+						source={{ uri: profile_pic }}
+					/>
 
 					<View
 						style={{
