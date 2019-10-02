@@ -12,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, {
     defaultStyle, getFormattedLevel,
     getStatsImageById,
-    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, getUtcDateFromTime
+    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, getUtcDateFromTime, PROFILE_PIC_UPDATED
 } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
@@ -299,6 +299,13 @@ class UserHome extends BaseComponent {
                     this.setState({
                         academy_feedback_data: user1.data['academy_data'].feedback[0],
                     })
+                }
+
+                try{
+                    const profile_pic = user1.data.player_profile.profile_pic
+                    Events.publish(PROFILE_PIC_UPDATED,profile_pic);
+                }catch(err){
+
                 }
 
                 if (user1.data.player_profile['stats'] != null &&

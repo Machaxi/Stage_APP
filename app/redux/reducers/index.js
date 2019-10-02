@@ -25,6 +25,8 @@ import CourtBookingReducer from './CourtBookingReducer'
 import PlayerReducer from './PlayerReducer'
 import ChallengeResultReducer from './ChallengeResultReducer'
 import ChallengeLeaderboardReducer from './ChallengeLeaderboardReducer'
+import EditPartnerReducer from './EditPartnerReducer'
+import RelationReducer from './RelationReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -52,7 +54,9 @@ const rootReducer = combineReducers({
     CourtBookingReducer,
     PlayerReducer,
     ChallengeResultReducer,
-    ChallengeLeaderboardReducer
+    ChallengeLeaderboardReducer,
+    EditPartnerReducer,
+    RelationReducer
 });
 
 export default rootReducer

@@ -78,3 +78,20 @@ export function getPaymentHistory(header, month, year, academy_id, player_user_i
     };
 
 }
+
+export function duePay(header, postData) {
+    console.log('duePay=> ',JSON.stringify(postData))
+    return {
+        type: types.PAYMENT_DUES,
+        payload: {
+            request: {
+                url: `/payment/due-play`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}

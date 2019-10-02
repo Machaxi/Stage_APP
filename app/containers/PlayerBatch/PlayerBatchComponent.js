@@ -9,6 +9,7 @@ import BaseComponent, {
     checkProfilePic, getFormatTimeDate, getFormatTime, getUtcDateFromTime
 } from '../BaseComponent';
 import { getData } from "../../components/auth";
+import ProgressIngreeDialog from '../../components/custom/ProgressIngreeDialog'
 
 class PlayerBatchComponent extends BaseComponent {
 
@@ -18,7 +19,8 @@ class PlayerBatchComponent extends BaseComponent {
 
             batchdata: null,
             coactList: [],
-            academy_id: ''
+            academy_id: '',
+            performance_dialog: false
         }
 
         getData('userInfo', (value) => {
@@ -227,6 +229,25 @@ class PlayerBatchComponent extends BaseComponent {
         // this.scoreMangement(tournaments)
 
         return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+
+            <ProgressIngreeDialog
+                touchOutside={(item) => {
+                    this.setState({
+                        performance_dialog: false
+                    })
+                    setTimeout(() => {
+
+                        if (item != null) {
+                            item.score = 0
+                            this.props.navigation.navigate('ViewPlayerPerformance',
+                                { performance_data: item });
+                        }
+                    }, 50)
+                }}
+                performance_data={this.props.jumpTo.progress_attributes}
+                visible={this.state.performance_dialog}
+            />
+
             <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 {/*// <View style={{margin: 10}}>*/}
 
@@ -324,7 +345,7 @@ class PlayerBatchComponent extends BaseComponent {
                                             }</Text>
                                     </View>
                                     : null}
-                                    
+
                                 {operations.weekend ?
 
                                     <View style={{ width: '40%' }}>
@@ -401,6 +422,41 @@ class PlayerBatchComponent extends BaseComponent {
                                 </View>
                             </View>
 
+                        </TouchableOpacity>
+                    </CustomeCard>
+
+                    <CustomeCard>
+                        <TouchableOpacity onPress={() => {
+                            this.setState({
+                                performance_dialog: true
+                            })
+                        }}>
+                            <View style={{ marginLeft: 8, marginTop: 8, marginBottom: 8, flexDirection: 'row', height: 40 }}>
+
+                                <View style={{ flex: 1 }}>
+
+                                    <View style={{
+                                        marginTop: 10,
+                                        flex: 1,
+                                        marginRight: 15,
+                                        marginBottom: 5,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <Text
+                                            style={defaultStyle.regular_text_14}>
+                                            View Performance
+                                            </Text>
+
+                                        <Image source={require('../../images/path.png')}
+                                            style={{
+                                                width: 19,
+                                                height: 13, marginRight: 0, marginTop: 5
+                                            }} />
+
+                                    </View>
+                                </View>
+                            </View>
 
                         </TouchableOpacity>
                     </CustomeCard>

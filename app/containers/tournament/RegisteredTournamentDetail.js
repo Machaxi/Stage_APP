@@ -13,9 +13,11 @@ import Share from 'react-native-share';
 import { getData, storeData } from '../../components/auth';
 import NavigationDrawerStructure from '../../router/NavigationDrawerStructure'
 import { PARENT } from '../../components/Constants';
+import { getTournamentById } from "../../redux/reducers/UpcomingReducer";
+import { connect } from 'react-redux';
+import Events from '../../router/events';
 
-
-export default class RegisteredTournamentDetail extends BaseComponent {
+class RegisteredTournamentDetail extends BaseComponent {
 
     static navigationOptions = ({ navigation }) => {
 
@@ -80,6 +82,36 @@ export default class RegisteredTournamentDetail extends BaseComponent {
             });
         });
 
+        this.refreshEvent = Events.subscribe('EDIT_PARTNER', () => {
+            let id = this.state.data['id']
+            this.fetchTournamentData(id)
+        });
+    }
+
+    fetchTournamentData(tournament_id) {
+
+        getData('header', (value) => {
+
+            this.props.getTournamentById(value, tournament_id).then(() => {
+                let data = this.props.data.data
+                console.log(' getTournamentById ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    let tournament = data.data.tournament
+                    this.setState({
+                        data: tournament
+                    })
+                    this.state.tournament = tournament
+                    storeData("detail", JSON.stringify(tournament))
+                }
+
+            }).catch((response) => {
+                this.setState({ isRefreshing: false })
+                console.log(response);
+            })
+        })
     }
 
     tournament_types(tournament_types) {
@@ -191,7 +223,7 @@ export default class RegisteredTournamentDetail extends BaseComponent {
                             onPress={() => {
                                 //alert('under development')
                                 this.props.navigation.navigate('EditPartner', {
-                                    data: this.props.navigation.getParam('data')
+                                    data: JSON.stringify(data)
                                 })
                             }}
                             style={{
@@ -565,6 +597,16 @@ export default class RegisteredTournamentDetail extends BaseComponent {
         );
     }
 }
+const mapStateToProps = state => {
+    return {
+        data: state.UpcomingTournamentReducer,
+    };
+};
+const mapDispatchToProps = {
+    getTournamentById
+};
+export default connect(mapStateToProps, mapDispatchToProps)(RegisteredTournamentDetail);
+
 
 
 const styles = StyleSheet.create({

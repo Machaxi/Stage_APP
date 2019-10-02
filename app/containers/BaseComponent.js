@@ -27,6 +27,7 @@ export const EVENT_REFRESH_DASHBOARD = 'EVENT_REFRESH_DASHBOARD'
 export const EVENT_EDIT_PROFILE = 'EVENT_EDIT_PROFILE'
 export const EVENT_SELECT_PLAYER_TOURNAMENT = 'EVENT_SELECT_PLAYER_TOURNAMENT'
 export const EVENT_SELECT_PLAYER_ADD_NUMBER = 'EVENT_SELECT_PLAYER_ADD_NUMBER'
+export const PROFILE_PIC_UPDATED = 'PROFILE_PIC_UPDATED'
 
 //to refresh challenge dashboard
 export const EVENT_REFRESH_CHALLENGE = 'EVENT_REFRESH_CHALLENGE'
@@ -94,9 +95,38 @@ export default class BaseComponent extends React.Component {
         });
     }
 
+    isNumbericOnly(value){
+
+        return /^\d*$/.test(value)
+
+    }
     static isUserLoggedIn() {
         return this.isUserLoggedIn;
     }
+
+    filterRewards(reward_detail) {
+        let temp_reward = []
+        for (let i = 0; i < reward_detail.length; i++) {
+
+            let month = reward_detail[i].month
+            let year = reward_detail[i].year
+
+            let is_exists = false
+            for (let j = 0; j < temp_reward.length; j++) {
+
+                if (temp_reward[j].month == month && temp_reward[j].year == year) {
+                    is_exists = true
+                    break
+                }
+            }
+            if (is_exists == false) {
+                temp_reward.push(reward_detail[i])
+            }
+
+        }
+        return temp_reward
+    }
+
 
     //using top of all dashboard to check notification, this code will hellp
     // to reduce extra efforts in all cases
@@ -123,6 +153,8 @@ export default class BaseComponent extends React.Component {
                         'app_version': '1'
                     };
 
+                    console.log('Notification_header=>', JSON.stringify(headers))
+
                     //client.call
                     client.get('notification/notification-count',
                         { headers })
@@ -146,8 +178,6 @@ export default class BaseComponent extends React.Component {
                                 if (is_sync == true) {
                                     getSettingData(headers)
                                 }
-
-
                             }
 
                         })
@@ -165,7 +195,28 @@ export default class BaseComponent extends React.Component {
     }
 
 
+    isValidMobileNumber(phone) {
 
+        let is_valid = true
+        if (phone.length != 13) {
+            is_valid = false
+        } else {
+            if (!phone.startsWith('+91')) {
+                is_valid = false
+            }
+            else {
+                let std = phone.substring(0, 3)
+                let number = phone.substring(3, phone.length - 1)
+                if (number.startsWith('9') || number.startsWith('8') || number.startsWith('7')
+                    || number.startsWith('6')) {
+                    is_valid = true
+                } else {
+                    is_valid = false
+                }
+            }
+        }
+        return is_valid
+    }
 
     getNetworkStatus() {
         if (!connected) {

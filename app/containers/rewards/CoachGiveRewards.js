@@ -80,7 +80,7 @@ class CoachGiveRewards extends BaseComponent {
                     for (let i = 0; i < players.length; i++) {
 
                         let obj = players[i]
-                        let newObj = { ...obj, input_score: 0 }
+                        let newObj = { ...obj, input_score: '' }
                         newPlayerList[i] = newObj
                     }
                     this.setState({
@@ -117,12 +117,6 @@ class CoachGiveRewards extends BaseComponent {
             //     }
             // }"
 
-            let data = {};
-            data["month"] = this.state.month
-            data["year"] = this.state.year
-            data["batch_id"] = this.state.batch_id
-            data["coach_id"] = this.state.coach_id
-
             const players = this.state.playerList
             let totalScore = 0
             let rewards = {}
@@ -132,15 +126,42 @@ class CoachGiveRewards extends BaseComponent {
                 let player = players[i]
                 let id = player.id
                 let nId = id + ""
-                let score = player.input_score
-                reward[nId] = score
+                let score = +player.input_score
+                reward[nId] = score == '' ? 0 : score
                 //rewards[i] = reward
                 //rewards = {...rewards,reward}
-                rewards[nId] = score
+                rewards[nId] = score == '' ? 0 : score
                 //console.log('rewards = ',JSON.stringify(rewards))
                 totalScore = totalScore + player.input_score
             }
+
+            if (totalScore == 0) {
+                alert('Please enter score.')
+                return
+            }
+
+            let data = {};
+            data["month"] = this.state.month
+            data["year"] = this.state.year
+            data["batch_id"] = this.state.batch_id
+            data["coach_id"] = this.state.coach_id
             data["rewards"] = rewards
+
+
+            // for (let i = 0; i < players.length; i++) {
+
+            //     let reward = {}
+            //     let player = players[i]
+            //     let id = player.id
+            //     let nId = id + ""
+            //     let score = player.input_score
+            //     reward[nId] = score
+            //     //rewards[i] = reward
+            //     //rewards = {...rewards,reward}
+            //     rewards[nId] = score
+            //     //console.log('rewards = ',JSON.stringify(rewards))
+            //     totalScore = totalScore + player.input_score
+            // }
 
             let req = {}
             req['data'] = data
@@ -253,23 +274,21 @@ class CoachGiveRewards extends BaseComponent {
                     borderWidth: 1,
                     borderColor: '#CECECE'
                 }}
+                value={item.input_score}
                 onChangeText={(text) => {
-                    item.input_score = text
-                    // const NON_DIGIT = '/[^\d]/g';
-                    // const intValue = parseInt(text.toString().replace(NON_DIGIT, ''));
-                    // item.input_score = intValue
-                    // //alert(intValue)
-                    // const playerList = this.state.playerList
-                    // playerList[index] = {...item}
-                    // console.log('oNChangeText => ',JSON.stringify(playerList))
-                    // this.setState({
-                    //     playerList: [...playerList]
-                    // })
-
+                    if (!this.isNumbericOnly(text)) {
+                       item.input_score = ''
+                    } else {
+                        item.input_score = text
+                    }
+                    let playerList = [...this.state.playerList]
+                    playerList[index] = { ...item }
+                    this.setState({
+                        playerList: playerList
+                    })
+                    this.state.playerList = playerList
                     this.subtractRewardPoints(text)
-                }}
-
-            >{item.input_score}</TextInput>
+                }}></TextInput>
         </View>
     );
 
@@ -348,6 +367,8 @@ class CoachGiveRewards extends BaseComponent {
                                         style={{
                                             fontSize: 14,
                                             marginTop: 16,
+                                            paddingLeft: 16,
+                                            paddingRight: 16,
                                             color: 'black',
                                             fontWeight: "400",
                                             textAlign: 'center',

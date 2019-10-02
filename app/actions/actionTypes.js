@@ -33,6 +33,10 @@ export const GET_TOURNAMENT_REGISTER = 'tournament_register/LOAD';
 export const DO_TOURNAMENT_REGISTER_SUCCESS = 'tournament_register/LOAD_SUCCESS';
 export const DO_TOURNAMENT_REGISTER_FAIL = 'tournament_register/LOAD_FAIL';
 
+export const GET_EDIT_PARTNER = 'edit_partner/LOAD';
+export const DO_EDIT_PARTNER_SUCCESS = 'edit_partner/LOAD_SUCCESS';
+export const DO_EDIT_PARTNER_FAIL = 'edit_partner/LOAD_FAIL';
+
 export const GET_UPCOMING_TOURNAMENT = 'upcoming/LOAD';
 export const DO_UPCOMING_TOURNAMENT_SUCCESS = 'upcoming/LOAD_SUCCESS';
 export const DO_UPCOMING_TOURNAMENT_FAIL = 'upcoming/LOAD_FAIL';
@@ -64,6 +68,10 @@ export const DO_DASHBOARD_FAIL = 'user/LOAD_FAIL';
 export const GET_PROFILE = 'profile/LOAD';
 export const DO_PROFILE_SUCCESS = 'profile/LOAD_SUCCESS';
 export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
+
+export const GET_RELATION = 'relation/LOAD';
+export const DO_RELATION_SUCCESS = 'relation/LOAD_SUCCESS';
+export const DO_RELATION_FAIL = 'relation/LOAD_FAIL';
 
 export const DIET_PLAN = 'diet_plan/LOAD';
 export const DO_DIET_PLAN_SUCCESS = 'diet_plan/LOAD_SUCCESS';

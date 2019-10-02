@@ -122,8 +122,14 @@ class ParentRewardComponent extends BaseComponent {
         //         }
         // }
 
-        let love_game = this.state.love_game == '' ? 0 : this.state.love_game
         let following_diet = this.state.following_diet == '' ? 0 : this.state.following_diet
+        let love_game = this.state.love_game == '' ? 0 : this.state.love_game
+
+        // if (love_game + "".match(/[^\d]/) || following_diet + "".match(/[^\d]/)) {
+        //     alert('Invalid character input')
+        //     return
+        // }
+        
         let sum = +love_game + +following_diet
         console.warn('sum => ', sum)
         // if (following_diet == 0) {
@@ -132,17 +138,22 @@ class ParentRewardComponent extends BaseComponent {
         //     })
         //     //alert('Following diet field is empty')
         // }
-         if (love_game == 0 && following_diet == 0) {
+
+
+        if (love_game == 0 && following_diet == 0) {
             this.setState({
-                alert: 'Reward field is empty'
+                alert: 'Reward fields is empty'
             })
+
             //alert('Love for the game field is empty')
-        } else if (sum > 500) {
+        }
+        else if (sum > 500) {
             this.setState({
                 alert: 'Total points sum must be less than or equivalent to 500'
             })
         }
         else {
+
             this.setState({
                 alert: ''
             })
@@ -248,6 +259,9 @@ class ParentRewardComponent extends BaseComponent {
     render() {
 
         let data = this.state.player_due
+        data = this.filterRewards(data)
+
+
         let name = this.state.name
         let player_history = this.state.player_history
         let history_view = [];
@@ -425,8 +439,13 @@ class ParentRewardComponent extends BaseComponent {
                                     <TextInput style={styles.formInput}
                                         placeholder="Following Diet"
                                         keyboardType={'number-pad'}
-                                        onChangeText={(text) => this.setState({ following_diet: text })}
-                                        value={this.state.text}
+                                        onChangeText={(text) => {
+                                            if (!this.isNumbericOnly(text)) {
+                                                this.setState({ following_diet: '' })
+                                            } else
+                                                this.setState({ following_diet: text })
+                                        }}
+                                        value={this.state.following_diet}
                                     ></TextInput>
 
                                     <TextInput style={[styles.formInput, { marginLeft: 20 }]}
@@ -434,14 +453,10 @@ class ParentRewardComponent extends BaseComponent {
                                         keyboardType={'number-pad'}
                                         placeholderTextColor='#A3A5AE'
                                         onChangeText={(text) => {
-
-                                            if (text != '') {
-                                                const NON_DIGIT = '/[^\d]/g';
-                                                const intValue = parseInt(text.toString().replace(NON_DIGIT, ''));
-                                                this.setState({ love_game: intValue })
-                                            } else {
+                                            if (!this.isNumbericOnly(text)) {
                                                 this.setState({ love_game: '' })
-                                            }
+                                            } else
+                                                this.setState({ love_game: text })
                                         }}
                                         value={this.state.love_game}
                                     ></TextInput>

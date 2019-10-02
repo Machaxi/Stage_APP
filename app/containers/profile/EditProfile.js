@@ -16,6 +16,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
 import { BASE_URL } from '../../../App'
 import ImageResizer from 'react-native-image-resizer';
+import FastImage from 'react-native-fast-image';
 
 class EditProfile extends BaseComponent {
 
@@ -56,7 +57,7 @@ class EditProfile extends BaseComponent {
                 txtphone: userData.user['mobile_number'],
                 birthdate: userData.user['dob'],
                 profile_pic: userData.user['profile_pic'],
-                is_image_processed: userData.user['is_image_processed']
+                is_image_processed: false//userData.user['is_image_processed']
             })
 
 
@@ -93,9 +94,13 @@ class EditProfile extends BaseComponent {
         if (txtname == '') {
             alert('Name cannot be empty.')
         } else if (phone_number == '') {
-            alert('Phone number can\'t be empty')
+            alert('Mobile number can\'t be empty')
+        }
+        else if (!this.isValidMobileNumber(phone_number)) {
+            alert('Invalid mobile number')
         }
         else {
+
             getData('header', (value) => {
                 //var formData = new FormData();
                 //var dataDic = {};
@@ -113,12 +118,12 @@ class EditProfile extends BaseComponent {
 
                 let file = null
                 let path = this.state.path
-                console.log("path",path);
-                if(Platform.OS=='ios'){
-                    path = path.replace('file:///','/')
-                    console.log("path",path);    
+                console.log("path", path);
+                if (Platform.OS == 'ios') {
+                    path = path.replace('file:///', '/')
+                    console.log("path", path);
                 }
-                
+
                 let fileName = this.state.fileName
                 let type = this.state.contentType
                 if (path != null) {
@@ -141,39 +146,44 @@ class EditProfile extends BaseComponent {
 
                 let url = BASE_URL + 'user/profile'
 
-                RNFetchBlob.fetch('POST', url, {
-                    'Content-Type': 'multipart/form-data',
-                    'x-authorization': value,
-                }, param).then((resp) => {
-                    // this.progress(false)
-                    // console.log(resp);
-                    // alert('your image uploaded successfully');
+                RNFetchBlob.
+                    config({ timeout: 1000 * 60 })
+                    .fetch('POST', url, {
+                        'Content-Type': 'multipart/form-data',
+                        'x-authorization': value,
+                    }, param).then((resp) => {
+                        // this.progress(false)
+                        // console.log(resp);
+                        // alert('your image uploaded successfully');
 
-                    this.progress(false)
+                        this.progress(false)
 
-                    let data = JSON.parse(resp.data)//JSON.parse(resp)
-                    console.warn('suces => ', data.success)
-                    console.log(' saveUserStartupProfile payload ' + JSON.stringify(data));
+                        let data = JSON.parse(resp.data)//JSON.parse(resp)
+                        console.warn('suces => ', data.success)
+                        console.log(' saveUserStartupProfile payload ' + JSON.stringify(data));
 
-                    let success = data.success
-                    if (success) {
+                        let success = data.success
+                        if (success) {
 
-                        // alert('Success.')
-                        this.updatePrefData(JSON.stringify(data.data))
+                            // alert('Success.')
+                            this.updatePrefData(JSON.stringify(data.data))
 
-                        if (this.state.is_navigation_to_tournament) {
-                            storeData(TOURNAMENT_REGISTER, '')
-                            this.props.navigation.navigate('RegistrationSteps')
+                            if (this.state.is_navigation_to_tournament) {
+                                storeData(TOURNAMENT_REGISTER, '')
+                                this.props.navigation.navigate('RegistrationSteps')
+                            } else {
+                                this.props.navigation.goBack()
+                                Events.publish('REFRESH_DASHBOARD');
+                            }
                         } else {
-                            this.props.navigation.goBack()
-                            Events.publish('REFRESH_DASHBOARD');
+                            let error_message = data.error_message
+                            alert(error_message)
                         }
-                    }
 
-                }).catch((error) => {
-                    console.log('error => ', error)
-                    this.progress(false)
-                })
+                    }).catch((error) => {
+                        console.log('error => ', error)
+                        this.progress(false)
+                    })
 
 
 
@@ -224,7 +234,7 @@ class EditProfile extends BaseComponent {
     pickImage() {
 
         const options = {
-            title: 'Select Images',
+            title: 'Select Image',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
@@ -244,7 +254,7 @@ class EditProfile extends BaseComponent {
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
                 let path = response.path
-                if(Platform.OS=='ios'){
+                if (Platform.OS == 'ios') {
                     path = response.uri
                 }
                 // let fileName = response.fileName
@@ -265,7 +275,7 @@ class EditProfile extends BaseComponent {
 
     resizeImage(path) {
 
-        
+
         ImageResizer.createResizedImage(path, 625, 400, 'PNG', 80)
             .then(({ uri }) => {
 
@@ -329,7 +339,7 @@ class EditProfile extends BaseComponent {
                             }}
                         >
 
-                            <Image
+                            <FastImage
                                 resizeMode="contain"
                                 style={{
 

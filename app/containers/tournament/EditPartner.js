@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { Card, } from 'react-native-paper';
 import BaseComponent, {
     EVENT_SELECT_PLAYER_TOURNAMENT,
@@ -9,17 +9,20 @@ import BaseComponent, {
 import Moment from 'moment';
 import { getData } from '../../components/auth';
 import { FlatList } from 'react-native-gesture-handler';
+import { editPartner } from "../../redux/reducers/EditPartnerReducer";
+import { connect } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
 
-
-export default class EditPartner extends BaseComponent {
+class EditPartner extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
             data: {},
             players: null,
-            show_enable: false
+            show_enable: false,
+            spinner: false,
         }
 
         this.state.data = JSON.parse(this.props.navigation.getParam('data'));
@@ -55,7 +58,7 @@ export default class EditPartner extends BaseComponent {
                 let cat = tempCategory[j]
                 let obj = this.getPlayerMatch(registrations, player, cat);
                 if (obj != null) {
-                    obj= { ...obj, tournament_id: player.id }
+                    obj = { ...obj, tournament_id: player.id }
                     category_array.push(obj)
                 }
             }
@@ -82,24 +85,152 @@ export default class EditPartner extends BaseComponent {
 
         console.log('final_array => ', JSON.stringify(final_array))
 
+        const final_array1 = []
+        for (let i = 0; i < final_array.length; i++) {
+
+            let player = final_array[i].player
+            let list = final_array[i].list
+            let temp_list = []
+            for (let j = 0; j < list.length; j++) {
+
+                let list_obj = list[j]
+                let tournament_category = list_obj.tournament_category
+                let tournament_type = list_obj.tournament_type
+                let temp_tournament_type = []
+                for (let k = 0; k < tournament_type.length; k++) {
+
+                    let type = tournament_type[k].tournament_type
+                    let tournament_id = this.searchTournamentId(player.entity_id,
+                        tournament_category,
+                        type)
+
+                    let newObj = { ...tournament_type[k], tournament_id: tournament_id }
+                    temp_tournament_type.push(newObj)
+                    //list[j] = {...}
+                }
+                console.log('temp_tournament_type=> ', JSON.stringify(temp_tournament_type))
+                let t_type = {
+                    tournament_category: tournament_category,
+                    tournament_type: temp_tournament_type
+                }
+                temp_list.push(t_type)
+            }
+
+            let obj = {
+                player: final_array[i].player,
+                list: temp_list
+            }
+            final_array1.push(obj)
+        }
+
+        console.log('final_array1 => ', JSON.stringify(final_array1))
+
 
         this.setState({
-            players: final_array
+            players: final_array1
         })
-        this.state.players = final_array
+        this.state.players = final_array1
+    }
 
-
+    progress(status) {
+        setTimeout(() => {
+            console.log('Progress=> ', status)
+            this.setState({
+                spinner: status
+            })
+            this.state.spinner = status
+        }, 100)
 
     }
 
+    searchTournamentId(entity_id, tournament_category, type) {
+        const registrations = this.state.data['tournament_registrations']
+        for (let i = 0; i < registrations.length; i++) {
+
+            let obj = registrations[i]
+            let t_entity_id = obj.player.entity_id
+            let t_tournament_category = obj.tournament_category
+            let t_tournament_type = obj.tournament_type
+
+            if (t_entity_id == entity_id && t_tournament_category == tournament_category &&
+                type == t_tournament_type) {
+                return obj.id
+            }
+        }
+    }
     componentDidMount() {
 
         this.refreshEvent = Events.subscribe(EVENT_SELECT_PLAYER_TOURNAMENT, (args) => {
             console.log(EVENT_SELECT_PLAYER_TOURNAMENT)
             console.log('args - > ' + JSON.stringify(args))
-
+            let match_id = args.id
+            let name = args.name
+            let phone = args.phone
+            this.setState({
+                show_enable: true
+            })
+            this.updatePartner(match_id, name, phone)
         });
 
+    }
+
+    updatePartner(match_id, partner_name, mobile_number) {
+
+        let final_array = this.state.players
+        const final_array1 = []
+        for (let i = 0; i < final_array.length; i++) {
+
+            let player = final_array[i].player
+            let list = final_array[i].list
+            let temp_list = []
+            for (let j = 0; j < list.length; j++) {
+
+                let list_obj = list[j]
+                let tournament_category = list_obj.tournament_category
+                let tournament_type = list_obj.tournament_type
+                let temp_tournament_type = []
+                for (let k = 0; k < tournament_type.length; k++) {
+
+                    let type = tournament_type[k].tournament_type
+                    let tournament_id = tournament_type[k].tournament_id
+
+                    let newObj = {}
+
+                    if (tournament_id == match_id) {
+                        newObj = {
+                            ...tournament_type[k],
+                            tournament_id: tournament_id,
+                            partner_name: partner_name,
+                            partner_mobile_number: mobile_number,
+                            is_change: true
+                        }
+                    } else {
+                        newObj = { ...tournament_type[k], tournament_id: tournament_id }
+                    }
+
+                    temp_tournament_type.push(newObj)
+
+                }
+                console.log('temp_tournament_type=> ', JSON.stringify(temp_tournament_type))
+                let t_type = {
+                    tournament_category: tournament_category,
+                    tournament_type: temp_tournament_type
+                }
+                temp_list.push(t_type)
+            }
+
+            let obj = {
+                player: final_array[i].player,
+                list: temp_list
+            }
+            final_array1.push(obj)
+        }
+
+        console.log('update_final_array1 => ', JSON.stringify(final_array1))
+
+        this.setState({
+            players: final_array1
+        })
     }
 
     getPlayerById(id, registrations) {
@@ -172,6 +303,79 @@ export default class EditPartner extends BaseComponent {
             str = str + name + " | "
         }
         return str.substring(0, str.length - 2);
+    }
+
+    updateApi() {
+
+        let final_array = this.state.players
+        let update_array = []
+
+        for (let i = 0; i < final_array.length; i++) {
+
+            let list = final_array[i].list
+            for (let j = 0; j < list.length; j++) {
+
+                let list_obj = list[j]
+                let tournament_type = list_obj.tournament_type
+                for (let k = 0; k < tournament_type.length; k++) {
+
+                    let is_change = tournament_type[k].is_change
+                    if (is_change) {
+                        let update_obj = {
+                            id: tournament_type[k].tournament_id,
+                            partner_name: tournament_type[k].partner_name,
+                            partner_mobile_number: tournament_type[k].partner_mobile_number
+                        }
+                        update_array.push(update_obj)
+                    }
+
+                }
+            }
+        }
+
+        console.log('update_array => ', JSON.stringify(update_array))
+        let data = {}
+        data['data'] = update_array
+
+        this.progress(true)
+
+        getData('header', (value) => {
+
+            this.props.editPartner(value, data).then(() => {
+
+                this.progress(false)
+
+                let data = this.props.data.data
+                console.log(' editPartner ' + JSON.stringify(data));
+
+                let success = data.success
+                if (success) {
+
+                    let msg = data.success_message
+                    setTimeout(() => {
+                        Alert.alert(
+                            'Success',
+                            msg,
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        Events.publish('EDIT_PARTNER');
+                                        this.props.navigation.goBack()
+                                    }
+                                },
+                            ],
+                            { cancelable: false },
+                        );
+                    }, 100)
+
+                }
+                this.setState({ isRefreshing: false })
+
+            }).catch((response) => {
+                this.progress(false)
+                console.log(response);
+            })
+        })
     }
 
     getCategoryView(list) {
@@ -262,7 +466,7 @@ export default class EditPartner extends BaseComponent {
                     onPress={() => {
 
                         this.props.navigation.navigate('AddPartner', {
-                            id: item.id,
+                            id: item.tournament_id,//match_id
                             tournament_id: this.state.data['id'],
                             user_id: ''
                         })
@@ -281,6 +485,8 @@ export default class EditPartner extends BaseComponent {
             </View>
         )
     }
+
+
     render() {
 
         const show_enable = this.state.show_enable
@@ -293,6 +499,10 @@ export default class EditPartner extends BaseComponent {
 
                 <View style={styles.chartContainer}>
 
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
                     <Card
                         style={{
                             elevation: 2
@@ -380,7 +590,7 @@ export default class EditPartner extends BaseComponent {
                                                         onPress={() => {
 
                                                             if (show_enable) {
-
+                                                                this.updateApi()
                                                             }
                                                         }}>
                                                         <Text
@@ -409,7 +619,15 @@ export default class EditPartner extends BaseComponent {
         );
     }
 }
-
+const mapStateToProps = state => {
+    return {
+        data: state.EditPartnerReducer,
+    };
+};
+const mapDispatchToProps = {
+    editPartner
+};
+export default connect(mapStateToProps, mapDispatchToProps)(EditPartner);
 
 const styles = StyleSheet.create({
     chartContainer: {

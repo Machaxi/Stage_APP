@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle } from '../BaseComponent'
+import BaseComponent, { defaultStyle,formattedName } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getchallengeLeaderboard } from "../../redux/reducers/ChallengeLeaderboardReducer";
 import { connect } from 'react-redux';
@@ -126,7 +126,7 @@ class LeaderboardRoute extends BaseComponent {
         }}>
         <View style={styles.totalResultsValueOuter}>
           <View style={styles.nameOuter}>
-            <Text style={styles.nameValue}>{item.player.name}</Text>
+            <Text style={styles.nameValue}>{formattedName(item.player.name)}</Text>
           </View>
           <View style={[styles.winOuter, { marginLeft: 4 }]}>
             <Text style={styles.nameValue}>{item.win_count}</Text>

@@ -174,6 +174,12 @@ class Registration extends BaseComponent {
                 alert_msg: alert_msg
             })
         }
+        else if (!this.isValidMobileNumber(txtphone)) {
+            alert_msg = 'Invalid mobile number.'
+            this.setState({
+                alert_msg: alert_msg
+            })
+        }
         else if (selected_gender == '') {
             alert_msg = 'Please select gender'
             this.setState({

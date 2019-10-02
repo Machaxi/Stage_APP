@@ -13,8 +13,8 @@ import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
-import { getRelationsDetails, logout } from "../redux/reducers/ProfileReducer";
+import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
+import { getRelationsDetails, logout } from "../redux/reducers/RelationReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
 import { Rating } from 'react-native-ratings';
@@ -42,7 +42,8 @@ class CoachMenuDrawer extends BaseComponent {
 			academy_name: '',
 			related_players: [],
 			related_guardians: [],
-			profile_pic: ''
+			profile_pic: '',
+			updated_profile_pic: ''
 		};
 
 		isSignedIn()
@@ -73,12 +74,23 @@ class CoachMenuDrawer extends BaseComponent {
 
 		});
 
+		this.refreshEvent = Events.subscribe(PROFILE_PIC_UPDATED, (obj) => {
+
+			if (obj) {
+				this.setState({
+					updated_profile_pic: obj,
+				})
+				//alert(obj)
+			}
+		});
+
+
 	}
 
 	updateData() {
 		getData('userInfo', (value) => {
 			userData = (JSON.parse(value))
-
+			const updated_profile_pic = this.state.updated_profile_pic
 
 			console.log("SplashScreen=> ", userData);
 			this.setState({
@@ -89,7 +101,7 @@ class CoachMenuDrawer extends BaseComponent {
 				academy_id: userData.academy_id,
 				academy_rating: userData.academy_rating,
 				academy_name: userData.academy_name,
-				profile_pic: userData.user['profile_pic']
+				profile_pic: updated_profile_pic != '' ? updated_profile_pic : userData.user['profile_pic']
 
 			})
 
@@ -786,7 +798,7 @@ class CoachMenuDrawer extends BaseComponent {
 		let is_parent = user_type == PARENT
 		let profile_pic = this.state.profile_pic
 
-		//console.warn('profile_pic', profile_pic)
+		console.warn('profile_pic', profile_pic)
 
 		let show_edit = is_parent
 
@@ -834,7 +846,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<FastImage
 						//resizeMode={FastImage.resizeMode.contain}
 						style={{
-							width: 128, height: 128, borderRadius: 8 
+							width: 128, height: 128, borderRadius: 8
 						}}
 						source={{ uri: profile_pic }}
 					/>
@@ -1362,7 +1374,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 const mapStateToProps = state => {
 	return {
-		data: state.ProfileReducer,
+		data: state.RelationReducer,
 	};
 };
 const mapDispatchToProps = {

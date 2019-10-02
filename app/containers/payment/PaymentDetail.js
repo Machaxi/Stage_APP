@@ -1,16 +1,18 @@
 import React from 'react'
 
 import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator } from 'react-native'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, DRIBBLE_LOGO, PAYMENT_KEY } from '../BaseComponent';
 import { FlatList } from 'react-native-gesture-handler';
 import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { DueView } from '../../components/Home/DueView';
 import moment from 'moment'
-import { paymentDues } from "../../redux/reducers/PaymentReducer";
+import { paymentDues, duePay } from "../../redux/reducers/PaymentReducer";
 import { connect } from 'react-redux';
 import { getData } from '../../components/auth';
 import InfoDialog from '../../components/custom/InfoDialog'
+import RazorpayCheckout from 'react-native-razorpay';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class PaymentDetail extends BaseComponent {
 
@@ -20,13 +22,32 @@ class PaymentDetail extends BaseComponent {
         this.state = {
             data: [],
             showDialog: false,
-            message: ''
+            message: '',
+            dribble_logo: '',
+            mobile_number: '',
+            userData: null,
+            spinner: false,
         };
 
+
+        getData(DRIBBLE_LOGO, (value) => {
+            //alert(value)
+            if (value != null)
+                this.state.dribble_logo = value
+            else
+                this.state.dribble_logo = 'https://i.imgur.com/3g7nmJC.png'
+        })
+
+        this.getDues()
+
+    }
+
+    getDues() {
         getData('userInfo', (value) => {
             console.warn(value)
             userData = JSON.parse(value)
             const player_id = userData['player_id']
+            this.state.userData = userData
 
             getData('header', (header) => {
 
@@ -44,11 +65,91 @@ class PaymentDetail extends BaseComponent {
                     console.log(response);
                 })
             });
+        });
+    }
 
+    progress(status) {
+        setTimeout(() => {
+            console.log('Progress=> ', status)
+            this.setState({
+                spinner: status
+            })
+            this.state.spinner = status
+        }, 100)
 
+    }
 
+    processPayment(item) {
+
+        const logo = this.state.dribble_logo
+        const desc = 'Payment for ' + item.academyName
+        const mobile_number = this.state.userData.user['mobile_number']
+        const email = this.state.userData.user['email']
+        const name = this.state.userData.user['name']
+        let total = item.amount
+        total = total + '00'
+
+        var options = {
+            description: desc,
+            image: logo,
+            currency: 'INR',
+            key: PAYMENT_KEY,
+            amount: total,
+            name: 'Machaxi',
+            prefill: {
+                email: email,
+                contact: mobile_number,
+                name: name
+            },
+            theme: { color: '#67BAF5' }
+        }
+        RazorpayCheckout.open(options).then((data) => {
+            // handle success
+            console.log('Razor Rspo ', JSON.stringify(data))
+            //alert(`Success: ${data.razorpay_payment_id}`);
+            let payment_details = {
+                razorpay_payment_id: data.razorpay_payment_id
+            }
+            this.submitData(payment_details, item, total)
+        }).catch((error) => {
+            // handle failure
+            console.log('Razor Rspo ', JSON.stringify(error))
+            //alert(`Error: ${error.code} | ${error.description}`);
+            alert('Payment could not succeed. Please try again.')
         });
 
+    }
+
+    submitData(payment_details, item, total) {
+
+        let subData = {}
+        subData.id = item.dueId
+        subData.amount = total
+        subData.payment_details = payment_details
+        let data = {}
+        data['data'] = subData
+
+        this.progress(true)
+
+
+        getData('header', (header) => {
+
+            this.props.duePay(header, data).then(() => {
+
+                this.progress(false)
+
+                let data = this.props.data.data
+                console.log('submitData payload ' + JSON.stringify(this.props.data.data));
+                if (data.success) {
+                    let msg = data.success_message
+                    alert(msg)
+                    this.getDues()
+                }
+            }).catch((response) => {
+                console.log(response);
+                this.progress(false)
+            })
+        });
     }
 
 
@@ -112,11 +213,7 @@ class PaymentDetail extends BaseComponent {
                         }}>
                             <CustomeButtonB onPress={() => {
 
-                                const upaId = item.upaId
-                                if (upaId) {
-                                    let msg = 'Please make payment on this UPI ID : ' + upaId
-                                    alert(msg)
-                                }
+                                this.processPayment(item)
 
                             }}>Pay</CustomeButtonB>
                         </View>
@@ -130,7 +227,7 @@ class PaymentDetail extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading) {
+        if (this.props.data.loading && this.state.data.length == 0) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -149,6 +246,11 @@ class PaymentDetail extends BaseComponent {
                         visible={this.state.showDialog}
                         message={this.state.message}
                     /> */}
+
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
 
                     <TouchableOpacity onPress={() =>
                         this.props.navigation.navigate('PaymentHistory')
@@ -189,6 +291,6 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    paymentDues
+    paymentDues, duePay
 };
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentDetail);

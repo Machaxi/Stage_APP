@@ -34,7 +34,8 @@ export default class CustomProgres extends BaseComponent {
     render() {
         const height = this.props.height//14
         const width = this.props.width//"100%"
-        const t_percent = this.props.percent
+        const p = this.props.percent;
+        const t_percent = p > 100 ? 100 : p
         const percent = this.props.percent + "%"//"100%"//children//"50%"
         const fillWidth = (width * +t_percent) / 100
         //console.log('fillWidth=>', fillWidth)

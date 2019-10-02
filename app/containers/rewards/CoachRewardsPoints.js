@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from '../PlayerBatch/PlayerBatchComponent'
 import ParentRewardComponent from './ParentRewardComponent';
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormattedCategory } from '../BaseComponent';
 import RNPickerSelect from 'react-native-picker-select'
 import { getAcademyListing, getRewardDue } from "../../redux/reducers/RewardReducer";
 import moment from 'moment'
@@ -78,6 +78,16 @@ class CoachRewardsPoints extends BaseComponent {
                         }
                         newArray[i] = obj
                     }
+
+                    //select by default 0 position
+                    if (newArray.length > 0) {
+                        let value = newArray[0].value
+                        this.setState({
+                            country: value,
+                        });
+                        this.fetchBatchByAcademy(value)
+                    }
+
                     this.setState({
                         academies: newArray
                     })
@@ -190,7 +200,7 @@ class CoachRewardsPoints extends BaseComponent {
 
                     <View style={{ marginLeft: 20 }}>
                         <Text style={styles.regular_text_10}>Category</Text>
-                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10, color: '#707070' }]}>{item.batch_category}</Text>
+                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10, color: '#707070' }]}>{getFormattedCategory(item.batch_category)}</Text>
                     </View>
                 </View>
 
@@ -323,7 +333,7 @@ const pickerSelectStyles = StyleSheet.create({
     inputAndroid: {
         fontSize: 16,
         paddingHorizontal: 10,
-        paddingVertical: 8,
+        paddingVertical: 4,
         fontFamily: 'Quicksand-Regular',
         borderColor: '#614051',
         borderRadius: 8,

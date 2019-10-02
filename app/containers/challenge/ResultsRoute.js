@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text, ImageBackground, ScrollView, Modal } from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_RESULTS } from '../BaseComponent'
+import BaseComponent, { defaultStyle, formattedName, EVENT_REFRESH_RESULTS } from '../BaseComponent'
 import { getData } from "../../components/auth";
 import { getchallengeResults, disputeChallenge } from "../../redux/reducers/ChallengeResultReducer";
 import { connect } from 'react-redux';
@@ -134,7 +134,15 @@ class ResultsRoute extends BaseComponent {
 
   _renderItem = ({ item }) => {
 
+    let score = ''
+    let first = item.score.split(':')[0]
+    let second = item.score.split(':')[1]
+    score = item.opponent.id == this.state.playerId ?
+      second + " - " + first :
+      first + " - " + second
 
+
+    //{item.score.split(':')[0]} - {item.score.split(':')[1]}
     return (
 
       <View>
@@ -152,7 +160,7 @@ class ResultsRoute extends BaseComponent {
                   })
                 }}>
                 <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>
-                  {item.opponent.name} - {item.challenge_by.name}
+                  {formattedName(item.opponent.name)} - {formattedName(item.challenge_by.name)}
                 </Text>
               </TouchableOpacity>
               :
@@ -165,13 +173,15 @@ class ResultsRoute extends BaseComponent {
                   })
                 }}>
                 <Text style={{ fontSize: 14, color: '#404040', fontFamily: 'Quicksand-Regular' }}>
-                  {item.challenge_by.name} - {item.opponent.name}
+                  {formattedName(item.challenge_by.name)} - {formattedName(item.opponent.name)}
                 </Text>
               </TouchableOpacity>
 
           }
 
-          <Text style={styles.scoreValue}>{item.score.split(':')[0]} - {item.score.split(':')[1]}</Text>
+          <Text style={styles.scoreValue}>
+            {score}
+          </Text>
           <View style={styles.resultOuter}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               {

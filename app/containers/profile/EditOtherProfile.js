@@ -76,8 +76,12 @@ class EditOtherProfile extends BaseComponent {
             alert("Name is empty")
         }
         else if (txtphone == '') {
-            alert("Phone number is empty.")
-        } else {
+            alert("Mobile number is empty.")
+        }
+        else if (!this.isValidMobileNumber(phone_number)) {
+            alert('Invalid mobile number')
+        }
+        else {
 
             getData('header', (value) => {
                 var formData = new FormData();
@@ -185,7 +189,7 @@ class EditOtherProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                            Mobile Number
+                                Mobile Number
                     </Text>
 
                             <TextInput

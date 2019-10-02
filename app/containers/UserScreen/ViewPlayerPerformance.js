@@ -53,8 +53,23 @@ class ViewPlayerPerformance extends BaseComponent {
     };
 
     console.log('this.state.performanceData', this.state.performanceData);
-    this.state.month = this.state.performanceData.month.toString();
-    this.state.year = this.state.performanceData.year.toString();
+
+    var today = new Date();
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+
+    if (this.state.performanceData.month) {
+      this.state.month = this.state.performanceData.month.toString();
+    } else {
+      this.state.month = mm
+    }
+
+    if (this.state.performanceData.year) {
+      this.state.year = this.state.performanceData.year.toString();
+    } else {
+      this.state.year = yyyy
+    }
 
     this.getPerformanceData();
 

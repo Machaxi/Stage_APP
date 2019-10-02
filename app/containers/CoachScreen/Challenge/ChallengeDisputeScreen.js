@@ -5,7 +5,7 @@ import { CustomeCard } from '../../../components/Home/Card'
 import { getData } from "../../../components/auth";
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import BaseComponent, { defaultStyle, formattedName, getFormattedCategory } from '../../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName, getFormattedCategory, getFormattedBadge } from '../../BaseComponent';
 import RNPickerSelect from 'react-native-picker-select'
 import { getAcademyListing } from "../../../redux/reducers/RewardReducer";
 import { getDisputedChallenges } from "../../../redux/reducers/CoachReducer";
@@ -77,6 +77,16 @@ class ChallengeDisputeScreen extends BaseComponent {
             }
             newArray[i] = obj
           }
+
+          if (newArray.length > 0) {
+            let value = newArray[0].value
+            this.setState({
+              country: value,
+              academyId: value
+            });
+            this.fetchDisputeListByAcademy(value)
+          }
+
           this.setState({
             academies: newArray
           })
@@ -164,7 +174,13 @@ class ChallengeDisputeScreen extends BaseComponent {
     return (
       <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
         <View>
-          <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
+          <Modal
+            onRequestClose={() => {
+              this.setState({
+                visible: false
+              })
+            }}
+            animationType="none" transparent={true} visible={this.state.modalVisible}>
             <View style={styles.modalOuter}>
               <View style={styles.modalBox}>
                 <View style={styles.modalHeadingOuter}>
@@ -199,7 +215,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.challenge_by.badge == undefined ? '' : this.state.selectedChallengeData.challenge_by.badge}</Text>
+                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.challenge_by.badge == undefined ? '' : getFormattedBadge(this.state.selectedChallengeData.challenge_by.badge)}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -234,7 +250,7 @@ class ChallengeDisputeScreen extends BaseComponent {
                           <ImageBackground style={styles.badgeBackImage} source={require('../../../images/single_shield.png')}>
                             <View style={styles.badgeInner}>
                               {/* <Image style={styles.badgeLeftArrow} source={require('../../images/left_batch_arrow.png')}></Image> */}
-                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.opponent.badge == undefined ? '' : this.state.selectedChallengeData.opponent.badge}</Text>
+                              <Text style={styles.badgeValue}>{this.state.selectedChallengeData.opponent.badge == undefined ? '' : getFormattedBadge(this.state.selectedChallengeData.opponent.badge)}</Text>
                               {/* <Image style={styles.badgeRightArrow} source={require('../../images/right_batch_arrow.png')}></Image> */}
                             </View>
                           </ImageBackground>
@@ -245,10 +261,10 @@ class ChallengeDisputeScreen extends BaseComponent {
 
                 </View>
 
-                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                {/* <View style={{ display: 'flex', flexDirection: 'row' }}>
                   <Text style={styles.challengeScoreLabel}>You</Text>
                   <Text style={styles.challengeScoreLabel}>Opponent</Text>
-                </View>
+                </View> */}
 
                 {this.state.matchData != null &&
                   <View style={styles.scoreOuter}>
@@ -499,7 +515,8 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginBottom: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    fontFamily: 'Quicksand-Medium'
   },
   disputePlayer: {
     color: '#404040',
@@ -679,6 +696,7 @@ const styles = StyleSheet.create({
   badgeValue: {
     fontSize: 5,
     color: '#F4F4F4',
+    fontFamily: 'BebasNeue-Regular'
   },
   badgeRightArrow: {
     height: 7,

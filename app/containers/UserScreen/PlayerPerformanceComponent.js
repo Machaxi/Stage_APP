@@ -214,9 +214,17 @@ class PlayerPerformanceComponent extends BaseComponent {
 
                 </View>
                 <View style={{ backgroundColor: '#EFEFEF', borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row' }}>
-                    <Image source={require('../../images/shape.png')} />
+                    <Image 
+                    resizeMode="contain"
+                    style={{
+                        width: 16,
+                        height: 16
+                    }}
+                    source={require('../../images/shape.png')} />
                     <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
-                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 11, color: '#A3A5AE' }}>{item.attribute.intro_video_url}</Text>
+                    <Text 
+                    numberOfLines={1}
+                    style={{ fontFamily: 'Quicksand-Regular', fontSize: 11, color: '#A3A5AE',}}>{item.attribute.intro_video_url}</Text>
                 </View>
             </Card>
 
@@ -234,7 +242,13 @@ class PlayerPerformanceComponent extends BaseComponent {
                             });
                         }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Image source={require('../../images/info-bulb.png')} />
+                                <Image
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 20,
+                                        height: 24
+                                    }}
+                                    source={require('../../images/info-bulb.png')} />
                                 <View style={{ height: 25, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
                                 <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>{element.question}</Text>
                             </View>

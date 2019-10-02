@@ -417,28 +417,6 @@ class ParentHome extends BaseComponent {
 
     );
 
-    filterRewards(reward_detail) {
-        let temp_reward = []
-        for (let i = 0; i < reward_detail.length; i++) {
-
-            let month = reward_detail[i].month
-            let year = reward_detail[i].year
-
-            let is_exists = false
-            for (let j = 0; j < temp_reward.length; j++) {
-
-                if (temp_reward[j].month == month && temp_reward[j].year == year) {
-                    is_exists = true
-                    break
-                }
-            }
-            if (is_exists == false) {
-                temp_reward.push(reward_detail[i])
-            }
-
-        }
-        return temp_reward
-    }
 
 
     onRefresh = () => {
@@ -664,7 +642,13 @@ class ParentHome extends BaseComponent {
                                     </View>
                                 </View>
 
-                                <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
+                                <TouchableOpacity
+                                onPress={()=>{
+                                    this.props.navigation.navigate('PaymentDetail')
+                                }}>
+                                    <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
+                                </TouchableOpacity>
+
                             </View>
                             <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
 
@@ -688,7 +672,7 @@ class ParentHome extends BaseComponent {
                                 </View>
                                 <View style={{ width: '40%' }}>
                                     <CustomeButtonB onPress={() => {
-                                        //this.props.navigation.navigate('ParentRewards')
+                                        this.props.navigation.navigate('PaymentDetail')
                                     }}>
                                         Pay </CustomeButtonB>
                                 </View>

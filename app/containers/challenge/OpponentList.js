@@ -22,21 +22,37 @@ class OpponentList extends BaseComponent {
             player_id: null,
             selectedOpponentData: null,
             playerData: null,
-            originalOpponentData: null
+            originalOpponentData: null,
+            hasMore: true,
+            page: 0
         }
         this.state.id = this.props.navigation.getParam('id', '');
     }
 
     componentDidMount() {
         this.getPlayerData();
+        this.getPlayersDataCall()
+
+
+    }
+
+    getPlayersDataCall() {
+
+        let page = this.state.page
+        let size = 10
+
         getData('userInfo', (value) => {
             userData = JSON.parse(value);
             this.state.academy_id = userData['academy_id'];
             this.state.player_id = userData['player_id'];
             getData('header', (value) => {
-                this.props.getOpponentList(value, userData['academy_id'], 0, 20).then(() => {
+                this.props.getOpponentList(value, userData['academy_id'], page, size).then(() => {
                     let data = this.props.data.data
                     console.log(' getOpponentList ' + JSON.stringify(data));
+                    this.setState({
+                        pagingLoader: false
+
+                    })
 
                     // console.log('data.data.dashboard', data.data.dashboard);
                     // console.log('data.data.challenges', data.data.dashboard.challenges)
@@ -44,12 +60,26 @@ class OpponentList extends BaseComponent {
                     let success = data.success
                     if (success) {
 
-                        console.log(' getChallengeDashboardsds ' + JSON.stringify(data.data.dashboard));
+                        if (data.data.players.length > 0) {
+                            this.setState({
+                                hasMore: true,
 
-                        this.setState({
-                            opponentData: data.data.players,
-                            originalOpponentData: data.data.players
-                        })
+                            })
+                            console.log(' getChallengeDashboardsds ' + JSON.stringify(data.data.dashboard));
+                            let opponentData = [...this.state.opponentData]
+                            let players = data.data.players
+
+                            for (let i = 0; i < players.length; i++) {
+                                let obj = players[i]
+                                opponentData.push(obj)
+                            }
+
+
+                            this.setState({
+                                opponentData: opponentData,
+                                originalOpponentData: opponentData
+                            })
+                        }
                     }
 
                 }).catch((response) => {
@@ -57,14 +87,10 @@ class OpponentList extends BaseComponent {
                 })
             })
         })
-
     }
 
     getPlayerData() {
-        //console.log('heyyyyyyyyyyyyyyy,=======', global.opponentPlayerDetails);
         if (global.opponentPlayerDetails != undefined && global.opponentPlayerDetails != null) {
-            //console.log('yipeeeeeeeeeeeeeeeeeee');
-            //this.state.selectedOpponentData = global.opponentPlayerDetails;
             this.setState({
                 selectedOpponentData: global.opponentPlayerDetails
             })
@@ -101,7 +127,7 @@ class OpponentList extends BaseComponent {
         console.warn('here =>', opponentData)
 
         if (query === '') {
-            return this.state.originalOpponentData;
+            return this.state.opponentData;
         }
         const regex = new RegExp(`${query.trim()}`, 'i');
         return opponentData.filter(item => item.name.search(regex) >= 0);
@@ -142,14 +168,18 @@ class OpponentList extends BaseComponent {
         return (
             <View style={styles.searchOuter}>
                 <Card style={styles.searchCard}>
-                    <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => {
-                        this.state.query = text
-                        const data = this.find(this.state.query);
-                        this.state.opponentData = data;
-                        this.setState({
-                            opponentData: data
-                        })
-                    }}></TextInput>
+                    <TextInput style={styles.searchBox}
+                        placeholder="Search" onChangeText={text => {
+                            //this.state.query = text
+                            this.setState({
+                                query: text
+                            })
+                            // const data = this.find(this.state.query);
+                            // this.state.opponentData = data;
+                            // this.setState({
+                            //     opponentData: data
+                            // })
+                        }}></TextInput>
                 </Card>
                 {/* <Text style={styles.filterLabel} >Filter</Text> */}
             </View>
@@ -373,9 +403,25 @@ class OpponentList extends BaseComponent {
         </View>
     );
 
+    _progressLoader = ({ }) => {
+
+        if (this.state.pagingLoader) {
+            return (
+                <ActivityIndicator size="large" color="#67BAF5" />
+            )
+        }
+        else {
+            return null
+        }
+    }
+
     render() {
 
-        if (this.props.data.loading && !this.state.opponentData.length == 0) {
+        let loading = this.props.data.loading
+        let pagingLoader = this.state.pagingLoader
+        const data = this.find(this.state.query);
+
+        if (loading && data.length == 0) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -383,15 +429,27 @@ class OpponentList extends BaseComponent {
             )
         }
 
-        let data = this.state.opponentData
         return (
             <View style={styles.chartContainer}>
 
                 {this.listHeader()}
                 <FlatList
+                    onEndReachedThreshold={0.1}
+                    onEndReached={({ distanceFromEnd }) => {
+                        const hasMore = this.state.hasMore
+                        if (hasMore) {
+                            this.state.pagingLoader = true
+                            console.log('on end reached ', distanceFromEnd);
+                            let page = this.state.page
+                            page = page + 1
+                            this.state.page = page
+                            this.getPlayersDataCall()
+                        }
+
+                    }}
                     data={data}
                     style={{ padding: 8 }}
-                    //ListHeaderComponent={() => this.listHeader()}
+                    ListFooterComponent={this._progressLoader}
                     numColumns={3}
                     renderItem={this._renderItem}
                 />

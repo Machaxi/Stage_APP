@@ -49,12 +49,11 @@ export const clearData = async () => {
         getData(PUSH_TOKEN, (token) => {
 
             getData(ONE_SIGNAL_USERID, (userId) => {
-
+               
+                const value = AsyncStorage.clear();
                 storeData(PUSH_TOKEN,token)
                 storeData(ONE_SIGNAL_USERID,userId)
                 
-                const value = AsyncStorage.clear();
-
             })
 
         })

@@ -108,7 +108,11 @@ class PhoneAuth extends BaseComponent {
 
         const { phoneNumber } = this.state;
         if (phoneNumber == '') {
-            alert('Invalid phone number')
+            alert('Mobile number is empty.')
+            return
+        }
+        else if (!this.isValidMobileNumber(phoneNumber)) {
+            alert('Invalid phone number.')
             return
         }
         this.setState({ message: 'Sending code ...' });

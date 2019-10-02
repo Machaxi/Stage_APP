@@ -145,6 +145,8 @@ class UpcomingTournamentDetail extends BaseComponent {
         if (today_time > last_date)
             show_register = false
 
+        const conditions = data.conditions
+
         return (
 
             <View style={{
@@ -402,25 +404,27 @@ class UpcomingTournamentDetail extends BaseComponent {
                                             fontFamily: 'Quicksand-Regular'
                                         }}>{data.address}</Text>
 
+                                        {conditions ?
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.props.navigation.navigate('TournamentTerms', {
+                                                        conditions: conditions
+                                                    })
+                                                    //console.warn('terms')
+                                                }}>
 
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                this.props.navigation.navigate('TournamentTerms')
-                                                //console.warn('terms')
-                                            }}
-                                        >
-
-                                            <Text style={{
-                                                paddingTop: 16,
-                                                paddingBottom: 10,
-                                                fontSize: 10,
-                                                color: '#667DDB',
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}>
-                                                Terms and Conditions
+                                                <Text style={{
+                                                    paddingTop: 16,
+                                                    paddingBottom: 10,
+                                                    fontSize: 10,
+                                                    color: '#667DDB',
+                                                    fontFamily: 'Quicksand-Regular'
+                                                }}>
+                                                    Terms and Conditions
                                         </Text>
-                                        </TouchableOpacity>
-
+                                            </TouchableOpacity>
+                                            : null
+                                        }
                                     </View>
 
                                 </View>
@@ -487,7 +491,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                     </View>
                 </View>
 
-            </View>
+            </View >
         );
     }
 }
