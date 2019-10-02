@@ -7,6 +7,8 @@ import { createChallenge, getOpponentList, getChallengeDashboard } from '../../r
 import { getData } from "../../components/auth";
 import BaseComponent, { defaultStyle, EVENT_REFRESH_CHALLENGE, getFormattedBadge, getFormattedCategory, formattedName } from '../BaseComponent'
 import Events from '../../router/events';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 class OpponentList extends BaseComponent {
 
@@ -24,7 +26,8 @@ class OpponentList extends BaseComponent {
             playerData: null,
             originalOpponentData: null,
             hasMore: true,
-            page: 0
+            page: 0,
+            spinner: false,
         }
         this.state.id = this.props.navigation.getParam('id', '');
     }
@@ -34,6 +37,12 @@ class OpponentList extends BaseComponent {
         this.getPlayersDataCall()
 
 
+    }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
     }
 
     getPlayersDataCall() {
@@ -134,6 +143,9 @@ class OpponentList extends BaseComponent {
     }
 
     saveData() {
+
+        this.progress(true)
+
         let postData = {};
         console.log('this.state.academy_id11', this.state.academy_id);
         postData['academy_id'] = this.state.academy_id;
@@ -149,6 +161,7 @@ class OpponentList extends BaseComponent {
             this.props.createChallenge(value, data).then(() => {
                 let data = this.props.data.data
                 console.log('createChallenge========= ' + JSON.stringify(data));
+                this.progress(false)
 
                 let success = data.success
                 if (success) {
@@ -160,6 +173,7 @@ class OpponentList extends BaseComponent {
 
             }).catch((response) => {
                 console.log(response);
+                this.progress(false)
             })
         })
     }
@@ -432,6 +446,11 @@ class OpponentList extends BaseComponent {
         return (
             <View style={styles.chartContainer}>
 
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+
                 {this.listHeader()}
                 <FlatList
                     onEndReachedThreshold={0.1}
@@ -672,7 +691,7 @@ const styles = StyleSheet.create({
         width: "100%",
         marginLeft: 0,
         marginRight: 0,
-        fontFamily: 'Quicksand-Regular',
+        fontFamily: 'Quicksand-Medium',
     },
     closeImg: {
         height: 30,

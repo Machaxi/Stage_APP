@@ -177,22 +177,24 @@ class PlayerPerformanceComponent extends BaseComponent {
 
                 }
             </Card>
-            <Card style={styles.performanceCard}>
-                <View style={{ width: '100%', height: 300 }}>
 
-                    {
-                        <WebView
-                            source={{ uri: `https://www.youtube.com/embed/${item.attribute.intro_video_url.split('=')[1]}` }}
-                            javaScriptEnabled={true}
-                            domStorageEnabled={true}
-                        />
-                    }
+            {item.attribute.intro_video_url ?
+                <Card style={styles.performanceCard}>
+                    <View style={{ width: '100%', height: 300 }}>
+
+                        {
+                            <WebView
+                                source={{ uri: `https://www.youtube.com/embed/${item.attribute.intro_video_url.split('=')[1]}` }}
+                                javaScriptEnabled={true}
+                                domStorageEnabled={true}
+                            />
+                        }
 
 
 
 
 
-                    {/* <YouTube
+                        {/* <YouTube
                     apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
                     videoId='wF_B_aagLfI'   // The YouTube video ID
                     controls={1}
@@ -212,21 +214,28 @@ class PlayerPerformanceComponent extends BaseComponent {
                     style={{ alignSelf: 'stretch', height: this.state.height }}
                 /> */}
 
-                </View>
-                <View style={{ backgroundColor: '#EFEFEF', borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row' }}>
-                    <Image 
-                    resizeMode="contain"
-                    style={{
-                        width: 16,
-                        height: 16
-                    }}
-                    source={require('../../images/shape.png')} />
-                    <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
-                    <Text 
-                    numberOfLines={1}
-                    style={{ fontFamily: 'Quicksand-Regular', fontSize: 11, color: '#A3A5AE',}}>{item.attribute.intro_video_url}</Text>
-                </View>
-            </Card>
+                    </View>
+                    <View style={{
+                        backgroundColor: '#EFEFEF',
+                        width:"100%",
+                        borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row'
+                    }}>
+                        <Image
+                            resizeMode="contain"
+                            style={{
+                                width: 16,
+                                height: 16
+                            }}
+                            source={require('../../images/shape.png')} />
+                        <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 12 }}></View>
+                        <Text
+                            numberOfLines={1}
+                            style={{
+                                fontFamily: 'Quicksand-Regular',
+                                fontSize: 9, color: '#A3A5AE',
+                            }}>{item.attribute.intro_video_url}</Text>
+                    </View>
+                </Card> : null}
 
             {
                 item.attribute.qa.map((element, index) => {

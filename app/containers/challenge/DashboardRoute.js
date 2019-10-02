@@ -152,7 +152,7 @@ class DashboardRoute extends BaseComponent {
 
           const success_message = data.success_message
           this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
-          
+
           this.setState({
             playerData: [data.data.dashboard.player],
             challengeData: data.data.dashboard.challenges,
@@ -365,22 +365,40 @@ class DashboardRoute extends BaseComponent {
                       placeholder={"Enter Score"}
                       keyboardType={'number-pad'}
                       style={styles.scoreTextbox}
+                      value={this.state.matchData.match_scores[0].player1_score}
                       onChangeText={(text) => {
                         //item.input_score = text
 
-                        this.state.matchData.match_scores[0].player1_score = text
-
-                      }}>{this.state.matchData.match_scores[0].player1_score}</TextInput>
+                        if (!this.isNumbericOnly(text)) {
+                          text = ''
+                        }
+                        let matchData = { ...this.state.matchData }
+                        matchData.match_scores[0].player1_score = text
+                        console.log('matchData=>', JSON.stringify(matchData))
+                        this.setState({
+                          matchData
+                        })
+                      }}></TextInput>
                     <TextInput
                       placeholder={"Enter Score"}
                       keyboardType={'number-pad'}
                       style={styles.scoreTextbox}
+                      value={this.state.matchData.match_scores[0].player2_score}
                       onChangeText={(text) => {
                         //item.input_score = text
-                        this.state.matchData.match_scores[0].player2_score = text
-                      }}
+                        //this.state.matchData.match_scores[0].player2_score = text
 
-                    >{this.state.matchData.match_scores[0].player2_score}</TextInput>
+                        if (!this.isNumbericOnly(text)) {
+                          text = ''
+                        }
+                        let matchData = { ...this.state.matchData }
+                        matchData.match_scores[0].player2_score = text
+                        console.log('matchData=>', JSON.stringify(matchData))
+                        this.setState({
+                          matchData
+                        })
+
+                      }}></TextInput>
                   </View>
                 }
 
@@ -1048,12 +1066,12 @@ const styles = StyleSheet.create({
   cancelBtnText: {
     color: '#FC4E4E',
     textAlign: 'center',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   primaryBtnText: {
     color: 'white',
     textAlign: 'center',
-    fontFamily: 'Quicksand-Regular'
+    fontFamily: 'Quicksand-Medium'
   },
   acceptCardHeadingOuter: {
     display: 'flex',

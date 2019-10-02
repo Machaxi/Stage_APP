@@ -172,7 +172,8 @@ class UserHome extends BaseComponent {
             acedemy_name: '',
             academy_feedback_data: null,
             coach_feedback_data: null,
-            academy_id: ''
+            academy_id: '',
+            academy_user_id:''
         }
         StatusBar.setBackgroundColor("#262051")
         StatusBar.setBarStyle('light-content', true)
@@ -320,6 +321,7 @@ class UserHome extends BaseComponent {
                 if (user1.success == true) {
 
                     global.SELECTED_PLAYER_NAME = user1.data['player_profile'].name
+                    this.state.academy_user_id = user1.data['player_profile'].academy_user_id
 
                     this.setState({
                         player_profile: user1.data['player_profile'],
@@ -336,9 +338,10 @@ class UserHome extends BaseComponent {
                     getData('userInfo', (value) => {
                         userData = JSON.parse(value)
                         userData['academy_name'] = acedemy_name
+                        userData['academy_user_id'] = user1.data['player_profile'].academy_user_id
                         storeData("userInfo", JSON.stringify(userData))
                         Events.publish(EVENT_EDIT_PROFILE);
-
+                        
                     });
 
 

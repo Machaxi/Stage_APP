@@ -18,6 +18,7 @@ class WriteFeedbackListing extends BaseComponent {
         this.state = {
             modalVisible: false,
             academy_id: '',
+            academy_user_id:'',
             spinner: false,
             coaches: []
         };
@@ -30,6 +31,12 @@ class WriteFeedbackListing extends BaseComponent {
 
         let academy_id = this.state.academy_id
         let player_id = this.state.player_id
+
+        getData('userInfo',(value)=>{
+            console.log('userInfo=> ',value)
+            const json = JSON.parse(value)
+            this.state.academy_user_id = json.academy_user_id
+        })
 
         //adding academy cell manually
 
@@ -104,7 +111,7 @@ class WriteFeedbackListing extends BaseComponent {
             if (obj.is_coach) {
                 dict['targetId'] = obj.id
             } else {
-                dict['targetId'] = this.state.academy_id
+                dict['targetId'] = this.state.academy_user_id
             }
             dict['academyId'] = this.state.academy_id;
             dict['review'] = obj.review
