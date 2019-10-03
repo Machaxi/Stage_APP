@@ -794,7 +794,9 @@ class AcademyProfile extends BaseComponent {
                                     justifyContent: 'space-between',
                                 }}>
                                     <Text
-                                        style={{ fontSize: 14, color: '#707070' }}
+                                        style={[defaultStyle.bold_text_14, {
+                                            color: '#707070'
+                                        }]}
                                     >
                                         Reviews ({feedback_count})
                             </Text>
@@ -808,8 +810,8 @@ class AcademyProfile extends BaseComponent {
 
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text
-                                                style={{ color: '#707070', fontSize: 12, marginRight: 2 }}
-                                            >Sort </Text>
+                                                style={[defaultStyle.bold_text_12, { color: '#707070', fontSize: 12, marginRight: 2 }]}>
+                                                Sort</Text>
                                             <Image
                                                 style={{ width: 24, height: 15, }}
                                                 source={require('../../images/filter_rating.png')}
