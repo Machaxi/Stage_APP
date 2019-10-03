@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import moment from "moment/moment";
 import { COACH, ACADEMY } from '../../../components/Constants';
 import BaseComponent, { defaultStyle } from '../../BaseComponent'
+import PTRView from 'react-native-pull-to-refresh';
 
 
 class PerformenceScreen extends BaseComponent {
@@ -29,6 +30,10 @@ class PerformenceScreen extends BaseComponent {
     }
 
     componentDidMount() {
+        this.selfComponentDidMount()
+    }
+
+    selfComponentDidMount() {
         var userData;
         getData('header', (value) => {
             console.log("header", value);
@@ -49,6 +54,15 @@ class PerformenceScreen extends BaseComponent {
             }
 
 
+        });
+    }
+
+    _refresh = () => {
+        this.selfComponentDidMount()
+        setTimeout(() => {
+        }, 500)
+        return new Promise((resolve) => {
+            resolve()
         });
     }
 
@@ -179,27 +193,27 @@ class PerformenceScreen extends BaseComponent {
                 </View>
             )
         }
-        if (this.state.batchList && this.state.batchList.length > 0) {
 
 
-            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                <FlatList
-                    data={this.state.batchList}
-                    renderItem={this.renderItemSection}
-                    keyExtractor4={(item, index) => item.id}
-                />
+        return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-            </View>;
-        } else {
-            return (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={defaultStyle.regular_text_14}>No Dues Yet.</Text>
-                    </View>
-                </View>
-            )
-        }
+            <PTRView onRefresh={this._refresh} >
+                {this.state.batchList && this.state.batchList.length > 0 ?
+                    <FlatList
+                        data={this.state.batchList}
+                        renderItem={this.renderItemSection}
+                        keyExtractor4={(item, index) => item.id}
+                    />
+                    :
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ marginTop: 50, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={defaultStyle.regular_text_14}>No Dues Yet.</Text>
+                        </View>
+                    </View>}
+            </PTRView>
+        </View>;
+
     }
 }
 const mapStateToProps = state => {

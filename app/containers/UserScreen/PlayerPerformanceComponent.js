@@ -42,7 +42,9 @@ class PlayerPerformanceComponent extends BaseComponent {
     }
 
     componentDidMount() {
-        console.log('hiiiiiiiiiiiiiiiiii', this.props.jumpTo);
+        console.log('componentDidMount', JSON.stringify(this.props.jumpTo));
+        console.log('Youtube=>', this.props.youtube_url)
+
         this.refreshEvent = Events.subscribe(EVENT_CLEAR_GRAPH, () => {
             console.warn(EVENT_CLEAR_GRAPH);
             console.log('Deepika');
@@ -178,13 +180,13 @@ class PlayerPerformanceComponent extends BaseComponent {
                 }
             </Card>
 
-            {item.attribute.intro_video_url ?
+            {this.props.youtube_url ?
                 <Card style={styles.performanceCard}>
                     <View style={{ width: '100%', height: 300 }}>
 
                         {
                             <WebView
-                                source={{ uri: `https://www.youtube.com/embed/${item.attribute.intro_video_url.split('=')[1]}` }}
+                                source={{ uri: `https://www.youtube.com/embed/${this.props.youtube_url.split('=')[1]}` }}
                                 javaScriptEnabled={true}
                                 domStorageEnabled={true}
                             />
@@ -217,7 +219,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                     </View>
                     <View style={{
                         backgroundColor: '#EFEFEF',
-                        width:"100%",
+                        width: "100%",
                         borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row'
                     }}>
                         <Image
@@ -233,7 +235,7 @@ class PlayerPerformanceComponent extends BaseComponent {
                             style={{
                                 fontFamily: 'Quicksand-Regular',
                                 fontSize: 9, color: '#A3A5AE',
-                            }}>{item.attribute.intro_video_url}</Text>
+                            }}>{this.props.youtube_url}</Text>
                     </View>
                 </Card> : null}
 

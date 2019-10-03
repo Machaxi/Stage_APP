@@ -10,10 +10,11 @@ import { getAcademyDetail, getAcademyFeedbackList } from '../../redux/reducers/A
 import BaseComponent, { defaultStyle, formattedName, getFormattedBadge } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Swiper from 'react-native-swiper'
-
+import Events from '../../router/events'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import ReadMoreText from "rn-read-more-text";
+import StarRating from 'react-native-star-rating';
 
 class AcademyProfile extends BaseComponent {
 
@@ -28,13 +29,13 @@ class AcademyProfile extends BaseComponent {
             filter_dialog: false,
             spinner: false,
             page: 0,
-            sortType: '',
+            sortType: 'createdAt,desc',
             type: '',
             clear_feedback_array: false,
-            feedback_count:0
+            feedback_count: 0
         }
         this.state.id = this.props.navigation.getParam('id', '');
-        
+
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             this.state.player_id = userData.user['id']
@@ -52,6 +53,16 @@ class AcademyProfile extends BaseComponent {
                 showFeedback: true
             })
         });
+
+        this.refreshEvent = Events.subscribe('RefreshFeedback', () => {
+            this.state.page = 0
+            this.state.feedback = []
+            let sortType = this.state.sortType
+            let type = this.state.type
+            this.getAcademyFeedbacks(sortType, type, false)
+        });
+
+
     }
     progress(status) {
         this.setState({
@@ -163,7 +174,7 @@ class AcademyProfile extends BaseComponent {
                     alignItems: 'center'
                 }}>
 
-                    <Rating
+                    {/* <Rating
                         type='custom'
                         ratingColor='#F4FC9A'
                         ratingBackgroundColor='#D7D7D7'
@@ -172,6 +183,27 @@ class AcademyProfile extends BaseComponent {
                         readonly={true}
                         startingValue={item.rating}
                         style={{ width: 80 }}
+                    /> */}
+                    <StarRating
+                        style={{
+                            //height: 24, 
+                            width: 70,
+                            marginRight: 6,
+                        }}
+                        containerStyle={{
+                            width: 70,
+                            marginRight: 6
+                        }}
+                        starSize={14}
+                        disabled={true}
+                        emptyStar={require('../../images/ic_empty_star.png')}
+                        fullStar={require('../../images/ic_star.png')}
+                        halfStar={require('../../images/ic_half_star.png')}
+                        iconSet={'Ionicons'}
+                        maxStars={5}
+                        rating={item.rating}
+                        ratingBackgroundColor={"#ff2200"}
+                        fullStarColor={'#F4FC9A'}
                     />
 
                     {/* <Text style={{
@@ -256,7 +288,7 @@ class AcademyProfile extends BaseComponent {
                         <Text style={{
                             justifyContent: 'center', textAlign: 'center',
                             fontFamily: 'Quicksand-Bold', color: 'white', fontSize: 13
-                        }}>{top_player.score==0?"-":top_player.score}</Text>
+                        }}>{top_player.score == 0 ? "-" : top_player.score}</Text>
 
                         <View style={{ flexDirection: 'row', paddingTop: 13, marginLeft: 2, marginRight: 2 }}>
 
@@ -491,10 +523,11 @@ class AcademyProfile extends BaseComponent {
                                     alignItems: 'center',
                                     paddingTop: 8,
                                     paddingBottom: 12,
+                                    marginLeft: 6,
                                     flexDirection: 'row', flex: 1
                                 }}>
 
-                                    <Rating
+                                    {/* <Rating
                                         type='custom'
                                         ratingColor='#F4FC9A'
                                         ratingBackgroundColor='#D7D7D7'
@@ -503,6 +536,27 @@ class AcademyProfile extends BaseComponent {
                                         readonly={true}
                                         startingValue={academy.ratings}
                                         style={{ width: 80 }}
+                                    /> */}
+                                    <StarRating
+                                        style={{
+                                            //height: 24, 
+                                            width: 70,
+                                            marginRight: 6,
+                                        }}
+                                        containerStyle={{
+                                            width: 70,
+                                            marginRight: 6
+                                        }}
+                                        starSize={14}
+                                        disabled={true}
+                                        emptyStar={require('../../images/ic_empty_star.png')}
+                                        fullStar={require('../../images/ic_star.png')}
+                                        halfStar={require('../../images/ic_half_star.png')}
+                                        iconSet={'Ionicons'}
+                                        maxStars={5}
+                                        rating={academy.ratings}
+                                        ratingBackgroundColor={"#ff2200"}
+                                        fullStarColor={'#F4FC9A'}
                                     />
 
                                     {/* <Text style={{

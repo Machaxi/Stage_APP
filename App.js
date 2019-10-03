@@ -24,8 +24,8 @@ import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } from './app/containers/BaseComponent';
-import { storeData } from "./app/components/auth";
+import BaseComponent, { ONE_SIGNAL_ID, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
+import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 
@@ -47,6 +47,7 @@ client.interceptors.request.use(
     config => {
         config.headers.app_version = '1';
         config.headers.device_type = Platform.OS;
+        config.headers.device_id = global.FCM_DEVICE_ID;
         //config.headers.fcm_token = FCM_TOKEN
         return config;
     },
@@ -64,11 +65,35 @@ client.interceptors.response.use(response => {
     try {
         let status = error.response.data.status
         let msg = error.response.data.error_message
+        let error_code = -1
+        try {
+            error_code = error.response.data.error_code
+        } catch (err) {
+
+        }
+
         console.log('status=> ', status)
-        if (status != 401) {
+        if (error_code == 1010) {
+
+            //auto logout and sending navigation to switcher
+            console.log('error => ' + JSON.stringify(error.response))
+
+            getData('userInfo', (value) => {
+                userData = JSON.parse(value)
+                userData['academy_name'] = null
+                userData['academy_id'] = null
+                userData['academy_user_id'] = null
+                storeData("userInfo", JSON.stringify(userData))
+                setTimeout(() => {
+                    Events.publish(GO_TO_SWITCHER);
+                }, 100)
+            });
+        }
+        else if (status != 401) {
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
         }
+
     }
     catch (error) {
 
@@ -185,7 +210,7 @@ export default class App extends BaseComponent {
             })
         });
 
-        OneSignal.init("0afba88e-fe31-4da9-9540-412faf6b856b",{kOSSettingsKeyAutoPrompt : true});
+        OneSignal.init(ONE_SIGNAL_ID, { kOSSettingsKeyAutoPrompt: true });
         //OneSignal.setLogLevel(0, 6)
 
         OneSignal.addEventListener('received', this.onReceived);
@@ -203,10 +228,13 @@ export default class App extends BaseComponent {
     }
 
     onOpened(openResult) {
+        global.NOTIFICATION_DATA = openResult.notification.payload.additionalData
+
+        //alert(JSON.stringify(openResult))
         //console.log('Message: ', openResult.notification.payload.body);
         //  console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
-        //  console.log('openResult: ', openResult);
+         console.log('openResult: ', JSON.stringify(openResult));
     }
 
     componentWillUnmount() {
@@ -216,12 +244,11 @@ export default class App extends BaseComponent {
     }
 
 
-
-
     onIds(device) {
         //alert(JSON.stringify(device))
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
+        global.FCM_DEVICE_ID = device.pushToken
         //alert('onIds ',  device)
         console.log('Device info: ', device)
     }
@@ -295,9 +322,8 @@ export default class App extends BaseComponent {
                                         StatusBar.setBarStyle('dark-content', true)
                                     }
                                 }
-                            }else{
+                            } else {
                                 StatusBar.setBarStyle('dark-content', true)
-  
                             }
                         }}
                     />

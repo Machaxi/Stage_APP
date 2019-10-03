@@ -24,6 +24,7 @@ import BaseComponent, {
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
 import firebase from "react-native-firebase";
+import StarRating from 'react-native-star-rating';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -209,6 +210,16 @@ class ParentHome extends BaseComponent {
         });
 
         this.getNotifications()
+
+        if (global.NOTIFICATION_DATA) {
+            try {
+                let notification_for = global.NOTIFICATION_DATA.notification_for
+                this.notificationOpenScreen(notification_for)
+                global.NOTIFICATION_DATA = null
+
+            } catch (err) {
+            }
+        }
 
     }
 
@@ -445,6 +456,7 @@ class ParentHome extends BaseComponent {
         if (this.state.player_profile) {
             const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, is_reward_point_due,
                 is_payment_due, reward_detail, payment_detail, operations } = this.state.player_profile
+            //console.log('payment_detail=> ', JSON.stringify(payment_detail[0].dueDate))
 
             sessionArray = [];
             if (operations != null && operations.next_sessions != null) {
@@ -643,9 +655,9 @@ class ParentHome extends BaseComponent {
                                 </View>
 
                                 <TouchableOpacity
-                                onPress={()=>{
-                                    this.props.navigation.navigate('PaymentDetail')
-                                }}>
+                                    onPress={() => {
+                                        this.props.navigation.navigate('PaymentDetail')
+                                    }}>
                                     <Text style={{ color: '#667DDB', marginRight: 10, fontFamily: 'Quicksand-Regular', fontSize: 10 }}>View Details</Text>
                                 </TouchableOpacity>
 
@@ -660,14 +672,14 @@ class ParentHome extends BaseComponent {
                                     <View>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Due Date</Text>
                                         <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>
-                                            {moment.utc(payment_detail.due_date).local().format("DD-MMM-YYYY")}
+                                            {moment.utc(payment_detail[0].dueDate, 'YYYY-MM-DD').local().format("DD-MMM-YYYY")}
                                         </Text>
                                     </View>
 
 
                                     <View style={{ marginLeft: 24 }}>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Amount</Text>
-                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{payment_detail.amount}</Text>
+                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{payment_detail[0].amount}</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '40%' }}>
@@ -897,7 +909,7 @@ class ParentHome extends BaseComponent {
                                         marginTop: 4
                                     }}>
 
-                                        <Rating
+                                        {/* <Rating
                                             type='custom'
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
@@ -906,6 +918,27 @@ class ParentHome extends BaseComponent {
                                             readonly={true}
                                             startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
                                             style={{ width: 80 }}
+                                        /> */}
+                                        <StarRating
+                                            style={{
+                                                //height: 24, 
+                                                width: 70,
+                                                marginRight: 6,
+                                            }}
+                                            containerStyle={{
+                                                width: 70,
+                                                marginRight: 6
+                                            }}
+                                            starSize={14}
+                                            disabled={true}
+                                            emptyStar={require('../../images/ic_empty_star.png')}
+                                            fullStar={require('../../images/ic_star.png')}
+                                            halfStar={require('../../images/ic_half_star.png')}
+                                            iconSet={'Ionicons'}
+                                            maxStars={5}
+                                            rating={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            ratingBackgroundColor={"#ff2200"}
+                                            fullStarColor={'#F4FC9A'}
                                         />
 
                                         {/* <Text style={{
@@ -945,11 +978,11 @@ class ParentHome extends BaseComponent {
                                                 alignItems: 'center',
                                                 flexDirection: 'row',
                                                 marginLeft: 6,
-                                                marginTop: 4,
+                                                //marginTop: 4,
                                                 alignItems: 'center'
                                             }}>
 
-                                                <Rating
+                                                {/* <Rating
                                                     type='custom'
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
@@ -958,6 +991,27 @@ class ParentHome extends BaseComponent {
                                                     readonly={true}
                                                     startingValue={academy_feedback_data.rating}
                                                     style={{ width: 80 }}
+                                                /> */}
+                                                <StarRating
+                                                    style={{
+                                                        //height: 24, 
+                                                        width: 70,
+                                                        marginRight: 6,
+                                                    }}
+                                                    containerStyle={{
+                                                        width: 70,
+                                                        marginRight: 6
+                                                    }}
+                                                    starSize={14}
+                                                    disabled={true}
+                                                    emptyStar={require('../../images/ic_empty_star.png')}
+                                                    fullStar={require('../../images/ic_star.png')}
+                                                    halfStar={require('../../images/ic_half_star.png')}
+                                                    iconSet={'Ionicons'}
+                                                    maxStars={5}
+                                                    rating={academy_feedback_data.rating}
+                                                    ratingBackgroundColor={"#ff2200"}
+                                                    fullStarColor={'#F4FC9A'}
                                                 />
 
                                                 {/* <Text style={{
@@ -1059,7 +1113,7 @@ class ParentHome extends BaseComponent {
                                             marginTop: 4
                                         }}>
 
-                                            <Rating
+                                            {/* <Rating
                                                 type='custom'
                                                 ratingColor='#F4FC9A'
                                                 ratingBackgroundColor='#D7D7D7'
@@ -1068,6 +1122,27 @@ class ParentHome extends BaseComponent {
                                                 readonly={true}
                                                 startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
                                                 style={{ width: 80 }}
+                                            /> */}
+                                            <StarRating
+                                                style={{
+                                                    //height: 24, 
+                                                    width: 70,
+                                                    marginRight: 6,
+                                                }}
+                                                containerStyle={{
+                                                    width: 70,
+                                                    marginRight: 6
+                                                }}
+                                                starSize={14}
+                                                disabled={true}
+                                                emptyStar={require('../../images/ic_empty_star.png')}
+                                                fullStar={require('../../images/ic_star.png')}
+                                                halfStar={require('../../images/ic_half_star.png')}
+                                                iconSet={'Ionicons'}
+                                                maxStars={5}
+                                                rating={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                                ratingBackgroundColor={"#ff2200"}
+                                                fullStarColor={'#F4FC9A'}
                                             />
 
                                             {/* <Text style={{
@@ -1100,10 +1175,11 @@ class ParentHome extends BaseComponent {
                                                 <View style={{
                                                     flexDirection: 'row',
                                                     alignItems: 'center',
-                                                    marginLeft: 6, marginTop: 4
+                                                    marginLeft: 6,
+                                                    //marginTop: 4
                                                 }}>
 
-                                                    <Rating
+                                                    {/* <Rating
                                                         type='custom'
                                                         ratingColor='#F4FC9A'
                                                         ratingBackgroundColor='#D7D7D7'
@@ -1112,6 +1188,27 @@ class ParentHome extends BaseComponent {
                                                         readonly={true}
                                                         startingValue={coach_feedback_data.rating}
                                                         style={{ width: 80 }}
+                                                    /> */}
+                                                    <StarRating
+                                                        style={{
+                                                            //height: 24, 
+                                                            width: 70,
+                                                            marginRight: 6,
+                                                        }}
+                                                        containerStyle={{
+                                                            width: 70,
+                                                            marginRight: 6
+                                                        }}
+                                                        starSize={14}
+                                                        disabled={true}
+                                                        emptyStar={require('../../images/ic_empty_star.png')}
+                                                        fullStar={require('../../images/ic_star.png')}
+                                                        halfStar={require('../../images/ic_half_star.png')}
+                                                        iconSet={'Ionicons'}
+                                                        maxStars={5}
+                                                        rating={coach_feedback_data.rating}
+                                                        ratingBackgroundColor={"#ff2200"}
+                                                        fullStarColor={'#F4FC9A'}
                                                     />
 
                                                     {/* <Text style={{

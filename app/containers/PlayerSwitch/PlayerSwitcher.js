@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import BaseComponent, { defaultStyle, getFormattedLevel } from '../BaseComponent';
 import PlayerHeader from '../../components/custom/PlayerHeader'
 import { RateViewFill } from '../../components/Home/RateViewFill';
+import StarRating from 'react-native-star-rating';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 class PlayerSwitcher extends BaseComponent {
@@ -133,6 +134,7 @@ class PlayerSwitcher extends BaseComponent {
                 </View>
                 <View style={{
                     paddingLeft: 6,
+                    marginLeft: 8,
                     paddingTop: 8,
                     paddingBottom: 12,
                     alignItems: 'center',
@@ -140,7 +142,7 @@ class PlayerSwitcher extends BaseComponent {
                     flex: 1
                 }}>
 
-                    <Rating
+                    {/* <Rating
                         type='custom'
                         ratingColor='#F4FC9A'
                         ratingBackgroundColor='#D7D7D7'
@@ -149,6 +151,27 @@ class PlayerSwitcher extends BaseComponent {
                         imageSize={12}
                         readonly={true}
                         style={{ width: 80 }}
+                    /> */}
+                    <StarRating
+                        style={{
+                            //height: 24, 
+                            width: 70,
+                            marginRight: 6,
+                        }}
+                        containerStyle={{
+                            width: 70,
+                            marginRight: 6
+                        }}
+                        starSize={14}
+                        disabled={true}
+                        emptyStar={require('../../images/ic_empty_star.png')}
+                        fullStar={require('../../images/ic_star.png')}
+                        halfStar={require('../../images/ic_half_star.png')}
+                        iconSet={'Ionicons'}
+                        maxStars={5}
+                        rating={item.academy_rating}
+                        ratingBackgroundColor={"#ff2200"}
+                        fullStarColor={'#F4FC9A'}
                     />
 
                     {/* <Text style={{
@@ -267,12 +290,25 @@ class PlayerSwitcher extends BaseComponent {
                     <View>
 
 
-                        <FlatList
-                            data={this.state.itemList}
-                            renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? this.renderItem : this.renderItemAcedemic}
-                            keyExtractor={(item, index) => item.id}
-                        />
+                        {this.state.itemList.length > 0 ?
+                            <FlatList
+                                data={this.state.itemList}
+                                renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? this.renderItem : this.renderItemAcedemic}
+                                keyExtractor={(item, index) => item.id}
+                            /> :
+                            <View style={{
+                                flex: 1,
+                                padding: 20,
+                                marginBottom: 20,
+                                alignItems: 'center', justifyContent: 'center'
+                            }}>
+                                <Text style={defaultStyle.bold_text_14}>
+                                    You don't have any academy assigned yet.
+                                </Text>
+                            </View>
+                        }
                     </View>
+
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
@@ -281,10 +317,12 @@ class PlayerSwitcher extends BaseComponent {
                                 this.props.navigation.navigate('CurrentBooking')
 
                             }}>
-                                <View style={{ margin: 10, 
-                                    alignItems:'center',
-                                    justifyContent:'center',
-                                    flexDirection: 'row', height: 40 }}>
+                                <View style={{
+                                    margin: 10,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexDirection: 'row', height: 40
+                                }}>
 
                                     <Image
                                         resizeMode="contain"
@@ -298,15 +336,15 @@ class PlayerSwitcher extends BaseComponent {
 
                                         <View style={{
                                             flex: 1,
-                                            alignItems:'center',
-                                            justifyContent:'center',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
                                             marginRight: 15,
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={defaultStyle.bold_text_14}>
                                                 Book and Play
-                                    </Text>
+                                            </Text>
 
                                             <Image
                                                 resizeMode="contain"
@@ -321,11 +359,9 @@ class PlayerSwitcher extends BaseComponent {
                                     </View>
                                 </View>
 
-
                             </TouchableOpacity>
                         </Card>
                     </View>
-
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
@@ -384,10 +420,7 @@ class PlayerSwitcher extends BaseComponent {
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
-
-                                console.warn("Touch Press")
-
-
+                                this.props.navigation.navigate('WebViewScreen')
                             }}>
                                 <View style={{
                                     margin: 10,
@@ -432,6 +465,25 @@ class PlayerSwitcher extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
+
+
+                    {this.state.itemList.length == 0 ?
+                        <View style={{
+                            flex: 1,
+                            padding: 20,
+                            alignItems: 'center', justifyContent: 'center'
+                        }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.logout()
+                                }}
+                            >
+
+                                <Text style={defaultStyle.bold_text_14}>
+                                    Logout</Text>
+                            </TouchableOpacity>
+
+                        </View> : null}
 
 
                 </ScrollView> : null}

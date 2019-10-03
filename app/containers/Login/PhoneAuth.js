@@ -235,7 +235,7 @@ class PhoneAuth extends BaseComponent {
                         this.props.navigation.navigate('GHome')
 
                     } else if (userInfoData.user_type == PLAYER) {
-                        if (!userData.has_multiple_acadmies) {
+                        if (!userData.has_multiple_acadmies && userData.academy_id != null) {
                             this.props.navigation.navigate('UHome')
 
                         } else {
@@ -246,7 +246,7 @@ class PhoneAuth extends BaseComponent {
 
                     } else if (userInfoData.user_type == PARENT) {
                         storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false) {
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                             this.props.navigation.navigate('PHome')
 
                         } else {
@@ -258,7 +258,7 @@ class PhoneAuth extends BaseComponent {
                     }
                     else if (userInfoData.user_type == COACH) {
                         storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false) {
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                             this.props.navigation.navigate('CHome')
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
@@ -369,7 +369,8 @@ class PhoneAuth extends BaseComponent {
                         this.props.navigation.navigate('GHome')
 
                     } else if (userInfoData.user_type == PLAYER) {
-                        if (!userData.has_multiple_acadmies) {
+
+                        if (!userData.has_multiple_acadmies && userData.academy_id != null) {
                             this.props.navigation.navigate('UHome')
 
                         } else {
@@ -380,7 +381,7 @@ class PhoneAuth extends BaseComponent {
 
                     } else if (userInfoData.user_type == PARENT) {
                         storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false) {
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                             this.props.navigation.navigate('PHome')
 
                         } else {
@@ -392,7 +393,7 @@ class PhoneAuth extends BaseComponent {
                     }
                     else if (userInfoData.user_type == COACH) {
                         storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false) {
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                             this.props.navigation.navigate('CHome')
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
@@ -496,10 +497,9 @@ class PhoneAuth extends BaseComponent {
                         style={{
                             color: 'white',
                             textAlign: 'center',
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Medium'
                         }}>
-                        Login
-                                            </Text>
+                        Login</Text>
                 </TouchableOpacity>
 
                 {/* <Text style={[styles.rounded_button, { marginTop: 16 }]}
@@ -519,10 +519,9 @@ class PhoneAuth extends BaseComponent {
                         style={{
                             color: 'white',
                             textAlign: 'center',
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Medium'
                         }}>
-                        Login by name
-                                            </Text>
+                        Login by name</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity

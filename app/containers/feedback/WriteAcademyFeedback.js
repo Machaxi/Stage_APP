@@ -10,6 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import SwipeableRating from 'react-native-swipeable-rating';
 import StarRating from 'react-native-star-rating';
+import Events from '../../router/events'
 
 class WriteAcademyFeedback extends BaseComponent {
 
@@ -71,6 +72,7 @@ class WriteAcademyFeedback extends BaseComponent {
                     //console.warn('Res=> ' + JSON.stringify(this.props.data))
                     let data = this.props.data.data
                     if (data.success) {
+                          Events.publish('RefreshFeedback');
                         this.setState({
                             modalVisible: true
                         })

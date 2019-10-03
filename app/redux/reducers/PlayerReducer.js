@@ -26,12 +26,16 @@ export default function PlayerReducer(state = initialState, action) {
     }
 }
 
-export function getAcademyPlayersList(id) {
+export function getAcademyPlayersList(id, header) {
     return {
         type: types.GET_PLAYER_LISTING,
         payload: {
             request: {
-                url: `global/academy/${id}/players`
+                url: `global/academy/${id}/players`,
+                headers: {
+                    'x-authorization': header
+
+                },
             }
         }
     };

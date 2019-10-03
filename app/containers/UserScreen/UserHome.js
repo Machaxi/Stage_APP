@@ -22,6 +22,7 @@ import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder';
 import firebase from 'react-native-firebase'
 import CustomProgress from '../../components/custom/CustomProgress';
+import StarRating from 'react-native-star-rating';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -173,7 +174,7 @@ class UserHome extends BaseComponent {
             academy_feedback_data: null,
             coach_feedback_data: null,
             academy_id: '',
-            academy_user_id:''
+            academy_user_id: ''
         }
         StatusBar.setBackgroundColor("#262051")
         StatusBar.setBarStyle('light-content', true)
@@ -221,6 +222,17 @@ class UserHome extends BaseComponent {
 
         this.getNotifications()
         this.selfComponentDidMount()
+
+        if (global.NOTIFICATION_DATA) {
+            try {
+                let notification_for = global.NOTIFICATION_DATA.notification_for
+                this.notificationOpenScreen(notification_for)
+                global.NOTIFICATION_DATA = null
+
+            } catch (err) {
+            }
+        }
+
     }
 
     getNotifications() {
@@ -289,11 +301,11 @@ class UserHome extends BaseComponent {
                         this.setState({
                             coach_feedback_data: user1.data['coach_data'].coach_feedback[0],
                         })
-                      }
-                      catch(err) {
+                    }
+                    catch (err) {
                         //document.getElementById("demo").innerHTML = err.message;
-                      }
-                    
+                    }
+
                 }
 
                 if (user1.data['academy_data'] != null && user1.data['academy_data'].feedback) {
@@ -302,10 +314,10 @@ class UserHome extends BaseComponent {
                     })
                 }
 
-                try{
+                try {
                     const profile_pic = user1.data.player_profile.profile_pic
-                    Events.publish(PROFILE_PIC_UPDATED,profile_pic);
-                }catch(err){
+                    Events.publish(PROFILE_PIC_UPDATED, profile_pic);
+                } catch (err) {
 
                 }
 
@@ -341,7 +353,7 @@ class UserHome extends BaseComponent {
                         userData['academy_user_id'] = user1.data['player_profile'].academy_user_id
                         storeData("userInfo", JSON.stringify(userData))
                         Events.publish(EVENT_EDIT_PROFILE);
-                        
+
                     });
 
 
@@ -447,7 +459,7 @@ class UserHome extends BaseComponent {
 
             const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, operations } = this.state.player_profile
             sessionArray = [];
-            if (operations!=null && operations.next_sessions != null) {
+            if (operations != null && operations.next_sessions != null) {
 
                 for (let i = 0; i < operations.next_sessions.length; i++) {
                     const { routine_name, session_date, is_canceled, end_time, start_time } = operations.next_sessions[i]
@@ -760,7 +772,7 @@ class UserHome extends BaseComponent {
                                         alignItems: 'center'
                                     }}>
 
-                                        <Rating
+                                        {/* <Rating
                                             type='custom'
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
@@ -769,6 +781,27 @@ class UserHome extends BaseComponent {
                                             readonly={true}
                                             startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}//
                                             style={{ width: 80 }}
+                                        /> */}
+                                        <StarRating
+                                            style={{
+                                                //height: 24, 
+                                                width: 70,
+                                                marginRight: 6,
+                                            }}
+                                            containerStyle={{
+                                                width: 70,
+                                                marginRight: 6
+                                            }}
+                                            starSize={14}
+                                            disabled={true}
+                                            emptyStar={require('../../images/ic_empty_star.png')}
+                                            fullStar={require('../../images/ic_star.png')}
+                                            halfStar={require('../../images/ic_half_star.png')}
+                                            iconSet={'Ionicons'}
+                                            maxStars={5}
+                                            rating={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            ratingBackgroundColor={"#ff2200"}
+                                            fullStarColor={'#F4FC9A'}
                                         />
 
                                         {/* <Text style={{
@@ -809,11 +842,11 @@ class UserHome extends BaseComponent {
                                                 alignItems: 'center',
                                                 flexDirection: 'row',
                                                 marginLeft: 6,
-                                                marginTop: 4,
+                                                //marginTop: 4,
                                                 alignItems: 'center'
                                             }}>
 
-                                                <Rating
+                                                {/* <Rating
                                                     type='custom'
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
@@ -822,6 +855,27 @@ class UserHome extends BaseComponent {
                                                     readonly={true}
                                                     startingValue={academy_feedback_data.rating}
                                                     style={{ width: 80 }}
+                                                /> */}
+                                                <StarRating
+                                                    style={{
+                                                        //height: 24, 
+                                                        width: 70,
+                                                        marginRight: 6,
+                                                    }}
+                                                    containerStyle={{
+                                                        width: 70,
+                                                        marginRight: 6
+                                                    }}
+                                                    starSize={14}
+                                                    disabled={true}
+                                                    emptyStar={require('../../images/ic_empty_star.png')}
+                                                    fullStar={require('../../images/ic_star.png')}
+                                                    halfStar={require('../../images/ic_half_star.png')}
+                                                    iconSet={'Ionicons'}
+                                                    maxStars={5}
+                                                    rating={academy_feedback_data.rating}
+                                                    ratingBackgroundColor={"#ff2200"}
+                                                    fullStarColor={'#F4FC9A'}
                                                 />
 
                                                 {/* <Text style={{
@@ -925,7 +979,7 @@ class UserHome extends BaseComponent {
                                         flexDirection: 'row',
                                     }}>
 
-                                        <Rating
+                                        {/* <Rating
                                             type='custom'
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
@@ -934,6 +988,27 @@ class UserHome extends BaseComponent {
                                             readonly={true}
                                             startingValue={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}//coach_feedback_data.target.avgFeedbackEntities[0].avgRating
                                             style={{ width: 80 }}
+                                        /> */}
+                                        <StarRating
+                                            style={{
+                                                //height: 24, 
+                                                width: 70,
+                                                marginRight: 6,
+                                            }}
+                                            containerStyle={{
+                                                width: 70,
+                                                marginRight: 6
+                                            }}
+                                            starSize={14}
+                                            disabled={true}
+                                            emptyStar={require('../../images/ic_empty_star.png')}
+                                            fullStar={require('../../images/ic_star.png')}
+                                            halfStar={require('../../images/ic_half_star.png')}
+                                            iconSet={'Ionicons'}
+                                            maxStars={5}
+                                            rating={coach_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            ratingBackgroundColor={"#ff2200"}
+                                            fullStarColor={'#F4FC9A'}
                                         />
 
                                         {/* <Text style={{
@@ -969,10 +1044,10 @@ class UserHome extends BaseComponent {
                                                 flexDirection: 'row',
                                                 alignItems: 'center',
                                                 marginLeft: 6,
-                                                marginTop: 4
+                                                //marginTop: 4,
                                             }}>
 
-                                                <Rating
+                                                {/* <Rating
                                                     type='custom'
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
@@ -981,6 +1056,27 @@ class UserHome extends BaseComponent {
                                                     readonly={true}
                                                     startingValue={coach_feedback_data.rating}
                                                     style={{ width: 80 }}
+                                                /> */}
+                                                <StarRating
+                                                    style={{
+                                                        //height: 24, 
+                                                        width: 70,
+                                                        marginRight: 6,
+                                                    }}
+                                                    containerStyle={{
+                                                        width: 70,
+                                                        marginRight: 6
+                                                    }}
+                                                    starSize={14}
+                                                    disabled={true}
+                                                    emptyStar={require('../../images/ic_empty_star.png')}
+                                                    fullStar={require('../../images/ic_star.png')}
+                                                    halfStar={require('../../images/ic_half_star.png')}
+                                                    iconSet={'Ionicons'}
+                                                    maxStars={5}
+                                                    rating={coach_feedback_data.rating}
+                                                    ratingBackgroundColor={"#ff2200"}
+                                                    fullStarColor={'#F4FC9A'}
                                                 />
 
                                                 {/* <Text style={{

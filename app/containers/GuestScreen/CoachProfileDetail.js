@@ -14,6 +14,7 @@ import ReadMoreText from "rn-read-more-text";
 import FilterDialog from './FilterDialog'
 import StarRating from 'react-native-star-rating';
 import { COACH } from '../../components/Constants';
+import Events from '../../router/events'
 
 class CoachProfileDetail extends BaseComponent {
 
@@ -27,7 +28,7 @@ class CoachProfileDetail extends BaseComponent {
             showFeedback: false,
             feedback: [],
             filter_dialog: false,
-            sortType: '',
+            sortType: 'createdAt,desc',
             type: '',
             is_feedback_loading: false,
             user_id: '',
@@ -48,6 +49,15 @@ class CoachProfileDetail extends BaseComponent {
         //         })
         //     }
         // });
+
+        this.refreshEvent = Events.subscribe('RefreshFeedback', () => {
+            this.state.page = 0
+            this.state.feedback = []
+            this.state.is_feedback_loading = true
+            let sortType = this.state.sortType
+            let type = this.state.type
+            this.getCoachFeedbacks(sortType, type, false)
+        });
     }
 
     getCoachFeedbacks(sortType, type, showLoading) {
@@ -180,7 +190,7 @@ class CoachProfileDetail extends BaseComponent {
 
                     }}>
 
-                        <Rating
+                        {/* <Rating
                             type='custom'
                             ratingColor='#F4FC9A'
                             ratingBackgroundColor='#D7D7D7'
@@ -189,8 +199,28 @@ class CoachProfileDetail extends BaseComponent {
                             readonly={true}
                             startingValue={item.rating}
                             style={{ width: 80 }}
+                        /> */}
+                        <StarRating
+                            style={{
+                                //height: 24, 
+                                width: 70,
+                                marginRight: 6,
+                            }}
+                            containerStyle={{
+                                width: 70,
+                                marginRight: 6
+                            }}
+                            starSize={14}
+                            disabled={true}
+                            emptyStar={require('../../images/ic_empty_star.png')}
+                            fullStar={require('../../images/ic_star.png')}
+                            halfStar={require('../../images/ic_half_star.png')}
+                            iconSet={'Ionicons'}
+                            maxStars={5}
+                            rating={item.rating}
+                            ratingBackgroundColor={"#ff2200"}
+                            fullStarColor={'#F4FC9A'}
                         />
-
 
 
 

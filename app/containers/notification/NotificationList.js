@@ -115,10 +115,17 @@ class NotificationList extends BaseComponent {
                 <TouchableOpacity
                     activeOpacity={.8}
                     onPress={() => {
-                        //this.props.navigation.navigate('Batch')
-                    }}
-                >
 
+                        let data = item.data
+                        if (data) {
+                            let json = JSON.parse(data)
+                            let notification_for = json.notification_for
+                            if (notification_for) {
+                                this.notificationOpenScreen(notification_for)
+                            }
+                        }
+
+                    }}>
 
                     <View style={{
                         flexDirection: 'row',

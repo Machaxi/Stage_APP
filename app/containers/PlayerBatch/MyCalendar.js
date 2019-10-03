@@ -173,7 +173,7 @@ class MyCalendar extends BaseComponent {
                                 <Text style={styles.attSessionLabel}>Sessions Attended</Text>
                             </View>
                             <View style={styles.attSessionValueOuter}>
-                                <Text style={styles.attSessionValue}>{data.attendance} %</Text>
+                                <Text style={styles.attSessionValue}>{data.attendance}%</Text>
                                 <Text style={styles.attSessionValue}>{data.session_attended}/{data.total_session}</Text>
                             </View>
                             {

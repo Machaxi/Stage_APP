@@ -198,7 +198,7 @@ class CancelSession extends BaseComponent {
                 }).catch((response) => {
                     this.progress(false)
                     console.log(response);
-                    alert('Something went wrong.')
+                    //alert('Something went wrong.')
                 })
             });
         }

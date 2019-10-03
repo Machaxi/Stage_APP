@@ -10,6 +10,7 @@ import moment from 'moment';
 import { ACADEMY, COACH } from '../../../components/Constants';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_PLAYER } from '../../BaseComponent';
 import Events from '../../../router/events';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class UpdatePlayerPerformence extends BaseComponent {
 
@@ -21,12 +22,22 @@ class UpdatePlayerPerformence extends BaseComponent {
             playerList: null,
             batchDetails: null,
             player_name: '',
+            spinner: false,
         }
         let data = this.props.navigation.getParam('data')
         this.state.player_name = JSON.parse(data).name
         console.log(data)
     }
 
+    progress(status) {
+        setTimeout(() => {
+            console.log('Progress=> ', status)
+            this.setState({
+                spinner: status
+            })
+            this.state.spinner = status
+        }, 100)
+    }
 
 
     componentDidMount() {
@@ -67,14 +78,14 @@ class UpdatePlayerPerformence extends BaseComponent {
                         playerList: user1.data['attributes'],
                         batchDetails: user1.data
                     }, () => {
-                        console.log('this.state.playerList', this.state.playerList);
                         this.state.playerList.map((item, index) => {
 
                             item.parameters.map((newitem, newindex) => {
                                 this.state.playerList[index].parameters[newindex]['score'] = '';
+                                this.state.playerList[index].parameters[newindex]['attribute_id'] = this.state.playerList[index].attribute_id;
                             })
 
-
+                            console.log('this.state.playerList', JSON.stringify(this.state.playerList));
 
                         })
                     })
@@ -90,7 +101,7 @@ class UpdatePlayerPerformence extends BaseComponent {
     }
 
 
-    renderItem = ({ item }) => (
+    renderItem = ({ item, index }) => (
 
 
         <View style={{
@@ -133,7 +144,33 @@ class UpdatePlayerPerformence extends BaseComponent {
                             padding: 10
                         }}
                         keyboardType={'number-pad'}
-                        onChangeText={(txtscore) => { item.score = txtscore }}
+                        //onChangeText={(txtscore) => { item.score = txtscore }}
+                        onChangeText={(text) => {
+                            if (!this.isNumbericOnly(text)) {
+                                text = ''
+                            } else if (+text > 100) {
+                                text = ''
+                                alert('Percentage must be less than or equal to 100')
+                            }
+
+                            let attributes = [...this.state.playerList]
+                            let parentIndex = -1
+                            let childIndex = index
+                            for (let i = 0; i < attributes.length; i++) {
+                                let obj = attributes[i]
+                                if (obj.attribute_id == item.attribute_id) {
+                                    obj.parameters[childIndex].score = text
+                                    break
+                                }
+                            }
+
+                            this.setState({
+                                playerList: attributes
+                            })
+
+                            console.log('attributes=> ', JSON.stringify(attributes))
+
+                        }}
                     >{item.score}</TextInput>
                 </View>
                 <Text style={defaultStyle.regular_text_14}>
@@ -185,10 +222,13 @@ class UpdatePlayerPerformence extends BaseComponent {
                 alert('Kindly rate on all parameters');
             } else {
 
+                this.progress(true)
                 postData['data'] = data;
 
                 console.log('postData', postData);
                 this.props.savePlayerPerformance(value, postData).then(() => {
+
+                    this.progress(false)
                     let user = JSON.stringify(this.props.data.performencedata);
                     console.log(' user response payload ' + user);
                     let user1 = JSON.parse(user)
@@ -200,6 +240,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                     }
 
                 }).catch((response) => {
+                    this.progress(false)
                     //handle form errors
                     console.log(response);
                 })
@@ -277,6 +318,11 @@ class UpdatePlayerPerformence extends BaseComponent {
             return <View style={{ flex: 1, marginBottom: 0, backgroundColor: 'white' }}>
                 <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: 'white' }}>
 
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
+
                     <View style={{ backgroundColor: 'white', padding: 16 }}>
                         <View >
                             <Text style={[defaultStyle.regular_text_14, { color: 'black' }]}>{'Update ' + name + '`s progress'} </Text>
@@ -286,7 +332,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                                 <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE' }]}>Month </Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                <Text style={defaultStyle.bold_text_14}>{moment(this.props.navigation.getParam('month') + '/' + this.props.navigation.getParam('year'), "MM/YYYY").format('MMM ’YY')} </Text>
+                                <Text style={defaultStyle.bold_text_14}>{moment(this.props.navigation.getParam('month') + '/' + this.props.navigation.getParam('year'), "MM/YYYY").format("MMM'YY")} </Text>
                                 <Text style={[defaultStyle.regular_text_14, { color: '#A3A5AE' }]}>(Enter Percentage)</Text>
                             </View>
                         </View>

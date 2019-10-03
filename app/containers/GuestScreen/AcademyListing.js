@@ -13,6 +13,7 @@ import { getData, storeData, isSignedIn } from '../../components/auth';
 import Events from '../../router/events';
 import FastImage from 'react-native-fast-image'
 import { GUEST } from '../../components/Constants';
+import StarRating from 'react-native-star-rating';
 
 var filterData = ''
 var notification_count = 0
@@ -227,6 +228,16 @@ class AcademyListing extends BaseComponent {
 
 
         this.getAcademyList('')
+
+        if (global.NOTIFICATION_DATA) {
+            try {
+                let notification_for = global.NOTIFICATION_DATA.notification_for
+                this.notificationOpenScreen(notification_for)
+                global.NOTIFICATION_DATA = null
+
+            } catch (err) {
+            }
+        }
     }
 
     getNotifications() {
@@ -651,12 +662,12 @@ class AcademyListing extends BaseComponent {
                         alignItems: 'center',
                         paddingTop: 12,
                         paddingBottom: 12,
-                        paddingLeft: 6,
+                        marginLeft: 12,
                         flexDirection: 'row',
                         flex: 1
                     }}>
 
-                        <Rating
+                        {/* <Rating
                             type='custom'
                             ratingColor='#F4FC9A'
                             ratingBackgroundColor='#D7D7D7'
@@ -665,6 +676,28 @@ class AcademyListing extends BaseComponent {
                             readonly={true}
                             startingValue={item.ratings}
                             style={{ width: 80 }}
+                        /> */}
+
+                        <StarRating
+                            style={{
+                                //height: 24, 
+                                width: 70,
+                                marginRight: 6
+                            }}
+                            containerStyle={{
+                                width: 70,
+                                marginRight: 6
+                            }}
+                            starSize={14}
+                            disabled={true}
+                            emptyStar={require('../../images/ic_empty_star.png')}
+                            fullStar={require('../../images/ic_star.png')}
+                            halfStar={require('../../images/ic_half_star.png')}
+                            iconSet={'Ionicons'}
+                            maxStars={5}
+                            rating={item.ratings}
+                            ratingBackgroundColor={"#ff2200"}
+                            fullStarColor={'#F4FC9A'}
                         />
 
                         {/* <Text style={{

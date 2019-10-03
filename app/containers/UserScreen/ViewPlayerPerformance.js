@@ -112,6 +112,7 @@ class ViewPlayerPerformance extends BaseComponent {
               let obj = {
                 key: row.parameter_id,
                 title: row.name,
+                youtube_url: row.video_url
               }
               newArray[i] = obj
             }
@@ -151,8 +152,10 @@ class ViewPlayerPerformance extends BaseComponent {
   );
   renderScene = ({ route, jumpTo }) => {
 
-    return <PlayerPerformanceComponent jumpTo={this.state.response}
+    return <PlayerPerformanceComponent
+      jumpTo={this.state.response}
       name={route.title}
+      youtube_url={route.video_url}
       navigation={this.props.navigation} />;
 
   };

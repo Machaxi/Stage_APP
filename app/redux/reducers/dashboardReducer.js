@@ -1,5 +1,5 @@
 import * as types from '../../actions/actionTypes';
-import {getData,storeData} from '../../components/auth'
+import { getData, storeData } from '../../components/auth'
 
 const initialState = {
     loading: false,
@@ -11,10 +11,10 @@ export default function dashboardReducer(state = initialState, action) {
         case types.GET_DASHBOARD:
             return { ...state, loading: true };
         case types.DO_DASHBOARD_SUCCESS:
-            console.log("sucesss DASHBOARD",action.payload.data);
+            console.log("sucesss DASHBOARD", action.payload.data);
             return { ...state, loading: false, dashboardData: action.payload.data };
         case types.DO_DASHBOARD_FAIL:
-            console.log("fails DO_DASHBOARD_FAIL",action.payload);
+            console.log("fails DO_DASHBOARD_FAIL", action.payload);
             return {
                 ...state,
                 loading: false,
@@ -25,8 +25,10 @@ export default function dashboardReducer(state = initialState, action) {
     }
 }
 
-export function getPlayerDashboard(header,player_id,academy_id) {
-    console.log("getPlayerDashboard ",header,player_id,academy_id)
+export function getPlayerDashboard(header, player_id, academy_id) {
+    console.log("getPlayerDashboard ", header, player_id, academy_id)
+    if (academy_id == null)
+        academy_id = ''
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -47,8 +49,8 @@ export function getPlayerDashboard(header,player_id,academy_id) {
     };
 }
 
-export function getOtherPlayerDashboard(academy_id,player_id) {
-    console.log("getPlayerDashboard ",player_id,academy_id)
+export function getOtherPlayerDashboard(academy_id, player_id) {
+    console.log("getPlayerDashboard ", player_id, academy_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -65,8 +67,8 @@ export function getOtherPlayerDashboard(academy_id,player_id) {
     };
 }
 
-export function getOtherPlayerWithoutAcademy(header,player_id) {
-    console.log("getOtherPlayerWithoutAcademy ",player_id)
+export function getOtherPlayerWithoutAcademy(header, player_id) {
+    console.log("getOtherPlayerWithoutAcademy ", player_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -86,8 +88,8 @@ export function getOtherPlayerWithoutAcademy(header,player_id) {
     };
 }
 
-export function getCoachDashboard(header,coach_id,academy_id) {
-    console.log("getCoachDashboard",header,coach_id,academy_id)
+export function getCoachDashboard(header, coach_id, academy_id) {
+    console.log("getCoachDashboard", header, coach_id, academy_id)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -110,7 +112,7 @@ export function getCoachDashboard(header,coach_id,academy_id) {
 }
 
 export function getPlayerSWitcher(header) {
-    console.log("postdata",header)
+    console.log("postdata", header)
     // var header =
     //     getData('header', (value) => {
     //         header  = value
@@ -121,7 +123,7 @@ export function getPlayerSWitcher(header) {
             request: {
                 url: `player/switcher`,
                 method: 'GET',
-               // data: postdata,
+                // data: postdata,
                 headers: {
                     'x-authorization': header
 
@@ -133,7 +135,7 @@ export function getPlayerSWitcher(header) {
 }
 
 export function getCoachSWitcher(header) {
-    console.log("postdata",header)
+    console.log("postdata", header)
     // var header =
     //     getData('header', (value) => {
     //         header  = value

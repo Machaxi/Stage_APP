@@ -219,7 +219,7 @@ class PlayerBatchComponent extends BaseComponent {
     }
     render() {
 
-        const { session, attendance, operations } = this.props.jumpTo
+        const { session, attendance, operations,batch_id} = this.props.jumpTo
         // const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
         // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 
@@ -239,6 +239,7 @@ class PlayerBatchComponent extends BaseComponent {
 
                         if (item != null) {
                             item.score = 0
+                            item.batchId = batch_id
                             this.props.navigation.navigate('ViewPlayerPerformance',
                                 { performance_data: item });
                         }

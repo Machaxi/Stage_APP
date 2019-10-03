@@ -29,21 +29,26 @@ class PlayersListing extends BaseComponent {
         if (this.props.navigation.getParam('List_type') == 'BATCH') {
             this.getBtachPlayer(this.props.navigation.getParam('batch_id'))
         } else {
-            this.props.getAcademyPlayersList(this.state.id).then(() => {
-                console.log('Res=> ' + JSON.stringify(this.props.data.res))
-                let status = this.props.data.res.success
-                if (status) {
-                    let players = this.props.data.res.data.players
-                    this.setState({
-                        players: players,
-                        filter: players
-                    })
-                }
+
+            getData('header', (value) => {
+
+                this.props.getAcademyPlayersList(this.state.id,value).then(() => {
+                    console.log('Res=> ' + JSON.stringify(this.props.data.res))
+                    let status = this.props.data.res.success
+                    if (status) {
+                        let players = this.props.data.res.data.players
+                        this.setState({
+                            players: players,
+                            filter: players
+                        })
+                    }
 
 
-            }).catch((response) => {
-                console.log(response);
+                }).catch((response) => {
+                    console.log(response);
+                })
             })
+
         }
     }
 

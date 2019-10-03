@@ -22,6 +22,7 @@ import { RateViewBorder } from '../components/Home/RateViewBorder';
 import { SkyFilledButton } from '../components/Home/SkyFilledButton';
 import Share from 'react-native-share';
 import FastImage from 'react-native-fast-image'
+import StarRating from 'react-native-star-rating';
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png"
 
@@ -446,15 +447,7 @@ class CoachMenuDrawer extends BaseComponent {
 	callApi() {
 		getData('header', (value) => {
 
-			onSignOut()
-			clearData()
-			global.USER_TYPE = ''
-			global.SELECTED_PLAYER_ID = ''
-
-
-			firebase.auth().signOut();
-			this.props.navigation.navigate('Login')
-
+			this.logout()
 
 			this.props.logout(value).then(() => {
 				let data = this.props.data.profileData
@@ -593,7 +586,7 @@ class CoachMenuDrawer extends BaseComponent {
 								flex: 1
 							}}>
 
-								<Rating
+								{/* <Rating
 									type='custom'
 									ratingColor='#F4FC9A'
 									ratingBackgroundColor='#D7D7D7'
@@ -602,6 +595,27 @@ class CoachMenuDrawer extends BaseComponent {
 									readonly={true}
 									startingValue={ratings}
 									style={{ width: 80 }}
+								/> */}
+								<StarRating
+									style={{
+										//height: 24, 
+										width: 70,
+										marginRight: 6,
+									}}
+									containerStyle={{
+										width: 70,
+										marginRight: 6
+									}}
+									starSize={14}
+									disabled={true}
+									emptyStar={require('../images/ic_empty_star.png')}
+									fullStar={require('../images/ic_star.png')}
+									halfStar={require('../images/ic_half_star.png')}
+									iconSet={'Ionicons'}
+									maxStars={5}
+									rating={ratings}
+									ratingBackgroundColor={"#ff2200"}
+									fullStarColor={'#F4FC9A'}
 								/>
 
 								{/* <Text style={{
@@ -1118,7 +1132,8 @@ class CoachMenuDrawer extends BaseComponent {
 							style={[defaultStyle.bold_text_14, { width: 200 }]}>{this.state.academy_name}</Text>
 
 						<View style={{
-							flexDirection: 'row'
+							flexDirection: 'row',
+							alignItems: 'center'
 						}}>
 
 							<Image

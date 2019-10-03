@@ -9,6 +9,7 @@ import { getAcademyListing, getPlayerRewardDue, saveParentRewardData } from "../
 import { connect } from 'react-redux';
 import moment from 'moment'
 import { Card } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class ParentRewardComponent extends BaseComponent {
 
@@ -29,7 +30,8 @@ class ParentRewardComponent extends BaseComponent {
             alert: '',
             success_dialog: false,
             name: '',
-            player_history: []
+            player_history: [],
+            spinner: false,
         }
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
@@ -81,12 +83,24 @@ class ParentRewardComponent extends BaseComponent {
 
     }
 
+    progress(status) {
+        setTimeout(() => {
+            this.setState({
+                spinner: status
+            })
+            this.state.spinner = status
+        }, 100)
+
+    }
+
+
     componentDidMount() {
 
         let obj = this.props.jumpTo//JSON.parse()
         console.warn(obj)
         let player_dues = obj.player_dues
         let player_history = obj.player_history
+        player_history = this.filterRewards(player_history)
         let history_view = [];
         for (let i = 0; i < player_history.length; i++) {
             let obj = { ...player_history[i], expand: false }
@@ -129,7 +143,7 @@ class ParentRewardComponent extends BaseComponent {
         //     alert('Invalid character input')
         //     return
         // }
-        
+
         let sum = +love_game + +following_diet
         console.warn('sum => ', sum)
         // if (following_diet == 0) {
@@ -158,6 +172,8 @@ class ParentRewardComponent extends BaseComponent {
                 alert: ''
             })
 
+            this.progress(true)
+
             let item = this.state.selected_item
             let data = {};
             data["month"] = item.month
@@ -171,9 +187,12 @@ class ParentRewardComponent extends BaseComponent {
             req['data'] = data
             console.warn(JSON.stringify(req))
 
+
             getData('header', (value) => {
 
                 this.props.saveParentRewardData(value, req).then(() => {
+
+                    this.progress(false)
 
                     //console.warn('Res=> ' + JSON.stringify(this.props.data))
                     let data = this.props.data.data
@@ -184,8 +203,8 @@ class ParentRewardComponent extends BaseComponent {
                         alert("Something went wrong.")
                     }
                 }).catch((response) => {
+                    this.progress(false)
                     console.log(response);
-
                 })
 
             })
@@ -248,8 +267,7 @@ class ParentRewardComponent extends BaseComponent {
                         })
                         this.setModalVisible(true);
 
-                    }}>
-                        Reward </CustomeButtonB>
+                    }}>Reward</CustomeButtonB>
                 </View>
             </View>
 
@@ -340,7 +358,7 @@ class ParentRewardComponent extends BaseComponent {
 
                             <View style={{ marginRight: 50 }}>
                                 <Text style={[defaultStyle.bold_text_10, {}]}>Total</Text>
-                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{total} pts</Text>
+                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~total} pts</Text>
 
                             </View>
                         </View>
@@ -356,6 +374,11 @@ class ParentRewardComponent extends BaseComponent {
             <ScrollView
                 style={{ backgroundColor: '#F7F7F7' }}>
                 <View>
+
+                    <Spinner
+                        visible={this.state.spinner}
+                        textStyle={defaultStyle.spinnerTextStyle}
+                    />
 
                     <Modal
                         animationType="none"

@@ -27,6 +27,7 @@ class PaymentDetail extends BaseComponent {
             mobile_number: '',
             userData: null,
             spinner: false,
+            isRefreshing: false
         };
 
 
@@ -40,6 +41,11 @@ class PaymentDetail extends BaseComponent {
 
         this.getDues()
 
+    }
+
+    onRefresh() {
+        //this.setState({ isRefreshing: true }, () => { this.getDues() });
+        alert('test')
     }
 
     getDues() {
@@ -76,7 +82,6 @@ class PaymentDetail extends BaseComponent {
             })
             this.state.spinner = status
         }, 100)
-
     }
 
     processPayment(item) {
@@ -224,7 +229,6 @@ class PaymentDetail extends BaseComponent {
         )
     }
 
-
     render() {
 
         if (this.props.data.loading && this.state.data.length == 0) {
@@ -268,13 +272,15 @@ class PaymentDetail extends BaseComponent {
                     </TouchableOpacity>
                 </View>
 
+
                 {data != null && data.length > 0 ?
                     <FlatList
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isRefreshing}
                         data={data}
                         extraData={data}
                         renderItem={this._renderItem}
                     /> :
-
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
                     </View>}

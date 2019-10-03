@@ -38,7 +38,8 @@ class PaymentHistory extends BaseComponent {
             payment_history: null,
             show_month_dialog: false,
             selected_month: '',
-            selected_year: ''
+            selected_year: '',
+            history_progress: false
         };
 
         this.inputRefs = {
@@ -159,7 +160,7 @@ class PaymentHistory extends BaseComponent {
                 <Text style={[defaultStyle.regular_text_14, {
                     width: "33%",
                     justifyContent: 'center',
-                    paddingLeft:30,
+                    paddingLeft: 30,
                     //marginLeft: 20,
                     //textAlign: 'center'
                 }]}>
@@ -199,7 +200,7 @@ class PaymentHistory extends BaseComponent {
                     width: "33%",
                     color: '#A3A5AE',
                     textAlign: 'left',
-                    paddingLeft:30,
+                    paddingLeft: 30,
                     //marginLeft: 20,
                 }]}>
                     Amount
@@ -211,6 +212,7 @@ class PaymentHistory extends BaseComponent {
     }
 
     filterMatch() {
+
 
         let playerId = this.state.selected_player
         //alert(playerId)
@@ -252,7 +254,9 @@ class PaymentHistory extends BaseComponent {
         const academy_id = this.state.selected_academy
         const player_user_id = this.state.selected_player
 
-
+        this.setState({
+            history_progress: true
+        })
         getData('header', (header) => {
 
             this.props.getPaymentHistory(header, month, year, academy_id, player_user_id).then(() => {
@@ -265,8 +269,14 @@ class PaymentHistory extends BaseComponent {
                         payment_history: payment_history
                     })
                 }
+                this.setState({
+                    history_progress: false
+                })
             }).catch((response) => {
                 console.log(response);
+                this.setState({
+                    history_progress: false
+                })
             })
         });
 
@@ -286,6 +296,8 @@ class PaymentHistory extends BaseComponent {
             formatted_date = moment(month + "/" + year, 'MM-YYYY').format("MMM'YY")
             //alert(formatted_date)
         }
+
+        const history_progress = this.state.history_progress
 
 
         if (this.props.data.loading && playerData == null) {
@@ -482,12 +494,16 @@ class PaymentHistory extends BaseComponent {
                         extraData={payment_history}
                         renderItem={this._renderItem}
                     /> :
-
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={defaultStyle.regular_text_14}>
-                            {payment_history == null ? "Please choose player and academy" : "No payment history."}
-                        </Text>
-                    </View>}
+                    (history_progress ?
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <ActivityIndicator size="large" color="#67BAF5" />
+                        </View>
+                        :
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={defaultStyle.regular_text_14}>
+                                {payment_history == null ? "Please choose player and academy" : "No payment history."}
+                            </Text>
+                        </View>)}
 
             </View>
         );

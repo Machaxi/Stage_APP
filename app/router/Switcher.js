@@ -20,6 +20,10 @@ import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
 import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
 import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
 import BookTrial from '../containers/GuestScreen/BookTrial'
+import WebViewScreen from '../containers/util/WebViewScreen'
+import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
+import PaymentPage from '../containers/court_booking/PaymentPage'
+import Registration from "../containers/tournament/Registration";
 
 const Switcher = createStackNavigator({
 
@@ -80,13 +84,27 @@ const Switcher = createStackNavigator({
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+                navigation={navigation} showNotification={false} />,
             headerStyle: {
                 backgroundColor: '#FFFFFF',
             },
 
             headerTintColor: '#000',
         }),
+    },
+    ViewPlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Players",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
     AcademyProfile: {
         screen: AcademyProfile,
@@ -194,7 +212,23 @@ const Switcher = createStackNavigator({
         screen: AcademyFilter,
 
     },
+    AcademyBatch: {
+        screen: AcademyBatch,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Batches",
+            headerLeft: <NavigationDrawerStructure
+                showDrawer={false}
+                navigationProps={navigation} showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+
+    },
 
     BookTrial: {
         screen: BookTrial,
@@ -213,6 +247,84 @@ const Switcher = createStackNavigator({
         })
 
     },
+    WebViewScreen: {
+        screen: WebViewScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "WebView",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
+    CurrentBooking: {
+        screen: CurrentBooking,
+        navigationOptions: ({ navigation }) => ({
+          title: 'Book and play',
+          headerTitleStyle: style.headerStyle,
+          headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+            showDrawer={false}
+            showBackAction={true}
+          />,
+          headerRight: <RightMenuToolbar navigationProps={navigation}
+            navigation={navigation} showNotification={false} />,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+    
+          headerTintColor: '#000',
+        }),
+      },
+      CourtAcademyListing: {
+        screen: CourtAcademyListing,
+        navigationOptions: ({ navigation }) => ({
+          title: 'Book and play',
+          headerTitleStyle: style.headerStyle,
+          headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+            showBackAction={true}
+            showDrawer={false}
+          />,
+          headerRight: <RightMenuToolbar navigationProps={navigation}
+            navigation={navigation} showNotification={false} />,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+    
+          headerTintColor: '#000',
+        }),
+      },
+      ChooseTimeDate: {
+        screen: ChooseTimeDate,
+        navigationOptions: ({ navigation }) => ({
+          title: 'Book and play',
+          headerTitleStyle: style.headerStyle,
+          headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+            showBackAction={true}
+            showDrawer={false}
+          />,
+          headerRight: <RightMenuToolbar navigationProps={navigation}
+            navigation={navigation} showNotification={false} />,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+    
+          headerTintColor: '#000',
+        }),
+      },
+      Registration: {
+        screen: Registration,
+      },
+      PaymentPage: {
+        screen: PaymentPage,
+      }
 }
 );
 export default Switcher;

@@ -13,6 +13,7 @@ import { getAcademyFeedbackList } from '../../redux/reducers/AcademyReducer'
 import FilterDialog from './../GuestScreen/FilterDialog'
 import ReadMoreText from "rn-read-more-text";
 import { RateViewFill } from '../../components/Home/RateViewFill';
+import StarRating from 'react-native-star-rating';
 
 
 class AcademyFeedbackListing extends BaseComponent {
@@ -94,7 +95,7 @@ class AcademyFeedbackListing extends BaseComponent {
             feedback: [],
             academy_id: '',
             page: 0,
-            sortType: '',
+            sortType: 'createdAt,desc',
             type: '',
             filter_dialog: false,
             clear_feedback_array: false,
@@ -203,7 +204,7 @@ class AcademyFeedbackListing extends BaseComponent {
                         alignItems: 'center'
                     }}>
 
-                        <Rating
+                        {/* <Rating
                             type='custom'
                             ratingColor='#F4FC9A'
                             ratingBackgroundColor='#D7D7D7'
@@ -212,6 +213,27 @@ class AcademyFeedbackListing extends BaseComponent {
                             readonly={true}
                             startingValue={item.rating}
                             style={{ width: 80 }}
+                        /> */}
+                        <StarRating
+                            style={{
+                                //height: 24, 
+                                width: 70,
+                                marginRight: 6,
+                            }}
+                            containerStyle={{
+                                width: 70,
+                                marginRight: 6
+                            }}
+                            starSize={14}
+                            disabled={true}
+                            emptyStar={require('../../images/ic_empty_star.png')}
+                            fullStar={require('../../images/ic_star.png')}
+                            halfStar={require('../../images/ic_half_star.png')}
+                            iconSet={'Ionicons'}
+                            maxStars={5}
+                            rating={item.rating}
+                            ratingBackgroundColor={"#ff2200"}
+                            fullStarColor={'#F4FC9A'}
                         />
 
                         {/* <Text style={{
@@ -314,10 +336,10 @@ class AcademyFeedbackListing extends BaseComponent {
                         onEndReached={({ distanceFromEnd }) => {
 
                             const hasMore = this.state.hasMore
-                            console.log('hasMore',hasMore)
+                            console.log('hasMore', hasMore)
                             if (hasMore) {
                                 this.setState({
-                                    pagination:true
+                                    pagination: true
                                 })
                                 console.log('on end reached ', distanceFromEnd);
                                 let page = this.state.page

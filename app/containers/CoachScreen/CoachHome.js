@@ -168,6 +168,16 @@ class CoachHome extends BaseComponent {
             this.selfComponentDidMount()
         });
 
+        if (global.NOTIFICATION_DATA) {
+            try {
+                let notification_for = global.NOTIFICATION_DATA.notification_for
+                this.notificationOpenScreen(notification_for)
+                global.NOTIFICATION_DATA = null
+
+            } catch (err) {
+            }
+        }
+
     }
 
     getNotifications() {
@@ -462,7 +472,7 @@ class CoachHome extends BaseComponent {
                             {/* {moment.utc(start_date + " " + start_time).local().format("hh:mm a")
                                 + " - " +
                                 moment.utc(start_date + " " + end_time).local().format("hh:mm a")} */}
-                            {start_time +" onwards"}
+                            {start_time + " onwards"}
                         </Text>
                     </View>
 

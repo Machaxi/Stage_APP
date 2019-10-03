@@ -1,6 +1,6 @@
 import React from 'react'
 import NetInfo from "@react-native-community/netinfo";
-import { getData, storeData } from '../components/auth';
+import { getData, storeData, onSignOut, clearData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 import Events from '../router/events';
 import axios from 'axios'
@@ -8,6 +8,8 @@ import { client } from '../../App'
 import { BASE_URL } from '../../App'
 import moment from 'moment'
 import { StatusBar } from 'react-native';
+import firebase from 'react-native-firebase';
+
 msg = "GUEST"
 
 colors = {
@@ -47,6 +49,7 @@ export const EVENT_CLEAR_GRAPH = 'EVENT_CLEAR_GRAPH'
 export const TOURNAMENT_REGISTER = 'TOURNAMENT_REGISTER'
 export const TEMP_USER_INFO = "TEMP_USER_INFO"
 export const GO_TO_HOME = "GO_TO_HOME"
+export const GO_TO_SWITCHER = "GO_TO_SWITCHER"
 export const TOURNAMENT_FITLER = 'TOURNAMENT_FITLER'
 export const PUSH_TOKEN = "PUSH_TOKEN"
 export const ONE_SIGNAL_USERID = "ONE_SIGNAL_USERID"
@@ -60,7 +63,7 @@ global.SELECTED_PLAYER_ID = ''
 
 //PAYMENT_GATEWAY
 export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
-
+export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
 ///
 
 export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
@@ -93,15 +96,93 @@ export default class BaseComponent extends React.Component {
         this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
             this.goToHome(from_registration)
         });
+
+        this.refreshEvent = Events.subscribe(GO_TO_SWITCHER, () => {
+            this.goToSwitcher()
+        });
     }
 
-    isNumbericOnly(value){
+    notificationOpenScreen(type) {
+        if (type == null || type == '') {
+            return
+        } else {
+
+            getData('userInfo', (value) => {
+
+                if (value != '') {
+                    let userData = (JSON.parse(value))
+                    let userType = userData.user['user_type']
+
+                    switch (type) {
+
+                        case 'batch_cancelled':
+                            this.props.navigation.navigate('Batch')
+                            break
+                        case 'challange_disputed':
+                            //this.props.navigation.navigate('Batch')
+                            break
+                        case 'new_tournament_created':
+                            this.props.navigation.navigate('Tournament')
+                            break
+                        case 'new_challange_created':
+                            this.props.navigation.navigate('Challenge')
+                            break
+                        case 'challenge_accepted':
+                            this.props.navigation.navigate('Challenge')
+                            break
+                        case 'batch_dues':
+                            if (userType == COACH)
+                                this.props.navigation.navigate('Performence')
+                            break
+                        case 'payment_dues':
+                            this.props.navigation.navigate('PaymentDetail')
+                            break
+                        case 'rewards_due':
+                            if (userType == COACH)
+                                this.props.navigation.navigate('CoachRewardPoints')
+                            else if (userType == PARENT)
+                                this.props.navigation.navigate('ParentRewards')
+                            break
+
+                        case 'rewards_due_player':
+                            if (userType == COACH)
+                                this.props.navigation.navigate('CoachRewardPoints')
+                            else if (userType == PARENT)
+                                this.props.navigation.navigate('ParentRewards')
+                            break
+
+                    }
+
+                }
+            });
+
+
+
+
+        }
+    }
+
+
+    isNumbericOnly(value) {
 
         return /^\d*$/.test(value)
 
     }
     static isUserLoggedIn() {
         return this.isUserLoggedIn;
+    }
+
+    logout() {
+
+        onSignOut()
+        clearData()
+        global.USER_TYPE = ''
+        global.SELECTED_PLAYER_ID = ''
+
+
+        firebase.auth().signOut();
+        this.props.navigation.navigate('Login')
+
     }
 
     filterRewards(reward_detail) {
@@ -320,6 +401,45 @@ export default class BaseComponent extends React.Component {
                 Events.publish('FROM_REGISTRATION', data);
         });
 
+    }
+
+    goToSwitcher() {
+
+        getData('userInfo', (value) => {
+
+            if (value != '') {
+                let userData = (JSON.parse(value))
+                // onSignIn()
+                let userType = userData.user['user_type']
+                console.log("SplashScreen1=> ", JSON.stringify(userData));
+                console.warn('userType ', userType)
+                let academy_id = userData.academy_id
+                //console.warn('academy_id ', userData.academy_id)
+
+                if (userType == GUEST) {
+                    this.props.navigation.navigate('GHome')
+                }
+                else {
+                    if (userType == PLAYER) {
+                        this.props.navigation.navigate('SwitchPlayer', {
+                            userType: 'PLAYER'
+                        })
+
+                    } else if (userType == COACH || userType == ACADEMY) {
+                        this.props.navigation.navigate('SwitchPlayer', {
+                            userType: COACH
+                        })
+                    }
+                    else if (userType == PARENT) {
+                        this.props.navigation.navigate('SwitchPlayer', {
+                            userType: PLAYER
+                        })
+                    }
+                }
+            } else {
+                this.props.navigation.navigate('GHome')
+            }
+        });
     }
 }
 

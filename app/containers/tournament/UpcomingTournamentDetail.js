@@ -141,10 +141,11 @@ class UpcomingTournamentDetail extends BaseComponent {
         let today_time = Moment(today).format("X")
         console.log('last_date => ', last_date)
         console.log('last_date => 1', today_time)
-        let show_register = true;
-        if (today_time > last_date)
+        let show_register = data.can_register;
+        if (show_register){
+            if (today_time > last_date)
             show_register = false
-
+        }
         const conditions = data.conditions
 
         return (
@@ -475,7 +476,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                 if (show_register)
                                     this.register();
                                 else {
-                                    alert('Registrations are closed.')
+                                    //alert('Registrations are closed.')
                                 }
 
                             }}>

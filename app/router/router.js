@@ -1414,6 +1414,23 @@ const parentHomeModule = createStackNavigator({
         })
 
     },
+    WebViewScreen: {
+        screen: WebViewScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: "WebView",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation}
+                showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 }
 );
 

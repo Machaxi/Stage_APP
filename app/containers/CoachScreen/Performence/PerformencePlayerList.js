@@ -192,7 +192,7 @@ class PerformencePlayerList extends BaseComponent {
                         </View>
                         <View style={{ width: 130 }}>
                             <Text style={[defaultStyle.bold_text_10, { marginBottom: 5, color: '#A3A5AE' }]} >Month</Text>
-                            <Text style={defaultStyle.regular_text_14}>{moment( this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year'),"MM/YYYY").format('MMM YY')}</Text>
+                            <Text style={defaultStyle.regular_text_14}>{moment( this.props.navigation.getParam('month') + '-' + this.props.navigation.getParam('year'),"MM/YYYY").format("MMM'YY")}</Text>
                         </View>
 
                     </View>
