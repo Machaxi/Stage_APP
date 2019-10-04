@@ -85,7 +85,9 @@ class CoachRewardsPoints extends BaseComponent {
                         this.setState({
                             country: value,
                         });
-                        this.fetchBatchByAcademy(value)
+                        setTimeout(() => {
+                            this.fetchBatchByAcademy(value)
+                        }, 100)
                     }
 
                     this.setState({

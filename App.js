@@ -90,6 +90,14 @@ client.interceptors.response.use(response => {
                 }, 100)
             });
         }
+        else if (error_code == '1020') {
+
+            // //auto logout user
+            // console.log('error => ' + JSON.stringify(error.response))
+            // setTimeout(() => {
+            //     Events.publish('LOGOUT');
+            // }, 100)
+        }
         else if (status != 401) {
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
