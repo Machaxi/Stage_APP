@@ -19,7 +19,7 @@ import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, {
     getFormattedLevel,
     getStatsImageById,
-    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime, RATING_UPDATE
+    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime, RATING_UPDATE, EVENT_EDIT_PROFILE
 } from '../BaseComponent'
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
@@ -176,7 +176,8 @@ class ParentHome extends BaseComponent {
             acedemy_name: '',
             academy_feedback_data: null,
             coach_feedback_data: null,
-            academy_id: ''
+            academy_id: '',
+            academy_user_id: ''
         }
     }
 
@@ -292,6 +293,7 @@ class ParentHome extends BaseComponent {
                             console.warn(value1)
                             const userData = JSON.parse(value1)
                             userData['academy_name'] = name
+                            userData['academy_user_id'] = user1.data['player_profile'].academy_user_id
                             storeData('userInfo', JSON.stringify(userData))
 
                             let obj = {
@@ -337,18 +339,30 @@ class ParentHome extends BaseComponent {
                     let coach_feedback_data = null;
                     let academy_feedback_data = null;
 
-                    if (user1.data['coach_data'] != null && user1.data['coach_data']) {
-                        if (user1.data['coach_data'].coach_feedback != undefined)
-                            coach_feedback_data = user1.data['coach_data'].coach_feedback[0]
+                    this.state.academy_user_id = user1.data['player_profile'].academy_user_id
+
+
+                    try {
+                        if (user1.data['coach_data'] != null && user1.data['coach_data']) {
+                            if (user1.data['coach_data'].coach_feedback != undefined)
+                                coach_feedback_data = user1.data['coach_data'].coach_feedback[0]
+                        }
+                    } catch (err) {
+
                     }
 
-                    if (user1.data['academy_data'] != null && user1.data['academy_data'].feedback) {
-                        academy_feedback_data = user1.data['academy_data'].feedback[0]
+                    try {
+                        if (user1.data['academy_data'] != null && user1.data['academy_data'].feedback) {
+                            academy_feedback_data = user1.data['academy_data'].feedback[0]
+                        }
                     }
+                    catch (err) {
 
+                    }
                     console.log('coach_feedback_data =>', coach_feedback_data)
 
                     global.SELECTED_PLAYER_NAME = user1.data['player_profile'].name
+
 
                     this.setState({
                         player_profile: user1.data['player_profile'],
@@ -359,7 +373,18 @@ class ParentHome extends BaseComponent {
 
                     })
 
+                    let acedemy_name = user1.data['player_profile'].academy_name
+                    this.props.navigation.setParams({ Title: acedemy_name });
 
+                    getData('userInfo', (value) => {
+                        userData = JSON.parse(value)
+                        userData['academy_name'] = acedemy_name
+                        userData['academy_user_id'] = user1.data['player_profile'].academy_user_id
+                        userData['academy_rating'] = user1.data['player_profile'].academy_rating
+                        storeData("userInfo", JSON.stringify(userData))
+                        Events.publish(EVENT_EDIT_PROFILE);
+
+                    });
 
                 }
 

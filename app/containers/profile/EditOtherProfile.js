@@ -78,7 +78,7 @@ class EditOtherProfile extends BaseComponent {
         else if (txtphone == '') {
             alert("Mobile number is empty.")
         }
-        else if (!this.isValidMobileNumber(phone_number)) {
+        else if (!this.isValidMobileNumber(txtphone)) {
             alert('Invalid mobile number')
         }
         else {
