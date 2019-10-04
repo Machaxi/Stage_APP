@@ -332,7 +332,7 @@ export default class App extends BaseComponent {
                                         StatusBar.setBarStyle('dark-content', true)
                                     }
 
-                                    this.refreshScreenCallback(currentScreen)
+                                    //this.refreshScreenCallback(currentScreen)
                                 }
                             } else {
                                 StatusBar.setBarStyle('dark-content', true)
