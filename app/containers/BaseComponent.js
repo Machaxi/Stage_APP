@@ -67,11 +67,12 @@ export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
 ///
 
 export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
+export const REFRESH_SCREEN_CALLBACK = 'REFRESH_SCREEN_CALLBACK'
 
 export default class BaseComponent extends React.Component {
 
-
     static isUserLoggedIn = false
+    myNavigation = null
 
     constructor(props) {
         super(props)
@@ -100,6 +101,13 @@ export default class BaseComponent extends React.Component {
         this.refreshEvent = Events.subscribe(GO_TO_SWITCHER, () => {
             this.goToSwitcher()
         });
+
+        this.refreshEvent = Events.subscribe('LOGOUT', () => {
+            this.logout()
+        });
+    }
+    setNavigation(navigation) {
+        myNavigation = navigation
     }
 
     notificationOpenScreen(type) {
@@ -178,11 +186,8 @@ export default class BaseComponent extends React.Component {
         clearData()
         global.USER_TYPE = ''
         global.SELECTED_PLAYER_ID = ''
-
-
         firebase.auth().signOut();
-        this.props.navigation.navigate('Login')
-
+        myNavigation.navigate('Login')
     }
 
     filterRewards(reward_detail) {
@@ -258,6 +263,11 @@ export default class BaseComponent extends React.Component {
                                 let is_sync = true//json.data.is_sync
                                 if (is_sync == true) {
                                     getSettingData(headers)
+                                }
+                            } else {
+
+                                if (json.code == '1020') {
+                                    Events.publish('LOGOUT');
                                 }
                             }
 

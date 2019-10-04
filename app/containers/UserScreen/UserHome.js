@@ -12,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, {
     defaultStyle, getFormattedLevel,
     getStatsImageById,
-    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, getUtcDateFromTime, PROFILE_PIC_UPDATED
+    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, REFRESH_SCREEN_CALLBACK, getUtcDateFromTime, PROFILE_PIC_UPDATED
 } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
@@ -162,8 +162,8 @@ class UserHome extends BaseComponent {
         this.inputRefs = {
 
             acedemic: null
-
         };
+        this.setNavigation(this.props.navigation)
         this.state = {
             refreshing: false,
             userData: null,
@@ -222,6 +222,10 @@ class UserHome extends BaseComponent {
 
         this.getNotifications()
         this.selfComponentDidMount()
+
+        this.refreshEvent = Events.subscribe(REFRESH_SCREEN_CALLBACK, (msg) => {
+            this.selfComponentDidMount()
+        });
 
         if (global.NOTIFICATION_DATA) {
             try {
@@ -351,6 +355,7 @@ class UserHome extends BaseComponent {
                         userData = JSON.parse(value)
                         userData['academy_name'] = acedemy_name
                         userData['academy_user_id'] = user1.data['player_profile'].academy_user_id
+                        userData['academy_rating'] = user1.data['player_profile'].academy_rating
                         storeData("userInfo", JSON.stringify(userData))
                         Events.publish(EVENT_EDIT_PROFILE);
 

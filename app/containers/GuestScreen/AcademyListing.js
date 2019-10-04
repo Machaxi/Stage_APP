@@ -101,7 +101,7 @@ class AcademyListing extends BaseComponent {
     constructor(props) {
         super(props)
         this.secondTextInputRef = React.createRef();
-
+        this.setNavigation(this.props.navigation)
         this.state = {
             academies: [],
             query: '',

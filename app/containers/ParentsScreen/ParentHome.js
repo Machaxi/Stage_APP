@@ -166,6 +166,7 @@ class ParentHome extends BaseComponent {
             acedemic: null
 
         };
+        this.setNavigation(this.props.navigation)
         this.state = {
             refreshing: false,
             userData: null,

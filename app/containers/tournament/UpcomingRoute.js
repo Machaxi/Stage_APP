@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, getFormattedTournamentType } from '../BaseComponent'
+import BaseComponent, { defaultStyle,REFRESH_SCREEN_CALLBACK, getFormattedTournamentType } from '../BaseComponent'
 import { getData, storeData } from "../../components/auth";
 import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
@@ -42,6 +42,9 @@ class UpcomingRoute extends BaseComponent {
     componentDidMount() {
 
 
+        this.refreshEvent = Events.subscribe(REFRESH_SCREEN_CALLBACK, (msg) => {
+            this.selfComponentDidMount('')
+        });
 
         this.selfComponentDidMount('')
     }

@@ -24,11 +24,11 @@ import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { ONE_SIGNAL_ID, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
+import BaseComponent, { ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
 import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
-
+import moment from 'moment'
 export const BASE_URL = 'http://13.233.182.217:8080/api/'
 //export const BASE_URL = 'http://192.168.3.145:8089/api/'
 
@@ -48,6 +48,7 @@ client.interceptors.request.use(
         config.headers.app_version = '1';
         config.headers.device_type = Platform.OS;
         config.headers.device_id = global.FCM_DEVICE_ID;
+        config.headers.one_signal_device_id = global.ONE_SIGNAL_USERID
         //config.headers.fcm_token = FCM_TOKEN
         return config;
     },
@@ -234,7 +235,7 @@ export default class App extends BaseComponent {
         //console.log('Message: ', openResult.notification.payload.body);
         //  console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
-         console.log('openResult: ', JSON.stringify(openResult));
+        console.log('openResult: ', JSON.stringify(openResult));
     }
 
     componentWillUnmount() {
@@ -249,6 +250,7 @@ export default class App extends BaseComponent {
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
         global.FCM_DEVICE_ID = device.pushToken
+        global.ONE_SIGNAL_USERID =  device.userId
         //alert('onIds ',  device)
         console.log('Device info: ', device)
     }
@@ -321,6 +323,8 @@ export default class App extends BaseComponent {
                                         StatusBar.setBackgroundColor("#ffffff")
                                         StatusBar.setBarStyle('dark-content', true)
                                     }
+
+                                    this.refreshScreenCallback(currentScreen)
                                 }
                             } else {
                                 StatusBar.setBarStyle('dark-content', true)
@@ -343,6 +347,38 @@ export default class App extends BaseComponent {
         Linking.canOpenURL(link).then(supported => {
             supported && Linking.openURL(link);
         }, (err) => console.log(err));
+    }
+
+    refreshScreenCallback(currentScreen) {
+        console.log('screen_state', currentScreen)
+
+        getData('screen_state', (value) => {
+            console.log('screen_state1', value)
+            let obj = {}
+            if (value != '') {
+                console.log('screen_state1', value)
+                obj = JSON.parse(value)
+            }
+            if (obj[currentScreen] == undefined) {
+                console.log('screen_state2 = ', obj[currentScreen])
+                obj[currentScreen] = +moment();
+                console.log('screen_state3 = ', obj[currentScreen])
+
+            } else {
+                let currentMilli = +moment()
+                let lastMilli = obj[currentScreen]
+                let diffMilli = (currentMilli - lastMilli) / (1000)
+                let diffMin = +(diffMilli / 60)
+                console.log('screen_state- = ', lastMilli + "==" + diffMilli)
+                console.log('screen_state4 = ', obj[currentScreen])
+                console.log('screen_state5 = ', diffMin)
+                if (diffMin >= 1) {
+                    Events.publish(REFRESH_SCREEN_CALLBACK);
+                    obj[currentScreen] = +moment();
+                }
+            }
+            storeData('screen_state', JSON.stringify(obj))
+        })
     }
 }
 

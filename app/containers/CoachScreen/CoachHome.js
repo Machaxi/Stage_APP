@@ -130,6 +130,7 @@ class CoachHome extends BaseComponent {
             acedemic: null
 
         };
+        this.setNavigation(this.props.navigation)
         this.state = {
             refreshing: false,
             coach_profile: null,

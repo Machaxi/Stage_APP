@@ -9,7 +9,7 @@ import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from './PlayerBatchComponent'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle, REFRESH_SCREEN_CALLBACK } from '../BaseComponent';
 import moment from 'moment'
 import { PLAYER, FAMILY } from '../../components/Constants';
 import Events from '../../router/events';
@@ -89,6 +89,10 @@ class PlayerBatch extends BaseComponent {
         firebase.analytics().logEvent("PlayerBatch", {})
 
         this.selfComponentDidMount()
+
+        this.refreshEvent = Events.subscribe(REFRESH_SCREEN_CALLBACK, () => {
+            this.selfComponentDidMount()
+        });
     }
 
     selfComponentDidMount() {
@@ -105,12 +109,8 @@ class PlayerBatch extends BaseComponent {
                 userData: JSON.parse(value)
             });
             console.log("userData.user", userData.user['user_type'])
-            // if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == FAMILY) {
 
-
-            // }
             this.getPlayerBatchData(userData['academy_id'], userData['player_id'])
-
         });
     }
 

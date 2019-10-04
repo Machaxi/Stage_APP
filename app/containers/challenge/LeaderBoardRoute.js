@@ -188,24 +188,7 @@ class LeaderboardRoute extends BaseComponent {
             visible={this.state.show_month_dialog}
           />
 
-          {/* <RNPickerSelect
-            placeholder={{}}
-            items={this.state.months}
-            onValueChange={(value) => {
-              console.log(value)
-              this.setState({
-                month: value,
-              }, () => {
-                this.getLeaderboardData()
-              });
-            }}
-            style={pickerSelectStyles}
-            value={this.state.month}
-            useNativeAndroidPickerStyle={false}
-            ref={(el) => {
-              this.inputRefs.month = el;
-            }}
-          /> */}
+          
           <TouchableOpacity
             onPress={() => {
               this.setState({

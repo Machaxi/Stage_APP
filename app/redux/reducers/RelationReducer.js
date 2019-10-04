@@ -30,7 +30,7 @@ export function getRelationsDetails(header) {
     console.log("getRelationsDetails ", header)
 
     return {
-        type: types.GET_PROFILE,
+        type: types.GET_RELATION,
         payload: {
             request: {
                 url: `user/relations`,
@@ -48,7 +48,7 @@ export function logout(header) {
     console.log("logout ", header)
 
     return {
-        type: types.GET_PROFILE,
+        type: types.GET_RELATION,
         payload: {
             request: {
                 url: `logout`,

@@ -44,8 +44,7 @@ class TournamentTabs extends BaseComponent {
     });
 
 
-
-
+  
 
   }
 

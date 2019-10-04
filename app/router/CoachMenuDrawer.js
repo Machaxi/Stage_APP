@@ -93,7 +93,7 @@ class CoachMenuDrawer extends BaseComponent {
 			userData = (JSON.parse(value))
 			const updated_profile_pic = this.state.updated_profile_pic
 
-			console.log("SplashScreen=> ", userData);
+			console.log("CoachMenu=> ", JSON.stringify(userData));
 			this.setState({
 				user_type: userData.user['user_type'],
 				fullName: userData.user['name'],
