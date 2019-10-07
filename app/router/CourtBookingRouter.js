@@ -23,7 +23,7 @@ const BookPlayModule = createStackNavigator({
         showBackAction={false}
       />,
       headerRight: <RightMenuToolbar navigationProps={navigation}
-        navigation={navigation} showNotification={true} />,
+        navigation={navigation} showNotification={false} />,
       headerStyle: {
         backgroundColor: '#FFFFFF',
       },

@@ -242,7 +242,9 @@ class PaymentHistory extends BaseComponent {
         }
         console.log('Academy-> ', JSON.stringify(new_array))
         this.setState({
-            academy_drop: new_array
+            academy_drop: new_array,
+            payment_history:null,
+            selected_academy:null
         })
 
     }
@@ -404,12 +406,15 @@ class PaymentHistory extends BaseComponent {
                                     this.setState({
                                         selected_academy: value,
                                     });
-                                    setTimeout(() => {
-                                        this.fetchHistory()
-                                    }, 100)
+                                    if(value!=null){
+                                        setTimeout(() => {
+                                            this.fetchHistory()
+                                        }, 50)
+                                    }
+                                    
                                 }}
                                 style={pickerSelectStyles}
-                                value={this.state.selected_gender}
+                                value={this.state.selected_academy}
                                 useNativeAndroidPickerStyle={false}
                                 ref={(el) => {
                                     this.inputRefs.gender = el;

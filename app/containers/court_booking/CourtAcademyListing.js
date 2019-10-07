@@ -329,12 +329,11 @@ class CourtAcademyListing extends BaseComponent {
                                 </Text>
                     <Text
                         onPress={() => {
-                            this.props.navigation.navigate('ChooseTimeDate', { id: item.id, name: item.name })
+                            this.props.navigation.navigate('ChooseTimeDate',
+                                { id: item.id, name: item.name })
                         }}
                         style={styles.rounded_button}
-                    >
-                        Book Court
-                                </Text>
+                    >Book Court</Text>
 
                 </View>
 

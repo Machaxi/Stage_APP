@@ -256,7 +256,7 @@ const styles = {
         backgroundColor: '#67BAF5',
         color: 'white',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
     text: {
         fontSize: 14,
