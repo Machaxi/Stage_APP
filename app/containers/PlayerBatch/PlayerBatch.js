@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
+import { View, ImageBackground, Text,StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
@@ -11,7 +11,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from './PlayerBatchComponent'
 import BaseComponent, { defaultStyle, REFRESH_SCREEN_CALLBACK } from '../BaseComponent';
 import moment from 'moment'
-import { PLAYER, FAMILY } from '../../components/Constants';
+import { PLAYER, FAMILY, PARENT } from '../../components/Constants';
 import Events from '../../router/events';
 import firebase from "react-native-firebase";
 import PTRView from 'react-native-pull-to-refresh';
@@ -50,8 +50,7 @@ class PlayerBatch extends BaseComponent {
                             fontFamily: 'Quicksand-Regular',
                             fontSize: 10,
                             color: '#667DDB'
-                        }}
-                    >Switch Player</Text>
+                        }}>{navigation.getParam('switch_button','')}</Text>
                 </TouchableOpacity>
 
             )
@@ -85,6 +84,8 @@ class PlayerBatch extends BaseComponent {
 
     }
 
+   
+
     componentDidMount() {
         firebase.analytics().logEvent("PlayerBatch", {})
 
@@ -109,6 +110,17 @@ class PlayerBatch extends BaseComponent {
                 userData: JSON.parse(value)
             });
             console.log("userData.user", userData.user['user_type'])
+
+            let user_type = userData.user['user_type']
+            if (user_type == PARENT) {
+                this.props.navigation.setParams({
+                    switch_button: 'Switch Child'
+                })
+            } else {
+                this.props.navigation.setParams({
+                    switch_button: 'Switch Academy'
+                })
+            }
 
             this.getPlayerBatchData(userData['academy_id'], userData['player_id'])
         });

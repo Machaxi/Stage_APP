@@ -621,7 +621,7 @@ class ParentHome extends BaseComponent {
                         <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
                             userType: 'coach'
                         })}>
-                            Switch Player
+                            Switch Child
                         </SwitchButton>
                     </View>
 

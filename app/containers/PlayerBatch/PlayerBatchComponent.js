@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ScrollView, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
+import { View, ScrollView, BackHandler, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { CustomeCard } from '../../components/Home/Card'
 import moment from 'moment'
 import BaseComponent, {
@@ -29,6 +29,29 @@ class PlayerBatchComponent extends BaseComponent {
 
         });
 
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        let performance_dialog = this.state.performance_dialog
+
+        if (performance_dialog) {
+            this.setState({
+                performance_dialog: !performance_dialog
+            })
+        } else {
+            this.props.navigation.goBack(null);
+            return true;
+        }
     }
 
     componentDidMount() {
@@ -219,7 +242,7 @@ class PlayerBatchComponent extends BaseComponent {
     }
     render() {
 
-        const { session, attendance, operations,batch_id} = this.props.jumpTo
+        const { session, attendance, operations, batch_id } = this.props.jumpTo
         // const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
         // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 

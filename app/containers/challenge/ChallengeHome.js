@@ -9,10 +9,51 @@ import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { Button } from 'react-native-paper';
 import firebase from "react-native-firebase";
 import { onSignOut } from "../../components/auth";
+import { getData, storeData } from '../../components/auth';
+import { PLAYER, PARENT, COACH } from '../../components/Constants';
+
 //import firebase from 'react-native-firebase';
 
 class ChallengeHome extends BaseComponent {
 
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: 'Challenge',
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.toggleDrawer();
+                    }}
+                    activeOpacity={.8}>
+                    <Image
+                        source={require('../../images/hamburger.png')}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#667DDB'
+                        }}
+                    >{navigation.getParam('Title', '')}</Text>
+                </TouchableOpacity>
+
+            )
+        };
+    };
 
     state = {
         index: 0,
@@ -25,6 +66,25 @@ class ChallengeHome extends BaseComponent {
 
     constructor(props) {
         super(props)
+
+        getData('userInfo', (value) => {
+            userData = JSON.parse(value)
+            if (userData.user['user_type'] == PLAYER) {
+                this.props.navigation.setParams({ Title: "Switch Player" });
+            }
+            else if (userData.user['user_type'] == PARENT) {
+                this.props.navigation.setParams({ Title: "Switch Child" });
+            }
+            else if (userData.user['user_type'] == COACH) {
+                this.props.navigation.setParams({ Title: "Switch Academy" });
+            } else {
+                this.props.navigation.setParams({ Title: "" });
+            }
+
+        });
+
+
+
     }
 
     _handleIndexChange = index => this.setState({ index });

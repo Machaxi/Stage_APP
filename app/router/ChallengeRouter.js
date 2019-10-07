@@ -15,38 +15,38 @@ const userChallengeModule = createStackNavigator({
 
     ChallengeHome: {
         screen: ChallengeHome,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Challenge',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={true}
-                showBackAction={false}
-            />,
+        // navigationOptions: ({ navigation }) => ({
+        //     title: 'Challenge',
+        //     headerTitleStyle: style.headerStyle,
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showDrawer={true}
+        //         showBackAction={false}
+        //     />,
 
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('SwitchPlayer')
-                    }}
-                    activeOpacity={.8}
-                >
-                    <Text
-                        style={{
-                            marginRight: 12,
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 10,
-                            color: '#667DDB'
-                        }}
-                    >Switch Player</Text>
-                </TouchableOpacity>
+        //     headerRight: (
+        //         <TouchableOpacity
+        //             onPress={() => {
+        //                 navigation.navigate('SwitchPlayer')
+        //             }}
+        //             activeOpacity={.8}
+        //         >
+        //             <Text
+        //                 style={{
+        //                     marginRight: 12,
+        //                     fontFamily: 'Quicksand-Regular',
+        //                     fontSize: 10,
+        //                     color: '#667DDB'
+        //                 }}
+        //             >Switch Player</Text>
+        //         </TouchableOpacity>
 
-            ),
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+        //     ),
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
 
-            headerTintColor: '#000',
-        }),
+        //     headerTintColor: '#000',
+        // }),
 
     },
     OpponentList: {

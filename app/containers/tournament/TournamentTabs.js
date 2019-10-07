@@ -11,6 +11,7 @@ import { getTournamentFilter, } from "../../redux/reducers/TournamentFilter";
 import { connect } from 'react-redux';
 import { TOURNAMENT_FILTER } from '../../actions/actionTypes';
 import firebase from "react-native-firebase";
+import { PLAYER, PARENT, COACH } from '../../components/Constants';
 
 class TournamentTabs extends BaseComponent {
 
@@ -33,9 +34,13 @@ class TournamentTabs extends BaseComponent {
 
     getData('userInfo', (value) => {
       userData = JSON.parse(value)
-      if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+      if (userData.user['user_type'] == PLAYER) {
         this.props.navigation.setParams({ Title: "Switch Player" });
-      } else if (userData.user['user_type'] == 'COACH') {
+      }
+      else if (userData.user['user_type'] == PARENT) {
+        this.props.navigation.setParams({ Title: "Switch Child" });
+      }
+      else if (userData.user['user_type'] == COACH) {
         this.props.navigation.setParams({ Title: "Switch Academy" });
       } else {
         this.props.navigation.setParams({ Title: "" });
@@ -44,7 +49,7 @@ class TournamentTabs extends BaseComponent {
     });
 
 
-  
+
 
   }
 

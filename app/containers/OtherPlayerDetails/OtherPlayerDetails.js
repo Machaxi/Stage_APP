@@ -13,11 +13,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import CustomProgres from '../../components/custom/CustomProgress';
+import { PLAYER, PARENT } from '../../components/Constants';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
 class OtherPlayerDetails extends BaseComponent {
 
+    
     constructor(props) {
         super(props)
         this.inputRefs = {
@@ -59,7 +61,7 @@ class OtherPlayerDetails extends BaseComponent {
                     // console.warn('academy_id=>', academy_id)
 
 
-                    if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') {
+                    if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
                         this.setState({
                             showChallenge: true
                         })
@@ -70,7 +72,7 @@ class OtherPlayerDetails extends BaseComponent {
             } else {
                 getData('userInfo', (value) => {
                     let userData = JSON.parse(value)
-                    if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'PARENT') {
+                    if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
                         this.setState({
                             showChallenge: true
                         })
@@ -390,7 +392,7 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         alignItems: 'center',
-        fontFamily: 'Quicksand-Regular',
+        fontFamily: 'Quicksand-Medium',
         marginTop: 16,
         width: "100%",
     },

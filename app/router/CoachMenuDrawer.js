@@ -933,7 +933,7 @@ class CoachMenuDrawer extends BaseComponent {
 										fontSize: 10,
 										marginTop: 4
 									}}>
-									({user_type})</Text>
+									({user_type == PARENT ? 'Guardian' : user_type})</Text>
 
 								<Text
 									style={{
