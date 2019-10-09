@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator, Linking, View, ImageBackground, Touchabl
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
-import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/AcademyReducer'
+import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/BrowseAcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
 import BaseComponent, { defaultStyle } from './../BaseComponent'
@@ -47,16 +47,33 @@ class AcademyListing extends BaseComponent {
             },
             headerTitleStyle: styles.headerStyle,
             headerLeft: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.toggleDrawer();
-                    }}
-                    activeOpacity={.8}>
-                    <Image
-                        source={require('../../images/hamburger.png')}
-                        style={{ width: 20, height: 16, marginLeft: 12 }}
-                    />
-                </TouchableOpacity>
+                <View style={{
+                    flexDirection: 'row'
+                }}>
+                    {navigation.getParam('show_back') ?
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                            activeOpacity={.8}>
+                            <Image
+                                source={require('../../images/go_back_arrow.png')}
+                                style={{ width: 20, height: 16, marginLeft: 12 }}
+                            />
+                        </TouchableOpacity>
+                        : null}
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.toggleDrawer();
+                        }}
+                        activeOpacity={.8}>
+                        <Image
+                            source={require('../../images/hamburger.png')}
+                            style={{ width: 20, height: 16, marginLeft: 12 }}
+                        />
+                    </TouchableOpacity>
+                </View>
+
             ),
             headerRight: (
                 navigation.getParam('show_bell') == undefined ?
@@ -116,8 +133,6 @@ class AcademyListing extends BaseComponent {
         this._handleChange = this._handleChange.bind(this)
         this.state.job_vacancy = this.props.navigation.getParam('vacancy');
         this.state.book_court = this.props.navigation.getParam('book_court');
-
-
     }
 
     _refresh() {
@@ -182,7 +197,12 @@ class AcademyListing extends BaseComponent {
                         if (value != '') {
                             const data = JSON.parse(value)
                             const user_type = data['user'].user_type
-                            if (user_type == GUEST) {
+                            if (this.state.book_court) {
+                                this.props.navigation.setParams({
+                                    title: 'Book and Play',
+                                });
+                            }
+                            else if (user_type == GUEST) {
                                 this.props.navigation.setParams({
                                     title: 'Machaxi',
                                     show_bell: true
@@ -763,36 +783,38 @@ class AcademyListing extends BaseComponent {
                             marginTop: 8
                         }}>
 
-                            <TouchableOpacity
-                                activeOpacity={.8}
-                                style={defaultStyle.rounded_button} onPress={() => {
-                                    this.props.navigation.navigate('AcademyBatch',
-                                        { academy_id: item.id })
-                                }}>
+                            {item.coaching_enabled ?
+                                <TouchableOpacity
+                                    activeOpacity={.8}
+                                    style={defaultStyle.rounded_button} onPress={() => {
+                                        this.props.navigation.navigate('AcademyBatch',
+                                            { academy_id: item.id })
+                                    }}>
 
-                                <Text
-                                    style={[defaultStyle.bold_text_14,
-                                    { color: 'white' }]}
-                                >
-                                    View Batches
+                                    <Text
+                                        style={[defaultStyle.bold_text_14,
+                                        { color: 'white' }]}
+                                    >
+                                        View Batches
                                 </Text>
-                            </TouchableOpacity>
+                                </TouchableOpacity> : null}
 
-                            <TouchableOpacity
-                                activeOpacity={.8}
-                                style={defaultStyle.rounded_button} onPress={() => {
-                                    this.props.navigation.navigate('ChooseTimeDate', {
-                                        id: item.id,
-                                        name: item.name
-                                    })
-                                }}>
+                            {item.book_and_play_enabled ?
+                                <TouchableOpacity
+                                    activeOpacity={.8}
+                                    style={defaultStyle.rounded_button} onPress={() => {
+                                        this.props.navigation.navigate('ChooseTimeDate', {
+                                            id: item.id,
+                                            name: item.name
+                                        })
+                                    }}>
 
-                                <Text
-                                    style={[defaultStyle.bold_text_14,
-                                    { color: 'white' }]}>
-                                    Book Court
+                                    <Text
+                                        style={[defaultStyle.bold_text_14,
+                                        { color: 'white' }]}>
+                                        Book Court
                                 </Text>
-                            </TouchableOpacity>
+                                </TouchableOpacity> : null}
 
                         </View> : null}
 
@@ -839,7 +861,7 @@ class AcademyListing extends BaseComponent {
 
 const mapStateToProps = state => {
     return {
-        data: state.AcademyReducer,
+        data: state.BrowseAcademyReducer,
     };
 };
 const mapDispatchToProps = {

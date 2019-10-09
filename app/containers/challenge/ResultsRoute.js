@@ -470,7 +470,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 30,
+    //marginTop: 30,
+    marginTop: 16,
+    marginBottom: 16,
     paddingHorizontal: 16
   },
   opponentValue: {

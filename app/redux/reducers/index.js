@@ -27,6 +27,7 @@ import ChallengeResultReducer from './ChallengeResultReducer'
 import ChallengeLeaderboardReducer from './ChallengeLeaderboardReducer'
 import EditPartnerReducer from './EditPartnerReducer'
 import RelationReducer from './RelationReducer'
+import BrowseAcademyReducer from './BrowseAcademyReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -56,7 +57,8 @@ const rootReducer = combineReducers({
     ChallengeResultReducer,
     ChallengeLeaderboardReducer,
     EditPartnerReducer,
-    RelationReducer
+    RelationReducer,
+    BrowseAcademyReducer
 });
 
 export default rootReducer

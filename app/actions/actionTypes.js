@@ -5,6 +5,10 @@ export const GET_SWITCHING = 'user/LOAD';
 export const DO_SWITCHING_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_SWITCHING_FAIL = 'user/LOAD_FAIL';
 
+export const GET_BROWSE_ACADEMY = 'user/LOAD';
+export const DO_BROWSE_ACADEMY_SUCCESS = 'user/LOAD_SUCCESS';
+export const DO_BROWSE_ACADEMY_FAIL = 'user/LOAD_FAIL';
+
 export const GET_PLAYER_LISTING = 'player_listing/LOAD';
 export const DO_PLAYER_LISTING_SUCCESS = 'player_listing/LOAD_SUCCESS';
 export const DO_PLAYER_LISTING_FAIL = 'player_listing/LOAD_FAIL';

@@ -164,7 +164,12 @@ class CurrentBooking extends BaseComponent {
 
                 {this.state.bookingsData != null && this.state.bookingsData.length == 0
                     ?
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 50, alignItems: 'center' }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        flex: 1,
+                        alignItems: 'center'
+                    }}>
                         <Text style={styles.text}>No Bookings</Text>
                     </View>
                     :
@@ -199,7 +204,9 @@ class CurrentBooking extends BaseComponent {
                         <SkyFilledButton
                             onPress={() => {
                                 this.props.navigation.navigate('AcademyListing', {
-                                    book_court: true
+                                    book_court: true,
+                                    title: 'Book and Play',
+                                    show_back: true
                                 })
                             }}
                         >Book and Play</SkyFilledButton>

@@ -78,6 +78,7 @@ import BookPlayModule from './CourtBookingRouter'
 import LeaderboardRoute from '../containers/challenge/LeaderBoardRoute'
 import PaymentDetail from '../containers/payment/PaymentDetail'
 import PaymentHistory from '../containers/payment/PaymentHistory'
+import Test from '../containers/welcome/Test'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -99,6 +100,9 @@ const loginModule = createStackNavigator({
             headerStyle,
             header: null
         }
+    },
+    Test: {
+        screen: Test,
     },
     MyCalendar: {
         screen: MyCalendar

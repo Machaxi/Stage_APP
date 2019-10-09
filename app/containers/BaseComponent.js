@@ -138,6 +138,9 @@ export default class BaseComponent extends React.Component {
                         case 'challenge_accepted':
                             this.props.navigation.navigate('Challenge')
                             break
+                        case 'challenge_score_updated':
+                            this.props.navigation.navigate('Challenge')
+                            break
                         case 'batch_dues':
                             if (userType == COACH)
                                 this.props.navigation.navigate('Performence')
@@ -530,6 +533,18 @@ export function formattedName(name) {
     //alert(array)
     return newName
 
+}
+
+export function camelCase(str) {
+
+    if (str == undefined) {
+        return ''
+    } else {
+        let firstChar = str.charAt(0).toUpperCase()
+        let last = str.substring(1, str.length).toLowerCase()
+        return firstChar + last
+
+    }
 }
 
 export function getFormattedBadge(name) {

@@ -164,6 +164,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                                 }
                             }
 
+                            this.state.playerList = attributes
                             this.setState({
                                 playerList: attributes
                             })

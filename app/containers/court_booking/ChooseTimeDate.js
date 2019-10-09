@@ -1193,7 +1193,8 @@ class ChooseTimeDate extends BaseComponent {
 
         this.setState({
             selectedDuration: selectedDuration,
-            selectedTimeRange: selectedTimeRange
+            selectedTimeRange: selectedTimeRange,
+            totalCost: 0
         }, () => {
             this.checkCourtAvailability();
             console.log(this.state.selectedDuration);
@@ -1210,6 +1211,9 @@ class ChooseTimeDate extends BaseComponent {
             selectedDuration = selectedDuration - this.state.selectedSportTimeData.incremental_time;
             selectedTimeRange['endTime'] = selectedTimeRange['startTime'] + selectedDuration;
         }
+
+        this.state.selectedDuration = selectedDuration
+        this.state.selectedTimeRange = selectedTimeRange
 
         this.setState({
             selectedDuration: selectedDuration,
@@ -1401,7 +1405,9 @@ class ChooseTimeDate extends BaseComponent {
 
                                         <View style={{ flexDirection: 'row', width: '37.33%' }}>
 
-                                            <TouchableOpacity onPress={() => { this.decrementDuration() }}>
+                                            <TouchableOpacity
+                                                activeOpacity={.8}
+                                                onPress={() => { this.decrementDuration() }}>
                                                 <Image source={require('../../images/minus.png')} style={{}}></Image>
                                             </TouchableOpacity>
 
@@ -1420,8 +1426,11 @@ class ChooseTimeDate extends BaseComponent {
 
                                             }
 
-                                            <TouchableOpacity onPress={() => { this.incrementDuration() }}>
-                                                <Image source={require('../../images/plus.png')} style={{}}></Image>
+                                            <TouchableOpacity
+                                                activeOpacity={.8}
+                                                onPress={() => { this.incrementDuration() }}>
+                                                <Image
+                                                    source={require('../../images/plus.png')} style={{}}></Image>
                                             </TouchableOpacity>
 
                                         </View>
@@ -1604,10 +1613,10 @@ class ChooseTimeDate extends BaseComponent {
                                 this.state.selectedCourtIds.length == 0 ?
                                     <Text style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} onPress={() => {
                                         //this.showPaymentModal();
-                                    }}>Save</Text> :
+                                    }}>Pay Now</Text> :
                                     <Text style={styles.rounded_button_half} onPress={() => {
                                         this.showPaymentModal();
-                                    }}>Save</Text>
+                                    }}>Pay Now</Text>
                             }
                         </View>
                     </View>

@@ -422,6 +422,9 @@ class AcademyProfile extends BaseComponent {
         let about = academy.about
         let user_id = academy.user_id
         let facilities = academy.facilities
+        const book_and_play_enabled = academy.book_and_play_enabled
+        const coaching_enabled = academy.coaching_enabled
+
         const feedback_count = this.state.feedback_count
 
         return (
@@ -574,7 +577,16 @@ class AcademyProfile extends BaseComponent {
 
                                     <TouchableOpacity
                                         activeOpacity={.8}
-                                        style={defaultStyle.rounded_button} onPress={() => { this.props.navigation.navigate('AcademyBatch', { academy_id: this.state.id }) }}>
+                                        style={[defaultStyle.rounded_button, {
+                                            backgroundColor: coaching_enabled ? '#67BAF5' : 'gray'
+                                        }]} onPress={() => {
+                                            if (coaching_enabled) {
+                                                this.props.navigation.navigate('AcademyBatch',
+                                                    { academy_id: this.state.id })
+                                            }
+                                        }
+                                        }
+                                    >
 
                                         <Text
                                             style={[defaultStyle.bold_text_14,
@@ -586,8 +598,13 @@ class AcademyProfile extends BaseComponent {
 
                                     <TouchableOpacity
                                         activeOpacity={.8}
-                                        style={defaultStyle.rounded_button} onPress={() => {
-                                            this.props.navigation.navigate('ChooseTimeDate')
+                                        style={[defaultStyle.rounded_button, {
+                                            backgroundColor: book_and_play_enabled ? '#67BAF5' : 'gray'
+                                        }]}
+                                        onPress={() => {
+                                            if (book_and_play_enabled) {
+                                                this.props.navigation.navigate('ChooseTimeDate')
+                                            }
                                         }}>
 
                                         <Text

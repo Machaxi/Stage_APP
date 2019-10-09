@@ -58,6 +58,12 @@ class CoachProfileDetail extends BaseComponent {
             let type = this.state.type
             this.getCoachFeedbacks(sortType, type, false)
         });
+
+        
+    }
+
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
     }
 
     getCoachFeedbacks(sortType, type, showLoading) {
@@ -102,32 +108,43 @@ class CoachProfileDetail extends BaseComponent {
 
     componentDidMount() {
 
-        let academy_id = this.state.academy_id
-        let coach_id = this.state.coach_id
-        getData('header', (value) => {
-
-            this.props.coachDetail(value, coach_id, academy_id).then(() => {
-                console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
-                let status = this.props.data.res.success
-                if (status) {
-                    let coach = this.props.data.res.data.coach
-                    this.setState({
-                        coachData: coach
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                //alert('test'+)
+                this.state.coach_id = this.props.navigation.getParam('coach_id', '')
+                this.state.academy_id = this.props.navigation.getParam('academy_id', '');
+                let academy_id = this.state.academy_id
+                let coach_id = this.state.coach_id
+                getData('header', (value) => {
+        
+                    this.props.coachDetail(value, coach_id, academy_id).then(() => {
+                        console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
+                        let status = this.props.data.res.success
+                        if (status) {
+                            let coach = this.props.data.res.data.coach
+                            this.setState({
+                                coachData: coach
+                            })
+        
+                            let sortType = this.state.sortType
+                            let type = this.state.type
+                            this.setState({
+                                is_feedback_loading: true
+                            })
+                            this.getCoachFeedbacks(sortType, type, false)
+        
+                        }
+        
+                    }).catch((response) => {
+                        console.log(response);
                     })
-
-                    let sortType = this.state.sortType
-                    let type = this.state.type
-                    this.setState({
-                        is_feedback_loading: true
-                    })
-                    this.getCoachFeedbacks(sortType, type, false)
-
-                }
-
-            }).catch((response) => {
-                console.log(response);
-            })
-        })
+                })
+                //this.getNotifications()
+            }
+        );
+        
+       
 
 
 

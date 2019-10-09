@@ -158,7 +158,7 @@ export function coachListing(academy_id) {
 export function coachDetail(header, coach_id, academy_id) {
 
     let url = `global/coach/details?coach_id=${coach_id}&academy_id=${academy_id}`
-    console.log("search => " + url)
+    console.log("coachDetail=> " + url)
     return {
         type: types.DO_LOGIN,
         payload: {

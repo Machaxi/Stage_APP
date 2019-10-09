@@ -320,6 +320,7 @@ class TournamentFixture extends BaseComponent {
 
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
+                                    
                                 }
 
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
@@ -353,6 +354,78 @@ class TournamentFixture extends BaseComponent {
                                     firstArray.push(temp_player2)
                                 }
                             }
+
+                            if (obj.player1_match == undefined) {
+
+                                console.log('player1_match_undefine', JSON.stringify(obj))
+                                let temp_player1 = obj.player1
+                                if (temp_player1) {
+                                    temp_player1['match_id'] = obj.id
+                                    temp_player1['player_description'] = obj.player1_description
+                                    if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
+                                        firstArray.push(temp_player1)
+                                        firstArray.push(temp_player1)
+                                    }
+
+                                }
+                                let temp_player2 = obj.player2
+                                if(temp_player2){
+                                    temp_player2['match_id'] = obj.id
+                                    temp_player2['player_description'] = obj.player2_description
+    
+                                    if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
+                                        firstArray.push(temp_player2)
+                                        firstArray.push(temp_player2)
+                                    }
+                                }
+                                
+
+
+                                // const temp_obj = fixture_data[last_key]
+                                // //temp_player1.tournament_match_scores = temp_obj.player1_match.tournament_match_scores == undefined ? [] : temp_obj.player1_match.tournament_match_scores
+                                // //temp_player2.tournament_match_scores = temp_obj.player2_match.tournament_match_scores == undefined ? [] : temp_obj.player2_match.tournament_match_scores
+                                // temp_player1.tournament_match_scores = this.getMatchScoreById(obj.id, temp_obj)
+                                // temp_player2.tournament_match_scores = this.getMatchScoreById(obj.id, temp_obj)
+
+
+
+                            }
+
+                            if (obj.player2_match == undefined) {
+                                console.log('player2_match_undefine', JSON.stringify(obj))
+
+                                let temp_player1 = obj.player1
+                                if(temp_player1){
+                                    temp_player1['match_id'] = obj.match_number
+                                    temp_player1['player_description'] = obj.player1_description
+                                    if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
+                                        firstArray.push(temp_player1)
+                                    }
+                                }
+                                let temp_player2 = obj.player2
+                                if(temp_player2){
+                                    temp_player2['match_id'] = obj.match_number
+                                    temp_player2['player_description'] = obj.player2_description
+                                    if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
+                                        firstArray.push(temp_player2)
+                                    }
+                                }
+                                
+
+
+                                // const temp_obj = fixture_data[last_key]
+                                // //temp_player1.tournament_match_scores = temp_obj.player1_match.tournament_match_scores == undefined ? [] : temp_obj.player1_match.tournament_match_scores
+                                // //temp_player2.tournament_match_scores = temp_obj.player2_match.tournament_match_scores == undefined ? [] : temp_obj.player2_match.tournament_match_scores
+                                // temp_player1.tournament_match_scores = this.getMatchScoreById(obj.id, temp_obj)
+                                // temp_player2.tournament_match_scores = this.getMatchScoreById(obj.id, temp_obj)
+
+                                
+
+                                
+
+                            }
+
+
                         }
 
                         //===================== END =============================
@@ -766,7 +839,7 @@ class TournamentFixture extends BaseComponent {
 
                         if (score == undefined || score == null || score.length == 0) {
 
-                            let length = i > 0 ? 3 : 2
+                            let length = i > 0 ? 3 : 3
 
                             for (k = 0; k < length; k++) {
 
@@ -840,7 +913,7 @@ class TournamentFixture extends BaseComponent {
 
                             let length = score.length
                             let tempScore = []
-                            for(let x=length-1;x>=0;x--){
+                            for (let x = length - 1; x >= 0; x--) {
                                 tempScore.push(score[x])
                             }
                             score = tempScore
@@ -1136,8 +1209,8 @@ class TournamentFixture extends BaseComponent {
         console.warn('Show => ', this.state.is_show_dialog)
 
         return (
-            <ScrollView contentContainerStyle={{ height: 1500 }}>
-                <ScrollView horizontal contentContainerStyle={{ width: 1500 }}>
+            <ScrollView contentContainerStyle={{ height: 1700 }}>
+                <ScrollView horizontal contentContainerStyle={{ width: 1700 }}>
 
                     {/* <TournamentCategoryDialog
                         tournament_fixture={this.state.tournament_fixtures}

@@ -11,7 +11,7 @@ import { getOtherPlayerDashboard, getOtherPlayerWithoutAcademy } from "../../red
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
-import BaseComponent, { defaultStyle } from '../BaseComponent';
+import BaseComponent, { defaultStyle,getStatsImageById } from '../BaseComponent';
 import CustomProgres from '../../components/custom/CustomProgress';
 import { PLAYER, PARENT } from '../../components/Constants';
 
@@ -19,7 +19,7 @@ var deviceWidth = Dimensions.get('window').width - 20;
 
 class OtherPlayerDetails extends BaseComponent {
 
-    
+
     constructor(props) {
         super(props)
         this.inputRefs = {
@@ -188,10 +188,13 @@ class OtherPlayerDetails extends BaseComponent {
             }}>
             <View style={{ margin: 10, flexDirection: 'row', height: 60 }}>
 
-                <Image source={require('../../images/Mysatus.png')}
+                <Image
+                    resizeMode="contain"
+                    source={getStatsImageById(item.id)}
                     style={{
                         width: 40,
-                        height: 40, marginRight: 20
+                        height: 40, marginRight: 20,
+                        alignItems: 'center'
                     }} />
                 <View>
 

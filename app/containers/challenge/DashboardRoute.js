@@ -424,7 +424,9 @@ class DashboardRoute extends BaseComponent {
           <Text style={[styles.cardHeading, { marginHorizontal: 16 }]}>Create Challenge</Text>
           <View style={styles.playerCardOuter}>
             <View style={styles.playerCard}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={1}
+              >
                 <ImageBackground resizeMode='contain' style={styles.playerBackImage}
                   source={require('../../images/batch_card.png')}
                 >
@@ -461,7 +463,9 @@ class DashboardRoute extends BaseComponent {
             </View>
 
             <View style={styles.opponentCard}>
-              <TouchableOpacity onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
+              <TouchableOpacity
+                activeOpacity={.8}
+                onPress={() => { this.props.navigation.navigate('OpponentList', { playerData: item }) }}>
                 <ImageBackground resizeMode='contain' style={styles.opponentBackImage} source={require('../../images/batch_card_grey.png')}>
                   <Text style={styles.addOpponentLabel}>+ Add Opponent</Text>
                 </ImageBackground>
