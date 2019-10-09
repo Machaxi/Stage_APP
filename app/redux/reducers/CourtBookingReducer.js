@@ -52,7 +52,7 @@ export function createBooking(header, postData) {
     type: types.GET_BOOKING,
     payload: {
       request: {
-        url: 'court/mybookings',
+        url: 'court/book',
         method: 'POST',
         data: postData,
         headers: {

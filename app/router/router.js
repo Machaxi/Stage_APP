@@ -140,20 +140,6 @@ const GuestHomeModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
     AcademyListing: {
         screen: AcademyListing,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: 'Machaxi',
-        //     headerTitleStyle: style.headerStyle,
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //         showBackAction={false}
-        //     />,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showNotification={true} />,
-        //     headerStyle: {
-        //         backgroundColor: '#FFFFFF',
-        //     },
-
-        //     headerTintColor: '#000',
-        // }),
     },
     AcademyFilter: {
         screen: AcademyFilter,

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Modal } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image, Dimensions, Modal } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getCourtBookingDetails, createBooking } from '../../redux/reducers/CourtBookingReducer';
@@ -9,6 +9,12 @@ import { getData, isSignedIn } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import moment from 'moment';
 import Carousel from 'react-native-snap-carousel';
+
+var block_array = 2
+var percent = 1.77
+//var block_array = 4
+//var percent = 1
+
 
 class ChooseTimeDate extends BaseComponent {
 
@@ -99,7 +105,7 @@ class ChooseTimeDate extends BaseComponent {
 
         this.state.calendarData = dateObjArray;
 
-        console.log('hellllllllllllllllllllo', this.state.calendarData);
+        console.log('hellllllllllllllllllllo', JSON.stringify(this.state.calendarData));
         console.log('dateObjArray', dateObjArray);
 
     }
@@ -130,6 +136,11 @@ class ChooseTimeDate extends BaseComponent {
     }
 
     convertMinsToHrsMins(minutes) {
+
+        console.log('convertMinsToHrsMins=> ' + minutes)
+        if (minutes == undefined || isNaN(minutes))
+            return ''
+
         var h = Math.floor(minutes / 60);
         var m = minutes % 60;
         let am_pm = 'AM';
@@ -188,7 +199,7 @@ class ChooseTimeDate extends BaseComponent {
                 console.log('this.props.data', this.props.data);
                 let data = this.props.data.res
 
-                console.log('data.data.challenges', data.data);
+                console.log('data.data.challenges', JSON.stringify(data.data));
 
                 let success = data.success
                 if (success) {
@@ -771,13 +782,41 @@ class ChooseTimeDate extends BaseComponent {
         return intersect;
     }
 
+    has30MinCondition(selectedSportTimeData) {
+        let min_booking_time = selectedSportTimeData.min_booking_time
+        let incremental_time = selectedSportTimeData.incremental_time
+        if (min_booking_time % 30 == 0 && incremental_time % 30 == 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     makeSliderData(finalDeadSlots) {
 
+        console.log('selectedSportTimeData', JSON.stringify(this.state.selectedSportTimeData))
+
+        let has30Min = this.has30MinCondition(this.state.selectedSportTimeData)
+        let incrementalTime = 15
+        if (has30Min) {
+            incrementalTime = 30
+            block_array = 2
+            percent = 1.77
+        } else {
+            incrementalTime = 15
+            block_array = 4
+            percent = 1
+        }
+
         var sliderData = [];
-        sliderData[0] = null;
-        sliderData[1] = null;
-        sliderData[2] = null;
-        sliderData[3] = null;
+
+        //this will help to lead space on start, help us to start from center
+        for (let i = 0; i < block_array; i++) {
+            sliderData.push(null);
+        }
+
+        //end
+
 
         var index = 4;
         var time = this.state.minTime;
@@ -788,7 +827,7 @@ class ChooseTimeDate extends BaseComponent {
                 time = this.state.minTime;
                 newtime = this.convertMinsToHrsMins(time);
             } else {
-                time = time + 15;
+                time = time + incrementalTime;
                 newtime = this.convertMinsToHrsMins(time);
             }
             var temp = {};
@@ -828,14 +867,19 @@ class ChooseTimeDate extends BaseComponent {
         console.log('this.state.finalDeadSlots', this.state.finalDeadSlots);
 
 
-        this.state.finalDeadSlots.map((element, index) => {
-            console.log(selectedTimeRange['startTime']);
-            console.log(selectedTimeRange['endTime']);
-            if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime || (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['startTime'] < element.endTime) || (selectedTimeRange['endTime'] <= element.startTime && selectedTimeRange['endTime'] > element.startTime)) {
-                console.log('in iffffffffffffffffffff');
-                msg = 'Sorry, all courts are closed for the selected time and duration.';
-            }
-        })
+        const finalDeadSlots = this.state.finalDeadSlots
+        if (finalDeadSlots == undefined || finalDeadSlots.length == block_array) {
+            msg = 'Sorry, all courts are closed for the selected time and duration.';
+
+        } else
+            finalDeadSlots.map((element, index) => {
+                console.log(selectedTimeRange['startTime']);
+                console.log(selectedTimeRange['endTime']);
+                if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime || (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['startTime'] < element.endTime) || (selectedTimeRange['endTime'] <= element.startTime && selectedTimeRange['endTime'] > element.startTime)) {
+                    console.log('in iffffffffffffffffffff');
+                    msg = 'Sorry, all courts are closed for the selected time and duration.';
+                }
+            })
 
         console.log('this.state.courtAvailability', this.state.courtAvailability);
 
@@ -1231,10 +1275,18 @@ class ChooseTimeDate extends BaseComponent {
 
     render() {
 
+        // if (this.props.data.loading || !this.state.sportsData) {
+        //     return (
+        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        //             <ActivityIndicator size="large" color="#67BAF5" />
+        //         </View>
+        //     )
+        // }
+
         console.log('this.state.calendarData', this.state.calendarData);
         console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
 
-        const itemWidth = 38.5
+        const itemWidth = 38.5 * percent
         return (
 
             <View style={styles.bookingContainer}>
@@ -1263,10 +1315,17 @@ class ChooseTimeDate extends BaseComponent {
                                     }
 
                                     return (
-                                        <TouchableOpacity onPress={() => { this.toggleSportsSelector(element.id) }}>
+                                        <TouchableOpacity
+                                            activeOpacity={1}
+                                            onPress={() => { this.toggleSportsSelector(element.id) }}>
                                             <View style={pickerStyle}>
                                                 <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
-                                                    <Image source={require('../../images/soccer-ball.png')} style={{}} ></Image>
+                                                    <Image
+                                                        resizeMode="contain"
+                                                        source={require('../../images/soccer-ball.png')} style={{
+                                                            width: 25,
+                                                            height: 25
+                                                        }} ></Image>
                                                 </View>
                                                 <View style={{ marginVertical: 17, maxWidth: 65, marginRight: 18 }}>
                                                     <Text style={textStyle}>{element.name}</Text>
@@ -1302,7 +1361,9 @@ class ChooseTimeDate extends BaseComponent {
                                     }
 
                                     return (
-                                        <TouchableOpacity onPress={() => { this.toggleDateSelector(element.date) }}>
+                                        <TouchableOpacity
+                                            activeOpacity={1}
+                                            onPress={() => { this.toggleDateSelector(element.date) }}>
                                             <View style={pickerStyle}>
                                                 <View style={{ marginBottom: 6 }}>
                                                     <Text style={textStyleSmall}>{element.month}</Text>
@@ -1367,86 +1428,92 @@ class ChooseTimeDate extends BaseComponent {
 
                                     }
 
-                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>{this.convertMinsToHrsMins(this.state.selectedTimeRange.startTime)} - {this.convertMinsToHrsMins(this.state.selectedTimeRange.endTime)}</Text></View>
+                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>
+                                        {this.convertMinsToHrsMins(this.state.selectedTimeRange.startTime)} - {this.convertMinsToHrsMins(this.state.selectedTimeRange.endTime)}</Text></View>
                                 </View>
                             </View>
 
                             {/* Time slider starts */}
 
                             {
-                                this.state.sliderData != null &&
+                                this.state.sliderData != null && this.state.sliderData.length > block_array ?
 
-                                <View>
                                     <View>
-                                        <Image resizeMode="contain" style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', width: 50, height: 50 }} source={require('../../images/ic_navigation.png')} />
-                                    </View>
+                                        <View>
+                                            <Image resizeMode="contain" style={{
+                                                alignSelf: 'center',
+                                                justifyContent: 'center',
+                                                alignItems: 'center', width: 50, height: 50
+                                            }}
+                                                source={require('../../images/ic_navigation.png')} />
+                                        </View>
 
-                                    <Carousel
-                                        ref={(c) => { this._carousel = c; }}
-                                        data={this.state.sliderData}
-                                        loop={false}
-                                        renderItem={this.renderItem}
-                                        itemWidth={itemWidth}
-                                        onSnapToItem={(index) => {
-                                            console.log("Moved to=====> " + index)
-                                            this.state.selectedIndex = index;
-                                            this.setState({
-                                                selectedIndex: index
+                                        <Carousel
+                                            ref={(c) => { this._carousel = c; }}
+                                            data={this.state.sliderData}
+                                            loop={false}
+                                            renderItem={this.renderItem}
+                                            itemWidth={itemWidth}
+                                            onSnapToItem={(index) => {
+                                                console.log("Moved to=====> " + index)
+                                                this.state.selectedIndex = index;
+                                                this.setState({
+                                                    selectedIndex: index
 
-                                            }, () => {
-                                                var timing = {};
-                                                if (this.state.sliderData[this.state.selectedIndex + 2]) {
+                                                }, () => {
+                                                    var timing = {};
+                                                    if (this.state.sliderData[this.state.selectedIndex + block_array]) {
 
-                                                    timing['startTime'] = this.state.sliderData[this.state.selectedIndex + 4].minutes;
-                                                    timing['endTime'] = this.state.sliderData[this.state.selectedIndex + 4].minutes + this.state.selectedDuration;
-                                                    this.setState({
-                                                        selectedTimeRange: timing,
-                                                        totalNoOfHours: 0,
-                                                        totalCost: 0
-                                                    }, () => {
-                                                        this.checkCourtAvailability();
-                                                    })
+                                                        timing['startTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes;
+                                                        timing['endTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes + this.state.selectedDuration;
+                                                        this.setState({
+                                                            selectedTimeRange: timing,
+                                                            totalNoOfHours: 0,
+                                                            totalCost: 0
+                                                        }, () => {
+                                                            this.checkCourtAvailability();
+                                                        })
+                                                    }
+                                                })
+                                            }}
+                                            onScroll={(event) => {
+                                                // 114 is the item width
+
+                                                if (event.nativeEvent.contentOffset.x % itemWidth === 0) {
+                                                    if (this.state.selectedIndex + block_array == this.state.sliderData.length - 1) {
+                                                        //alert('last')
+                                                        // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
+                                                        //   event.nativeEvent.contentOffset.y});
+                                                    }
+                                                    //ReactNativeHapticFeedback.trigger('impactLight', true)
+                                                    //console.log('onScroll-> ', event.nativeEvent.contentOffset.x)
+                                                    let val = (this.state.sliderData.length - block_array) * itemWidth
+                                                    console.log('onScroll-> ', event.nativeEvent.contentOffset.x + "== " + val)
+                                                    if (event.nativeEvent.contentOffset.x >= val) {
+                                                        // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
+                                                        //   event.nativeEvent.contentOffset.y});
+                                                        //alert('outside')
+                                                        console.log('outside')
+                                                        this._carousel.snapToItem(this.state.sliderData.length - block_array)
+                                                        setTimeout(() => {
+                                                            this._carousel.snapToItem(this.state.sliderData.length - block_array)
+                                                        }, 100)
+                                                    }
                                                 }
-                                            })
-                                        }}
-                                        onScroll={(event) => {
-                                            // 114 is the item width
+                                            }}
+                                            //onScroll={(event) => this.handleScroll(event)}
+                                            itemHeight={80}
+                                            lockScrollWhileSnapping={false}
+                                            sliderWidth={Dimensions.get('window').width}
+                                            inactiveSlideOpacity={1}
+                                            inactiveSlideScale={1}
+                                            activeSlideAlignment={'start'}
+                                            //slideStyle={{ marginLeft: 14 }}
+                                            loopClonesPerSide={10}
+                                            useScrollView={true}
+                                        />
 
-                                            if (event.nativeEvent.contentOffset.x % itemWidth === 0) {
-                                                if (this.state.selectedIndex + 4 == this.state.sliderData.length - 1) {
-                                                    //alert('last')
-                                                    // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
-                                                    //   event.nativeEvent.contentOffset.y});
-                                                }
-                                                //ReactNativeHapticFeedback.trigger('impactLight', true)
-                                                //console.log('onScroll-> ', event.nativeEvent.contentOffset.x)
-                                                let val = (this.state.sliderData.length - 5) * itemWidth
-                                                console.log('onScroll-> ', event.nativeEvent.contentOffset.x + "== " + val)
-                                                if (event.nativeEvent.contentOffset.x >= val) {
-                                                    // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
-                                                    //   event.nativeEvent.contentOffset.y});
-                                                    //alert('outside')
-                                                    console.log('outside')
-                                                    this._carousel.snapToItem(this.state.sliderData.length - 5)
-                                                    setTimeout(() => {
-                                                        this._carousel.snapToItem(this.state.sliderData.length - 5)
-                                                    }, 100)
-                                                }
-                                            }
-                                        }}
-                                        //onScroll={(event) => this.handleScroll(event)}
-                                        itemHeight={80}
-                                        lockScrollWhileSnapping={false}
-                                        sliderWidth={Dimensions.get('window').width}
-                                        inactiveSlideOpacity={1}
-                                        inactiveSlideScale={1}
-                                        activeSlideAlignment={'start'}
-                                        //slideStyle={{ marginLeft: 14 }}
-                                        loopClonesPerSide={10}
-                                        useScrollView={true}
-                                    />
-
-                                </View>
+                                    </View> : null
                             }
 
 
@@ -1488,7 +1555,9 @@ class ChooseTimeDate extends BaseComponent {
 
                                         return (
 
-                                            <TouchableOpacity onPress={() => { this.courtSelector(index) }}>
+                                            <TouchableOpacity
+                                                activeOpacity={1}
+                                                onPress={() => { this.courtSelector(index) }}>
                                                 <View style={pickerStyle}>
                                                     <View style={{ marginBottom: 6 }}>
                                                         <Text style={textStyleLarge}>{element.name}</Text>
@@ -1534,7 +1603,7 @@ class ChooseTimeDate extends BaseComponent {
                             {
                                 this.state.selectedCourtIds.length == 0 ?
                                     <Text style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} onPress={() => {
-                                        this.showPaymentModal();
+                                        //this.showPaymentModal();
                                     }}>Save</Text> :
                                     <Text style={styles.rounded_button_half} onPress={() => {
                                         this.showPaymentModal();
@@ -1554,8 +1623,10 @@ class ChooseTimeDate extends BaseComponent {
 
     renderItem = ({ item, index }) => {
 
-        const fullWidth = 52
-        const singleWidth = 26
+        let empty_width = (Dimensions.get('window').width / 2) / block_array
+        console.log('empty_width=> ', empty_width)
+        const fullWidth = 52 * percent
+        const singleWidth = 26 * percent
 
         let prevsBlock = false
         let nextBlock = false
@@ -1574,7 +1645,7 @@ class ChooseTimeDate extends BaseComponent {
             <View>
                 {item != null ?
                     <View style={{
-                        paddingTop: 8,
+                        //paddingTop: 8,
                         paddingBottom: 16,
                     }}>
                         <View style={{ flexDirection: 'row' }}>
@@ -1609,7 +1680,7 @@ class ChooseTimeDate extends BaseComponent {
                                 justifyContent: 'center',
                                 textAlign: 'center',
                                 width: fullWidth,
-                                marginTop: 6
+                                marginTop: 12
                             }}>
 
                             {item.showLabel ?
@@ -1657,7 +1728,7 @@ class ChooseTimeDate extends BaseComponent {
                                     }}>
 
                                     </View>
-                                    <Text style={[defaultStyle.regular_text_10, {
+                                    <Text style={[defaultStyle.regular_text_12, {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         textAlign: 'center',
@@ -1673,7 +1744,7 @@ class ChooseTimeDate extends BaseComponent {
 
                     </View>
                     :
-                    <View style={{ width: fullWidth }}></View>
+                    <View style={{ width: empty_width }}></View>
                 }
             </View>
 
@@ -1760,7 +1831,7 @@ const styles = {
         color: '#FFFFFF'
     },
     sportPickerLabel: {
-        marginBottom: 10,
+        marginBottom: 4,
         paddingLeft: 12,
         paddingTop: 16
     },
@@ -1775,22 +1846,26 @@ const styles = {
         borderRadius: 12,
         alignItems: 'center',
         backgroundColor: '#667DDB',
-        marginRight: 15
+        marginRight: 15,
+        elevation: 4,
+        margin: 4,
     },
     sportPickerUnselected: {
         //width: 136,
+        margin: 4,
         flexDirection: 'row',
         borderRadius: 12,
         alignItems: 'center',
-        elevation: 1.5,
-        shadowOpacity: 0.32,
-        shadowOffset: { width: 0, height: 1 },
+        elevation: 4,
+        backgroundColor: 'white',
+        //shadowOpacity: 0.32,
+        //shadowOffset: { width: 0, height: 1 },
         marginRight: 15
     },
     datePickerLabel: {
         marginBottom: 10,
         paddingLeft: 12,
-        paddingTop: 16
+        paddingTop: 8
     },
     headingLabel: {
         fontFamily: 'Quicksand-Medium',
@@ -1813,7 +1888,7 @@ const styles = {
         backgroundColor: '#67BAF5',
         color: 'white',
         textAlign: 'center',
-        fontFamily: 'Quicksand-Regular'
+        fontFamily: 'Quicksand-Medium'
     },
     rounded_button: {
         width: '100%',
@@ -1835,27 +1910,31 @@ const styles = {
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 12
+        marginRight: 12,
+        margin: 2,
+        elevation: 4,
     },
     datePickerUnselected: {
         height: 63,
         width: 56,
+        margin: 2,
+        backgroundColor: 'white',
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
-        elevation: 1.5,
-        shadowOpacity: 0.32,
-        shadowOffset: { width: 0, height: 1 }
+        elevation: 4,
+        //shadowOpacity: 0.32,
+        //shadowOffset: { width: 0, height: 1 }
     },
     timePickerLabel: {
-        marginTop: 30,
+        marginTop: 12,
         paddingLeft: 12
     },
     slotsLabelOuter: {
         marginBottom: 10,
         paddingLeft: 12,
-        marginTop: 16,
+        marginTop: 8,
     },
     slotsLabel: {
         fontFamily: 'Quicksand-Medium',
@@ -1912,18 +1991,20 @@ const styles = {
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 12
+        marginRight: 12,
+        elevation: 4,
+        margin: 2,
     },
     courtPickerUnSelected: {
+        backgroundColor: 'white',
+        elevation: 4,
+        margin: 2,
         height: 38,
         width: 128,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
-        elevation: 1.5,
-        shadowOpacity: 0.32,
-        shadowOffset: { width: 0, height: 1 }
     },
     courtPickerDisabled: {
         height: 38,
@@ -1944,7 +2025,7 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
-        paddingVertical: 16
+        paddingVertical: 20
     },
     modalBox: {
         width: "95%",
@@ -1993,6 +2074,6 @@ const styles = {
         width: "100%",
         marginLeft: 0,
         marginRight: 0,
-        fontFamily: 'Quicksand-Regular',
+        fontFamily: 'Quicksand-Medium',
     }
 }

@@ -367,12 +367,13 @@ class ChallengeDisputeScreen extends BaseComponent {
             placeholder={placeholder}
             items={this.state.academies}
             onValueChange={(value) => {
-              console.warn(value)
+              //console.warn(value)
               this.setState({
                 country: value,
                 academyId: value
               });
-              this.fetchDisputeListByAcademy(value)
+              if (value != null)
+                this.fetchDisputeListByAcademy(value)
             }}
             style={pickerSelectStyles}
             value={this.state.country}

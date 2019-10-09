@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions,Alert } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, DRIBBLE_LOGO, PAYMENT_KEY, TEMP_USER_INFO } from '../BaseComponent';
 import { createBooking } from '../../redux/reducers/CourtBookingReducer';
 import { connect } from 'react-redux';
@@ -43,7 +43,7 @@ class PaymentPage extends BaseComponent {
 
 
     isSignedIn()
-    .then(res => {
+      .then(res => {
         let getDataFrom;
         console.log('isSignedIn => ', res);
         let signedIn = res
@@ -58,7 +58,7 @@ class PaymentPage extends BaseComponent {
 
           let total = this.state.paymentData.fees
           total = total + '00'
-    
+
           let userData = JSON.parse(value);
           let user = userData['user']
           let name = user['name']
@@ -68,7 +68,7 @@ class PaymentPage extends BaseComponent {
           const logo = this.state.dribble_logo
           const desc = 'Payment for Booking Court'
           const mobile_number = userData['user'].mobile_number
-    
+
           var options = {
             description: desc,
             image: logo,
@@ -83,8 +83,8 @@ class PaymentPage extends BaseComponent {
             },
             theme: { color: '#67BAF5' }
           }
-    
-    
+
+
           RazorpayCheckout.open(options).then((data) => {
             // handle success
             console.log('Razor Rspo ', JSON.stringify(data))
@@ -100,13 +100,13 @@ class PaymentPage extends BaseComponent {
             alert('Payment could not succeed. Please try again.');
             this.props.navigation.navigate('CurrentBooking');
           });
-    
-    
+
+
         });
 
 
-    })
-    .catch(err => alert("An error occurred"));
+      })
+      .catch(err => alert("An error occurred"));
   }
 
 
@@ -134,7 +134,18 @@ class PaymentPage extends BaseComponent {
         let success = data.success
         if (success) {
           //Events.publish(EVENT_REFRESH_CHALLENGE);
-          this.props.navigation.navigate('CurrentBooking');
+          Alert.alert(
+            'Success',
+            'Booking has been done successfully.',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  this.props.navigation.navigate('CurrentBooking');
+                }
+              },
+            ],
+            { cancelable: false },
+          );
         }
 
       }).catch((response) => {

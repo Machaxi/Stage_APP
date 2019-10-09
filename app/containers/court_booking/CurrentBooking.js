@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { Card } from 'react-native-paper';
 import { getData, isSignedIn } from "../../components/auth";
@@ -8,6 +8,7 @@ import { getCourtBookings } from '../../redux/reducers/CourtBookingReducer';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import moment from 'moment'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 class CurrentBooking extends BaseComponent {
 
@@ -67,12 +68,16 @@ class CurrentBooking extends BaseComponent {
 
     _renderItem = ({ item }) => (
 
-        <View>
+        <View style={{
+            margin: 16,
+        }}>
 
             <Card style={styles.bookingCard}>
                 <View style={{
-                    paddingLeft: 12, paddingRight: 12,
-                    paddingTop: 16, paddingBottom: 16
+                    paddingLeft: 12,
+                    paddingRight: 12,
+                    paddingTop: 16,
+                    paddingBottom: 16
                 }}>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -129,95 +134,83 @@ class CurrentBooking extends BaseComponent {
 
 
         </View>
+    );
 
-
-
+    _renderHeaderItem = ({ }) => (
+        <View style={{
+            marginLeft: 16,
+            marginTop: 12,
+        }}>
+            <Text style={styles.text}>My Bookings</Text>
+        </View>
     );
 
     render() {
 
-        if (this.state.bookingsData != null && this.state.bookingsData.length > 0) {
+        const bookingsData = this.state.bookingsData
+        if (this.props.data.loading || !bookingsData) {
             return (
-                <View style={styles.bookingContainer}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
 
-                    <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
-                    />
+        return (
+            <View style={styles.bookingContainer}>
 
+                <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
+                />
 
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={styles.text}>My Bookings</Text>
-                        {/* <Text style={styles.small_text}>View Old Bookings</Text> */}
+                {this.state.bookingsData != null && this.state.bookingsData.length == 0
+                    ?
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 50, alignItems: 'center' }}>
+                        <Text style={styles.text}>No Bookings</Text>
                     </View>
-
+                    :
                     <FlatList
+                        ListHeaderComponent={this._renderHeaderItem}
                         data={this.state.bookingsData}
+                        extraData={bookingsData}
                         renderItem={this._renderItem}
-                    />
+                    />}
 
-                    <View
-                        style={{
-                            alignSelf: 'flex-end',
-                            flexDirection: 'row',
-                            marginTop: 10, marginBottom: 0, marginLeft: 8, marginRight: 8
-                        }}>
+                <View
+                    style={{
+                        alignSelf: 'flex-end',
+                        flexDirection: 'row',
+                        margin: 12,
+                    }}>
 
-                        <Text
+                    {/* <TouchableOpacity>
+
+                    <Text
+                        onPress={() => {
+                            this.props.navigation.navigate('AcademyListing', {
+                                book_court: true
+                            })
+                        }}
+                        style={styles.rounded_button}>
+                        Book and Play</Text>
+                        </TouchableOpacity> */}
+                    <View style={{
+                        width: "100%"
+                    }}>
+                        <SkyFilledButton
                             onPress={() => {
-                                this.props.navigation.navigate('CourtAcademyListing')
+                                this.props.navigation.navigate('AcademyListing', {
+                                    book_court: true
+                                })
                             }}
-                            style={styles.rounded_button}
-                        >
-                            Book and Play
-                                        </Text>
-
+                        >Book and Play</SkyFilledButton>
                     </View>
 
                 </View>
 
-            )
-        }
+            </View>
 
-        {
-            if (this.state.bookingsData != null && this.state.bookingsData.length == 0) {
-                return (
-                    <View style={styles.bookingContainer}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 50, alignItems: 'center' }}>
-                            <Text style={styles.text}>No Bookings</Text>
-                            {/* <Text style={styles.small_text}>View Old Bookings</Text> */}
-                        </View>
-                        <FlatList
-                            data={this.state.bookingsData}
-                            renderItem={this._renderItem}
-                        />
-                        <View
-                            style={{
-                                alignSelf: 'flex-end',
-                                flexDirection: 'row',
-                                marginTop: 10, marginBottom: 0, marginLeft: 8, marginRight: 8
-                            }}>
-
-                            <Text
-                                onPress={() => {
-                                    this.props.navigation.navigate('CourtAcademyListing')
-                                }}
-                                style={styles.rounded_button}
-                            >
-                                Book and Play
-                                        </Text>
-
-                        </View>
-
-                    </View>
-
-                )
-            }
-        }
-
-        return null;
-
+        )
     }
-
 }
 
 const mapStateToProps = state => {
@@ -233,7 +226,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(CurrentBooking);
 
 const styles = {
     bookingContainer: {
-        padding: 16,
+        //padding: 16,
         flex: 1,
         backgroundColor: '#F7F7F7',
         fontFamily: 'Quicksand-Regular'

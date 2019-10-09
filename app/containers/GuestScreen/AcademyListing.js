@@ -109,11 +109,13 @@ class AcademyListing extends BaseComponent {
             suggestionResult: [],
             isAutoSuggest: false,
             isRefreshing: false,
-            job_vacancy: false
+            job_vacancy: false,
+            book_court: false
 
         }
         this._handleChange = this._handleChange.bind(this)
         this.state.job_vacancy = this.props.navigation.getParam('vacancy');
+        this.state.book_court = this.props.navigation.getParam('book_court');
 
 
     }
@@ -753,6 +755,47 @@ class AcademyListing extends BaseComponent {
                             </TouchableOpacity>
 
                         </View> : null}
+
+                    {this.state.book_court ?
+                        <View style={{
+                            flexDirection: 'row', marginBottom: 16,
+                            marginLeft: 4, marginRight: 4,
+                            marginTop: 8
+                        }}>
+
+                            <TouchableOpacity
+                                activeOpacity={.8}
+                                style={defaultStyle.rounded_button} onPress={() => {
+                                    this.props.navigation.navigate('AcademyBatch',
+                                        { academy_id: item.id })
+                                }}>
+
+                                <Text
+                                    style={[defaultStyle.bold_text_14,
+                                    { color: 'white' }]}
+                                >
+                                    View Batches
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                activeOpacity={.8}
+                                style={defaultStyle.rounded_button} onPress={() => {
+                                    this.props.navigation.navigate('ChooseTimeDate', {
+                                        id: item.id,
+                                        name: item.name
+                                    })
+                                }}>
+
+                                <Text
+                                    style={[defaultStyle.bold_text_14,
+                                    { color: 'white' }]}>
+                                    Book Court
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View> : null}
+
 
                 </View>
 
