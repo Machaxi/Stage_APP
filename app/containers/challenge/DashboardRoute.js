@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Events from '../../router/events';
 import Spinner from 'react-native-loading-spinner-overlay';
-import DropdownAlert from 'react-native-dropdownalert';
 
 class DashboardRoute extends BaseComponent {
 
@@ -151,7 +150,8 @@ class DashboardRoute extends BaseComponent {
         if (success) {
 
           const success_message = data.success_message
-          this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
+          //this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
+          this.showSnackBar(success_message)
 
           this.setState({
             playerData: [data.data.dashboard.player],
@@ -177,8 +177,8 @@ class DashboardRoute extends BaseComponent {
         if (success) {
 
           const success_message = data.success_message
-          this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
-
+          //this.dropDownAlertRef.alertWithType('success', 'Success', success_message);
+          this.showSnackBar(success_message)
 
           this.setState({
             playerData: [data.data.dashboard.player],
@@ -752,9 +752,6 @@ class DashboardRoute extends BaseComponent {
           visible={this.state.spinner}
           textStyle={defaultStyle.spinnerTextStyle}
         />
-
-        <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
-
 
         <FlatList
           onRefresh={() => this.onRefresh()}

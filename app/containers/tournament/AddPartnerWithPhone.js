@@ -13,7 +13,7 @@ export default class AddPartnerWithPhone extends BaseComponent {
         super(props)
         this.state = {
             txtname: '',
-            txtphone: '',
+            txtphone: '+91',
             id: ''
         }
         this.state.id = this.props.navigation.getParam('id', '')
@@ -28,8 +28,12 @@ export default class AddPartnerWithPhone extends BaseComponent {
             alert('Name can\'t be empty')
         }
         else if (txtphone == '') {
-            alert('Phone number can\'t be empty')
-        } else {
+            alert('Mobile number can\'t be empty')
+        }
+        else if (!this.isValidMobileNumber(txtphone)) {
+            alert('Please enter valid mobile number.')
+        }
+        else {
             this.props.navigation.goBack()
             Events.publish('AddPartner',
                 { name: txtname, phone: txtphone, id: id });

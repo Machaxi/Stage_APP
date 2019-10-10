@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
 import FilterDialog from './FilterDialog'
 import { getAcademyBatchDetail } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName, getFormatTime } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNPickerSelect from 'react-native-picker-select';
 import moment from 'moment'
@@ -104,7 +104,7 @@ class AcademyBatch extends BaseComponent {
             {
               item.operations.weekday ?
                 <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>
-                  {moment.utc(item.operations.weekday.start_time, 'hh:mm a').local().format("hh:mm a")} - {moment.utc(item.operations.weekday.end_time, 'hh:mm a').local().format("hh:mm a")}
+                  {getFormatTime(item.operations.weekday.start_time)} - {getFormatTime(item.operations.weekday.end_time)}
                 </Text></View> : <View><Text>-</Text></View>
             }
 
@@ -120,7 +120,7 @@ class AcademyBatch extends BaseComponent {
               item.operations.weekend ?
                 <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>
                   {/* {item.operations.weekend.start_time}- {item.operations.weekend.end_time} */}
-                  {moment.utc(item.operations.weekend.start_time, 'hh:mm a').local().format("hh:mm a")} - {moment.utc(item.operations.weekend.end_time, 'hh:mm a').local().format("hh:mm a")}
+                  {getFormatTime(item.operations.weekend.start_time)} - {getFormatTime(item.operations.weekend.end_time)}
 
                 </Text></View> : <View><Text>-</Text></View>
             }

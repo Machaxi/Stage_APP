@@ -136,15 +136,20 @@ class UpcomingTournamentDetail extends BaseComponent {
         let tournament_types = this.tournament_types(data.tournament_types)
         let tournament_link = data.tournament_link
         let category_type = this.category_type(data.category_types)
-        let last_date = Moment(data.registration_last_date).format("X")
+        let split = data.registration_last_date.split("T")
+        let reg_last = split[0] + " 23:59:59"
+        console.log('reg_last=>', reg_last)
+        let last_date = Moment(reg_last).format("X")
         var today = new Date();
+        console.log('today=> ', today)
         let today_time = Moment(today).format("X")
+
         console.log('last_date => ', last_date)
         console.log('last_date => 1', today_time)
         let show_register = data.can_register;
-        if (show_register){
+        if (show_register) {
             if (today_time > last_date)
-            show_register = false
+                show_register = false
         }
         const conditions = data.conditions
 
@@ -409,7 +414,8 @@ class UpcomingTournamentDetail extends BaseComponent {
                                             <TouchableOpacity
                                                 onPress={() => {
                                                     this.props.navigation.navigate('TournamentTerms', {
-                                                        conditions: conditions
+                                                        conditions: conditions,
+                                                        show_register: show_register
                                                     })
                                                     //console.warn('terms')
                                                 }}>

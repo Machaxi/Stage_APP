@@ -201,6 +201,17 @@ class OpponentList extends BaseComponent {
     }
 
     createChallengeModal() {
+
+        console.log('PlayerData=>', JSON.stringify(this.state.playerData))
+        console.log('selectedOpponentData=>', JSON.stringify(this.state.selectedOpponentData))
+        let canShow = false
+        if (this.state.playerData && this.state.selectedOpponentData) {
+            let selected_player_id = this.state.playerData.id
+            let selected_opponent_id = this.state.selectedOpponentData.id
+            canShow = selected_player_id != selected_opponent_id
+        }
+
+
         return (
             <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
                 <View>
@@ -294,9 +305,16 @@ class OpponentList extends BaseComponent {
                                     <Text style={{ color: '#404040', fontSize: 14, fontFamily: 'Quicksand-Regular', width: "50 %", textAlign: 'center' }}>Opponent</Text>
                                 </View>
 
-                                <View style={styles.confirmBtnOuter}>
-                                    <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => { this.saveData() }}>Confirm</Text>
-                                </View>
+
+                                {canShow ?
+                                    < View style={styles.confirmBtnOuter}>
+                                        <TouchableOpacity onPress={() => {
+                                            this.saveData()
+                                        }}>
+                                            <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} >Confirm</Text>
+                                        </TouchableOpacity>
+
+                                    </View> : null}
 
                             </View>
                         </View>

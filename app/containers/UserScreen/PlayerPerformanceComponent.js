@@ -48,8 +48,12 @@ class PlayerPerformanceComponent extends BaseComponent {
         this.refreshEvent = Events.subscribe(EVENT_CLEAR_GRAPH, () => {
             console.warn(EVENT_CLEAR_GRAPH);
             console.log('Deepika');
-            if (this.chart)
-                this.chart.clear();
+            try {
+                if (this.chart)
+                    this.chart.clear();
+            } catch (err) {
+
+            }
         });
         this.initChart();
 

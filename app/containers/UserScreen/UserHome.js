@@ -12,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, {
     defaultStyle, getFormattedLevel,
     getStatsImageById,
-    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, REFRESH_SCREEN_CALLBACK, getUtcDateFromTime, PROFILE_PIC_UPDATED
+    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, REFRESH_SCREEN_CALLBACK, getUtcDateFromTime, PROFILE_PIC_UPDATED, getFormatTimeDate
 } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
@@ -21,8 +21,9 @@ import PlayerHeader from '../../components/custom/PlayerHeader'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder';
 import firebase from 'react-native-firebase'
-import CustomProgress from '../../components/custom/CustomProgress';
+import CustomAnimationProgress from '../../components/custom/CustomAnimationProgress';
 import StarRating from 'react-native-star-rating';
+import CustomProgres from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -176,9 +177,8 @@ class UserHome extends BaseComponent {
             academy_id: '',
             academy_user_id: ''
         }
-        StatusBar.setBackgroundColor("#262051")
-        StatusBar.setBarStyle('light-content', true)
-
+        //StatusBar.setBackgroundColor("#262051")
+        //StatusBar.setBarStyle('light-content', true)
     }
     componentWillUnmount() {
         this.willFocusSubscription.remove();
@@ -414,7 +414,7 @@ class UserHome extends BaseComponent {
                         progress={item.score / 100}
                         width={deviceWidth - 130} height={14} /> */}
 
-                    <CustomProgress
+                    <CustomAnimationProgress
                         percent={item.score}
                         width={deviceWidth - 120}
                         height={14}
@@ -507,9 +507,9 @@ class UserHome extends BaseComponent {
                                             textDecorationLine: 'line-through',
                                             marginLeft: 10,
                                         }]}>
-                                        {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        {getFormatTimeDate(session_date, start_time)
                                             + "  -   " +
-                                            moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                            getFormatTimeDate(session_date, end_time)}
                                     </Text>
 
                                 </View>
@@ -533,9 +533,9 @@ class UserHome extends BaseComponent {
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                                        {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        {getFormatTimeDate(session_date, start_time)
                                             + "  -   " +
-                                            moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                            getFormatTimeDate(session_date, end_time)}
                                     </Text>
 
                                 </View>
@@ -804,7 +804,7 @@ class UserHome extends BaseComponent {
                                             halfStar={require('../../images/ic_half_star.png')}
                                             iconSet={'Ionicons'}
                                             maxStars={5}
-                                            rating={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            rating={academy_feedback_data.target.avgFeedbackEntities[0] ? academy_feedback_data.target.avgFeedbackEntities[0].avgRating : 0}
                                             ratingBackgroundColor={"#ff2200"}
                                             fullStarColor={'#F4FC9A'}
                                         />
@@ -821,7 +821,9 @@ class UserHome extends BaseComponent {
                                         }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
                                         academy_feedback_data.target.avgFeedbackEntities[0].avgRating
                                         */}
-                                        <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
+                                        <RateViewBorder>
+                                            {academy_feedback_data.target.avgFeedbackEntities[0] ? academy_feedback_data.target.avgFeedbackEntities[0].avgRating : 0}
+                                        </RateViewBorder>
                                     </View>
                                 </View>
                                 <View>

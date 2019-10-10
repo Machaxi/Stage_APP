@@ -78,3 +78,18 @@ export function getCourtBookings(header) {
     }
   }
 };
+
+export function cancelBooking(header, bookingId) {
+  return {
+    type: types.GET_BOOKING,
+    payload: {
+      request: {
+        url: `court/cancel-booking/${bookingId}`,
+        method: 'GET',
+        headers: {
+          'x-authorization': header
+        },
+      }
+    }
+  }
+};

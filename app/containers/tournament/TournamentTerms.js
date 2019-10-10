@@ -18,6 +18,7 @@ class TournamentTerms extends BaseComponent {
     render() {
 
         const conditions = this.props.navigation.getParam('conditions')
+        const show_register = this.props.navigation.getParam('show_register')
 
         return (
             <ScrollView>
@@ -27,17 +28,19 @@ class TournamentTerms extends BaseComponent {
                 }}>
 
                     <Text style={[defaultStyle.bold_text_14, {
-                        marginBottom: 20
+                        marginBottom: 20,
+                        flex: 1
                     }]}>{conditions} </Text>
 
-                    <SkyFilledButton
-                        style={{
-                            marginTop: 30
-                        }}
-                        onPress={() => {
-                            this.props.navigation.navigate('RegistrationSteps')
-                        }} >Register</SkyFilledButton>
-
+                    {show_register ?
+                        <SkyFilledButton
+                            style={{
+                                marginTop: 30
+                            }}
+                            onPress={() => {
+                                this.props.navigation.navigate('RegistrationSteps')
+                            }} >Register</SkyFilledButton>
+                        : null}
                 </View>
             </ScrollView>
 

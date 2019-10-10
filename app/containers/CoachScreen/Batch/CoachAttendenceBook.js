@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
 import DatePicker from 'react-native-datepicker'
-import { defaultStyle } from '../../BaseComponent';
+import { defaultStyle, getFormatTimeDate } from '../../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ACADEMY, COACH } from '../../../components/Constants';
 import NavigationDrawerStructure from '../../../router/NavigationDrawerStructure';
@@ -199,7 +199,7 @@ class CoachAttendenceBook extends React.Component {
         // }
         // const { batch_name, batch_category, batch_id, session } = this.state.batchDetails
 
-        console.log('batch_data => ',JSON.stringify(this.state.batch_data))
+        console.log('batch_data => ', JSON.stringify(this.state.batch_data))
         if (this.state.batch_data) {
 
             const batchDetails = this.state.batchDetails
@@ -276,9 +276,9 @@ class CoachAttendenceBook extends React.Component {
                             <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Time slot </Text>
                             <Text style={[defaultStyle.regular_text_14, { color: '#404040' }]}>
                                 {/* {session.start_time + ' - ' + session.end_time} */}
-                                {moment.utc("01/01/1970 " + session.start_time).local().format("hh:mm a")
+                                {getFormatTimeDate("01/01/1970 ", session.start_time)
                                     + ' - ' +
-                                    moment.utc("01/01/1970 " + session.end_time).local().format("hh:mm a")
+                                    getFormatTimeDate("01/01/1970 ", session.end_time)
                                 }
                             </Text>
                         </View>
@@ -291,7 +291,7 @@ class CoachAttendenceBook extends React.Component {
                     <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Session </Text>
                 </View>
 
-                {batchDetails!=null && batchDetails.length != 0 ?
+                {batchDetails != null && batchDetails.length != 0 ?
                     <View style={{
                         backgroundColor: 'white',
                     }}>

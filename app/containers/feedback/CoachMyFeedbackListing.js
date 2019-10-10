@@ -8,6 +8,7 @@ import { getData } from "../../components/auth";
 import { getMyCoachFeedbackListing } from '../../redux/reducers/FeedbackReduer'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import StarRating from 'react-native-star-rating';
+import { COACH } from '../../components/Constants';
 
 
 class CoachMyFeedbackListing extends BaseComponent {
@@ -31,17 +32,16 @@ class CoachMyFeedbackListing extends BaseComponent {
             this.state.academy_id = value
 
             getData('userInfo', (value) => {
-
+                console.warn('userInfo', value)
                 let user = JSON.parse(value)
-
-                //console.warn('coach_id', user['coach_id'])
-                this.state.coach_id = user['coach_id']
-                this.state.academy_id = user['academy_id']
-                this.fetchData()
-
+                let user_type = user.user['user_type']
+                if (user_type == COACH) {
+                    //console.warn('coach_id', user['coach_id'])
+                    this.state.coach_id = user['coach_id']
+                    this.state.academy_id = user['academy_id']
+                    this.fetchData()
+                }
             })
-
-
         })
 
     }

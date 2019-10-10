@@ -19,12 +19,14 @@ import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, {
     getFormattedLevel,
     getStatsImageById,
-    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime, RATING_UPDATE, EVENT_EDIT_PROFILE
+    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime, RATING_UPDATE, EVENT_EDIT_PROFILE, getFormatTimeDate
 } from '../BaseComponent'
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
 import firebase from "react-native-firebase";
 import StarRating from 'react-native-star-rating';
+import CustomAnimationProgress from '../../components/custom/CustomAnimationProgress';
+import CustomProgres from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -429,7 +431,7 @@ class ParentHome extends BaseComponent {
                         </Text>
                     </View>
                     {/* <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} /> */}
-                    <CustomProgress
+                    <CustomAnimationProgress
                         percent={item.score}
                         width={deviceWidth - 120}
                         height={14}
@@ -526,9 +528,10 @@ class ParentHome extends BaseComponent {
                                         style={[defaultStyle.regular_text_14, {
                                             textDecorationLine: 'line-through',
                                             marginLeft: 10,
-                                        }]}> {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        }]}>
+                                        {getFormatTimeDate(session_date, start_time)
                                             + "  -   " +
-                                            moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                            getFormatTimeDate(session_date, end_time)}
                                     </Text>
 
                                 </View>
@@ -552,9 +555,9 @@ class ParentHome extends BaseComponent {
                                     </Text>
 
                                     <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                                        {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                        {getFormatTimeDate(session_date, start_time)
                                             + "  -   " +
-                                            moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                            getFormatTimeDate(session_date, end_time)}
                                     </Text>
 
                                 </View>
@@ -962,7 +965,7 @@ class ParentHome extends BaseComponent {
                                             halfStar={require('../../images/ic_half_star.png')}
                                             iconSet={'Ionicons'}
                                             maxStars={5}
-                                            rating={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
+                                            rating={academy_feedback_data.target.avgFeedbackEntities[0] ? academy_feedback_data.target.avgFeedbackEntities[0].avgRating : 0}
                                             ratingBackgroundColor={"#ff2200"}
                                             fullStarColor={'#F4FC9A'}
                                         />
@@ -977,7 +980,9 @@ class ParentHome extends BaseComponent {
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
                                         }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
-                                        <RateViewBorder>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating}</RateViewBorder>
+                                        <RateViewBorder>
+                                            {academy_feedback_data.target.avgFeedbackEntities[0] ? academy_feedback_data.target.avgFeedbackEntities[0].avgRating : 0}
+                                        </RateViewBorder>
 
                                     </View>
                                 </View>

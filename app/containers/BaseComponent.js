@@ -9,6 +9,7 @@ import { BASE_URL } from '../../App'
 import moment from 'moment'
 import { StatusBar } from 'react-native';
 import firebase from 'react-native-firebase';
+import Snackbar from 'react-native-snackbar';
 
 msg = "GUEST"
 
@@ -106,8 +107,17 @@ export default class BaseComponent extends React.Component {
             this.logout()
         });
     }
+
     setNavigation(navigation) {
         myNavigation = navigation
+    }
+
+    showSnackBar(msg) {
+        Snackbar.show({
+            color: 'white',
+            title: msg,
+            duration: Snackbar.LENGTH_LONG,
+        });
     }
 
     notificationOpenScreen(type) {
@@ -457,11 +467,16 @@ export default class BaseComponent extends React.Component {
 }
 
 export function getFormatTime(time) {
-    return moment.utc(time, 'hh:mm a').local().format("hh:mm a")
+    //utc commented
+    //return moment.utc(time, 'hh:mm a').local().format("hh:mm a")
+
+    return moment(time, 'hh:mm a').format("hh:mm a")
 }
 
 export function getFormatTimeDate(date, time) {
-    return moment.utc(date + " " + time).local().format("hh:mm a")
+    //utc commented
+    //return moment.utc(date + " " + time).local().format("hh:mm a")
+    return moment(date + " " + time).format("hh:mm a")
 }
 
 export function getStatsImageById(id) {
@@ -654,7 +669,9 @@ export function getUtcDateFromTime(date, time) {
     console.log('getUtcDateFromTime', date + ' ' + time)
     // Tuesday 10 September 2019 09:00 AM
     var localDate2 = date + " " + time
-    let test = moment.utc(localDate2, format).local().format(SESSION_DATE_FORMAT)
+    //let test = moment.utc(localDate2, format).local().format(SESSION_DATE_FORMAT)
+    let test = moment(localDate2, format).format(SESSION_DATE_FORMAT)
+
     console.log('localFormat: ', test);
     return test;
 }

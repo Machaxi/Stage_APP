@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import BaseComponent, {
     defaultStyle,
     getUtcDateFromTime,
-    SESSION_DATE_FORMAT, formattedName
+    SESSION_DATE_FORMAT, formattedName, getFormatTimeDate
 } from '../../BaseComponent';
 import moment from 'moment'
 import { COACH, ACADEMY } from '../../../components/Constants';
@@ -155,9 +155,9 @@ class BatchDetails extends BaseComponent {
                             fontSize: 14,
                             textDecorationLine: 'line-through'
                         }}>
-                            {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                            {getFormatTimeDate(session_date, start_time)
                                 + "  -   " +
-                                moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                getFormatTimeDate(session_date, end_time)}
                         </Text>
 
                     </View>
@@ -194,9 +194,9 @@ class BatchDetails extends BaseComponent {
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
                         }}>
-                            {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                            {getFormatTimeDate(session_date, start_time)
                                 + "  -   " +
-                                moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                getFormatTimeDate(session_date, end_time)}
                         </Text>
 
                     </View>
@@ -334,9 +334,9 @@ class BatchDetails extends BaseComponent {
                                         <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekdays</Text>
                                         <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekday.days.join(' ')}</Text>
                                         <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
-                                            {moment.utc("01/01/1970 " + operations.weekday.start_time).local().format("hh:mm a")
+                                            {getFormatTimeDate("01/01/1970 ", operations.weekday.start_time)
                                                 + ' - ' +
-                                                moment.utc("01/01/1970 " + operations.weekday.end_time).local().format("hh:mm a")
+                                                getFormatTimeDate("01/01/1970 ", operations.weekday.end_time)
                                             }
                                         </Text>
                                     </View> : null}
@@ -346,9 +346,10 @@ class BatchDetails extends BaseComponent {
                                         <Text style={{ fontSize: 10, color: '#A3A5AE', marginBottom: 10, fontFamily: 'Quicksand-Medium' }}>Weekend</Text>
                                         <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>{operations.weekend.days.join(' ')}</Text>
                                         <Text style={{ color: '#404040', fontSize: 14, marginBottom: 10, fontFamily: 'Quicksand-Regular' }}>
-                                            {moment.utc("01/01/1970 " + operations.weekend.start_time).local().format("hh:mm a")
+                                            {
+                                                getFormatTimeDate("01/01/1970 ", operations.weekend.start_time)
                                                 + ' - ' +
-                                                moment.utc("01/01/1970 " + operations.weekend.end_time).local().format("hh:mm a")
+                                                getFormatTimeDate("01/01/1970 ", operations.weekend.end_time)
                                             }
                                         </Text>
 

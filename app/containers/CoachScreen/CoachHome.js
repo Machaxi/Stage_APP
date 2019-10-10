@@ -12,7 +12,7 @@ import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashbo
 import { getData, storeData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime, getFormatTimeDate } from '../BaseComponent';
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
 
@@ -338,9 +338,9 @@ class CoachHome extends BaseComponent {
                                 {getUtcDateFromTime(session_date, start_time)}
                             </Text>
                             <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
-                                {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                {getFormatTimeDate(session_date, start_time)
                                     + "  -   " +
-                                    moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                    getFormatTimeDate(session_date, end_time)}
                             </Text>
                         </View> :
                         <View>
@@ -351,9 +351,9 @@ class CoachHome extends BaseComponent {
                                 </Text>
 
                                 <Text style={defaultStyle.regular_text_14}>
-                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    {getFormatTimeDate(session_date, start_time)
                                         + "  -   " +
-                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}</Text>
+                                        getFormatTimeDate(session_date, end_time)}</Text>
                             </View>
                             <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id })}>
                                 Mark Attendance</CustomeButtonB>
@@ -412,9 +412,9 @@ class CoachHome extends BaseComponent {
                                         textDecorationLine: 'line-through',
                                         marginLeft: 10,
                                     }]}>
-                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    {getFormatTimeDate(session_date, start_time)
                                         + " - " +
-                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                        getFormatTimeDate(session_date, end_time)}
                                 </Text>
 
                             </View>
@@ -439,9 +439,9 @@ class CoachHome extends BaseComponent {
                                 </Text>
 
                                 <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
-                                    {moment.utc(session_date + " " + start_time).local().format("hh:mm a")
+                                    {getFormatTimeDate(session_date, start_time)
                                         + " - " +
-                                        moment.utc(session_date + " " + end_time).local().format("hh:mm a")}
+                                        getFormatTimeDate(session_date, end_time)}
                                 </Text>
 
                             </View>

@@ -11,9 +11,10 @@ import { getOtherPlayerDashboard, getOtherPlayerWithoutAcademy } from "../../red
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import PlayerHeader from '../../components/custom/PlayerHeader'
-import BaseComponent, { defaultStyle,getStatsImageById } from '../BaseComponent';
-import CustomProgres from '../../components/custom/CustomProgress';
+import BaseComponent, { defaultStyle, getStatsImageById } from '../BaseComponent';
+import CustomAnimationProgress from '../../components/custom/CustomAnimationProgress';
 import { PLAYER, PARENT } from '../../components/Constants';
+import CustomProgres from '../../components/custom/CustomProgress';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -213,7 +214,7 @@ class OtherPlayerDetails extends BaseComponent {
                         </Text>
                     </View>
                     {/* <Progress.Bar style={{ backgroundColor: '#E1E1E1', color: '#305F82', borderRadius: 11, borderWidth: 0 }} progress={item.score / 100} width={deviceWidth - 130} height={14} /> */}
-                    <CustomProgres
+                    <CustomAnimationProgress
                         percent={item.score}
                         width={deviceWidth - 100}
                         height={14}

@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { Card } from 'react-native-paper';
 import { getData, isSignedIn } from "../../components/auth";
-import { getCourtBookings } from '../../redux/reducers/CourtBookingReducer';
+import { getCourtBookings, cancelBooking } from '../../redux/reducers/CourtBookingReducer';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import moment from 'moment'
@@ -43,7 +43,7 @@ class CurrentBooking extends BaseComponent {
             this.props.getCourtBookings(value).then(() => {
                 let data = this.props.data.res
                 this.progress(false)
-                console.log('data.data.challenges', data.data)
+                console.log('getCourtBookings', JSON.stringify(data.data))
 
                 let success = data.success
                 if (success) {
@@ -51,6 +51,40 @@ class CurrentBooking extends BaseComponent {
                     this.setState({
                         bookingsData: data.data.bookings,
                     })
+                }
+
+            }).catch((response) => {
+                this.progress(false)
+                console.log(response);
+            })
+        })
+    }
+
+    cancel(item) {
+        this.progress(true)
+
+        const booking_id = item.booking_id
+
+        getData('header', (value) => {
+            this.props.cancelBooking(value, booking_id).then(() => {
+                let data = this.props.data.res
+                this.progress(false)
+                console.log('cancelBooking', JSON.stringify(data.data))
+
+                let success = data.success
+                if (success) {
+                    let success_message = data.success_message
+                    Alert.alert(
+                        'Success',
+                        success_message,
+                        [{
+                            text: 'OK', onPress: () => {
+                                this.getAllBookings()
+                            }
+                        },
+                        ],
+                        { cancelable: false },
+                    );
                 }
 
             }).catch((response) => {
@@ -129,6 +163,28 @@ class CurrentBooking extends BaseComponent {
                         </View>
                     </View>
 
+                    {item.canCancel && !item.isCancelled ?
+                        <View style={{
+                            marginTop: 16,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+
+                            <TouchableOpacity activeOpacity={.8}
+                                style={defaultStyle.rounded_button_150}
+                                onPress={() => {
+                                    this.cancel(item)
+                                }}>
+                                <Text
+                                    style={[defaultStyle.bold_text_14, { color: 'white' }]}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View> : null}
+
+                    {item.isCancelled ?
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={defaultStyle.heavy_bold_text_14}>You have cancelled court booking.</Text>
+                        </View> : null
+                    }
                 </View>
             </Card>
 
@@ -148,7 +204,7 @@ class CurrentBooking extends BaseComponent {
     render() {
 
         const bookingsData = this.state.bookingsData
-        if (this.props.data.loading || !bookingsData) {
+        if (this.props.data.loading && !bookingsData) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -226,7 +282,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getCourtBookings
+    getCourtBookings, cancelBooking
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentBooking);
