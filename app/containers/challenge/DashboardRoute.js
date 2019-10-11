@@ -66,7 +66,7 @@ class DashboardRoute extends BaseComponent {
           //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
 
           //console.log('data.data.dashboard', data.data.dashboard);
-          console.log('data.data.challenges', data.data.dashboard.challenges)
+          console.log('data.data.challenges', JSON.stringify(data.data.dashboard.challenges))
 
           let success = data.success
           if (success) {
@@ -220,6 +220,10 @@ class DashboardRoute extends BaseComponent {
 
   saveData() {
 
+
+
+
+
     let player1_score = +this.state.matchData.match_scores[0].player1_score
     let player2_score = +this.state.matchData.match_scores[0].player2_score
 
@@ -228,9 +232,34 @@ class DashboardRoute extends BaseComponent {
       return
     }
 
+    let matchData = { ...this.state.matchData }
+
+
+    try {
+      //console.log('updateScoreModal=>data', JSON.stringify(data))
+      let opponentData = this.state.selected_score_update//challenge_by
+      console.log('updateScoreModal=>ChallengeBy', JSON.stringify(this.state.selected_score_update))
+      let player_id = global.SELECTED_PLAYER_ID
+      let opponent_id = opponentData.opponent.id
+      let challenge_by_other = player_id == opponent_id
+      let is_player_1 = player_id == opponent_id
+      console.log('updateScoreModal=>opponent_id', opponent_id)
+      console.log('updateScoreModal=>player_id', player_id)
+      console.log('updateScoreModal=>challenge_by_other', challenge_by_other)
+
+      if (is_player_1) {
+        matchData.match_scores[0].player1_score = player2_score
+        matchData.match_scores[0].player2_score = player1_score
+
+      }
+
+    } catch (err) {
+      console.log("err", JSON.stringify(err))
+    }
+
 
     let postData = {}
-    postData['data'] = this.state.matchData;
+    postData['data'] = matchData;
 
     console.log('postData', JSON.stringify(postData));
 
@@ -267,6 +296,7 @@ class DashboardRoute extends BaseComponent {
   // }
 
   updateScoreModal(data) {
+
     return (
       <ScrollView style={{ backgroundColor: '#F7F7F7' }}>
         <View>
@@ -415,7 +445,7 @@ class DashboardRoute extends BaseComponent {
 
   }
 
-  _renderItem = ({ item }) => (
+  _renderItem = ({ item,index }) => (
 
 
     <View>
@@ -543,8 +573,11 @@ class DashboardRoute extends BaseComponent {
                       <Text style={defaultStyle.rounded_button_150} onPress={() => {
                         this.getChallengeScoreData(item.id);
                         //this.setModalVisible(true);
+                        console.log('UpdateScore=>',JSON.stringify(item))
+                        console.log('UpdateScore=>index',index)
                         this.setState({
-                          selectedOpponentData: item.challenge_by
+                          selectedOpponentData: item.challenge_by,
+                          selected_score_update: item
                         })
                       }}>Update Score</Text>
                     </View>
@@ -598,9 +631,12 @@ class DashboardRoute extends BaseComponent {
                       <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
                       <Text style={defaultStyle.rounded_button_150} onPress={() => {
                         this.getChallengeScoreData(item.id);
+                        console.log('UpdateScore=>index',index)
                         //this.setModalVisible(true);
                         this.setState({
-                          selectedOpponentData: item.opponent
+                          selectedOpponentData: item.opponent,
+                          selected_score_update: item
+
                         })
                       }}>Update Score</Text>
                     </View>
@@ -743,6 +779,7 @@ class DashboardRoute extends BaseComponent {
       )
     }
 
+    let selectedIndex = this.state.selectedIndex
     let data = this.state.playerData;
     //console.log('data', data);
     return (

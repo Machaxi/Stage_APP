@@ -575,45 +575,45 @@ class AcademyProfile extends BaseComponent {
 
                                 <View style={{ flexDirection: 'row', marginBottom: 16 }}>
 
-                                    <TouchableOpacity
-                                        activeOpacity={.8}
-                                        style={[defaultStyle.rounded_button, {
-                                            backgroundColor: coaching_enabled ? '#67BAF5' : 'gray'
-                                        }]} onPress={() => {
-                                            if (coaching_enabled) {
-                                                this.props.navigation.navigate('AcademyBatch',
-                                                    { academy_id: this.state.id })
+                                    {coaching_enabled ?
+                                        <TouchableOpacity
+                                            activeOpacity={.8}
+                                            style={[defaultStyle.rounded_button, {
+                                            }]} onPress={() => {
+                                                if (coaching_enabled) {
+                                                    this.props.navigation.navigate('AcademyBatch',
+                                                        { academy_id: this.state.id })
+                                                }
                                             }
-                                        }
-                                        }
-                                    >
-
-                                        <Text
-                                            style={[defaultStyle.bold_text_14,
-                                            { color: 'white' }]}
-                                        >
-                                            View Batches
-                                </Text>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        activeOpacity={.8}
-                                        style={[defaultStyle.rounded_button, {
-                                            backgroundColor: book_and_play_enabled ? '#67BAF5' : 'gray'
-                                        }]}
-                                        onPress={() => {
-                                            if (book_and_play_enabled) {
-                                                this.props.navigation.navigate('ChooseTimeDate')
                                             }
-                                        }}>
-
-                                        <Text
-                                            style={[defaultStyle.bold_text_14,
-                                            { color: 'white' }]}
                                         >
-                                            Book Court
+
+                                            <Text
+                                                style={[defaultStyle.bold_text_14,
+                                                { color: 'white' }]}
+                                            >
+                                                View Batches
                                 </Text>
-                                    </TouchableOpacity>
+                                        </TouchableOpacity> : null}
+
+                                    {book_and_play_enabled ?
+                                        <TouchableOpacity
+                                            activeOpacity={.8}
+                                            style={[defaultStyle.rounded_button, {
+                                            }]}
+                                            onPress={() => {
+                                                if (book_and_play_enabled) {
+                                                    this.props.navigation.navigate('ChooseTimeDate')
+                                                }
+                                            }}>
+
+                                            <Text
+                                                style={[defaultStyle.bold_text_14,
+                                                { color: 'white' }]}
+                                            >
+                                                Book Court
+                                             </Text>
+                                        </TouchableOpacity> : null}
 
                                     {/* <Text
                                     style={styles.rounded_button}
