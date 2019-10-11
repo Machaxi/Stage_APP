@@ -147,8 +147,10 @@ class PaymentDetail extends BaseComponent {
                 console.log('submitData payload ' + JSON.stringify(this.props.data.data));
                 if (data.success) {
                     let msg = data.success_message
-                    alert(msg)
-                    this.getDues()
+                    setTimeout(()=>{
+                        alert(msg)
+                        this.getDues()
+                    },500)
                 }
             }).catch((response) => {
                 console.log(response);

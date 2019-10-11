@@ -366,7 +366,7 @@ class EditPartner extends BaseComponent {
                             ],
                             { cancelable: false },
                         );
-                    }, 100)
+                    }, 500)
 
                 }
                 this.setState({ isRefreshing: false })

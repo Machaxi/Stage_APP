@@ -74,17 +74,19 @@ class CurrentBooking extends BaseComponent {
                 let success = data.success
                 if (success) {
                     let success_message = data.success_message
-                    Alert.alert(
-                        'Success',
-                        success_message,
-                        [{
-                            text: 'OK', onPress: () => {
-                                this.getAllBookings()
-                            }
-                        },
-                        ],
-                        { cancelable: false },
-                    );
+                    setTimeout(()=>{
+                        Alert.alert(
+                            'Success',
+                            success_message,
+                            [{
+                                text: 'OK', onPress: () => {
+                                    this.getAllBookings()
+                                }
+                            },
+                            ],
+                            { cancelable: false },
+                        );
+                    },500)
                 }
 
             }).catch((response) => {

@@ -134,18 +134,20 @@ class PaymentPage extends BaseComponent {
         let success = data.success
         if (success) {
           //Events.publish(EVENT_REFRESH_CHALLENGE);
-          Alert.alert(
-            'Success',
-            'Booking has been done successfully.',
-            [
-              {
-                text: 'OK', onPress: () => {
-                  this.props.navigation.navigate('CurrentBooking');
-                }
-              },
-            ],
-            { cancelable: false },
-          );
+          setTimeout(()=>{
+            Alert.alert(
+              'Success',
+              'Booking has been done successfully.',
+              [
+                {
+                  text: 'OK', onPress: () => {
+                    this.props.navigation.navigate('CurrentBooking');
+                  }
+                },
+              ],
+              { cancelable: false },
+            );
+          },500)
         }
 
       }).catch((response) => {

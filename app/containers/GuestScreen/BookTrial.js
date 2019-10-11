@@ -154,7 +154,7 @@ class BookTrial extends BaseComponent {
                         { cancelable: false },
                     );
 
-                }, 100)
+                }, 500)
 
             }
 
@@ -177,13 +177,10 @@ class BookTrial extends BaseComponent {
     }
 
     progress(status) {
-        setTimeout(() => {
-            console.log('Progress=> ', status)
-            this.setState({
-                spinner: status
-            })
-            this.state.spinner = status
-        }, 100)
+        this.setState({
+            spinner: status
+        })
+        this.state.spinner = status
 
     }
 
