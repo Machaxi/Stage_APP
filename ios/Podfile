@@ -53,6 +53,8 @@ target 'Dribble' do
   
   pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
 
+  pod 'RNSnackbar', :path => '../node_modules/react-native-snackbar'
+
   target 'DribbleTests' do
     inherit! :search_paths
     # Pods for testing
@@ -72,4 +74,13 @@ target 'Dribble-tvOS' do
     # Pods for testing
   end
 
+end
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "React"
+      target.remove_from_project
+    end
+  end
 end
