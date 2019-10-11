@@ -573,7 +573,6 @@ class UserHome extends BaseComponent {
                                 onPress={() => {
                                     global.click_batch_id = operations.batch_id;
                                     this.props.navigation.navigate('Batch')
-
                                 }}
                             >
 
