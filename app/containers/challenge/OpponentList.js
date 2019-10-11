@@ -530,6 +530,7 @@ const styles = StyleSheet.create({
         elevation: 1
     },
     searchBox: {
+        height:40,
         marginLeft: 8,
         backgroundColor: 'white',
         borderRadius: 16,
