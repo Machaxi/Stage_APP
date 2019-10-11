@@ -92,7 +92,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
 
       // packages.add(new MainReactPackage(),
-            new SnackbarPackage());
+            //new SnackbarPackage());
       // packages.add(new SplashScreenReactPackage());
       // packages.add( new RNSharePackage());
       // packages.add(new ReactNativeYouTube());
@@ -113,6 +113,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new VectorIconsPackage());
       // packages.add(new RNGestureHandlerPackage());
        //packages.add(new RNFirebasePackage());
+      // packages.add(new SnackbarPackage());
        packages.add(new RNFirebaseAuthPackage());
        packages.add(new RNFirebaseNotificationsPackage());
        packages.add(new RNFirebaseMessagingPackage());

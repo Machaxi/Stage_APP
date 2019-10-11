@@ -58,25 +58,33 @@ class OtherPlayerDetails extends BaseComponent {
                 //console.warn('if=>')
                 getData('userInfo', (value) => {
                     let userData = JSON.parse(value)
-                    let academy_id = userData['academy_id']
+                    let user_academy_id = userData['academy_id']
                     // console.warn('academy_id=>', academy_id)
 
 
                     if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
-                        this.setState({
-                            showChallenge: true
-                        })
+                        
+                        if(user_academy_id==academy_id){
+                            this.setState({
+                                showChallenge: true
+                            })
+                        }
+                       
                     }
 
-                    this.fetch(academy_id, player_id)
+                    this.fetch(user_academy_id, player_id)
                 });
             } else {
                 getData('userInfo', (value) => {
                     let userData = JSON.parse(value)
+                    let user_academy_id = userData['academy_id']
+
                     if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
-                        this.setState({
-                            showChallenge: true
-                        })
+                        if(user_academy_id==academy_id){
+                            this.setState({
+                                showChallenge: true
+                            })
+                        }
                     }
                 });
                 this.fetch(academy_id, player_id)
