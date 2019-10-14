@@ -111,17 +111,7 @@ export default class BaseComponent extends React.Component {
         });
     }
 
-    getSportImage(id) {
-        switch (id) {
-            case 1:
-                return '../images/sport_badminton.png'
-            case 2:
-                return '../images/sport_swiming.png'
-            case 3:
-                return '../images/sport_cricket.png'
-        }
-        return '../images/soccer-ball.png'
-    }
+    
 
     setNavigation(navigation) {
         myNavigation = navigation

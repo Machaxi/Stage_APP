@@ -128,7 +128,7 @@ class BookTrial extends BaseComponent {
             if (user1.success == true) {
 
                 let success_message = user1.data.Success
-                let mobile_number = ''
+                let mobile_number = user1.data.academy_phone
                 const array = user1.data.Timings
                 let classes = ''
                 for (let i = 0; i < array.length; i++) {
@@ -141,7 +141,8 @@ class BookTrial extends BaseComponent {
                 }
                 success_message = 'Booking successful for Trial session for ' + batch_name + '. You can visit the academy on:'
                 success_message = success_message + '\n\n' + classes
-                success_message = success_message + '\n\n' + 'You can also call the academy at ' + mobile_number + ' for more details.'
+                if (mobile_number)
+                    success_message = success_message + '\n\n' + 'You can also call the academy at ' + mobile_number + ' for more details.'
 
 
                 console.log('classes=> ', classes)

@@ -14,7 +14,7 @@ var block_array = 2
 var percent = 1.77
 //var block_array = 4
 //var percent = 1
-
+var NO_COURT_MSG = 'Sorry, no courts available for selected time and duration.';
 
 class ChooseTimeDate extends BaseComponent {
 
@@ -138,7 +138,7 @@ class ChooseTimeDate extends BaseComponent {
 
     convertMinsToHrsMins(minutes) {
 
-        console.log('convertMinsToHrsMins=> ' + minutes)
+        //console.log('convertMinsToHrsMins=> ' + minutes)
         if (minutes == undefined || isNaN(minutes))
             return ''
 
@@ -215,176 +215,6 @@ class ChooseTimeDate extends BaseComponent {
                     });
 
                     var bookingDetails = data.data.courts;
-
-
-
-                    /*var bookingDetails = [
-                        {
-                            "name": "court1",
-                            "court_id": 9,
-                            "court_timings": [
-                                {
-                                    "open_time": "06:00:00",
-                                    "close_time": "09:00:00"
-                                },
-                                {
-                                    "open_time": "11:00:00",
-                                    "close_time": "14:00:00"
-                                },
-                                {
-                                    "open_time": "15:00:00",
-                                    "close_time": "17:00:00"
-                                }
-                            ],
-                            "court_bookings": [
-                                {
-                                    "open_time": "08:00:00",
-                                    "close_time": "09:00:00"
-                                },
-                                {
-                                    "open_time": "15:00:00",
-                                    "close_time": "15:30:00"
-                                }
-                            ],
-                            "pricing_plan": [
-                                {
-                                    "id": 1,
-                                    "price": 500.0,
-                                    "time_interval": 30
-                                },
-                                {
-                                    "id": 2,
-                                    "price": 1000.0,
-                                    "time_interval": 60
-                                },
-                                {
-                                    "id": 3,
-                                    "price": 1500.0,
-                                    "time_interval": 90
-                                },
-                                {
-                                    "id": 4,
-                                    "price": 2000.0,
-                                    "time_interval": 120
-                                },
-                                {
-                                    "id": 5,
-                                    "price": 2500.0,
-                                    "time_interval": 150
-                                },
-                                {
-                                    "id": 6,
-                                    "price": 3000.0,
-                                    "time_interval": 180
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Test Court",
-                            "court_id": 10,
-                            "court_timings": [
-                                {
-                                    "open_time": "06:00:00",
-                                    "close_time": "9:30:00"
-                                },
-                                {
-                                    "open_time": "11:00:00",
-                                    "close_time": "13:00:00"
-                                },
-                                {
-                                    "open_time": "15:00:00",
-                                    "close_time": "17:00:00"
-                                }
-                            ],
-                            "court_bookings": [
-                            ],
-                            "pricing_plan": [
-                                {
-                                    "id": 1,
-                                    "price": 500.0,
-                                    "time_interval": 30
-                                },
-                                {
-                                    "id": 2,
-                                    "price": 1000.0,
-                                    "time_interval": 60
-                                },
-                                {
-                                    "id": 3,
-                                    "price": 1500.0,
-                                    "time_interval": 90
-                                },
-                                {
-                                    "id": 4,
-                                    "price": 2000.0,
-                                    "time_interval": 120
-                                },
-                                {
-                                    "id": 5,
-                                    "price": 2500.0,
-                                    "time_interval": 150
-                                },
-                                {
-                                    "id": 6,
-                                    "price": 3000.0,
-                                    "time_interval": 180
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Test Court1",
-                            "court_id": 11,
-                            "court_timings": [
-                                {
-                                    "open_time": "12:00:00",
-                                    "close_time": "13:00:00"
-                                },
-                                {
-                                    "open_time": "13:30:00",
-                                    "close_time": "14:00:00"
-                                }
-                            ],
-                            "court_bookings": [
-                                {
-                                    "open_time": "12:30:00",
-                                    "close_time": "13:00:00"
-                                }
-                            ],
-                            "pricing_plan": [
-                                {
-                                    "id": 1,
-                                    "price": 500.0,
-                                    "time_interval": 30
-                                },
-                                {
-                                    "id": 2,
-                                    "price": 1000.0,
-                                    "time_interval": 60
-                                },
-                                {
-                                    "id": 3,
-                                    "price": 1500.0,
-                                    "time_interval": 90
-                                },
-                                {
-                                    "id": 4,
-                                    "price": 2000.0,
-                                    "time_interval": 120
-                                },
-                                {
-                                    "id": 5,
-                                    "price": 2500.0,
-                                    "time_interval": 150
-                                },
-                                {
-                                    "id": 6,
-                                    "price": 3000.0,
-                                    "time_interval": 180
-                                }
-                            ]
-                        }
-                    ];*/
-
 
                     this.setState({
                         sportsData: data.data.sports,
@@ -696,6 +526,7 @@ class ChooseTimeDate extends BaseComponent {
     }
 
     getAllCourtsDeadSlots(courtTimings) {
+        console.log('getAllCourtsDeadSlots', JSON.stringify(courtTimings))
         var newArray = [];
         courtTimings.map((ele, index) => {
             var item = {};
@@ -715,6 +546,7 @@ class ChooseTimeDate extends BaseComponent {
     getSingleCourtDeadSlots(arr) {
 
         var newArray = [];
+        console.log('getSingleCourtDeadSlots=>', JSON.stringify(arr))
 
         arr.map((element, index) => {
 
@@ -901,10 +733,19 @@ class ChooseTimeDate extends BaseComponent {
         var courts = [];
 
         var selectedTimeRange = this.state.selectedTimeRange;
+        console.log('selecedTime', JSON.stringify(selectedTimeRange))
         var msg = '';
 
         console.log('this.state.finalDeadSlots', this.state.finalDeadSlots);
-
+        let todaySelected = this.getTodayTime()
+        let todayPastTime = -1
+        if (todaySelected) {
+            var today = new Date();
+            let today_time = moment(today).format("HH:mm")
+            console.log('todaySelected=>time', today_time)
+            todayPastTime = this.convertTimeStringToMins(today_time)
+            console.log('todaySelected=>format_time', todayPastTime)
+        }
 
         const finalDeadSlots = this.state.finalDeadSlots
         if (finalDeadSlots == undefined || finalDeadSlots.length == block_array) {
@@ -931,7 +772,10 @@ class ChooseTimeDate extends BaseComponent {
                     console.log('selectedTimeRange.startTime', selectedTimeRange['startTime'])
                     console.log('selectedTimeRange.endTime', selectedTimeRange['endTime'])
 
-                    if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
+                    if (todaySelected && selectedTimeRange['startTime'] < todayPastTime) {
+
+                    }
+                    else if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
                         console.log(element1.startTime)
                         console.log(element1.endTime)
                         element['selected'] = false;
@@ -940,6 +784,7 @@ class ChooseTimeDate extends BaseComponent {
                     }
                 })
             })
+            console.log('courts=>', JSON.stringify(courts))
             if (courts.length == 0) {
                 msg = 'Sorry, no courts available for selected time and duration.';
             }
@@ -1318,6 +1163,17 @@ class ChooseTimeDate extends BaseComponent {
         this.setState({ modalVisible: visible });
     }
 
+    getSportImage(id) {
+        switch (id) {
+            case "1":
+                return '../../images/sport_badminton.png'
+            case 2:
+                return '../images/sport_swiming.png'
+            case 3:
+                return '../images/sport_cricket.png'
+        }
+        return '../images/soccer-ball.png'
+    }
 
     render() {
 
@@ -1333,9 +1189,11 @@ class ChooseTimeDate extends BaseComponent {
         console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
 
         let itemWidth = 38 * percent
-        if(Platform.OS =='ios'){
+        if (Platform.OS == 'ios') {
             itemWidth = 39.2 * percent
         }
+
+
         return (
 
             <View style={styles.bookingContainer}>
@@ -1371,7 +1229,7 @@ class ChooseTimeDate extends BaseComponent {
                                                 <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
                                                     <Image
                                                         resizeMode="contain"
-                                                        source={require('../../images/soccer-ball.png')}
+                                                        source={{uri:'file://'+this.getSportImage(element)}}
                                                         style={{
                                                             width: 25,
                                                             height: 25
@@ -1503,6 +1361,7 @@ class ChooseTimeDate extends BaseComponent {
                                                 source={require('../../images/ic_navigation.png')} />
                                         </View>
 
+
                                         <Carousel
                                             ref={(c) => { this._carousel = c; }}
                                             data={this.state.sliderData}
@@ -1519,10 +1378,13 @@ class ChooseTimeDate extends BaseComponent {
                                                     var timing = {};
                                                     let data = this.state.sliderData[this.state.selectedIndex + block_array]
                                                     if (data) {
-                                                        console.log('CarosoulData->',JSON.stringify(data))
-                                                        if(data.deadslot){
-
-                                                        }else{
+                                                        console.log('CarosoulData->', JSON.stringify(data))
+                                                        if (data.deadslot) {
+                                                            this.setState({
+                                                                availableCourts: [],
+                                                                courtInfoMessage: NO_COURT_MSG
+                                                            })
+                                                        } else {
                                                             timing['startTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes;
                                                             timing['endTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes + this.state.selectedDuration;
                                                             this.setState({
@@ -1533,13 +1395,13 @@ class ChooseTimeDate extends BaseComponent {
                                                                 this.checkCourtAvailability();
                                                             })
                                                         }
-                                                        
+
                                                     }
                                                 })
                                             }}
+
                                             onScroll={(event) => {
                                                 // 114 is the item width
-
                                                 if (event.nativeEvent.contentOffset.x % itemWidth === 0) {
                                                     if (this.state.selectedIndex + block_array == this.state.sliderData.length - 1) {
                                                         //alert('last')
@@ -1687,7 +1549,7 @@ class ChooseTimeDate extends BaseComponent {
     renderItem = ({ item, index }) => {
 
         let empty_width = (Dimensions.get('window').width / 2) / block_array
-        console.log('empty_width=> ', empty_width)
+        //console.log('empty_width=> ', empty_width)
         const fullWidth = 52 * percent
         const singleWidth = 26 * percent
 
