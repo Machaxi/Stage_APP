@@ -313,7 +313,7 @@ class AcademyBatch extends BaseComponent {
               <View><Text style={styles.availableLabel}>Availability</Text></View>
               <View style={styles.toggleView}>
                 <Switch disabled={false}
-                  ios_backgroundColor={'#667DDB'}
+                  //ios_backgroundColor={'#667DDB'}
                   onValueChange={(value) => {
                     console.log(value)
                     this.setState({

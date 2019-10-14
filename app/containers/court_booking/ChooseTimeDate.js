@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image, Dimensions, Modal } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image, Dimensions, Modal, Platform } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getCourtBookingDetails, createBooking } from '../../redux/reducers/CourtBookingReducer';
@@ -818,6 +818,9 @@ class ChooseTimeDate extends BaseComponent {
         if (has30Min) {
             incrementalTime = 30
             block_array = 2
+            // if(Platform.OS == 'ios')
+            // percent = 1.80
+            // else
             percent = 1.77
         } else {
             incrementalTime = 15
@@ -1329,7 +1332,10 @@ class ChooseTimeDate extends BaseComponent {
         console.log('this.state.calendarData', this.state.calendarData);
         console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
 
-        const itemWidth = 38.5 * percent
+        let itemWidth = 38 * percent
+        if(Platform.OS =='ios'){
+            itemWidth = 39.2 * percent
+        }
         return (
 
             <View style={styles.bookingContainer}>
@@ -1514,15 +1520,20 @@ class ChooseTimeDate extends BaseComponent {
                                                     let data = this.state.sliderData[this.state.selectedIndex + block_array]
                                                     if (data) {
                                                         console.log('CarosoulData->',JSON.stringify(data))
-                                                        timing['startTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes;
-                                                        timing['endTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes + this.state.selectedDuration;
-                                                        this.setState({
-                                                            selectedTimeRange: timing,
-                                                            totalNoOfHours: 0,
-                                                            totalCost: 0
-                                                        }, () => {
-                                                            this.checkCourtAvailability();
-                                                        })
+                                                        if(data.deadslot){
+
+                                                        }else{
+                                                            timing['startTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes;
+                                                            timing['endTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes + this.state.selectedDuration;
+                                                            this.setState({
+                                                                selectedTimeRange: timing,
+                                                                totalNoOfHours: 0,
+                                                                totalCost: 0
+                                                            }, () => {
+                                                                this.checkCourtAvailability();
+                                                            })
+                                                        }
+                                                        
                                                     }
                                                 })
                                             }}
@@ -1901,6 +1912,8 @@ const styles = {
         marginRight: 15,
         elevation: 4,
         margin: 4,
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 },
     },
     sportPickerUnselected: {
         //width: 136,
@@ -1910,8 +1923,8 @@ const styles = {
         alignItems: 'center',
         elevation: 4,
         backgroundColor: 'white',
-        //shadowOpacity: 0.32,
-        //shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 },
         marginRight: 15
     },
     datePickerLabel: {
@@ -1965,6 +1978,8 @@ const styles = {
         marginRight: 12,
         margin: 2,
         elevation: 4,
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 },
     },
     datePickerUnselected: {
         height: 63,
@@ -1976,8 +1991,8 @@ const styles = {
         alignItems: 'center',
         marginRight: 12,
         elevation: 4,
-        //shadowOpacity: 0.32,
-        //shadowOffset: { width: 0, height: 1 }
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 }
     },
     timePickerLabel: {
         marginTop: 12,
@@ -2057,6 +2072,8 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 },
     },
     courtPickerDisabled: {
         height: 38,
@@ -2065,7 +2082,9 @@ const styles = {
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 12
+        marginRight: 12,
+        shadowOpacity: 0.32,
+        shadowOffset: { width: 0, height: 1 },
     },
     closeImg: {
         height: 30,
