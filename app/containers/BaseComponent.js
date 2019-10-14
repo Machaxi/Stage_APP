@@ -322,6 +322,23 @@ export default class BaseComponent extends React.Component {
         return is_valid
     }
 
+    isValidMobileNumberWithoutPrefix(phone) {
+
+        let is_valid = true
+        if (phone.length != 10) {
+            is_valid = false
+        } else {
+            let number = phone.substring(0, phone.length - 1)
+            if (number.startsWith('9') || number.startsWith('8') || number.startsWith('7')
+                || number.startsWith('6')) {
+                is_valid = true
+            } else {
+                is_valid = false
+            }
+        }
+        return is_valid
+    }
+
     getNetworkStatus() {
         if (!connected) {
             alert("Oops!! No Internet Connection Available");

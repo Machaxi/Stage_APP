@@ -69,7 +69,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.10.16",
-    "rn-read-more-text": "0.0.5"
+    "rn-read-more-text": "0.0.5",
+    "zoomable-svg": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

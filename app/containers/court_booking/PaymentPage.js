@@ -1,12 +1,13 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions,Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Alert } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, DRIBBLE_LOGO, PAYMENT_KEY, TEMP_USER_INFO } from '../BaseComponent';
 import { createBooking } from '../../redux/reducers/CourtBookingReducer';
 import { connect } from 'react-redux';
 import { getData, isSignedIn } from "../../components/auth";
 import Spinner from 'react-native-loading-spinner-overlay';
 import RazorpayCheckout from 'react-native-razorpay';
+import Events from '../../router/events';
 
 class PaymentPage extends BaseComponent {
 
@@ -134,7 +135,7 @@ class PaymentPage extends BaseComponent {
         let success = data.success
         if (success) {
           //Events.publish(EVENT_REFRESH_CHALLENGE);
-          setTimeout(()=>{
+          setTimeout(() => {
             Alert.alert(
               'Success',
               'Booking has been done successfully.',
@@ -142,12 +143,15 @@ class PaymentPage extends BaseComponent {
                 {
                   text: 'OK', onPress: () => {
                     this.props.navigation.navigate('CurrentBooking');
+                    setTimeout(() => {
+                      Events.publish('REFRESH_BOOKING');
+                    }, 100)
                   }
                 },
               ],
               { cancelable: false },
             );
-          },500)
+          }, 500)
         }
 
       }).catch((response) => {

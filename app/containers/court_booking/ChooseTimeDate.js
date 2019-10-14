@@ -1115,7 +1115,8 @@ class ChooseTimeDate extends BaseComponent {
 
             this.setState({
                 calendarData: datePickerData,
-                selectedDate: selectedDate
+                selectedDate: selectedDate,
+                selectedCourtNames: []
             }, () => {
                 this.getBookingDetails(this.state.selectedDate, this.state.selectedSportsId)
             })
@@ -2042,7 +2043,7 @@ const styles = {
         //padding: 16,
         borderRadius: 16,
         backgroundColor: 'white',
-        height: 336,
+        height: 360,
     },
     modalHeadingOuter: {
         flexDirection: 'row',

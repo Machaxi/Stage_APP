@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Platform, Alert, ActivityIndicator, StyleSheet, TouchableOpacity, Image, BackHandler } from 'react-native'
-import BaseComponent, { defaultStyle, } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFormatTime, } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { getData, storeData, isSignedIn } from '../../components/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -132,8 +132,8 @@ class BookTrial extends BaseComponent {
 
                     let obj = array[i]
                     classes = classes + this.spaceCount(obj['weekday']) + "  "
-                        + moment.utc(obj['start_time'], 'hh:mm a').local().format("hh:mm a") + " - "
-                        + moment.utc(obj['end_time'], 'hh:mm a').local().format("hh:mm a") + "\n"
+                        + getFormatTime(obj['start_time']) + " - "
+                        + getFormatTime(obj['end_time']) + "\n"
 
                 }
                 //success_message = success_message+"\\n"

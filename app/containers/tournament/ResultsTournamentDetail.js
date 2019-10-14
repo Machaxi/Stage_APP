@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel } from '../BaseComponent'
+import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedCategory, getFormattedTournamentLevel } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { connect } from 'react-redux';
@@ -92,7 +92,7 @@ class ResultsTournamentDetail extends BaseComponent {
                     let temp_cat = []
                     for (let i = 0; i < unique.length; i++) {
                         let obj = {
-                            label: unique[i],
+                            label: getFormattedCategory(unique[i]),
                             value: unique[i],
                         }
                         temp_cat.push(obj)

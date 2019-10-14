@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT } from '../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, getFormatTime } from '../BaseComponent';
 import { Card } from 'react-native-paper';
 import { getData, isSignedIn } from "../../components/auth";
 import { getCourtBookings, cancelBooking } from '../../redux/reducers/CourtBookingReducer';
@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import moment from 'moment'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import Events from '../../router/events';
 
 class CurrentBooking extends BaseComponent {
 
@@ -22,6 +23,14 @@ class CurrentBooking extends BaseComponent {
 
     componentDidMount() {
 
+        this.checkAndGet()
+
+        this.refreshEvent = Events.subscribe('REFRESH_BOOKING', () => {
+            this.checkAndGet()
+        });
+    }
+
+    checkAndGet() {
         isSignedIn()
             .then(res => {
                 console.log('isSignedIn => ', res);
@@ -74,7 +83,7 @@ class CurrentBooking extends BaseComponent {
                 let success = data.success
                 if (success) {
                     let success_message = data.success_message
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         Alert.alert(
                             'Success',
                             success_message,
@@ -86,7 +95,7 @@ class CurrentBooking extends BaseComponent {
                             ],
                             { cancelable: false },
                         );
-                    },500)
+                    }, 500)
                 }
 
             }).catch((response) => {
@@ -148,7 +157,7 @@ class CurrentBooking extends BaseComponent {
 
                     <View style={{ flexDirection: 'row', marginTop: 4 }}>
                         <Text style={styles.text_bold}>{moment.utc(item.created_at).local().format(SESSION_DATE_FORMAT)}</Text>
-                        <Text style={styles.text_bold}>{item.start_time} - {item.end_time}</Text>
+                        <Text style={styles.text_bold}>{getFormatTime(item.start_time)} - {getFormatTime(item.end_time)}</Text>
                     </View>
 
                     <View style={{ marginTop: 14 }}>

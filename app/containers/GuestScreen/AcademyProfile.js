@@ -603,7 +603,11 @@ class AcademyProfile extends BaseComponent {
                                             }]}
                                             onPress={() => {
                                                 if (book_and_play_enabled) {
-                                                    this.props.navigation.navigate('ChooseTimeDate')
+                                                    this.props.navigation.navigate('ChooseTimeDate',
+                                                        {
+                                                            id: this.state.id,
+                                                            name: academy.name
+                                                        })
                                                 }
                                             }}>
 
