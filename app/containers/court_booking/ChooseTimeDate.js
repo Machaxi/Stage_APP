@@ -131,6 +131,7 @@ class ChooseTimeDate extends BaseComponent {
     }
 
     convertTimeStringToMins(time) {
+        console.log('convertTimeStringToMins ' + time)
         let arr = time.split(":");
         return (arr[0] * 60) + (arr[1] * 1);
     }
@@ -792,6 +793,22 @@ class ChooseTimeDate extends BaseComponent {
         }
     }
 
+    getTodayTime() {
+
+        // var today = new Date();
+        // let today_time = moment(today).format("hh:mm a")
+        // let today_date = moment(today).format("DD-MM-YYYY")
+        // console.log('today=> ', today_time)
+        // console.log('today=> ', this.state.selectedDate)
+        // console.log('today=_date=> ', today_date)
+
+        var today = new Date();
+        let today_date = moment(today).format("DD-MM-YYYY")
+        return today_date == this.state.selectedDate
+
+
+    }
+
     makeSliderData(finalDeadSlots) {
 
         console.log('selectedSportTimeData', JSON.stringify(this.state.selectedSportTimeData))
@@ -814,14 +831,27 @@ class ChooseTimeDate extends BaseComponent {
         for (let i = 0; i < block_array; i++) {
             sliderData.push(null);
         }
-
         //end
 
+
+
+        let todaySelected = this.getTodayTime()
+        console.log('todaySelected=>', todaySelected)
+        let todayPastTime = -1
+        if (todaySelected) {
+            var today = new Date();
+            let today_time = moment(today).format("HH:mm")
+            console.log('todaySelected=>time', today_time)
+            todayPastTime = this.convertTimeStringToMins(today_time)
+            console.log('todaySelected=>format_time', todayPastTime)
+        }
 
         var index = 4;
         var time = this.state.minTime;
 
         while (time != this.state.maxTime) {
+
+            console.log('While-> ', time)
             var minutes, time;
             if (index == 4) {
                 time = this.state.minTime;
@@ -833,7 +863,13 @@ class ChooseTimeDate extends BaseComponent {
             var temp = {};
             temp['title'] = newtime;
             temp['minutes'] = time;
-            temp['deadslot'] = false;
+
+            if (todaySelected && time <= todayPastTime) {
+                temp['deadslot'] = true;
+            } else {
+                temp['deadslot'] = false;
+            }
+
             if (index % 2 == 0)
                 temp['showLabel'] = true;
             else
@@ -873,6 +909,7 @@ class ChooseTimeDate extends BaseComponent {
 
         } else
             finalDeadSlots.map((element, index) => {
+                console.log('finalDeadSlots=>', JSON.stringify(finalDeadSlots));
                 console.log(selectedTimeRange['startTime']);
                 console.log(selectedTimeRange['endTime']);
                 if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime || (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['startTime'] < element.endTime) || (selectedTimeRange['endTime'] <= element.startTime && selectedTimeRange['endTime'] > element.startTime)) {
@@ -884,6 +921,7 @@ class ChooseTimeDate extends BaseComponent {
         console.log('this.state.courtAvailability', this.state.courtAvailability);
 
         if (msg == '') {
+            console.log('CourtAvailability', JSON.stringify(this.state.courtAvailability))
             this.state.courtAvailability.map((element, index) => {
                 element.court_availability.map((element1, index1) => {
 
@@ -1327,10 +1365,11 @@ class ChooseTimeDate extends BaseComponent {
                                                 <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
                                                     <Image
                                                         resizeMode="contain"
-                                                        source={require('../../images/soccer-ball.png')} style={{
+                                                        source={require('../../images/soccer-ball.png')}
+                                                        style={{
                                                             width: 25,
                                                             height: 25
-                                                        }} ></Image>
+                                                        }} />
                                                 </View>
                                                 <View style={{ marginVertical: 17, maxWidth: 65, marginRight: 18 }}>
                                                     <Text style={textStyle}>{element.name}</Text>
@@ -1472,8 +1511,9 @@ class ChooseTimeDate extends BaseComponent {
 
                                                 }, () => {
                                                     var timing = {};
-                                                    if (this.state.sliderData[this.state.selectedIndex + block_array]) {
-
+                                                    let data = this.state.sliderData[this.state.selectedIndex + block_array]
+                                                    if (data) {
+                                                        console.log('CarosoulData->',JSON.stringify(data))
                                                         timing['startTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes;
                                                         timing['endTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes + this.state.selectedDuration;
                                                         this.setState({
@@ -1579,26 +1619,28 @@ class ChooseTimeDate extends BaseComponent {
                                 }
                             </ScrollView>
 
-                            {/* <View style={{marginTop: 30, paddingLeft: 12}}>
+                            {this.state.selectedSportTimeData.rules ?
+                                < View style={{ marginTop: 30, paddingLeft: 12 }}>
+                                    <View>
+                                        <Text style={styles.headingLabel}>Playing Rules</Text>
+                                        <View style={{ marginTop: 12 }}>
+                                            <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>
+                                                {this.state.selectedSportTimeData.rules}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View> : null}
+
+                            <View style={{ marginTop: 16, paddingLeft: 12, marginBottom: 20 }}>
                                 <View>
-                                    <Text style={styles.headingLabel}>Playing Rules</Text>
-                                    <View style={{marginTop: 12}}>
-                                        <Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>{`\u2022 Must have non-marking shoes.`}</Text>
-                                        <Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>{`\u2022 Must have non-marking shoes.`}</Text>
-                                        <Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>{`\u2022 Must have non-marking shoes.`}</Text>
+                                    <Text style={styles.headingLabel}>Reschedule/Cancellation</Text>
+                                    <View style={{ marginTop: 12 }}>
+                                        <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>
+                                            {}
+                                        </Text>
                                     </View>
                                 </View>
                             </View>
-                            <View style={{marginTop: 30, paddingLeft: 12, marginBottom: 10}}>
-                                <View>
-                                    <Text style={styles.headingLabel}>Reschedule/Cancellation</Text>
-                                    <View style={{marginTop: 12}}>
-                                        <Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>{`\u2022 Must have non-marking shoes.`}</Text>
-                                        <Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>{`\u2022 Must have non-marking shoes.`}</Text>
-                                        <Text style={{fontFamily:'Quicksand-Regular', fontSize: 14, color: '#404040'}}>{`\u2022 Must have non-marking shoes.`}</Text>
-                                    </View>
-                                </View>
-                            </View> */}
                         </View>
                     }
                 </ScrollView>
@@ -1625,7 +1667,7 @@ class ChooseTimeDate extends BaseComponent {
 
                 {this.paymentModal()}
 
-            </View>
+            </View >
 
         );
 

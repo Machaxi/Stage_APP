@@ -64,6 +64,9 @@ global.SELECTED_PLAYER_ID = ''
 
 //PAYMENT_GATEWAY
 export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
+//export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
+
+
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
 ///
 
@@ -106,6 +109,18 @@ export default class BaseComponent extends React.Component {
         this.refreshEvent = Events.subscribe('LOGOUT', () => {
             this.logout()
         });
+    }
+
+    getSportImage(id) {
+        switch (id) {
+            case 1:
+                return '../images/sport_badminton.png'
+            case 2:
+                return '../images/sport_swiming.png'
+            case 3:
+                return '../images/sport_cricket.png'
+        }
+        return '../images/soccer-ball.png'
     }
 
     setNavigation(navigation) {

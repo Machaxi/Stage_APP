@@ -59,6 +59,7 @@
     "react-native-swiper": "^1.5.14",
     "react-native-tab-view": "^2.5.0",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-web": "^0.11.7",
     "react-native-webview": "^7.0.5",
     "react-native-youtube": "^2.0.0-beta.2",
     "react-navigation": "^3.11.1",
@@ -69,8 +70,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.10.16",
-    "rn-read-more-text": "0.0.5",
-    "zoomable-svg": "^5.0.1"
+    "rn-read-more-text": "0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

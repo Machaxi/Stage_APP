@@ -87,7 +87,7 @@ class PaymentDetail extends BaseComponent {
     processPayment(item) {
 
         const logo = this.state.dribble_logo
-        const desc = 'Payment for ' + item.academyName
+        const desc = 'Payment for Academy ' + item.academyName + ' and Batch ' + item.batchName
         const mobile_number = this.state.userData.user['mobile_number']
         const email = this.state.userData.user['email']
         const name = this.state.userData.user['name']
@@ -147,10 +147,10 @@ class PaymentDetail extends BaseComponent {
                 console.log('submitData payload ' + JSON.stringify(this.props.data.data));
                 if (data.success) {
                     let msg = data.success_message
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         alert(msg)
                         this.getDues()
-                    },500)
+                    }, 500)
                 }
             }).catch((response) => {
                 console.log(response);

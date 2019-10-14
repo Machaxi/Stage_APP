@@ -112,6 +112,8 @@ class BookTrial extends BaseComponent {
 
     submit(value, subData) {
 
+        let batch_name = this.state.data['batch_name']
+
         var data = {}
         data['data'] = subData
 
@@ -126,24 +128,28 @@ class BookTrial extends BaseComponent {
             if (user1.success == true) {
 
                 let success_message = user1.data.Success
+                let mobile_number = ''
                 const array = user1.data.Timings
                 let classes = ''
                 for (let i = 0; i < array.length; i++) {
 
                     let obj = array[i]
-                    classes = classes + this.spaceCount(obj['weekday']) + "  "
+                    classes = classes + this.spaceCount(obj['weekday'].substring(0, 3)) + "  "
                         + getFormatTime(obj['start_time']) + " - "
                         + getFormatTime(obj['end_time']) + "\n"
 
                 }
-                //success_message = success_message+"\\n"
-                //success_message+classes
+                success_message = 'Booking successful for Trial session for ' + batch_name + '. You can visit the academy on:'
+                success_message = success_message + '\n\n' + classes
+                success_message = success_message + '\n\n' + 'You can also call the academy at ' + mobile_number + ' for more details.'
+
+
                 console.log('classes=> ', classes)
                 //alert(success_message)
                 setTimeout(() => {
                     Alert.alert(
                         '',
-                        success_message + '\n\n' + classes,
+                        success_message,
                         [
                             {
                                 text: 'OK', onPress: () => {
@@ -168,7 +174,7 @@ class BookTrial extends BaseComponent {
     }
 
     spaceCount(weekday) {
-        let count = 13 - weekday.length
+        let count = 8 - weekday.length
         let extraSpace = ''
         for (let i = 0; i < count; i++) {
             extraSpace = extraSpace + ' '
