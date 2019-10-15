@@ -104,6 +104,11 @@ export const DO_LOGIN_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_LOGIN_FAIL = 'user/LOAD_FAIL';
 
 
+export const DO_ACADEMY_BATCH_START = 'academy_batch/LOAD_START';
+export const DO_ACADEMY_BATCH_SUCCESS = 'academy_batch/LOAD_SUCCESS';
+export const DO_ACADEMY_BATCH_FAIL = 'academy_batch/LOAD_FAIL';
+
+
 export const GET_PRODUCT = 'product/LOAD';
 export const GET_PRODUCT_SUCCESS = 'product/LOAD_SUCCESS';
 export const GET_PRODUCT_FAIL = 'product/LOAD_FAIL';

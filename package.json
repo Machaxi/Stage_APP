@@ -25,6 +25,7 @@
     "react-native-dropdownalert": "^4.2.0",
     "react-native-echarts-wrapper": "^1.4.7",
     "react-native-elements": "^1.2.0",
+    "react-native-exception-handler": "^2.10.8",
     "react-native-fast-image": "^7.0.2",
     "react-native-firebase": "^5.5.6",
     "react-native-fs": "^2.14.1",

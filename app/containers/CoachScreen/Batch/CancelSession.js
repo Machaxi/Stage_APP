@@ -162,13 +162,17 @@ class CancelSession extends BaseComponent {
                 academy_id,
                 coach_id,
                 is_single_day, reason_text } = this.state
+                
 
             let subData = {}
-            let end_date = is_single_day ? null : moment(selected_end_date).format('YYYY-MM-DD')
+            let end_date = is_single_day ? null : moment(selected_end_date,'DD-MMM-YYYY').format('YYYY-MM-DD')
+            // alert(moment(selected_start_date).format('YYYY-MM-DD'))
+            // alert(moment(selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD'))
+            // return
 
             subData['is_range'] = !this.state.is_single_day
-            subData['from_date'] = moment(selected_start_date).format('YYYY-MM-DD')
-            subData['to_date'] = 
+            subData['from_date'] = moment(selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD')
+            subData['to_date'] = end_date
             subData['academy_id'] = academy_id
             subData['coach_id'] = coach_id
             subData['cancelation_reason'] = reason_text

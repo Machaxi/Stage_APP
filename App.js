@@ -193,6 +193,8 @@ export default class App extends BaseComponent {
             navigation: null
         }
         console.disableYellowBox = true;
+        console.reportErrorsAsExceptions = false;
+
 
 
         firebase.messaging().getToken().then((token) => {

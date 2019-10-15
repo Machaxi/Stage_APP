@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, PanResponder, Dimensions } from 'react-native';
+import {
+    StyleSheet, View, TouchableOpacity,
+    Dimensions,
+    PanResponder,
+} from 'react-native';
 import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
@@ -8,6 +12,9 @@ import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { COACH, PLAYER } from '../../components/Constants'
 import { Text as MyText } from 'react-native'
+import ZoomableSvg from '../util/zoomable_svg';
+
+const { width, height } = Dimensions.get('window');
 
 import Svg, {
     Circle,
@@ -34,63 +41,55 @@ import Svg, {
 } from 'react-native-svg';
 import { ScrollView } from 'react-native-gesture-handler';
 import NavigationDrawerStructure from '../../router/NavigationDrawerStructure';
-const { width, height } = Dimensions.get('window');
 
-function calcDistance(x1, y1, x2, y2) {
-    const dx = x1 - x2;
-    const dy = y1 - y2;
-    return Math.sqrt(dx * dx + dy * dy);
-}
 
-function middle(p1, p2) {
-    return (p1 + p2) / 2;
-}
 
-function calcCenter(x1, y1, x2, y2) {
-    return {
-        x: middle(x1, x2),
-        y: middle(y1, y2),
+class SvgRoot extends BaseComponent {
+
+    processTouch = (sx, sy) => {
+        const { transform } = this.props;
+        const { currentPath } = this.state;
+        const { translateX, translateY, scaleX, scaleY } = transform;
+        const x = (sx - translateX) / scaleX;
+        const y = (sy - translateY) / scaleY;
+        if (!currentPath) {
+            this.setState({ currentPath: `M${x},${y}` });
+        } else {
+            this.setState({ currentPath: `${currentPath}L${x},${y}` });
+        }
     };
-}
 
-class TournamentFixture extends BaseComponent {
-
-    static navigationOptions = ({ navigation }) => {
-
-        return {
-            headerTitle: (
-                <View style={{
-                    flexDirection: 'row',
-                    //alignItems: 'center'
-                }}><MyText
-                    style={defaultStyle.bold_text_12}>{navigation.getParam('title')}
-                    </MyText></View>),
-            headerTitleStyle: defaultStyle.headerStyle,
-
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true} />
-            ,
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => {
-                        //navigation.navigate('SwitchPlayer')
-                    }}
-                    activeOpacity={.8}
-                >
-                    <Text
-                        style={{
-                            marginRight: 12,
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 10,
-                            color: '#667DDB'
-                        }} >Refresh</Text>
-                </TouchableOpacity>
-
-            )
+    componentWillMount() {
+        const noop = () => { };
+        const yes = () => true;
+        const shouldRespond = () => {
+            return this.props.drawing;
         };
+        this._panResponder = PanResponder.create({
+            onPanResponderGrant: noop,
+            onPanResponderTerminate: noop,
+            onShouldBlockNativeResponder: yes,
+            onMoveShouldSetPanResponder: shouldRespond,
+            onStartShouldSetPanResponder: shouldRespond,
+            onPanResponderTerminationRequest: shouldRespond,
+            onMoveShouldSetPanResponderCapture: shouldRespond,
+            onStartShouldSetPanResponderCapture: shouldRespond,
+            onPanResponderMove: ({ nativeEvent: { touches } }) => {
+                const { length } = touches;
+                if (length === 1) {
+                    const [{ pageX, pageY }] = touches;
+                    this.processTouch(pageX, pageY);
+                }
+            },
+            onPanResponderRelease: () => {
+                this.setState(({ paths, currentPath }) => ({
+                    paths: [...paths, currentPath],
+                    currentPath: null,
+                }));
+            },
+        });
+    }
 
-    };
 
     constructor(props) {
         super(props)
@@ -105,9 +104,8 @@ class TournamentFixture extends BaseComponent {
             tournament_name: '',
             academy_name: 'Test Academy',
             winner: null,
-            zoom: 1,
-            left: 0,
-            top: 0,
+            paths: [],
+            currentPath: null,
 
         }
 
@@ -154,105 +152,6 @@ class TournamentFixture extends BaseComponent {
         this.state.data = json
         this.showFixture(json)
     }
-
-    processPinch(x1, y1, x2, y2) {
-        const distance = calcDistance(x1, y1, x2, y2);
-        const { x, y } = calcCenter(x1, y1, x2, y2);
-
-        if (!this.state.isZooming) {
-            const { top, left, zoom } = this.state;
-            this.setState({
-                isZooming: true,
-                initialX: x,
-                initialY: y,
-                initialTop: top,
-                initialLeft: left,
-                initialZoom: zoom,
-                initialDistance: distance,
-            });
-        } else {
-            const {
-                initialX,
-                initialY,
-                initialTop,
-                initialLeft,
-                initialZoom,
-                initialDistance,
-            } = this.state;
-
-            const touchZoom = distance / initialDistance;
-            const dx = x - initialX;
-            const dy = y - initialY;
-
-            const left = (initialLeft + dx - x) * touchZoom + x;
-            const top = (initialTop + dy - y) * touchZoom + y;
-            const zoom = initialZoom * touchZoom;
-
-            this.setState({
-                zoom,
-                left,
-                top,
-            });
-        }
-    }
-
-    processTouch(x, y) {
-        if (!this.state.isMoving || this.state.isZooming) {
-            const { top, left } = this.state;
-            this.setState({
-                isMoving: true,
-                isZooming: false,
-                initialLeft: left,
-                initialTop: top,
-                initialX: x,
-                initialY: y,
-            });
-        } else {
-            const { initialX, initialY, initialLeft, initialTop } = this.state;
-            const dx = x - initialX;
-            const dy = y - initialY;
-            this.setState({
-                left: initialLeft + dx,
-                top: initialTop + dy,
-            });
-        }
-    }
-
-    componentWillMount() {
-        this._panResponder = PanResponder.create({
-            onPanResponderGrant: () => { },
-            onPanResponderTerminate: () => { },
-            onMoveShouldSetPanResponder: () => true,
-            onStartShouldSetPanResponder: () => false,
-            onShouldBlockNativeResponder: () => true,
-            onPanResponderTerminationRequest: () => true,
-            onMoveShouldSetPanResponderCapture: () => true,
-            onStartShouldSetPanResponderCapture: () => { return false },
-            onPanResponderMove: evt => {
-                const touches = evt.nativeEvent.touches;
-                const length = touches.length;
-                if (length === 1) {
-                    const [{ locationX, locationY }] = touches;
-                    this.processTouch(locationX, locationY);
-                } else if (length === 2) {
-                    const [touch1, touch2] = touches;
-                    this.processPinch(
-                        touch1.locationX,
-                        touch1.locationY,
-                        touch2.locationX,
-                        touch2.locationY
-                    );
-                }
-            },
-            onPanResponderRelease: () => {
-                this.setState({
-                    isZooming: false,
-                    isMoving: false,
-                });
-            },
-        });
-    }
-
 
     getFixtureData() {
 
@@ -685,14 +584,6 @@ class TournamentFixture extends BaseComponent {
     }
 
     render() {
-
-        // let array = [
-        //     //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H","A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
-        //     //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
-        //     ["A", "B", "C", "D", "E", "F", "G", "H"],
-        //     ["A", "C", "E", "H"],
-        //     ["A", "E"]
-        // ]
 
         let array = this.state.array
         let container = []
@@ -1317,43 +1208,126 @@ class TournamentFixture extends BaseComponent {
 
         }
 
-        // if (this.props.data.loading && array.length == 0) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
-        console.warn('Show => ', this.state.is_show_dialog)
-        const viewBoxSize = 65;
-        const { left, top, zoom } = this.state;
-        const resolution = viewBoxSize / Math.min(height, width);//.09//
-        console.log('resolution=>' + resolution)
-
+        const { paths, currentPath } = this.state;
+        const { transform } = this.props;
         return (
 
-            <View  {...this._panResponder.panHandlers}>
-                <Svg
-
-                    width={width}
-                    height={height}
-                    viewBox="0 0 65 65"
-                    preserveAspectRatio="xMinYMin meet">
-                    <G
-                        transform={{
-                            translateX: left * resolution,
-                            translateY: top * resolution,
-                            scale: zoom,
-                        }}>
-                        {container}
+            // <View {...this._panResponder.panHandlers}>
+            //     <Svg width={width} height={height} style={styles.absfill}>
+            //         {container}
+            //     </Svg>
+            // </View>
+        
+            <View {...this._panResponder.panHandlers}>
+                {/* <Svg width={width} height={height} style={styles.absfill}>
+                {container}
+                </Svg> */}
+                <Svg width={width} height={height} style={styles.absfill}>
+                    <G transform={transform}>
+                    {container}
                     </G>
                 </Svg>
-
             </View>
-
+       
         );
     }
 }
+
+class TournamentFixture extends Component {
+
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            data: null,
+            drawing: false,
+        }
+
+        let data = this.props.navigation.getParam('data')
+        this.state.data = data
+    }
+
+
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            headerTitle: (
+                <View style={{
+                    flexDirection: 'row',
+                    //alignItems: 'center'
+                }}><MyText
+                    style={defaultStyle.bold_text_12}>{navigation.getParam('title')}
+                    </MyText></View>),
+            headerTitleStyle: defaultStyle.headerStyle,
+
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true} />
+            ,
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        //navigation.navigate('SwitchPlayer')
+                    }}
+                    activeOpacity={.8}
+                >
+                    <Text
+                        style={{
+                            marginRight: 12,
+                            fontFamily: 'Quicksand-Regular',
+                            fontSize: 10,
+                            color: '#667DDB'
+                        }} >Refresh</Text>
+                </TouchableOpacity>
+
+            )
+        };
+
+    };
+
+
+    toggleDrawing = () => {
+        this.setState(({ drawing }) => ({
+            drawing: !drawing,
+        }));
+    };
+
+    render() {
+
+        const { drawing } = this.state;
+
+        return (
+            <View style={[styles.container, styles.absfill]}>
+                <ZoomableSvg
+                    align="start"
+                    vbWidth={500}
+                    vbHeight={500}
+                    width={width}
+                    height={height}
+                    initialTop={0}
+                    initialLeft={0}
+                    initialZoom={1}
+                    doubleTapThreshold={300}
+                    meetOrSlice="meet"
+                    svgRoot={SvgRoot}
+                    lock={drawing}
+                    childProps={this.props}
+                    constrain={constraints}
+                />
+
+            </View>
+        );
+    }
+}
+
+
+
+const constraints = {
+    combine: 'dynamic',
+    scaleExtent: [width / height, 5],
+    translateExtent: [[0, 0], [100, 100]],
+};
+
 const mapStateToProps = state => {
     return {
         data: state.TournamentReducer,
@@ -1368,7 +1342,24 @@ export default connect(mapStateToProps, mapDispatchToProps)(TournamentFixture);
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        width: '100%',
-        height: '100%'
+        width: width,
+        height: height
+    },
+    container: {
+        backgroundColor: '#ecf0f1',
+        width: width,
+        height: height
+    },
+    absfill: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+    },
+    button: {
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
     },
 });

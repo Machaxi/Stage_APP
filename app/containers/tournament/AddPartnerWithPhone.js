@@ -93,7 +93,7 @@ export default class AddPartnerWithPhone extends BaseComponent {
                     }}
                 >
                     <Text style={style.text}>
-                        Phone Number
+                        Mobile Number
                     </Text>
 
                     <TextInput

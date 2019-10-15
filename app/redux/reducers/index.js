@@ -28,6 +28,7 @@ import ChallengeLeaderboardReducer from './ChallengeLeaderboardReducer'
 import EditPartnerReducer from './EditPartnerReducer'
 import RelationReducer from './RelationReducer'
 import BrowseAcademyReducer from './BrowseAcademyReducer'
+import AcademyBatchReducer from './AcademyBatchReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -58,7 +59,8 @@ const rootReducer = combineReducers({
     ChallengeLeaderboardReducer,
     EditPartnerReducer,
     RelationReducer,
-    BrowseAcademyReducer
+    BrowseAcademyReducer,
+    AcademyBatchReducer
 });
 
 export default rootReducer
