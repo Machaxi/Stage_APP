@@ -158,6 +158,7 @@ class TournamentFixture extends BaseComponent {
     processPinch(x1, y1, x2, y2) {
         const distance = calcDistance(x1, y1, x2, y2);
         const { x, y } = calcCenter(x1, y1, x2, y2);
+        console.log('processPinch', x + '==' + y)
 
         if (!this.state.isZooming) {
             const { top, left, zoom } = this.state;
@@ -685,14 +686,6 @@ class TournamentFixture extends BaseComponent {
     }
 
     render() {
-
-        // let array = [
-        //     //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H","A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
-        //     //["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
-        //     ["A", "B", "C", "D", "E", "F", "G", "H"],
-        //     ["A", "C", "E", "H"],
-        //     ["A", "E"]
-        // ]
 
         let array = this.state.array
         let container = []
@@ -1317,13 +1310,6 @@ class TournamentFixture extends BaseComponent {
 
         }
 
-        // if (this.props.data.loading && array.length == 0) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        //             <ActivityIndicator size="large" color="#67BAF5" />
-        //         </View>
-        //     )
-        // }
         console.warn('Show => ', this.state.is_show_dialog)
         const viewBoxSize = 65;
         const { left, top, zoom } = this.state;
