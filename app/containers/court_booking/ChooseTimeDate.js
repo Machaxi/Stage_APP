@@ -1171,16 +1171,43 @@ class ChooseTimeDate extends BaseComponent {
         this.setState({ modalVisible: visible });
     }
 
-    getSportImage(id) {
-        switch (id) {
-            case 1:
+    getSportImage(element) {
+
+        let id = element.id
+        let is_selected = element.is_selected
+        if(id==1){
+            if(is_selected){
                 return require('../../images/sport_badminton.png')
-            case 2:
-                return require('../../images/sport_swiming.png')
-            case 3:
-                return require('../../images/sport_cricket.png')
+            }else{
+                return require('../../images/sport_badminton.png')
+            }
         }
-        return require('../../images/soccer-ball.png')
+        else if(id==2){
+            if(is_selected){
+                return require('../../images/sport_swiming.png')
+            }else{
+                return require('../../images/sport_swiming.png')
+            }
+        }
+        else if(id==3){
+            if(is_selected){
+                return require('../../images/sport_cricket.png')
+            }else{
+                return require('../../images/sport_cricket.png')
+            }
+        }else{
+            return require('../../images/soccer-ball.png')
+        }
+
+        // switch (id) {
+        //     case 1:
+        //         return require('../../images/sport_badminton.png')
+        //     case 2:
+        //         return require('../../images/sport_swiming.png')
+        //     case 3:
+        //         return require('../../images/sport_cricket.png')
+        // }
+        // return require('../../images/soccer-ball.png')
     }
 
     render() {
@@ -1237,7 +1264,7 @@ class ChooseTimeDate extends BaseComponent {
                                                 <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
                                                     <Image
                                                         resizeMode="contain"
-                                                        source={this.getSportImage(element.id)}
+                                                        source={this.getSportImage(element)}
                                                         style={{
                                                             width: 25,
                                                             height: 25
@@ -1517,7 +1544,7 @@ class ChooseTimeDate extends BaseComponent {
                                     <Text style={styles.headingLabel}>Reschedule/Cancellation</Text>
                                     <View style={{ marginTop: 12 }}>
                                         <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>
-                                            {}
+                                        {this.state.selectedSportTimeData.cancellation_policy}
                                         </Text>
                                     </View>
                                 </View>

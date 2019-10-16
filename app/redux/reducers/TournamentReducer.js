@@ -104,7 +104,7 @@ export function getTournamentResultListing(header, filter) {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/results?${filter}`,
+                url: `global/tournament/results?${filter}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

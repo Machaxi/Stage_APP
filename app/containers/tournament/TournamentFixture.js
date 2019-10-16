@@ -254,6 +254,18 @@ class TournamentFixture extends BaseComponent {
         });
     }
 
+    goToPlayerDetail(id){
+
+        let user_type = this.state.user_type
+        if(user_type!=null && user_type!=''){
+            this.props.navigation.navigate('OtherPlayerDeatils', {
+                player_id: id,
+                fixture: true
+            })
+        }
+        
+    }
+
 
     getFixtureData() {
 
@@ -842,10 +854,11 @@ class TournamentFixture extends BaseComponent {
                                 let id = array[i][j].id
                                 console.warn("playerid : " + id)
                                 if (id != undefined) {
-                                    this.props.navigation.navigate('OtherPlayerDeatils', {
-                                        player_id: id,
-                                        fixture: true
-                                    })
+                                    // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    //     player_id: id,
+                                    //     fixture: true
+                                    // })
+                                    this.goToPlayerDetail(id)
                                 }
                             }
 
@@ -921,10 +934,11 @@ class TournamentFixture extends BaseComponent {
                                         let id = array[i][j].id
                                         console.warn("playerid : " + id)
                                         if (id != undefined) {
-                                            this.props.navigation.navigate('OtherPlayerDeatils', {
-                                                player_id: id,
-                                                fixture: true
-                                            })
+                                            // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                            //     player_id: id,
+                                            //     fixture: true
+                                            // })
+                                            this.goToPlayerDetail(id)
                                         }
                                     }
                                 }}
@@ -1261,10 +1275,11 @@ class TournamentFixture extends BaseComponent {
                                 let id = array[i][j].id
                                 console.warn("playerid : " + id)
                                 if (id != undefined) {
-                                    this.props.navigation.navigate('OtherPlayerDeatils', {
-                                        player_id: id,
-                                        fixture: true
-                                    })
+                                    // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    //     player_id: id,
+                                    //     fixture: true
+                                    // })
+                                    this.goToPlayerDetail(id)
                                 }
                             }
                         }}

@@ -81,7 +81,7 @@ export default class TournamentGallerySlider extends BaseComponent {
                 /> */}
 
                 <FastImage
-                    resizeMode={FastImage.resizeMode.contain}
+                    resizeMode={FastImage.resizeMode.center}
                     style={{
                         width: "100%",
                         height: 150,

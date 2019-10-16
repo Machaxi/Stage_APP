@@ -158,7 +158,9 @@ class AcademyListing extends BaseComponent {
     getAcademyList(query) {
 
         const job_vacancy = this.state.job_vacancy
-        this.props.getAllAcademy(query, job_vacancy).then(() => {
+        const book_court = this.state.book_court
+        
+        this.props.getAllAcademy(query, job_vacancy,book_court).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
