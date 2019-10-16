@@ -11,6 +11,7 @@ import { ACADEMY, COACH } from '../../../components/Constants';
 import BaseComponent, { defaultStyle, EVENT_REFRESH_PLAYER } from '../../BaseComponent';
 import Events from '../../../router/events';
 import Spinner from 'react-native-loading-spinner-overlay';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 class UpdatePlayerPerformence extends BaseComponent {
 
@@ -375,8 +376,11 @@ class UpdatePlayerPerformence extends BaseComponent {
                     </CustomeButtonB>
                         </View>
 
+
                     </View>
                 </ScrollView>
+
+                <KeyboardSpacer/>
 
             </View>;
         } else {

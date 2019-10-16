@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, RefreshControl,ScrollView,ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, getFormatTime } from '../BaseComponent';
 import { Card } from 'react-native-paper';
 import { getData, isSignedIn } from "../../components/auth";
@@ -18,6 +18,7 @@ class CurrentBooking extends BaseComponent {
         this.state = {
             bookingsData: null,
             spinner: false,
+            refreshing: false,
         };
     }
 
@@ -29,6 +30,15 @@ class CurrentBooking extends BaseComponent {
             this.checkAndGet()
         });
     }
+
+    onRefresh = () => {
+
+        this.setState({ refreshing: true });
+        this.checkAndGet()
+        setTimeout(() => {
+            this.setState({ refreshing: false });
+        }, 1000);
+    };
 
     checkAndGet() {
         isSignedIn()
@@ -224,7 +234,20 @@ class CurrentBooking extends BaseComponent {
         }
 
         return (
+
             <View style={styles.bookingContainer}>
+            <ScrollView
+            
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                            title="Pull to refresh"
+                        />
+                    }>
+
+                    
+            <View >
 
                 <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
                 />
@@ -247,12 +270,7 @@ class CurrentBooking extends BaseComponent {
                         renderItem={this._renderItem}
                     />}
 
-                <View
-                    style={{
-                        alignSelf: 'flex-end',
-                        flexDirection: 'row',
-                        margin: 12,
-                    }}>
+                
 
                     {/* <TouchableOpacity>
 
@@ -265,24 +283,35 @@ class CurrentBooking extends BaseComponent {
                         style={styles.rounded_button}>
                         Book and Play</Text>
                         </TouchableOpacity> */}
-                    <View style={{
-                        width: "100%"
-                    }}>
-                        <SkyFilledButton
-                            onPress={() => {
-                                this.props.navigation.navigate('AcademyListing', {
-                                    book_court: true,
-                                    title: 'Book and Play',
-                                    show_back: true
-                                })
-                            }}
-                        >Book and Play</SkyFilledButton>
-                    </View>
+                    
 
-                </View>
+                
 
             </View>
+            
+            </ScrollView>
 
+            <View
+            style={{
+                alignSelf: 'flex-end',
+                flexDirection: 'row',
+                margin: 12,
+            }}>
+            <View style={{
+                width: "100%"
+            }}>
+                <SkyFilledButton
+                    onPress={() => {
+                        this.props.navigation.navigate('AcademyListing', {
+                            book_court: true,
+                            title: 'Book and Play',
+                            show_back: true
+                        })
+                    }}
+                >Book and Play</SkyFilledButton>
+            </View>
+            </View>
+            </View>
         )
     }
 }

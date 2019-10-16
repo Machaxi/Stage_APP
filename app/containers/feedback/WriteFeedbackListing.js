@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { getCoachListing, postFeedbackMultiple } from '../../redux/reducers/FeedbackReduer'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import StarRating from 'react-native-star-rating';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 
 class WriteFeedbackListing extends BaseComponent {
@@ -400,6 +401,8 @@ class WriteFeedbackListing extends BaseComponent {
                             >Submit</SkyFilledButton>
                         </View>
                         : null}
+
+                    <KeyboardSpacer/>
 
                 </View>
             </ScrollView >

@@ -192,10 +192,10 @@ class PlayerBatchComponent extends BaseComponent {
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                    <View style={{ flexDirection: 'row', marginTop: 5,justifyContent: 'space-between' }}>
                         <Text style={[defaultStyle.regular_text_14, {
                             textDecorationLine: 'line-through',
-                            justifyContent: 'space-between'
+                            
                         }]}>
                             {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
                             {getUtcDateFromTime(session_date, start_time)}

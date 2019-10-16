@@ -1002,7 +1002,8 @@ class ChooseTimeDate extends BaseComponent {
             this.setState({
                 calendarData: datePickerData,
                 selectedDate: selectedDate,
-                selectedCourtNames: []
+                selectedCourtNames: [],
+                selectedCourtIds:[]
             }, () => {
                 this.getBookingDetails(this.state.selectedDate, this.state.selectedSportsId)
             })
@@ -1131,12 +1132,15 @@ class ChooseTimeDate extends BaseComponent {
         console.log('totalNoOfHours', this.state.totalNoOfHours);
         console.log('totalNoOfHours', this.state.totalCost);
 
+        let selectedDate = moment(this.state.selectedDate,'DD-MM-YYYY').format('YYYY-MM-DD')
+
         var paymentData = {
             court_ids: this.state.selectedCourtIds,
             academy_id: this.state.academyId,
             fees: this.state.totalCost,
             start_time: this.convertMinsToHrsMins_sql(this.state.selectedTimeRange.startTime),
             end_time: this.convertMinsToHrsMins_sql(this.state.selectedTimeRange.endTime),
+            date:selectedDate
         };
 
         isSignedIn()
@@ -1145,9 +1149,13 @@ class ChooseTimeDate extends BaseComponent {
                 let signedIn = res
                 if (signedIn) {
                     this.setModalVisible(false);
-                    this.props.navigation.navigate('PaymentPage', {
-                        paymentData: paymentData
-                    });
+                    setTimeout(()=>{
+
+                        this.props.navigation.navigate('PaymentPage', {
+                            paymentData: paymentData
+                        });
+                    },500)
+                    
                 } else {
                     this.setModalVisible(false);
                     this.props.navigation.navigate('Registration', {
@@ -1165,14 +1173,14 @@ class ChooseTimeDate extends BaseComponent {
 
     getSportImage(id) {
         switch (id) {
-            case "1":
-                return '../../images/sport_badminton.png'
+            case 1:
+                return require('../../images/sport_badminton.png')
             case 2:
-                return '../images/sport_swiming.png'
+                return require('../../images/sport_swiming.png')
             case 3:
-                return '../images/sport_cricket.png'
+                return require('../../images/sport_cricket.png')
         }
-        return '../images/soccer-ball.png'
+        return require('../../images/soccer-ball.png')
     }
 
     render() {
@@ -1229,7 +1237,7 @@ class ChooseTimeDate extends BaseComponent {
                                                 <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
                                                     <Image
                                                         resizeMode="contain"
-                                                        source={{uri:'file://'+this.getSportImage(element)}}
+                                                        source={this.getSportImage(element.id)}
                                                         style={{
                                                             width: 25,
                                                             height: 25
@@ -1482,7 +1490,7 @@ class ChooseTimeDate extends BaseComponent {
                                                 activeOpacity={1}
                                                 onPress={() => { this.courtSelector(index) }}>
                                                 <View style={pickerStyle}>
-                                                    <View style={{ marginBottom: 6 }}>
+                                                    <View style={{ marginBottom: 0 }}>
                                                         <Text style={textStyleLarge}>{element.name}</Text>
                                                     </View>
                                                 </View>
@@ -1703,7 +1711,7 @@ class ChooseTimeDate extends BaseComponent {
                                         <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Time</Text></View>
                                     </View>
                                     <View style={styles.paymentValueOuter}>
-                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{moment.utc(new Date(this.state.selectedDate.split('-')[2], this.state.selectedDate.split('-')[1], this.state.selectedDate.split('-')[0])).local().format("DD MMM'YY")}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{moment(this.state.selectedDate,'DD-MM-YYYY').format("DD MMM'YY")}</Text></View>
                                         <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{this.convertMinsToHrsMins(this.state.selectedTimeRange['startTime'])}- {this.convertMinsToHrsMins(this.state.selectedTimeRange['endTime'])}</Text></View>
                                     </View>
                                     <View style={styles.paymentLabelOuter}>
@@ -1940,6 +1948,7 @@ const styles = {
     courtPickerDisabled: {
         height: 38,
         width: 128,
+        alignItems:'center',
         backgroundColor: '#DFDFDF',
         borderRadius: 12,
         justifyContent: 'center',

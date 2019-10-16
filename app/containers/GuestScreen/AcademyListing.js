@@ -455,11 +455,11 @@ class AcademyListing extends BaseComponent {
                     marginTop: 16,
                     marginBottom: 8,
                     borderRadius: 12,
-
+                    
                 }}>
                 <Card style={{
                     borderRadius: 4,
-                    elevation: 8,
+                    elevation: 2,
                     flex: 1,
                     left: 0,
                     position: 'absolute',
@@ -489,7 +489,7 @@ class AcademyListing extends BaseComponent {
                         }} placeholder="Search" />
 
                     <FlatList
-
+                    
                         keyboardShouldPersistTaps={'handled'}
                         data={autoData}
                         renderItem={({ item }) =>
@@ -541,81 +541,7 @@ class AcademyListing extends BaseComponent {
                         }
                     />
 
-                    {/* <Autocomplete
-                        listStyle={{ borderWidth: 0 }}
-                        containerStyle={{
-                            borderWidth: 0,
-                            padding: 0,
-                            margin: 0
-                        }}
-                        ref={this.secondTextInputRef}
-                        inputContainerStyle={{
-                            marginTop: 2,
-                            marginBottom: 2,
-                            backgroundColor: 'white',
-                            borderWidth: 0,
-                        }}
-                        style={{
-                            fontFamily: 'Quicksand-Regular',
-                            borderRadius: 4
-                        }}
-                        data={autoData}
-                        defaultValue={this.state.query}
-                        onChangeText={text => {
-                            this.state.query = text
-                            //console.warn(text)
-                            this.getAutoSuggestion()
-                        }}
-                        onSubmitEditing={() => {
-                            this.state.suggestionResult = []
-                            this.getAcademicSearchResult(true)
-                        }}
-                        placeholder="Search"
-                        onKeyPress={this.handleKeyDown}
-                        returnKeyType='search'
-                        renderItem={({ item, i }) =>
-                            (
-                                <View >
-                                    {item.is_first ?
-                                        <Text
-                                            style={{
-                                                backgroundColor: '#ECECEC',
-                                                color: 'black',
-                                                paddingTop: 4,
-                                                paddingBottom: 4,
-                                                fontSize: 12,
-                                                fontFamily: 'Quicksand-Regular'
-                                            }}
-                                        >{item.is_academy ? "Academies by name" : "Academies by location"}</Text>
-                                        :
-                                        null
-                                    }
-
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            {
-                                                this.state.suggestionResult = []
-                                                if (!item.is_academy) {
-                                                    this.state.query = item.name
-                                                    this.getAcademicSearchResult(true)
-                                                } else {
-                                                    this.props.navigation.navigate('AcademyProfile', { id: item.id })
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <Text style={{
-                                            fontSize: 14,
-                                            padding: 6,
-                                            color: '#000000',
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>{item.name}</Text>
-                                    </TouchableOpacity>
-
-                                </View>
-
-                            )}
-                    /> */}
+                    
 
                 </Card>
 
@@ -838,11 +764,18 @@ class AcademyListing extends BaseComponent {
 
         return (
             <View style={styles.chartContainer}>
+                <View style={{
+                    zIndex:10
+                }}>
                 {
                     this.listHeader()
                 }
+                </View>
                 {this.state.academies.length > 0 ?
                     <FlatList
+                    style={{
+                    zIndex:1
+                    }}
                         onRefresh={() => this.onRefresh()}
                         refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}

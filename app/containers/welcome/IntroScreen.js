@@ -76,7 +76,7 @@ export default class IntroPage extends Component {
                     style={{
                         paddingLeft: 20,
                         paddingRight: 20,
-                        paddingBottom: 6,
+                        paddingBottom: Platform.OS == "ios"?20:8,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>

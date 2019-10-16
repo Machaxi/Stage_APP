@@ -63,8 +63,8 @@ global.SELECTED_PLAYER_ID = ''
 //
 
 //PAYMENT_GATEWAY
-export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
-//export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
+//export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
+export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
 
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
