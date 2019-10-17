@@ -105,9 +105,9 @@ class TournamentFixture extends BaseComponent {
             tournament_name: '',
             academy_name: 'Test Academy',
             winner: null,
-            zoom: 1,
+            zoom: 0.09820492746901595,
             left: 0,
-            top: 0,
+            top: 150,
 
         }
 
@@ -158,7 +158,7 @@ class TournamentFixture extends BaseComponent {
     processPinch(x1, y1, x2, y2) {
         const distance = calcDistance(x1, y1, x2, y2);
         const { x, y } = calcCenter(x1, y1, x2, y2);
-        console.log('processPinch', x + '==' + y)
+
 
         if (!this.state.isZooming) {
             const { top, left, zoom } = this.state;
@@ -171,6 +171,8 @@ class TournamentFixture extends BaseComponent {
                 initialZoom: zoom,
                 initialDistance: distance,
             });
+            console.log('processPinch', "x=" + x + ', y=' + y + ", top=" + top + ",left=" + left + ", zoom=" + zoom + ",distance=" + distance)
+
         } else {
             const {
                 initialX,
@@ -254,16 +256,16 @@ class TournamentFixture extends BaseComponent {
         });
     }
 
-    goToPlayerDetail(id){
+    goToPlayerDetail(id) {
 
         let user_type = this.state.user_type
-        if(user_type!=null && user_type!=''){
+        if (user_type != null && user_type != '') {
             this.props.navigation.navigate('OtherPlayerDeatils', {
                 player_id: id,
                 fixture: true
             })
         }
-        
+
     }
 
 

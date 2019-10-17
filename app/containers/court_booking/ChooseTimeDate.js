@@ -1177,21 +1177,21 @@ class ChooseTimeDate extends BaseComponent {
         let is_selected = element.is_selected
         if(id==1){
             if(is_selected){
-                return require('../../images/sport_badminton.png')
+                return require('../../images/sport_badminton_selected.png')
             }else{
                 return require('../../images/sport_badminton.png')
             }
         }
         else if(id==2){
             if(is_selected){
-                return require('../../images/sport_swiming.png')
+                return require('../../images/sport_swiming_selected.png')
             }else{
                 return require('../../images/sport_swiming.png')
             }
         }
         else if(id==3){
             if(is_selected){
-                return require('../../images/sport_cricket.png')
+                return require('../../images/sport_cricket_selected.png')
             }else{
                 return require('../../images/sport_cricket.png')
             }

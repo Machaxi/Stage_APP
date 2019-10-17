@@ -68,7 +68,7 @@ export function getTournamentFixture(header, tournament_id) {
         type: types.GET_TOURNAMENT,
         payload: {
             request: {
-                url: `tournament/${tournament_id}/fixtures`,
+                url: `global/tournament/${tournament_id}/fixtures`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
