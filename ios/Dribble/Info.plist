@@ -46,6 +46,22 @@
 				<string>com.googleusercontent.apps.445376033321-9fsofml577vf7g85nau2ckqol9i24ddh</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>machaxi.test-app.link</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>machaxi.app.link</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -67,7 +83,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>UIAppFonts</key>
