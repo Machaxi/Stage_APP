@@ -74,7 +74,7 @@ class BatchScreen extends BaseComponent {
                                 fontSize: 10,
                                 color: '#667DDB'
                             }}
-                        >Switch Player</Text>
+                        >Switch Academy</Text>
                     </TouchableOpacity>
                     : <Text></Text>
 

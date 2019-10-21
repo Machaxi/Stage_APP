@@ -126,14 +126,15 @@ class BatchDetails extends BaseComponent {
             sessionArray.push(
                 <View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        {/* <Text style={{
-                            margin: 10, textDecorationLine: 'line-through',
-                            fontFamily: 'Quicksand-Medium',
-                            color: '#404040'
-                        }}>{routine_name}</Text> */}
-                        <View style={{ backgroundColor: '#FF7373', margin: 0, borderRadius: 10 }}>
+                        <View style={{ backgroundColor: '#FF7373', margin: 10, borderRadius: 10 }}>
                             <Text style={{
-                                margin: 10, color: 'white'
+                                fontFamily: 'Quicksand-Medium',
+                                fontSize: 10,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                marginTop: 5,
+                                marginBottom: 5,
+                                color: 'white'
                             }}>Canceled</Text>
                         </View>
                     </View>
@@ -144,17 +145,10 @@ class BatchDetails extends BaseComponent {
                         marginRight: 10,
                         marginBottom: 10
                     }}>
-                        <Text style={{
-                            marginRight: 20,
-                            fontSize: 14,
-                            textDecorationLine: 'line-through'
-                        }}>
+                        <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
                             {getUtcDateFromTime(session_date, start_time)}
                         </Text>
-                        <Text style={{
-                            fontSize: 14,
-                            textDecorationLine: 'line-through'
-                        }}>
+                        <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
                             {getFormatTimeDate(session_date, start_time)
                                 + "  -   " +
                                 getFormatTimeDate(session_date, end_time)}

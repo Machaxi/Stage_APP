@@ -5,7 +5,8 @@
   "scripts": {
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "node ./android-release-fix.js"
   },
   "dependencies": {
     "@cypchat/rn-parallax-swipe-gallery": "^1.0.0",

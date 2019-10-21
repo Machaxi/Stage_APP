@@ -509,7 +509,7 @@ class PhoneAuth extends BaseComponent {
                     onPress={() => {
                         this.signInByName(null, null)
                     }}>Login by name</Text> */}
-                <TouchableOpacity activeOpacity={.8}
+                {/* <TouchableOpacity activeOpacity={.8}
                     style={[defaultStyle.rounded_button,
                     {
                         marginTop: 16,
@@ -525,7 +525,7 @@ class PhoneAuth extends BaseComponent {
                             fontFamily: 'Quicksand-Medium'
                         }}>
                         Login by name</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity
                     style={{

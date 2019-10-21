@@ -111,7 +111,7 @@ export default class BaseComponent extends React.Component {
         });
     }
 
-    
+
 
     setNavigation(navigation) {
         myNavigation = navigation
@@ -168,6 +168,12 @@ export default class BaseComponent extends React.Component {
                                 this.props.navigation.navigate('CoachRewardPoints')
                             else if (userType == PARENT)
                                 this.props.navigation.navigate('ParentRewards')
+                            break
+
+                        case 'coach_job_vacancy':
+                            this.props.navigation.navigate('AcademyListing', {
+                                vacancy: true
+                            })
                             break
 
                         case 'rewards_due_player':

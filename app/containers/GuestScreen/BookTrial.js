@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Platform, Alert, ActivityIndicator, StyleSheet, TouchableOpacity, Image, BackHandler } from 'react-native'
+import { View, ImageBackground, Text, TextInput, Linking, Platform, Alert, ActivityIndicator, StyleSheet, TouchableOpacity, Image, BackHandler } from 'react-native'
 import BaseComponent, { defaultStyle, getFormatTime, } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { getData, storeData, isSignedIn } from '../../components/auth';
@@ -152,6 +152,19 @@ class BookTrial extends BaseComponent {
                         '',
                         success_message,
                         [
+                            {
+                                text: 'Call',
+                                onPress: () => {
+
+                                    if (mobile_number) {
+                                        Linking.openURL(`tel:${mobile_number}`)
+                                        setTimeout(() => {
+                                            this.props.navigation.goBack()
+                                        }, 500)
+                                    }
+                                },
+                                //style: 'cancel',
+                            },
                             {
                                 text: 'OK', onPress: () => {
                                     this.props.navigation.goBack()

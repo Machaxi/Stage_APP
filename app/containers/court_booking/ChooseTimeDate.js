@@ -1003,7 +1003,7 @@ class ChooseTimeDate extends BaseComponent {
                 calendarData: datePickerData,
                 selectedDate: selectedDate,
                 selectedCourtNames: [],
-                selectedCourtIds:[]
+                selectedCourtIds: []
             }, () => {
                 this.getBookingDetails(this.state.selectedDate, this.state.selectedSportsId)
             })
@@ -1040,6 +1040,7 @@ class ChooseTimeDate extends BaseComponent {
                 }
                 courts[selectedIndex]['pricing_plan'].map((element, index) => {
                     if (element.time_interval == this.state.selectedDuration) {
+                        console.log('minus---', totalCost + "-" + element.price)
                         totalCost = totalCost - element.price;
                         totalNoOfHours = totalNoOfHours - element.time_interval;
                     }
@@ -1050,6 +1051,10 @@ class ChooseTimeDate extends BaseComponent {
 
         }
 
+        // if (totalCost < 0) {
+        //     totalCost = 0
+        // }
+        
         console.log('totalCost', totalCost);
         console.log('courtIds', courtIds);
         this.setState({
@@ -1132,7 +1137,7 @@ class ChooseTimeDate extends BaseComponent {
         console.log('totalNoOfHours', this.state.totalNoOfHours);
         console.log('totalNoOfHours', this.state.totalCost);
 
-        let selectedDate = moment(this.state.selectedDate,'DD-MM-YYYY').format('YYYY-MM-DD')
+        let selectedDate = moment(this.state.selectedDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
 
         var paymentData = {
             court_ids: this.state.selectedCourtIds,
@@ -1140,7 +1145,7 @@ class ChooseTimeDate extends BaseComponent {
             fees: this.state.totalCost,
             start_time: this.convertMinsToHrsMins_sql(this.state.selectedTimeRange.startTime),
             end_time: this.convertMinsToHrsMins_sql(this.state.selectedTimeRange.endTime),
-            date:selectedDate
+            date: selectedDate
         };
 
         isSignedIn()
@@ -1149,13 +1154,13 @@ class ChooseTimeDate extends BaseComponent {
                 let signedIn = res
                 if (signedIn) {
                     this.setModalVisible(false);
-                    setTimeout(()=>{
+                    setTimeout(() => {
 
                         this.props.navigation.navigate('PaymentPage', {
                             paymentData: paymentData
                         });
-                    },500)
-                    
+                    }, 500)
+
                 } else {
                     this.setModalVisible(false);
                     this.props.navigation.navigate('Registration', {
@@ -1175,27 +1180,27 @@ class ChooseTimeDate extends BaseComponent {
 
         let id = element.id
         let is_selected = element.is_selected
-        if(id==1){
-            if(is_selected){
+        if (id == 1) {
+            if (is_selected) {
                 return require('../../images/sport_badminton_selected.png')
-            }else{
+            } else {
                 return require('../../images/sport_badminton.png')
             }
         }
-        else if(id==2){
-            if(is_selected){
+        else if (id == 2) {
+            if (is_selected) {
                 return require('../../images/sport_swiming_selected.png')
-            }else{
+            } else {
                 return require('../../images/sport_swiming.png')
             }
         }
-        else if(id==3){
-            if(is_selected){
+        else if (id == 3) {
+            if (is_selected) {
                 return require('../../images/sport_cricket_selected.png')
-            }else{
+            } else {
                 return require('../../images/sport_cricket.png')
             }
-        }else{
+        } else {
             return require('../../images/soccer-ball.png')
         }
 
@@ -1544,7 +1549,7 @@ class ChooseTimeDate extends BaseComponent {
                                     <Text style={styles.headingLabel}>Reschedule/Cancellation</Text>
                                     <View style={{ marginTop: 12 }}>
                                         <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>
-                                        {this.state.selectedSportTimeData.cancellation_policy}
+                                            {this.state.selectedSportTimeData.cancellation_policy}
                                         </Text>
                                     </View>
                                 </View>
@@ -1738,7 +1743,7 @@ class ChooseTimeDate extends BaseComponent {
                                         <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Time</Text></View>
                                     </View>
                                     <View style={styles.paymentValueOuter}>
-                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{moment(this.state.selectedDate,'DD-MM-YYYY').format("DD MMM'YY")}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{moment(this.state.selectedDate, 'DD-MM-YYYY').format("DD MMM'YY")}</Text></View>
                                         <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{this.convertMinsToHrsMins(this.state.selectedTimeRange['startTime'])}- {this.convertMinsToHrsMins(this.state.selectedTimeRange['endTime'])}</Text></View>
                                     </View>
                                     <View style={styles.paymentLabelOuter}>
@@ -1975,7 +1980,7 @@ const styles = {
     courtPickerDisabled: {
         height: 38,
         width: 128,
-        alignItems:'center',
+        alignItems: 'center',
         backgroundColor: '#DFDFDF',
         borderRadius: 12,
         justifyContent: 'center',
