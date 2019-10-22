@@ -100,7 +100,7 @@ class ParentRewardComponent extends BaseComponent {
         console.warn(obj)
         let player_dues = obj.player_dues
         let player_history = obj.player_history
-        player_history = this.filterRewards(player_history)
+        //player_history = this.filterRewards()
         let history_view = [];
         for (let i = 0; i < player_history.length; i++) {
             let obj = { ...player_history[i], expand: false }
@@ -286,85 +286,87 @@ class ParentRewardComponent extends BaseComponent {
         for (let i = 0; i < player_history.length; i++) {
 
             let obj = player_history[i]
-            let coach = obj.COACH == undefined ? 0 : obj.COACH
-            let family = obj.FAMILY == undefined ? 0 : obj.FAMILY
+            if (obj.primary == "true") {
 
-            let total = +coach + +family
+                let coach = obj.COACH == undefined ? 0 : obj.COACH
+                let family = obj.FAMILY == undefined ? 0 : obj.FAMILY
 
-            history_view.push(
-                <View>
-                    <TouchableOpacity
-                        activeOpacity={.8}
-                        onPress={() => {
-                            obj.expand = !obj.expand
-                            player_history[i] = obj
-                            this.setState({
-                                player_history: player_history
-                            })
-                            console.warn('player_history => ', JSON.stringify(player_history))
-                        }}
-                    >
+                let total = +coach + +family
 
-                        <View style={{
-                            padding: 12,
-                            marginBottom: 8,
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                        }}>
-                            <Text style={[defaultStyle.regular_text_14, { width: '50%', color: "#707070" }]}>{moment.utc(obj.month, "MM").format("MMMM")}</Text>
-                            <Text style={[defaultStyle.regular_text_14, { width: '45%', color: "#707070" }]}>{~~total}</Text>
+                history_view.push(
+                    <View>
+                        <TouchableOpacity
+                            activeOpacity={.8}
+                            onPress={() => {
+                                obj.expand = !obj.expand
+                                player_history[i] = obj
+                                this.setState({
+                                    player_history: player_history
+                                })
+                                console.warn('player_history => ', JSON.stringify(player_history))
+                            }}
+                        >
 
-                            {obj.expand ?
-                                <Image
-                                    resizeMode="contain"
-                                    style={{
-                                        width: 14,
-                                        marginTop: 3,
-                                        height: 10,
-                                    }}
-                                    source={require('../../images/up_arrow_reward.png')}
-                                /> :
-                                <Image
-                                    resizeMode="contain"
-                                    style={{
-                                        width: 14,
-                                        marginTop: 3,
-                                        height: 10,
-                                    }}
-                                    source={require('../../images/down_arrow_reward.png')}
-                                />}
+                            <View style={{
+                                padding: 12,
+                                marginBottom: 8,
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={[defaultStyle.regular_text_14, { width: '50%', color: "#707070" }]}>{moment.utc(obj.month, "MM").format("MMMM")}</Text>
+                                <Text style={[defaultStyle.regular_text_14, { width: '45%', color: "#707070" }]}>{~~total}</Text>
 
+                                {obj.expand ?
+                                    <Image
+                                        resizeMode="contain"
+                                        style={{
+                                            width: 14,
+                                            marginTop: 3,
+                                            height: 10,
+                                        }}
+                                        source={require('../../images/up_arrow_reward.png')}
+                                    /> :
+                                    <Image
+                                        resizeMode="contain"
+                                        style={{
+                                            width: 14,
+                                            marginTop: 3,
+                                            height: 10,
+                                        }}
+                                        source={require('../../images/down_arrow_reward.png')}
+                                    />}
 
-                        </View>
-                    </TouchableOpacity>
-
-                    {obj.expand ?
-                        <View style={{
-                            backgroundColor: '#F8F8F8',
-                            padding: 12,
-                            flexDirection: 'row'
-                        }}>
-
-                            <View style={{ marginRight: 50 }}>
-                                <Text style={[defaultStyle.bold_text_10, {}]}>Parents</Text>
-                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~family} pts</Text>
 
                             </View>
-                            <View style={{ marginRight: 70 }}>
-                                <Text style={[defaultStyle.bold_text_10, {}]}>Coach</Text>
-                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~coach} pts</Text>
+                        </TouchableOpacity>
 
+                        {obj.expand ?
+                            <View style={{
+                                backgroundColor: '#F8F8F8',
+                                padding: 12,
+                                flexDirection: 'row'
+                            }}>
+
+                                <View style={{ marginRight: 50 }}>
+                                    <Text style={[defaultStyle.bold_text_10, {}]}>Parents</Text>
+                                    <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~family} pts</Text>
+
+                                </View>
+                                <View style={{ marginRight: 70 }}>
+                                    <Text style={[defaultStyle.bold_text_10, {}]}>Coach</Text>
+                                    <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~coach} pts</Text>
+
+                                </View>
+
+                                <View style={{ marginRight: 50 }}>
+                                    <Text style={[defaultStyle.bold_text_10, {}]}>Total</Text>
+                                    <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~total} pts</Text>
+
+                                </View>
                             </View>
-
-                            <View style={{ marginRight: 50 }}>
-                                <Text style={[defaultStyle.bold_text_10, {}]}>Total</Text>
-                                <Text style={[defaultStyle.regular_text_14, { color: "#707070", marginTop: 2, }]}>{~~total} pts</Text>
-
-                            </View>
-                        </View>
-                        : null}
-                </View>)
-
+                            : null}
+                    </View>)
+            }
         }
 
         const selected_item = this.state.selected_item
@@ -445,7 +447,7 @@ class ParentRewardComponent extends BaseComponent {
                                 </View>
 
                                 <Text
-                                    style={defaultStyle.bold_text_14}>Reward {name} for :</Text>
+                                    style={defaultStyle.bold_text_14}>Reward {name} based on:</Text>
 
                                 <View style={{
                                     flexDirection: 'row',

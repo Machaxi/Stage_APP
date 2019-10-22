@@ -3,6 +3,7 @@ package com.dribble;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNTextInputMask.RNTextInputMaskPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import cl.json.RNSharePackage;
@@ -92,6 +93,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
 
       // packages.add(new MainReactPackage(),
+           // new RNTextInputMaskPackage(),
             //new SnackbarPackage());
       // packages.add(new SplashScreenReactPackage());
       // packages.add( new RNSharePackage());

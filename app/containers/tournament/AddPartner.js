@@ -21,7 +21,10 @@ class AddPartner extends BaseComponent {
             query: '',
             item_id:'',
             tournament_id:'',
-            user_id:''
+            user_id:'',
+            page:0,
+            hasMore: true,
+            pagingLoader: false,
         }
         this.state.item_id = this.props.navigation.getParam('id','')
         this.state.tournament_id = this.props.navigation.getParam('tournament_id','')
@@ -36,23 +39,39 @@ class AddPartner extends BaseComponent {
     }
 
     componentDidMount(){
+        this.selfComponentDidMount()
+       
+    }
 
+    selfComponentDidMount(){
         getData('header', (value) => {
 
             let size = 20
-            let page =0
+            let page = this.state.page
             let tournament_id = this.state.tournament_id
 
             this.props.getPartnerList(value,tournament_id,page,size).then(() => {
                 let data = this.props.data.data
                 //console.log(' getPartnerList ' + JSON.stringify(data));
 
+                this.setState({
+                    pagingLoader: false
+
+                })
+                
                 let success = data.success
                 if (success) {
 
+                    this.setState({
+                        hasMore: true,
+
+                    })
+
                     console.log(' getPartnerList ' + JSON.stringify(data.data.tournaments));
                     const array = data.data.players
-                    let players = []
+                    if(array.length>0){
+
+                    let players = [...this.state.players]
                     const user_id = this.state.user_id
 
                     for(let i =0;i<array.length;i++){
@@ -67,12 +86,33 @@ class AddPartner extends BaseComponent {
                     this.setState({
                         players: players
                     })
+                }else{
+                    this.setState({
+                        hasMore: false,
+                    })
+                }
+
+                this.setState({ isRefreshing: false })
+                    
                 }
 
             }).catch((response) => {
                 console.log(response);
+                this.setState({ isRefreshing: false })
             })
         })
+    }
+
+    _progressLoader = ({ }) => {
+
+        if (this.state.pagingLoader) {
+            return (
+                <ActivityIndicator size="large" color="#67BAF5" />
+            )
+        }
+        else {
+            return null
+        }
     }
 
 
@@ -216,6 +256,20 @@ class AddPartner extends BaseComponent {
                 
                 {}
                 <FlatList
+                onEndReachedThreshold={0.1}
+                onEndReached={({ distanceFromEnd }) => {
+                    const hasMore = this.state.hasMore
+                    if (hasMore) {
+                        this.state.pagingLoader = true
+                        console.log('on end reached ', distanceFromEnd);
+                        let page = this.state.page
+                        page = page + 1
+                        this.state.page = page
+                        this.selfComponentDidMount()
+                    }
+
+                }}
+                ListFooterComponent={this._progressLoader}
                     data={autoData}
                     extraData={autoData}
                     renderItem={this._renderItem}

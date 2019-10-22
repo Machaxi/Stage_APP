@@ -29,8 +29,8 @@ import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
-export const BASE_URL = 'http://13.233.182.217:8080/api/'
-//export const BASE_URL = 'http://192.168.3.145:8089/api/'
+export const BASE_URL = 'https://www.machaxi.com/api/'
+//export const BASE_URL = 'http://13.233.182.217:8080/api/'
 
 export const client = axios.create({
     baseURL: BASE_URL,
@@ -97,6 +97,10 @@ client.interceptors.response.use(response => {
             // setTimeout(() => {
             //     Events.publish('LOGOUT');
             // }, 100)
+        }
+        else if (error_code == '1030') {
+            //do nothing
+            // in this case we will not show any popup
         }
         else if (status != 401) {
             console.log('error => ' + JSON.stringify(error.response))
@@ -239,6 +243,7 @@ export default class App extends BaseComponent {
     }
 
     onOpened(openResult) {
+       
         global.NOTIFICATION_DATA = openResult.notification.payload.additionalData
 
         //alert(JSON.stringify(openResult))
@@ -246,6 +251,9 @@ export default class App extends BaseComponent {
         //  console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
         console.log('openResult: ', JSON.stringify(openResult));
+        setTimeout(()=>{
+            Events.publish('NOTIFICATION_CLICKED');
+        },100)
     }
 
     componentWillUnmount() {
@@ -260,7 +268,7 @@ export default class App extends BaseComponent {
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
         global.FCM_DEVICE_ID = device.pushToken
-        global.ONE_SIGNAL_USERID =  device.userId
+        global.ONE_SIGNAL_USERID = device.userId
         //alert('onIds ',  device)
         console.log('Device info: ', device)
     }
@@ -352,7 +360,7 @@ export default class App extends BaseComponent {
         if (Platform.OS == 'ios') {
             link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
         } else {
-            link = 'market://details?id=com.whatsapp'
+            link = 'market://details?id=com.machaxi'
         }
         Linking.canOpenURL(link).then(supported => {
             supported && Linking.openURL(link);

@@ -23,6 +23,8 @@ class CourtAcademyListing extends BaseComponent {
             isAutoSuggest: false,
 
         }
+
+       
     }
 
     componentDidMount() {

@@ -475,7 +475,7 @@ class PlayerSwitcher extends BaseComponent {
                         }}>
                             <TouchableOpacity
                                 onPress={() => {
-                                    this.logout()
+                                    this.logout(this.props.navigation)
                                 }}
                             >
 

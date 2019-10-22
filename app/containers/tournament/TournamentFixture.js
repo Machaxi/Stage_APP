@@ -6,7 +6,7 @@ import { getData } from "../../components/auth";
 import { Card, ActivityIndicator, } from 'react-native-paper';
 import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
-import { COACH, PLAYER } from '../../components/Constants'
+import { COACH, PLAYER, ACADEMY } from '../../components/Constants'
 import { Text as MyText } from 'react-native'
 
 import Svg, {
@@ -117,7 +117,8 @@ class TournamentFixture extends BaseComponent {
 
                 let userData = JSON.parse(value)
                 let user_type = userData.user['user_type']
-                this.state.is_coach = user_type == COACH
+                //alert(user_type)
+                this.state.is_coach = user_type == COACH || user_type == ACADEMY
                 this.setState({
                     user_type: user_type
                 })
@@ -491,20 +492,23 @@ class TournamentFixture extends BaseComponent {
                             if (obj.player1_match == undefined) {
 
                                 console.log('player1_match_undefine', JSON.stringify(obj))
-                                let temp_player1 = obj.player1
+                                let temp_player1 = { ...obj.player1 }
                                 if (temp_player1) {
                                     temp_player1['match_id'] = obj.id
                                     temp_player1['player_description'] = obj.player1_description
+                                    temp_player1['is_bye'] = true
+
                                     if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                         firstArray.push(temp_player1)
                                         firstArray.push(temp_player1)
                                     }
 
                                 }
-                                let temp_player2 = obj.player2
+                                let temp_player2 = { ...obj.player2 }
                                 if (temp_player2) {
                                     temp_player2['match_id'] = obj.id
                                     temp_player2['player_description'] = obj.player2_description
+                                    temp_player2['is_bye'] = true
 
                                     if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
                                         firstArray.push(temp_player2)
@@ -527,18 +531,21 @@ class TournamentFixture extends BaseComponent {
                             if (obj.player2_match == undefined) {
                                 console.log('player2_match_undefine', JSON.stringify(obj))
 
-                                let temp_player1 = obj.player1
+                                let temp_player1 = { ...obj.player1 }
                                 if (temp_player1) {
                                     temp_player1['match_id'] = obj.match_number
                                     temp_player1['player_description'] = obj.player1_description
+                                    temp_player1['is_bye'] = true
+
                                     if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                         firstArray.push(temp_player1)
                                     }
                                 }
-                                let temp_player2 = obj.player2
+                                let temp_player2 = { ...obj.player2 }
                                 if (temp_player2) {
                                     temp_player2['match_id'] = obj.match_number
                                     temp_player2['player_description'] = obj.player2_description
+                                    temp_player2['is_bye'] = true
                                     if (!this.isPlayerExistsInArray(firstArray, temp_player2.id)) {
                                         firstArray.push(temp_player2)
                                     }
@@ -603,6 +610,14 @@ class TournamentFixture extends BaseComponent {
             //     }
             // }
             console.log('Final => ', JSON.stringify(playerArray))
+            let temp_first = []
+            for (let l = 0; l < firstArray.length; l++) {
+                let obj = firstArray[l]
+                if (obj.id) {
+                    temp_first.push(obj)
+                }
+            }
+            firstArray = temp_first
 
             if (firstArray.length != 0)
                 playerArray[0] = firstArray

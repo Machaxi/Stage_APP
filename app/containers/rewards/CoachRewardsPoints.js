@@ -289,7 +289,7 @@ class CoachRewardsPoints extends BaseComponent {
                     {alert ?
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={[defaultStyle.regular_text_14, { marginTop: 40 }]}>
-                                No data found.
+                            Wow!! No Dues remaining.
                     </Text>
                         </View> : null}
 

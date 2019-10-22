@@ -13,7 +13,7 @@ import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
 import firebase from 'react-native-firebase';
-import BaseComponent, { defaultStyle,camelCase, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
+import BaseComponent, { defaultStyle, camelCase, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
 import { getRelationsDetails, logout } from "../redux/reducers/RelationReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
@@ -447,7 +447,7 @@ class CoachMenuDrawer extends BaseComponent {
 	callApi() {
 		getData('header', (value) => {
 
-			this.logout()
+			this.logout(this.props.navigation)
 
 			this.props.logout(value).then(() => {
 				let data = this.props.data.profileData
@@ -689,17 +689,18 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('CoachMyFeedbackListing')}>
-					<View style={styles.drawercell}>
-						<Text style={styles.menu_coach}>View my Feedback</Text>
-						<Image
-							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						/>
-					</View>
-				</TouchableOpacity>
-
+				{user_type == COACH ?
+					<TouchableOpacity activeOpacity={0.8} onPress={() =>
+						this.props.navigation.navigate('CoachMyFeedbackListing')}>
+						<View style={styles.drawercell}>
+							<Text style={styles.menu_coach}>View my Feedback</Text>
+							<Image
+								style={styles.arrow_img}
+								source={require('../images/ic_drawer_arrow.png')}
+							/>
+						</View>
+					</TouchableOpacity> : null
+				}
 				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('CoachRewardPoints')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Reward Points</Text>
@@ -1292,7 +1293,8 @@ class CoachMenuDrawer extends BaseComponent {
 	shareApp() {
 		this.props.navigation.closeDrawer();
 		setTimeout(() => {
-			const url = 'https://play.google.com/store/apps/'
+			let url = 'https://machaxi.app.link/get-machaxi'
+
 			const shareOptions = {
 				title: 'Share via',
 				message: 'I\'m using Machaxi app.',
@@ -1322,7 +1324,7 @@ class CoachMenuDrawer extends BaseComponent {
 		}
 		//console.warn('profile_pic', profile_pic)
 
-		console.log('signedIn => ', signedIn)
+		//console.log('signedIn => ', signedIn)
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
 			//fullName = "Guest"

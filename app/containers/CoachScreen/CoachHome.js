@@ -169,6 +169,22 @@ class CoachHome extends BaseComponent {
             this.selfComponentDidMount()
         });
 
+        this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD_1', () => {
+            this.selfComponentDidMount()
+        });
+
+
+        this.checkNotification()
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
+            this.checkNotification()
+        });
+
+       
+
+    }
+
+    checkNotification(){
         if (global.NOTIFICATION_DATA) {
             try {
                 let notification_for = global.NOTIFICATION_DATA.notification_for
@@ -178,7 +194,6 @@ class CoachHome extends BaseComponent {
             } catch (err) {
             }
         }
-
     }
 
     getNotifications() {

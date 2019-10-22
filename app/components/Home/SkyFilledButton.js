@@ -31,7 +31,7 @@ export const SkyBorderButton = ({ onPress, children }) => {
             <Text
                 style={{
                     fontSize: 14,
-                    color: '#FFFFFF',
+                    color: '#67BAF5',
                     textAlign: 'center',
                     justifyContent: 'center',
                     fontFamily: 'Quicksand-Medium',

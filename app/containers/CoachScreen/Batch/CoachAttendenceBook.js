@@ -314,7 +314,7 @@ class CoachAttendenceBook extends React.Component {
                         }}
                     >
 
-                        <Text style={defaultStyle.regular_text_14}>No Data found of selected date</Text>
+                        <Text style={defaultStyle.regular_text_14}>Attendance not found for this date.</Text>
                     </View>
 
                 }

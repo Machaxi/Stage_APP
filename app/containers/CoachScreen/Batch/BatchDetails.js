@@ -150,7 +150,7 @@ class BatchDetails extends BaseComponent {
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, { textDecorationLine: 'line-through' }]}>
                             {getFormatTimeDate(session_date, start_time)
-                                + "  -   " +
+                                + " - " +
                                 getFormatTimeDate(session_date, end_time)}
                         </Text>
 
@@ -182,14 +182,14 @@ class BatchDetails extends BaseComponent {
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
                         }}>
-                            {getUtcDateFromTime(session_date, start_time)}                        </Text>
+                            {getUtcDateFromTime(session_date, start_time)}</Text>
                         <Text style={{
                             fontSize: 14,
                             color: '#404040',
                             fontFamily: 'Quicksand-Regular',
                         }}>
                             {getFormatTimeDate(session_date, start_time)
-                                + "  -   " +
+                                + " - " +
                                 getFormatTimeDate(session_date, end_time)}
                         </Text>
 

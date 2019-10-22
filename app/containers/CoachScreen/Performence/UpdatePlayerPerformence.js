@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-import { View, TextInput, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, Platform } from 'react-native';
 import { SwitchButton, CustomeButtonB } from '../../../components/Home/SwitchButton'
 import { getPerformenceOption, savePlayerPerformance } from "../../../redux/reducers/PerformenceReducer";
 import { getData } from "../../../components/auth";
@@ -145,6 +145,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                             padding: 10
                         }}
                         keyboardType={'number-pad'}
+                        value={item.score}
                         //onChangeText={(txtscore) => { item.score = txtscore }}
                         onChangeText={(text) => {
                             if (!this.isNumbericOnly(text)) {
@@ -173,7 +174,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                             console.log('attributes=> ', JSON.stringify(attributes))
 
                         }}
-                    >{item.score}</TextInput>
+                    ></TextInput>
                 </View>
                 <Text style={defaultStyle.regular_text_14}>
                     {item.prev_month_score}
@@ -380,7 +381,10 @@ class UpdatePlayerPerformence extends BaseComponent {
                     </View>
                 </ScrollView>
 
-                <KeyboardSpacer/>
+                {Platform.OS == 'ios' ?
+                    <KeyboardSpacer />
+                    : null}
+
 
             </View>;
         } else {

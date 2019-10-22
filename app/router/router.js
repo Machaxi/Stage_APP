@@ -52,6 +52,7 @@ import CoachGiveRewards from '../containers/rewards/CoachGiveRewards'
 import ParentRewards from '../containers/rewards/ParentRewards'
 import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListing'
 import EditOtherProfile from '../containers/profile/EditOtherProfile'
+import ImageGuidelines from '../containers/profile/ImageGuidelines'
 import TabBarHighlightLabel from './TabBarHighlightLabel'
 import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
 import Registration from "../containers/tournament/Registration";
@@ -136,7 +137,20 @@ const loginModule = createStackNavigator({
 
         })
     },
+    ImageGuidelines: {
+        screen: ImageGuidelines,
+        navigationOptions: ({ navigation }) => ({
+            title: "Image Guidelines",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
+        })
+    },
 
 })
 
@@ -1240,6 +1254,20 @@ const parentHomeModule = createStackNavigator({
 
         })
 
+    },
+    ImageGuidelines: {
+        screen: ImageGuidelines,
+        navigationOptions: ({ navigation }) => ({
+            title: "Image Guidelines",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
     WriteFeedback: {
         screen: WriteFeedback,

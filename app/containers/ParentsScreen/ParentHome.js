@@ -215,6 +215,15 @@ class ParentHome extends BaseComponent {
 
         this.getNotifications()
 
+        this.checkNotification()
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
+            this.checkNotification()
+        });
+
+    }
+
+    checkNotification(){
         if (global.NOTIFICATION_DATA) {
             try {
                 let notification_for = global.NOTIFICATION_DATA.notification_for
@@ -224,7 +233,6 @@ class ParentHome extends BaseComponent {
             } catch (err) {
             }
         }
-
     }
 
     getNotifications() {

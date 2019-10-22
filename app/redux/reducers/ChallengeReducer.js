@@ -25,7 +25,7 @@ export default function ChallengeReducer(state = initialState, action) {
     }
 }
 
-export function getChallengeDashboard(header, academy_id,player_id) {
+export function getChallengeDashboard(header, academy_id, player_id) {
     console.log("getChallengeDashboard", header, academy_id)
 
     return {
@@ -62,14 +62,14 @@ export function createChallenge(header, postData) {
 
 }
 
-export function getOpponentList(header, academy_id, page, size) {
+export function getOpponentList(header, academy_id, page, size, playerId) {
     //console.log("createChallenge", header, academy_id)
 
     return {
         type: types.GET_CHALLENGE,
         payload: {
             request: {
-                url: `challenge/opponent-list?academy_id=${academy_id}&page=${page}&size=${size}`,
+                url: `challenge/opponent-list?academy_id=${academy_id}&player_id=${playerId}&page=${page}&size=${size}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header
@@ -80,7 +80,7 @@ export function getOpponentList(header, academy_id, page, size) {
 
 }
 
-export function acceptChallenge(header, challenge_id,player_id) {
+export function acceptChallenge(header, challenge_id, player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
@@ -98,7 +98,7 @@ export function acceptChallenge(header, challenge_id,player_id) {
 
 }
 
-export function cancelChallenge(header, challenge_id,player_id) {
+export function cancelChallenge(header, challenge_id, player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
@@ -116,7 +116,7 @@ export function cancelChallenge(header, challenge_id,player_id) {
 
 }
 
-export function dismissChallenge(header, challenge_id,player_id) {
+export function dismissChallenge(header, challenge_id, player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
@@ -134,7 +134,7 @@ export function dismissChallenge(header, challenge_id,player_id) {
 
 }
 
-export function abortChallenge(header, challenge_id,player_id) {
+export function abortChallenge(header, challenge_id, player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
@@ -152,7 +152,7 @@ export function abortChallenge(header, challenge_id,player_id) {
 
 }
 
-export function disputeChallenge(header, challenge_id,player_id) {
+export function disputeChallenge(header, challenge_id, player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {
@@ -170,7 +170,7 @@ export function disputeChallenge(header, challenge_id,player_id) {
 
 }
 
-export function getchallengeResults(header, academy_id, month, year,player_id) {
+export function getchallengeResults(header, academy_id, month, year, player_id) {
     //console.log("createChallenge", header, academy_id)
 
     return {

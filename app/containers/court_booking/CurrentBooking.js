@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet, FlatList, RefreshControl,ScrollView,ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, RefreshControl, ScrollView, ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
 import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, getFormatTime } from '../BaseComponent';
 import { Card } from 'react-native-paper';
 import { getData, isSignedIn } from "../../components/auth";
@@ -20,6 +20,15 @@ class CurrentBooking extends BaseComponent {
             spinner: false,
             refreshing: false,
         };
+
+        this.refreshEvent = Events.subscribe('OPEN_LISTING', () => {
+            this.props.navigation.navigate('AcademyListing', {
+                book_court: true,
+                title: 'Book and Play',
+                show_back: true
+            })
+        });
+
     }
 
     componentDidMount() {
@@ -236,8 +245,8 @@ class CurrentBooking extends BaseComponent {
         return (
 
             <View style={styles.bookingContainer}>
-            <ScrollView
-            
+                <ScrollView
+
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.refreshing}
@@ -246,33 +255,34 @@ class CurrentBooking extends BaseComponent {
                         />
                     }>
 
-                    
-            <View >
 
-                <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
-                />
+                    <View >
 
-                {this.state.bookingsData != null && this.state.bookingsData.length == 0
-                    ?
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        flex: 1,
-                        alignItems: 'center'
-                    }}>
-                        <Text style={styles.text}>No Bookings</Text>
-                    </View>
-                    :
-                    <FlatList
-                        ListHeaderComponent={this._renderHeaderItem}
-                        data={this.state.bookingsData}
-                        extraData={bookingsData}
-                        renderItem={this._renderItem}
-                    />}
+                        <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
+                        />
 
-                
+                        {this.state.bookingsData != null && this.state.bookingsData.length == 0
+                            ?
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                flex: 1,
+                                margin: 20,
+                                alignItems: 'center'
+                            }}>
+                                <Text style={styles.text}>No Bookings</Text>
+                            </View>
+                            :
+                            <FlatList
+                                ListHeaderComponent={this._renderHeaderItem}
+                                data={this.state.bookingsData}
+                                extraData={bookingsData}
+                                renderItem={this._renderItem}
+                            />}
 
-                    {/* <TouchableOpacity>
+
+
+                        {/* <TouchableOpacity>
 
                     <Text
                         onPress={() => {
@@ -283,34 +293,34 @@ class CurrentBooking extends BaseComponent {
                         style={styles.rounded_button}>
                         Book and Play</Text>
                         </TouchableOpacity> */}
-                    
 
-                
 
-            </View>
-            
-            </ScrollView>
 
-            <View
-            style={{
-                alignSelf: 'flex-end',
-                flexDirection: 'row',
-                margin: 12,
-            }}>
-            <View style={{
-                width: "100%"
-            }}>
-                <SkyFilledButton
-                    onPress={() => {
-                        this.props.navigation.navigate('AcademyListing', {
-                            book_court: true,
-                            title: 'Book and Play',
-                            show_back: true
-                        })
-                    }}
-                >Book and Play</SkyFilledButton>
-            </View>
-            </View>
+
+                    </View>
+
+                </ScrollView>
+
+                <View
+                    style={{
+                        alignSelf: 'flex-end',
+                        flexDirection: 'row',
+                        margin: 12,
+                    }}>
+                    <View style={{
+                        width: "100%"
+                    }}>
+                        <SkyFilledButton
+                            onPress={() => {
+                                this.props.navigation.navigate('AcademyListing', {
+                                    book_court: true,
+                                    title: 'Book and Play',
+                                    show_back: true
+                                })
+                            }}
+                        >Book and Play</SkyFilledButton>
+                    </View>
+                </View>
             </View>
         )
     }

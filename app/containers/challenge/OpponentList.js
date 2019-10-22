@@ -54,8 +54,10 @@ class OpponentList extends BaseComponent {
             userData = JSON.parse(value);
             this.state.academy_id = userData['academy_id'];
             this.state.player_id = userData['player_id'];
+            let player_id = userData['player_id'];
+
             getData('header', (value) => {
-                this.props.getOpponentList(value, userData['academy_id'], page, size).then(() => {
+                this.props.getOpponentList(value, userData['academy_id'], page, size,player_id).then(() => {
                     let data = this.props.data.data
                     console.log(' getOpponentList ' + JSON.stringify(data));
                     this.setState({
@@ -530,7 +532,7 @@ const styles = StyleSheet.create({
         elevation: 1
     },
     searchBox: {
-        height:40,
+        height: 40,
         marginLeft: 8,
         backgroundColor: 'white',
         borderRadius: 16,

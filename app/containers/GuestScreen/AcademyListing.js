@@ -159,8 +159,8 @@ class AcademyListing extends BaseComponent {
 
         const job_vacancy = this.state.job_vacancy
         const book_court = this.state.book_court
-        
-        this.props.getAllAcademy(query, job_vacancy,book_court).then(() => {
+
+        this.props.getAllAcademy(query, job_vacancy, book_court).then(() => {
             //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
@@ -253,6 +253,15 @@ class AcademyListing extends BaseComponent {
 
         this.getAcademyList('')
 
+
+        this.checkNotification()
+
+        this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
+            this.checkNotification()
+        });
+    }
+
+    checkNotification() {
         if (global.NOTIFICATION_DATA) {
             try {
                 let notification_for = global.NOTIFICATION_DATA.notification_for
@@ -457,7 +466,7 @@ class AcademyListing extends BaseComponent {
                     marginTop: 16,
                     marginBottom: 8,
                     borderRadius: 12,
-                    
+
                 }}>
                 <Card style={{
                     borderRadius: 4,
@@ -491,7 +500,7 @@ class AcademyListing extends BaseComponent {
                         }} placeholder="Search" />
 
                     <FlatList
-                    
+
                         keyboardShouldPersistTaps={'handled'}
                         data={autoData}
                         renderItem={({ item }) =>
@@ -543,7 +552,7 @@ class AcademyListing extends BaseComponent {
                         }
                     />
 
-                    
+
 
                 </Card>
 
@@ -767,17 +776,17 @@ class AcademyListing extends BaseComponent {
         return (
             <View style={styles.chartContainer}>
                 <View style={{
-                    zIndex:10
+                    zIndex: 10
                 }}>
-                {
-                    this.listHeader()
-                }
+                    {
+                        this.listHeader()
+                    }
                 </View>
                 {this.state.academies.length > 0 ?
                     <FlatList
-                    style={{
-                    zIndex:1
-                    }}
+                        style={{
+                            zIndex: 1
+                        }}
                         onRefresh={() => this.onRefresh()}
                         refreshing={this.state.isRefreshing}
                         //ListHeaderComponent={() => this.listHeader()}

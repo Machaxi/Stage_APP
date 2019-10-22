@@ -220,7 +220,10 @@ class PaymentDetail extends BaseComponent {
                         }}>
                             <CustomeButtonB onPress={() => {
 
-                                this.processPayment(item)
+                                if (item.canPayOnline == true)
+                                    this.processPayment(item)
+                                else
+                                    alert('Something went wrong. Please contact to Academy for more details.')
 
                             }}>Pay</CustomeButtonB>
                         </View>

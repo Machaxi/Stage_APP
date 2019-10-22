@@ -249,7 +249,6 @@ class ChooseTimeDate extends BaseComponent {
                         console.log('selectedTimeRange', this.state.selectedTimeRange);
                     })
 
-
                     /* get dead slots of all individual courts*/
                     allCourtsDeadSlots = this.getAllCourtsDeadSlots(courtTimings);
 
@@ -683,8 +682,9 @@ class ChooseTimeDate extends BaseComponent {
 
         var index = 4;
         var time = this.state.minTime;
-
-        while (time != this.state.maxTime) {
+        console.log('Time=>' + time + " maxTime=" + this.state.maxTime)
+        //return 
+        while (time <= this.state.maxTime) {
 
             console.log('While-> ', time)
             var minutes, time;
@@ -1014,13 +1014,14 @@ class ChooseTimeDate extends BaseComponent {
     courtSelector(selectedIndex) {
         console.log('selectedIndex', selectedIndex);
         var courts = this.state.availableCourts;
-        console.log('courts', courts);
+        console.log('courts', JSON.stringify(courts));
         courts[selectedIndex].selected = !courts[selectedIndex].selected;
 
         var totalCost = this.state.totalCost;
         var courtIds = this.state.selectedCourtIds;
         var courtNames = this.state.selectedCourtNames;
         var totalNoOfHours = this.state.totalNoOfHours;
+        console.log('courtIds', JSON.stringify(courtIds));
 
         if (courts[selectedIndex].selected == true) {
             courtIds.push(courts[selectedIndex].court_id);
@@ -1038,25 +1039,50 @@ class ChooseTimeDate extends BaseComponent {
                     courtIds.splice(index, 1);
                     courtNames.splice(index, 1);
                 }
-                courts[selectedIndex]['pricing_plan'].map((element, index) => {
-                    if (element.time_interval == this.state.selectedDuration) {
-                        console.log('minus---', totalCost + "-" + element.price)
-                        totalCost = totalCost - element.price;
-                        totalNoOfHours = totalNoOfHours - element.time_interval;
-                    }
-                })
+                // courts[selectedIndex]['pricing_plan'].map((element, index) => {
+                //     if (element.time_interval == this.state.selectedDuration) {
+                //         console.log('minus---', totalCost + "-" + element.price)
+                //         totalCost = totalCost - element.price;
+                //         totalNoOfHours = totalNoOfHours - element.time_interval;
+
+                //     }
+                // })
+
+
 
             })
+            let pricing_plan = courts[selectedIndex]['pricing_plan']
+            for (let i = 0; i < pricing_plan.length; i++) {
+                let element = pricing_plan[i]
+                if (element.time_interval == this.state.selectedDuration) {
+                    console.log('minus---', totalCost + "-" + element.price)
+                    totalCost = totalCost - element.price;
+                    totalNoOfHours = totalNoOfHours - element.time_interval;
 
+                }
+            }
 
         }
 
         // if (totalCost < 0) {
         //     totalCost = 0
         // }
-        
+
+        let unique = [...new Set(courtIds)];
+        courtIds = unique
+
         console.log('totalCost', totalCost);
         console.log('courtIds', courtIds);
+
+        this.state.selectedCourtIds = courtIds
+        this.state.selectedCourtNames = courtNames
+        this.state.totalCost = totalCost
+        this.state.totalNoOfHours = totalNoOfHours
+        this.state.availableCourts = courts
+        console.log('this.state.selectedCourt', this.state.selectedCourtIds);
+        console.log('this.state.selectedCourt', this.state.totalCost);
+        console.log('allCourts', this.state.availableCourts);
+
         this.setState({
             selectedCourtIds: courtIds,
             selectedCourtNames: courtNames,
@@ -1225,13 +1251,14 @@ class ChooseTimeDate extends BaseComponent {
         //     )
         // }
 
-        console.log('this.state.calendarData', this.state.calendarData);
-        console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
+        //console.log('this.state.calendarData', this.state.calendarData);
+        //console.log('this.state.sliderData', JSON.stringify(this.state.sliderData));
 
         let itemWidth = 38 * percent
         if (Platform.OS == 'ios') {
             itemWidth = 39.2 * percent
         }
+        //console.log('Dimensions'+Dimensions.get('window').width)
 
 
         return (
@@ -1467,7 +1494,7 @@ class ChooseTimeDate extends BaseComponent {
                                             //onScroll={(event) => this.handleScroll(event)}
                                             itemHeight={80}
                                             lockScrollWhileSnapping={false}
-                                            sliderWidth={Dimensions.get('window').width}
+                                            sliderWidth={360}//Dimensions.get('window').width
                                             inactiveSlideOpacity={1}
                                             inactiveSlideScale={1}
                                             activeSlideAlignment={'start'}

@@ -445,7 +445,7 @@ class DashboardRoute extends BaseComponent {
 
   }
 
-  _renderItem = ({ item,index }) => (
+  _renderItem = ({ item, index }) => (
 
 
     <View>
@@ -569,12 +569,19 @@ class DashboardRoute extends BaseComponent {
 
                   {item.challenge_status == 'ACCEPTED' &&
                     <View style={styles.challengeBtnOuter}>
-                      <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
+                      <Text
+                        onPress={() => {
+                          this.props.navigation.navigate('BookandPlay')
+                          setTimeout(() => {
+                            Events.publish('OPEN_LISTING');
+                          }, 200)
+                        }}
+                        style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
                       <Text style={defaultStyle.rounded_button_150} onPress={() => {
                         this.getChallengeScoreData(item.id);
                         //this.setModalVisible(true);
-                        console.log('UpdateScore=>',JSON.stringify(item))
-                        console.log('UpdateScore=>index',index)
+                        console.log('UpdateScore=>', JSON.stringify(item))
+                        console.log('UpdateScore=>index', index)
                         this.setState({
                           selectedOpponentData: item.challenge_by,
                           selected_score_update: item
@@ -628,10 +635,17 @@ class DashboardRoute extends BaseComponent {
 
                   {item.challenge_status == 'ACCEPTED' &&
                     <View style={styles.challengeBtnOuter}>
-                      <Text style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
+                      <Text
+                        onPress={() => {
+                          this.props.navigation.navigate('BookandPlay')
+                          setTimeout(() => {
+                            Events.publish('OPEN_LISTING');
+                          }, 200)
+                        }}
+                        style={[defaultStyle.rounded_button_150, { marginRight: 20 }]}>Book Court</Text>
                       <Text style={defaultStyle.rounded_button_150} onPress={() => {
                         this.getChallengeScoreData(item.id);
-                        console.log('UpdateScore=>index',index)
+                        console.log('UpdateScore=>index', index)
                         //this.setModalVisible(true);
                         this.setState({
                           selectedOpponentData: item.opponent,

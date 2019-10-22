@@ -36,6 +36,7 @@ import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
 import TestExample from '../containers/welcome/TestExample'
 import BookTrial from '../containers/GuestScreen/BookTrial'
 import PaymentHistory from '../containers/payment/PaymentHistory'
+import ImageGuidelines from '../containers/profile/ImageGuidelines'
 
 const userHomeModule = createStackNavigator({
 
@@ -425,7 +426,7 @@ const userHomeModule = createStackNavigator({
         })
 
     },
-    
+
     BookTrial: {
         screen: BookTrial,
         navigationOptions: ({ navigation }) => ({
@@ -459,6 +460,24 @@ const userHomeModule = createStackNavigator({
 
         })
 
+    },
+
+    ImageGuidelines: {
+        screen: ImageGuidelines,
+        navigationOptions: ({ navigation }) => ({
+            title: "Edit Image Guidelines",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+                 />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
 });
 

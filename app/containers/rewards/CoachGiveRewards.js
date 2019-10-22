@@ -127,12 +127,14 @@ class CoachGiveRewards extends BaseComponent {
                 let id = player.id
                 let nId = id + ""
                 let score = +player.input_score
-                reward[nId] = score == '' ? 0 : score
-                //rewards[i] = reward
-                //rewards = {...rewards,reward}
-                rewards[nId] = score == '' ? 0 : score
-                //console.log('rewards = ',JSON.stringify(rewards))
-                totalScore = totalScore + player.input_score
+                if(score!=''){
+                    reward[nId] = score == '' ? '' : score
+                    //rewards[i] = reward
+                    //rewards = {...rewards,reward}
+                    rewards[nId] = score == '' ? '' : score
+                    //console.log('rewards = ',JSON.stringify(rewards))
+                    totalScore = totalScore + player.input_score
+                }
             }
 
             if (totalScore == 0) {
@@ -380,6 +382,8 @@ class CoachGiveRewards extends BaseComponent {
                                         onPress={() => {
                                             this.setModalVisible(false);
                                             Events.publish('REFRESH_REWARDS');
+                                            Events.publish('REFRESH_DASHBOARD_1');
+
                                             setTimeout(() => {
                                                 this.props.navigation.goBack(null);
                                             }, 100)

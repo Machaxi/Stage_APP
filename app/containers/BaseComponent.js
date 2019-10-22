@@ -63,8 +63,8 @@ global.SELECTED_PLAYER_ID = ''
 //
 
 //PAYMENT_GATEWAY
-//export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
-export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
+export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
+//export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
 
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
@@ -147,6 +147,16 @@ export default class BaseComponent extends React.Component {
                         case 'new_tournament_created':
                             this.props.navigation.navigate('Tournament')
                             break
+                        case 'last_day_tournament_registration':
+                            this.props.navigation.navigate('Tournament')
+                            break
+                        case 'tournament_winner_declared':
+                            this.props.navigation.navigate('Tournament')
+                            break
+
+                        case 'challenge_dispute_resolved':
+                            this.props.navigation.navigate('Challenge')
+                            break
                         case 'new_challange_created':
                             this.props.navigation.navigate('Challenge')
                             break
@@ -204,7 +214,7 @@ export default class BaseComponent extends React.Component {
         return this.isUserLoggedIn;
     }
 
-    logout() {
+    logout(myNavigation) {
 
         onSignOut()
         clearData()
@@ -316,7 +326,7 @@ export default class BaseComponent extends React.Component {
         if (phone.length != 13) {
             is_valid = false
         } else {
-            if (!phone.startsWith('+91')) {
+            if (!phone.startsWith('+91') && !phone.startsWith('+92')) {
                 is_valid = false
             }
             else {

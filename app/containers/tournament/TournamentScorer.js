@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, ActivityIndicator, Image, Modal, TextInput } from 'react-native'
-import BaseComponent, { defaultStyle, ImageBackground,formattedName} from '../BaseComponent';
+import BaseComponent, { defaultStyle, ImageBackground, formattedName } from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Card } from 'react-native-paper';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
@@ -30,7 +30,10 @@ class TournamentScorer extends BaseComponent {
             modalVisible: false,
             edit_index: -1,
             edit_instance: null,
-            is_show: false
+            is_show: false,
+            disable_increasement_p1: false,
+            disable_increasement_p2: false
+
         }
 
         this.state.match_id = this.props.navigation.getParam('match_id', '')
@@ -77,12 +80,30 @@ class TournamentScorer extends BaseComponent {
         let currentIndex = this.state.currentIndex
         let match_scores = this.state.match_scores
         let currentSet = match_scores[currentIndex]
+        let playerScore = ''
         if (isPlayer1) {
+            playerScore = currentSet.player1_score
             currentSet.player1_score = currentSet.player1_score + 1
         } else {
+            playerScore = currentSet.player2_score
             currentSet.player2_score = currentSet.player2_score + 1
         }
         match_scores[currentIndex] = currentSet
+
+
+        if (playerScore > 21) {
+            if (isPlayer1) {
+                this.setState({
+                    disable_increasement_p1: true
+                })
+            } else {
+                this.setState({
+                    disable_increasement_p2: true
+                })
+            }
+
+            return
+        }
 
         this.setState({
             // match_scores: match_scores,
@@ -738,13 +759,13 @@ class TournamentScorer extends BaseComponent {
                                                 flexDirection: 'row',
                                                 justifyContent: 'space-between',
                                                 marginTop: 20,
-                                                flex: 2
+                                                //flex: 2
                                             }}>
 
 
                                                 <View style={{
                                                     flex: 1,
-                                                    width: 90,
+                                                    width: 120,
                                                     marginRight: 8,
                                                     alignItems: 'center',
                                                 }}>
@@ -759,20 +780,40 @@ class TournamentScorer extends BaseComponent {
 
                                                 <View style={{
                                                     flex: 1,
-                                                    width: 90,
+                                                    width: 120,
                                                     marginLeft: 8,
                                                     alignItems: 'center',
 
                                                 }}>
 
-                                                    <SkyFilledButton
+                                                    {/* <SkyFilledButton
                                                         onPress={() => {
                                                             this.setState({
                                                                 start_card_show: false,
                                                                 is_shown: true
                                                             })
                                                         }}
-                                                    >Start Set !</SkyFilledButton>
+                                                    >Start Set !</SkyFilledButton> */}
+                                                    <TouchableOpacity activeOpacity={.8}
+                                                        style={[style.rounded_button1, {
+                                                            width: 120,
+                                                            // width: "100%",
+                                                        }]}
+                                                        onPress={() => {
+                                                            this.setState({
+                                                                start_card_show: false,
+                                                                is_shown: true
+                                                            })
+                                                        }}>
+                                                        <Text
+                                                            style={{
+                                                                color: 'white',
+                                                                textAlign: 'center',
+                                                                fontFamily: 'Quicksand-Medium',
+                                                            }}>
+                                                            Start Set !
+                                                        </Text>
+                                                    </TouchableOpacity>
 
                                                 </View>
                                             </View>
@@ -840,7 +881,8 @@ class TournamentScorer extends BaseComponent {
                                                         activeOpacity={.8}
                                                         onPress={() => {
                                                             //true means player1
-                                                            this.updateScore(true)
+                                                            if (!this.state.disable_increasement_p1)
+                                                                this.updateScore(true)
                                                         }}>
                                                         <Image
                                                             source={require('../../images/ic_plus.png')}
@@ -904,7 +946,8 @@ class TournamentScorer extends BaseComponent {
                                                         activeOpacity={.8}
                                                         onPress={() => {
                                                             //false means player2
-                                                            this.updateScore(false)
+                                                            if (!this.state.disable_increasement_p2)
+                                                                this.updateScore(false)
                                                         }}>
                                                         <Image
                                                             source={require('../../images/ic_plus.png')}
@@ -966,11 +1009,30 @@ class TournamentScorer extends BaseComponent {
                                             marginTop: 20,
                                         }}>
 
-                                            <SkyFilledButton
+                                            <TouchableOpacity activeOpacity={.8}
+                                                style={[style.rounded_button1, {
+                                                    width: 120,
+                                                    alignItems: 'center'
+                                                    // width: "100%",
+                                                }]}
+                                                onPress={() => {
+                                                    this.props.navigation.goBack()
+                                                }}>
+                                                <Text
+                                                    style={{
+                                                        color: 'white',
+                                                        textAlign: 'center',
+                                                        fontFamily: 'Quicksand-Medium',
+                                                    }}>
+                                                    Finish
+                                                        </Text>
+                                            </TouchableOpacity>
+                                            {/* <SkyFilledButton
                                                 onPress={() => {
                                                     this.props.navigation.goBack()
                                                 }}
-                                            >Finish</SkyFilledButton>
+                                            >Finish</SkyFilledButton> */}
+
 
                                         </View>
 
@@ -1037,5 +1099,23 @@ const style = {
         alignItems: 'center',
         textAlign: 'center',
         fontFamily: 'Quicksand-Medium'
-    }
+    },
+    rounded_button1: {
+        //width:'100%',
+        // padding: 10,
+        // flexShrink: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // borderRadius: 20,
+        // //borderWidth: 1,
+        // marginLeft: 4,
+        // marginRight: 4,
+        // borderColor: '#67BAF5',
+        // backgroundColor: '#67BAF5',
+        padding: 10,
+        backgroundColor: '#67BAF5',
+        height: 42,
+        borderRadius: 23,
+
+    },
 }

@@ -246,6 +246,7 @@ export function bookTrial(header, data) {
     // } else {
     //     url = `batch/${batchId}/book-trial?academy_id=${academy_id}&name=${name}&contact=${contact}`
     // }
+    console.log('bookTrial=>',JSON.stringify(data))
     return {
         type: types.DO_LOGIN,
         payload: {

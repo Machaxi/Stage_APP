@@ -379,6 +379,14 @@ class EditProfile extends BaseComponent {
 
                         </TouchableOpacity>
 
+                        <Text
+                            onPress={() => {
+                                this.props.navigation.navigate('ImageGuidelines')
+                            }}
+                            style={[defaultStyle.regular_text_10, { margin: 8, color: '#67BAF5' }]}>
+                            Image Guidelines
+                            </Text>
+
                         {/*<ImageBackground*/}
                         {/*style={{ width: 180, height: 240 }}*/}
                         {/*source={require('../../images/edit_profile_holder.png')}*/}
@@ -430,7 +438,12 @@ class EditProfile extends BaseComponent {
                             <TextInput
                                 value={this.state.txtphone}
                                 style={style.textinput}
-                                onChangeText={(txtphone) => this.setState({ txtphone: txtphone })}>
+                                onChangeText={(txtphone) => {
+                                    if (txtphone == '') {
+                                        txtphone = '+91'
+                                    }
+                                    this.setState({ txtphone: txtphone })
+                                }}>
 
                             </TextInput>
                         </View>
