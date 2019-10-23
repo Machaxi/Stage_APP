@@ -29,8 +29,8 @@ import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
-export const BASE_URL = 'https://www.machaxi.com/api/'
-//export const BASE_URL = 'http://13.233.182.217:8080/api/'
+//export const BASE_URL = 'https://www.machaxi.com/api/'
+export const BASE_URL = 'http://13.233.182.217:8080/api/'
 
 export const client = axios.create({
     baseURL: BASE_URL,

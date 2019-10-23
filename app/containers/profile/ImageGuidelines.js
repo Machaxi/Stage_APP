@@ -1,22 +1,9 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Image, Alert, Platform } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
-import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import DatePicker from 'react-native-datepicker'
-import PhotoUpload from 'react-native-photo-upload'
-import { getData, storeData } from "../../components/auth";
-import { saveUserStartupProfile } from "../../redux/reducers/ProfileReducer";
-import { connect } from 'react-redux';
-import Spinner from 'react-native-loading-spinner-overlay';
-import Events from '../../router/events';
-import moment from 'moment'
-import RNFetchBlob from 'rn-fetch-blob';
-import ImagePicker from 'react-native-image-picker';
-import { BASE_URL } from '../../../App'
-import ImageResizer from 'react-native-image-resizer';
-import FastImage from 'react-native-fast-image';
+import { View, Text, Image } from 'react-native'
+import BaseComponent, { defaultStyle } from '../BaseComponent';
+import { ScrollView } from 'react-native-gesture-handler';
+
 
 class ImageGuidelines extends BaseComponent {
 
@@ -66,7 +53,8 @@ class ImageGuidelines extends BaseComponent {
                                 These guidelines are only for the players profile photo appearing on the player dashboard and not for coaches/parents profile. We recommend following guidelines while clicking player photos:
                                 </Text>
                             <Text style={[style.text, {
-                                marginTop: 10
+                                marginTop: 10,
+                                fontstyle: 'italic'
                             }]}>
                                 (These guidelines are recommended as we are using Machine Learning (ML) to automatically remove background from the players’ photo and give their profile photo a professional sportsperson feel. Our ML engines currently give best results if the following guidelines are adhered to)
                             </Text>
