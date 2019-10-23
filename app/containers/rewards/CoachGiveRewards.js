@@ -93,6 +93,8 @@ class CoachGiveRewards extends BaseComponent {
                 console.log(response);
             })
         });
+
+        
     }
 
     submitScore() {
@@ -127,7 +129,7 @@ class CoachGiveRewards extends BaseComponent {
                 let id = player.id
                 let nId = id + ""
                 let score = +player.input_score
-                if(score!=''){
+                if (score != '') {
                     reward[nId] = score == '' ? '' : score
                     //rewards[i] = reward
                     //rewards = {...rewards,reward}
@@ -279,7 +281,7 @@ class CoachGiveRewards extends BaseComponent {
                 value={item.input_score}
                 onChangeText={(text) => {
                     if (!this.isNumbericOnly(text)) {
-                       item.input_score = ''
+                        item.input_score = ''
                     } else {
                         item.input_score = text
                     }

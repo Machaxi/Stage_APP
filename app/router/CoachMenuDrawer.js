@@ -23,6 +23,7 @@ import { SkyFilledButton } from '../components/Home/SkyFilledButton';
 import Share from 'react-native-share';
 import FastImage from 'react-native-fast-image'
 import StarRating from 'react-native-star-rating';
+import DeviceInfo from 'react-native-device-info';
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png"
 
@@ -275,6 +276,9 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
+				<Text
+					style={styles.version_style}>
+					App Version: {DeviceInfo.getVersion()}</Text>
 
 			</View>)
 	}
@@ -440,6 +444,9 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
+				<Text
+					style={styles.version_style}>
+					App Version: {DeviceInfo.getVersion()}</Text>
 
 			</View>)
 	}
@@ -770,6 +777,10 @@ class CoachMenuDrawer extends BaseComponent {
 
 					</View>
 				</TouchableOpacity>
+
+				<Text
+					style={styles.version_style}>
+					App Version: {DeviceInfo.getVersion()}</Text>
 			</View >)
 	}
 
@@ -1287,6 +1298,10 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
+				<Text
+					style={styles.version_style}>
+					App Version: {DeviceInfo.getVersion()}</Text>
+
 			</View>)
 	}
 
@@ -1447,6 +1462,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between'
+	},
+	version_style: {
+		color: '#404040',
+		width: "100%",
+		textAlign: 'center',
+		fontFamily: 'Quicksand-Medium',
+		fontSize: 10,
+		marginTop: 16,
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginBottom: 4
 	},
 
 	container: {

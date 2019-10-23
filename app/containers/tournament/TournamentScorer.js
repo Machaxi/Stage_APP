@@ -76,18 +76,39 @@ class TournamentScorer extends BaseComponent {
         this.setState({ modalVisible: visible });
     }
 
-    updateScore(isPlayer1) {
+    updateScore(isPlayer1, deduct) {
         let currentIndex = this.state.currentIndex
         let match_scores = this.state.match_scores
         let currentSet = match_scores[currentIndex]
         let playerScore = ''
-        if (isPlayer1) {
-            playerScore = currentSet.player1_score
-            currentSet.player1_score = currentSet.player1_score + 1
-        } else {
-            playerScore = currentSet.player2_score
-            currentSet.player2_score = currentSet.player2_score + 1
+
+        if (deduct == false) {
+
+            if (isPlayer1) {
+                playerScore = currentSet.player1_score
+                currentSet.player1_score = currentSet.player1_score + 1
+            } else {
+                playerScore = currentSet.player2_score
+                currentSet.player2_score = currentSet.player2_score + 1
+            }
+
         }
+        else {
+            if (isPlayer1) {
+                playerScore = currentSet.player1_score
+                currentSet.player1_score = currentSet.player1_score - 1
+                if (currentSet.player1_score < 0) {
+                    currentSet.player1_score = 0
+                }
+            } else {
+                playerScore = currentSet.player2_score
+                currentSet.player2_score = currentSet.player2_score - 1
+                if (currentSet.player2_score < 0) {
+                    currentSet.player2_score = 0
+                }
+            }
+        }
+
         match_scores[currentIndex] = currentSet
 
 
@@ -847,14 +868,23 @@ class TournamentScorer extends BaseComponent {
 
                                                     }}>
 
-                                                    <Image
-                                                        source={require('../../images/ic_minus.png')}
-                                                        style={{
-                                                            width: 30,
-                                                            height: 30,
-                                                            marginTop: 5,
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            this.updateScore(true, true)
                                                         }}
-                                                    />
+                                                    >
+
+                                                        <Image
+                                                            source={require('../../images/ic_minus.png')}
+                                                            style={{
+                                                                width: 30,
+                                                                height: 30,
+                                                                marginTop: 5,
+                                                            }}
+                                                        />
+
+                                                    </TouchableOpacity>
+
                                                     <Text
                                                         style={{
                                                             width: 56,
@@ -882,7 +912,7 @@ class TournamentScorer extends BaseComponent {
                                                         onPress={() => {
                                                             //true means player1
                                                             if (!this.state.disable_increasement_p1)
-                                                                this.updateScore(true)
+                                                                this.updateScore(true, false)
                                                         }}>
                                                         <Image
                                                             source={require('../../images/ic_plus.png')}
@@ -911,14 +941,20 @@ class TournamentScorer extends BaseComponent {
 
                                                     }}>
 
-                                                    <Image
-                                                        source={require('../../images/ic_minus.png')}
-                                                        style={{
-                                                            width: 30,
-                                                            height: 30,
-                                                            marginTop: 5,
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            this.updateScore(false, true)
                                                         }}
-                                                    />
+                                                    >
+                                                        <Image
+                                                            source={require('../../images/ic_minus.png')}
+                                                            style={{
+                                                                width: 30,
+                                                                height: 30,
+                                                                marginTop: 5,
+                                                            }}
+                                                        />
+                                                    </TouchableOpacity>
                                                     <Text
                                                         style={{
                                                             textAlign: 'center',
@@ -947,7 +983,7 @@ class TournamentScorer extends BaseComponent {
                                                         onPress={() => {
                                                             //false means player2
                                                             if (!this.state.disable_increasement_p2)
-                                                                this.updateScore(false)
+                                                                this.updateScore(false, false)
                                                         }}>
                                                         <Image
                                                             source={require('../../images/ic_plus.png')}

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import moment from 'moment'
 import { Card } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Events from '../../router/events';
 
 class ParentRewardComponent extends BaseComponent {
 
@@ -568,6 +569,7 @@ class ParentRewardComponent extends BaseComponent {
                                     onPress={() => {
                                         this.setState({ success_dialog: false });
                                         this.props.navigation.goBack(null);
+                                        Events.publish('REFRESH_DASHBOARD_1');
                                     }}>
                                     OK</Text>
 

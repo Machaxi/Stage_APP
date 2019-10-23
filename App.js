@@ -29,8 +29,9 @@ import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
+import DeviceInfo from 'react-native-device-info';
 //export const BASE_URL = 'https://www.machaxi.com/api/'
-export const BASE_URL = 'http://13.233.182.217:8080/api/'
+export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 export const client = axios.create({
     baseURL: BASE_URL,
@@ -45,7 +46,8 @@ const store = createStore(reducer, middleware);
 //added only header but now we have to send more default params, so using this block
 client.interceptors.request.use(
     config => {
-        config.headers.app_version = '1';
+        config.headers.app_version =DeviceInfo.getBuildNumber();
+        config.headers.app_version_code =DeviceInfo.getVersion();
         config.headers.device_type = Platform.OS;
         config.headers.device_id = global.FCM_DEVICE_ID;
         config.headers.one_signal_device_id = global.ONE_SIGNAL_USERID

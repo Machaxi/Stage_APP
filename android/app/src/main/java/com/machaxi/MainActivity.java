@@ -1,4 +1,4 @@
-package com.dribble;
+package com.machaxi;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

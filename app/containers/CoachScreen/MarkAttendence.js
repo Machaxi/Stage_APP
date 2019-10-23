@@ -12,7 +12,7 @@ import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
-import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
+import BaseComponent, { getFormatTimeDate,defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
 import Events from '../../router/events';
 import { ACADEMY, COACH } from '../../components/Constants';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -272,16 +272,16 @@ class MarkAttendence extends BaseComponent {
                         <View style={{ marginTop: 5 }}>
                             <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Date </Text>
                             <Text style={defaultStyle.regular_text_14}>
-                                {moment.utc(session.session_date).local().format("dddd, DD MMM YYYY")}
+                                {moment(session.session_date).format("dddd, DD MMM YYYY")}
                             </Text>
 
                         </View>
                         <View style={{ marginTop: 5 }}>
                             <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Time slot </Text>
                             <Text style={defaultStyle.regular_text_14}>
-                                {moment.utc(session.session_date + " " + session.start_time).local().format("hh:mm a")
+                                {getFormatTimeDate(session.session_date,session.start_time)
                                     + " - " +
-                                    moment.utc(session.session_date + " " + session.end_time).local().format("hh:mm a")}
+                                    getFormatTimeDate(session.session_date,session.end_time)}
                             </Text>
                         </View>
                     </View>

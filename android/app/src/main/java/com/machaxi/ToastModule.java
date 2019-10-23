@@ -1,4 +1,4 @@
-package com.dribble;
+package com.machaxi;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.NativeModule;

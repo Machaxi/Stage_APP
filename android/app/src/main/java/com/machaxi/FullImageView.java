@@ -1,4 +1,4 @@
-package com.dribble;
+package com.machaxi;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -20,9 +20,9 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.dribble.R;
-import com.dribble.TouchImageView;
-import com.dribble.MainApplication;
+import com.machaxi.R;
+import com.machaxi.TouchImageView;
+import com.machaxi.MainApplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;

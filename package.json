@@ -23,6 +23,7 @@
     "react-native-collapse-view": "^1.0.0",
     "react-native-confirmation-code-input": "^1.0.4",
     "react-native-datepicker": "^1.7.2",
+    "react-native-device-info": "^4.0.1",
     "react-native-dropdownalert": "^4.2.0",
     "react-native-echarts-wrapper": "^1.4.7",
     "react-native-elements": "^1.2.0",

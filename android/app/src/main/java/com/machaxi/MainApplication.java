@@ -1,4 +1,4 @@
-package com.dribble;
+package com.machaxi;
 
 import android.app.Application;
 
@@ -38,7 +38,7 @@ import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.google.firebase.FirebaseApp;
-import com.dribble.CustomToastPackage;
+import com.machaxi.CustomToastPackage;
 import com.facebook.react.PackageList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,7 +46,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.L;
 import android.graphics.Bitmap;
-import com.dribble.R;
+import com.machaxi.R;
 
 
 
