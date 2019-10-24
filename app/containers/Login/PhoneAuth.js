@@ -194,7 +194,7 @@ class PhoneAuth extends BaseComponent {
         dict['fcm_token'] = fcm_token;
         dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
         dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
-        dict['has_firebase_check'] = false;
+        dict['has_firebase_check'] = true;
 
 
         dataDic['data'] = dict;
@@ -509,7 +509,8 @@ class PhoneAuth extends BaseComponent {
                     onPress={() => {
                         this.signInByName(null, null)
                     }}>Login by name</Text> */}
-                <TouchableOpacity activeOpacity={.8}
+                    
+                {/* <TouchableOpacity activeOpacity={.8}
                     style={[defaultStyle.rounded_button,
                     {
                         marginTop: 16,
@@ -525,7 +526,7 @@ class PhoneAuth extends BaseComponent {
                             fontFamily: 'Quicksand-Medium'
                         }}>
                         Login by name</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity
                     style={{
@@ -699,7 +700,7 @@ class PhoneAuth extends BaseComponent {
 
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
-                {user1 && isCall ? this.signIn11(user1, this.state.token) : null}
+                {/* {user1 && isCall ? this.signIn11(user1, this.state.token) : null} */}
 
             </View>
 

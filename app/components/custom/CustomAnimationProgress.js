@@ -23,7 +23,7 @@ export default class CustomAnimationProgress extends BaseComponent {
         if (percent >= 100)
             percent = 100
         let totalValue = 100
-        console.log('componentDidUpdate => ' + totalValue + "==" + percent + "==" + (percent / totalValue))
+        //console.log('componentDidUpdate => ' + totalValue + "==" + percent + "==" + (percent / totalValue))
 
         this.animate(percent, totalValue);
     }
@@ -47,10 +47,10 @@ export default class CustomAnimationProgress extends BaseComponent {
         const t_percent = p >= 100 ? 100 : p
         const percent = t_percent + "%"//"100%"//children//"50%"
         const fillWidth = (width1 * +t_percent) / 100
-        console.log('Progress=>percent=> ', p)
-        console.log('Progress=>FillWidth=> ', fillWidth)
-        console.log('Progress=>width=> ', width)
-        console.log('Progress=>width1=> ', width1)
+       /// console.log('Progress=>percent=> ', p)
+       // console.log('Progress=>FillWidth=> ', fillWidth)
+       // console.log('Progress=>width=> ', width)
+       // console.log('Progress=>width1=> ', width1)
 
         return (
             <View style={{

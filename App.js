@@ -30,8 +30,8 @@ import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info';
-//export const BASE_URL = 'https://www.machaxi.com/api/'
-export const BASE_URL = 'http://stage.dribblediary.com/api/'
+export const BASE_URL = 'https://www.machaxi.com/api/'
+//export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 export const client = axios.create({
     baseURL: BASE_URL,
