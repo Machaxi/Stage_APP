@@ -80,6 +80,7 @@ import LeaderboardRoute from '../containers/challenge/LeaderBoardRoute'
 import PaymentDetail from '../containers/payment/PaymentDetail'
 import PaymentHistory from '../containers/payment/PaymentHistory'
 import Test from '../containers/welcome/Test'
+import ContactUs from '../containers/util/ContactUs'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -364,6 +365,23 @@ const GuestHomeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
 
+    },
+    ContactUs: {
+        screen: ContactUs,
+        navigationOptions: ({ navigation }) => ({
+            title: "Contact Us",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
 
 })
@@ -905,6 +923,23 @@ const coachHomeModule = createStackNavigator({
         }),
 
     },
+    ContactUs: {
+        screen: ContactUs,
+        navigationOptions: ({ navigation }) => ({
+            title: "Contact Us",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 
 }, {
         contentComponent: ({ navigation }) => {
@@ -1442,6 +1477,23 @@ const parentHomeModule = createStackNavigator({
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation}
                 showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    ContactUs: {
+        screen: ContactUs,
+        navigationOptions: ({ navigation }) => ({
+            title: "Contact Us",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',

@@ -9,7 +9,7 @@ import { CheckBox } from 'react-native-elements';
 //import firebase from 'react-native-firebase';
 import moment from 'moment'
 import { getData } from '../../../components/auth';
-import { getBatchOperational, cancelBatch } from "../../../redux/reducers/BatchReducer";
+import { getBatchOperational, cancelBatch } from "../../../redux/reducers/CancelBatchReducer";
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DatePicker from 'react-native-datepicker'
@@ -50,6 +50,7 @@ class CancelSession extends BaseComponent {
         });
 
         console.warn('Date => ' + Date.now())
+        console.log('SelectedDate=>',moment(this.state.selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD'))
     }
 
     progress(status) {
@@ -165,13 +166,13 @@ class CancelSession extends BaseComponent {
                 
 
             let subData = {}
-            let end_date = is_single_day ? null : moment(selected_end_date,'DD-MMM-YYYY').format('YYYY-MM-DD')
+            let end_date = is_single_day ? null : moment(selected_end_date,'YYYY-MM-DD').format('YYYY-MM-DD')
             // alert(moment(selected_start_date).format('YYYY-MM-DD'))
             // alert(moment(selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD'))
             // return
 
             subData['is_range'] = !this.state.is_single_day
-            subData['from_date'] = moment(selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD')
+            subData['from_date'] = moment(selected_start_date,'YYYY-MM-DD').format('YYYY-MM-DD')
             subData['to_date'] = end_date
             subData['academy_id'] = academy_id
             subData['coach_id'] = coach_id

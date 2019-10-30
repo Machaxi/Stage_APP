@@ -24,7 +24,7 @@ import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { BASE_URL,ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
+import BaseComponent, { DEBUG_APP, getBaseUrl, ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
 import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
@@ -34,7 +34,7 @@ import DeviceInfo from 'react-native-device-info';
 //export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 export const client = axios.create({
-    baseURL: BASE_URL,
+    baseURL: getBaseUrl(),
     responseType: 'json'
 });
 
@@ -46,8 +46,8 @@ const store = createStore(reducer, middleware);
 //added only header but now we have to send more default params, so using this block
 client.interceptors.request.use(
     config => {
-        config.headers.app_version =DeviceInfo.getBuildNumber();
-        config.headers.app_version_code =DeviceInfo.getVersion();
+        config.headers.app_version = DeviceInfo.getBuildNumber();
+        config.headers.app_version_code = DeviceInfo.getVersion();
         config.headers.device_type = Platform.OS;
         config.headers.device_id = global.FCM_DEVICE_ID;
         config.headers.one_signal_device_id = global.ONE_SIGNAL_USERID
@@ -135,55 +135,7 @@ const configurationOptions = {
 const firebase = RNFirebase.initializeApp(configurationOptions)
 
 
-branch.subscribe(({ error, params }) => {
-    if (error) {
-        //console.error('Error from Branch: ' + error)
-        return
-    }
 
-    const clicked_branch_link = params['+clicked_branch_link']
-    //alert(clicked_branch_link)
-    if (clicked_branch_link) {
-        let feature = params['~feature']
-        if (feature) {
-            let id = params['id']
-            let obj = {
-                tournament_id: id,
-                feature: feature
-            }
-            Events.publish('deep_linking', obj);
-            //payment_details
-            //  razorpay_payment_id
-        }
-    }
-
-    //alert(JSON.stringify(params))
-    // let lastParams =  branch.getLatestReferringParams() // params from last open
-    // let installParams =  branch.getFirstReferringParams() // params from original install
-    //console.log('lastParams=> ', JSON.stringify(branch))
-    // console.log('installParams=> ', JSON.stringify(installParams))
-
-    // console.log('Branch=> ',JSON.stringify(branch))
-
-    // if (params['+non_branch_link']) {
-    //     const nonBranchUrl = params['+non_branch_link']
-    //     console.log('Branch=>', nonBranchUrl)
-    //     let lastParams = branch.getLatestReferringParams() // params from last open
-    //     console.log('lastParams ' + JSON.stringify(lastParams))
-    //     // Route non-Branch URL if appropriate.
-    //     return
-    // }
-    //const tournament_id = params.tournament_id
-    console.log('Branchtit=>', JSON.stringify(params))
-    // console.log('Branchtit=>', tournament_id)
-    // if (tournament_id) {
-    //     //alert('test')
-    //     // storeData('deep_linking', true)
-    //     // Events.publish('deep_linking', tournament_id);
-
-    // }
-
-})
 
 
 export default class App extends BaseComponent {
@@ -236,6 +188,64 @@ export default class App extends BaseComponent {
         //OneSignal.configure();
         OneSignal.enableVibrate(true);
         OneSignal.inFocusDisplaying(2)
+
+       if (DEBUG_APP)
+            alert('You are running debug app.')
+    }
+
+    componentWillMount() {
+        branch.subscribe(({ error, params }) => {
+            if (error) {
+                //console.error('Error from Branch: ' + error)
+                return
+            }
+
+            const clicked_branch_link = params['+clicked_branch_link']
+            const rn_cached_initial_event = params['+rn_cached_initial_event']
+
+            //alert(clicked_branch_link)
+            if (clicked_branch_link) {
+                let feature = params['~feature']
+                if (feature) {
+                    let id = params['id']
+                    let obj = {
+                        tournament_id: id,
+                        feature: feature
+                    }
+                    console.log('Branchtit=>', feature)
+                    Events.publish('deep_linking', obj);
+                    //payment_details
+                    //  razorpay_payment_id
+                }
+            }
+
+            //alert(JSON.stringify(params))
+            // let lastParams =  branch.getLatestReferringParams() // params from last open
+            // let installParams =  branch.getFirstReferringParams() // params from original install
+            //console.log('lastParams=> ', JSON.stringify(branch))
+            // console.log('installParams=> ', JSON.stringify(installParams))
+
+            // console.log('Branch=> ',JSON.stringify(branch))
+
+            // if (params['+non_branch_link']) {
+            //     const nonBranchUrl = params['+non_branch_link']
+            //     console.log('Branch=>', nonBranchUrl)
+            //     let lastParams = branch.getLatestReferringParams() // params from last open
+            //     console.log('lastParams ' + JSON.stringify(lastParams))
+            //     // Route non-Branch URL if appropriate.
+            //     return
+            // }
+            //const tournament_id = params.tournament_id
+            console.log('Branchtit=>', JSON.stringify(params))
+            // console.log('Branchtit=>', tournament_id)
+            // if (tournament_id) {
+            //     //alert('test')
+            //     // storeData('deep_linking', true)
+            //     // Events.publish('deep_linking', tournament_id);
+
+            // }
+
+        })
     }
 
     onReceived(notification) {
@@ -245,7 +255,7 @@ export default class App extends BaseComponent {
     }
 
     onOpened(openResult) {
-       
+
         global.NOTIFICATION_DATA = openResult.notification.payload.additionalData
 
         //alert(JSON.stringify(openResult))
@@ -253,9 +263,9 @@ export default class App extends BaseComponent {
         //  console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
         console.log('openResult: ', JSON.stringify(openResult));
-        setTimeout(()=>{
+        setTimeout(() => {
             Events.publish('NOTIFICATION_CLICKED');
-        },100)
+        }, 100)
     }
 
     componentWillUnmount() {

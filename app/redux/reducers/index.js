@@ -29,6 +29,7 @@ import EditPartnerReducer from './EditPartnerReducer'
 import RelationReducer from './RelationReducer'
 import BrowseAcademyReducer from './BrowseAcademyReducer'
 import AcademyBatchReducer from './AcademyBatchReducer'
+import CancelBatchReducer from './CancelBatchReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -60,7 +61,8 @@ const rootReducer = combineReducers({
     EditPartnerReducer,
     RelationReducer,
     BrowseAcademyReducer,
-    AcademyBatchReducer
+    AcademyBatchReducer,
+    CancelBatchReducer
 });
 
 export default rootReducer

@@ -8,7 +8,7 @@ import firebase from 'react-native-firebase';
 import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
-import BaseComponent, { defaultStyle, FIREBASE_CHECK, SHOW_LOGIN_BY_NAME, TOURNAMENT_REGISTER, PUSH_TOKEN, ONE_SIGNAL_USERID } from '../BaseComponent';
+import BaseComponent, { defaultStyle, getFirebaseCheck, getShowLoginByName, TOURNAMENT_REGISTER, PUSH_TOKEN, ONE_SIGNAL_USERID } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
@@ -201,7 +201,7 @@ class PhoneAuth extends BaseComponent {
         dict['fcm_token'] = fcm_token;
         dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
         dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
-        dict['has_firebase_check'] = FIREBASE_CHECK;
+        dict['has_firebase_check'] = getFirebaseCheck();
 
 
         dataDic['data'] = dict;
@@ -486,7 +486,7 @@ class PhoneAuth extends BaseComponent {
                         borderBottomWidth: 1,
                         marginTop: 50, marginBottom: 15
                     }}
-                    keyboardType={SHOW_LOGIN_BY_NAME ? "default" : "phone-pad"}
+                    keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
                     onChangeText={value => this.setState({ phoneNumber: value })}
                     placeholder={'Enter Phone Number'}
                     value={phoneNumber}
@@ -528,7 +528,7 @@ class PhoneAuth extends BaseComponent {
                         this.signInByName(null, null)
                     }}>Login by name</Text> */}
 
-                {SHOW_LOGIN_BY_NAME ?
+                {getShowLoginByName() ?
                     <TouchableOpacity activeOpacity={.8}
                         style={[defaultStyle.rounded_button,
                         {

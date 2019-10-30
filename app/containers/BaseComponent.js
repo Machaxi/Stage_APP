@@ -72,18 +72,57 @@ global.SELECTED_PLAYER_ID = ''
 //export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 //LIVE
-export const BASE_URL = 'https://www.machaxi.com/api/'
-export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
-export const SHOW_LOGIN_BY_NAME = false
-export const FIREBASE_CHECK = true
+//export const BASE_URL = 'https://www.machaxi.com/api/'
+///export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
+//export const SHOW_LOGIN_BY_NAME = false
+//export const FIREBASE_CHECK = true
 
 //===============================================================================================
+
+export const DEBUG_APP = true
+export const PROD_DEBUG = true
+
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
 ///
 
 export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY"
 export const REFRESH_SCREEN_CALLBACK = 'REFRESH_SCREEN_CALLBACK'
+
+export function getBaseUrl() {
+
+    if (DEBUG_APP)
+        return 'http://stage.dribblediary.com/api/'
+    else
+        return 'https://www.machaxi.com/api/'
+}
+
+export function getPaymentKey() {
+    if (DEBUG_APP)
+        return 'rzp_test_hEiHYwRLYkvcNV'
+    else
+        return 'rzp_live_uh7h7N55m9BHaZ'
+}
+
+export function getFirebaseCheck() {
+    if (DEBUG_APP) {
+        return false
+    }
+    else {
+        return true
+    }
+}
+
+export function getShowLoginByName() {
+    if (DEBUG_APP) {
+        return true
+    } else {
+        if (PROD_DEBUG)
+            return true
+        else
+            return false
+    }
+}
 
 export default class BaseComponent extends React.Component {
 
@@ -554,7 +593,7 @@ export function getStatsImageById(id) {
 }
 export function getSettingData(headers) {
     console.log('user-setting');
-    client.get(BASE_URL + 'user/settings',
+    client.get(getBaseUrl() + 'user/settings',
         { headers })
         .then(function (response) {
             let json = response.data

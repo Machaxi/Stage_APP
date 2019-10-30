@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator } from 'react-native'
-import BaseComponent, { defaultStyle, DRIBBLE_LOGO, PAYMENT_KEY } from '../BaseComponent';
+import BaseComponent, { defaultStyle, DRIBBLE_LOGO, getPaymentKey } from '../BaseComponent';
 import { FlatList } from 'react-native-gesture-handler';
 import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
@@ -98,7 +98,7 @@ class PaymentDetail extends BaseComponent {
             description: desc,
             image: logo,
             currency: 'INR',
-            key: PAYMENT_KEY,
+            key: getPaymentKey(),
             amount: total,
             name: 'Machaxi',
             prefill: {

@@ -243,7 +243,7 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('WebViewScreen')}>
+					this.props.navigation.navigate('ContactUs')}>
 
 					<View style={styles.drawercell}>
 
@@ -412,7 +412,7 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ContactUs')}>
 
 					<View style={styles.drawercell}>
 
@@ -752,7 +752,7 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('WebViewScreen')}>
+					this.props.navigation.navigate('ContactUs')}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Contact Us</Text>
 						<Image
@@ -1247,7 +1247,7 @@ class CoachMenuDrawer extends BaseComponent {
 				</TouchableOpacity>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('WebViewScreen')}>
+					this.props.navigation.navigate('ContactUs')}>
 
 					<View style={styles.drawercell}>
 

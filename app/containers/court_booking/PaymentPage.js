@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Alert } from 'react-native'
-import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, DRIBBLE_LOGO, PAYMENT_KEY, TEMP_USER_INFO } from '../BaseComponent';
+import BaseComponent, { defaultStyle, SESSION_DATE_FORMAT, DRIBBLE_LOGO, getPaymentKey, TEMP_USER_INFO } from '../BaseComponent';
 import { createBooking } from '../../redux/reducers/CourtBookingReducer';
 import { connect } from 'react-redux';
 import { getData, isSignedIn } from "../../components/auth";
@@ -74,7 +74,7 @@ class PaymentPage extends BaseComponent {
             description: desc,
             image: logo,
             currency: 'INR',
-            key: PAYMENT_KEY,
+            key: getPaymentKey(),
             amount: total,
             name: 'Machaxi',
             prefill: {

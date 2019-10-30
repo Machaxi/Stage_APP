@@ -137,6 +137,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445376033321:android:e81f32db57dcade54fa238",
+        "android_client_info": {
+          "package_name": "com.machaxi.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5xPrD2Bod747X6_55traTxGgU955w5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445376033321-9fsofml577vf7g85nau2ckqol9i24ddh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.machaxi"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

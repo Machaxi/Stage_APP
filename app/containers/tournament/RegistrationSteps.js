@@ -2,7 +2,7 @@ import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
 import BaseComponent, {
-    defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, PAYMENT_KEY,
+    defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, getPaymentKey,
     getFormattedCategory,
     GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel, DRIBBLE_LOGO
 } from '../BaseComponent';
@@ -1418,7 +1418,7 @@ class RegistrationSteps extends BaseComponent {
                 description: desc,
                 image: logo,
                 currency: 'INR',
-                key: PAYMENT_KEY,
+                key: getPaymentKey(),
                 amount: total,
                 name: 'Machaxi',
                 prefill: {

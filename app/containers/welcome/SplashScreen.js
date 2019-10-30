@@ -129,7 +129,7 @@ class Splash extends BaseComponent {
 
                     }
 
-                }, 10)
+                }, 1000)
             })
             .catch(err => alert("An error occurred"));
 

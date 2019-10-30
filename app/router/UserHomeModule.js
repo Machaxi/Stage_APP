@@ -37,6 +37,7 @@ import TestExample from '../containers/welcome/TestExample'
 import BookTrial from '../containers/GuestScreen/BookTrial'
 import PaymentHistory from '../containers/payment/PaymentHistory'
 import ImageGuidelines from '../containers/profile/ImageGuidelines'
+import ContactUs from '../containers/util/ContactUs'
 
 const userHomeModule = createStackNavigator({
 
@@ -469,7 +470,24 @@ const userHomeModule = createStackNavigator({
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={true}
                 showDrawer={false}
-                 />,
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    ContactUs: {
+        screen: ContactUs,
+        navigationOptions: ({ navigation }) => ({
+            title: "Contact Us",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false}
+            />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,

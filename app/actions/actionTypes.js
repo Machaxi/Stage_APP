@@ -21,6 +21,10 @@ export const GET_BATCHES = 'user/LOAD';
 export const DO_BATCHES_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_BATCHES_FAIL = 'user/LOAD_FAIL';
 
+export const GET_CANCEL_BATCHES = 'cancel_batch/LOAD';
+export const DO_CANCEL_BATCHES_SUCCESS = 'cancel_batch/LOAD_SUCCESS';
+export const DO_CANCEL_BATCHES_FAIL = 'cancel_batch/LOAD_FAIL';
+
 export const GET_BATCHES_ATTENDENCE = 'user_attendence/LOAD';
 export const DO_BATCHES_ATTENDENCE_SUCCESS = 'user_attendence/LOAD_SUCCESS';
 export const DO_BATCHES_ATTENDENCE_FAIL = 'user_attendence/LOAD_FAIL';

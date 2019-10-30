@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert, Platform } from 'react-native'
-import BaseComponent, {BASE_URL, defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
+import BaseComponent, {getBaseUrl, defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
@@ -143,7 +143,7 @@ class EditProfile extends BaseComponent {
 
                 console.log('profile data=> ', JSON.stringify(dict))
 
-                let url = BASE_URL + 'user/profile'
+                let url = getBaseUrl() + 'user/profile'
 
                 RNFetchBlob.
                     config({ timeout: 1000 * 60 })

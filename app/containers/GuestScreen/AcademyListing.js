@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/BrowseAcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent, { defaultStyle,BASE_URL } from './../BaseComponent'
+import BaseComponent, { defaultStyle,getBaseUrl } from './../BaseComponent'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData, isSignedIn } from '../../components/auth';
 import Events from '../../router/events';
@@ -349,7 +349,7 @@ class AcademyListing extends BaseComponent {
         // }).catch((response) => {
         //     console.log(response);
         // })
-        const addCart = BASE_URL + `global/academy/search-auto-suggest?search_query=${search_query}`
+        const addCart = getBaseUrl() + `global/academy/search-auto-suggest?search_query=${search_query}`
 
         console.log(addCart)
 
