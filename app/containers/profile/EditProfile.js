@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert, Platform } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
+import BaseComponent, {BASE_URL, defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
@@ -14,7 +14,6 @@ import Events from '../../router/events';
 import moment from 'moment'
 import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
-import { BASE_URL } from '../../../App'
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
 

@@ -24,13 +24,13 @@ import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
+import BaseComponent, { BASE_URL,ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
 import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info';
-export const BASE_URL = 'https://www.machaxi.com/api/'
+//export const BASE_URL = 'https://www.machaxi.com/api/'
 //export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 export const client = axios.create({

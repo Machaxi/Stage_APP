@@ -8,10 +8,11 @@ import firebase from 'react-native-firebase';
 import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
-import BaseComponent, { defaultStyle, TOURNAMENT_REGISTER, PUSH_TOKEN, ONE_SIGNAL_USERID } from '../BaseComponent';
+import BaseComponent, { defaultStyle, FIREBASE_CHECK, SHOW_LOGIN_BY_NAME, TOURNAMENT_REGISTER, PUSH_TOKEN, ONE_SIGNAL_USERID } from '../BaseComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import Events from '../../router/events';
 
 class PhoneAuth extends BaseComponent {
     constructor(props) {
@@ -65,22 +66,22 @@ class PhoneAuth extends BaseComponent {
 
     componentDidMount() {
         // this.signOut()
-        this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({ user1: user.toJSON() });
-
-            } else {
-                // User has been signed out, reset the state
-                this.setState({
-                    user1: null,
-                    message: '',
-                    codeInput: '',
-                    phoneNumber: '+91',
-                    confirmResult: null,
-                    token: '',
-                });
-            }
-        });
+        // this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        //     if (user) {
+        //         this.setState({ user1: user.toJSON() });
+        //         console.log('componentDidMount=>',JSON.stringify(user))
+        //     } else {
+        //         // User has been signed out, reset the state
+        //         this.setState({
+        //             user1: null,
+        //             message: '',
+        //             codeInput: '',
+        //             phoneNumber: '+91',
+        //             confirmResult: null,
+        //             token: '',
+        //         });
+        //     }
+        // });
         // firebase.auth().currentUser.getIdToken(true).then((token) => {
         //     // this.setState({
         //     //     token:token,
@@ -139,14 +140,16 @@ class PhoneAuth extends BaseComponent {
             confirmResult.confirm(codeInput)
                 .then((user1) => {
                     this.progress(false)
-                    console.log(user1)
+                    console.log('user1----' + JSON.stringify(user1))
+                    this.state.user1 = user1
                     this.setState({ message: 'Code Confirmed!' });
                     firebase.auth().currentUser.getIdToken(true).then((token) => {
-                        console.log("token", token)
+                        console.log("token===", token)
                         this.setState({
                             token: token,
 
-                        }, this.signIn11(this.state.user1, token))
+                        })
+                        this.signIn11(this.state.user1, token)
 
                         if (!token) {
                             //Helpers.logout(false);
@@ -172,8 +175,12 @@ class PhoneAuth extends BaseComponent {
 
     }
 
-    signIn11 = (user1, token) => {
+    signIn11(user1, token) {
 
+        if (token == null || token == '')
+            return
+
+        console.log('phoneNumber=>', JSON.stringify(user1))
         let os = "IOS"
         if (Platform.OS === 'android') {
             os = "android";
@@ -194,7 +201,7 @@ class PhoneAuth extends BaseComponent {
         dict['fcm_token'] = fcm_token;
         dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
         dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
-        dict['has_firebase_check'] = true;
+        dict['has_firebase_check'] = FIREBASE_CHECK;
 
 
         dataDic['data'] = dict;
@@ -294,6 +301,11 @@ class PhoneAuth extends BaseComponent {
                     else {
                         this.props.navigation.navigate('EditProfile')
                     }
+                } else {
+                    this.props.navigation.navigate('GHome')
+                    setTimeout(() => {
+                        Events.publish('OPEN_PROFILE')
+                    }, 500)
                 }
             } else {
                 alert('Invalid credentials')
@@ -432,6 +444,12 @@ class PhoneAuth extends BaseComponent {
                     else {
                         this.props.navigation.navigate('EditProfile')
                     }
+                } else {
+
+                    this.props.navigation.navigate('GHome')
+                    setTimeout(() => {
+                        Events.publish('OPEN_PROFILE')
+                    }, 500)
                 }
             } else {
                 alert('Invalid credentials')
@@ -468,7 +486,7 @@ class PhoneAuth extends BaseComponent {
                         borderBottomWidth: 1,
                         marginTop: 50, marginBottom: 15
                     }}
-                    //keyboardType={"phone-pad"}
+                    keyboardType={SHOW_LOGIN_BY_NAME ? "default" : "phone-pad"}
                     onChangeText={value => this.setState({ phoneNumber: value })}
                     placeholder={'Enter Phone Number'}
                     value={phoneNumber}
@@ -509,24 +527,26 @@ class PhoneAuth extends BaseComponent {
                     onPress={() => {
                         this.signInByName(null, null)
                     }}>Login by name</Text> */}
-                    
-                {/* <TouchableOpacity activeOpacity={.8}
-                    style={[defaultStyle.rounded_button,
-                    {
-                        marginTop: 16,
-                        width: 150
-                    }]}
-                    onPress={() => {
-                        this.signInByName(null, null)
-                    }}>
-                    <Text
-                        style={{
-                            color: 'white',
-                            textAlign: 'center',
-                            fontFamily: 'Quicksand-Medium'
+
+                {SHOW_LOGIN_BY_NAME ?
+                    <TouchableOpacity activeOpacity={.8}
+                        style={[defaultStyle.rounded_button,
+                        {
+                            marginTop: 16,
+                            width: 150
+                        }]}
+                        onPress={() => {
+                            this.signInByName(null, null)
                         }}>
-                        Login by name</Text>
-                </TouchableOpacity> */}
+                        <Text
+                            style={{
+                                color: 'white',
+                                textAlign: 'center',
+                                fontFamily: 'Quicksand-Medium'
+                            }}>
+                            Login by name</Text>
+                    </TouchableOpacity>
+                    : null}
 
                 <TouchableOpacity
                     style={{
@@ -700,7 +720,7 @@ class PhoneAuth extends BaseComponent {
 
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
-                {/* {user1 && isCall ? this.signIn11(user1, this.state.token) : null} */}
+                {user1 && isCall ? this.signIn11(user1, this.state.token) : null}
 
             </View>
 

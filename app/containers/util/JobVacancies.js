@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/AcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent, { defaultStyle } from './../BaseComponent'
-import { BASE_URL } from '../../../App';
+import BaseComponent, {BASE_URL, defaultStyle } from './../BaseComponent'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData } from '../../components/auth';
 import Events from '../../router/events';

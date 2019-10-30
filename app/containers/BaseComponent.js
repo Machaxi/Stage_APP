@@ -5,7 +5,6 @@ import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 import Events from '../router/events';
 import axios from 'axios'
 import { client } from '../../App'
-import { BASE_URL } from '../../App'
 import moment from 'moment'
 import { StatusBar } from 'react-native';
 import firebase from 'react-native-firebase';
@@ -62,10 +61,23 @@ global.SELECTED_PLAYER_ID = ''
 
 //
 
-//PAYMENT_GATEWAY
-//export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
-export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
 
+//===============================================================================================
+//======================== FOR LIVE AND DEBUG CONFIGURATION =====================================
+
+//TEST
+//export const PAYMENT_KEY = 'rzp_test_hEiHYwRLYkvcNV'
+//export const SHOW_LOGIN_BY_NAME = true
+//export const FIREBASE_CHECK = false
+//export const BASE_URL = 'http://stage.dribblediary.com/api/'
+
+//LIVE
+export const BASE_URL = 'https://www.machaxi.com/api/'
+export const PAYMENT_KEY = 'rzp_live_uh7h7N55m9BHaZ'
+export const SHOW_LOGIN_BY_NAME = false
+export const FIREBASE_CHECK = true
+
+//===============================================================================================
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
 ///

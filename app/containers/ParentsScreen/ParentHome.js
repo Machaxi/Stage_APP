@@ -213,6 +213,10 @@ class ParentHome extends BaseComponent {
             this.selfComponentDidMount()
         });
 
+        this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD_1', () => {
+            this.selfComponentDidMount()
+        });
+
         this.getNotifications()
 
         this.checkNotification()

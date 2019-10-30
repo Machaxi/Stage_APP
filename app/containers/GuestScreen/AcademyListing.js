@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/BrowseAcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent, { defaultStyle } from './../BaseComponent'
-import { BASE_URL } from '../../../App';
+import BaseComponent, { defaultStyle,BASE_URL } from './../BaseComponent'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData, isSignedIn } from '../../components/auth';
 import Events from '../../router/events';
@@ -133,6 +132,10 @@ class AcademyListing extends BaseComponent {
         this._handleChange = this._handleChange.bind(this)
         this.state.job_vacancy = this.props.navigation.getParam('vacancy');
         this.state.book_court = this.props.navigation.getParam('book_court');
+
+        this.refreshEvent = Events.subscribe('OPEN_PROFILE', () => {
+            this.props.navigation.navigate('EditProfile')
+        });
     }
 
     _refresh() {
