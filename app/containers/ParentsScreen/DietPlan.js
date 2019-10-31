@@ -109,13 +109,13 @@ class DietPlan extends BaseComponent {
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={[defaultStyle.bold_text_14, {
                         textAlign: 'center',
-                        padding:16
+                        padding: 16
                     }]}>
                         Diet plan not available. Please get in touch with the academy to upload it.</Text>
                 </View>
             )
         }
-        const uri = 'https://docs.google.com/gview?embedded=true&url=' + dietUrl;
+        const uri = 'https://docs.google.com/gview?embedded=true&url=' + encodeURI(dietUrl);;
         console.log('NewDietUrl-> ', uri)
 
         return (

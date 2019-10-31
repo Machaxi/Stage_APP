@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/BrowseAcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent, { defaultStyle,getBaseUrl } from './../BaseComponent'
+import BaseComponent, { defaultStyle, getBaseUrl } from './../BaseComponent'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData, isSignedIn } from '../../components/auth';
 import Events from '../../router/events';
@@ -119,14 +119,15 @@ class AcademyListing extends BaseComponent {
         this.secondTextInputRef = React.createRef();
         this.setNavigation(this.props.navigation)
         this.state = {
-            academies: [],
+            academies: null,
             query: '',
             autodata: [],
             suggestionResult: [],
             isAutoSuggest: false,
             isRefreshing: false,
             job_vacancy: false,
-            book_court: false
+            book_court: false,
+            firstInstance: true
 
         }
         this._handleChange = this._handleChange.bind(this)
@@ -170,12 +171,15 @@ class AcademyListing extends BaseComponent {
                 let list = this.props.data.res.data.academies
 
                 this.setState({
-                    academies: list
+                    academies: list,
+                    isRefreshing: false
                 })
+                setTimeout(() => {
+                    this.state.firstInstance = false
+
+                }, 1000)
+
             }
-
-            this.setState({ isRefreshing: false })
-
         }).catch((response) => {
             console.log(response);
             this.setState({ isRefreshing: false })
@@ -768,7 +772,10 @@ class AcademyListing extends BaseComponent {
 
     render() {
 
-        if (!this.state.isRefreshing && this.props.data.loading && !this.state.isAutoSuggest) {
+        let academies = this.state.academies
+        let firstInstance = this.state.firstInstance
+
+        if (firstInstance == true && !this.state.isRefreshing && this.props.data.loading && !this.state.isAutoSuggest) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
@@ -785,7 +792,7 @@ class AcademyListing extends BaseComponent {
                         this.listHeader()
                     }
                 </View>
-                {this.state.academies.length > 0 ?
+                {academies != null && academies.length > 0 ?
                     <FlatList
                         style={{
                             zIndex: 1
@@ -798,7 +805,7 @@ class AcademyListing extends BaseComponent {
                         renderItem={this._renderItem}
                     /> :
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={defaultStyle.regular_text_14}>No Academy Found</Text>
+                        <Text style={defaultStyle.regular_text_14}>{academies == null ? '' : "No Academy Found"}</Text>
                     </View>
                 }
             </View>

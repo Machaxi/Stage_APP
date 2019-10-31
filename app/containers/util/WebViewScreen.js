@@ -16,7 +16,7 @@ export default class WebViewScreen extends BaseComponent {
     }
 
     render() {
-        const uri = 'http://stage.dribblediary.com/';
+        const uri = 'https://machaxi.com/about-us';
         //const uri = 'http://www.africau.edu/images/default/sample.pdf'
         let visible = this.state.visible
       

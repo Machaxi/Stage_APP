@@ -134,7 +134,58 @@ const configurationOptions = {
 }
 const firebase = RNFirebase.initializeApp(configurationOptions)
 
+branch.subscribe(({ error, params }) => {
+    if (error) {
+        //console.error('Error from Branch: ' + error)
+        return
+    }
 
+    const clicked_branch_link = params['+clicked_branch_link']
+    const rn_cached_initial_event = params['+rn_cached_initial_event']
+
+    //alert(clicked_branch_link)
+    if (clicked_branch_link) {
+        let feature = params['~feature']
+        if (feature) {
+            let id = params['id']
+            let obj = {
+                tournament_id: id,
+                feature: feature
+            }
+            console.log('Branchtit=>', feature)
+            Events.publish('deep_linking', obj);
+            //payment_details
+            //  razorpay_payment_id
+        }
+    }
+
+    //alert(JSON.stringify(params))
+    // let lastParams =  branch.getLatestReferringParams() // params from last open
+    // let installParams =  branch.getFirstReferringParams() // params from original install
+    //console.log('lastParams=> ', JSON.stringify(branch))
+    // console.log('installParams=> ', JSON.stringify(installParams))
+
+    // console.log('Branch=> ',JSON.stringify(branch))
+
+    // if (params['+non_branch_link']) {
+    //     const nonBranchUrl = params['+non_branch_link']
+    //     console.log('Branch=>', nonBranchUrl)
+    //     let lastParams = branch.getLatestReferringParams() // params from last open
+    //     console.log('lastParams ' + JSON.stringify(lastParams))
+    //     // Route non-Branch URL if appropriate.
+    //     return
+    // }
+    //const tournament_id = params.tournament_id
+    console.log('Branchtit=>', JSON.stringify(params))
+    // console.log('Branchtit=>', tournament_id)
+    // if (tournament_id) {
+    //     //alert('test')
+    //     // storeData('deep_linking', true)
+    //     // Events.publish('deep_linking', tournament_id);
+
+    // }
+
+})
 
 
 
@@ -194,58 +245,7 @@ export default class App extends BaseComponent {
     }
 
     componentWillMount() {
-        branch.subscribe(({ error, params }) => {
-            if (error) {
-                //console.error('Error from Branch: ' + error)
-                return
-            }
-
-            const clicked_branch_link = params['+clicked_branch_link']
-            const rn_cached_initial_event = params['+rn_cached_initial_event']
-
-            //alert(clicked_branch_link)
-            if (clicked_branch_link) {
-                let feature = params['~feature']
-                if (feature) {
-                    let id = params['id']
-                    let obj = {
-                        tournament_id: id,
-                        feature: feature
-                    }
-                    console.log('Branchtit=>', feature)
-                    Events.publish('deep_linking', obj);
-                    //payment_details
-                    //  razorpay_payment_id
-                }
-            }
-
-            //alert(JSON.stringify(params))
-            // let lastParams =  branch.getLatestReferringParams() // params from last open
-            // let installParams =  branch.getFirstReferringParams() // params from original install
-            //console.log('lastParams=> ', JSON.stringify(branch))
-            // console.log('installParams=> ', JSON.stringify(installParams))
-
-            // console.log('Branch=> ',JSON.stringify(branch))
-
-            // if (params['+non_branch_link']) {
-            //     const nonBranchUrl = params['+non_branch_link']
-            //     console.log('Branch=>', nonBranchUrl)
-            //     let lastParams = branch.getLatestReferringParams() // params from last open
-            //     console.log('lastParams ' + JSON.stringify(lastParams))
-            //     // Route non-Branch URL if appropriate.
-            //     return
-            // }
-            //const tournament_id = params.tournament_id
-            console.log('Branchtit=>', JSON.stringify(params))
-            // console.log('Branchtit=>', tournament_id)
-            // if (tournament_id) {
-            //     //alert('test')
-            //     // storeData('deep_linking', true)
-            //     // Events.publish('deep_linking', tournament_id);
-
-            // }
-
-        })
+        
     }
 
     onReceived(notification) {

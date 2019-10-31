@@ -79,7 +79,7 @@ global.SELECTED_PLAYER_ID = ''
 
 //===============================================================================================
 
-export const DEBUG_APP = true
+export const DEBUG_APP = false
 export const PROD_DEBUG = true
 
 
@@ -106,7 +106,7 @@ export function getPaymentKey() {
 
 export function getFirebaseCheck() {
     if (DEBUG_APP) {
-        return false
+        return true
     }
     else {
         return true
@@ -330,6 +330,7 @@ export default class BaseComponent extends React.Component {
                     client.get('notification/notification-count',
                         { headers })
                         .then(function (response) {
+                            console.log('notification' + JSON.stringify( response.data));
                             let json = response.data
                             let success = json.success
                             if (success) {

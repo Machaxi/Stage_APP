@@ -101,13 +101,7 @@ class EditProfile extends BaseComponent {
         else {
 
             getData('header', (value) => {
-                //var formData = new FormData();
-                //var dataDic = {};
-                // data.append('file', this.state.imageData);
-                // 
-                //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
-                //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
-
+               
                 var dict = {};
                 this.progress(true)
                 dict['phone_number'] = phone_number;

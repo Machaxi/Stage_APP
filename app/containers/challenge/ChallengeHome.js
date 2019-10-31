@@ -70,7 +70,7 @@ class ChallengeHome extends BaseComponent {
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             if (userData.user['user_type'] == PLAYER) {
-                this.props.navigation.setParams({ Title: "Switch Player" });
+                this.props.navigation.setParams({ Title: "Switch Academy" });
             }
             else if (userData.user['user_type'] == PARENT) {
                 this.props.navigation.setParams({ Title: "Switch Child" });

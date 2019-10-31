@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel,getFormattedCategory } from '../BaseComponent'
+import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel, getFormattedCategory } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { connect } from 'react-redux';
@@ -59,9 +59,19 @@ class FixtureSelection extends BaseComponent {
 
 
         this.dialogRef = React.createRef();
-        this.state.tournament_id = this.props.navigation.getParam('id')
-        this.getFixtureData()
 
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.state.tournament_id = this.props.navigation.getParam('id')
+                this.getFixtureData()
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
     }
 
     getFixtureData() {

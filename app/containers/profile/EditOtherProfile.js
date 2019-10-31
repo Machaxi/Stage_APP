@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Image, Alert } from 'react-native'
-import BaseComponent, { defaultStyle, EVENT_EDIT_PROFILE } from '../BaseComponent';
+import { View, ImageBackground, Text, TouchableOpacity, TextInput, Image, Alert } from 'react-native'
+import BaseComponent, { getBaseUrl,defaultStyle, EVENT_EDIT_PROFILE } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker'
@@ -13,7 +13,10 @@ import axios from 'axios'
 import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
 import moment from 'moment'
-
+import RNFetchBlob from 'rn-fetch-blob';
+import ImagePicker from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer';
+import FastImage from 'react-native-fast-image';
 
 class EditOtherProfile extends BaseComponent {
 
@@ -24,7 +27,13 @@ class EditOtherProfile extends BaseComponent {
             txtname: '',
             txtphone: '',
             profile_pic: '',
-            id: ''
+            id: '',
+            path: null,
+            fileName: null,
+            is_navigation_to_tournament: false,
+            base64img: null,
+            contentType: '',
+            is_image_processed: false
         }
 
         let data = this.props.navigation.getParam('data')
@@ -84,38 +93,177 @@ class EditOtherProfile extends BaseComponent {
         else {
 
             getData('header', (value) => {
-                var formData = new FormData();
-                var dataDic = {};
-                // data.append('file', this.state.imageData);
+
                 var dict = {};
-                //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
-                //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
                 this.progress(true)
-                dict['phone_number'] = txtphone//user.phoneNumber;
+                dict['phone_number'] = txtphone;
                 dict['name'] = txtname;
                 dict['dob'] = dob;
                 dict['user_id'] = this.state.id
-                console.log('json => ', JSON.stringify(dict))
-                formData.append('post', JSON.stringify(dict));
-                console.log("header", JSON.stringify(formData));
+                //formData.append('post', JSON.stringify(dict));
 
-                this.props.saveOtherUserProfile(value, formData).then(() => {
-                    this.progress(false)
-                    let data = this.props.data.profileData.data
-                    console.log(' saveOtherUserProfile payload ' + JSON.stringify(this.props.data));
-                    alert('Success.')
-                    Events.publish(EVENT_EDIT_PROFILE);
+                let file = null
+                let path = this.state.path
+                console.log("path", path);
+                if (Platform.OS == 'ios') {
+                    path = path.replace('file:///', '/')
+                    console.log("path", path);
+                }
 
-                }).catch((response) => {
-                    //handle form errors
-                    console.log(response);
-                    this.progress(false)
-                    alert('Something went wrong.')
+                let fileName = this.state.fileName
+                let type = this.state.contentType
+                if (path != null) {
+                    file = {
+                        name: 'file',
+                        filename: fileName,
+                        data: RNFetchBlob.wrap(path),
+                        type: type
+                    }
+                }
+                let param = []
+                if (file != null) {
+                    param.push(file)
+                }
+                console.warn('file => ', JSON.stringify(file))
+                let post = { name: 'post', data: JSON.stringify(dict) }
+                param.push(post)
+
+                console.log('profile data=> ', JSON.stringify(dict))
+
+                let url = getBaseUrl() + 'user/profile'
+
+                RNFetchBlob.
+                    config({ timeout: 1000 * 60 })
+                    .fetch('POST', url, {
+                        'Content-Type': 'multipart/form-data',
+                        'x-authorization': value,
+                    }, param).then((resp) => {
+                        // this.progress(false)
+                        // console.log(resp);
+                        // alert('your image uploaded successfully');
+
+                        this.progress(false)
+
+                        let data = JSON.parse(resp.data)//JSON.parse(resp)
+                        console.warn('suces => ', data.success)
+                        console.log(' saveUserStartupProfile payload ' + JSON.stringify(data));
+
+                        let success = data.success
+                        if (success) {
+
+                            // alert('Success.')
+                            //this.updatePrefData(JSON.stringify(data.data))
+
+                            this.props.navigation.goBack()
+                            Events.publish('REFRESH_DASHBOARD');
+
+                        } else {
+                            let error_message = data.error_message
+                            alert(error_message)
+                        }
+
+                    }).catch((error) => {
+                        console.log('error => ', error)
+                        this.progress(false)
+                    })
+            })
+
+            // getData('header', (value) => {
+            //     var formData = new FormData();
+            //     var dataDic = {};
+            //     // data.append('file', this.state.imageData);
+            //     var dict = {};
+            //     //dataDic['file'] = "storage/emulated/0/Pictures/test.jpg"//this.state.imageData
+            //     //formData.append("file", "storage/emulated/0/Pictures/test.jpg");
+            //     this.progress(true)
+            //     dict['phone_number'] = txtphone//user.phoneNumber;
+            //     dict['name'] = txtname;
+            //     dict['dob'] = dob;
+            //     dict['user_id'] = this.state.id
+            //     console.log('json => ', JSON.stringify(dict))
+            //     formData.append('post', JSON.stringify(dict));
+            //     console.log("header", JSON.stringify(formData));
+
+            //     this.props.saveOtherUserProfile(value, formData).then(() => {
+            //         this.progress(false)
+            //         let data = this.props.data.profileData.data
+            //         console.log(' saveOtherUserProfile payload ' + JSON.stringify(this.props.data));
+            //         alert('Success.')
+            //         Events.publish(EVENT_EDIT_PROFILE);
+
+            //     }).catch((response) => {
+            //         //handle form errors
+            //         console.log(response);
+            //         this.progress(false)
+            //         alert('Something went wrong.')
+            //     })
+
+            // })
+        }
+    }
+
+    pickImage() {
+
+        const options = {
+            title: 'Select Image',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                //const source = { uri: response.uri };
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+                let path = response.path
+                if (Platform.OS == 'ios') {
+                    path = response.uri
+                }
+                // let fileName = response.fileName
+                // let base64 = 'data:image/jpeg;base64,' + response.data
+                // let type = response.type
+                // this.setState({
+                //     path: path,
+                // })
+
+                this.resizeImage(path)
+
+                //console.warn('path => ',this.state.path)
+                //console.warn('fileName => ',this.state.fileName)
+            }
+        });
+
+    }
+
+    resizeImage(path) {
+
+
+        ImageResizer.createResizedImage(path, 625, 400, 'PNG', 80)
+            .then(({ uri }) => {
+
+                var fileName = uri.replace(/^.*[\\\/]/, '')
+                this.setState({
+                    path: uri,
+                    fileName: fileName,
+                    contentType: 'image/png'
                 })
 
             })
-        }
+            .catch(err => {
+                console.log(err);
+                return Alert.alert('Unable to resize the photo', 'Check the console for full the error message');
+            });
     }
+
 
     progress(status) {
         this.setState({
@@ -125,10 +273,21 @@ class EditOtherProfile extends BaseComponent {
 
     render() {
 
+        const is_image_processed = false
+
+        let placeHolder = null
         let profile_pic = this.state.profile_pic
-        if (profile_pic == '') {
-            profile_pic = 'https://www.cobdoglaps.sa.edu.au/wp-content/uploads/2017/11/placeholder-profile-sq.jpg'
+        let base64img = this.state.path
+
+        if (base64img != null) {
+            placeHolder = { uri: base64img }
         }
+        else if (profile_pic == null) {
+            placeHolder = require('../../images/male_avatar_small.png')
+        } else {
+            placeHolder = { uri: profile_pic }
+        }
+
 
         return (
 
@@ -153,10 +312,60 @@ class EditOtherProfile extends BaseComponent {
                         }}
                     >
 
-                        <Image
-                            resizeMode="contain"
-                            style={{ height: 100, width: 100 }}
-                            source={{ uri: profile_pic }} />
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (is_image_processed != true)
+                                    this.pickImage()
+                            }}
+                        >
+
+                            <FastImage
+                                resizeMode="contain"
+                                style={{
+
+                                    paddingVertical: 0,
+                                    width: 180,
+                                    height: 240,
+                                    marginBottom: -40
+                                    // borderRadius: 75
+                                }}
+                                //  resizeMode='cover'
+                                source={placeHolder}
+                            />
+                            {is_image_processed != true ?
+                                <View style={{
+                                    justifyContent: 'flex-end', marginBottom: 0,
+                                }}>
+
+                                    <View style={{
+                                        padding: 10,
+                                        backgroundColor: '#67BAF5',
+                                        height: 46,
+                                        justifyContent: 'center',
+                                        //borderWidth:1,
+                                        //borderColor:'#67BAF5',
+                                        alignItems: 'center',
+                                        borderRadius: 23,
+                                        marginBottom: 0,
+                                    }} >
+                                        <Text style={[defaultStyle.bold_text_14,
+                                        {
+                                            color: '#FFFFFF',
+                                            textAlign: 'center',
+                                        }]}> Change Image</Text>
+                                    </View>
+                                </View>
+                                : null}
+
+                        </TouchableOpacity>
+
+                        <Text
+                            onPress={() => {
+                                this.props.navigation.navigate('ImageGuidelines')
+                            }}
+                            style={[defaultStyle.regular_text_10, { margin: 8, color: '#67BAF5' }]}>
+                            Image Guidelines
+                            </Text>
 
 
                         <View

@@ -12,7 +12,7 @@ import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
 import moment from 'moment';
-import BaseComponent, { getFormatTimeDate,defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
+import BaseComponent, { getFormatTimeDate, defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
 import Events from '../../router/events';
 import { ACADEMY, COACH } from '../../components/Constants';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -33,6 +33,7 @@ class MarkAttendence extends BaseComponent {
             country: undefined,
             billingchecked: false,
             playerList: null,
+            coachesList: null,
             batchDetails: null,
             spinner: false
         }
@@ -82,9 +83,17 @@ class MarkAttendence extends BaseComponent {
                         players[i] = obj
                     }
 
+                    let coaches = user1.data['coaches']
+                    for (let i = 0; i < coaches.length; i++) {
+                        let obj = coaches[i]
+                        obj.is_present = true
+                        coaches[i] = obj
+                    }
+
 
                     this.setState({
                         playerList: players,
+                        coachesList: coaches,
                         batchDetails: user1.data['batch']
 
                     })
@@ -106,75 +115,165 @@ class MarkAttendence extends BaseComponent {
 
 
 
-    renderItem = ({ item }) => (
-
-        <View style={{
-            marginLeft: 10, marginRight: 10, marginTop: 10,
-            flex: 1, flexDirection: 'row', height: 50
-        }}>
+    renderItem(item) {
+        return (
 
             <View style={{
+                marginLeft: 10,
+                marginRight: 10,
+
+                alignItems: 'center',
                 flex: 1,
-                marginLeft: 8,
-                marginRight: 15,
-                marginBottom: 5,
                 flexDirection: 'row',
-                justifyContent: 'space-between',
+                height: 50
             }}>
-                <Text style={defaultStyle.regular_text_14}>
-                    {item.name}
-                </Text>
-                <View style={{ backgroundColor: 'white', marginTop: -10 }}>
-                    <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                        activeOpacity={.8}
-                        checkedIcon={<Image style={{
-                            width: 18,
-                            height: 18
-                        }} resizeMode="contain"
-                            source={require('../../images/ic_checkbox_on.png')} />}
-                        uncheckedIcon={<Image style={{
-                            width: 18,
-                            height: 18
-                        }} resizeMode="contain"
-                            source={require('../../images/ic_checkbox_off.png')} />}
-                        containerStyle={{
-                            backgroundColor: 'white',
-                            borderWidth: 0,
-                            padding: 4,
-                            margin: 0,
-                            marginTop: 20,
 
-                        }}
-                        checked={item.is_present}
-                        onPress={() => {
-                            console.log("he;eleleo", item.is_present)
-                            let playerList = [...this.state.playerList];
-                            let index = playerList.findIndex(el => el.id === item.id);
-                            playerList[index] = { ...playerList[index], is_present: !item.is_present };
-                            this.setState({ playerList });
+                <View style={{
+                    flex: 1,
+                    marginLeft: 8,
+                    marginRight: 15,
+                    alignItems: 'center',
+                    //marginBottom: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={[defaultStyle.regular_text_14, {
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }]}>
+                        {item.name}
+                    </Text>
+                    <View style={{ backgroundColor: 'white', marginTop: 0 }}>
+                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
+                            activeOpacity={.8}
+                            checkedIcon={<Image style={{
+                                width: 18,
+                                height: 18
+                            }} resizeMode="contain"
+                                source={require('../../images/ic_checkbox_on.png')} />}
+                            uncheckedIcon={<Image style={{
+                                width: 18,
+                                height: 18
+                            }} resizeMode="contain"
+                                source={require('../../images/ic_checkbox_off.png')} />}
+                            containerStyle={{
+                                backgroundColor: 'white',
+                                borderWidth: 0,
+                                padding: 4,
+                                margin: 0,
+                                marginTop: 0,
 
-                            //   item.isPresent = !item.isPresent
-                            // this.setState({
-                            //     playerList:item
-                            // })
+                            }}
+                            checked={item.is_present}
+                            onPress={() => {
+                                console.log("he;eleleo", item.is_present)
+                                let playerList = [...this.state.playerList];
+                                let index = playerList.findIndex(el => el.id === item.id);
+                                playerList[index] = { ...playerList[index], is_present: !item.is_present };
+                                this.setState({ playerList });
 
-                            console.log("he;eleleo", playerList[0].is_present)
-                        }
+                                //   item.isPresent = !item.isPresent
+                                // this.setState({
+                                //     playerList:item
+                                // })
+
+                                console.log("he;eleleo", playerList[0].is_present)
+                            }
 
 
-                        }
-                    />
+                            }
+                        />
+                    </View>
+
                 </View>
 
             </View>
+        )
+    };
 
-        </View>
+    renderCoachItem(item) {
+        return (
 
-    );
+            <View style={{
+                marginLeft: 10,
+                marginRight: 10,
+
+                alignItems: 'center',
+                flex: 1,
+                flexDirection: 'row',
+                height: 50
+            }}>
+
+                <View style={{
+                    flex: 1,
+                    marginLeft: 8,
+                    marginRight: 15,
+                    alignItems: 'center',
+                    //marginBottom: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={[defaultStyle.regular_text_14, {
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }]}>
+                        {item.name}
+                    </Text>
+                    <View style={{ backgroundColor: 'white', marginTop: 0 }}>
+                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
+                            activeOpacity={.8}
+                            checkedIcon={<Image style={{
+                                width: 18,
+                                height: 18
+                            }} resizeMode="contain"
+                                source={require('../../images/ic_checkbox_on.png')} />}
+                            uncheckedIcon={<Image style={{
+                                width: 18,
+                                height: 18
+                            }} resizeMode="contain"
+                                source={require('../../images/ic_checkbox_off.png')} />}
+                            containerStyle={{
+                                backgroundColor: 'white',
+                                borderWidth: 0,
+                                padding: 4,
+                                margin: 0,
+                                marginTop: 0,
+
+                            }}
+                            checked={item.is_present}
+                            onPress={() => {
+                                console.log("he;eleleo", item.is_present)
+                                let coachesList = [...this.state.coachesList];
+                                let index = coachesList.findIndex(el => el.id === item.id);
+                                coachesList[index] = { ...coachesList[index], is_present: !item.is_present };
+                                this.setState({ coachesList });
+
+                                //   item.isPresent = !item.isPresent
+                                // this.setState({
+                                //     playerList:item
+                                // })
+
+                                console.log("he;eleleo", coachesList[0].is_present)
+                            }
+
+
+                            }
+                        />
+                    </View>
+
+                </View>
+
+            </View>
+        )
+    };
 
     renderFooterItem = () => (
 
-        <View style={{ flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20, justifyContent: 'flex-end' }}>
+        <View style={{
+            flex: 1, marginBottom: 30, marginRight: 20, marginLeft: 20,
+            marginTop: 20,
+            justifyContent: 'flex-end'
+        }}>
 
             <CustomeButtonB onPress={() => { this.savePlayerAttendence() }}>
                 Update
@@ -201,11 +300,11 @@ class MarkAttendence extends BaseComponent {
             dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
             dict['attendance_date'] = NewDate;
             dict['players'] = this.state.playerList
-
+            dict['coaches'] = this.state.coachesList
 
 
             dataDic['data'] = dict;
-            console.log("dicttttc ", dict)
+            console.log("dicttttc ", JSON.stringify(dataDic))
 
             console.warn('Save===> ', JSON.stringify(this.state.playerList))
 
@@ -232,9 +331,6 @@ class MarkAttendence extends BaseComponent {
                 this.progress(false)
                 console.log(response);
             })
-
-
-
         });
     }
 
@@ -248,7 +344,35 @@ class MarkAttendence extends BaseComponent {
                 </View>
             )
         }
+
+
         if (this.state.batchDetails) {
+
+
+            console.log('this.state.playerList', JSON.stringify(this.state.playerList))
+            let player_list = []
+            if (this.state.playerList.length > 0) {
+
+                for (let i = 0; i < this.state.playerList.length; i++) {
+                    let item = this.state.playerList[i]
+                    console.log('obj=>', JSON.stringify(item))
+                    player_list.push(this.renderItem(item))
+
+                }
+            }
+
+            let coaches_list = []
+            if (this.state.coachesList.length > 0) {
+
+                for (let i = 0; i < this.state.coachesList.length; i++) {
+                    let item = this.state.coachesList[i]
+                    console.log('obj=>', JSON.stringify(item))
+                    coaches_list.push(this.renderCoachItem(item))
+
+                }
+            }
+
+            console.log('player_list->', player_list.length)
             const { batch_name, batch_category, batch_id, session } = this.state.batchDetails
 
             // this.attedenceMangement(attandence_batch)
@@ -279,44 +403,83 @@ class MarkAttendence extends BaseComponent {
                         <View style={{ marginTop: 5 }}>
                             <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 10, marginBottom: 10 }}>Time slot </Text>
                             <Text style={defaultStyle.regular_text_14}>
-                                {getFormatTimeDate(session.session_date,session.start_time)
+                                {getFormatTimeDate(session.session_date, session.start_time)
                                     + " - " +
-                                    getFormatTimeDate(session.session_date,session.end_time)}
+                                    getFormatTimeDate(session.session_date, session.end_time)}
                             </Text>
                         </View>
                     </View>
                 </View>
 
-                <View style={{
-                    marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
-                    flexDirection: 'row', justifyContent: 'space-between'
-                }}>
-                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Player </Text>
-                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
-                </View>
+                <ScrollView>
+                    <View>
 
-                <View style={{ backgroundColor: 'white', marginTop: -10, flex: 1 }}>
-                    <CustomeCard>
+                        <View style={{
+                            marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
+                            flexDirection: 'row', justifyContent: 'space-between'
+                        }}>
+                            <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Player </Text>
+                            <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
+                        </View>
 
-                        <FlatList
+                        <View style={
+                            { backgroundColor: 'white', marginTop: -10, flex: 1 }}>
+
+                            <View>
+
+                                {player_list}
+
+                            </View>
+
+                            {/* <CustomeCard> */}
+
+                            {/* <FlatList
                             data={this.state.playerList}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => item.id}
                             ListFooterComponent={this.renderFooterItem}
-                        />
-                    </CustomeCard>
+                        /> */}
 
-                </View>
+                            {/* </CustomeCard> */}
 
+                        </View>
 
+                        {coaches_list.length > 0 ?
+                            <View>
+                                <View style={{
+                                    marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
+                                    flexDirection: 'row', justifyContent: 'space-between'
+                                }}>
+                                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Coach </Text>
+                                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
+                                </View>
 
+                                <View style={
+                                    { backgroundColor: 'white', marginTop: -10, flex: 1 }}>
 
+                                    <View>
 
+                                        {coaches_list}
 
+                                    </View>
 
+                                    {/* <CustomeCard> */}
 
+                                    {/* <FlatList
+                            data={this.state.playerList}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => item.id}
+                            ListFooterComponent={this.renderFooterItem}
+                        /> */}
 
+                                    {/* </CustomeCard> */}
 
+                                </View>
+                            </View> : null}
+
+                        {this.renderFooterItem()}
+                    </View>
+                </ScrollView>
 
 
 

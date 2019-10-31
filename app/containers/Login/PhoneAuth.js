@@ -65,23 +65,23 @@ class PhoneAuth extends BaseComponent {
 
 
     componentDidMount() {
-        // this.signOut()
-        // this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-        //     if (user) {
-        //         this.setState({ user1: user.toJSON() });
-        //         console.log('componentDidMount=>',JSON.stringify(user))
-        //     } else {
-        //         // User has been signed out, reset the state
-        //         this.setState({
-        //             user1: null,
-        //             message: '',
-        //             codeInput: '',
-        //             phoneNumber: '+91',
-        //             confirmResult: null,
-        //             token: '',
-        //         });
-        //     }
-        // });
+        this.signOut()
+        this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user1: user.toJSON() });
+                console.log('componentDidMount=>', JSON.stringify(user))
+            } else {
+                // User has been signed out, reset the state
+                this.setState({
+                    user1: null,
+                    message: '',
+                    codeInput: '',
+                    phoneNumber: '+91',
+                    confirmResult: null,
+                    token: '',
+                });
+            }
+        });
         // firebase.auth().currentUser.getIdToken(true).then((token) => {
         //     // this.setState({
         //     //     token:token,
@@ -124,7 +124,7 @@ class PhoneAuth extends BaseComponent {
                 this.progress(false)
                 this.setState({ confirmResult, message: 'Code has been sent!' })
 
-                console.log('Firebase error ', this.state.message)
+                console.log('Firebase ', this.state.message)
             })
             .catch(error => {
                 console.log('Firebase error ', error)
@@ -175,10 +175,33 @@ class PhoneAuth extends BaseComponent {
 
     }
 
-    signIn11(user1, token) {
 
-        if (token == null || token == '')
-            return
+    getToken() {
+        // console.warn('getToken')
+        firebase
+            .auth()
+            .currentUser.getIdToken(true)
+            .then(token => {
+                console.log("token", token);
+                this.setState(
+                    {
+                        token: token
+                    },
+                    this.signIn11(this.state.user1, token)
+                );
+
+                if (!token) {
+                    //Helpers.logout(false);
+                } else {
+                    // init rest of app, send user to primary navigation component, etc...
+                }
+            });
+    }
+
+    signIn11 = (user1, token) => {
+
+        // if (token == null || token == '')
+        //     return
 
         console.log('phoneNumber=>', JSON.stringify(user1))
         let os = "IOS"
@@ -718,9 +741,15 @@ class PhoneAuth extends BaseComponent {
 
                 {/* {this.renderMessage()} */}
 
+
+                {user1 && isCall ? this.getToken() : null}
+
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 
-                {user1 && isCall ? this.signIn11(user1, this.state.token) : null}
+                {user1 && isCall && this.state.token
+                    ? this.signIn11(user1, this.state.token)
+                    : null}
+                {user1 && isCall ? this.getToken() : null}
 
             </View>
 

@@ -142,7 +142,9 @@ const loginModule = createStackNavigator({
         screen: ImageGuidelines,
         navigationOptions: ({ navigation }) => ({
             title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
+            showMenuAction={false} 
+            showBackAction={true} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -332,7 +334,7 @@ const GuestHomeModule = createStackNavigator({
     WebViewScreen: {
         screen: WebViewScreen,
         navigationOptions: ({ navigation }) => ({
-            title: "WebView",
+            title: "About Us",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={true}
                 showDrawer={false} />,
@@ -383,6 +385,24 @@ const GuestHomeModule = createStackNavigator({
 
         })
     },
+    ImageGuidelines: {
+        screen: ImageGuidelines,
+        navigationOptions: ({ navigation }) => ({
+            title: "Image Guidelines",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
+            showMenuAction={false} 
+            showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
+    
 
 })
 
@@ -861,7 +881,7 @@ const coachHomeModule = createStackNavigator({
     WebViewScreen: {
         screen: WebViewScreen,
         navigationOptions: ({ navigation }) => ({
-            title: "WebView",
+            title: "About Us",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={true}
                 showDrawer={false} />,
@@ -940,6 +960,23 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    ImageGuidelines: {
+        screen: ImageGuidelines,
+        navigationOptions: ({ navigation }) => ({
+            title: "Image Guidelines",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
+            showMenuAction={false} 
+            showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
 
 }, {
         contentComponent: ({ navigation }) => {
@@ -1294,7 +1331,9 @@ const parentHomeModule = createStackNavigator({
         screen: ImageGuidelines,
         navigationOptions: ({ navigation }) => ({
             title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showBackAction={true}
+                showDrawer={false} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -1470,7 +1509,7 @@ const parentHomeModule = createStackNavigator({
     WebViewScreen: {
         screen: WebViewScreen,
         navigationOptions: ({ navigation }) => ({
-            title: "WebView",
+            title: "About Us",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={true}
                 showDrawer={false} />,

@@ -100,7 +100,7 @@ class CancelSession extends BaseComponent {
                 this.progress(false)
 
                 let user = JSON.stringify(this.props.data.batchdata);
-                console.log(' getBatchOperational payload ' + user);
+                console.log(' getBatchOperational payload ' + JSON.stringify(this.props.data));
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
@@ -723,7 +723,7 @@ class CancelSession extends BaseComponent {
 }
 const mapStateToProps = state => {
     return {
-        data: state.BatchReducer,
+        data: state.CancelBatchReducer,
     };
 };
 const mapDispatchToProps = {

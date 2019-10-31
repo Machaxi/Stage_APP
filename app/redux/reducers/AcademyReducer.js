@@ -40,24 +40,24 @@ export default function AcademyReducer(state = initialState, action) {
 }
 
 
-export function getAllAcademy(query, job_vacancy) {
-    console.log('getAllAcademy => ', query)
-    let url = `global/academy/all?${query}`
-    if (job_vacancy) {
-        url = `global/academy/all?vacancy=1&${query}`
-    }
-    return {
-        type: types.DO_LOGIN,
-        payload: {
-            request: {
-                url: url
-            }
-        }
-    };
+// export function getAllAcademy(query, job_vacancy) {
+//     console.log('getAllAcademy => ', query)
+//     let url = `global/academy/all?${query}`
+//     if (job_vacancy) {
+//         url = `global/academy/all?vacancy=1&${query}`
+//     }
+//     return {
+//         type: types.DO_LOGIN,
+//         payload: {
+//             request: {
+//                 url: url
+//             }
+//         }
+//     };
 
 
 
-}
+// }
 
 export function getAcademyDetail(id) {
     return {
@@ -113,33 +113,33 @@ export function getAcademyPlayersList(id) {
     };
 }
 
-export function search(search_query, locality_id) {
+// export function search(search_query, locality_id) {
 
-    let url = `global/academy/search?search_query=${search_query}&locality_id=${locality_id}`
-    console.log("search => " + url)
-    return {
-        type: types.DO_LOGIN,
-        payload: {
-            request: {
-                url: url
-            }
-        }
-    }
-};
+//     let url = `global/academy/search?search_query=${search_query}&locality_id=${locality_id}`
+//     console.log("search => " + url)
+//     return {
+//         type: types.DO_LOGIN,
+//         payload: {
+//             request: {
+//                 url: url
+//             }
+//         }
+//     }
+// };
 
-export function search_auto_suggest(search_query) {
+// export function search_auto_suggest(search_query) {
 
-    let url = `global/academy/search-auto-suggest?search_query=${search_query}`
-    console.log("search => " + url)
-    return {
-        type: types.DO_LOGIN,
-        payload: {
-            request: {
-                url: url
-            }
-        }
-    }
-};
+//     let url = `global/academy/search-auto-suggest?search_query=${search_query}`
+//     console.log("search => " + url)
+//     return {
+//         type: types.DO_LOGIN,
+//         payload: {
+//             request: {
+//                 url: url
+//             }
+//         }
+//     }
+// };
 
 
 export function coachListing(academy_id) {

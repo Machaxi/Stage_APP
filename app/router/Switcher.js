@@ -250,7 +250,7 @@ const Switcher = createStackNavigator({
     WebViewScreen: {
         screen: WebViewScreen,
         navigationOptions: ({ navigation }) => ({
-            title: "WebView",
+            title: "About Us",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={true}
                 showDrawer={false} />,

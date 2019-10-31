@@ -59,17 +59,18 @@ class OtherPlayerDetails extends BaseComponent {
                 getData('userInfo', (value) => {
                     let userData = JSON.parse(value)
                     let user_academy_id = userData['academy_id']
+                    let id = userData['player_id']
                     // console.warn('academy_id=>', academy_id)
 
 
-                    if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
-                        
-                        if(user_academy_id==academy_id){
+                    if (id != player_id && userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
+
+                        if (user_academy_id == academy_id) {
                             this.setState({
                                 showChallenge: true
                             })
                         }
-                       
+
                     }
 
                     this.fetch(user_academy_id, player_id)
@@ -77,10 +78,13 @@ class OtherPlayerDetails extends BaseComponent {
             } else {
                 getData('userInfo', (value) => {
                     let userData = JSON.parse(value)
+                    console.log('userData=>', JSON.stringify(userData))
                     let user_academy_id = userData['academy_id']
+                    let id = userData['player_id']
 
-                    if (userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
-                        if(user_academy_id==academy_id){
+
+                    if (id != player_id &&  userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
+                        if (user_academy_id == academy_id) {
                             this.setState({
                                 showChallenge: true
                             })
