@@ -64,7 +64,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.0.2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -82,8 +82,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To Set Profile picture</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To show nearby academy</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>To show nearby academy</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>UIAppFonts</key>

@@ -66,15 +66,15 @@ end
 target 'OneSignalNotificationServiceExtension' do
   pod 'OneSignal', '>= 2.9.3', '< 3.0'
 end
-target 'Dribble-tvOS' do
+#target 'Dribble-tvOS' do
   # Pods for Dribble-tvOS
 
-  target 'Dribble-tvOSTests' do
-    inherit! :search_paths
+#target 'Dribble-tvOSTests' do
+#   inherit! :search_paths
     # Pods for testing
-  end
+# end
 
-end
+#end
 
 
 post_install do |installer|
