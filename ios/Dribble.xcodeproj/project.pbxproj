@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		0047DE71B9CC4A498F8C11A8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D571A395E08B49649009E409 /* FontAwesome.ttf */; };
 		00E356F31AD99517003FC87E /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
@@ -19,12 +20,12 @@
 		2DCD954D1E0B4F2C00145EB5 /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
 		39FE186DCB194B6CA6E23ADA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3532B16D2EFF4744BA759E71 /* AntDesign.ttf */; };
 		449C2C4E0BE34D7BBD6A18DF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2914638E5834733BA9EEA4F /* Feather.ttf */; };
-		504C0A71E13B354D3AAEE66B /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C132E15083E224763CAD16B /* libPods-OneSignalNotificationServiceExtension.a */; };
 		578198CE2BED42919C805A87 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FFE6FC481A34737AA2F511B /* EvilIcons.ttf */; };
 		82A660DBFF2B642015B06671 /* libPods-Dribble.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E3950F35E7A0C6D3EC059C9 /* libPods-Dribble.a */; };
 		85DAA372481308126BEC9485 /* libPods-DribbleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E6B40C78949C299533E6710 /* libPods-DribbleTests.a */; };
 		8C568AC3629E40219264D564 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA401DAAFFB748159660A81C /* Fontisto.ttf */; };
-		A20645032350A1F40037E420 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A20645022350A1F40037E420 /* GoogleService-Info.plist */; };
+		A20C67C9236C459400968980 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A20C67C8236C459300968980 /* GoogleService-Info.plist */; };
+		A2136010236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A213600F236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		A22C6CC623320EAE00AE9F60 /* new_splash_logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A22C6CC323320EAE00AE9F60 /* new_splash_logo.jpg */; };
 		A2346D60232B607B009565AC /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5C232B607B009565AC /* BebasNeue-Regular.ttf */; };
 		A2346D61232B607B009565AC /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5D232B607B009565AC /* Quicksand-Bold.ttf */; };
@@ -134,7 +135,8 @@
 		9E3950F35E7A0C6D3EC059C9 /* libPods-Dribble.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Dribble.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E6B40C78949C299533E6710 /* libPods-DribbleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DribbleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EFCAF0EECE0BFD234164522 /* Pods-DribbleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DribbleTests.release.xcconfig"; path = "Target Support Files/Pods-DribbleTests/Pods-DribbleTests.release.xcconfig"; sourceTree = "<group>"; };
-		A20645022350A1F40037E420 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A20C67C8236C459300968980 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A213600F236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A229A1C9232A8168006F9F9B /* Razorpay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Razorpay.framework; path = "../node_modules/react-native-razorpay/ios/Razorpay.framework"; sourceTree = "<group>"; };
 		A22C6CC323320EAE00AE9F60 /* new_splash_logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = new_splash_logo.jpg; sourceTree = "<group>"; };
 		A2346D5C232B607B009565AC /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
@@ -193,7 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				504C0A71E13B354D3AAEE66B /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				A2136010236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,7 +222,7 @@
 		13B07FAE1A68108700A75B9A /* Dribble */ = {
 			isa = PBXGroup;
 			children = (
-				A20645022350A1F40037E420 /* GoogleService-Info.plist */,
+				A20C67C8236C459300968980 /* GoogleService-Info.plist */,
 				A2837896233200DC0019E155 /* Dribble.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -237,6 +239,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A213600F236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a */,
 				A229A1C9232A8168006F9F9B /* Razorpay.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -581,7 +584,7 @@
 				A22C6CC623320EAE00AE9F60 /* new_splash_logo.jpg in Resources */,
 				DD55356CAA3F4BE5B14C050A /* Foundation.ttf in Resources */,
 				A2346D63232B607B009565AC /* Quicksand-Regular.ttf in Resources */,
-				A20645032350A1F40037E420 /* GoogleService-Info.plist in Resources */,
+				A20C67C9236C459400968980 /* GoogleService-Info.plist in Resources */,
 				B9106352017141B092B21112 /* Ionicons.ttf in Resources */,
 				247F9D3A0B2F407085B32FE6 /* MaterialCommunityIcons.ttf in Resources */,
 				B5C0272589CA43B3A4365220 /* MaterialIcons.ttf in Resources */,

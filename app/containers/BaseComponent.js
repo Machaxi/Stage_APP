@@ -79,7 +79,7 @@ global.SELECTED_PLAYER_ID = ''
 
 //===============================================================================================
 
-export const DEBUG_APP = true
+export const DEBUG_APP = false
 export const PROD_DEBUG = true
 
 

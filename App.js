@@ -46,7 +46,7 @@ const store = createStore(reducer, middleware);
 //added only header but now we have to send more default params, so using this block
 client.interceptors.request.use(
     config => {
-        config.headers.app_version = DeviceInfo.getBuildNumber();
+        config.headers.app_version = '1'//DeviceInfo.getBuildNumber();
         config.headers.app_version_code = DeviceInfo.getVersion();
         config.headers.device_type = Platform.OS;
         config.headers.device_id = global.FCM_DEVICE_ID;
@@ -184,7 +184,7 @@ branch.subscribe(({ error, params }) => {
     //     // Events.publish('deep_linking', tournament_id);
 
     // }
-
+    //alert(DeviceInfo.getVersion())
 })
 
 

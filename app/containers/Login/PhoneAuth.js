@@ -13,6 +13,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import Events from '../../router/events';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 class PhoneAuth extends BaseComponent {
     constructor(props) {
@@ -751,6 +752,9 @@ class PhoneAuth extends BaseComponent {
                     : null}
                 {user1 && isCall ? this.getToken() : null}
 
+                {Platform.OS == 'ios' ?
+                    <KeyboardSpacer />
+                    : null}
             </View>
 
         );
