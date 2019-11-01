@@ -40,11 +40,13 @@ class ParentRewards extends BaseComponent {
         getData('userInfo', (value) => {
             userData = JSON.parse(value)
             console.warn("userData.user", userData.user['id'])
+            let academy_id = userData['academy_id']
+
             parent_player_id = userData.user['id']
             //parent_player_id = "12"
             getData('header', (value) => {
 
-                this.props.getPlayerRewardDue(value, parent_player_id).then(() => {
+                this.props.getPlayerRewardDue(value, parent_player_id,academy_id).then(() => {
                     console.log(' getPlayerRewardDue response payload ' + JSON.stringify(this.props.data));
                     // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
                     let user = JSON.stringify(this.props.data.data);

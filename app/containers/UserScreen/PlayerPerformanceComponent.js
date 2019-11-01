@@ -109,98 +109,111 @@ class PlayerPerformanceComponent extends BaseComponent {
 
     }
 
-    _renderItem = ({ item }) => (
-        <View>
-            <Card style={[styles.performanceCard, { marginTop: 14 }]}>
-                <Text style={styles.reportCardheadingText}>Report</Text>
-                <View style={styles.scoreBestLabelOuter}>
-                    <Text style={styles.scoreLabel}>Score</Text>
-                    <Text style={styles.bestScoreLabel}>Best Score (Batch)</Text>
-                </View>
-                <View style={styles.scoreBestValueOuter}>
-                    <View style={styles.scoreValueOuter}>
-                        <Text style={styles.scoreValue}>{item.current_parameter.score}</Text>
-                        {
-                            item.current_parameter.prev_score != 0 &&
-                            <View style={{ flexDirection: 'row' }}>
+    _renderItem = ({ item }) => {
 
-                                {
-
-
-                                    ((item.current_parameter.prev_score - item.current_parameter.score) != 0 ?
-
-                                        ((item.current_parameter.prev_score > item.current_parameter.score) ?
-
-                                            <Image style={styles.triangleImg} source={require('../../images/triangle_red.png')} /> :
-
-                                            <Image style={styles.triangleImg} source={require('../../images/triangle_green.png')} />)
-
-                                        : <Image style={[styles.triangleImg, { opacity: 0 }]} source={require('../../images/triangle_red.png')} />
-
-                                    )
-
-                                }
-
-
-                                {
-                                    (item.current_parameter.prev_score > item.current_parameter.score) ?
-                                        <Text style={styles.scoreMinValue}>{item.current_parameter.prev_score - item.current_parameter.score} </Text> :
-                                        <Text style={styles.scoreMinValue}>{item.current_parameter.score - item.current_parameter.prev_score} </Text>
-                                }
-
-
-                            </View>
-                        }
-
+        return (
+            <View>
+                <Card style={[styles.performanceCard, { marginTop: 14 }]}>
+                    <Text style={styles.reportCardheadingText}>Report</Text>
+                    <View style={styles.scoreBestLabelOuter}>
+                        <Text style={styles.scoreLabel}>Score</Text>
+                        <Text style={styles.bestScoreLabel}>Best Score (Batch)</Text>
                     </View>
-                    <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
-                </View>
-            </Card>
-            <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
-                <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
+                    <View style={styles.scoreBestValueOuter}>
+                        <View style={styles.scoreValueOuter}>
+                            <Text style={styles.scoreValue}>{item.current_parameter.score}</Text>
+                            {
+                                item.current_parameter.prev_score != 0 && item.current_parameter.prev_score != '-' ?
+                                    <View style={{ flexDirection: 'row' }}>
 
-                {
-                    this.props.jumpTo.current_parameter.graph_data.length > 0 ?
+                                        {(item.current_parameter.prev_score != '-' && item.current_parameter.score != '-') ?
 
-                        <View style={{ width: '100%', height: 300 }}>
-                            <ECharts
-                                ref={this.onRef}
-                                style={{ width: '100%' }}
-                                option={option}></ECharts>
-                        </View> :
 
-                        <View>
 
-                            <View style={{ width: 0, height: 0 }}>
+                                            ((item.current_parameter.prev_score - item.current_parameter.score) != 0 ?
+
+                                                ((item.current_parameter.prev_score > item.current_parameter.score) ?
+
+                                                    <Image style={styles.triangleImg} source={require('../../images/triangle_red.png')} /> :
+
+                                                    <Image style={styles.triangleImg} source={require('../../images/triangle_green.png')} />)
+
+                                                : <Image style={[styles.triangleImg, { opacity: 0 }]} source={require('../../images/triangle_red.png')} />
+
+                                            )
+                                            : null
+                                        }
+
+
+
+                                        {
+                                            (item.current_parameter.prev_score != '-' && item.current_parameter.score != '-')
+                                                ?
+                                                (item.current_parameter.prev_score > item.current_parameter.score) ?
+                                                    <Text style={styles.scoreMinValue}>{item.current_parameter.prev_score - item.current_parameter.score} </Text> :
+                                                    <Text style={styles.scoreMinValue}>{item.current_parameter.score - item.current_parameter.prev_score} </Text>
+                                                :
+                                                <Text style={[styles.scoreMinValue, {
+                                                    marginLeft: 24
+                                                }]}>{item.current_parameter.prev_score}</Text>
+                                        }
+
+
+                                    </View>
+                                    :
+                                    <Text style={styles.scoreMinValue}></Text>
+
+                            }
+
+                        </View>
+                        <Text style={styles.bestScoreValue}>{item.current_parameter.batch_best_score}</Text>
+                    </View>
+                </Card>
+                <Card style={[styles.performanceCard, { paddingBottom: 40 }]}>
+                    <Text style={styles.reportCardheadingText}>Me vs My Batch</Text>
+
+                    {
+                        this.props.jumpTo.current_parameter.graph_data.length > 0 ?
+
+                            <View style={{ width: '100%', height: 300 }}>
                                 <ECharts
                                     ref={this.onRef}
                                     style={{ width: '100%' }}
                                     option={option}></ECharts>
+                            </View> :
+
+                            <View>
+
+                                <View style={{ width: 0, height: 0 }}>
+                                    <ECharts
+                                        ref={this.onRef}
+                                        style={{ width: '100%' }}
+                                        option={option}></ECharts>
+                                </View>
+                                <View style={{ marginTop: 30, marginLeft: 40 }}><Text>No data to show</Text></View>
+
                             </View>
-                            <View style={{ marginTop: 30, marginLeft: 40 }}><Text>No data to show</Text></View>
 
-                        </View>
+                    }
+                </Card>
 
-                }
-            </Card>
+                {this.props.youtube_url ?
+                    <Card style={styles.performanceCard}>
+                        <View style={{ width: '100%', height: 300 }}>
 
-            {this.props.youtube_url ?
-                <Card style={styles.performanceCard}>
-                    <View style={{ width: '100%', height: 300 }}>
-
-                        {
-                            <WebView
-                                source={{ uri: `https://www.youtube.com/embed/${this.props.youtube_url.split('=')[1]}` }}
-                                javaScriptEnabled={true}
-                                domStorageEnabled={true}
-                            />
-                        }
+                            {
+                                <WebView
+                                    source={{ uri: `https://www.youtube.com/embed/${this.props.youtube_url.split('=')[1]}` }}
+                                    javaScriptEnabled={true}
+                                    domStorageEnabled={true}
+                                />
+                            }
 
 
 
 
 
-                        {/* <YouTube
+                            {/* <YouTube
                     apiKey='AIzaSyAFWt-p6Wz0mk7RYyR_amCJUQhojnePTSg'
                     videoId='wF_B_aagLfI'   // The YouTube video ID
                     controls={1}
@@ -220,61 +233,61 @@ class PlayerPerformanceComponent extends BaseComponent {
                     style={{ alignSelf: 'stretch', height: this.state.height }}
                 /> */}
 
-                    </View>
-                    <View style={{
-                        backgroundColor: '#EFEFEF',
-                        width: "100%",
-                        borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row'
-                    }}>
-                        <Image
-                            resizeMode="contain"
-                            style={{
-                                width: 16,
-                                height: 16
-                            }}
-                            source={require('../../images/shape.png')} />
-                        <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 12 }}></View>
-                        <Text
-                            numberOfLines={1}
-                            style={{
-                                fontFamily: 'Quicksand-Regular',
-                                fontSize: 9, color: '#A3A5AE',
-                            }}>{this.props.youtube_url}</Text>
-                    </View>
-                </Card> : null}
-
-            {
-                item.attribute.qa.map((element, index) => {
-
-                    return (
-                        <Card style={[styles.performanceCard, { marginBottom: 14 }]} onPress={() => {
-
-                            this.setState({
-                                question: element.question,
-                                answer: element.answer
-                            }, () => {
-                                this.setModalVisible(true);
-                            });
+                        </View>
+                        <View style={{
+                            backgroundColor: '#EFEFEF',
+                            width: "100%",
+                            borderRadius: 12, height: 36, marginTop: 12, padding: 10, flexDirection: 'row'
                         }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image
-                                    resizeMode="contain"
-                                    style={{
-                                        width: 20,
-                                        height: 24
-                                    }}
-                                    source={require('../../images/info-bulb.png')} />
-                                <View style={{ height: 25, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
-                                <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>{element.question}</Text>
-                            </View>
-                        </Card>
-                    )
-                })
-            }
+                            <Image
+                                resizeMode="contain"
+                                style={{
+                                    width: 16,
+                                    height: 16
+                                }}
+                                source={require('../../images/shape.png')} />
+                            <View style={{ height: 19, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 12 }}></View>
+                            <Text
+                                numberOfLines={1}
+                                style={{
+                                    fontFamily: 'Quicksand-Regular',
+                                    fontSize: 9, color: '#A3A5AE',
+                                }}>{this.props.youtube_url}</Text>
+                        </View>
+                    </Card> : null}
 
+                {
+                    item.attribute.qa.map((element, index) => {
 
-        </View>
-    );
+                        return (
+                            <Card style={[styles.performanceCard, { marginBottom: 14 }]} onPress={() => {
+
+                                this.setState({
+                                    question: element.question,
+                                    answer: element.answer
+                                }, () => {
+                                    this.setModalVisible(true);
+                                });
+                            }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image
+                                        resizeMode="contain"
+                                        style={{
+                                            width: 20,
+                                            height: 24
+                                        }}
+                                        source={require('../../images/info-bulb.png')} />
+                                    <View style={{ height: 25, width: 1, borderWidth: 1, borderColor: '#DFDFDF', marginLeft: 17, marginRight: 17 }}></View>
+                                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>{element.question}</Text>
+                                </View>
+                            </Card>
+                        )
+                    })
+                }
+
+            </View>
+        )
+    };
 
     componentDidUpdate() {
         console.log('component did update');
