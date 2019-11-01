@@ -166,13 +166,16 @@ class CancelSession extends BaseComponent {
                 
 
             let subData = {}
-            let end_date = is_single_day ? null : moment(selected_end_date,'YYYY-MM-DD').format('YYYY-MM-DD')
+            let end_date = is_single_day ? null : moment(selected_end_date,'DD-MMM-YYYY').format('YYYY-MM-DD')
             // alert(moment(selected_start_date).format('YYYY-MM-DD'))
             // alert(moment(selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD'))
             // return
+            console.log('selected_start_date=>',selected_start_date)
+            console.log('selected_end_date=>',end_date)
+            
 
             subData['is_range'] = !this.state.is_single_day
-            subData['from_date'] = moment(selected_start_date,'YYYY-MM-DD').format('YYYY-MM-DD')
+            subData['from_date'] = moment(selected_start_date,'DD-MMM-YYYY').format('YYYY-MM-DD')
             subData['to_date'] = end_date
             subData['academy_id'] = academy_id
             subData['coach_id'] = coach_id

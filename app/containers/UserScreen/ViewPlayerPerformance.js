@@ -94,9 +94,9 @@ class ViewPlayerPerformance extends BaseComponent {
       getData('header', (value) => {
         this.props.getPlayerPerformance(value, this.state.performanceData.id, this.state.month, this.state.year, this.state.performanceData.batchId, userData['player_id'], this.state.routes.length != 0 ? this.state.routes[this.state.index].key : null).then(() => {
           this.progress(false);
-          console.log('this.props.data===========', this.props.data);
+          //console.log('this.props.data===========', this.props.data);
           let data = this.props.data.performencedata
-          //console.log(' getChallengeDashboard1111 ' + JSON.stringify(data));
+          console.log(' getPlayerPerformance ' + JSON.stringify(data));
 
           let success = data.success
           if (success) {
