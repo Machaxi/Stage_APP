@@ -38,6 +38,7 @@ class AcademyBatch extends BaseComponent {
       type: '',
       proficiency: [
         { 'value': '', 'label': 'All' },
+        { 'value': 'AMATEUR', 'label': 'Amateur' },
         { 'value': 'BASIC', 'label': 'Basic' },
         { 'value': 'INTERMEDIATE', 'label': 'Intermediate' },
         { 'value': 'ADVANCED', 'label': 'Advanced' }

@@ -486,6 +486,12 @@ class CoachMenuDrawer extends BaseComponent {
 		}
 		//console.warn('profile_pic', profile_pic)
 
+		let user_type_str = user_type
+		if (user_type == COACH)
+			user_type_str = 'Coach'
+		else if (user_type == ACADEMY)
+			user_type_str = 'Academy'
+
 
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
@@ -555,7 +561,7 @@ class CoachMenuDrawer extends BaseComponent {
 									fontSize: 10,
 									marginTop: 4
 								}}>
-								({user_type == COACH ? 'Coach' : user_type})</Text>
+								({user_type_str})</Text>
 
 							<View style={{ marginTop: 8 }}>
 								<TouchableOpacity activeOpacity={.8} onPress={() => {

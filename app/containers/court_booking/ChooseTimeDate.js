@@ -1034,10 +1034,12 @@ class ChooseTimeDate extends BaseComponent {
             })
         } else {
 
+            let temp = []
             this.state.availableCourts.map((element, index) => {
                 if (element.court_id == courts[selectedIndex].court_id) {
-                    courtIds.splice(index, 1);
+                    // courtIds.splice(index, 1);
                     courtNames.splice(index, 1);
+                    temp.push(element.court_id)
                 }
                 // courts[selectedIndex]['pricing_plan'].map((element, index) => {
                 //     if (element.time_interval == this.state.selectedDuration) {
@@ -1051,6 +1053,28 @@ class ChooseTimeDate extends BaseComponent {
 
 
             })
+            console.log('temp=>', temp)
+            let new_courtIds = []
+            for (let i = 0; i < courts.length; i++) {
+                let element = courts[i]
+                if(element.selected==true){
+                    let isExists = false
+
+                    for (let j = 0; j < temp.length; j++) {
+                        if (element.court_id == temp[j]) {
+                            isExists = true;
+                            break
+                        }
+                    }
+                    if (isExists == false) {
+                        new_courtIds.push(element.court_id)
+                    }
+                }
+                
+            }
+            console.log('new_courtIds=>',new_courtIds)
+            courtIds = new_courtIds
+
             let pricing_plan = courts[selectedIndex]['pricing_plan']
             for (let i = 0; i < pricing_plan.length; i++) {
                 let element = pricing_plan[i]
@@ -1074,14 +1098,14 @@ class ChooseTimeDate extends BaseComponent {
         console.log('totalCost', totalCost);
         console.log('courtIds', courtIds);
 
-        this.state.selectedCourtIds = courtIds
-        this.state.selectedCourtNames = courtNames
-        this.state.totalCost = totalCost
-        this.state.totalNoOfHours = totalNoOfHours
-        this.state.availableCourts = courts
-        console.log('this.state.selectedCourt', this.state.selectedCourtIds);
-        console.log('this.state.selectedCourt', this.state.totalCost);
-        console.log('allCourts', this.state.availableCourts);
+        //this.state.selectedCourtIds = courtIds
+        //this.state.selectedCourtNames = courtNames
+        //this.state.totalCost = totalCost
+        //this.state.totalNoOfHours = totalNoOfHours
+        //this.state.availableCourts = courts
+        //console.log('this.state.selectedCourt', this.state.selectedCourtIds);
+        //console.log('this.state.selectedCourt', this.state.totalCost);
+        // console.log('allCourts', this.state.availableCourts);
 
         this.setState({
             selectedCourtIds: courtIds,
@@ -1091,7 +1115,7 @@ class ChooseTimeDate extends BaseComponent {
             availableCourts: courts
         }, () => {
             console.log('this.state.selectedCourt', this.state.selectedCourtIds);
-            console.log('this.state.selectedCourt', this.state.totalCost);
+            console.log('this.state.totalCost', this.state.totalCost);
             console.log('allCourts', this.state.availableCourts);
         })
     }

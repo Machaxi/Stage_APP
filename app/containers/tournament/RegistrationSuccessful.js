@@ -100,7 +100,7 @@ export default class RegistrationSuccessful extends BaseComponent {
                                 marginBottom: 4,
                                 fontFamily: 'Quicksand-Medium'
                             }}>
-                                Registration Sucessfull!
+                                Registration Successfull!
                     </Text>
 
                         </View>

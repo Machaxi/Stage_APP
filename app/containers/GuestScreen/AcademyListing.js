@@ -353,9 +353,12 @@ class AcademyListing extends BaseComponent {
         // }).catch((response) => {
         //     console.log(response);
         // })
-        const addCart = getBaseUrl() + `global/academy/search-auto-suggest?search_query=${search_query}`
+        let addCart = getBaseUrl() + `global/academy/search-auto-suggest?search_query=${search_query}`
+        if (this.state.job_vacancy) {
+            addCart = addCart + `&vacancy=1`
+        }
 
-        console.log(addCart)
+        console.log('getAutoSuggestion=> ' + addCart)
 
         axios.get(addCart)
             .then((response) => {
@@ -415,7 +418,7 @@ class AcademyListing extends BaseComponent {
         console.warn(this.state.query)
         if (hardSearch) {
             search_query = this.state.query
-            locality_id = this.state.locality_id
+            locality_id = this.state.locality_id == undefined ? '' : this.state.locality_id
         } else {
             locality_id = this.state.query
         }

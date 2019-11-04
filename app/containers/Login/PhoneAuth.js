@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet, BackHandler, Platform } from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet, BackHandler,Linking, Platform } from 'react-native';
 import { doLogin, doFBLogin, doLoginTest } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
@@ -77,7 +77,7 @@ class PhoneAuth extends BaseComponent {
                     user1: null,
                     message: '',
                     codeInput: '',
-                    phoneNumber: '+91',
+                    phoneNumber: '',
                     confirmResult: null,
                     token: '',
                 });
@@ -97,6 +97,7 @@ class PhoneAuth extends BaseComponent {
 
 
     progress(status) {
+        this.state.spinner = status
         this.setState({
             spinner: status
         })
@@ -108,7 +109,9 @@ class PhoneAuth extends BaseComponent {
 
     signIn = () => {
 
-        const { phoneNumber } = this.state;
+
+        let { phoneNumber } = this.state;
+        phoneNumber = '+91' + phoneNumber
         if (phoneNumber == '') {
             alert('Mobile number is empty.')
             return
@@ -128,6 +131,7 @@ class PhoneAuth extends BaseComponent {
                 console.log('Firebase ', this.state.message)
             })
             .catch(error => {
+                firebase.crashlytics().log('Firebase Login Error ' + error);
                 console.log('Firebase error ', error)
                 this.progress(false)
             });
@@ -496,25 +500,71 @@ class PhoneAuth extends BaseComponent {
 
         return (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+
+                {/* <Image
+                    resizeMode="contain"
+                    style={{ width: 24, height: 24 }}
+                    source={require('../../images/help_icon.png')}
+                /> */}
+
                 <Image
                     resizeMode="contain"
                     style={{ width: 270, height: 80 }}
                     source={require('../../images/dribble_logo.png')}
                 />
-                <TextInput
-                    autoFocus
-                    style={{
+
+                <View style={{
+                    marginTop: 50,
+                    marginBottom: 15,
+                }}>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        height: 40,
                         width: 150,
-                        fontFamily: 'Quicksand-Regular',
-                        height: 40, borderBottomColor: '#BDBDBD',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+
+                        <Text style={{
+                            fontFamily: 'Quicksand-Regular',
+                            //height: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                        }}>+91</Text>
+
+                        <TextInput
+                            autoFocus
+                            style={{
+                                //width: 150,
+                                fontFamily: 'Quicksand-Regular',
+                                height: 40,
+                                //borderBottomColor: '#BDBDBD',
+                                //borderBottomWidth: 1,
+
+                            }}
+                            keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
+                            onChangeText={value => {
+                                // if (value == '' && getShowLoginByName() == false) {
+                                //     value = '+91'
+                                // }
+                                this.setState({ phoneNumber: value })
+                            }}
+                            placeholder={''}
+                            value={phoneNumber}
+                        />
+
+                    </View>
+
+                    <View style={{
+                        borderBottomColor: '#BDBDBD',
                         borderBottomWidth: 1,
-                        marginTop: 50, marginBottom: 15
-                    }}
-                    keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
-                    onChangeText={value => this.setState({ phoneNumber: value })}
-                    placeholder={'Enter Phone Number'}
-                    value={phoneNumber}
-                />
+                        width: 150,
+                        height: 1
+                    }}></View>
+                </View>
+
 
                 {/* <Text style={styles.rounded_button}
                     onPress={() => {
@@ -591,6 +641,30 @@ class PhoneAuth extends BaseComponent {
                     >SKIP</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity
+                    style={{
+                        marginTop: 10,
+                        alignItems: 'center'
+                    }}
+                    onPress={() => {
+                        Linking.canOpenURL('https://www.machaxi.com').then(supported => {
+                            if (supported) {
+                              Linking.openURL('https://www.machaxi.com');
+                            } else {
+                              console.log("Don't know how to open URI: " + this.props.url);
+                            }
+                          });
+                        //this.props.navigation.navigate('GHome')
+                    }}>
+
+                    <Text style={{
+                        color: '#808080',
+                        fontSize: 12,
+                        fontFamily: 'Quicksand-Regular'
+                    }}
+                    >Need Help?</Text>
+                </TouchableOpacity>
+
             </View>
         );
     }
@@ -653,7 +727,7 @@ class PhoneAuth extends BaseComponent {
                             fontFamily: 'Quicksand-Bold',
                             fontSize: 18
                         }}>
-                            {this.state.phoneNumber}
+                            +91{this.state.phoneNumber}
                         </Text>
 
 
@@ -682,22 +756,26 @@ class PhoneAuth extends BaseComponent {
                 />
 
 
-                <TouchableOpacity
-                    onPress={() => {
-                        this.signIn()
-                    }}
-                >
+                <View style={{
+                    flexDirection: 'row',
+                    marginTop: 0,
+                    marginBottom: 10
+                }}>
 
                     <Text style={[defaultStyle.bold_text_14,
-                    { color: "#A3A5AE", marginTop: 0, marginBottom: 10 }]}>
+                    { color: "#A3A5AE", }]}>
                         Didn’t receive the OTP?
-                    <Text style={{
+                            </Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.signIn()
+                        }}>
+                        <Text style={{
                             color: "#67BAF5", paddingLeft: 4,
                             fontFamily: 'Quicksand-Medium',
                         }}> RESEND</Text>
-                    </Text>
-                </TouchableOpacity>
-
+                    </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity activeOpacity={.8}
                     style={[defaultStyle.rounded_button,

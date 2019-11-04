@@ -511,14 +511,18 @@ class TournamentScorer extends BaseComponent {
                         <TouchableOpacity
                             onPress={() => {
                                 this.setState({
-                                    edit_instance: match_scores[index],
+                                    edit_instance: this.state.match_scores[index],
                                     edit_index: index,
 
                                 })
                                 setTimeout(() => {
                                     this.setModalVisible(true)
-                                }, 100)
-                                console.warn('Element ', index)
+                                    console.warn('Element-> ', index)
+                                    console.warn('Element->direct', JSON.stringify(this.state.match_scores[index]))
+                                    console.warn('Element->edit_instance', JSON.stringify(this.state.edit_instance))
+                                   
+                                }, 500)
+                                
                                 //this.state.modalVisible = true
                                 // this.setModalVisible(true)
                             }}
@@ -1092,6 +1096,8 @@ class TournamentScorer extends BaseComponent {
                                     this.editScore(round)
                                 }, 100)
                             }}
+                            edit_index={this.state.edit_index}
+                            match_score={this.state.match_scores}
                             player1={player1}
                             player2={player2}
                             previousRound={is_tournament_completed == true ?

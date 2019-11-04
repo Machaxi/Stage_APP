@@ -260,12 +260,13 @@ class TournamentFixture extends BaseComponent {
     goToPlayerDetail(id) {
 
         let user_type = this.state.user_type
-        if (user_type != null && user_type != '') {
-            this.props.navigation.navigate('OtherPlayerDeatils', {
-                player_id: id,
-                fixture: true
-            })
-        }
+        // if (user_type != null && user_type != '') {
+            
+        // }
+        this.props.navigation.navigate('OtherPlayerDeatils', {
+            player_id: id,
+            fixture: true
+        })
 
     }
 
@@ -1011,7 +1012,7 @@ class TournamentFixture extends BaseComponent {
                                     <Rect
                                         onPress={() => {
 
-                                            if (this.state.is_coach) {
+                                            if (this.state.is_coach && this.state.winner == null) {
                                                 //console.warn("Match : " + JSON.stringify(array[i][j]))
                                                 this.props.navigation.navigate('TournamentScorer', {
                                                     match_id: array[i][j].match_id
@@ -1033,7 +1034,7 @@ class TournamentFixture extends BaseComponent {
                                     <Text
                                         onPress={() => {
 
-                                            if (this.state.is_coach) {
+                                            if (this.state.is_coach && this.state.winner == null) {
                                                 //console.warn("Match : " + JSON.stringify(array[i][j]))
                                                 this.props.navigation.navigate('TournamentScorer', {
                                                     match_id: array[i][j].match_id
@@ -1114,7 +1115,7 @@ class TournamentFixture extends BaseComponent {
                                     <Rect
                                         onPress={() => {
 
-                                            if (this.state.is_coach) {
+                                            if (this.state.is_coach && this.state.winner == null) {
                                                 //console.warn("Match : " + JSON.stringify(array[i][j]))
                                                 this.props.navigation.navigate('TournamentScorer', {
                                                     match_id: array[i][j].match_id
@@ -1136,7 +1137,7 @@ class TournamentFixture extends BaseComponent {
                                     <Text
                                         onPress={() => {
 
-                                            if (this.state.is_coach) {
+                                            if (this.state.is_coach && this.state.winner==null) {
                                                 //console.warn("Match : " + JSON.stringify(array[i][j]))
                                                 this.props.navigation.navigate('TournamentScorer', {
                                                     match_id: array[i][j].match_id

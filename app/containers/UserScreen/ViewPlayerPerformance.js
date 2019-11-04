@@ -34,7 +34,8 @@ class ViewPlayerPerformance extends BaseComponent {
       currentPerformanceData: null,
       spinner: false,
       show_month_dialog: false,
-      year: ''
+      year: '',
+      current_score: 0
     }
     this.inputRefs = {
       month: null
@@ -103,6 +104,7 @@ class ViewPlayerPerformance extends BaseComponent {
 
             this.setState({
               response: data.data,
+              current_score:data.data.attribute.score
             })
 
             let array = data.data.attribute.parameters
@@ -244,11 +246,11 @@ class ViewPlayerPerformance extends BaseComponent {
                 Current Score
                         </Text>
               <Text style={defaultStyle.bold_text_12}>
-                {this.state.performanceData.score}
+                {this.state.current_score}
               </Text>
             </View>
             <CustomProgress
-              percent={this.state.performanceData.score}
+              percent={this.state.current_score}
               width={deviceWidth - 100}
               height={14}
             />

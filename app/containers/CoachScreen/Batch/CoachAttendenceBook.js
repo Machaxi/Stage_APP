@@ -60,6 +60,10 @@ class CoachAttendenceBook extends React.Component {
             batch_data: null,
             spinner: false
         }
+
+
+        this.state.attendenceDate = moment(new Date()).format("DD-MMMM-YYYY")
+
         const batch_data = this.props.navigation.getParam('batch_data', undefined)
         this.state.batch_data = batch_data
         console.log('Batch-Data=>', this.state.batch_data)
@@ -150,9 +154,6 @@ class CoachAttendenceBook extends React.Component {
 
                 console.warn("Touch Press")
 
-                // this.props.navigation.navigate('OrderTracking', {
-                //     order_id: item.increment_id
-                // })
 
             }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -214,7 +215,7 @@ class CoachAttendenceBook extends React.Component {
             // this.sessionMangement(operations)
             // this.scoreMangement(tournaments)
 
-            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#ffffff' }}>
+            return <ScrollView><View style={{ flex: 1, marginTop: 0, backgroundColor: '#ffffff' }}>
 
                 <Spinner
                     visible={this.state.spinner}
@@ -299,6 +300,7 @@ class CoachAttendenceBook extends React.Component {
 
                         <FlatList
                             data={this.state.playerList}
+                            extraData={this.state.playerList}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => item.id}
                         />
@@ -330,7 +332,7 @@ class CoachAttendenceBook extends React.Component {
                 </View>
 
 
-            </View>;
+            </View></ScrollView>;
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

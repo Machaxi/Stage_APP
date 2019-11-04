@@ -145,7 +145,7 @@ class CurrentBooking extends BaseComponent {
                 }}>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={styles.text_12}>Booked on {moment.utc(item.booking_date).local().format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.text_12}>Booked on {moment.utc(item.created_at).local().format('DD/MM/YYYY')}</Text>
                         {/* <Text style={styles.small_text}>Edit</Text> */}
                     </View>
 
@@ -175,7 +175,7 @@ class CurrentBooking extends BaseComponent {
                     {/* moment(this.state.attendenceDate).format('YYYY-MM-DD') */}
 
                     <View style={{ flexDirection: 'row', marginTop: 4 }}>
-                        <Text style={styles.text_bold}>{moment.utc(item.created_at).local().format(SESSION_DATE_FORMAT)}</Text>
+                        <Text style={styles.text_bold}>{moment.utc(item.booking_date).local().format(SESSION_DATE_FORMAT)}</Text>
                         <Text style={styles.text_bold}>{getFormatTime(item.start_time)} - {getFormatTime(item.end_time)}</Text>
                     </View>
 

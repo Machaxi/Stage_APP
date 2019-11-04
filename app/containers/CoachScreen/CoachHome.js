@@ -180,11 +180,11 @@ class CoachHome extends BaseComponent {
             this.checkNotification()
         });
 
-       
+
 
     }
 
-    checkNotification(){
+    checkNotification() {
         if (global.NOTIFICATION_DATA) {
             try {
                 let notification_for = global.NOTIFICATION_DATA.notification_for
@@ -750,47 +750,50 @@ class CoachHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
 
-                                //console.warn("Touch Press")
-                                this.props.navigation.navigate('CoachMyFeedbackListing')
+                    {this.state.userType == COACH ?
+                        <View style={{ margin: 5 }}>
+                            <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
+                                <TouchableOpacity onPress={() => {
 
-                            }}>
-                                <View style={{
-                                    marginLeft: 10,
-                                    marginRight: 10,
-                                    flexDirection: 'row', height: 50
+                                    //console.warn("Touch Press")
+                                    this.props.navigation.navigate('CoachMyFeedbackListing')
+
                                 }}>
-
-
-
                                     <View style={{
-                                        flex: 1,
-                                        marginRight: 15,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        flexDirection: 'row', height: 50
                                     }}>
-                                        <Text style={defaultStyle.regular_text_14}>
-                                            View my Feedback
+
+
+
+                                        <View style={{
+                                            flex: 1,
+                                            marginRight: 15,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.regular_text_14}>
+                                                View my Feedback
                                             </Text>
 
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                resizeMode: "contain",
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    resizeMode: "contain",
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
 
+                                        </View>
                                     </View>
-                                </View>
 
 
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
+                                </TouchableOpacity>
+                            </Card>
+                        </View>
+                        : null}
                     <View style={{ margin: 5 }}>
                         <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {

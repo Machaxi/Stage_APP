@@ -110,6 +110,7 @@ class ResultsRoute extends BaseComponent {
         let success = data.success
         if (success) {
 
+          this.showSnackBar('Challenge disputed. Please get in touch with your coach to resolve this.')
           this.setState({
             challengeResultsData: data.data,
           })
