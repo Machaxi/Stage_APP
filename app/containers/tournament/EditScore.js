@@ -21,7 +21,7 @@ export default class EditScore extends BaseComponent {
         let player1 = this.props.player1
         let player2 = this.props.player2
         let alert = this.state.alert
-        this.state.previousRound = this.props.previousRound
+        //this.state.previousRound = this.props.previousRound
         let previousRound = this.state.previousRound
 
         console.warn('Element->EditScore ', JSON.stringify(previousRound))
