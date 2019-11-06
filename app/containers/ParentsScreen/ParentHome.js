@@ -578,13 +578,15 @@ class ParentHome extends BaseComponent {
                         );
                     }
                 }
-
-
+                
+                }
+                
                 if (is_reward_point_due) {
+                    
                     console.log('reward_detail => ', JSON.stringify(reward_detail))
 
                     let temp_reward_detail = this.filterRewards(reward_detail)
-
+                    console.log('temp_reward_detail->',JSON.stringify(temp_reward_detail))
 
                     for (let i = 0; i < temp_reward_detail.length; i++) {
 
@@ -613,7 +615,6 @@ class ParentHome extends BaseComponent {
                             </View>
                         )
                     }
-                }
 
             }
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
