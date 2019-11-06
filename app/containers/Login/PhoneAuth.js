@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet, BackHandler,Linking, Platform } from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet, BackHandler, Linking, Platform } from 'react-native';
 import { doLogin, doFBLogin, doLoginTest } from '../../redux/reducers/loginReducer';
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
@@ -23,7 +23,7 @@ class PhoneAuth extends BaseComponent {
             user1: null,
             message: '',
             codeInput: '',
-            phoneNumber: '+91',
+            phoneNumber: '',
             confirmResult: null,
             isCall: true,
             spinner: false,
@@ -208,144 +208,147 @@ class PhoneAuth extends BaseComponent {
         // if (token == null || token == '')
         //     return
 
-        console.log('phoneNumber=>', JSON.stringify(user1))
-        let os = "IOS"
-        if (Platform.OS === 'android') {
-            os = "android";
-        }
-        let fcm_token = this.state.firebase_token
-        let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
+        if (this.state.isCall) {
+
+            this.setState({
+                isCall: false
+            }, () => {
+                    console.log('phoneNumber=>', JSON.stringify(user1))
+                    let os = "IOS"
+                    if (Platform.OS === 'android') {
+                        os = "android";
+                    }
+                    let fcm_token = this.state.firebase_token
+                    let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
+
+                    var dataDic = {};
+                    var dict = {};
+                    dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
+                    dict['firebase_token'] = token;
+                    dict['device_type'] = os;
+                    dict['app_version'] = '1.1.0';
+                    dict['fcm_token'] = fcm_token;
+                    dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
+                    dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
+                    dict['has_firebase_check'] = getFirebaseCheck();
 
 
-        this.setState({
-            isCall: false
-        })
-        var dataDic = {};
-        var dict = {};
-        dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
-        dict['firebase_token'] = token;
-        dict['device_type'] = os;
-        dict['app_version'] = '1.1.0';
-        dict['fcm_token'] = fcm_token;
-        dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
-        dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
-        dict['has_firebase_check'] = getFirebaseCheck();
+                    dataDic['data'] = dict;
+                    console.log("dicttttc ", JSON.stringify(dict))
+
+                    this.progress(true)
+                    this.props.doLogin(dataDic).then(() => {
+                        this.progress(false)
+                        //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
+                        //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
+                        let user = JSON.stringify(this.props.data.user);
+                        console.log('doLogin-payload ' + JSON.stringify(user));
+                        let user1 = JSON.parse(user)
+
+                        if (user1.success == true) {
+                            console.log(' user response  ' + user1.success_message);
+
+                            var userData = user1['data'];
+                            var userInfoData = userData['user'];
+                            storeData("userInfo", JSON.stringify(userData))
+                            onSignIn()
+
+                            let is_navigation_to_tournament = this.state.is_navigation_to_tournament
+                            //Registarion for tournament
+                            // if (is_navigation_to_tournament) {
+
+                            //     if (userData.is_existing_user == true)
+                            //         this.props.navigation.navigate('RegistrationSteps')
+                            //     else
+                            //         this.props.navigation.navigate('EditProfile')
+
+                            //     storeData(TOURNAMENT_REGISTER, false)
+                            // } else {
 
 
-        dataDic['data'] = dict;
-        console.log("dicttttc ", JSON.stringify(dict))
+                            if (userData.is_existing_user == true) {
+                                if (userInfoData.user_type == GUEST) {
 
-        this.progress(true)
-        this.props.doLogin(dataDic).then(() => {
-            this.progress(false)
-            //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
-            //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
-            let user = JSON.stringify(this.props.data.user);
-            console.log(' doLoginTest payload ' + user);
-            let user1 = JSON.parse(user)
+                                    this.props.navigation.navigate('GHome')
 
-            if (user1.success == true) {
-                console.log(' user response  ' + user1.success_message);
+                                } else if (userInfoData.user_type == PLAYER) {
+                                    storeData('multiple', userData.has_multiple_acadmies)
+                                    if (!userData.has_multiple_acadmies && userData.academy_id != null) {
+                                        this.props.navigation.navigate('UHome')
 
-                var userData = user1['data'];
-                var userInfoData = userData['user'];
-                storeData("userInfo", JSON.stringify(userData))
-                onSignIn()
+                                    } else {
+                                        this.props.navigation.navigate('SwitchPlayer', {
+                                            userType: 'PLAYER'
+                                        })
+                                    }
 
-                let is_navigation_to_tournament = this.state.is_navigation_to_tournament
-                //Registarion for tournament
-                // if (is_navigation_to_tournament) {
+                                } else if (userInfoData.user_type == PARENT) {
+                                    storeData('multiple', userData.has_multiple_acadmies)
+                                    if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                                        this.props.navigation.navigate('PHome')
 
-                //     if (userData.is_existing_user == true)
-                //         this.props.navigation.navigate('RegistrationSteps')
-                //     else
-                //         this.props.navigation.navigate('EditProfile')
+                                    } else {
+                                        this.props.navigation.navigate('SwitchPlayer', {
+                                            userType: PLAYER
+                                        })
+                                    }
 
-                //     storeData(TOURNAMENT_REGISTER, false)
-                // } else {
+                                }
+                                else if (userInfoData.user_type == COACH) {
+                                    storeData('multiple', userData.has_multiple_acadmies)
+                                    if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                                        this.props.navigation.navigate('CHome')
+                                    } else {
+                                        this.props.navigation.navigate('SwitchPlayer', {
+                                            userType: COACH
+                                        })
+                                    }
 
+                                }
+                                else if (userInfoData.user_type == ACADEMY) {
+                                    //==================== NOTE ==========================
+                                    //      Forcefully adding coach_id = '', to run coach section as academy
+                                    //      academy section does not require coach_id
+                                    //=====================================================
+                                    userData['coach_id'] = ''
+                                    storeData("userInfo", JSON.stringify(userData))
+                                    storeData('academy_name', userData.user.name)
+                                    console.log('coach userData => ', JSON.stringify(userData))
+                                    this.props.navigation.navigate('CHome')
 
-                if (userData.is_existing_user == true) {
-                    if (userInfoData.user_type == GUEST) {
+                                    // }
 
-                        this.props.navigation.navigate('GHome')
+                                    //
+                                    // if(otherParam == true){
+                                    //     this.props.navigation.navigate('DrawerNavigator')
+                                    // }
+                                    // else
+                                    // {
+                                    //     this.props.navigation.goBack();
 
-                    } else if (userInfoData.user_type == PLAYER) {
-                        storeData('multiple', userData.has_multiple_acadmies)
-                        if (!userData.has_multiple_acadmies && userData.academy_id != null) {
-                            this.props.navigation.navigate('UHome')
-
+                                }
+                                else {
+                                    this.props.navigation.navigate('EditProfile')
+                                }
+                            } else {
+                                this.props.navigation.navigate('GHome')
+                                setTimeout(() => {
+                                    Events.publish('OPEN_PROFILE')
+                                }, 500)
+                            }
                         } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: 'PLAYER'
-                            })
+                            alert('Invalid credentials')
                         }
 
-                    } else if (userInfoData.user_type == PARENT) {
-                        storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                            this.props.navigation.navigate('PHome')
 
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: PLAYER
-                            })
-                        }
-
-                    }
-                    else if (userInfoData.user_type == COACH) {
-                        storeData('multiple', userData.has_multiple_acadmies)
-                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                            this.props.navigation.navigate('CHome')
-                        } else {
-                            this.props.navigation.navigate('SwitchPlayer', {
-                                userType: COACH
-                            })
-                        }
-
-                    }
-                    else if (userInfoData.user_type == ACADEMY) {
-                        //==================== NOTE ==========================
-                        //      Forcefully adding coach_id = '', to run coach section as academy
-                        //      academy section does not require coach_id
-                        //=====================================================
-                        userData['coach_id'] = ''
-                        storeData("userInfo", JSON.stringify(userData))
-                        storeData('academy_name', userData.user.name)
-                        console.log('coach userData => ', JSON.stringify(userData))
-                        this.props.navigation.navigate('CHome')
-
-                        // }
-
-                        //
-                        // if(otherParam == true){
-                        //     this.props.navigation.navigate('DrawerNavigator')
-                        // }
-                        // else
-                        // {
-                        //     this.props.navigation.goBack();
-
-                    }
-                    else {
-                        this.props.navigation.navigate('EditProfile')
-                    }
-                } else {
-                    this.props.navigation.navigate('GHome')
-                    setTimeout(() => {
-                        Events.publish('OPEN_PROFILE')
-                    }, 500)
+                    }).catch((response) => {
+                        this.progress(false)
+                        //handle form errors
+                        console.log(response);
+                    })
                 }
-            } else {
-                alert('Invalid credentials')
-            }
-
-
-        }).catch((response) => {
-            this.progress(false)
-            //handle form errors
-            console.log(response);
-        })
-
+            )
+        }
     }
 
     signInByName = (user1, token) => {
@@ -649,11 +652,11 @@ class PhoneAuth extends BaseComponent {
                     onPress={() => {
                         Linking.canOpenURL('https://www.machaxi.com').then(supported => {
                             if (supported) {
-                              Linking.openURL('https://www.machaxi.com');
+                                Linking.openURL('https://www.machaxi.com');
                             } else {
-                              console.log("Don't know how to open URI: " + this.props.url);
+                                console.log("Don't know how to open URI: " + this.props.url);
                             }
-                          });
+                        });
                         //this.props.navigation.navigate('GHome')
                     }}>
 
@@ -821,7 +824,7 @@ class PhoneAuth extends BaseComponent {
                 {/* {this.renderMessage()} */}
 
 
-                {user1 && isCall ? this.getToken() : null}
+                {/* {user1 && isCall ? this.getToken() : null} */}
 
                 {!user1 && confirmResult && this.renderVerificationCodeInput()}
 

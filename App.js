@@ -48,7 +48,7 @@ client.interceptors.request.use(
     config => {
         config.headers.app_version = '1'//DeviceInfo.getBuildNumber();
         config.headers.app_version_code = DeviceInfo.getVersion();
-        config.headers.device_type = Platform.OS;
+        config.headers.device_type = Platform.OS.toLowerCase();
         config.headers.device_id = global.FCM_DEVICE_ID;
         config.headers.one_signal_device_id = global.ONE_SIGNAL_USERID
         //config.headers.fcm_token = FCM_TOKEN

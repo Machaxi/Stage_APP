@@ -238,12 +238,14 @@ class TournamentFixture extends BaseComponent {
         this._panResponder = PanResponder.create({
             onPanResponderGrant: () => { },
             onPanResponderTerminate: () => { },
-            onMoveShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => false,
             onStartShouldSetPanResponder: () => true,
-            onShouldBlockNativeResponder: () => true,
+            onShouldBlockNativeResponder: () => false,
             onPanResponderTerminationRequest: () => true,
             onMoveShouldSetPanResponderCapture: () => false,
-            onStartShouldSetPanResponderCapture: () => { return false },
+            onStartShouldSetPanResponderCapture: () => { 
+                console.log('onStartShouldSetPanResponderCapture')
+                return false },
             onPanResponderMove: evt => {
                 const touches = evt.nativeEvent.touches;
                 const length = touches.length;
@@ -893,7 +895,7 @@ class TournamentFixture extends BaseComponent {
                             }
 
                         }}
-                        key={"id_" + (i * 100 + j)}
+                        key={"id_" + ((i+1) * 100 + (j+1))}
                         x={x}
                         y={y}
                         width={width}
@@ -990,7 +992,7 @@ class TournamentFixture extends BaseComponent {
 
 
                         let score = array[i][j].tournament_match_scores
-                        console.log('Score-Array=> ', JSON.stringify(score))
+                        //console.log('Score-Array=> ', JSON.stringify(score))
 
                         if (score == undefined || score == null || score.length == 0) {
 
@@ -1076,13 +1078,13 @@ class TournamentFixture extends BaseComponent {
                             for (k = 0; k < length; k++) {
 
                                 let obj = score[k]
-                                console.log('Match Score11 => ' + JSON.stringify(obj))
+                                //console.log('Match Score11 => ' + JSON.stringify(obj))
 
                                 if (j % 2 == 0) {
-                                    console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player1_score)
+                                  //  console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player1_score)
                                 }
                                 else {
-                                    console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player2_score)
+                                    //console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player2_score)
                                 }
                                 let bgColor
                                 if (j % 2 == 0) {

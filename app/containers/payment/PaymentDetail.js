@@ -102,7 +102,7 @@ class PaymentDetail extends BaseComponent {
             amount: total,
             name: 'Machaxi',
             prefill: {
-                //email: email,
+                email: this.getDefaultRazorPayEmail(),
                 contact: mobile_number,
                 name: name
             },

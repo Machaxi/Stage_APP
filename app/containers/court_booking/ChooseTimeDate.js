@@ -131,9 +131,10 @@ class ChooseTimeDate extends BaseComponent {
     }
 
     convertTimeStringToMins(time) {
-        console.log('convertTimeStringToMins ' + time)
         let arr = time.split(":");
-        return (arr[0] * 60) + (arr[1] * 1);
+        let result = (arr[0] * 60) + (arr[1] * 1);
+        console.log('convertTimeStringToMins input=' + time + ', out=' + result)
+        return result
     }
 
     convertMinsToHrsMins(minutes) {
@@ -233,10 +234,11 @@ class ChooseTimeDate extends BaseComponent {
                     /* get all available courts from court bookings and court timings*/
                     courtAvailability1 = this.getAllAvailableCourts(courtTimings, courtBookings);
 
-                    console.log('courtAvailability111111111111111111111111111111', courtAvailability1);
+                    console.log('courtAvailability1', JSON.stringify(courtAvailability1));
 
                     /*get min and max time to plot slider, get data for showing time range */
                     minMaxTime = this.getMinAndMaxTimeofSlider(courtTimings);
+                    console.log('minMaxTime->', JSON.stringify(minMaxTime))
                     minTime = minMaxTime['minTime'];
                     maxTime = minMaxTime['maxTime']
                     this.state.minTime = minTime;
@@ -254,8 +256,10 @@ class ChooseTimeDate extends BaseComponent {
 
                     /* get final dead slots to show on slider*/
                     finalDeadSlots = this.getFinalDeadSlots(allCourtsDeadSlots);
+                    console.log('finalDeadSlots->', JSON.stringify(finalDeadSlots))
 
                     courtAvailability = this.getFinalCourtAvailability(finalDeadSlots, courtAvailability1);
+                    console.log('courtAvailability->', JSON.stringify(courtAvailability))
 
                     /* make slider data to show slider*/
                     sliderData = this.makeSliderData(finalDeadSlots);
@@ -509,6 +513,7 @@ class ChooseTimeDate extends BaseComponent {
                 maxTime = ele['court_timings'][length - 1].endTime;
             }
             else {
+                console.log('getMinAndMaxTimeofSlider='+ele['court_timings'][0].startTime+'<'+minTime+' == status='+ele['court_timings'][0].startTime < minTime)
                 if (ele['court_timings'][0].startTime < minTime) {
                     minTime = ele['court_timings'][0].startTime;
                 }
@@ -550,40 +555,40 @@ class ChooseTimeDate extends BaseComponent {
         arr.map((element, index) => {
 
             if (arr.length == 1) {
-                if (element.startTime > this.state.minTime) {
+                if (+element.startTime > this.state.minTime) {
                     var timing = {};
                     timing['startTime'] = this.state.minTime;
-                    timing['endTime'] = element.startTime;
+                    timing['endTime'] = +element.startTime;
                     newArray.push(timing);
                 }
-                if (element.endTime < this.state.maxTime) {
+                if (+element.endTime < this.state.maxTime) {
                     var timing = {};
-                    timing['startTime'] = element.endTime;
+                    timing['startTime'] = +element.endTime;
                     timing['endTime'] = this.state.maxTime;
                     newArray.push(timing);
                 }
             }
             else {
                 if (index == 0) {
-                    if (element.startTime > this.state.minTime) {
+                    if (+element.startTime > this.state.minTime) {
                         var timing = {};
                         timing['startTime'] = this.state.minTime;
-                        timing['endTime'] = element.startTime;
+                        timing['endTime'] = +element.startTime;
                         newArray.push(timing);
                     }
                 }
                 if (index == arr.length - 1) {
-                    if (element.endTime < this.state.maxTime) {
+                    if (+element.endTime < this.state.maxTime) {
                         var timing = {};
-                        timing['startTime'] = element.endTime;
+                        timing['startTime'] = +element.endTime;
                         timing['endTime'] = this.state.maxTime;
                         newArray.push(timing);
                     }
                 }
 
-                if (index <= (arr.length - 2) && element.endTime != arr[index + 1].startTime) {
+                if (index <= (arr.length - 2) && +element.endTime != arr[index + 1].startTime) {
                     var timing = {};
-                    timing['startTime'] = element.endTime;
+                    timing['startTime'] = +element.endTime;
                     timing['endTime'] = arr[index + 1].startTime;
                     newArray.push(timing);
                 }
@@ -717,7 +722,10 @@ class ChooseTimeDate extends BaseComponent {
         sliderData.map((element, index) => {
             if (element != null) {
                 finalDeadSlots.map((element1, index1) => {
-                    if (element.minutes == element1.startTime || element.minutes == element1.endTime || (element.minutes > element1.startTime && element.minutes < element1.endTime)) {
+                    //900-1020 === 1095-1110
+                    //
+                    if (element.minutes == element1.startTime || /*element.minutes == element1.endTime ||*/ (element.minutes > element1.startTime && element.minutes < element1.endTime)) {
+                        console.log('element=>start='+element.minutes+', element1='+JSON.stringify(element1))
                         sliderData[index]['deadslot'] = true
                     }
                 })
@@ -748,7 +756,7 @@ class ChooseTimeDate extends BaseComponent {
         }
 
         const finalDeadSlots = this.state.finalDeadSlots
-        if (finalDeadSlots == undefined || finalDeadSlots.length == block_array) {
+        if (finalDeadSlots == undefined /*|| finalDeadSlots.length == block_array*/) {
             msg = 'Sorry, all courts are closed for the selected time and duration.';
 
         } else
@@ -896,6 +904,7 @@ class ChooseTimeDate extends BaseComponent {
                 element['court_availability'].map((element2, index2) => {
 
                     if (element1.startTime == element2.startTime && element1.endTime == element2.endTime) {
+                        console.log('start_time=' + element1.startTime + '==' + element2.endTime + ', end_time=' + element1.endTime + '==' + element2.endTime)
                         console.log(index2);
                         var timing = {};
                         timing['startTime'] = element2.startTime;
@@ -1057,7 +1066,7 @@ class ChooseTimeDate extends BaseComponent {
             let new_courtIds = []
             for (let i = 0; i < courts.length; i++) {
                 let element = courts[i]
-                if(element.selected==true){
+                if (element.selected == true) {
                     let isExists = false
 
                     for (let j = 0; j < temp.length; j++) {
@@ -1070,9 +1079,9 @@ class ChooseTimeDate extends BaseComponent {
                         new_courtIds.push(element.court_id)
                     }
                 }
-                
+
             }
-            console.log('new_courtIds=>',new_courtIds)
+            console.log('new_courtIds=>', new_courtIds)
             courtIds = new_courtIds
 
             let pricing_plan = courts[selectedIndex]['pricing_plan']

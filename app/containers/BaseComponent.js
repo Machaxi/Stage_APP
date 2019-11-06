@@ -163,6 +163,9 @@ export default class BaseComponent extends React.Component {
     }
 
 
+    getDefaultRazorPayEmail(){
+        return 'hello@machaxi.com'
+    }
 
     setNavigation(navigation) {
         myNavigation = navigation

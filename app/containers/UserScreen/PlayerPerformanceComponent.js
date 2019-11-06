@@ -155,7 +155,9 @@ class PlayerPerformanceComponent extends BaseComponent {
                                                 :
                                                 <Text style={[styles.scoreMinValue, {
                                                     marginLeft: 24
-                                                }]}>{item.current_parameter.prev_score}</Text>
+                                                }]}>
+                                                    {item.current_parameter.score != '-' ? item.current_parameter.prev_score : ''}
+                                                </Text>
                                         }
 
 
