@@ -113,8 +113,10 @@ class EditProfile extends BaseComponent {
                 let path = this.state.path
                 console.log("path", path);
                 if (Platform.OS == 'ios') {
-                    path = path.replace('file:///', '/')
-                    console.log("path", path);
+                    if(path!=null){
+                        path = path.replace('file:///', '/')
+                        console.log("path", path);
+                    }
                 }
 
                 let fileName = this.state.fileName
