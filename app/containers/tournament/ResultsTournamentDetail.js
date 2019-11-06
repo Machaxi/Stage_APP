@@ -180,6 +180,7 @@ class ResultsTournamentDetail extends BaseComponent {
         }
 
         let size = this.state.tournament_fixtures.length
+        let name = data.name + " "
 
         return (
 
@@ -393,7 +394,8 @@ class ResultsTournamentDetail extends BaseComponent {
                                                             activeOpacity={1}
                                                             onPress={() => {
                                                                 this.props.navigation.navigate('TournamentFixture', {
-                                                                    data: JSON.stringify(item)
+                                                                    data: JSON.stringify(item),
+                                                                    title: name + item.name
                                                                 })
                                                             }}
                                                         >

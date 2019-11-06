@@ -11,6 +11,8 @@ import { getRegisteredTournament, getTournamentFixture } from "../../redux/reduc
 import { COACH } from '../../components/Constants'
 import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons'
+import Events from '../../router/events';
+
 const placeholder = {
     label: 'Select',
     value: null,
@@ -34,7 +36,8 @@ class FixtureSelection extends BaseComponent {
             selected_gender: '',
             gender: [{ label: 'Male', value: 'Male' },
             { label: 'Female', value: 'Female' }],
-            fixture_type: []
+            fixture_type: [],
+            selected_f_type: null
 
         }
 
@@ -68,13 +71,38 @@ class FixtureSelection extends BaseComponent {
                 this.getFixtureData()
             }
         );
+
+        this.refreshEvent = Events.subscribe('FIXTURE_CALL_API', () => {
+
+            this.getFixtureData(() => {
+
+                console.log('selected_f_type=>', JSON.stringify(this.state.selected_f_type))
+                alert('FIXTURE_CALL_API')
+                let previous_selected = this.state.selected_f_type
+                let latest_data = null;
+                let tournament_fixtures = this.state.tournament_fixtures
+                console.log('tournament_fixtures->',JSON.stringify(tournament_fixtures))
+                for (let i = 0; i < tournament_fixtures.length; i++) {
+                    let element = tournament_fixtures[i]
+                    console.log('compare' + element.id + '==' + previous_selected.id)
+                    if (element.id == previous_selected.id) {
+                        latest_data = element
+                        break
+                    }
+                }
+                if (latest_data) {
+                    console.log('LatestData=>', JSON.stringify(latest_data))
+                    Events.publish('REFRESH_FIXTURE',latest_data);
+                }
+            })
+        });
     }
 
     componentWillUnmount() {
         this.willFocusSubscription.remove();
     }
 
-    getFixtureData() {
+    getFixtureData(callback) {
 
         let tournament_id = this.state.tournament_id
 
@@ -121,6 +149,13 @@ class FixtureSelection extends BaseComponent {
                     }
                     else {
                         //alert('No data found.')
+                    }
+
+                    if (callback) {
+                        setTimeout(() => {
+
+                            callback()
+                        }, 200)
                     }
 
                 }
@@ -405,6 +440,9 @@ class FixtureSelection extends BaseComponent {
                                                         <TouchableOpacity
                                                             activeOpacity={1}
                                                             onPress={() => {
+                                                                this.setState({
+                                                                    selected_f_type: item
+                                                                })
                                                                 this.props.navigation.navigate('TournamentFixture', {
                                                                     data: JSON.stringify(item),
                                                                     title: name + item.name

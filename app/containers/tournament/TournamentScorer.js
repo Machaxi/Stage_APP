@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, ActivityIndicator, Image, Modal, TextInput } from 'react-native'
+import { View, Text, ActivityIndicator, Image, Modal, TextInput,Alert } from 'react-native'
 import BaseComponent, { defaultStyle, ImageBackground, formattedName } from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Card } from 'react-native-paper';
@@ -54,16 +54,32 @@ class TournamentScorer extends BaseComponent {
                 let success = data.success
                 if (success) {
 
+                    if (data.data.player1 && data.data.player2) {
 
-                    this.setState({
-                        match_scores: data.data.match_scores,
-                        player1: data.data.player1,
-                        player2: data.data.player2,
-                        winner: data.data.winner
+                        this.setState({
+                            match_scores: data.data.match_scores,
+                            player1: data.data.player1,
+                            player2: data.data.player2,
+                            winner: data.data.winner
+                        })
 
-                    })
+                        console.log('player => ', JSON.stringify(this.state.player1))
+                    }else{
+                        Alert.alert(
+                            '',
+                            'No Players detail found.',
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        this.props.navigation.goBack()
+                                    }
+                                },
+                            ],
+                            { cancelable: false },
+                        );
+                    }
 
-                    console.log('player => ', JSON.stringify(this.state.player1))
+
                 }
 
             }).catch((response) => {
@@ -456,7 +472,7 @@ class TournamentScorer extends BaseComponent {
                                 fontSize: 14,
                                 color: color,
                                 fontFamily: 'Quicksand-Regular',
-                            }}>Set {element.round}</Text>
+                            }}>Round {element.round}</Text>
 
                         {element.winner_id ?
                             <View style={{
@@ -514,15 +530,15 @@ class TournamentScorer extends BaseComponent {
                                     edit_instance: this.state.match_scores[index],
                                     edit_index: index,
 
-                                })
+                                },
+                                    this.setModalVisible(true))
                                 setTimeout(() => {
-                                    this.setModalVisible(true)
                                     console.warn('Element-> ', index)
                                     console.warn('Element->direct', JSON.stringify(this.state.match_scores[index]))
                                     console.warn('Element->edit_instance', JSON.stringify(this.state.edit_instance))
-                                   
+
                                 }, 500)
-                                
+
                                 //this.state.modalVisible = true
                                 // this.setModalVisible(true)
                             }}
@@ -772,7 +788,7 @@ class TournamentScorer extends BaseComponent {
                                             padding: 12,
                                         }}>
 
-                                            <Text style={defaultStyle.bold_text_14}>Set {previousRound.round}</Text>
+                                            <Text style={defaultStyle.bold_text_14}>Round {previousRound.round}</Text>
                                             <Text style={[defaultStyle.heavy_bold_text_14, { marginTop: 10 }]}>
                                                 {previousRound.winner_id == player1.id ?
                                                     player1.name : player2.name} Won !</Text>
@@ -799,7 +815,7 @@ class TournamentScorer extends BaseComponent {
                                                         onPress={() => {
                                                             this.skipSet()
                                                         }}
-                                                    >Skip Set</SkyBorderButton>
+                                                    >Skip Round</SkyBorderButton>
 
                                                 </View>
 
@@ -836,7 +852,7 @@ class TournamentScorer extends BaseComponent {
                                                                 textAlign: 'center',
                                                                 fontFamily: 'Quicksand-Medium',
                                                             }}>
-                                                            Start Set !
+                                                            Start Round !
                                                         </Text>
                                                     </TouchableOpacity>
 

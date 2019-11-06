@@ -253,8 +253,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						>
+							source={require('../images/ic_drawer_arrow.png')}>
 
 						</Image>
 
@@ -263,9 +262,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
 					this.props.navigation.navigate('Login')
-				}
-				}>
-
+				}}>
 
 					<View style={styles.drawercell}>
 						<Text style={styles.menu}>
@@ -1188,9 +1185,7 @@ class CoachMenuDrawer extends BaseComponent {
 							onPress={() => {
 								this.props.navigation.navigate('WriteFeedback',
 									{ academy_id: this.state.academy_id, player_id: this.state.player_id })
-							}}
-
-						>Academy-Coach Feedback</SkyFilledButton>
+							}}>Academy-Coach Feedback</SkyFilledButton>
 					</View>
 
 					{/* <TouchableOpacity
@@ -1265,14 +1260,14 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<Image
 							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						/>
+							source={require('../images/ic_drawer_arrow.png')}/>
 
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('WebViewScreen')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					this.props.navigation.navigate('FaqScreen')
+				}}>
 
 					<View style={styles.drawercell}>
 

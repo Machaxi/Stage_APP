@@ -265,7 +265,7 @@ class RegisteredTournamentDetail extends BaseComponent {
                         }}>
                         <View style={{ marginLeft: 8, marginRight: 8, marginTop: 2 }}>
                             <Image style={{ height: 150, width: "100%" }}
-                                source={require('../../images/tournament_banner.png')}
+                                source={{ uri: data.cover_pic }}
                             />
 
 

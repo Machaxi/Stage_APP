@@ -29,7 +29,7 @@ class Registration extends BaseComponent {
     static navigationOptions = ({ navigation }) => {
 
         return {
-            headerTitle: 'Tournament Registration',
+            headerTitle: navigation.getParam('fromPage') == 'Booking' ? 'Booking Registration' : 'Tournament Registration',
             headerTitleStyle: defaultStyle.headerStyle,
 
             headerLeft: (
@@ -287,7 +287,12 @@ class Registration extends BaseComponent {
                         })
                         setTimeout(() => {
 
-                            Events.publish(GO_TO_HOME, true);
+                            if (this.state.fromPage == 'Booking') {
+                                this.props.navigation.goBack();
+                            } else {
+                                Events.publish(GO_TO_HOME, true);
+                            }
+
 
                         }, 100)
 

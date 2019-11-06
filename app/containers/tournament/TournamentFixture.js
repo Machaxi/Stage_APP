@@ -8,6 +8,7 @@ import BaseComponent, { defaultStyle, formattedName } from '../BaseComponent'
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { COACH, PLAYER, ACADEMY } from '../../components/Constants'
 import { Text as MyText } from 'react-native'
+import Events from '../../router/events';
 
 import Svg, {
     Circle,
@@ -140,13 +141,24 @@ class TournamentFixture extends BaseComponent {
         // this.getFixtureData()
         let data = this.props.navigation.getParam('data')
         console.log('Tournament Fixture -> ' + data)
+        this.init(data)
+
+        this.refreshEvent = Events.subscribe('REFRESH_FIXTURE', (data) => {
+
+            //alert('REFRESH_FIXTURE')
+            //console.log('REFRESH_FIXTURE->',JSON.stringify(data))
+            //this.init(JSON.stringify(data))
+        });
+
+        // setTimeout(() => {
+        //     Events.publish('FIXTURE_CALL_API');
+        // }, 20000)
+    }
+
+    init(data){
         let json = JSON.parse(data)
         this.state.tournament_name = json.name
 
-        // let navigation = this.props.navigation
-        // navigation.setParams({
-        //     title: json.name
-        // })
         let title = this.state.academy_name + " " + json.name
         //alert('Name ' + json.name)
         this.setState({
@@ -227,10 +239,10 @@ class TournamentFixture extends BaseComponent {
             onPanResponderGrant: () => { },
             onPanResponderTerminate: () => { },
             onMoveShouldSetPanResponder: () => true,
-            onStartShouldSetPanResponder: () => false,
+            onStartShouldSetPanResponder: () => true,
             onShouldBlockNativeResponder: () => true,
             onPanResponderTerminationRequest: () => true,
-            onMoveShouldSetPanResponderCapture: () => true,
+            onMoveShouldSetPanResponderCapture: () => false,
             onStartShouldSetPanResponderCapture: () => { return false },
             onPanResponderMove: evt => {
                 const touches = evt.nativeEvent.touches;
@@ -261,7 +273,7 @@ class TournamentFixture extends BaseComponent {
 
         let user_type = this.state.user_type
         // if (user_type != null && user_type != '') {
-            
+
         // }
         this.props.navigation.navigate('OtherPlayerDeatils', {
             player_id: id,
@@ -1137,7 +1149,7 @@ class TournamentFixture extends BaseComponent {
                                     <Text
                                         onPress={() => {
 
-                                            if (this.state.is_coach && this.state.winner==null) {
+                                            if (this.state.is_coach && this.state.winner == null) {
                                                 //console.warn("Match : " + JSON.stringify(array[i][j]))
                                                 this.props.navigation.navigate('TournamentScorer', {
                                                     match_id: array[i][j].match_id

@@ -78,7 +78,7 @@ class PaymentPage extends BaseComponent {
             amount: total,
             name: 'Machaxi',
             prefill: {
-              email: email,
+              //email: email,
               contact: mobile_number,
               name: name
             },

@@ -1007,8 +1007,8 @@ class ChooseTimeDate extends BaseComponent {
             }, () => {
                 this.getBookingDetails(this.state.selectedDate, this.state.selectedSportsId)
             })
-
         }
+        this._carousel.snapToItem(0)
     }
 
     courtSelector(selectedIndex) {

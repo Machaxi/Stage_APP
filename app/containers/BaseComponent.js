@@ -80,7 +80,7 @@ global.SELECTED_PLAYER_ID = ''
 //===============================================================================================
 
 export const DEBUG_APP = false
-export const PROD_DEBUG = false
+export const PROD_DEBUG = true
 
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
