@@ -532,6 +532,7 @@ class PhoneAuth extends BaseComponent {
                         <Text style={{
                             fontFamily: 'Quicksand-Regular',
                             //height: 40,
+                            //width:30,
                             justifyContent: 'center',
                             alignItems: 'center',
 
@@ -540,7 +541,7 @@ class PhoneAuth extends BaseComponent {
                         <TextInput
                             autoFocus
                             style={{
-                                //width: 150,
+                                width: 110,
                                 fontFamily: 'Quicksand-Regular',
                                 height: 40,
                                 //borderBottomColor: '#BDBDBD',
