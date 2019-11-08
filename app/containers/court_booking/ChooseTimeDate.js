@@ -255,6 +255,7 @@ class ChooseTimeDate extends BaseComponent {
                     allCourtsDeadSlots = this.getAllCourtsDeadSlots(courtTimings);
 
                     /* get final dead slots to show on slider*/
+                    console.log('allCourtsDeadSlots-> ', JSON.stringify(allCourtsDeadSlots))
                     finalDeadSlots = this.getFinalDeadSlots(allCourtsDeadSlots);
                     console.log('finalDeadSlots->', JSON.stringify(finalDeadSlots))
 
@@ -263,6 +264,7 @@ class ChooseTimeDate extends BaseComponent {
 
                     /* make slider data to show slider*/
                     sliderData = this.makeSliderData(finalDeadSlots);
+                    console.log('FinalSlider->', JSON.stringify(sliderData))
 
                     this.setState({
                         courtAvailability: courtAvailability,
@@ -513,7 +515,7 @@ class ChooseTimeDate extends BaseComponent {
                 maxTime = ele['court_timings'][length - 1].endTime;
             }
             else {
-                console.log('getMinAndMaxTimeofSlider='+ele['court_timings'][0].startTime+'<'+minTime+' == status='+ele['court_timings'][0].startTime < minTime)
+                console.log('getMinAndMaxTimeofSlider=' + ele['court_timings'][0].startTime + '<' + minTime + ' == status=' + ele['court_timings'][0].startTime < minTime)
                 if (ele['court_timings'][0].startTime < minTime) {
                     minTime = ele['court_timings'][0].startTime;
                 }
@@ -541,9 +543,10 @@ class ChooseTimeDate extends BaseComponent {
 
             var courtDeadSlots = this.getSingleCourtDeadSlots(ele['court_timings']);
             item['dead_slots'] = courtDeadSlots;
-
+            console.log('dead_slots', JSON.stringify(courtDeadSlots))
             newArray.push(item);
         });
+        console.log('courtTimings->', JSON.stringify(courtTimings))
         return newArray;
     }
 
@@ -597,12 +600,15 @@ class ChooseTimeDate extends BaseComponent {
 
         });
 
+        console.log('newArray->', JSON.stringify(newArray))
         return newArray;
     }
 
     getFinalDeadSlots(allCourtsDeadSlots) {
         var intersect;
+        console.log('getFinalDeadSlots->', JSON.stringify(allCourtsDeadSlots))
         allCourtsDeadSlots.map((ele, index) => {
+            console.log('allCourtsDeadSlots->', JSON.stringify(ele))
             if (allCourtsDeadSlots.length == 1) {
                 intersect = ele.dead_slots
             } else {
@@ -689,9 +695,9 @@ class ChooseTimeDate extends BaseComponent {
         var time = this.state.minTime;
         console.log('Time=>' + time + " maxTime=" + this.state.maxTime)
         //return 
-        while (time <= this.state.maxTime) {
+        while (time < this.state.maxTime) {
 
-            console.log('While-> ', time)
+            console.log('While-> ', this.convertMinsToHrsMins(time))
             var minutes, time;
             if (index == 4) {
                 time = this.state.minTime;
@@ -714,18 +720,31 @@ class ChooseTimeDate extends BaseComponent {
                 temp['showLabel'] = true;
             else
                 temp['showLabel'] = false;
+
+            //if (time != this.state.maxTime)
             sliderData.push(temp);
             index++;
 
         };
 
+        if (index != 0) {
+            if (sliderData[sliderData.length - 1]) {
+                sliderData[sliderData.length - 1]['is_last'] = true
+                sliderData[sliderData.length - 1]['showLabel'] = true
+            }
+        }
+
+
         sliderData.map((element, index) => {
             if (element != null) {
+                console.log('finalDeadSlots1->', JSON.stringify(finalDeadSlots))
                 finalDeadSlots.map((element1, index1) => {
                     //900-1020 === 1095-1110
                     //
+                    console.log('element=>start=' + element.minutes + ', element1=' + JSON.stringify(element1))
+
                     if (element.minutes == element1.startTime || /*element.minutes == element1.endTime ||*/ (element.minutes > element1.startTime && element.minutes < element1.endTime)) {
-                        console.log('element=>start='+element.minutes+', element1='+JSON.stringify(element1))
+                        console.log('element=>true->start=' + element.minutes + ', element1=' + JSON.stringify(element1))
                         sliderData[index]['deadslot'] = true
                     }
                 })
@@ -756,6 +775,7 @@ class ChooseTimeDate extends BaseComponent {
         }
 
         const finalDeadSlots = this.state.finalDeadSlots
+        console.log('checkCourtAvailability->finalDeadSlots', JSON.stringify(finalDeadSlots))
         if (finalDeadSlots == undefined /*|| finalDeadSlots.length == block_array*/) {
             msg = 'Sorry, all courts are closed for the selected time and duration.';
 
@@ -770,10 +790,11 @@ class ChooseTimeDate extends BaseComponent {
                 }
             })
 
-        console.log('this.state.courtAvailability', this.state.courtAvailability);
+        console.log('checkCourtAvailability->courtAvailability', this.state.courtAvailability);
+        console.log('checkCourtAvailability->msg', msg);
 
         if (msg == '') {
-            console.log('CourtAvailability', JSON.stringify(this.state.courtAvailability))
+            console.log('checkCourtAvailability->CourtAvailability', JSON.stringify(this.state.courtAvailability))
             this.state.courtAvailability.map((element, index) => {
                 element.court_availability.map((element1, index1) => {
 
@@ -815,6 +836,9 @@ class ChooseTimeDate extends BaseComponent {
     getIntersectingDeadSlots(arr1, arr2) {
 
         var newArray = [];
+        console.log('getIntersectingDeadSlots-arr1', JSON.stringify(arr1))
+        console.log('getIntersectingDeadSlots-arr2', JSON.stringify(arr2))
+
 
         arr1.map((element, index) => {
 
@@ -879,15 +903,42 @@ class ChooseTimeDate extends BaseComponent {
                 else if (element.startTime > element1.startTime && element.endTime < element1.endTime) {
                     console.log('in if 7');
                     var timing = {};
-                    timing['startTime'] = element.startTime;
+                    timing['startTime'] = element.endTime;
                     timing['endTime'] = element.endTime;
 
                     newArray.push(timing);
                 }
+                else if (element.startTime > element1.startTime && element.endTime > element1.endTime) {
+                    console.log('elemnt_new-case')
+                    var timing = {};
+                    timing['startTime'] = element.startTime;
+                    timing['endTime'] = element1.endTime;
+                    newArray.push(timing);
+                }
+                else if (element.startTime < element1.startTime && element.endTime < element1.endTime) {
+                    console.log('elemnt_new-else case1=>' + JSON.stringify(element) + "," + JSON.stringify(element1))
+                    var timing = {};
+                    timing['startTime'] = element.startTime;
+                    timing['endTime'] = element.endTime;
+                    newArray.push(timing);
+                }
+                else {
+
+                }
+
             })
         })
 
-        console.log('newArray', newArray);
+        console.log('newArray-11', JSON.stringify(newArray));
+        let temp_new_array = []
+        for (let i = 0; i < newArray; i++) {
+            let obj = newArray[i]
+            if (obj.startTime != obj.endTime) {
+                temp_new_array.push(obj)
+            }
+        }
+        newArray = temp_new_array
+        console.log('newArray-11-modi', JSON.stringify(temp_new_array));
 
         return newArray;
 
@@ -896,6 +947,8 @@ class ChooseTimeDate extends BaseComponent {
     getFinalCourtAvailability(arr1, arr2) {
 
         var newArray = JSON.parse(JSON.stringify(arr2));
+        console.log('getFinalCourtAvailability->arr1', JSON.stringify(arr1))
+        console.log('getFinalCourtAvailability->arr2', JSON.stringify(arr2))
 
 
         arr2.map((element, index) => {
@@ -1017,7 +1070,9 @@ class ChooseTimeDate extends BaseComponent {
                 this.getBookingDetails(this.state.selectedDate, this.state.selectedSportsId)
             })
         }
-        this._carousel.snapToItem(0)
+
+        if (this._carousel)
+            this._carousel.snapToItem(0)
     }
 
     courtSelector(selectedIndex) {
@@ -1517,9 +1572,9 @@ class ChooseTimeDate extends BaseComponent {
                                                         //   event.nativeEvent.contentOffset.y});
                                                         //alert('outside')
                                                         console.log('outside')
-                                                        this._carousel.snapToItem(this.state.sliderData.length - block_array)
+                                                        this._carousel.snapToItem(this.state.sliderData.length - block_array - 2)
                                                         setTimeout(() => {
-                                                            this._carousel.snapToItem(this.state.sliderData.length - block_array)
+                                                            this._carousel.snapToItem(this.state.sliderData.length - block_array - 2)
                                                         }, 100)
                                                     }
                                                 }
@@ -1690,11 +1745,13 @@ class ChooseTimeDate extends BaseComponent {
 
 
                             {
-                                item['deadslot'] ?
+                                item['is_last'] == undefined ?
+                                    (item['deadslot'] ?
 
-                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "red" }}></View> :
+                                        <View style={{ height: 3, width: singleWidth, backgroundColor: "red" }}></View> :
 
-                                    <View style={{ height: 3, width: singleWidth, backgroundColor: "#758272" }}></View>
+                                        <View style={{ height: 3, width: singleWidth, backgroundColor: "#758272" }}></View>)
+                                    : null
                             }
                         </View>
 

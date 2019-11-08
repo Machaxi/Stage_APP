@@ -7,7 +7,8 @@ import BaseComponent, {
     getFormattedRound,
     getFormattedTournamentLevel,
     genderCamal,
-    getFormattedCategory
+    getFormattedCategory,
+    getFormattedTournamentType
 } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
@@ -217,7 +218,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                             {Moment(data.start_date).format('MMM YYYY')}
                                         </Text>
 
-                                        <Text style={defaultStyle.blue_rounded_4}>Inter-Academy</Text>
+                                        <Text style={defaultStyle.blue_rounded_4}>{getFormattedTournamentType(data.academic_type)}</Text>
 
                                     </View>
 

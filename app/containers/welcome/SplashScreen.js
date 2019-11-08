@@ -59,8 +59,12 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
+        // this.props.navigation.navigate('Test',
+        //     { id: 39,
+        //     name:'Navdeep'})
+        // return
         // this.props.navigation.navigate('ChooseTimeDate',
-        //     { id: 3,
+        //     { id: 20,
         //     name:'Navdeep'})
         // return
         // this.props.navigation.navigate('PaymentHistory')
