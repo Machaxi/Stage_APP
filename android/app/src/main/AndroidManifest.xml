@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
-  package="com.dribble">
+  package="com.machaxi">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -11,7 +11,8 @@ xmlns:tools="http://schemas.android.com/tools"
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@drawable/ic_app_icon"
+      android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       tools:replace="android:appComponentFactory"
       android:appComponentFactory="whateverString"
@@ -66,12 +67,25 @@ xmlns:tools="http://schemas.android.com/tools"
                 <data android:scheme="https" android:host="dribble.test-app.link" />
             </intent-filter>
 
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="machaxi.app.link" />
+            </intent-filter>
+             <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="machaxi.test-app.link" />
+            </intent-filter>
+
 
       </activity>
 
        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_bfRvSAUUhF3BloaSXj8rNlcovrhMoMv0" />
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_biKzNtQRgB5ugoeSXDofHfegFwbSgKPd" />
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
 
         <!-- Branch install referrer tracking (optional) -->
         <receiver android:name="io.branch.referral.InstallListener" android:exported="true">

@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "445376033321-3lio9lugvjmgbins26kpsp5nuuj4ju9d.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.dribble",
-            "certificate_hash": "1bde83793268b5a9148b6253085b2b8e8df203a2"
-          }
-        },
-        {
           "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -48,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "445376033321-or05oq26k0phge5ajne056gbflp3a3vn.apps.googleusercontent.com",
+              "client_id": "445376033321-9fsofml577vf7g85nau2ckqol9i24ddh.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "org.reactjs.native.Dribble"
+                "bundle_id": "com.machaxi"
               }
             }
           ]
@@ -84,10 +76,98 @@
               "client_type": 3
             },
             {
-              "client_id": "445376033321-or05oq26k0phge5ajne056gbflp3a3vn.apps.googleusercontent.com",
+              "client_id": "445376033321-9fsofml577vf7g85nau2ckqol9i24ddh.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "org.reactjs.native.Dribble"
+                "bundle_id": "com.machaxi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445376033321:android:4a0c045de7027a544fa238",
+        "android_client_info": {
+          "package_name": "com.machaxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445376033321-c12iqo4kjk6kt8p24imbqcucu5uimeeq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi",
+            "certificate_hash": "ff5c2b14a20fec316b556c1a10bfc393fd05ab42"
+          }
+        },
+        {
+          "client_id": "445376033321-4c7lb6qponqenrt8mv9e0qsc8c26fvib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi",
+            "certificate_hash": "1bde83793268b5a9148b6253085b2b8e8df203a2"
+          }
+        },
+        {
+          "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5xPrD2Bod747X6_55traTxGgU955w5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445376033321-9fsofml577vf7g85nau2ckqol9i24ddh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.machaxi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445376033321:android:e81f32db57dcade54fa238",
+        "android_client_info": {
+          "package_name": "com.machaxi.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5xPrD2Bod747X6_55traTxGgU955w5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445376033321-9fsofml577vf7g85nau2ckqol9i24ddh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.machaxi"
               }
             }
           ]

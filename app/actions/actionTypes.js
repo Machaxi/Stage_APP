@@ -5,6 +5,14 @@ export const GET_SWITCHING = 'user/LOAD';
 export const DO_SWITCHING_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_SWITCHING_FAIL = 'user/LOAD_FAIL';
 
+export const GET_BROWSE_ACADEMY = 'user/LOAD';
+export const DO_BROWSE_ACADEMY_SUCCESS = 'user/LOAD_SUCCESS';
+export const DO_BROWSE_ACADEMY_FAIL = 'user/LOAD_FAIL';
+
+export const GET_PLAYER_LISTING = 'player_listing/LOAD';
+export const DO_PLAYER_LISTING_SUCCESS = 'player_listing/LOAD_SUCCESS';
+export const DO_PLAYER_LISTING_FAIL = 'player_listing/LOAD_FAIL';
+
 export const GET_COACH1 = 'coach1/LOAD';
 export const DO_COACH1_SUCCESS = 'coach1/LOAD_SUCCESS';
 export const DO_COACH1_FAIL = 'coach1/LOAD_FAIL';
@@ -12,6 +20,10 @@ export const DO_COACH1_FAIL = 'coach1/LOAD_FAIL';
 export const GET_BATCHES = 'user/LOAD';
 export const DO_BATCHES_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_BATCHES_FAIL = 'user/LOAD_FAIL';
+
+export const GET_CANCEL_BATCHES = 'cancel_batch/LOAD';
+export const DO_CANCEL_BATCHES_SUCCESS = 'cancel_batch/LOAD_SUCCESS';
+export const DO_CANCEL_BATCHES_FAIL = 'cancel_batch/LOAD_FAIL';
 
 export const GET_BATCHES_ATTENDENCE = 'user_attendence/LOAD';
 export const DO_BATCHES_ATTENDENCE_SUCCESS = 'user_attendence/LOAD_SUCCESS';
@@ -28,6 +40,10 @@ export const DO_TOURNAMENT_FAIL = 'tournament/LOAD_FAIL';
 export const GET_TOURNAMENT_REGISTER = 'tournament_register/LOAD';
 export const DO_TOURNAMENT_REGISTER_SUCCESS = 'tournament_register/LOAD_SUCCESS';
 export const DO_TOURNAMENT_REGISTER_FAIL = 'tournament_register/LOAD_FAIL';
+
+export const GET_EDIT_PARTNER = 'edit_partner/LOAD';
+export const DO_EDIT_PARTNER_SUCCESS = 'edit_partner/LOAD_SUCCESS';
+export const DO_EDIT_PARTNER_FAIL = 'edit_partner/LOAD_FAIL';
 
 export const GET_UPCOMING_TOURNAMENT = 'upcoming/LOAD';
 export const DO_UPCOMING_TOURNAMENT_SUCCESS = 'upcoming/LOAD_SUCCESS';
@@ -61,6 +77,19 @@ export const GET_PROFILE = 'profile/LOAD';
 export const DO_PROFILE_SUCCESS = 'profile/LOAD_SUCCESS';
 export const DO_PROFILE_FAIL = 'profile/LOAD_FAIL';
 
+export const GET_RELATION = 'relation/LOAD';
+export const DO_RELATION_SUCCESS = 'relation/LOAD_SUCCESS';
+export const DO_RELATION_FAIL = 'relation/LOAD_FAIL';
+
+export const DIET_PLAN = 'diet_plan/LOAD';
+export const DO_DIET_PLAN_SUCCESS = 'diet_plan/LOAD_SUCCESS';
+export const DO_DIET_PLAN_FAIL = 'diet_plan/LOAD_FAIL';
+
+
+export const PAYMENT_DUES = 'payment_dues/LOAD';
+export const DO_PAYMENT_DUES_SUCCESS = 'payment_dues/LOAD_SUCCESS';
+export const DO_PAYMENT_DUES_FAIL = 'payment_dues/LOAD_FAIL';
+
 export const GET_REWARD = 'reward/LOAD';
 export const DO_REWARD_SUCCESS = 'reward/LOAD_SUCCESS';
 export const DO_REWARD_FAIL = 'reward/LOAD_FAIL';
@@ -77,6 +106,11 @@ export const DO_ACADEMY_FAIL = 'user/LOAD_FAIL';
 export const DO_LOGIN_START = 'user/LOAD_START';
 export const DO_LOGIN_SUCCESS = 'user/LOAD_SUCCESS';
 export const DO_LOGIN_FAIL = 'user/LOAD_FAIL';
+
+
+export const DO_ACADEMY_BATCH_START = 'academy_batch/LOAD_START';
+export const DO_ACADEMY_BATCH_SUCCESS = 'academy_batch/LOAD_SUCCESS';
+export const DO_ACADEMY_BATCH_FAIL = 'academy_batch/LOAD_FAIL';
 
 
 export const GET_PRODUCT = 'product/LOAD';
@@ -137,5 +171,17 @@ export const MENU_DRAWER_METHOD_FAIL = 'menuDrawer/LOAD_FAIL';
 export const GET_CHALLENGE = 'challenge/LOAD';
 export const DO_CHALLENGE_SUCCESS = 'challenge/LOAD_SUCCESS';
 export const DO_CHALLENGE_FAIL = 'challenge/LOAD_FAIL';
+
+export const GET_CHALLENGE_RESULT = 'challenge_result/LOAD';
+export const DO_CHALLENGE__RESULT_SUCCESS = 'challenge_result/LOAD_SUCCESS';
+export const DO_CHALLENGE__RESULT_FAIL = 'challenge_result/LOAD_FAIL';
+
+export const GET_CHALLENGE_LEADERBOARD = 'challenge_leaderboard/LOAD';
+export const DO_CHALLENGE__LEADERBOARD_SUCCESS = 'challenge_leaderboard/LOAD_SUCCESS';
+export const DO_CHALLENGE__LEADERBOARD_FAIL = 'challenge_leaderboard/LOAD_FAIL';
+
+export const GET_BOOKING = 'booking/LOAD';
+export const DO_BOOKING_SUCCESS = 'booking/LOAD_SUCCESS';
+export const DO_BOOKING_FAIL = 'booking/LOAD_FAIL';
 
 export const LOGOUT = 'user/LOGOUT';

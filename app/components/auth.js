@@ -1,4 +1,5 @@
-import AsyncStorage  from '@react-native-community/async-storage';//"react-native";
+import AsyncStorage from '@react-native-community/async-storage';//"react-native";
+import { PUSH_TOKEN, ONE_SIGNAL_USERID } from '../containers/BaseComponent';
 
 export const USER_KEY = "auth-login-key";
 
@@ -7,17 +8,17 @@ export const onSignIn = () => AsyncStorage.setItem(USER_KEY, "true");
 export const onSignOut = () => AsyncStorage.removeItem(USER_KEY);
 
 export const isSignedIn = () => {
-  return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(USER_KEY)
-      .then(res => {
-        if (res !== null) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      })
-      .catch(err => reject(err));
-  });
+    return new Promise((resolve, reject) => {
+        AsyncStorage.getItem(USER_KEY)
+            .then(res => {
+                if (res !== null) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            })
+            .catch(err => reject(err));
+    });
 };
 export const getData = async (key, callback) => {
     try {
@@ -26,7 +27,7 @@ export const getData = async (key, callback) => {
         //console.log("GetData", key + " : " + value)
         if (value !== null) {
             callback(value)
-        }else{
+        } else {
             callback('')
         }
     } catch (error) {
@@ -39,12 +40,24 @@ export const storeData = async (key, value) => {
         //console.log("AppStorage", key + " : " + value)
         await AsyncStorage.setItem(key, value + "");
     } catch (error) {
-// Error saving data
+        // Error saving data
     }
 };
 export const clearData = async () => {
     try {
-        const value = await AsyncStorage.clear();
+
+        getData(PUSH_TOKEN, (token) => {
+
+            getData(ONE_SIGNAL_USERID, (userId) => {
+               
+                const value = AsyncStorage.clear();
+                storeData(PUSH_TOKEN,token)
+                storeData(ONE_SIGNAL_USERID,userId)
+                
+            })
+
+        })
+        
     } catch (error) {
         //console.log("GetData", key + " Error " + error)
     }

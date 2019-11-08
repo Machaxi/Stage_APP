@@ -24,15 +24,17 @@ import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG } from './app/containers/BaseComponent';
-import { storeData } from "./app/components/auth";
+import BaseComponent, { DEBUG_APP, getBaseUrl, ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
+import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
-
-export const BASE_URL = 'http://13.233.182.217:8080/api/'
-//export const BASE_URL = 'http://192.168.3.145:8089/api/'
+import DropdownAlert from 'react-native-dropdownalert';
+import moment from 'moment'
+import DeviceInfo from 'react-native-device-info';
+//export const BASE_URL = 'https://www.machaxi.com/api/'
+//export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 export const client = axios.create({
-    baseURL: BASE_URL,
+    baseURL: getBaseUrl(),
     responseType: 'json'
 });
 
@@ -44,8 +46,11 @@ const store = createStore(reducer, middleware);
 //added only header but now we have to send more default params, so using this block
 client.interceptors.request.use(
     config => {
-        config.headers.app_version = '1';
-        config.headers.device_type = Platform.OS;
+        config.headers.app_version = '1'//DeviceInfo.getBuildNumber();
+        config.headers.app_version_code = DeviceInfo.getVersion();
+        config.headers.device_type = Platform.OS.toLowerCase();
+        config.headers.device_id = global.FCM_DEVICE_ID;
+        config.headers.one_signal_device_id = global.ONE_SIGNAL_USERID
         //config.headers.fcm_token = FCM_TOKEN
         return config;
     },
@@ -63,11 +68,63 @@ client.interceptors.response.use(response => {
     try {
         let status = error.response.data.status
         let msg = error.response.data.error_message
+        let error_code = -1
+        try {
+            error_code = error.response.data.error_code
+        } catch (err) {
+
+        }
+
         console.log('status=> ', status)
-        if (status != 401) {
+        if (error_code == 1010) {
+
+            //auto logout and sending navigation to switcher
+            console.log('error => ' + JSON.stringify(error.response))
+
+            getData('userInfo', (value) => {
+                userData = JSON.parse(value)
+                userData['academy_name'] = null
+                userData['academy_id'] = null
+                userData['academy_user_id'] = null
+                storeData("userInfo", JSON.stringify(userData))
+                setTimeout(() => {
+                    Events.publish(GO_TO_SWITCHER);
+                }, 100)
+            });
+        }
+        else if (error_code == '1020') {
+
+            // //auto logout user
+            // console.log('error => ' + JSON.stringify(error.response))
+            // setTimeout(() => {
+            //     Events.publish('LOGOUT');
+            // }, 100)
+        }
+        else if (error_code == '1030') {
+            //do nothing
+            // in this case we will not show any popup
+        }
+        else if (status != 401) {
+            firebase.crashlytics().log('Api Error ' + error.response);
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
+
+            firebase.crashlytics().recordCustomError(
+                'Custom Error',
+                'Oh No!',
+                [
+                    {
+                        className: 'Api Error',
+                        fileName: 'Api',
+                        functionName: 'render',
+                        lineNumber: 81,
+                        additional: { request: error.response }
+                    }
+                ]
+            );
+
         }
+
     }
     catch (error) {
 
@@ -93,14 +150,15 @@ const configurationOptions = {
 }
 const firebase = RNFirebase.initializeApp(configurationOptions)
 
-
 branch.subscribe(({ error, params }) => {
     if (error) {
-        console.error('Error from Branch: ' + error)
+        //console.error('Error from Branch: ' + error)
         return
     }
 
     const clicked_branch_link = params['+clicked_branch_link']
+    const rn_cached_initial_event = params['+rn_cached_initial_event']
+
     //alert(clicked_branch_link)
     if (clicked_branch_link) {
         let feature = params['~feature']
@@ -110,6 +168,7 @@ branch.subscribe(({ error, params }) => {
                 tournament_id: id,
                 feature: feature
             }
+            console.log('Branchtit=>', feature)
             Events.publish('deep_linking', obj);
             //payment_details
             //  razorpay_payment_id
@@ -141,8 +200,9 @@ branch.subscribe(({ error, params }) => {
     //     // Events.publish('deep_linking', tournament_id);
 
     // }
-
+    //alert(DeviceInfo.getVersion())
 })
+
 
 
 export default class App extends BaseComponent {
@@ -158,6 +218,8 @@ export default class App extends BaseComponent {
             navigation: null
         }
         console.disableYellowBox = true;
+        console.reportErrorsAsExceptions = false;
+
 
 
         firebase.messaging().getToken().then((token) => {
@@ -171,6 +233,7 @@ export default class App extends BaseComponent {
         });
 
         this.refreshEvent = Events.subscribe('ShowDialog', (msg) => {
+            //this.dropDownAlertRef.alertWithType('error', 'Error', msg);
             this.setState({
                 is_show_alert: true,
                 info_msg: msg
@@ -183,8 +246,7 @@ export default class App extends BaseComponent {
             })
         });
 
-
-        OneSignal.init("0afba88e-fe31-4da9-9540-412faf6b856b");
+        OneSignal.init(ONE_SIGNAL_ID, { kOSSettingsKeyAutoPrompt: true });
         //OneSignal.setLogLevel(0, 6)
 
         OneSignal.addEventListener('received', this.onReceived);
@@ -193,6 +255,13 @@ export default class App extends BaseComponent {
         //OneSignal.configure();
         OneSignal.enableVibrate(true);
         OneSignal.inFocusDisplaying(2)
+
+        if (DEBUG_APP)
+            alert('You are running debug app.')
+    }
+
+    componentWillMount() {
+
     }
 
     onReceived(notification) {
@@ -202,10 +271,17 @@ export default class App extends BaseComponent {
     }
 
     onOpened(openResult) {
+
+        global.NOTIFICATION_DATA = openResult.notification.payload.additionalData
+
+        //alert(JSON.stringify(openResult))
         //console.log('Message: ', openResult.notification.payload.body);
         //  console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
-        //  console.log('openResult: ', openResult);
+        console.log('openResult: ', JSON.stringify(openResult));
+        setTimeout(() => {
+            Events.publish('NOTIFICATION_CLICKED');
+        }, 100)
     }
 
     componentWillUnmount() {
@@ -215,14 +291,26 @@ export default class App extends BaseComponent {
     }
 
 
-
-
     onIds(device) {
         //alert(JSON.stringify(device))
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
+        global.FCM_DEVICE_ID = device.pushToken
+        global.ONE_SIGNAL_USERID = device.userId
         //alert('onIds ',  device)
         console.log('Device info: ', device)
+    }
+
+    getActiveRouteName(navigationState) {
+        if (!navigationState) {
+            return null;
+        }
+        const route = navigationState.routes[navigationState.index];
+        // dive into nested navigators
+        if (route.routes) {
+            return this.getActiveRouteName(route);
+        }
+        return route.routeName;
     }
 
     render() {
@@ -247,6 +335,8 @@ export default class App extends BaseComponent {
                         message={info_msg}
                         visible={is_show_alert} />
 
+                    <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
+
                     <UpdateAppDialog
                         navigation={this.state.navigation}
                         exitPressed={() => {
@@ -264,7 +354,29 @@ export default class App extends BaseComponent {
                         }}
                         visible={show_must_update_alert} />
 
-                    <AppMain />
+                    <AppMain
+                        onNavigationStateChange={(prevState, currentState, action) => {
+                            const currentScreen = this.getActiveRouteName(currentState);
+                            const prevScreen = this.getActiveRouteName(prevState);
+
+                            if (Platform.OS == 'android') {
+
+                                if (prevScreen !== currentScreen) {
+                                    if (currentScreen == 'UserHome' || currentScreen == 'ParentHome') {
+                                        StatusBar.setBackgroundColor("#332B70")
+                                        StatusBar.setBarStyle('light-content', true)
+                                    } else {
+                                        StatusBar.setBackgroundColor("#ffffff")
+                                        StatusBar.setBarStyle('dark-content', true)
+                                    }
+
+                                    //this.refreshScreenCallback(currentScreen)
+                                }
+                            } else {
+                                StatusBar.setBarStyle('dark-content', true)
+                            }
+                        }}
+                    />
                 </Provider>
             </PaperProvider>
             // </SafeAreaView>
@@ -276,11 +388,43 @@ export default class App extends BaseComponent {
         if (Platform.OS == 'ios') {
             link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
         } else {
-            link = 'market://details?id=com.whatsapp'
+            link = 'market://details?id=com.machaxi'
         }
         Linking.canOpenURL(link).then(supported => {
             supported && Linking.openURL(link);
         }, (err) => console.log(err));
+    }
+
+    refreshScreenCallback(currentScreen) {
+        console.log('screen_state', currentScreen)
+
+        getData('screen_state', (value) => {
+            console.log('screen_state1', value)
+            let obj = {}
+            if (value != '') {
+                console.log('screen_state1', value)
+                obj = JSON.parse(value)
+            }
+            if (obj[currentScreen] == undefined) {
+                console.log('screen_state2 = ', obj[currentScreen])
+                obj[currentScreen] = +moment();
+                console.log('screen_state3 = ', obj[currentScreen])
+
+            } else {
+                let currentMilli = +moment()
+                let lastMilli = obj[currentScreen]
+                let diffMilli = (currentMilli - lastMilli) / (1000)
+                let diffMin = +(diffMilli / 60)
+                console.log('screen_state- = ', lastMilli + "==" + diffMilli)
+                console.log('screen_state4 = ', obj[currentScreen])
+                console.log('screen_state5 = ', diffMin)
+                if (diffMin >= 1) {
+                    Events.publish(REFRESH_SCREEN_CALLBACK);
+                    obj[currentScreen] = +moment();
+                }
+            }
+            storeData('screen_state', JSON.stringify(obj))
+        })
     }
 }
 
