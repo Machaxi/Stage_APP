@@ -10,6 +10,7 @@ import moment from 'moment';
 import Events from '../../router/events';
 import RNPickerSelect from 'react-native-picker-select'
 import MonthYearDialog from '../../components/custom/MonthYearDialog'
+import PTRView from 'react-native-pull-to-refresh';
 
 class LeaderboardRoute extends BaseComponent {
 
@@ -140,6 +141,15 @@ class LeaderboardRoute extends BaseComponent {
 
   );
 
+  _refresh = () => {
+    this.getLeaderboardData()
+    setTimeout(() => {
+    }, 500)
+    return new Promise((resolve) => {
+        resolve()
+    });
+  }
+
   render() {
 
     if (this.props.data.loading || this.state.challengeLeaderboardData == null) {
@@ -162,102 +172,102 @@ class LeaderboardRoute extends BaseComponent {
     return (
 
       <View style={styles.dashboardPageContainer} >
+        <PTRView onRefresh={this._refresh} >  
+          {this.listHeader()}
 
-        {this.listHeader()}
+          <View style={{ width: '45.33%', paddingLeft: 16 }}>
 
-        <View style={{ width: '45.33%', paddingLeft: 16 }}>
+            <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
 
-          <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
+            <MonthYearDialog
+              touchOutside={(month, year) => {
+                if (month != undefined && year != undefined) {
+                  //alert(month + "-" + year)
+                  this.state.selected_month = month
+                  this.state.selected_year = year
+                  setTimeout(() => {
+                    this.getLeaderboardData()
+                  }, 50)
+                }
+                this.setState({
+                  show_month_dialog: false
+                })
+              
 
-          <MonthYearDialog
-            touchOutside={(month, year) => {
-              if (month != undefined && year != undefined) {
-                //alert(month + "-" + year)
-                this.state.selected_month = month
-                this.state.selected_year = year
-                setTimeout(() => {
-                  this.getLeaderboardData()
-                }, 50)
-              }
-              this.setState({
-                show_month_dialog: false
-              })
-             
-
-            }}
-            visible={this.state.show_month_dialog}
-          />
-
-          
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({
-                show_month_dialog: true
-              })
-            }}
-          >
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 8,
-              width: 90,
-              justifyContent: 'space-between'
-            }}>
-
-              <Text style={{
-                fontSize: 14,
-                color: '#404040',
-                paddingLeft: 2,
-                fontFamily: 'Quicksand-Medium'
-              }}>
-                {formatted_date}
-              </Text>
-
-              <Image
-                style={{ width: 8, height: 5 }}
-                source={require('../../images/ic_down_arrow.png')} />
-            </View>
-            <View
-              style={{
-                width: 90,
-                marginTop: 4,
-                backgroundColor: '#A3A5AE',
-                height: 1
               }}
-            ></View>
-          </TouchableOpacity>
+              visible={this.state.show_month_dialog}
+            />
 
-          {/* <View style={{
-            width: 80,
-            backgroundColor: '#A3A5AE',
-            height: 1
-          }}></View> */}
+            
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({
+                  show_month_dialog: true
+                })
+              }}
+            >
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 8,
+                width: 90,
+                justifyContent: 'space-between'
+              }}>
 
-        </View>
+                <Text style={{
+                  fontSize: 14,
+                  color: '#404040',
+                  paddingLeft: 2,
+                  fontFamily: 'Quicksand-Medium'
+                }}>
+                  {formatted_date}
+                </Text>
 
-        {
-          data.length > 0 &&
-          <View style={styles.totalResultsLabelOuter}>
-            <Text style={styles.nameLabel}>Name</Text>
-            <Text style={styles.winLabel}>Won</Text>
-            <Text style={styles.lostLabel}>Lost</Text>
+                <Image
+                  style={{ width: 8, height: 5 }}
+                  source={require('../../images/ic_down_arrow.png')} />
+              </View>
+              <View
+                style={{
+                  width: 90,
+                  marginTop: 4,
+                  backgroundColor: '#A3A5AE',
+                  height: 1
+                }}
+              ></View>
+            </TouchableOpacity>
+
+            {/* <View style={{
+              width: 80,
+              backgroundColor: '#A3A5AE',
+              height: 1
+            }}></View> */}
+
           </View>
-        }
 
-        {data.length == 0 ?
+          {
+            data.length > 0 &&
+            <View style={styles.totalResultsLabelOuter}>
+              <Text style={styles.nameLabel}>Name</Text>
+              <Text style={styles.winLabel}>Won</Text>
+              <Text style={styles.lostLabel}>Lost</Text>
+            </View>
+          }
 
-          <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 50 }}><Text style={{ fontFamily: 'Quicksand-Medium', color: 'black' }}>No Challenges</Text></View>
+          {data.length == 0 ?
 
-          :
+            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 50 }}><Text style={{ fontFamily: 'Quicksand-Medium', color: 'black' }}>No Challenges</Text></View>
 
-          <FlatList
-            data={data}
-            renderItem={this._renderItem}
-          />
-        }
+            :
+
+            <FlatList
+              data={data}
+              renderItem={this._renderItem}
+            />
+          }
 
 
-
+        </PTRView>
       </View>
     );
   }
