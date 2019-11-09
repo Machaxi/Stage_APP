@@ -138,8 +138,10 @@ class ChallengeHome extends BaseComponent {
     );
     render() {
         return (
+            <>
             <TabView
-
+                style={{opacity: 0.2}}
+                swipeEnabled={false}
                 navigationState={this.state}
                 renderScene={this._renderScene}
                 renderTabBar={props =>
@@ -149,10 +151,20 @@ class ChallengeHome extends BaseComponent {
                         indicatorStyle={{ backgroundColor: '#667DDB', height: 4 }}
                         style={{ backgroundColor: 'white', elevation: 0 }}
                         labelStyle={{ color: '#404040', fontFamily: 'Quicksand-Regular', }}
+                        scrollEnabled={false}
                     />
                 }
                 onIndexChange={this._handleIndexChange}
             />
+            <Text style={{position: 'absolute',
+                justifyContent:'center',
+                alignItems:'center',
+                textAlign:'center',
+                top: 100,
+                width:"100%",
+                fontSize: 20,
+                backgroundColor: 'transparent'}}>Coming Soon</Text>
+            </>  
         );
     }
 

@@ -805,11 +805,12 @@ class DashboardRoute extends BaseComponent {
         />
 
         <FlatList
-          onRefresh={() => this.onRefresh()}
-          refreshing={this.state.isRefreshing}
+          // onRefresh={() => this.onRefresh()}
+          // refreshing={this.state.isRefreshing}
           data={data}
           extraData={data}
           renderItem={this._renderItem}
+          scrollEnabled={false}
         />
         {data.length > 0 && this.updateScoreModal(data[0])}
       </View>
