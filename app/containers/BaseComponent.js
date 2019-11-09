@@ -344,6 +344,8 @@ export default class BaseComponent extends React.Component {
 
                                 //checking for app update
                                 let must_update = json.data.must_update
+                                //let visible_challenge = json.data.visible_challenge
+                                
                                 if (must_update == true) {
                                     Events.publish(EVENT_UPDATE_DIALOG);
                                 }

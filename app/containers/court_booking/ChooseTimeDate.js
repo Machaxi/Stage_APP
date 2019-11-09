@@ -257,13 +257,13 @@ class ChooseTimeDate extends BaseComponent {
                     /* get final dead slots to show on slider*/
                     console.log('allCourtsDeadSlots-> ', JSON.stringify(allCourtsDeadSlots))
                     finalDeadSlots = this.getFinalDeadSlots(allCourtsDeadSlots);
-                    console.log('finalDeadSlots->', JSON.stringify(finalDeadSlots))
+                    console.log('finalDeadSlots1->', JSON.stringify(finalDeadSlots))
 
                     courtAvailability = this.getFinalCourtAvailability(finalDeadSlots, courtAvailability1);
                     console.log('courtAvailability->', JSON.stringify(courtAvailability))
 
                     /* make slider data to show slider*/
-                    sliderData = this.makeSliderData(finalDeadSlots);
+                    sliderData = this.makeSliderData(finalDeadSlots, courtAvailability1);
                     console.log('FinalSlider->', JSON.stringify(sliderData))
 
                     this.setState({
@@ -497,6 +497,8 @@ class ChooseTimeDate extends BaseComponent {
 
         })
 
+        console.log('getAllAvailableCourts->', JSON.stringify(newArray))
+
         return newArray;
 
 
@@ -651,9 +653,33 @@ class ChooseTimeDate extends BaseComponent {
 
     }
 
-    makeSliderData(finalDeadSlots) {
+    getDeadSlotfromAvailableCourt(courtAvailability1, timing) {
+
+        let is_dead = true
+        timing = timing+1
+        let courtAvailability = courtAvailability1
+        for(let i =0;i<courtAvailability.length;i++){
+            let element = courtAvailability[i]
+
+            for(let j=0;j<element.court_availability.length;j++){
+
+                let element1 = element.court_availability[j]
+                if (timing >= element1.startTime && timing<= element1.endTime) {
+                    is_dead = false
+                    break
+                }
+            }
+        }
+        
+        console.log('getDeadSlotfromAvailableCourt-timing->'+timing+"- is_dead "+is_dead)
+        return is_dead
+    }
+
+    makeSliderData(finalDeadSlots, courtAvailability1) {
 
         console.log('selectedSportTimeData', JSON.stringify(this.state.selectedSportTimeData))
+        console.log('makeSliderData->courtAvailability1', JSON.stringify(courtAvailability1))
+
 
         let has30Min = this.has30MinCondition(this.state.selectedSportTimeData)
         let incrementalTime = 15
@@ -710,11 +736,14 @@ class ChooseTimeDate extends BaseComponent {
             temp['title'] = newtime;
             temp['minutes'] = time;
 
+            
+
             if (todaySelected && time <= todayPastTime) {
                 temp['deadslot'] = true;
             } else {
-                temp['deadslot'] = false;
+                temp['deadslot'] = this.getDeadSlotfromAvailableCourt(courtAvailability1,time);
             }
+
 
             if (index % 2 == 0)
                 temp['showLabel'] = true;
@@ -933,7 +962,7 @@ class ChooseTimeDate extends BaseComponent {
         let temp_new_array = []
         for (let i = 0; i < newArray; i++) {
             let obj = newArray[i]
-            if (obj.startTime != obj.endTime) {
+            if (obj.startTime != obj.endTime ) {
                 temp_new_array.push(obj)
             }
         }
@@ -1159,8 +1188,13 @@ class ChooseTimeDate extends BaseComponent {
         let unique = [...new Set(courtIds)];
         courtIds = unique
 
+        let unique_courtNames =  [...new Set(courtNames)]
+        courtNames = unique_courtNames
+
         console.log('totalCost', totalCost);
         console.log('courtIds', courtIds);
+        console.log('courtNames', JSON.stringify(courtNames));
+        console.log('courtNames-unique_name', JSON.stringify(unique_courtNames));
 
         //this.state.selectedCourtIds = courtIds
         //this.state.selectedCourtNames = courtNames
@@ -1681,7 +1715,7 @@ class ChooseTimeDate extends BaseComponent {
                         </View>
                         <View style={{ width: '48%' }}>
                             {
-                                this.state.selectedCourtIds.length == 0 ?
+                                this.state.selectedCourtIds.length == 0 || this.state.totalCost==0?
                                     <Text style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} onPress={() => {
                                         //this.showPaymentModal();
                                     }}>Pay Now</Text> :
@@ -1853,7 +1887,8 @@ class ChooseTimeDate extends BaseComponent {
                                     </View>
                                     <View style={styles.paymentValueOuter}>
                                         <View style={styles.paymentLabelWidth}><Text style={defaultStyle.regular_text_14}>{this.state.academyName}</Text></View>
-                                        <View style={styles.paymentLabelWidth}><Text style={styles.paymentValue}>{this.state.selectedCourtNames.join(',')}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text 
+                                        style={styles.paymentValue}>{this.state.selectedCourtNames.join(',')}</Text></View>
                                     </View>
                                     <View style={styles.paymentLabelOuter}>
                                         <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Date</Text></View>
@@ -2124,7 +2159,7 @@ const styles = {
         //padding: 16,
         borderRadius: 16,
         backgroundColor: 'white',
-        height: 360,
+        height: 380,
     },
     modalHeadingOuter: {
         flexDirection: 'row',
