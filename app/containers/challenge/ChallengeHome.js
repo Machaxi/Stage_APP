@@ -84,7 +84,7 @@ class ChallengeHome extends BaseComponent {
         });
 
 
-
+        
     }
 
     _handleIndexChange = index => this.setState({ index });
@@ -140,8 +140,6 @@ class ChallengeHome extends BaseComponent {
         return (
             <>
                 <TabView
-                    //style={{opacity: 0.2}}
-                    swipeEnabled={false}
                     navigationState={this.state}
                     renderScene={this._renderScene}
                     renderTabBar={props =>
@@ -171,7 +169,8 @@ class ChallengeHome extends BaseComponent {
                         fontSize: 16,
                         color: 'white',
                         fontFamily: 'Quicksand-Medium'
-                    }}>Coming Soon</Text></View>
+                    }}>Launching Soon</Text>
+                </View>
             </>
         );
     }

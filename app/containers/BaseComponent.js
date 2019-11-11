@@ -684,6 +684,10 @@ export function getFormattedLevel(level) {
 
         case "INTERNATIONAL_LEVEL":
             return "International Level"
+        case "NA":
+            return "        "
+        case " na":
+            return "        "
     }
     return level
 }
