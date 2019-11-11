@@ -79,8 +79,8 @@ global.SELECTED_PLAYER_ID = ''
 
 //===============================================================================================
 
-export const DEBUG_APP = false
-export const PROD_DEBUG = false
+export const DEBUG_APP = true
+export const PROD_DEBUG = true
 
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
@@ -163,7 +163,7 @@ export default class BaseComponent extends React.Component {
     }
 
 
-    getDefaultRazorPayEmail(){
+    getDefaultRazorPayEmail() {
         return 'hello@machaxi.com'
     }
 
@@ -333,7 +333,7 @@ export default class BaseComponent extends React.Component {
                     client.get('notification/notification-count',
                         { headers })
                         .then(function (response) {
-                            console.log('notification' + JSON.stringify( response.data));
+                            console.log('notification' + JSON.stringify(response.data));
                             let json = response.data
                             let success = json.success
                             if (success) {
@@ -344,6 +344,8 @@ export default class BaseComponent extends React.Component {
 
                                 //checking for app update
                                 let must_update = json.data.must_update
+                                //let visible_challenge = json.data.visible_challenge
+
                                 if (must_update == true) {
                                     Events.publish(EVENT_UPDATE_DIALOG);
                                 }
@@ -679,6 +681,9 @@ export function getFormattedLevel(level) {
 
         case "NATIONAL_LEVEL":
             return "National Level"
+
+        case "INTERNATIONAL_LEVEL":
+            return "International Level"
     }
     return level
 }

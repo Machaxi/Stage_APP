@@ -105,8 +105,24 @@ client.interceptors.response.use(response => {
             // in this case we will not show any popup
         }
         else if (status != 401) {
+            firebase.crashlytics().log('Api Error ' + error.response);
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
+
+            firebase.crashlytics().recordCustomError(
+                'Custom Error',
+                'Oh No!',
+                [
+                    {
+                        className: 'Api Error',
+                        fileName: 'Api',
+                        functionName: 'render',
+                        lineNumber: 81,
+                        additional: { request: error.response }
+                    }
+                ]
+            );
+
         }
 
     }
@@ -240,12 +256,12 @@ export default class App extends BaseComponent {
         OneSignal.enableVibrate(true);
         OneSignal.inFocusDisplaying(2)
 
-       if (DEBUG_APP)
+        if (DEBUG_APP)
             alert('You are running debug app.')
     }
 
     componentWillMount() {
-        
+
     }
 
     onReceived(notification) {
