@@ -163,7 +163,7 @@ export default class BaseComponent extends React.Component {
     }
 
 
-    getDefaultRazorPayEmail(){
+    getDefaultRazorPayEmail() {
         return 'hello@machaxi.com'
     }
 
@@ -333,7 +333,7 @@ export default class BaseComponent extends React.Component {
                     client.get('notification/notification-count',
                         { headers })
                         .then(function (response) {
-                            console.log('notification' + JSON.stringify( response.data));
+                            console.log('notification' + JSON.stringify(response.data));
                             let json = response.data
                             let success = json.success
                             if (success) {
@@ -345,7 +345,7 @@ export default class BaseComponent extends React.Component {
                                 //checking for app update
                                 let must_update = json.data.must_update
                                 //let visible_challenge = json.data.visible_challenge
-                                
+
                                 if (must_update == true) {
                                     Events.publish(EVENT_UPDATE_DIALOG);
                                 }
@@ -681,6 +681,9 @@ export function getFormattedLevel(level) {
 
         case "NATIONAL_LEVEL":
             return "National Level"
+
+        case "INTERNATIONAL_LEVEL":
+            return "International Level"
     }
     return level
 }

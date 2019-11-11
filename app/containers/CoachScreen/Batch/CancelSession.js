@@ -34,8 +34,8 @@ class CancelSession extends BaseComponent {
         }
 
 
-        this.state.selected_start_date = moment().format('YYYY-MM-DD');
-        this.state.selected_end_date = moment().format('YYYY-MM-DD');
+        this.state.selected_start_date = moment().format('DD-MMM-YYYY');
+        this.state.selected_end_date = moment().format('DD-MMM-YYYY');
         console.warn(this.state.selected_start_date)
 
         getData('userInfo', (value) => {
@@ -313,6 +313,7 @@ class CancelSession extends BaseComponent {
 
 
         let selected_start_date = this.state.selected_start_date
+        console.log('selected_start-',selected_start_date)
         let selected_end_date = this.state.selected_end_date
         let data = this.state.data
         let is_single_day = this.state.is_single_day
