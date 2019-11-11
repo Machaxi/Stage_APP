@@ -3,7 +3,7 @@ package com.machaxi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.RNTextInputMask.RNTextInputMaskPackage;
+// import com.RNTextInputMask.RNTextInputMaskPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import cl.json.RNSharePackage;
