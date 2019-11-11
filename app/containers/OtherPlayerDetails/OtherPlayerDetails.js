@@ -257,6 +257,7 @@ class OtherPlayerDetails extends BaseComponent {
 
 
     render() {
+        this.state.showChallenge = false;
         if (this.props.data.loading && !this.state.player_profile) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
