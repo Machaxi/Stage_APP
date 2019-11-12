@@ -108,7 +108,6 @@ client.interceptors.response.use(response => {
             firebase.crashlytics().log('Api Error ' + error.response);
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
-
             firebase.crashlytics().recordCustomError(
                 'Custom Error',
                 'Oh No!',
@@ -118,7 +117,7 @@ client.interceptors.response.use(response => {
                         fileName: 'Api',
                         functionName: 'render',
                         lineNumber: 81,
-                        additional: { request: error.response }
+                        additional: { request: error.response.data.data }
                     }
                 ]
             );

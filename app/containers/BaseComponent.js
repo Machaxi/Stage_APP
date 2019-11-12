@@ -79,7 +79,7 @@ global.SELECTED_PLAYER_ID = ''
 
 //===============================================================================================
 
-export const DEBUG_APP = true
+export const DEBUG_APP = false
 export const PROD_DEBUG = true
 
 
@@ -416,6 +416,7 @@ export default class BaseComponent extends React.Component {
         }
         return is_valid
     }
+
 
     getNetworkStatus() {
         if (!connected) {
