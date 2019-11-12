@@ -167,7 +167,10 @@ class PhoneAuth extends BaseComponent {
                 })
                 .catch(error => {
                     this.progress(false)
-                    alert(`Code Confirm Error: ${error.message}`)
+                    setTimeout(()=>{
+                        alert(`Code Confirm Error: ${error.message}`)
+
+                    },500)
                     this.setState({ message: `Code Confirm Error: ${error.message}` })
                 }
                 );
