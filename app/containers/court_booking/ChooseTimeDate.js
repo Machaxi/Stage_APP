@@ -737,7 +737,7 @@ class ChooseTimeDate extends BaseComponent {
             temp['minutes'] = time;
 
             
-
+//Rajat work
             if (todaySelected && time <= todayPastTime) {
                 temp['deadslot'] = true;
             } else {
@@ -762,6 +762,9 @@ class ChooseTimeDate extends BaseComponent {
                 sliderData[sliderData.length - 1]['showLabel'] = true
             }
         }
+
+        ///// if (this._carousel)
+        // this._carousel.snapToItem(0)
 
 
         sliderData.map((element, index) => {
