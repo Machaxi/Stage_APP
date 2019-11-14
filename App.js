@@ -117,26 +117,28 @@ client.interceptors.response.use(response => {
                 let err_data = error.response.data
                 let url = error.response.config.url
                 let data = error.response.config.data
-                let obj = {
-                    className: 'Api Error',
-                    fileName: 'Api',
-                    functionName: 'render',
-                    lineNumber: 81,
-                    additional:
-                    {
-                        url: url,
-                        data: data,
-                        response: err_data
-                    }
+                let logs_data = {
+                    url: url,
+                    data: data,
+                    response: err_data
                 }
+                if (Platform.OS === 'ios') {
+                    // object literal will crash on iOS, so transform to string
+                    logs_data = JSON.stringify(logs_data, null, 2);
+                  }
+               
                 console.log('Crash Object -> ', JSON.stringify(obj))
 
                 firebase.crashlytics().recordCustomError(
                     'Custom Error',
-                    'Oh No!',
-                    [
-                        obj
-                    ]
+                    //'Oh No!',
+                    {
+                        className: 'Api Error',
+                        fileName: 'Api',
+                        functionName: 'render',
+                        lineNumber: 81,
+                        additional:logs_data
+                    }
                 );
             } catch (err) {
                 console.log('Error in sending data.')

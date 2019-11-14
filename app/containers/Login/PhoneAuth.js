@@ -771,7 +771,7 @@ class PhoneAuth extends BaseComponent {
 
                     <Text style={[defaultStyle.bold_text_14,
                     { color: "#A3A5AE", }]}>
-                        Didnâ€™t receive the OTP?
+                        Didn't receive the OTP?
                             </Text>
                     <TouchableOpacity
                         onPress={() => {
@@ -780,7 +780,7 @@ class PhoneAuth extends BaseComponent {
                         <Text style={{
                             color: "#67BAF5", paddingLeft: 4,
                             fontFamily: 'Quicksand-Medium',
-                        }}> RESEND</Text>
+                        }}>RESEND</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -795,7 +795,7 @@ class PhoneAuth extends BaseComponent {
                         style={{
                             color: 'white',
                             textAlign: 'center',
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Medium'
                         }}>Confirm</Text>
                 </TouchableOpacity>
                 {/* <Text style={styles.rounded_button}

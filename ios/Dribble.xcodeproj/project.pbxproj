@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		0047DE71B9CC4A498F8C11A8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D571A395E08B49649009E409 /* FontAwesome.ttf */; };
 		00E356F31AD99517003FC87E /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
@@ -411,6 +412,7 @@
 				A2346D6F232B9526009565AC /* Embed Frameworks */,
 				A26957F3233B902200AF8563 /* Embed App Extensions */,
 				A2ABD3EE235DA163007EE2B5 /* ShellScript */,
+				A290F666237D6ADB00D1DE45 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -717,6 +719,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dribble/Pods-Dribble-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		A290F666237D6ADB00D1DE45 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 		A2ABD3EE235DA163007EE2B5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
