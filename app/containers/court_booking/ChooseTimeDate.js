@@ -317,6 +317,14 @@ class ChooseTimeDate extends BaseComponent {
 
     convertArrayHoursToMinutes(bookingDetails, name) {
         var newArray = [];
+        if(name === 'court_bookings'){
+            bookingDetails.map((element, index) => {
+                element[name].sort((first, second) => {
+                    return this.convertTimeStringToMins(first.start_time) - this.convertTimeStringToMins(second.start_time);
+                })
+            })
+        }
+        console.log('bookingDetails', bookingDetails)
         bookingDetails.map((element, index) => {
 
             var item = {};
@@ -336,15 +344,14 @@ class ChooseTimeDate extends BaseComponent {
                 }
                 item[name].push(timing);
             })
-
             newArray.push(item);
         })
-
         return newArray;
     }
 
     getAllAvailableCourts(courtTimings, courtBookings) {
-
+        console.log('courtTimings', courtTimings)
+        console.log('courtBookings', courtBookings)
         var newArray = [];
 
         courtTimings.map((ele, ind) => {
@@ -366,9 +373,7 @@ class ChooseTimeDate extends BaseComponent {
                 for (i = flag; i < courtBookings[ind]['court_bookings'].length; i++) {
 
                     var element1 = courtBookings[ind]['court_bookings'][i];
-
-                    console.log('i', i, ' newflag', newflag);
-                    console.log('elseflsg', elseflag);
+                    
                     if (elseflag > 0) {
                         console.log('in new condition');
                         newflag = i;
@@ -377,14 +382,10 @@ class ChooseTimeDate extends BaseComponent {
 
                         console.log('heyyy');
                         if (element1.startTime < element.endTime) {
-                            //console.log('in if 1');
                             if (element1.startTime != courtBookings[ind]['court_bookings'][i - 1].endTime) {
-                                // console.log('in if 2');
-                                //console.log(courtBookings[ind]['court_bookings'][i - 1].endTime);
                                 var timing = {};
                                 timing['startTime'] = courtBookings[ind]['court_bookings'][i - 1].endTime;
                                 timing['endTime'] = element1.startTime;
-                                console.log('timimggggggggggg', timing);
                                 item['court_availability'].push(timing);
                                 newflag = i;
                                 elseflag = elseflag + 1;
@@ -397,7 +398,7 @@ class ChooseTimeDate extends BaseComponent {
                                     var timing = {};
                                     timing['startTime'] = element1.endTime;
                                     timing['endTime'] = element.endTime;
-                                    console.log('timimggggggggggg11', timing);
+                                    console.log('courtBookingsindcourt_bookings.length > i + 1 && courtBookingindcourt_bookingsi + 1.startTime > element.endTime', timing);
                                     item['court_availability'].push(timing);
                                     cTime = true;
                                 }
@@ -414,7 +415,7 @@ class ChooseTimeDate extends BaseComponent {
                                     var timing = {};
                                     timing['startTime'] = element1.endTime;
                                     timing['endTime'] = element.endTime;
-                                    console.log('timimggggggggggg22', timing);
+                                    console.log('courtBookingsindcourt_bookings.length == i + 1 && element1.startTime < element.endTime', timing);
                                     item['court_availability'].push(timing);
                                     cTime = true;
                                 }
@@ -430,7 +431,7 @@ class ChooseTimeDate extends BaseComponent {
 
                     }
                     else {
-                        //console.log('---------111111111-', tflag, newflag, 'i', i)
+                        console.log('i > 0 && newflag == i else')
                         if (tflag) {
                             //console.log('----------', newflag, 'i', i)
                             newflag = i + 1;
@@ -760,7 +761,8 @@ class ChooseTimeDate extends BaseComponent {
             sliderData.push(temp);
             index++;
             
-            if(todaySelected && !temp['deadslot'] && slidePointer){
+            console.log('slidePointer', slidePointer);
+            if(!temp['deadslot'] && slidePointer){
                 console.log('index is', index);
                 this.setState({ slideToIndex: index-5 }, () => {
                     if(this._carousel)
@@ -1275,7 +1277,8 @@ class ChooseTimeDate extends BaseComponent {
 
         this.setState({
             selectedDuration: selectedDuration,
-            selectedTimeRange: selectedTimeRange
+            selectedTimeRange: selectedTimeRange,
+            totalCost: 0
         }, () => {
             this.checkCourtAvailability();
         })
