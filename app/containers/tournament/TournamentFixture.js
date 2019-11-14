@@ -213,8 +213,6 @@ class TournamentFixture extends BaseComponent {
     }
 
     processTouch(x, y) {
-        console.log('pan_events_processTouch')
-
         if (!this.state.isMoving || this.state.isZooming) {
             const { top, left } = this.state;
             this.setState({
@@ -246,21 +244,16 @@ class TournamentFixture extends BaseComponent {
             onPanResponderTerminationRequest: () => true,
             onMoveShouldSetPanResponderCapture: () => false,
             onStartShouldSetPanResponderCapture: () => { 
-                console.log('pan_events_onStartShouldSetPanResponderCapture')
+                console.log('onStartShouldSetPanResponderCapture')
                 return false },
             onPanResponderMove: evt => {
                 const touches = evt.nativeEvent.touches;
                 const length = touches.length;
                 if (length === 1) {
-                    console.log('pan_events_onPanResponderMove==1')
-
                     const [{ locationX, locationY }] = touches;
                     this.processTouch(locationX, locationY);
                 } else if (length === 2) {
-                    console.log('pan_events_onPanResponderMove==2')
-
                     const [touch1, touch2] = touches;
-                    
                     this.processPinch(
                         touch1.locationX,
                         touch1.locationY,
@@ -1372,7 +1365,7 @@ class TournamentFixture extends BaseComponent {
 
         return (
 
-            <View  {...this._panResponder.panHandlers} pointerEvents="none">
+            <View  {...this._panResponder.panHandlers}>
                 <Svg
 
                     width={width}

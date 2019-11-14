@@ -105,23 +105,43 @@ client.interceptors.response.use(response => {
             // in this case we will not show any popup
         }
         else if (status != 401) {
+
+
+
             firebase.crashlytics().log('Api Error ' + error.response);
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
 
-            firebase.crashlytics().recordCustomError(
-                'Custom Error',
-                'Oh No!',
-                [
+            try {
+
+                let err_data = error.response.data
+                let url = error.response.config.url
+                let data = error.response.config.data
+                let obj = {
+                    className: 'Api Error',
+                    fileName: 'Api',
+                    functionName: 'render',
+                    lineNumber: 81,
+                    additional:
                     {
-                        className: 'Api Error',
-                        fileName: 'Api',
-                        functionName: 'render',
-                        lineNumber: 81,
-                        additional: { request: error.response }
+                        url: url,
+                        data: data,
+                        response: err_data
                     }
-                ]
-            );
+                }
+                console.log('Crash Object -> ', JSON.stringify(obj))
+
+                firebase.crashlytics().recordCustomError(
+                    'Custom Error',
+                    'Oh No!',
+                    [
+                        obj
+                    ]
+                );
+            } catch (err) {
+                console.log('Error in sending data.')
+            }
+
 
         }
 
@@ -164,14 +184,14 @@ branch.subscribe(({ error, params }) => {
         let feature = params['~feature']
         if (feature) {
             let id = params['id']
-            let obj = {
-                tournament_id: id,
-                feature: feature
+            if (id) {
+                let obj = {
+                    tournament_id: id,
+                    feature: feature
+                }
+                console.log('Branchtit=>', feature)
+                Events.publish('deep_linking', obj);
             }
-            console.log('Branchtit=>', feature)
-            Events.publish('deep_linking', obj);
-            //payment_details
-            //  razorpay_payment_id
         }
     }
 
