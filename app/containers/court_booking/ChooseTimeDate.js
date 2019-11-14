@@ -52,6 +52,7 @@ class ChooseTimeDate extends BaseComponent {
             courtInfoMessage: '',
             modalVisible: false,
             paymentData: null,
+            slideToIndex: 4,
         };
 
 
@@ -128,11 +129,18 @@ class ChooseTimeDate extends BaseComponent {
         this.state.academyId = this.props.navigation.getParam('id', '');
         this.state.academyName = this.props.navigation.getParam('name', '');
         this.getBookingDetails(this.state.today, this.state.selectedSportsId);
+        setTimeout(()=>{
+            if (this._carousel)
+                this._carousel.snapToItem(this.state.slideToIndex);
+        }, 3000)
     }
 
-    convertTimeStringToMins(time) {
+    convertTimeStringToMins(time, startOrEndTime = 'startTime') {
         let arr = time.split(":");
         let result = (arr[0] * 60) + (arr[1] * 1);
+        if(startOrEndTime === 'endTime' && result === 0){
+            result = 1440
+        }
         console.log('convertTimeStringToMins input=' + time + ', out=' + result)
         return result
     }
@@ -321,10 +329,10 @@ class ChooseTimeDate extends BaseComponent {
                 var timing = {};
                 if (name == 'court_timings') {
                     timing['startTime'] = this.convertTimeStringToMins(element1.open_time);
-                    timing['endTime'] = this.convertTimeStringToMins(element1.close_time);
+                    timing['endTime'] = this.convertTimeStringToMins(element1.close_time, 'endTime');
                 } else if (name == 'court_bookings') {
                     timing['startTime'] = this.convertTimeStringToMins(element1.start_time);
-                    timing['endTime'] = this.convertTimeStringToMins(element1.end_time);
+                    timing['endTime'] = this.convertTimeStringToMins(element1.end_time, 'endTime');
                 }
                 item[name].push(timing);
             })
@@ -506,7 +514,6 @@ class ChooseTimeDate extends BaseComponent {
 
     //find min and max time of courts
     getMinAndMaxTimeofSlider(courtTimings) {
-
         var newObj = {};
         var minTime, maxTime;
 
@@ -654,7 +661,6 @@ class ChooseTimeDate extends BaseComponent {
     }
 
     getDeadSlotfromAvailableCourt(courtAvailability1, timing) {
-
         let is_dead = true
         timing = timing+1
         let courtAvailability = courtAvailability1
@@ -721,6 +727,7 @@ class ChooseTimeDate extends BaseComponent {
         var time = this.state.minTime;
         console.log('Time=>' + time + " maxTime=" + this.state.maxTime)
         //return 
+        var slidePointer = true;
         while (time < this.state.maxTime) {
 
             console.log('While-> ', this.convertMinsToHrsMins(time))
@@ -744,7 +751,6 @@ class ChooseTimeDate extends BaseComponent {
                 temp['deadslot'] = this.getDeadSlotfromAvailableCourt(courtAvailability1,time);
             }
 
-
             if (index % 2 == 0)
                 temp['showLabel'] = true;
             else
@@ -753,7 +759,16 @@ class ChooseTimeDate extends BaseComponent {
             //if (time != this.state.maxTime)
             sliderData.push(temp);
             index++;
-
+            
+            if(todaySelected && !temp['deadslot'] && slidePointer){
+                console.log('index is', index);
+                this.setState({ slideToIndex: index-5 }, () => {
+                    if(this._carousel)
+                        this._carousel.snapToItem(index-5);
+                });
+                slidePointer = false;
+            }
+                
         };
 
         if (index != 0) {
@@ -763,8 +778,7 @@ class ChooseTimeDate extends BaseComponent {
             }
         }
 
-        ///// if (this._carousel)
-        // this._carousel.snapToItem(0)
+
 
 
         sliderData.map((element, index) => {
@@ -1104,7 +1118,7 @@ class ChooseTimeDate extends BaseComponent {
         }
 
         if (this._carousel)
-            this._carousel.snapToItem(0)
+            this._carousel.snapToItem(0);
     }
 
     courtSelector(selectedIndex) {
