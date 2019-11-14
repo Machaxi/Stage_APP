@@ -14,7 +14,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import Events from '../../router/events';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import OTPInputView from '@twotalltotems/react-native-otp-input'
 
 class PhoneAuth extends BaseComponent {
     constructor(props) {
@@ -744,21 +743,8 @@ class PhoneAuth extends BaseComponent {
                 </TouchableOpacity>
 
 
-                <OTPInputView
-                    style={{width: '80%', height: 200}}
-                    pinCount={6}
-                    // autoFocusOnLoad
-                    codeInputFieldStyle={{
-                        fontSize: 18,
-                        width: 30,
-                        height: 45,
-                        borderWidth: 0,
-                        borderBottomWidth: 1,
-                    }}
-                    codeInputHighlightStyle={{borderColor: "#03DAC6",}}
-                    onCodeFilled = {(code) => this.verify(code)}
-                />
-                {/* <CodeInput
+
+                <CodeInput
                     ref="codeinput"
                     className="border-b"
                     keyboardType="numeric"
@@ -774,7 +760,7 @@ class PhoneAuth extends BaseComponent {
                     onFulfill={(code) => this.verify(code)}
                     containerStyle={{ marginTop: 50, height: 60, flex: 0 }}
                     codeInputStyle={{ color: "#404040", fontSize: 32, }}
-                /> */}
+                />
 
 
                 <View style={{
@@ -785,7 +771,7 @@ class PhoneAuth extends BaseComponent {
 
                     <Text style={[defaultStyle.bold_text_14,
                     { color: "#A3A5AE", }]}>
-                        Didn’t receive the OTP?
+                        Didn't receive the OTP?
                             </Text>
                     <TouchableOpacity
                         onPress={() => {
@@ -794,7 +780,7 @@ class PhoneAuth extends BaseComponent {
                         <Text style={{
                             color: "#67BAF5", paddingLeft: 4,
                             fontFamily: 'Quicksand-Medium',
-                        }}> RESEND</Text>
+                        }}>RESEND</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -809,7 +795,7 @@ class PhoneAuth extends BaseComponent {
                         style={{
                             color: 'white',
                             textAlign: 'center',
-                            fontFamily: 'Quicksand-Regular'
+                            fontFamily: 'Quicksand-Medium'
                         }}>Confirm</Text>
                 </TouchableOpacity>
                 {/* <Text style={styles.rounded_button}
@@ -828,7 +814,6 @@ class PhoneAuth extends BaseComponent {
         console.log("isCall ", isCall)
         console.log("ConfirmResult ", confirmResult)
         console.log("Token ", this.state.token)
-        // this.state.phoneNumber = '8890633388';
 
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

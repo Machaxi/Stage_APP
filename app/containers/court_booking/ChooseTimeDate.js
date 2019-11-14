@@ -52,7 +52,7 @@ class ChooseTimeDate extends BaseComponent {
             courtInfoMessage: '',
             modalVisible: false,
             paymentData: null,
-            slideToIndex: 4,
+            //slideToIndex: 4,
         };
 
 
@@ -138,9 +138,9 @@ class ChooseTimeDate extends BaseComponent {
     convertTimeStringToMins(time, startOrEndTime = 'startTime') {
         let arr = time.split(":");
         let result = (arr[0] * 60) + (arr[1] * 1);
-        if(startOrEndTime === 'endTime' && result === 0){
-            result = 1440
-        }
+        //if(startOrEndTime === 'endTime' && result === 0){
+        //    result = 1440
+        //}
         console.log('convertTimeStringToMins input=' + time + ', out=' + result)
         return result
     }
