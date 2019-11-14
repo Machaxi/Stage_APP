@@ -4,7 +4,7 @@ import { Card } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers/PlayerReducer'
-import BaseComponent, { defaultStyle, formattedName, getFormattedBadge, getFormattedCategory } from '../BaseComponent';
+import BaseComponent, { defaultStyle, formattedName, getFormattedBadge, getFormattedCategory, getFormattedLevel } from '../BaseComponent';
 import { getData } from "../../components/auth";
 import FastImage from 'react-native-fast-image'
 
@@ -194,7 +194,7 @@ class PlayersListing extends BaseComponent {
                                 fontFamily: 'Quicksand-Medium',
                                 marginTop: 16,
                             }}
-                        >{item.player_level.split(" ").join("\n")}</Text>
+                        >{getFormattedLevel(item.player_level).split(" ").join("\n")}</Text>
                     </View>
 
                     <View style={{

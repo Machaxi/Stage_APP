@@ -79,8 +79,8 @@ global.SELECTED_PLAYER_ID = ''
 
 //===============================================================================================
 
-export const DEBUG_APP = false
-export const PROD_DEBUG = false
+export const DEBUG_APP = true
+export const PROD_DEBUG = true
 
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
@@ -417,6 +417,7 @@ export default class BaseComponent extends React.Component {
         return is_valid
     }
 
+
     getNetworkStatus() {
         if (!connected) {
             alert("Oops!! No Internet Connection Available");
@@ -630,18 +631,23 @@ export function checkProfilePic(profile_pic) {
 
 export function formattedName(name) {
 
-    let array = name.split(' ')
-    let newName = ''
-    if (array.length > 1) {
+    if (name) {
 
-        let singleChar = array[1].charAt(0)
-        newName = array[0] + " " + singleChar
+        let array = name.split(' ')
+        let newName = ''
+        if (array.length > 1) {
+
+            let singleChar = array[1].charAt(0)
+            newName = array[0] + " " + singleChar
+            return newName
+        } else {
+            newName = name
+        }
+        //alert(array)
         return newName
     } else {
-        newName = name
+        return ''
     }
-    //alert(array)
-    return newName
 
 }
 

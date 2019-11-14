@@ -12,6 +12,7 @@
     "@cypchat/rn-parallax-swipe-gallery": "^1.0.0",
     "@react-native-community/async-storage": "^1.6.1",
     "@react-native-community/netinfo": "^4.2.1",
+    "@twotalltotems/react-native-otp-input": "^1.0.22",
     "axios": "^0.19.0",
     "moment": "^2.24.0",
     "native-echarts": "^0.5.0",

@@ -771,7 +771,7 @@ class PhoneAuth extends BaseComponent {
 
                     <Text style={[defaultStyle.bold_text_14,
                     { color: "#A3A5AE", }]}>
-                        Didn’t receive the OTP?
+                        Didnâ€™t receive the OTP?
                             </Text>
                     <TouchableOpacity
                         onPress={() => {
