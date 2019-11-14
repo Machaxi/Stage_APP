@@ -205,7 +205,6 @@ dexOptions {
   
 
 dependencies {
-    implementation project(':react-native-text-input-mask')
     implementation project(':react-native-snackbar')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-share')
