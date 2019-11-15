@@ -194,8 +194,8 @@ branch.subscribe(({ error, params }) => {
                 console.log('Branchtit=>', feature)
                 Events.publish('deep_linking', obj);
             }
-            console.log('Branchtit=>', feature)
-            Events.publish('deep_linking', obj);
+            //console.log('Branchtit=>', feature)
+            //Events.publish('deep_linking', obj);
             //payment_details
             //  razorpay_payment_id
         }

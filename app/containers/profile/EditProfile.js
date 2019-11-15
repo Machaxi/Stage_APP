@@ -90,7 +90,7 @@ class EditProfile extends BaseComponent {
         }
 
 
-        if (txtname == '') {
+        if (txtname == '' || txtname == null) {
             alert('Name cannot be empty.')
         } else if (phone_number == '') {
             alert('Mobile number can\'t be empty')

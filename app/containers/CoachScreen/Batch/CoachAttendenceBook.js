@@ -58,7 +58,8 @@ class CoachAttendenceBook extends React.Component {
             batchDetails: null,
             attendenceDate: '10-JULY-2019',
             batch_data: null,
-            spinner: false
+            spinner: false,
+            session: null
         }
 
 
@@ -107,6 +108,8 @@ class CoachAttendenceBook extends React.Component {
     }
 
     getCoachAttendencedData(btach_id, date) {
+
+        this.state.session= null
         this.progress(true)
 
         getData('header', (value) => {
@@ -123,7 +126,8 @@ class CoachAttendenceBook extends React.Component {
                 if (user1.success == true) {
                     this.setState({
                         playerList: user1.data['players'],
-                        batchDetails: user1.data['batch']
+                        batchDetails: user1.data['batch'],
+                        session: user1.data['batch'].session
 
                     })
                 }
@@ -161,17 +165,17 @@ class CoachAttendenceBook extends React.Component {
 
                     <Text
                         style={[defaultStyle.regular_text_14, {
-                            width: "50%"
+                            width: "75%"
                         }]}
                     >
                         {item.name}
                     </Text>
-                    <Text
+                    {/* <Text
                         style={[defaultStyle.regular_text_14, {
                             width: "25%"
                         }]} >
                         {item.attendance + '%'}
-                    </Text>
+                    </Text> */}
                     <Text
                         style={[defaultStyle.regular_text_14, {
                             width: "25%"
@@ -206,7 +210,7 @@ class CoachAttendenceBook extends React.Component {
             const batchDetails = this.state.batchDetails
             let batch_name = this.state.batch_data.batch_name
             let batch_category = this.state.batch_data.batch_category
-            let session = this.state.batch_data.session
+            let session = this.state.session//this.state.batch_data.session
             let batch_id = this.state.batch_data.batch_id
 
 
@@ -276,19 +280,20 @@ class CoachAttendenceBook extends React.Component {
                         <View style={{ margin: 5 }}>
                             <Text style={[defaultStyle.regular_text_10, { color: '#A3A5AE', marginBottom: 10 }]}>Time slot </Text>
                             <Text style={[defaultStyle.regular_text_14, { color: '#404040' }]}>
-                                {/* {session.start_time + ' - ' + session.end_time} */}
-                                {getFormatTimeDate("01/01/1970 ", session.start_time)
+
+                                {session == null ? '-' :
+                                    getFormatTimeDate("01/01/1970 ", session.start_time)
                                     + ' - ' +
-                                    getFormatTimeDate("01/01/1970 ", session.end_time)
-                                }
+                                    getFormatTimeDate("01/01/1970 ", session.end_time)}
+
                             </Text>
                         </View>
                     </View>
                 </View>
 
                 <View style={{ backgroundColor: '#F7F7F7', padding: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={[defaultStyle.regular_text_10, { width: "50%", color: '#A3A5AE' }]}>Player </Text>
-                    <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Attendence </Text>
+                    <Text style={[defaultStyle.regular_text_10, { width: "75%", color: '#A3A5AE' }]}>Player </Text>
+                    {/* <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Attendence </Text> */}
                     <Text style={[defaultStyle.regular_text_10, { width: "25%", color: '#A3A5AE' }]}>Session </Text>
                 </View>
 

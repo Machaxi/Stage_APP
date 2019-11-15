@@ -217,15 +217,11 @@ class PaymentDetail extends BaseComponent {
                             justifyContent: 'flex-end',
 
                             //alignItems: 'flex-end'
-                        }}>
+                        }}>{ item.canPayOnline &&
                             <CustomeButtonB onPress={() => {
-
-                                if (item.canPayOnline == true)
-                                    this.processPayment(item)
-                                else
-                                    alert('Something went wrong. Please contact to Academy for more details.')
-
+                                this.processPayment(item)
                             }}>Pay</CustomeButtonB>
+                            }
                         </View>
                     </View>
                 </View>
