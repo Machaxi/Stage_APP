@@ -24,6 +24,7 @@ import WebViewScreen from '../containers/util/WebViewScreen'
 import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
 import PaymentPage from '../containers/court_booking/PaymentPage'
 import Registration from "../containers/tournament/Registration";
+import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 
 const Switcher = createStackNavigator({
 
@@ -96,7 +97,9 @@ const Switcher = createStackNavigator({
         screen: PlayersListing,
         navigationOptions: ({ navigation }) => ({
             title: "View Players",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
+                showDrawer={false}
+            />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -111,7 +114,9 @@ const Switcher = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
             title: "Academy Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
+                showDrawer={false}
+            />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
@@ -324,7 +329,22 @@ const Switcher = createStackNavigator({
       },
       PaymentPage: {
         screen: PaymentPage,
-      }
+      },
+      OtherPlayerDeatils: {
+        screen: otherplayerDetails,
+        navigationOptions: ({ navigation }) => ({
+            title: "Player Detail",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
 }
 );
 export default Switcher;

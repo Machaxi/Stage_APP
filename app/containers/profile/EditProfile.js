@@ -92,10 +92,11 @@ class EditProfile extends BaseComponent {
 
         if (txtname == '' || txtname == null) {
             alert('Name cannot be empty.')
-        } else if (phone_number == '') {
-            alert('Mobile number can\'t be empty')
-        }
-        else if (!this.isValidMobileNumber(phone_number)) {
+        } 
+        // else if (phone_number == '') {
+        //     alert('Mobile number can\'t be empty')
+        // }
+        else if (txtphone !== '' && txtphone !== null && !this.isValidMobileNumber(phone_number)) {
             alert('Invalid mobile number')
         }
         else {
@@ -428,19 +429,19 @@ class EditProfile extends BaseComponent {
                         >
                             <Text style={style.text}>
                                 <Text style={{ color: 'red' }}>*</Text>Mobile Number
-                    </Text>
+                            </Text>
 
                             <TextInput
                                 value={this.state.txtphone}
+                                keyboardType={'phone-pad'}
                                 style={style.textinput}
                                 onChangeText={(txtphone) => {
-                                    if (txtphone == '') {
-                                        txtphone = '+91'
+                                    if (txtphone.length === 1 && txtphone !== '+') {
+                                        txtphone = '+91' + txtphone
                                     }
                                     this.setState({ txtphone: txtphone })
-                                }}>
-
-                            </TextInput>
+                                }}
+                            />
                         </View>
 
                         <View

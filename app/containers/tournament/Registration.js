@@ -17,11 +17,7 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import Events from './../../router/events';
 
 
-const placeholder = {
-    label: 'Gender ',
-    value: null,
-    color: '#A3A5AE',
-};
+const placeholder = {};
 
 class Registration extends BaseComponent {
 
@@ -162,12 +158,6 @@ class Registration extends BaseComponent {
                 alert_msg: alert_msg
             })
         }
-        else if (birthdate == '') {
-            alert_msg = 'Please select birth date'
-            this.setState({
-                alert_msg: alert_msg
-            })
-        }
         else if (txtphone == '') {
             alert_msg = 'Phone number can\'t be blank'
             this.setState({
@@ -176,12 +166,6 @@ class Registration extends BaseComponent {
         }
         else if (!this.isValidMobileNumber(txtphone)) {
             alert_msg = 'Invalid mobile number.'
-            this.setState({
-                alert_msg: alert_msg
-            })
-        }
-        else if (selected_gender == '') {
-            alert_msg = 'Please select gender'
             this.setState({
                 alert_msg: alert_msg
             })
@@ -319,20 +303,27 @@ class Registration extends BaseComponent {
                     <Text style={defaultStyle.bold_text_14}>
                         Booking Details
                     </Text>
-
-                    {/* <Text style={style.text}>
+                </View>
+                <View 
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 20
+                    }}
+                >
+                    <Text style={style.text}>
+                        <Text style={{ color: 'red' }}>*</Text>
                         Name
-                    </Text> */}
+                    </Text>
                     <TextInput
                         style={style.textinput}
                         // mode='outlined'
-                        placeholder='name'
                         // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
                         value={this.state.txtname}
                         onChangeText={(txtname) => this.setState({ txtname: txtname })}
                     />
-
                 </View>
+                
 
                 <View
                     style={{
@@ -341,9 +332,9 @@ class Registration extends BaseComponent {
                         marginTop: 10
                     }}
                 >
-                    {/* <Text style={style.text}>
-                        Phone Number
-                    </Text> */}
+                    <Text style={style.text}>
+                        Birth Date
+                    </Text>
 
                     {/* <TextInput
                         placeholder='Birth Date'
@@ -355,8 +346,8 @@ class Registration extends BaseComponent {
                         showIcon={false}
                         style={{ width: 150, borderWidth: 0 }}
                         date={this.state.birthdate}
+                        placeholder="select date"
                         mode="date"
-                        placeholder="Birth Date"
                         format="DD-MMM-YYYY"
                         minDate={moment('1920-01-01')}
                         maxDate={moment(Date.now())}
@@ -382,10 +373,12 @@ class Registration extends BaseComponent {
                     style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-
+                        marginTop: 10
                     }}
                 >
-
+                    <Text style={style.text}>
+                        Gender
+                    </Text>
                     <RNPickerSelect
                         placeholder={placeholder}
                         items={this.state.gender}
@@ -414,10 +407,12 @@ class Registration extends BaseComponent {
                         marginTop: 10
                     }}
                 >
-
+                    <Text style={style.text}>
+                        <Text style={{ color: 'red' }}>*</Text>
+                        Phone Number
+                    </Text>
                     <TextInput
                         keyboardType="number-pad"
-                        placeholder='Phone Number'
                         style={style.textinput}
                         value={this.state.txtphone}
                         onChangeText={(txtphone) => this.setState({ txtphone: txtphone })}
@@ -471,7 +466,6 @@ const pickerSelectStyles = StyleSheet.create({
         fontFamily: 'Quicksand-Regular',
     },
     inputAndroid: {
-        marginTop: 12,
         fontSize: 14,
         textAlign: 'center',
         width: 150,
@@ -501,7 +495,6 @@ const style = {
     textinput: {
         textAlign: 'center',
         height: 36,
-        marginTop: 12,
         color: '#404040',
         width: 150, borderBottomColor: '#DFDFDF',
         borderBottomWidth: 1,

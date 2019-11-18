@@ -138,9 +138,9 @@ class ChooseTimeDate extends BaseComponent {
     convertTimeStringToMins(time, startOrEndTime = 'startTime') {
         let arr = time.split(":");
         let result = (arr[0] * 60) + (arr[1] * 1);
-        //if(startOrEndTime === 'endTime' && result === 0){
+        // if(startOrEndTime === 'endTime' && result === 0){
         //    result = 1440
-        //}
+        // }
         console.log('convertTimeStringToMins input=' + time + ', out=' + result)
         return result
     }
@@ -317,14 +317,19 @@ class ChooseTimeDate extends BaseComponent {
 
     convertArrayHoursToMinutes(bookingDetails, name) {
         var newArray = [];
-        if(name === 'court_bookings'){
-            bookingDetails.map((element, index) => {
-                element[name].sort((first, second) => {
-                    return this.convertTimeStringToMins(first.start_time) - this.convertTimeStringToMins(second.start_time);
-                })
-            })
-        }
-        console.log('bookingDetails', bookingDetails)
+        var bookingObj = []
+        // if(name === 'court_bookings'){
+        //     bookingDetails.map((element, index) => {
+        //         element[name].map(courtBooked => {
+        //             bookingObj.push(courtBooked);
+        //         })
+        //     })
+        //     bookingDetails.map((element, index) => {
+        //         element[name] = [...bookingObj]
+        //     })
+            
+        // }
+        
         bookingDetails.map((element, index) => {
 
             var item = {};
@@ -761,9 +766,9 @@ class ChooseTimeDate extends BaseComponent {
             sliderData.push(temp);
             index++;
             
-            console.log('slidePointer', slidePointer);
+            // console.log('slidePointer', slidePointer);
             if(!temp['deadslot'] && slidePointer){
-                console.log('index is', index);
+                // console.log('index is', index);
                 this.setState({ slideToIndex: index-5 }, () => {
                     if(this._carousel)
                         this._carousel.snapToItem(index-5);

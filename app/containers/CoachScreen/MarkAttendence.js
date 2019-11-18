@@ -41,8 +41,9 @@ class MarkAttendence extends BaseComponent {
 
     componentDidMount() {
         var userData;
+        console.log('in component did mount')
         getData('header', (value) => {
-            console.log("header", value);
+            console.log("header =>>>>", value);
         });
 
         console.log("CoachDashboard");
@@ -288,12 +289,13 @@ class MarkAttendence extends BaseComponent {
     savePlayerAttendence() {
 
         this.progress(true)
-
+        const { session } = this.state.batchDetails;
         getData('header', (value) => {
             console.log("savePlayerAttendence header", value);
-            const yourDate = Date()
-            console.log("savePlaye", yourDate)
-            const NewDate = moment(yourDate).format('YYYY-MM-DD')
+            // const yourDate = Date()
+            // console.log("savePlaye", yourDate)
+            // const NewDate = moment(yourDate).format('YYYY-MM-DD')
+            const NewDate = moment(session.session_date).format('YYYY-MM-DD');
             console.log("savePlayerAttendence", NewDate);
             var dataDic = {};
             var dict = {};

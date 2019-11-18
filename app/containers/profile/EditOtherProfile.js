@@ -70,7 +70,6 @@ class EditOtherProfile extends BaseComponent {
     }
 
     saveUserProfile() {
-
         let txtname = this.state.txtname;
         let txtphone = this.state.txtphone;
         let dob = this.state.birthdate;
@@ -80,14 +79,13 @@ class EditOtherProfile extends BaseComponent {
         if (dob != '') {
             dob = moment.utc(dob).local().format("YYYY-MM-DD")
         }
-
         if (txtname == '') {
             alert("Name is empty")
         }
-        else if (txtphone == '') {
-            alert("Mobile number is empty.")
-        }
-        else if (!this.isValidMobileNumber(txtphone)) {
+        // else if (txtphone == '') {
+        //     alert("Mobile number is empty.")
+        // }
+        else if (txtphone !== '' && txtphone !== null && !this.isValidMobileNumber(txtphone)) {
             alert('Invalid mobile number')
         }
         else {
@@ -399,16 +397,18 @@ class EditOtherProfile extends BaseComponent {
                                 marginTop: 10
                             }}
                         >
-                            <Text style={style.text}>
-                                Mobile Number
-                    </Text>
-
+                            <Text style={style.text}>Mobile Number</Text>
                             <TextInput
-                                onChangeText={(text) => this.setState({ txtphone: text })}
+                                onChangeText={(text) =>{
+                                    if(text.length === 1 && text !== '+'){
+                                        text = '+91' + text
+                                    }
+                                    this.setState({ txtphone: text })
+                                } }
                                 value={this.state.txtphone}
-                                style={style.textinput}>
-
-                            </TextInput>
+                                style={style.textinput}
+                                keyboardType={'phone-pad'}
+                            />
                         </View>
 
                         <View
@@ -418,10 +418,7 @@ class EditOtherProfile extends BaseComponent {
                                 marginTop: 10
                             }}
                         >
-                            <Text style={style.text}>
-                                Birth Date
-                    </Text>
-
+                            <Text style={style.text}>Birth Date</Text>
                             <DatePicker
                                 style={{ width: 200, borderWidth: 0 }}
                                 date={this.state.birthdate}
