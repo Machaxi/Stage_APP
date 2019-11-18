@@ -96,7 +96,7 @@ class EditProfile extends BaseComponent {
         // else if (phone_number == '') {
         //     alert('Mobile number can\'t be empty')
         // }
-        else if (txtphone !== '' && txtphone !== null && !this.isValidMobileNumber(phone_number)) {
+        else if (phone_number !== '' && phone_number !== null && !this.isValidMobileNumber(phone_number)) {
             alert('Invalid mobile number')
         }
         else {
