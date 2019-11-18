@@ -17,7 +17,11 @@ import { Card, ActivityIndicator, } from 'react-native-paper';
 import Events from './../../router/events';
 
 
-const placeholder = {};
+const placeholder = {
+    label: 'Select ',
+    value: null,
+    color: '#A3A5AE',
+};
 
 class Registration extends BaseComponent {
 
@@ -150,7 +154,9 @@ class Registration extends BaseComponent {
         let alert_msg = ''
 
         let { birthdate, txtname, txtphone, selected_gender } = this.state
-
+        if(selected_gender === ""){
+            selected_gender = null
+        }
 
         if (txtname == '') {
             alert_msg = 'Name can\'t be blank'
@@ -171,9 +177,11 @@ class Registration extends BaseComponent {
             })
         }
         else {
-
-            birthdate = moment.utc(birthdate).local().format("YYYY-MM-DD")
-
+            if(birthdate!=='' && birthdate !== null){
+                birthdate = moment.utc(birthdate).local().format("YYYY-MM-DD")
+            } else {
+                birthdate = null
+            }
             alert_msg = ''
             this.setState({
                 alert_msg: alert_msg
@@ -253,7 +261,6 @@ class Registration extends BaseComponent {
         }
 
         return (
-
             <View
                 style={{
                     margin: 16,
@@ -263,7 +270,6 @@ class Registration extends BaseComponent {
                     alignItems: 'center'
                 }}
             >
-
                 <AbortDialog
                     onYesPress={() => {
                         this.setState({
@@ -299,11 +305,9 @@ class Registration extends BaseComponent {
                         marginTop: 20
                     }}
                 >
-
-                    <Text style={defaultStyle.bold_text_14}>
-                        Booking Details
-                    </Text>
+                    <Text style={defaultStyle.bold_text_14}>Booking Details</Text>
                 </View>
+
                 <View 
                     style={{
                         justifyContent: 'center',
@@ -312,8 +316,7 @@ class Registration extends BaseComponent {
                     }}
                 >
                     <Text style={style.text}>
-                        <Text style={{ color: 'red' }}>*</Text>
-                        Name
+                        <Text style={{ color: 'red' }}>*</Text>Name
                     </Text>
                     <TextInput
                         style={style.textinput}
@@ -332,16 +335,12 @@ class Registration extends BaseComponent {
                         marginTop: 10
                     }}
                 >
-                    <Text style={style.text}>
-                        Birth Date
-                    </Text>
-
+                    <Text style={style.text}>Birth Date</Text>
                     {/* <TextInput
                         placeholder='Birth Date'
                         style={style.textinput}>
 
                     </TextInput> */}
-
                     <DatePicker
                         showIcon={false}
                         style={{ width: 150, borderWidth: 0 }}
@@ -354,7 +353,6 @@ class Registration extends BaseComponent {
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         customStyles={{
-
                             dateInput: {
                                 borderWidth: 0,
                                 fontFamily: 'Quicksand-Regular',
@@ -365,8 +363,6 @@ class Registration extends BaseComponent {
                         }}
                         onDateChange={(birthdate) => { this.setState({ birthdate: birthdate }) }}
                     />
-
-
                 </View>
 
                 <View
@@ -376,9 +372,7 @@ class Registration extends BaseComponent {
                         marginTop: 10
                     }}
                 >
-                    <Text style={style.text}>
-                        Gender
-                    </Text>
+                    <Text style={style.text}>Gender</Text>
                     <RNPickerSelect
                         placeholder={placeholder}
                         items={this.state.gender}
@@ -397,7 +391,6 @@ class Registration extends BaseComponent {
                             this.inputRefs.country = el;
                         }}
                     />
-
                 </View>
 
                 <View
@@ -408,18 +401,14 @@ class Registration extends BaseComponent {
                     }}
                 >
                     <Text style={style.text}>
-                        <Text style={{ color: 'red' }}>*</Text>
-                        Phone Number
+                        <Text style={{ color: 'red' }}>*</Text>Phone Number
                     </Text>
                     <TextInput
                         keyboardType="number-pad"
                         style={style.textinput}
                         value={this.state.txtphone}
                         onChangeText={(txtphone) => this.setState({ txtphone: txtphone })}
-                    >
-
-                    </TextInput>
-
+                    />
                 </View>
 
                 <Text style={[defaultStyle.regular_text_14,
@@ -431,7 +420,6 @@ class Registration extends BaseComponent {
                 <View style={{ flex: 1, margin: 30, width: '50%' }}>
                     <CustomeButtonB onPress={() => {
                         this.register()
-
                     }}> Next </CustomeButtonB>
                 </View>
             </View>
