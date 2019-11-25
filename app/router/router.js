@@ -416,6 +416,7 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Home',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Home'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_home.png')} />,
 
@@ -429,6 +430,7 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Batch',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Batch'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_batch.png')} />,
             }
@@ -440,6 +442,7 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Tournament',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Tournament'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
@@ -451,6 +454,7 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Challenge',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Challenge'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_challenge.png')} />,
             }
@@ -462,6 +466,7 @@ const tabBarController = createBottomTabNavigator(
                 tabBarLabel: 'Book and Play',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Book&Play'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
@@ -996,6 +1001,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Home',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Home'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_home.png')} />,
 
@@ -1009,6 +1015,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Batch',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Batch'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_batch.png')} />,
             }
@@ -1020,6 +1027,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Tournament',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Tournament'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
@@ -1031,6 +1039,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Performance',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Performance'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_performance.png')} />,
             }
@@ -1042,6 +1051,7 @@ const tabBarControllerCoach = createBottomTabNavigator(
                 tabBarLabel: 'Book and Play',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Book&Play'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
@@ -1077,6 +1087,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
                 tabBarLabel: 'Home',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Home'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_home.png')} />,
             },
@@ -1088,6 +1099,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
                 tabBarLabel: 'Tournament',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Tournament'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
@@ -1099,6 +1111,7 @@ const tabBarControllerGuest = createBottomTabNavigator(
                 tabBarLabel: 'Book and Play',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Book&Play'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }
@@ -1570,6 +1583,7 @@ const tabBarControllerParent = createBottomTabNavigator(
                 tabBarLabel: 'Home',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Home'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_home.png')} />,
             },
@@ -1582,6 +1596,7 @@ const tabBarControllerParent = createBottomTabNavigator(
                 tabBarLabel: 'Batch',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Batch'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_batch.png')} />,
             }
@@ -1593,6 +1608,7 @@ const tabBarControllerParent = createBottomTabNavigator(
                 tabBarLabel: 'Tournament',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Tournament'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_tournament.png')} />,
             }
@@ -1604,6 +1620,7 @@ const tabBarControllerParent = createBottomTabNavigator(
                 tabBarLabel: 'Challenge',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Challenge'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_challenge.png')} />,
             }
@@ -1615,6 +1632,7 @@ const tabBarControllerParent = createBottomTabNavigator(
                 tabBarLabel: 'Book and Play',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
+                        label='Book&Play'
                         focused={focused}
                         activeIcon={require('../images/ic_tab_booking.png')} />,
             }

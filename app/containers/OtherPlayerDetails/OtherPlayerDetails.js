@@ -52,15 +52,14 @@ class OtherPlayerDetails extends BaseComponent {
             this.fetchWithoutAcademy(player_id)
         }
         else {
-
             //alert('academy ' + academy_id)
             if (academy_id == '') {
-                //console.warn('if=>')
+                console.log('academy_id', academy_id)
                 getData('userInfo', (value) => {
+                    console.log('userInfo')
                     let userData = JSON.parse(value)
                     let user_academy_id = userData['academy_id']
                     let id = userData['player_id']
-                    // console.warn('academy_id=>', academy_id)
 
 
                     if (id != player_id && userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
@@ -83,7 +82,7 @@ class OtherPlayerDetails extends BaseComponent {
                     let id = userData['player_id']
 
 
-                    if (id != player_id &&  userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
+                    if (id != player_id && userData.user['user_type'] == PLAYER || userData.user['user_type'] == PARENT) {
                         if (user_academy_id == academy_id) {
                             this.setState({
                                 showChallenge: true
@@ -165,25 +164,26 @@ class OtherPlayerDetails extends BaseComponent {
 
 
     getPlayerDashboardData(academy_id, player_id, ) {
+        getData('header', (value) => {
+            this.props.getOtherPlayerDashboard(academy_id, player_id, value).then(() => {
+                // console.log(' user response payload ' + JSON.stringify(this.props.data));
+                // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+                let user = JSON.stringify(this.props.data.dashboardData);
+                console.log(' user getOtherPlayerDashboard ' + user);
+                let user1 = JSON.parse(user)
 
-        this.props.getOtherPlayerDashboard(academy_id, player_id).then(() => {
-            // console.log(' user response payload ' + JSON.stringify(this.props.data));
-            // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-            let user = JSON.stringify(this.props.data.dashboardData);
-            console.log(' user getOtherPlayerDashboard ' + user);
-            let user1 = JSON.parse(user)
+                if (user1.success == true) {
+                    this.setState({
+                        player_profile: user1.data['player_profile'],
+                        strenthList: user1.data.player_profile['stats']
 
-            if (user1.success == true) {
-                this.setState({
-                    player_profile: user1.data['player_profile'],
-                    strenthList: user1.data.player_profile['stats']
+                    })
+                }
 
-                })
-            }
-
-        }).catch((response) => {
-            //handle form errors
-            console.log(response);
+            }).catch((response) => {
+                //handle form errors
+                console.log(response);
+            })
         })
     }
 
@@ -257,6 +257,7 @@ class OtherPlayerDetails extends BaseComponent {
 
 
     render() {
+        console.log('other player detail component')
         this.state.showChallenge = false;
         if (this.props.data.loading && !this.state.player_profile) {
             return (
@@ -286,10 +287,7 @@ class OtherPlayerDetails extends BaseComponent {
                         </CustomeCard>
                     </View> */}
 
-
-                    {
-
-                        this.state.showChallenge &&
+                    {this.state.showChallenge &&
                         <View style={styles.confirmBtnOuter}>
                             <Text style={[styles.rounded_button]} onPress={() => {
                                 global.opponentPlayerDetails = this.state.player_profile;
@@ -297,7 +295,8 @@ class OtherPlayerDetails extends BaseComponent {
                             }}>Challenge</Text>
                         </View>
                     }
-                    {this.state.strenthList.length != 0 ?
+
+                    {this.state.strenthList.length != 0 && !this.state.player_profile.is_stats_hidden ?
                         <View style={{ margin: 10 }}>
                             <Card style={{ borderRadius: 12 }}>
                                 <View>
@@ -309,11 +308,13 @@ class OtherPlayerDetails extends BaseComponent {
                                         marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
                                     }}></View>
 
+
                                     <FlatList
                                         data={this.state.strenthList}
                                         renderItem={this.renderItem}
                                         keyExtractor={(item, index) => item.id}
                                     />
+
                                 </View>
                             </Card>
                         </View> : null}

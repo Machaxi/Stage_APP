@@ -4,6 +4,7 @@ import { View, ImageBackground, Text, TouchableOpacity, TextInput, Image, Alert 
 import BaseComponent, { getBaseUrl,defaultStyle, EVENT_EDIT_PROFILE } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView } from 'react-native-gesture-handler';
+import {Switch} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
 import { getData } from "../../components/auth";
@@ -17,6 +18,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 class EditOtherProfile extends BaseComponent {
 
@@ -33,7 +35,8 @@ class EditOtherProfile extends BaseComponent {
             is_navigation_to_tournament: false,
             base64img: null,
             contentType: '',
-            is_image_processed: false
+            is_image_processed: false,
+            hideUser: false,
         }
 
         let data = this.props.navigation.getParam('data')
@@ -43,11 +46,16 @@ class EditOtherProfile extends BaseComponent {
             let name = res.name
             let dob = res.dob
             let phone_number = res.phone_number
+            let hideUser = res.is_stats_hidden
+            if(hideUser === null){
+                hideUser = false
+            }
             this.state.txtname = name
             this.state.txtphone = phone_number
             this.state.birthdate = dob
-            this.state.id = res.user_id,
-                this.state.profile_pic = res.profile_pic
+            this.state.hideUser = hideUser
+            this.state.id = res.user_id
+            this.state.profile_pic = res.profile_pic
         }
 
         let date = this.state.birthdate
@@ -98,6 +106,7 @@ class EditOtherProfile extends BaseComponent {
                 dict['name'] = txtname;
                 dict['dob'] = dob;
                 dict['user_id'] = this.state.id
+                dict['is_stats_hidden'] = this.state.hideUser
                 //formData.append('post', JSON.stringify(dict));
 
                 let file = null
@@ -159,7 +168,10 @@ class EditOtherProfile extends BaseComponent {
 
                         } else {
                             let error_message = data.error_message
-                            alert(error_message)
+                            this.progress(false)
+                            setTimeout(()=>{
+                                alert(error_message)
+                            },500)
                         }
 
                     }).catch((error) => {
@@ -293,7 +305,7 @@ class EditOtherProfile extends BaseComponent {
 
             <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 <ScrollView style={{
-                    flex: 1, marginTop: 20,
+                    flex: 1,
                     backgroundColor: '#F7F7F7'
                 }}>
 
@@ -305,7 +317,7 @@ class EditOtherProfile extends BaseComponent {
                         style={{
                             margin: 16,
                             flex: 1,
-                            marginTop: 10,
+                            marginTop: 0,
                             justifyContent: 'center',
                             alignItems: 'center'
 
@@ -375,9 +387,7 @@ class EditOtherProfile extends BaseComponent {
                                 marginTop: 20
                             }}
                         >
-                            <Text style={style.text}>
-                                Name
-                    </Text>
+                            <Text style={style.text}>Name</Text>
                             <TextInput
                                 style={style.textinput}
                                 // mode='outlined'
@@ -440,9 +450,31 @@ class EditOtherProfile extends BaseComponent {
                                 onDateChange={(birthdate) => { this.setState({ birthdate: birthdate }) }}
                             />
                         </View>
+
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                alignItems: 'center',
+                                marginTop: 10
+                            }}
+                        >
+                            <Text style={style.text}>Hide Stats</Text>
+                            <Switch 
+                                onValueChange={(value) => this.setState({hideUser: value})}
+                                value={this.state.hideUser}
+                                color='#67BAF5'
+                                // trackColor={{false: '#DFDFDF', true: '#67BAF5'}}
+                            />
+                        </View>
+                            
                         <View style={{ flex: 1, margin: 20, width: '80%' }}>
                             <CustomeButtonB onPress={() => this.saveUserProfile()}> Update </CustomeButtonB>
                         </View>
+                        
+                        {Platform.OS == 'ios' ?
+                            <KeyboardSpacer />
+                        : null}
 
                     </View>
                 </ScrollView>

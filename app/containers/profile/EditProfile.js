@@ -1,13 +1,15 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Image, Alert, Platform } from 'react-native'
+import { View, ImageBackground, Text, TextInput, Image, Alert, Platform, StyleSheet } from 'react-native'
 import BaseComponent, {getBaseUrl, defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
 import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import {Switch} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
 import { getData, storeData } from "../../components/auth";
 import { saveUserStartupProfile } from "../../redux/reducers/ProfileReducer";
+import {coachDetail} from '../../redux/reducers/AcademyReducer';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
@@ -16,6 +18,35 @@ import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import RNPickerSelect from 'react-native-picker-select';
+
+// const year = [
+//     {label: '0', value: '0'},{label: '1', value: '1'},{label: '2', value: '2'},
+//     {label: '3', value: '3'},{label: '4', value: '4'},{label: '5', value: '5'},
+//     {label: '6', value: '6'},{label: '7', value: '7'},{label: '8', value: '8'},
+//     {label: '9', value: '9'},{label: '10', value: '10'},{label: '11', value: '11'},
+//     {label: '12', value: '12'},
+// ]
+
+const month = [
+    {label: '0', value: '0'},{label: '1', value: '1'},{label: '2', value: '2'},
+    {label: '3', value: '3'},{label: '4', value: '4'},{label: '5', value: '5'},
+    {label: '6', value: '6'},{label: '7', value: '7'},{label: '8', value: '8'},
+    {label: '9', value: '9'},{label: '10', value: '10'},{label: '11', value: '11'},
+]
+
+const selectYear = {
+    label: 'Year',
+    value: null,
+    color: '#9EA0A4',
+};
+
+const selectMonth = {
+    label: 'Month',
+    value: null,
+    color: '#9EA0A4',
+};
 
 class EditProfile extends BaseComponent {
 
@@ -32,9 +63,21 @@ class EditProfile extends BaseComponent {
             is_navigation_to_tournament: false,
             base64img: null,
             contentType: '',
-            is_image_processed: false
+            is_image_processed: false,
+            hideUser: false,
+            user_type: '',
+            totalYear: '',
+            totalMonth: '',
+            review: '',
+            totalExperience: '',
+            coach_id: ''
+        }
+        this.year = []
+        for(var i=0; i<50; i++){
+            this.year.push({label: i.toString(), value: i.toString()})
         }
 
+        console.log('year is', this.year)
         getData(TOURNAMENT_REGISTER, (value) => {
 
             if (value != '' && value)
@@ -56,6 +99,8 @@ class EditProfile extends BaseComponent {
                 txtphone: userData.user['mobile_number'],
                 birthdate: userData.user['dob'],
                 profile_pic: userData.user['profile_pic'],
+                user_type: userData.user['user_type'],
+                hideUser: userData.user['is_stats_hidden'],
                 is_image_processed: false//userData.user['is_image_processed']
             })
 
@@ -75,6 +120,37 @@ class EditProfile extends BaseComponent {
         });
 
 
+    }
+
+    componentDidMount(){
+        getData('header', (value) => {
+            getData('userInfo', (innerValue) => {
+                let userData = JSON.parse(innerValue)
+                if(userData.user['user_type'] === 'COACH'){
+                    this.setState({ coach_id: userData['coach_id'] })
+                    this.props.coachDetail(value, userData['coach_id'], '').then(() =>{
+                        var coachData = this.props.coachExperience.res.data
+                        this.setState({
+                            review: coachData['coach']['about'],
+                            totalExperience: coachData['coach']['experience']
+                        }, () => this.getYearMonth());
+                    }).catch(response => {
+                    })
+                }
+            })
+        })
+    }
+
+    getYearMonth(){
+        var totalYear = ''
+        var totalMonth = ''
+        if(this.state.totalExperience !== ''){
+            totalYear = Math.floor(this.state.totalExperience/12)
+            totalYear = this.year[totalYear].value
+            totalMonth = this.state.totalExperience%12
+            totalMonth = month[totalMonth].value
+        }
+        this.setState({ totalYear, totalMonth })
     }
     saveUserProfile() {
 
@@ -134,6 +210,14 @@ class EditProfile extends BaseComponent {
                 if (file != null) {
                     param.push(file)
                 }
+                if(this.state.user_type === 'PLAYER'){
+                    dict['is_stats_hidden'] = this.state.hideUser
+                } else if(this.state.user_type === 'COACH'){
+                    const {totalYear, totalMonth, review} = this.state;
+                    var months = parseInt(totalYear)*12 + parseInt(totalMonth)
+                    dict['about'] = review
+                    dict['experience'] = months
+                }
                 console.warn('file => ', JSON.stringify(file))
                 let post = { name: 'post', data: JSON.stringify(dict) }
                 param.push(post)
@@ -173,7 +257,10 @@ class EditProfile extends BaseComponent {
                             }
                         } else {
                             let error_message = data.error_message
-                            alert(error_message)
+                            this.progress(false)
+                            setTimeout(()=>{
+                                alert(error_message)
+                            },500)
                         }
 
                     }).catch((error) => {
@@ -408,7 +495,7 @@ class EditProfile extends BaseComponent {
                         >
                             <Text style={style.text}>
                                 <Text style={{ color: 'red' }}>*</Text>Name
-                    </Text>
+                            </Text>
                             <TextInput
                                 style={style.textinput}
                                 // mode='outlined'
@@ -451,9 +538,7 @@ class EditProfile extends BaseComponent {
                                 marginTop: 10
                             }}
                         >
-                            <Text style={style.text}>
-                                Birth Date
-                    </Text>
+                            <Text style={style.text}>Birth Date</Text>
 
                             <DatePicker
                                 style={{ width: 200, borderWidth: 0 }}
@@ -476,6 +561,83 @@ class EditProfile extends BaseComponent {
                                 onDateChange={(birthdate) => { this.setState({ birthdate: birthdate }) }}
                             />
                         </View>
+                        {
+                            this.state.user_type === "PLAYER" &&
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    alignItems: 'center',
+                                    marginTop: 10
+                                }}
+                            >
+                                <Text style={style.text}>Hide Stats</Text>
+                                <Switch 
+                                    onValueChange={(value) => this.setState({hideUser: value})}
+                                    value={this.state.hideUser}
+                                    color='#67BAF5'
+                                    // trackColor={{false: '#DFDFDF', true: '#67BAF5'}}
+                                />
+                            </View>
+                        }
+                        {
+                            this.state.user_type === "COACH" &&
+                            <View style={{width: '80%', alignItems: 'center'}}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    marginTop: 12,
+                                    justifyContent: 'space-around'
+                                }}>
+                                    <View style={{width: '40%',}}>
+                                        <RNPickerSelect
+                                            placeholder={selectYear}
+                                            items={this.year}
+                                            onValueChange={(value) => this.setState({totalYear: value})}
+                                            style={pickerSelectStyles}
+                                            value={this.state.totalYear}
+                                            useNativeAndroidPickerStyle={false}
+                                            // ref={(el) => {
+                                            //   this.inputRefs.proficiencyValue = el;
+                                            // }}
+                                        />
+                                        <View style={{
+                                            width: "80%",
+                                            backgroundColor: '#C7C7CD',
+                                            height: 1,
+                                            marginTop: 2
+                                        }}></View>
+                                    </View>
+
+                                    <View style={{width: '40%'}}>
+                                        <RNPickerSelect
+                                            placeholder={selectMonth}
+                                            items={month}
+                                            onValueChange={(value) => this.setState({totalMonth: value})}
+                                            style={pickerSelectStyles}
+                                            value={this.state.totalMonth}
+                                            useNativeAndroidPickerStyle={false}
+                                            // ref={(el) => {
+                                            //   this.inputRefs.proficiencyValue = el;
+                                            // }}
+                                        />
+                                        <View style={{
+                                            width: "80%",
+                                            backgroundColor: '#C7C7CD',
+                                            height: 1,
+                                            marginTop: 2
+                                        }}></View>
+                                    </View>
+                                </View>
+                                <TextInput
+                                    numberOfLines={3}
+                                    style={styles.aboutCoach}
+                                    onChangeText={(review) => this.setState({ review })}
+                                    value={this.state.review}
+                                    multiline={true}
+                                    placeholder={"About You"}
+                                />
+                            </View>
+                        }
                         <View style={{ flex: 1, margin: 20, width: '80%' }}>
                             <CustomeButtonB onPress={() => this.saveUserProfile()}> Save </CustomeButtonB>
                         </View>
@@ -483,6 +645,10 @@ class EditProfile extends BaseComponent {
                             <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Skip </SwitchButton>
                         </View> */}
 
+                        {Platform.OS == 'ios' ?
+                            <KeyboardSpacer />
+                        : null}
+                        
                     </View>
                 </ScrollView>
             </View>
@@ -494,13 +660,39 @@ class EditProfile extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.ProfileReducer,
+        coachExperience: state.AcademyReducer
     };
 };
 const mapDispatchToProps = {
-    saveUserStartupProfile
+    saveUserStartupProfile, coachDetail
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
 
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 16,
+      //paddingVertical: 12,
+      //paddingHorizontal: 10,
+      borderColor: '#D3D3D3',
+      borderRadius: 4,
+      color: 'black',
+      width: 200,
+      height: 40,
+      marginBottom: 4,
+      fontFamily: 'Quicksand-Regular',
+      // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 0,
+      paddingVertical: 6,
+      fontFamily: 'Quicksand-Regular',
+      borderColor: '#614051',
+      borderRadius: 8,
+      color: 'black',
+    },
+});
 
 const style = {
     rounded_button: {
@@ -531,3 +723,20 @@ const style = {
         color: '#A3A5AE'
     }
 }
+
+const styles = StyleSheet.create({
+    aboutCoach: {
+        borderColor: "#CECECE",
+        borderWidth: 1,
+        height: 100,
+        width: "100%",
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 14,
+        padding: 4,
+        justifyContent: 'center',
+        borderRadius: 8,
+        fontFamily: 'Quicksand-Regular',
+        textAlignVertical: 'top'
+    }
+})

@@ -39,14 +39,16 @@ export default TabBarHighlightLabel = ({
       flex: 0,
       width: '100%',
       textAlign: 'center',
+      marginBottom: 2,
       justifyContent: 'center',
-      fontSize: 12,
+      fontFamily: 'Quicksand-Medium',
+      fontSize: 10,
       color: labelColor
     },
     labelIndicator: {
       flex: 0,
       width: 55,
-      marginBottom: 4,
+      marginBottom: 2,
       height: 4,
       justifyContent: 'flex-end',
       backgroundColor: indicatorColor
@@ -62,12 +64,13 @@ export default TabBarHighlightLabel = ({
         style={{
           width: 22,
           height: 22,
-          marginBottom: 6
+          marginBottom: 0
         }}
         source={activeIcon}
-        size={24}
+        size={22}
       />
       {maybeRenderLabel}
+
       <View style={styles.labelIndicator} />
 
     </View>

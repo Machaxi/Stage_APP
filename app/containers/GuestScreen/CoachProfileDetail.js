@@ -175,7 +175,7 @@ class CoachProfileDetail extends BaseComponent {
     _renderRatingItem = ({ item }) => {
 
         let name = ''
-        if (global.USER_TYPE == undefined || global.USER_TYPE == COACH) {
+        if (global.USER_TYPE == undefined || global.USER_TYPE == COACH || global.USER_TYPE == '') {
             name = 'Anonymous'
         } else {
             name = item.source.name

@@ -49,7 +49,7 @@ export function getPlayerDashboard(header, player_id, academy_id) {
     };
 }
 
-export function getOtherPlayerDashboard(academy_id, player_id) {
+export function getOtherPlayerDashboard(academy_id, player_id, header) {
     console.log("getPlayerDashboard ", player_id, academy_id)
     // var header =
     //     getData('header', (value) => {
@@ -62,6 +62,9 @@ export function getOtherPlayerDashboard(academy_id, player_id) {
                 url: `global/player/academic-profile?player_id=${player_id}&academy_id=${academy_id}`,
                 method: 'GET',
                 // data: postdata,
+                headers: {
+                    'x-authorization': header
+                },
             }
         }
     };
