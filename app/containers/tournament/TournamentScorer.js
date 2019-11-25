@@ -41,16 +41,12 @@ class TournamentScorer extends BaseComponent {
     }
 
     componentDidMount() {
-
-        let match_id = this.state.match_id
-
+        const { match_id } = this.state
         getData('header', (value) => {
-
             this.state.header = value
             this.props.getMatchScore(value, match_id).then(() => {
                 let data = this.props.data.data
                 console.log(' getMatchScore ' + JSON.stringify(data));
-
                 let success = data.success
                 if (success) {
 
@@ -88,8 +84,9 @@ class TournamentScorer extends BaseComponent {
         })
     }
 
-    setModalVisible(visible) {
-        this.setState({ modalVisible: visible });
+    setModalVisible(visible, index=-1) {
+        console.log('index is', index)
+        this.setState({ modalVisible: visible, currentIndex: index });
     }
 
     updateScore(isPlayer1, deduct) {
@@ -152,11 +149,15 @@ class TournamentScorer extends BaseComponent {
         //========================END =================================
     }
 
-    editScore(previousRound) {
-
-        let match_scores = this.state.match_scores
-        console.log('After Update => ', JSON.stringify(match_scores))
-        this.submit(match_scores)
+    editScore(previousRound, winner_id) {
+        console.log('winner is', this.state);
+        if(winner_id !== null){
+            this.declareWinner(winner_id)
+        } else{
+            let match_scores = this.state.match_scores
+            console.log('After Update => ', JSON.stringify(match_scores))
+            this.submit(match_scores)
+        }
     }
 
     submit(match_scores) {
@@ -274,7 +275,13 @@ class TournamentScorer extends BaseComponent {
         })
     }
 
-
+    declareWinner(winner_id){
+        const {currentIndex} = this.state;
+        let match_scores = this.state.match_scores
+        match_scores[currentIndex]['winner_id'] = winner_id
+        console.log('After Update => ', JSON.stringify(match_scores))
+        this.submit(match_scores)
+    }
     render() {
         if (!this.state.score_call &&
             (this.props.data.loading || this.state.match_scores == null || this.state.player1 == null)) {
@@ -413,7 +420,6 @@ class TournamentScorer extends BaseComponent {
                         onPress={() => {
                         }}
                     >
-
                         <View
                             resizeMode="contain"
                             style={{
@@ -472,7 +478,7 @@ class TournamentScorer extends BaseComponent {
                                 fontSize: 14,
                                 color: color,
                                 fontFamily: 'Quicksand-Regular',
-                            }}>Round {element.round}</Text>
+                            }}>Set {element.round}</Text>
 
                         {element.winner_id ?
                             <View style={{
@@ -505,7 +511,7 @@ class TournamentScorer extends BaseComponent {
                         element.round ?
                         <TouchableOpacity
                             onPress={() => {
-                                this.setModalVisible(true)
+                                this.setModalVisible(true, index)
                             }}
                         >
 
@@ -531,7 +537,7 @@ class TournamentScorer extends BaseComponent {
                                     edit_index: index,
 
                                 },
-                                    this.setModalVisible(true))
+                                    this.setModalVisible(true, index))
                                 setTimeout(() => {
                                     console.warn('Element-> ', index)
                                     console.warn('Element->direct', JSON.stringify(this.state.match_scores[index]))
@@ -788,7 +794,7 @@ class TournamentScorer extends BaseComponent {
                                             padding: 12,
                                         }}>
 
-                                            <Text style={defaultStyle.bold_text_14}>Round {previousRound.round}</Text>
+                                            <Text style={defaultStyle.bold_text_14}>Set {previousRound.round}</Text>
                                             <Text style={[defaultStyle.heavy_bold_text_14, { marginTop: 10 }]}>
                                                 {previousRound.winner_id == player1.id ?
                                                     player1.name : player2.name} Won !</Text>
@@ -815,7 +821,7 @@ class TournamentScorer extends BaseComponent {
                                                         onPress={() => {
                                                             this.skipSet()
                                                         }}
-                                                    >Skip Round</SkyBorderButton>
+                                                    >Skip Set</SkyBorderButton>
 
                                                 </View>
 
@@ -852,7 +858,7 @@ class TournamentScorer extends BaseComponent {
                                                                 textAlign: 'center',
                                                                 fontFamily: 'Quicksand-Medium',
                                                             }}>
-                                                            Start Round !
+                                                            Start Set !
                                                         </Text>
                                                     </TouchableOpacity>
 
@@ -911,21 +917,9 @@ class TournamentScorer extends BaseComponent {
                                                             textAlign: 'center',
                                                             color: '#404040',
                                                             fontSize: 46,
-                                                            marginLeft: 16,
+                                                            marginLeft: 8,
                                                             fontFamily: 'Quicksand-Medium'
                                                         }}>{currentRound.player1_score}</Text>
-
-                                                </View>
-
-
-                                                <View style={{
-                                                    flex: 1,
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    alignContent: 'center',
-                                                    marginLeft: 40,
-                                                }}>
-
 
                                                     <TouchableOpacity
                                                         activeOpacity={.8}
@@ -940,8 +934,44 @@ class TournamentScorer extends BaseComponent {
 
                                                         />
                                                     </TouchableOpacity>
+                                                </View>
 
 
+                                                {/* <View style={{
+                                                    flex: 1,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    alignContent: 'center',
+                                                    marginLeft: 40,
+                                                }}>
+                                                    <TouchableOpacity
+                                                        activeOpacity={.8}
+                                                        onPress={() => {
+                                                            //true means player1
+                                                            if (!this.state.disable_increasement_p1)
+                                                                this.updateScore(true, false)
+                                                        }}>
+                                                        <Image
+                                                            source={require('../../images/ic_plus.png')}
+                                                            style={{ width: 48, height: 48 }}
+
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View> */}
+
+                                                <View
+                                                    style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        alignContent: 'center',
+                                                        marginTop: 5,
+                                                        marginLeft: 40,
+                                                    }}
+                                                >
+                                                    <CustomeButtonB onPress={
+                                                        () => this.declareWinner(player1.id)}
+                                                    >Declare Winner</CustomeButtonB>
                                                 </View>
                                             </View>
 
@@ -960,7 +990,6 @@ class TournamentScorer extends BaseComponent {
                                                         justifyContent: 'center'
 
                                                     }}>
-
                                                     <TouchableOpacity
                                                         onPress={() => {
                                                             this.updateScore(false, true)
@@ -981,23 +1010,10 @@ class TournamentScorer extends BaseComponent {
                                                             color: '#404040',
                                                             fontSize: 46,
                                                             width: 56,
-                                                            marginLeft: 16,
+                                                            marginLeft: 8,
                                                             fontFamily: 'Quicksand-Medium'
                                                         }}>{currentRound.player2_score}</Text>
-
-                                                </View>
-
-
-                                                <View style={{
-                                                    flex: 1,
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    alignContent: 'center',
-                                                    marginLeft: 40,
-                                                    marginTop: 12,
-                                                }}>
-
-
+                                                    
                                                     <TouchableOpacity
                                                         activeOpacity={.8}
                                                         onPress={() => {
@@ -1007,20 +1023,54 @@ class TournamentScorer extends BaseComponent {
                                                         }}>
                                                         <Image
                                                             source={require('../../images/ic_plus.png')}
-                                                            style={{ width: 48, height: 48 }}
+                                                            style={{ width: 43, height: 43 }}
 
                                                         />
                                                     </TouchableOpacity>
-
-
                                                 </View>
 
 
+                                                {/* <View style={{
+                                                    flex: 1,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    alignContent: 'center',
+                                                    marginLeft: 40,
+                                                }}>
+                                                    <TouchableOpacity
+                                                        activeOpacity={.8}
+                                                        onPress={() => {
+                                                            //false means player2
+                                                            if (!this.state.disable_increasement_p2)
+                                                                this.updateScore(false, false)
+                                                        }}>
+                                                        <Image
+                                                            source={require('../../images/ic_plus.png')}
+                                                            style={{ width: 43, height: 43 }}
+
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View> */}
+
+                                                <View
+                                                    style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        alignContent: 'center',
+                                                        marginTop: 5,
+                                                        marginLeft: 40,
+                                                    }}
+                                                >
+                                                    <CustomeButtonB onPress={
+                                                        () => this.declareWinner(player2.id)}
+                                                    >Declare Winner</CustomeButtonB>
+                                                </View>
                                             </View>
 
                                         </View>
 
-                                        <View style={{
+                                        {/* <View style={{
                                             flex: 1,
                                             alignItems: 'center',
                                             justifyContent: 'center',
@@ -1032,11 +1082,10 @@ class TournamentScorer extends BaseComponent {
                                                 onPress={() => {
 
                                                 }}>
-                                                <Text style={style.rounded_button_text}>
-                                                    Save</Text>
+                                                <Text style={style.rounded_button_text}>Save</Text>
                                             </TouchableOpacity>
 
-                                        </View>
+                                        </View> */}
                                     </View>}
                             </View> :
 
@@ -1100,7 +1149,7 @@ class TournamentScorer extends BaseComponent {
 
                     {previousRound != null || this.state.edit_index != -1 ?
                         <EditScore
-                            touchOutside={(round) => {
+                            touchOutside={(round, winner_id) => {
                                 this.state.modalVisible = false
                                 this.setState({
                                     modalVisible: false
@@ -1109,7 +1158,7 @@ class TournamentScorer extends BaseComponent {
                                     return
 
                                 setTimeout(() => {
-                                    this.editScore(round)
+                                    this.editScore(round, winner_id)
                                 }, 100)
                             }}
                             edit_index={this.state.edit_index}
@@ -1176,4 +1225,11 @@ const style = {
         borderRadius: 23,
 
     },
+    declare_winner: {
+        borderRadius: 20,
+        color: '#A3A5AE',
+        fontFamily: 'Quicksand-Medium',
+        padding: 10,
+        backgroundColor: '#E0E0E0',
+    }
 }

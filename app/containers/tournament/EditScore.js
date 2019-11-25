@@ -1,27 +1,60 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Picker } from 'react-native';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import RNPickerSelect from 'react-native-picker-select'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
+
+const placeholder = {
+    label: 'Select',
+    value: null,
+    color: '#9EA0A4',
+};
 
 export default class EditScore extends BaseComponent {
 
     constructor(props) {
         super(props)
         this.state = {
-            previousRound: null,
-            alert: ''
+            previousRound: this.props.previousRound,
+            // previousRound: null,
+            alert: '',
+            winner: '',
+            // selectWinner: [{ label: 'select', value: 'select' }, { label: 'select2', value: 'select2' }]
         }
 
-        this.state.previousRound = this.props.previousRound
-
+        const { player1, player2 } = this.props
+        let selectWinner = [
+            { label: player1.name, value: player1.id }, { label: player2.name, value: player2.id }
+        ]
+        this.selectWinner = [...selectWinner]
+        console.log('inside constuctor')
+        // this.state.previousRound = this.props.previousRound
     }
 
-    render() {
+    componentDidMount() {
+        const { match_score, edit_index } = this.props
+        this.setState({winner: match_score[edit_index]['winner_id']})
+    }
+    makeWinnerObj = () => {
+        
+    }
+    setWinner(winner_id){
+        console.log('in set winner');
+        this.setState({winner: winner_id})
+    }
 
+    // shouldComponentUpdate(nextProps, nextState){
+    //     return nextProps.player1 !== this.props.player1
+    // }
+
+    render() {
+        console.log('selectWinner', this.props)
         let player1 = this.props.player1
         let player2 = this.props.player2
+        console.log('player1', player1)
+        console.log('player2', player2)
         let alert = this.state.alert
-        this.state.previousRound = this.props.previousRound
+        // this.state.previousRound = this.props.previousRound
         let previousRound = this.state.previousRound
 
         console.warn('Element->EditScore ', JSON.stringify(previousRound))
@@ -30,8 +63,9 @@ export default class EditScore extends BaseComponent {
         return (
             <Dialog
                 width={300}
+                height={350}
                 visible={this.props.visible}
-                dialogStyle={{ borderRadius: 0, padding: 16, aspectRatio: 1 }}
+                dialogStyle={{ borderRadius: 0, padding: 16 }}
                 onTouchOutside={() => {
                     this.props.touchOutside(null);
                 }}
@@ -74,9 +108,9 @@ export default class EditScore extends BaseComponent {
                                 </View>
 
                                 <Text style={[defaultStyle.bold_text_14, {
-                                    marginTop: 16,
+                                    marginTop: 10,
                                     justifyContent: 'center'
-                                }]}>Edit Score for Round {previousRound.round} </Text>
+                                }]}>Edit Score for Set {previousRound.round} </Text>
 
 
                                 <View style={{
@@ -85,7 +119,6 @@ export default class EditScore extends BaseComponent {
                                     alignItems: 'center',
                                     marginTop: 15,
                                 }} >
-
                                     <Text style={[defaultStyle.regular_text_14,
                                     { marginRight: 12 }]}>
                                         {player1.name}</Text>
@@ -116,7 +149,6 @@ export default class EditScore extends BaseComponent {
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
                                     marginTop: 15,
-                                    marginBottom: 18,
                                 }} >
 
                                     <Text style={[defaultStyle.regular_text_14,
@@ -144,6 +176,31 @@ export default class EditScore extends BaseComponent {
 
                                 </View>
 
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginTop: 15,
+                                    marginBottom: 10,
+                                }}>
+                                    <Text style={[defaultStyle.regular_text_14,
+                                    { marginRight: 12 }]}>
+                                        Winner</Text>
+                                    {/* <Picker selectedValue={this.state.winner} onValueChange={(value)=>this.setWinner(value)}>
+                                        <Picker.Item label='ajkfja'  value='klfk' />
+                                        <Picker.Item label='klfka'  value='kflakf' />
+                                    </Picker> */}
+                                    <View>
+                                    <RNPickerSelect
+                                        placeholder={placeholder}
+                                        items={this.selectWinner}
+                                        onValueChange={(value) => {this.setWinner(value)}}
+                                        style={pickerSelectStyles}
+                                        value={this.state.winner}
+                                        useNativeAndroidPickerStyle={false}
+                                    />
+                                    </View>
+                                </View>
 
                                 <Text style={[defaultStyle.bold_text_12, { color: 'red' }]}>{this.state.alert}</Text>
 
@@ -158,7 +215,7 @@ export default class EditScore extends BaseComponent {
                                             previousRound.player2_score = 0
                                         }
                                         if (+previousRound.player1_score <= 21 && +previousRound.player2_score <= 21) {
-                                            this.props.touchOutside(previousRound)
+                                            this.props.touchOutside(previousRound, this.state.winner)
                                         }
 
                                     }}>Save</Text>
@@ -177,6 +234,7 @@ export default class EditScore extends BaseComponent {
 
 const styles = StyleSheet.create({
     contentContainer: {
+        flexDirection: 'column',
         paddingTop: 10,
         paddingBottom: 10,
         paddingHorizontal: 0,
@@ -215,3 +273,29 @@ const styles = StyleSheet.create({
     },
 })
 
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        //paddingVertical: 12,
+        //paddingHorizontal: 10,
+        borderColor: '#D3D3D3',
+        borderRadius: 4,
+        color: 'black',
+        width: 200,
+        height: 40,
+        marginBottom: 4,
+        fontFamily: 'Quicksand-Regular',
+        // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        height: 40,
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        fontFamily: 'Quicksand-Regular',
+        // borderColor: '#614051',
+        borderRadius: 8,
+        color: 'black',
+        textAlign: 'left'
+    },
+});
