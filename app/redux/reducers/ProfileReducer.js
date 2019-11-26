@@ -126,3 +126,40 @@ export function logout(header) {
         }
     };
 }
+
+export function UserProfile(state = initialState, action) {
+    switch (action.type) {
+        case types.USER_PROFILE:
+            return { ...state, loading: true };
+        case types.USER_PROFILE_SUCCESS:
+            console.log("sucesss PROFILE", action.payload.data);
+            return { ...state, loading: false, profileData: action.payload.data };
+        case types.USER_PROFILE_FAIL:
+            console.log("fails GET_PROFILE", action.payload);
+            return {
+                ...state,
+                loading: false,
+                error: 'Error while fetching user'
+            };
+        default:
+            return state;
+    }
+}
+
+export function getUserProfile(header, user_id='') {
+    console.log("logout ", header)
+
+    return {
+        type: types.USER_PROFILE,
+        payload: {
+            request: {
+                url: `user/profile?user_id=${user_id}`,
+                method: 'GET',
+                headers: {
+                    'x-authorization': header,
+                    'Content-Type': 'application/json',
+                },
+            }
+        }
+    };
+}

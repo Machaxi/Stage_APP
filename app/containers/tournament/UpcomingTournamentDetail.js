@@ -39,8 +39,15 @@ class UpcomingTournamentDetail extends BaseComponent {
     }
 
     fetchTournamentData(tournament_id) {
-
-        firebase.analytics().logEvent("UpcomingTournament", {})
+        getData('userInfo', (value)=>{
+            var userData = JSON.parse(value)
+            if(userData.user){
+                var userid = userData.user['id']
+                var username = userData.user['name']
+                firebase.analytics().logEvent("UpcomingTournament", {userid: userid, username: username})
+            }
+        })
+        // firebase.analytics().logEvent("UpcomingTournament", {})
 
 
         getData('header', (value) => {

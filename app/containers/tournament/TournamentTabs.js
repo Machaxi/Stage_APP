@@ -29,8 +29,15 @@ class TournamentTabs extends BaseComponent {
     ],
   };
   componentDidMount() {
-
-    firebase.analytics().logEvent("TournamentTabs", {})
+    getData('userInfo', (value)=>{
+      var userData = JSON.parse(value)
+      if(userData.user){
+          var userid = userData.user['id']
+          var username = userData.user['name']
+          firebase.analytics().logEvent("TournamentTabs", {userid: userid, username: username})
+      }
+    })
+    // firebase.analytics().logEvent("TournamentTabs", {})
 
     getData('userInfo', (value) => {
       userData = JSON.parse(value)

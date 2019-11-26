@@ -155,7 +155,7 @@ class TournamentFixture extends BaseComponent {
         // }, 20000)
     }
 
-    init(data){
+    init(data) {
         let json = JSON.parse(data)
         this.state.tournament_name = json.name
 
@@ -243,9 +243,10 @@ class TournamentFixture extends BaseComponent {
             onShouldBlockNativeResponder: () => false,
             onPanResponderTerminationRequest: () => true,
             onMoveShouldSetPanResponderCapture: () => false,
-            onStartShouldSetPanResponderCapture: () => { 
+            onStartShouldSetPanResponderCapture: () => {
                 console.log('onStartShouldSetPanResponderCapture')
-                return false },
+                return false
+            },
             onPanResponderMove: evt => {
                 const touches = evt.nativeEvent.touches;
                 const length = touches.length;
@@ -879,6 +880,34 @@ class TournamentFixture extends BaseComponent {
                     }
 
                     container.push(<Rect
+                        onPressIn={() => {
+                            const user_type = array[i][j].user_type
+                            if (user_type == PLAYER && array[i][j].name != 'To be decided') {
+                                let id = array[i][j].id
+                                console.warn("playerid : " + id)
+                                if (id != undefined) {
+                                    // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    //     player_id: id,
+                                    //     fixture: true
+                                    // })
+                                    this.goToPlayerDetail(id)
+                                }
+                            }
+                        }}
+                        onPressOut={() => {
+                            const user_type = array[i][j].user_type
+                            if (user_type == PLAYER && array[i][j].name != 'To be decided') {
+                                let id = array[i][j].id
+                                console.warn("playerid : " + id)
+                                if (id != undefined) {
+                                    // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    //     player_id: id,
+                                    //     fixture: true
+                                    // })
+                                    this.goToPlayerDetail(id)
+                                }
+                            }
+                        }}
                         onPress={() => {
 
                             const user_type = array[i][j].user_type
@@ -895,7 +924,7 @@ class TournamentFixture extends BaseComponent {
                             }
 
                         }}
-                        key={"id_" + ((i+1) * 100 + (j+1))}
+                        key={"id_" + ((i + 1) * 100 + (j + 1))}
                         x={x}
                         y={y}
                         width={width}
@@ -959,6 +988,36 @@ class TournamentFixture extends BaseComponent {
 
                         container.push(
                             <Text
+                                onPressIn={() => {
+
+                                    const user_type = array[i][j].user_type
+                                    if (user_type == PLAYER && array[i][j].name != 'To be decided') {
+                                        let id = array[i][j].id
+                                        console.warn("playerid : " + id)
+                                        if (id != undefined) {
+                                            // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                            //     player_id: id,
+                                            //     fixture: true
+                                            // })
+                                            this.goToPlayerDetail(id)
+                                        }
+                                    }
+                                }}
+                                onPressOut={() => {
+
+                                    const user_type = array[i][j].user_type
+                                    if (user_type == PLAYER && array[i][j].name != 'To be decided') {
+                                        let id = array[i][j].id
+                                        console.warn("playerid : " + id)
+                                        if (id != undefined) {
+                                            // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                            //     player_id: id,
+                                            //     fixture: true
+                                            // })
+                                            this.goToPlayerDetail(id)
+                                        }
+                                    }
+                                }}
                                 onPress={() => {
 
                                     const user_type = array[i][j].user_type
@@ -1024,6 +1083,22 @@ class TournamentFixture extends BaseComponent {
 
                                 container.push(
                                     <Rect
+                                        onPressIn={() => {
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        onPressOut={() => {
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
                                         onPress={() => {
 
                                             if (this.state.is_coach && this.state.winner == null) {
@@ -1046,6 +1121,22 @@ class TournamentFixture extends BaseComponent {
 
                                 container.push(
                                     <Text
+                                        onPressIn={() => {
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        onPressOut={() => {
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
                                         onPress={() => {
 
                                             if (this.state.is_coach && this.state.winner == null) {
@@ -1081,7 +1172,7 @@ class TournamentFixture extends BaseComponent {
                                 //console.log('Match Score11 => ' + JSON.stringify(obj))
 
                                 if (j % 2 == 0) {
-                                  //  console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player1_score)
+                                    //  console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player1_score)
                                 }
                                 else {
                                     //console.log('Match Score11 => ' + array[i][j].name + "== " + obj.player2_score)
@@ -1136,6 +1227,24 @@ class TournamentFixture extends BaseComponent {
                                                 })
                                             }
                                         }}
+                                        onPressIn={() => {
+
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        onPressOut={() => {
+
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
                                         x={x + width - 30 * (k + 1)}
                                         y={y}
                                         height={height}
@@ -1150,6 +1259,24 @@ class TournamentFixture extends BaseComponent {
                                 container.push(
                                     <Text
                                         onPress={() => {
+
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        onPressIn={() => {
+
+                                            if (this.state.is_coach && this.state.winner == null) {
+                                                //console.warn("Match : " + JSON.stringify(array[i][j]))
+                                                this.props.navigation.navigate('TournamentScorer', {
+                                                    match_id: array[i][j].match_id
+                                                })
+                                            }
+                                        }}
+                                        onPressOut={() => {
 
                                             if (this.state.is_coach && this.state.winner == null) {
                                                 //console.warn("Match : " + JSON.stringify(array[i][j]))
@@ -1300,6 +1427,35 @@ class TournamentFixture extends BaseComponent {
                     />)
 
                     container.push(<Rect
+
+                        onPressOut={() => {
+                            const user_type = array[i][j].user_type
+                            if (user_type == PLAYER) {
+                                let id = array[i][j].id
+                                console.warn("playerid : " + id)
+                                if (id != undefined) {
+                                    // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    //     player_id: id,
+                                    //     fixture: true
+                                    // })
+                                    this.goToPlayerDetail(id)
+                                }
+                            }
+                        }}
+                        onPressIn={() => {
+                            const user_type = array[i][j].user_type
+                            if (user_type == PLAYER) {
+                                let id = array[i][j].id
+                                console.warn("playerid : " + id)
+                                if (id != undefined) {
+                                    // this.props.navigation.navigate('OtherPlayerDeatils', {
+                                    //     player_id: id,
+                                    //     fixture: true
+                                    // })
+                                    this.goToPlayerDetail(id)
+                                }
+                            }
+                        }}
                         onPress={() => {
 
                             const user_type = array[i][j].user_type
@@ -1332,6 +1488,7 @@ class TournamentFixture extends BaseComponent {
 
                     container.push(
                         <Text
+                        
                             onPress={() => {
                                 // let id = array[i][j].id
                                 // console.warn("playerid : " + id)

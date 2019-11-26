@@ -106,13 +106,15 @@ class CoachHome extends BaseComponent {
                         {navigation.getParam('notification_count', 0) > 0 ? <View style={{
                             width: 16,
                             height: 16,
+                            // padding: 3,
                             alignItems: 'center',
                             justifyContent: 'center',
                             borderRadius: 30 / 2,
                             backgroundColor: '#ED2638'
                         }}>
-                            <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                {navigation.getParam('notification_count', '')}</Text>
+                            <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
+                                {navigation.getParam('notification_count', '') > 99 ? '99+' :  navigation.getParam('notification_count', '')}
+                            </Text>
                         </View> : null}
 
 

@@ -43,7 +43,15 @@ class Splash extends BaseComponent {
 
         // firebase.analytics().logEvent("APP_START", {})
         //firebase.analytics().logEvent("testing_dribble", {})
-        firebase.analytics().logEvent("SplashScreen", {})
+        getData('userInfo', (value)=>{
+            var userData = JSON.parse(value)
+            if(userData.user){
+                var userid = userData.user['id']
+                var username = userData.user['name']
+                firebase.analytics().logEvent("SplashScreen", {userid: userid, username: username})
+            }
+        })
+        // firebase.analytics().logEvent("SplashScreen", {})
         // firebase.analytics().setCurrentScreen()
         // firebase.analytics().setUserId('testing')
         //firebase.crashlytics().log('Test Message!');
@@ -59,8 +67,8 @@ class Splash extends BaseComponent {
     }
 
     moveNext() {
-        // this.props.navigation.navigate('Test',
-        //     { id: 39,
+        // this.props.navigation.navigate('TournamentScorer',
+        //     { match_id: 25,
         //     name:'Navdeep'})
         // return
         // this.props.navigation.navigate('ChooseTimeDate',

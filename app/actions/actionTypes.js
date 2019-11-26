@@ -185,3 +185,7 @@ export const DO_BOOKING_SUCCESS = 'booking/LOAD_SUCCESS';
 export const DO_BOOKING_FAIL = 'booking/LOAD_FAIL';
 
 export const LOGOUT = 'user/LOGOUT';
+
+export const USER_PROFILE = 'USER_PROFILE/LOAD';
+export const USER_PROFILE_SUCCESS = 'USER_PROFILE/LOAD_SUCCESS';
+export const USER_PROFILE_FAIL = 'USER_PROFILE/LOAD_FAIL';

@@ -100,8 +100,11 @@ class AcademyListing extends BaseComponent {
                                 borderRadius: 30 / 2,
                                 backgroundColor: '#ED2638'
                             }}>
-                                <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                    {navigation.getParam('notification_count', '')}</Text>
+                                {/* <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                    {navigation.getParam('notification_count', '')}</Text> */}
+                                <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
+                                    {navigation.getParam('notification_count', '') > 99 ? '99+' :  navigation.getParam('notification_count', '')}
+                                </Text>
                             </View> : null}
 
 

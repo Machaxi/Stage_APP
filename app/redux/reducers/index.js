@@ -4,7 +4,7 @@ import AcademyReducer from './AcademyReducer'
 import SwitchReducer from './switchReducer'
 import DashboardReducer from './dashboardReducer'
 import BatchReducer from './BatchReducer'
-import ProfileReducer from './ProfileReducer'
+import ProfileReducer, {UserProfile} from './ProfileReducer'
 import PlayerBatchReducer from './PlayerBatchReducer'
 import TournamentReducer from './TournamentReducer'
 import PerformenceReducer from './PerformenceReducer'
@@ -39,6 +39,7 @@ const rootReducer = combineReducers({
     DashboardReducer,
     BatchReducer,
     ProfileReducer,
+    UserProfile,
     PlayerBatchReducer,
     PerformenceReducer,
     TournamentReducer,

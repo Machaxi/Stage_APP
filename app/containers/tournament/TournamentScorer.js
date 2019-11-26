@@ -125,19 +125,19 @@ class TournamentScorer extends BaseComponent {
         match_scores[currentIndex] = currentSet
 
 
-        if (playerScore > 21) {
-            if (isPlayer1) {
-                this.setState({
-                    disable_increasement_p1: true
-                })
-            } else {
-                this.setState({
-                    disable_increasement_p2: true
-                })
-            }
+        // if (playerScore > 21) {
+        //     if (isPlayer1) {
+        //         this.setState({
+        //             disable_increasement_p1: true
+        //         })
+        //     } else {
+        //         this.setState({
+        //             disable_increasement_p2: true
+        //         })
+        //     }
 
-            return
-        }
+        //     return
+        // }
 
         this.setState({
             // match_scores: match_scores,

@@ -19,7 +19,6 @@ export default class EditScore extends BaseComponent {
             // previousRound: null,
             alert: '',
             winner: '',
-            // selectWinner: [{ label: 'select', value: 'select' }, { label: 'select2', value: 'select2' }]
         }
 
         const { player1, player2 } = this.props
@@ -35,17 +34,16 @@ export default class EditScore extends BaseComponent {
         const { match_score, edit_index } = this.props
         this.setState({winner: match_score[edit_index]['winner_id']})
     }
-    makeWinnerObj = () => {
-        
-    }
+
     setWinner(winner_id){
         console.log('in set winner');
         this.setState({winner: winner_id})
     }
 
-    // shouldComponentUpdate(nextProps, nextState){
-    //     return nextProps.player1 !== this.props.player1
-    // }
+    isFloat = (n) =>{
+        console.log('number is', typeof n)
+        return Number(n) === n && n % 1 !== 0;
+    }
 
     render() {
         console.log('selectWinner', this.props)
@@ -127,9 +125,9 @@ export default class EditScore extends BaseComponent {
                                         placeholder="Score"
                                         keyboardType={'number-pad'}
                                         onChangeText={(text) => {
-                                            if (+text > 21) {
+                                            if (this.isFloat(+text)) {
                                                 this.setState({
-                                                    alert: 'score must be less than or equal to 21'
+                                                    alert: 'score must be in integers'
                                                 })
                                             } else {
                                                 previousRound.player1_score = text
@@ -159,9 +157,9 @@ export default class EditScore extends BaseComponent {
                                         placeholder="Score"
                                         keyboardType={'number-pad'}
                                         onChangeText={(text) => {
-                                            if (+text > 21) {
+                                            if (this.isFloat(+text)) {
                                                 this.setState({
-                                                    alert: 'score must be less than or equal to 21'
+                                                    alert: 'score must be in integers'
                                                 })
                                             } else {
                                                 previousRound.player2_score = text
@@ -169,7 +167,6 @@ export default class EditScore extends BaseComponent {
                                                     previousRound: previousRound
                                                 })
                                             }
-
                                         }}
                                         value={previousRound.player2_score + ""}
                                     />

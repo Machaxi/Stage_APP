@@ -8,7 +8,7 @@ import {Switch} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
 import { getData, storeData } from "../../components/auth";
-import { saveUserStartupProfile } from "../../redux/reducers/ProfileReducer";
+import { saveUserStartupProfile, getUserProfile } from "../../redux/reducers/ProfileReducer";
 import {coachDetail} from '../../redux/reducers/AcademyReducer';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -21,13 +21,6 @@ import FastImage from 'react-native-fast-image';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RNPickerSelect from 'react-native-picker-select';
 
-// const year = [
-//     {label: '0', value: '0'},{label: '1', value: '1'},{label: '2', value: '2'},
-//     {label: '3', value: '3'},{label: '4', value: '4'},{label: '5', value: '5'},
-//     {label: '6', value: '6'},{label: '7', value: '7'},{label: '8', value: '8'},
-//     {label: '9', value: '9'},{label: '10', value: '10'},{label: '11', value: '11'},
-//     {label: '12', value: '12'},
-// ]
 
 const month = [
     {label: '0', value: '0'},{label: '1', value: '1'},{label: '2', value: '2'},
@@ -91,60 +84,86 @@ class EditProfile extends BaseComponent {
             userData = (JSON.parse(value))
             //console.warn('name => ', userData.user['name'])
             console.log("SplashScreen=> ", userData);
-            this.state.birthdate = userData.user['dob']
-            this.state.txtname = userData.user['name']
-            this.state.txtphone = userData.user['mobile_number']
+            // this.state.birthdate = userData.user['dob']
+            // this.state.txtname = userData.user['name']
+            // this.state.txtphone = userData.user['mobile_number']
             this.setState({
-                txtname: userData.user['name'],
-                txtphone: userData.user['mobile_number'],
-                birthdate: userData.user['dob'],
-                profile_pic: userData.user['profile_pic'],
+                // txtname: userData.user['name'],
+                // txtphone: userData.user['mobile_number'],
+                // birthdate: userData.user['dob'],
+                // profile_pic: userData.user['profile_pic'],
                 user_type: userData.user['user_type'],
-                hideUser: userData.user['is_stats_hidden'],
-                is_image_processed: false//userData.user['is_image_processed']
+                // hideUser: userData.user['is_stats_hidden'],
+                // is_image_processed: false//userData.user['is_image_processed']
             })
 
 
-            let date = userData.user['dob']
-            //console.warn('date = >', date)
-            if (date != '') {
-                date = date.split('T')
-                //console.warn('date = >', date[0])
-                date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
-                //console.warn('m date ,', date)
-                this.state.birthdate = date
-                this.setState({
-                    birthdate: date
-                })
-            }
+            // let date = userData.user['dob']
+            // //console.warn('date = >', date)
+            // if (date != '') {
+            //     date = date.split('T')
+            //     //console.warn('date = >', date[0])
+            //     date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
+            //     //console.warn('m date ,', date)
+            //     this.state.birthdate = date
+            //     this.setState({
+            //         birthdate: date
+            //     })
+            // }
         });
 
 
     }
 
     componentDidMount(){
-        getData('header', (value) => {
-            getData('userInfo', (innerValue) => {
-                let userData = JSON.parse(innerValue)
-                if(userData.user['user_type'] === 'COACH'){
-                    this.setState({ coach_id: userData['coach_id'] })
-                    this.props.coachDetail(value, userData['coach_id'], '').then(() =>{
-                        var coachData = this.props.coachExperience.res.data
-                        this.setState({
-                            review: coachData['coach']['about'],
-                            totalExperience: coachData['coach']['experience']
-                        }, () => this.getYearMonth());
-                    }).catch(response => {
-                    })
+        getData('header', (value)=>{
+            this.props.getUserProfile(value).then(()=>{
+                var userData = this.props.userProfile.profileData.data
+                let date = userData.user['dob']
+                if (date != '' && date !== null) {
+                    date = date.split('T')
+                    date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
+                    //console.warn('m date ,', date)
+                    this.state.birthdate = date
                 }
+                this.setState({
+                    txtname: userData.user['name'],
+                    txtphone: userData.user['phone_number'],
+                    hideUser: userData.user['is_stats_hidden'],
+                    birthdate: date,
+                    profile_pic: userData.user['profile_pic'],
+                    totalExperience: userData.user['experience'],
+                    review: userData.user['about'],
+                    // user_type: userData.user['user_type'],
+                    is_image_processed: false//userData.user['is_image_processed']
+                }, () => this.getYearMonth())
+            }).catch((response) =>{
+                console.log(response);
             })
         })
+
+        // getData('header', (value) => {
+        //     getData('userInfo', (innerValue) => {
+        //         let userData = JSON.parse(innerValue)
+        //         if(userData.user['user_type'] === 'COACH'){
+        //             this.setState({ coach_id: userData['coach_id'] })
+        //             this.props.coachDetail(value, userData['coach_id'], '').then(() =>{
+        //                 var coachData = this.props.coachExperience.res.data
+        //                 this.setState({
+        //                     review: coachData['coach']['about'],
+        //                     totalExperience: coachData['coach']['experience']
+        //                 }, () => this.getYearMonth());
+        //             }).catch(response => {
+        //             })
+        //         }
+        //     })
+        // })
     }
 
     getYearMonth(){
-        var totalYear = ''
-        var totalMonth = ''
-        if(this.state.totalExperience !== ''){
+        var totalYear = null
+        var totalMonth = null
+        if(this.state.totalExperience !== '' && this.state.totalExperience !== null){
             totalYear = Math.floor(this.state.totalExperience/12)
             totalYear = this.year[totalYear].value
             totalMonth = this.state.totalExperience%12
@@ -660,11 +679,12 @@ class EditProfile extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.ProfileReducer,
-        coachExperience: state.AcademyReducer
+        coachExperience: state.AcademyReducer,
+        userProfile: state.UserProfile,
     };
 };
 const mapDispatchToProps = {
-    saveUserStartupProfile, coachDetail
+    saveUserStartupProfile, coachDetail, getUserProfile
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
 

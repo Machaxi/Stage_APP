@@ -8,7 +8,7 @@ import {Switch} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
 import { getData } from "../../components/auth";
-import { saveOtherUserProfile } from "../../redux/reducers/ProfileReducer";
+import { saveOtherUserProfile, getUserProfile } from "../../redux/reducers/ProfileReducer";
 import { connect } from 'react-redux';
 import axios from 'axios'
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -75,6 +75,23 @@ class EditOtherProfile extends BaseComponent {
         //     let res = JSON.parse(value)
         //     this.state.id = res.user['id']
         // })
+    }
+
+    componentDidMount(){
+        getData('header', (value)=>{
+            this.props.getUserProfile(value, this.state.id).then(()=>{
+                var userData = this.props.userProfile.profileData.data
+                this.setState({
+                    txtname: userData.user['name'],
+                    txtphone: userData.user['phone_number'],
+                    hideUser: userData.user['is_stats_hidden'],
+                    birthdate: userData.user['dob'],
+                    profile_pic: userData.user['profile_pic']
+                })
+            }).catch((response) =>{
+                console.log(response);
+            })
+        })
     }
 
     saveUserProfile() {
@@ -487,10 +504,11 @@ class EditOtherProfile extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.ProfileReducer,
+        userProfile: state.UserProfile,
     };
 };
 const mapDispatchToProps = {
-    saveOtherUserProfile
+    saveOtherUserProfile, getUserProfile
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EditOtherProfile);
 

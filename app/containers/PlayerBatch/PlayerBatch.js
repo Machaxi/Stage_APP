@@ -87,7 +87,15 @@ class PlayerBatch extends BaseComponent {
    
 
     componentDidMount() {
-        firebase.analytics().logEvent("PlayerBatch", {})
+        getData('userInfo', (value)=>{
+            var userData = JSON.parse(value)
+            if(userData.user){
+                var userid = userData.user['id']
+                var username = userData.user['name']
+                firebase.analytics().logEvent("PlayerBatch", {userid: userid, username: username})
+            }
+        })
+        // firebase.analytics().logEvent("PlayerBatch", {})
 
         this.selfComponentDidMount()
 
