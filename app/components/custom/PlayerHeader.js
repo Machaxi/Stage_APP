@@ -70,7 +70,7 @@ export default class PlayerHeader extends BaseComponent {
                             <FastImage
                                 resizeMode={FastImage.resizeMode.contain}
                                 style={{
-                                    width: 201,
+                                    width: '50%',
                                     marginLeft:10,
                                     height: 238, marginRight: 20, marginTop: 0, display: 'flex'
                                 }}

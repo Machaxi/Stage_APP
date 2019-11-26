@@ -511,8 +511,13 @@ class TournamentScorer extends BaseComponent {
                         element.round ?
                         <TouchableOpacity
                             onPress={() => {
+                                this.setState({
+                                    // edit_instance: this.state.match_scores[index],
+                                    edit_index: index,
+                                },
                                 this.setModalVisible(true, index)
-                            }}
+                                )}
+                            }
                         >
 
                             <Image
@@ -1149,7 +1154,7 @@ class TournamentScorer extends BaseComponent {
 
                     {previousRound != null || this.state.edit_index != -1 ?
                         <EditScore
-                            touchOutside={(round, winner_id) => {
+                            touchOutside={(round = null, winner_id = null) => {
                                 this.state.modalVisible = false
                                 this.setState({
                                     modalVisible: false

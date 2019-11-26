@@ -18,7 +18,7 @@ export default class EditScore extends BaseComponent {
             previousRound: this.props.previousRound,
             // previousRound: null,
             alert: '',
-            winner: '',
+            winner: null,
         }
 
         const { player1, player2 } = this.props
@@ -32,7 +32,10 @@ export default class EditScore extends BaseComponent {
 
     componentDidMount() {
         const { match_score, edit_index } = this.props
-        this.setState({winner: match_score[edit_index]['winner_id']})
+        if(edit_index !== -1){
+            var winner = match_score[edit_index]['winner_id'] ? match_score[edit_index]['winner_id'] : null
+            this.setState({winner})
+        }
     }
 
     setWinner(winner_id){
@@ -65,7 +68,7 @@ export default class EditScore extends BaseComponent {
                 visible={this.props.visible}
                 dialogStyle={{ borderRadius: 0, padding: 16 }}
                 onTouchOutside={() => {
-                    this.props.touchOutside(null);
+                    this.props.touchOutside(null, null);
                 }}
             >
 
@@ -91,7 +94,7 @@ export default class EditScore extends BaseComponent {
 
                                     <TouchableOpacity
                                         onPress={() => {
-                                            this.props.touchOutside(null);
+                                            this.props.touchOutside(null, null);
                                         }} >
 
                                         <Image
