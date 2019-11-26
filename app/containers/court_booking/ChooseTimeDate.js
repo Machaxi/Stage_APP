@@ -129,7 +129,7 @@ class ChooseTimeDate extends BaseComponent {
         this.state.academyId = this.props.navigation.getParam('id', '');
         this.state.academyName = this.props.navigation.getParam('name', '');
         this.getBookingDetails(this.state.today, this.state.selectedSportsId);
-        setTimeout(()=>{
+        setTimeout(() => {
             if (this._carousel)
                 this._carousel.snapToItem(this.state.slideToIndex);
         }, 3000)
@@ -138,9 +138,9 @@ class ChooseTimeDate extends BaseComponent {
     convertTimeStringToMins(time, startOrEndTime = 'startTime') {
         let arr = time.split(":");
         let result = (arr[0] * 60) + (arr[1] * 1);
-        // if(startOrEndTime === 'endTime' && result === 0){
-        //    result = 1440
-        // }
+        if (startOrEndTime === 'endTime' && result === 0) {
+            result = 1440
+        }
         console.log('convertTimeStringToMins input=' + time + ', out=' + result)
         return result
     }
@@ -234,6 +234,7 @@ class ChooseTimeDate extends BaseComponent {
 
                     var courtTimings = [], courtBookings = [], courtAvailability1 = [], minMaxTime = {}, minTime, maxTime, timeRange = {}, allCourtsDeadSlots = [], finalDeadSlots = [], courtAvailability = [], sliderData = [];
 
+                    //if (data.data.courts.length != 0) {
 
                     /* split court data to timings and bookings array and convert time to minutes*/
                     courtTimings = this.convertArrayHoursToMinutes(bookingDetails, 'court_timings');
@@ -284,29 +285,33 @@ class ChooseTimeDate extends BaseComponent {
 
                     /*check if any court is available in the selected timings*/
                     this.checkCourtAvailability();
-
-
-
-                    console.log('courtTimings', courtTimings);
-                    console.log('courtBookings', courtBookings);
-                    console.log('minTime', minTime, this.convertMinsToHrsMins_sql(minTime));
-                    console.log('maxTime', maxTime, this.convertMinsToHrsMins_sql(maxTime));
-                    console.log('allCourtsDeadSlots', allCourtsDeadSlots);
-                    console.log('finalDeadSlots======', finalDeadSlots);
-                    console.log('sliderData======', sliderData);
-
-                    // courtAvailability.map((element, index) => {
-                    //     console.log(element.court_id);
-                    //     element.court_availability.map((element1, index1) => {
-                    //         element1['startTime'] = this.convertMinsToHrsMins_sql(element1.startTime);
-                    //         element1['endTime'] = this.convertMinsToHrsMins_sql(element1.endTime);
-                    //         // console.log('element', element);
-                    //     })
-                    // })
-
-                    this.progress(false);
-
                 }
+                //} else {
+
+                //}
+
+
+
+                console.log('courtTimings', courtTimings);
+                console.log('courtBookings', courtBookings);
+                console.log('minTime', minTime, this.convertMinsToHrsMins_sql(minTime));
+                console.log('maxTime', maxTime, this.convertMinsToHrsMins_sql(maxTime));
+                console.log('allCourtsDeadSlots', allCourtsDeadSlots);
+                console.log('finalDeadSlots======', finalDeadSlots);
+                console.log('sliderData======', sliderData);
+
+                // courtAvailability.map((element, index) => {
+                //     console.log(element.court_id);
+                //     element.court_availability.map((element1, index1) => {
+                //         element1['startTime'] = this.convertMinsToHrsMins_sql(element1.startTime);
+                //         element1['endTime'] = this.convertMinsToHrsMins_sql(element1.endTime);
+                //         // console.log('element', element);
+                //     })
+                // })
+
+                this.progress(false);
+
+                //}
 
             }).catch((response) => {
                 this.progress(false)
@@ -327,9 +332,9 @@ class ChooseTimeDate extends BaseComponent {
         //     bookingDetails.map((element, index) => {
         //         element[name] = [...bookingObj]
         //     })
-            
+
         // }
-        
+
         bookingDetails.map((element, index) => {
 
             var item = {};
@@ -378,7 +383,7 @@ class ChooseTimeDate extends BaseComponent {
                 for (i = flag; i < courtBookings[ind]['court_bookings'].length; i++) {
 
                     var element1 = courtBookings[ind]['court_bookings'][i];
-                    
+
                     if (elseflag > 0) {
                         console.log('in new condition');
                         newflag = i;
@@ -668,22 +673,22 @@ class ChooseTimeDate extends BaseComponent {
 
     getDeadSlotfromAvailableCourt(courtAvailability1, timing) {
         let is_dead = true
-        timing = timing+1
+        timing = timing + 1
         let courtAvailability = courtAvailability1
-        for(let i =0;i<courtAvailability.length;i++){
+        for (let i = 0; i < courtAvailability.length; i++) {
             let element = courtAvailability[i]
 
-            for(let j=0;j<element.court_availability.length;j++){
+            for (let j = 0; j < element.court_availability.length; j++) {
 
                 let element1 = element.court_availability[j]
-                if (timing >= element1.startTime && timing<= element1.endTime) {
+                if (timing >= element1.startTime && timing <= element1.endTime) {
                     is_dead = false
                     break
                 }
             }
         }
-        
-        console.log('getDeadSlotfromAvailableCourt-timing->'+timing+"- is_dead "+is_dead)
+
+        console.log('getDeadSlotfromAvailableCourt-timing->' + timing + "- is_dead " + is_dead)
         return is_dead
     }
 
@@ -749,12 +754,12 @@ class ChooseTimeDate extends BaseComponent {
             temp['title'] = newtime;
             temp['minutes'] = time;
 
-            
-//Rajat work
+
+            //Rajat work
             if (todaySelected && time <= todayPastTime) {
                 temp['deadslot'] = true;
             } else {
-                temp['deadslot'] = this.getDeadSlotfromAvailableCourt(courtAvailability1,time);
+                temp['deadslot'] = this.getDeadSlotfromAvailableCourt(courtAvailability1, time);
             }
 
             if (index % 2 == 0)
@@ -765,17 +770,24 @@ class ChooseTimeDate extends BaseComponent {
             //if (time != this.state.maxTime)
             sliderData.push(temp);
             index++;
-            
+
             // console.log('slidePointer', slidePointer);
-            if(!temp['deadslot'] && slidePointer){
-                // console.log('index is', index);
-                this.setState({ slideToIndex: index-5 }, () => {
-                    if(this._carousel)
-                        this._carousel.snapToItem(index-5);
+            if (!temp['deadslot'] && slidePointer) {
+                console.log('index isssssssssssssssssssssssssssss', index);
+                this.setState({ slideToIndex: index - 5 }, () => {
+                    if (this._carousel)
+                        this._carousel.snapToItem(index - 5);
                 });
                 slidePointer = false;
+                console.log('sliderData', sliderData)
+                var timing = {};
+                timing['startTime'] = sliderData[index - 1].minutes;
+                timing['endTime'] = sliderData[index - 1].minutes + this.state.selectedDuration;
+                this.setState({
+                    selectedTimeRange: timing,
+                })
             }
-                
+
         };
 
         if (index != 0) {
@@ -811,65 +823,72 @@ class ChooseTimeDate extends BaseComponent {
     checkCourtAvailability() {
 
         var courts = [];
-
-        var selectedTimeRange = this.state.selectedTimeRange;
-        console.log('selecedTime', JSON.stringify(selectedTimeRange))
         var msg = '';
 
-        console.log('this.state.finalDeadSlots', this.state.finalDeadSlots);
-        let todaySelected = this.getTodayTime()
-        let todayPastTime = -1
-        if (todaySelected) {
-            var today = new Date();
-            let today_time = moment(today).format("HH:mm")
-            console.log('todaySelected=>time', today_time)
-            todayPastTime = this.convertTimeStringToMins(today_time)
-            console.log('todaySelected=>format_time', todayPastTime)
+        if (this.state.courtBookingDetails.length == 0) {
+            msg = 'Sorry, no courts available for today.';
         }
+        else {
+            var selectedTimeRange = this.state.selectedTimeRange;
+            console.log('selecedTime', JSON.stringify(selectedTimeRange))
 
-        const finalDeadSlots = this.state.finalDeadSlots
-        console.log('checkCourtAvailability->finalDeadSlots', JSON.stringify(finalDeadSlots))
-        if (finalDeadSlots == undefined /*|| finalDeadSlots.length == block_array*/) {
-            msg = 'Sorry, all courts are closed for the selected time and duration.';
+            console.log('this.state.finalDeadSlots', this.state.finalDeadSlots);
+            let todaySelected = this.getTodayTime()
+            let todayPastTime = -1
+            if (todaySelected) {
+                var today = new Date();
+                let today_time = moment(today).format("HH:mm")
+                console.log('todaySelected=>time', today_time)
+                todayPastTime = this.convertTimeStringToMins(today_time)
+                console.log('todaySelected=>format_time', todayPastTime)
+            }
 
-        } else
-            finalDeadSlots.map((element, index) => {
-                console.log('finalDeadSlots=>', JSON.stringify(finalDeadSlots));
-                console.log(selectedTimeRange['startTime']);
-                console.log(selectedTimeRange['endTime']);
-                if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime || (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['startTime'] < element.endTime) || (selectedTimeRange['endTime'] <= element.startTime && selectedTimeRange['endTime'] > element.startTime)) {
-                    console.log('in iffffffffffffffffffff');
-                    msg = 'Sorry, all courts are closed for the selected time and duration.';
-                }
-            })
+            const finalDeadSlots = this.state.finalDeadSlots
+            console.log('checkCourtAvailability->finalDeadSlots', JSON.stringify(finalDeadSlots))
+            if (finalDeadSlots == undefined /*|| finalDeadSlots.length == block_array*/) {
+                msg = 'Sorry, all courts are closed for the selected time and duration.';
 
-        console.log('checkCourtAvailability->courtAvailability', this.state.courtAvailability);
-        console.log('checkCourtAvailability->msg', msg);
-
-        if (msg == '') {
-            console.log('checkCourtAvailability->CourtAvailability', JSON.stringify(this.state.courtAvailability))
-            this.state.courtAvailability.map((element, index) => {
-                element.court_availability.map((element1, index1) => {
-
-                    console.log('selectedTimeRange.startTime', selectedTimeRange['startTime'])
-                    console.log('selectedTimeRange.endTime', selectedTimeRange['endTime'])
-
-                    if (todaySelected && selectedTimeRange['startTime'] < todayPastTime) {
-
-                    }
-                    else if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
-                        console.log(element1.startTime)
-                        console.log(element1.endTime)
-                        element['selected'] = false;
-                        console.log('in if');
-                        courts.push(element);
+            } else
+                finalDeadSlots.map((element, index) => {
+                    console.log('finalDeadSlots=>', JSON.stringify(finalDeadSlots));
+                    console.log(selectedTimeRange['startTime']);
+                    console.log(selectedTimeRange['endTime']);
+                    if (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['endTime'] <= element.endTime || (selectedTimeRange['startTime'] >= element.startTime && selectedTimeRange['startTime'] < element.endTime) || (selectedTimeRange['endTime'] <= element.startTime && selectedTimeRange['endTime'] > element.startTime)) {
+                        console.log('in iffffffffffffffffffff');
+                        msg = 'Sorry, all courts are closed for the selected time and duration.';
                     }
                 })
-            })
-            console.log('courts=>', JSON.stringify(courts))
-            if (courts.length == 0) {
-                msg = 'Sorry, no courts available for selected time and duration.';
+
+            console.log('checkCourtAvailability->courtAvailability', this.state.courtAvailability);
+            console.log('checkCourtAvailability->msg', msg);
+
+            if (msg == '') {
+                console.log('checkCourtAvailability->CourtAvailability', JSON.stringify(this.state.courtAvailability))
+                this.state.courtAvailability.map((element, index) => {
+                    element.court_availability.map((element1, index1) => {
+
+                        console.log('selectedTimeRange.startTime', selectedTimeRange['startTime'])
+                        console.log('selectedTimeRange.endTime', selectedTimeRange['endTime'])
+
+                        if (todaySelected && selectedTimeRange['startTime'] < todayPastTime) {
+
+                        }
+                        else if (selectedTimeRange['startTime'] >= element1.startTime && selectedTimeRange['endTime'] <= element1.endTime) {
+                            console.log(element1.startTime)
+                            console.log(element1.endTime)
+                            element['selected'] = false;
+                            console.log('in if');
+                            courts.push(element);
+                        }
+                    })
+                })
+                console.log('courts=>', JSON.stringify(courts))
+                if (courts.length == 0) {
+                    msg = 'Sorry, no courts available for selected time and duration.';
+                }
+
             }
+
 
         }
 
@@ -986,7 +1005,7 @@ class ChooseTimeDate extends BaseComponent {
         let temp_new_array = []
         for (let i = 0; i < newArray; i++) {
             let obj = newArray[i]
-            if (obj.startTime != obj.endTime ) {
+            if (obj.startTime != obj.endTime) {
                 temp_new_array.push(obj)
             }
         }
@@ -1212,7 +1231,7 @@ class ChooseTimeDate extends BaseComponent {
         let unique = [...new Set(courtIds)];
         courtIds = unique
 
-        let unique_courtNames =  [...new Set(courtNames)]
+        let unique_courtNames = [...new Set(courtNames)]
         courtNames = unique_courtNames
 
         console.log('totalCost', totalCost);
@@ -1740,7 +1759,7 @@ class ChooseTimeDate extends BaseComponent {
                         </View>
                         <View style={{ width: '48%' }}>
                             {
-                                this.state.selectedCourtIds.length == 0 || this.state.totalCost==0?
+                                this.state.selectedCourtIds.length == 0 || this.state.totalCost == 0 ?
                                     <Text style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} onPress={() => {
                                         //this.showPaymentModal();
                                     }}>Pay Now</Text> :
@@ -1912,8 +1931,8 @@ class ChooseTimeDate extends BaseComponent {
                                     </View>
                                     <View style={styles.paymentValueOuter}>
                                         <View style={styles.paymentLabelWidth}><Text style={defaultStyle.regular_text_14}>{this.state.academyName}</Text></View>
-                                        <View style={styles.paymentLabelWidth}><Text 
-                                        style={styles.paymentValue}>{this.state.selectedCourtNames.join(',')}</Text></View>
+                                        <View style={styles.paymentLabelWidth}><Text
+                                            style={styles.paymentValue}>{this.state.selectedCourtNames.join(',')}</Text></View>
                                     </View>
                                     <View style={styles.paymentLabelOuter}>
                                         <View style={styles.paymentLabelWidth}><Text style={styles.paymentLabel}>Date</Text></View>
