@@ -20,6 +20,7 @@ import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RNPickerSelect from 'react-native-picker-select';
+import InfoMessage from '../../components/custom/InfoMessage';
 
 
 const month = [
@@ -63,7 +64,8 @@ class EditProfile extends BaseComponent {
             totalMonth: '',
             review: '',
             totalExperience: '',
-            coach_id: ''
+            coach_id: '',
+            showMessage: false
         }
         this.year = []
         for(var i=0; i<50; i++){
@@ -395,6 +397,9 @@ class EditProfile extends BaseComponent {
             });
     }
 
+    showMessage(){
+        this.setState({showMessage: true})
+    }
     render() {
 
         //console.log('base64img => ', base64img)
@@ -590,13 +595,29 @@ class EditProfile extends BaseComponent {
                                     marginTop: 10
                                 }}
                             >
-                                <Text style={style.text}>Hide Stats</Text>
+                                <Text style={[style.text, {marginRight:5}]}>Hide Stats</Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.showMessage()
+                                    }}
+                                >
+                                    <Image 
+                                        resizeMode="contain"
+                                        style={{
+                                            width: 15,
+                                            height: 15,
+                                        }}
+                                        source={require('../../images/information.png')}
+                                    />
+                                </TouchableOpacity>
                                 <Switch 
                                     onValueChange={(value) => this.setState({hideUser: value})}
                                     value={this.state.hideUser}
                                     color='#67BAF5'
+                                    style={{marginLeft: 20}}
                                     // trackColor={{false: '#DFDFDF', true: '#67BAF5'}}
                                 />
+                                
                             </View>
                         }
                         {
@@ -607,7 +628,15 @@ class EditProfile extends BaseComponent {
                                     marginTop: 12,
                                     justifyContent: 'space-around'
                                 }}>
-                                    <View style={{width: '40%',}}>
+                                    <Text style={[style.text, {width: '35%'}]}>Years</Text>
+                                    <Text style={[style.text, {width: '35%'}]}>Months</Text>
+                                </View>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    marginTop: 12,
+                                    justifyContent: 'space-around'
+                                }}>
+                                    <View style={{width: '35%',}}>
                                         <RNPickerSelect
                                             placeholder={selectYear}
                                             items={this.year}
@@ -627,7 +656,7 @@ class EditProfile extends BaseComponent {
                                         }}></View>
                                     </View>
 
-                                    <View style={{width: '40%'}}>
+                                    <View style={{width: '35%'}}>
                                         <RNPickerSelect
                                             placeholder={selectMonth}
                                             items={month}
@@ -663,6 +692,17 @@ class EditProfile extends BaseComponent {
                         {/* <View style={{ flex: 1, marginTop: -20, width: '80%' }}>
                             <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer')}> Skip </SwitchButton>
                         </View> */}
+
+                        {
+                            
+                            <InfoMessage 
+                                visible={this.state.showMessage}
+                                message="Please note that if you choose to hide your stats, you won’t be able to see other player stats as well."
+                                touchOutside={()=>{
+                                    this.setState({showMessage: false})
+                                }}
+                            />
+                        }
 
                         {Platform.OS == 'ios' ?
                             <KeyboardSpacer />

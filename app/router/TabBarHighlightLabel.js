@@ -19,8 +19,8 @@ export default TabBarHighlightLabel = ({
   const config = {
     activeIndicatorColor: '#667DDB',
     inactiveIndicatorColor: 'transparent',
-    activeLabelColor: '#333333',
-    inactiveLabelColor: "#333333",//inactiveLabelColor || '#CCCCCC',
+    activeLabelColor: '#696969',
+    inactiveLabelColor: '#696969',//inactiveLabelColor || '#CCCCCC',
     activeIcon: '../images/Home.png'
   };
 
