@@ -971,7 +971,6 @@ class TournamentScorer extends BaseComponent {
                                                         alignItems: 'center',
                                                         alignContent: 'center',
                                                         marginTop: 5,
-                                                        marginLeft: 40,
                                                     }}
                                                 >
                                                     <CustomeButtonB onPress={
@@ -1064,7 +1063,6 @@ class TournamentScorer extends BaseComponent {
                                                         alignItems: 'center',
                                                         alignContent: 'center',
                                                         marginTop: 5,
-                                                        marginLeft: 40,
                                                     }}
                                                 >
                                                     <CustomeButtonB onPress={

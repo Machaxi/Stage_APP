@@ -42,7 +42,7 @@ const Switcher = createStackNavigator({
     CurrentBooking: {
         screen: CurrentBooking,
         navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
+            title: 'Book and Play',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showDrawer={false}
@@ -60,7 +60,7 @@ const Switcher = createStackNavigator({
     CourtAcademyListing: {
         screen: CourtAcademyListing,
         navigationOptions: ({ navigation }) => ({
-            title: 'Book and play',
+            title: 'Book and Play',
             headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showBackAction={true}
@@ -273,7 +273,7 @@ const Switcher = createStackNavigator({
     CurrentBooking: {
         screen: CurrentBooking,
         navigationOptions: ({ navigation }) => ({
-          title: 'Book and play',
+          title: 'Book and Play',
           headerTitleStyle: style.headerStyle,
           headerLeft: <NavigationDrawerStructure navigationProps={navigation}
             showDrawer={false}
@@ -291,7 +291,7 @@ const Switcher = createStackNavigator({
       CourtAcademyListing: {
         screen: CourtAcademyListing,
         navigationOptions: ({ navigation }) => ({
-          title: 'Book and play',
+          title: 'Book and Play',
           headerTitleStyle: style.headerStyle,
           headerLeft: <NavigationDrawerStructure navigationProps={navigation}
             showBackAction={true}
@@ -309,7 +309,7 @@ const Switcher = createStackNavigator({
       ChooseTimeDate: {
         screen: ChooseTimeDate,
         navigationOptions: ({ navigation }) => ({
-          title: 'Book and play',
+          title: 'Book and Play',
           headerTitleStyle: style.headerStyle,
           headerLeft: <NavigationDrawerStructure navigationProps={navigation}
             showBackAction={true}

@@ -19,6 +19,7 @@ import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import InfoMessage from '../../components/custom/InfoMessage';
 
 class EditOtherProfile extends BaseComponent {
 
@@ -37,6 +38,7 @@ class EditOtherProfile extends BaseComponent {
             contentType: '',
             is_image_processed: false,
             hideUser: false,
+            showMessage: false
         }
 
         let data = this.props.navigation.getParam('data')
@@ -300,6 +302,9 @@ class EditOtherProfile extends BaseComponent {
         })
     }
 
+    showMessage(){
+        this.setState({showMessage: true})
+    }
     render() {
 
         const is_image_processed = false
@@ -447,7 +452,7 @@ class EditOtherProfile extends BaseComponent {
                         >
                             <Text style={style.text}>Birth Date</Text>
                             <DatePicker
-                                style={{ width: 200, borderWidth: 0 }}
+                                style={{ borderWidth: 0 }}
                                 date={this.state.birthdate}
                                 mode="date"
                                 placeholder="select date"
@@ -459,7 +464,7 @@ class EditOtherProfile extends BaseComponent {
                                 customStyles={{
 
                                     dateInput: {
-                                        marginLeft: 36,
+                                        marginLeft: 0,
                                         borderWidth: 0
                                     }
                                     // ... You can check the source to find the other keys.
@@ -476,19 +481,45 @@ class EditOtherProfile extends BaseComponent {
                                 marginTop: 10
                             }}
                         >
-                            <Text style={style.text}>Hide Stats</Text>
+                            <Text style={[style.text, {marginRight:5}]}>Hide Stats</Text>
+                            <TouchableOpacity
+                                    onPress={() => {
+                                        this.showMessage()
+                                    }}
+                                >
+                                    <Image 
+                                        resizeMode="contain"
+                                        style={{
+                                            width: 15,
+                                            height: 15,
+                                        }}
+                                        source={require('../../images/information.png')}
+                                    />
+                                </TouchableOpacity>
                             <Switch 
                                 onValueChange={(value) => this.setState({hideUser: value})}
                                 value={this.state.hideUser}
                                 color='#67BAF5'
+                                style={{marginLeft: 20}}
                                 // trackColor={{false: '#DFDFDF', true: '#67BAF5'}}
                             />
                         </View>
                             
                         <View style={{ flex: 1, margin: 20, width: '80%' }}>
-                            <CustomeButtonB onPress={() => this.saveUserProfile()}> Update </CustomeButtonB>
+                            <CustomeButtonB onPress={() => this.saveUserProfile()}> Save </CustomeButtonB>
                         </View>
                         
+                        {
+                            
+                            <InfoMessage 
+                                visible={this.state.showMessage}
+                                message="Please note that if you choose to hide your stats, you won’t be able to see other player stats as well."
+                                touchOutside={()=>{
+                                    this.setState({showMessage: false})
+                                }}
+                            />
+                        }
+
                         {Platform.OS == 'ios' ?
                             <KeyboardSpacer />
                         : null}

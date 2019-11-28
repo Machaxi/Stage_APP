@@ -559,13 +559,14 @@ class EditProfile extends BaseComponent {
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                marginTop: 10
+                                marginTop: 10,
+                                marginBottom: -5
                             }}
                         >
                             <Text style={style.text}>Birth Date</Text>
 
                             <DatePicker
-                                style={{ width: 200, borderWidth: 0 }}
+                                style={{ borderWidth: 0, borderBottomWidth: 1, borderBottomColor: '#DFDFDF' }}
                                 date={this.state.birthdate}
                                 mode="date"
                                 placeholder="select date"
@@ -577,7 +578,7 @@ class EditProfile extends BaseComponent {
                                 customStyles={{
 
                                     dateInput: {
-                                        marginLeft: 36,
+                                        marginLeft: 0,
                                         borderWidth: 0
                                     }
                                     // ... You can check the source to find the other keys.
@@ -622,23 +623,23 @@ class EditProfile extends BaseComponent {
                         }
                         {
                             this.state.user_type === "COACH" &&
-                            <View style={{width: '80%', alignItems: 'center'}}>
+                            <View style={{width: '75%', alignItems: 'center'}}>
+                                <Text style={[style.text, {marginTop: 10}]}>Experience</Text>
                                 <View style={{
                                     flexDirection: 'row',
-                                    marginTop: 12,
+                                    marginTop: 10,
                                     justifyContent: 'space-around'
                                 }}>
-                                    <Text style={[style.text, {width: '35%'}]}>Years</Text>
-                                    <Text style={[style.text, {width: '35%'}]}>Months</Text>
+                                    <Text style={[style.text, {width: '25%'}]}>Years</Text>
+                                    <Text style={[style.text, {width: '25%'}]}>Months</Text>
                                 </View>
                                 <View style={{
                                     flexDirection: 'row',
-                                    marginTop: 12,
                                     justifyContent: 'space-around'
                                 }}>
-                                    <View style={{width: '35%',}}>
+                                    <View style={{width: '25%',}}>
                                         <RNPickerSelect
-                                            placeholder={selectYear}
+                                            placeholder={{}}
                                             items={this.year}
                                             onValueChange={(value) => this.setState({totalYear: value})}
                                             style={pickerSelectStyles}
@@ -656,9 +657,9 @@ class EditProfile extends BaseComponent {
                                         }}></View>
                                     </View>
 
-                                    <View style={{width: '35%'}}>
+                                    <View style={{width: '25%'}}>
                                         <RNPickerSelect
-                                            placeholder={selectMonth}
+                                            placeholder={{}}
                                             items={month}
                                             onValueChange={(value) => this.setState({totalMonth: value})}
                                             style={pickerSelectStyles}
@@ -676,17 +677,27 @@ class EditProfile extends BaseComponent {
                                         }}></View>
                                     </View>
                                 </View>
-                                <TextInput
-                                    numberOfLines={3}
-                                    style={styles.aboutCoach}
-                                    onChangeText={(review) => this.setState({ review })}
-                                    value={this.state.review}
-                                    multiline={true}
-                                    placeholder={"About You"}
-                                />
+                                <View
+                                    style={{
+                                        width: '100%',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginTop: 12,
+                                    }}
+                                >
+                                    <Text style={style.text}>Certification / About me</Text>
+                                    <TextInput
+                                        numberOfLines={3}
+                                        style={styles.aboutCoach}
+                                        onChangeText={(review) => this.setState({ review })}
+                                        value={this.state.review}
+                                        multiline={true}
+                                        // placeholder={"About You"}
+                                    />
+                                </View>
                             </View>
                         }
-                        <View style={{ flex: 1, margin: 20, width: '80%' }}>
+                        <View style={{ flex: 1, margin: 20, width: '50%' }}>
                             <CustomeButtonB onPress={() => this.saveUserProfile()}> Save </CustomeButtonB>
                         </View>
                         {/* <View style={{ flex: 1, marginTop: -20, width: '80%' }}>

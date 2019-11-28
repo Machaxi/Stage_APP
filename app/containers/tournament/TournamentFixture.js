@@ -95,6 +95,7 @@ class TournamentFixture extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.firstRender = false;
         this.state = {
             array: [],
             data: null,
@@ -143,16 +144,32 @@ class TournamentFixture extends BaseComponent {
         console.log('Tournament Fixture -> ' + data)
         this.init(data)
 
-        this.refreshEvent = Events.subscribe('REFRESH_FIXTURE', (data) => {
 
-            //alert('REFRESH_FIXTURE')
-            //console.log('REFRESH_FIXTURE->',JSON.stringify(data))
-            //this.init(JSON.stringify(data))
-        });
+        this.refreshEvent = Events.subscribe('REFRESH_FIXTURE', (data) => {
+            // alert('REFRESH_FIXTURE')
+            console.log('REFRESH_FIXTURE->', JSON.stringify(data))
+            this.init(JSON.stringify(data))
+        })
 
         // setTimeout(() => {
         //     Events.publish('FIXTURE_CALL_API');
         // }, 20000)
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                if (this.firstRender) {
+                    Events.publish('FIXTURE_CALL_API');
+                } else {
+                    this.firstRender = true
+                }
+            }
+        )
+
+    }
+
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
     }
 
     init(data) {
@@ -285,43 +302,6 @@ class TournamentFixture extends BaseComponent {
 
     }
 
-
-    getFixtureData() {
-
-        let tournament_id = this.state.tournament_id
-
-        getData('header', (value) => {
-
-            this.props.getTournamentFixture(value, tournament_id).then(() => {
-
-                let data = this.props.data.data
-                console.log(' getTournamentFixture ' + JSON.stringify(data));
-
-                let success = data.success
-                if (success) {
-
-                    let tournament_fixtures = data.data.tournament_fixtures
-                    if (tournament_fixtures != null && tournament_fixtures.length > 0) {
-                        console.log(' tournament_fixtures ' + JSON.stringify(data.data.tournament_fixtures));
-                        this.setState({
-                            tournament_fixtures: tournament_fixtures,
-                            is_show_dialog: true
-
-                        })
-                    }
-                    else {
-                        alert('No data found.')
-                    }
-
-                }
-
-            }).catch((response) => {
-                console.log(response);
-            })
-        })
-
-    }
-
     showFixture(data) {
 
         // if (id == undefined) {
@@ -342,7 +322,7 @@ class TournamentFixture extends BaseComponent {
         if (data != null) {
             let fixture_data = data.tournament_matches
 
-            console.log('fixture array ', fixture_data)
+            console.log('fixture array ', JSON.stringify(fixture_data))
 
             let playerArray = []
             let firstArray = []
@@ -462,11 +442,12 @@ class TournamentFixture extends BaseComponent {
                                 console.log('temp_player_description=>', JSON.stringify(temp_player1))
 
                                 const temp_obj = fixture_data[last_key]
-                                //console.log('TempObj => ', JSON.stringify(temp_obj))
+                                console.log('TempObj => ', JSON.stringify(temp_obj))
                                 //temp_player1.tournament_match_scores = temp_obj.player1_match.tournament_match_scores == undefined ? [] : temp_obj.player1_match.tournament_match_scores
                                 //temp_player2.tournament_match_scores = temp_obj.player2_match.tournament_match_scores == undefined ? [] : temp_obj.player2_match.tournament_match_scores
                                 temp_player1.tournament_match_scores = this.getMatchScoreById(obj.player1_match.id, temp_obj)
                                 temp_player2.tournament_match_scores = this.getMatchScoreById(obj.player1_match.id, temp_obj)
+                                console.log('temp_player1.tournament_match_scores', JSON.stringify(temp_player1.tournament_match_scores))
 
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
@@ -491,11 +472,12 @@ class TournamentFixture extends BaseComponent {
 
 
                                 const temp_obj = fixture_data[last_key]
+                                console.log('TempObj1 => ' + last_key, JSON.stringify(temp_obj))
                                 //temp_player1.tournament_match_scores = temp_obj.player1_match.tournament_match_scores == undefined ? [] : temp_obj.player1_match.tournament_match_scores
                                 //temp_player2.tournament_match_scores = temp_obj.player2_match.tournament_match_scores == undefined ? [] : temp_obj.player2_match.tournament_match_scores
                                 temp_player1.tournament_match_scores = this.getMatchScoreById(obj.player2_match.id, temp_obj)
                                 temp_player2.tournament_match_scores = this.getMatchScoreById(obj.player2_match.id, temp_obj)
-
+                                console.log('temp_player1.tournament_match_scores', JSON.stringify(temp_player1.tournament_match_scores))
                                 if (!this.isPlayerExistsInArray(firstArray, temp_player1.id)) {
                                     firstArray.push(temp_player1)
                                 }
@@ -656,24 +638,43 @@ class TournamentFixture extends BaseComponent {
     }
 
     getMatchScoreById(matchid, array) {
-        console.log('getMatchScoreById => ' + matchid)
-        console.log('getMatchScoreById => ' + JSON.stringify(array))
+        console.log('getMatchScoreById-debug => debug 1 ' + matchid)
+        console.log('getMatchScoreById => debug ' + matchid + JSON.stringify(array))
 
-        if (array[0].player1_match) {
-            if (array[0].player1_match.id == matchid) {
-                return array[0].player1_match.tournament_match_scores
+        let data =  this.state.data
+        let fixture_data = data.tournament_matches
+        for (var key in fixture_data) {
+            if (fixture_data.hasOwnProperty(key)) {
+
+
+                array = fixture_data[key]
+
+                for (let i = 0; i < array.length; i++) {
+
+                    if (array[i].player1_match && array[i].player1_match.id == matchid) {
+                        console.log('getMatchScoreById-debug =>' + matchid + ' player1_match ' + JSON.stringify(array[i].player1_match))
+
+                        console.log('compare match id player1_match '+array[i].player2_match.id+"== "+matchid)
+
+                       
+                            console.log('compare match id player1_match-true'+array[i].player1_match.id+"== "+matchid)
+                            return array[i].player1_match.tournament_match_scores
+                       
+                    }
+                    else if (array[i].player2_match && array[i].player2_match.id == matchid) {
+                        console.log('getMatchScoreById-debug =>' + matchid + ' player2_match ' + JSON.stringify(array[i].player2_match))
+                        console.log('compare match id '+array[i].player2_match.id+"== "+matchid)
+                        
+                            console.log('compare match id player2_match-true '+array[i].player2_match.id+"== "+matchid)
+
+                            return array[i].player2_match.tournament_match_scores
+                      
+                    }
+                }
             }
         }
-        else {
-            return []
-        }
 
-        if (array[0].player2_match) {
-            if (array[0].player2_match.id == matchid) {
-                return array[0].player2_match.tournament_match_scores
-            }
-        }
-        else return []
+        return []
     }
 
 
@@ -1488,7 +1489,7 @@ class TournamentFixture extends BaseComponent {
 
                     container.push(
                         <Text
-                        
+
                             onPress={() => {
                                 // let id = array[i][j].id
                                 // console.warn("playerid : " + id)

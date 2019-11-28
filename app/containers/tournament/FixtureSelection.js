@@ -67,8 +67,10 @@ class FixtureSelection extends BaseComponent {
         this.willFocusSubscription = this.props.navigation.addListener(
             'willFocus',
             () => {
-                this.state.tournament_id = this.props.navigation.getParam('id')
-                this.getFixtureData()
+                this.setState({selected_tournament_category: '', fixture_type: []}, () => {
+                    this.state.tournament_id = this.props.navigation.getParam('id')
+                    this.getFixtureData()
+                })
             }
         );
 
@@ -77,7 +79,7 @@ class FixtureSelection extends BaseComponent {
             this.getFixtureData(() => {
 
                 console.log('selected_f_type=>', JSON.stringify(this.state.selected_f_type))
-                alert('FIXTURE_CALL_API')
+                // alert('FIXTURE_CALL_API')
                 let previous_selected = this.state.selected_f_type
                 let latest_data = null;
                 let tournament_fixtures = this.state.tournament_fixtures

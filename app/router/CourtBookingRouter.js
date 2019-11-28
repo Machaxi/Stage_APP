@@ -28,7 +28,7 @@ const BookPlayModule = createStackNavigator({
   CurrentBooking: {
     screen: CurrentBooking,
     navigationOptions: ({ navigation }) => ({
-      title: 'Book and play',
+      title: 'Book and Play',
       headerTitleStyle: style.headerStyle,
       headerLeft: <NavigationDrawerStructure navigationProps={navigation}
         showDrawer={true}
@@ -46,7 +46,7 @@ const BookPlayModule = createStackNavigator({
   CourtAcademyListing: {
     screen: CourtAcademyListing,
     navigationOptions: ({ navigation }) => ({
-      title: 'Book and play',
+      title: 'Book and Play',
       headerTitleStyle: style.headerStyle,
       headerLeft: <NavigationDrawerStructure navigationProps={navigation}
         showBackAction={true}
@@ -64,7 +64,7 @@ const BookPlayModule = createStackNavigator({
   ChooseTimeDate: {
     screen: ChooseTimeDate,
     navigationOptions: ({ navigation }) => ({
-      title: 'Book and play',
+      title: 'Book and Play',
       headerTitleStyle: style.headerStyle,
       headerLeft: <NavigationDrawerStructure navigationProps={navigation}
         showBackAction={true}

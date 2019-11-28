@@ -39,7 +39,7 @@ export default TabBarHighlightLabel = ({
       flex: 0,
       width: '100%',
       textAlign: 'center',
-      marginBottom: 2,
+      marginBottom: 0,
       justifyContent: 'center',
       fontFamily: 'Quicksand-Medium',
       fontSize: 10,
@@ -48,7 +48,7 @@ export default TabBarHighlightLabel = ({
     labelIndicator: {
       flex: 0,
       width: 55,
-      marginBottom: 2,
+      marginBottom: 1,
       height: 4,
       justifyContent: 'flex-end',
       backgroundColor: indicatorColor

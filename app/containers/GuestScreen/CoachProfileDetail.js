@@ -501,7 +501,7 @@ class CoachProfileDetail extends BaseComponent {
                             {
                                 color: '#A3A5AE', paddingTop: 8,
                                 paddingBottom: 6
-                            }]}>Certifications</Text>
+                            }]}>Certification / About me</Text>
 
                             <ReadMoreText
                                 limitLines={3}
