@@ -42,46 +42,63 @@ class TournamentScorer extends BaseComponent {
 
     componentDidMount() {
         const { match_id } = this.state
-        getData('header', (value) => {
-            this.state.header = value
-            this.props.getMatchScore(value, match_id).then(() => {
-                let data = this.props.data.data
-                console.log(' getMatchScore ' + JSON.stringify(data));
-                let success = data.success
-                if (success) {
+        if(match_id==undefined){
 
-                    if (data.data.player1 && data.data.player2) {
+            Alert.alert(
+                '',
+                `Previous match is not played. Can't give the score`,
+                [
+                    {
+                        text: 'OK', onPress: () => {
+                            this.props.navigation.goBack()
+                        }
+                    },
+                ],
+                { cancelable: false },
+            );
 
-                        this.setState({
-                            match_scores: data.data.match_scores,
-                            player1: data.data.player1,
-                            player2: data.data.player2,
-                            winner: data.data.winner
-                        })
-
-                        console.log('player => ', JSON.stringify(this.state.player1))
-                    }else{
-                        Alert.alert(
-                            '',
-                            'No Players detail found.',
-                            [
-                                {
-                                    text: 'OK', onPress: () => {
-                                        this.props.navigation.goBack()
-                                    }
-                                },
-                            ],
-                            { cancelable: false },
-                        );
+        }else{
+            getData('header', (value) => {
+                this.state.header = value
+                this.props.getMatchScore(value, match_id).then(() => {
+                    let data = this.props.data.data
+                    console.log(' getMatchScore ' + JSON.stringify(data));
+                    let success = data.success
+                    if (success) {
+    
+                        if (data.data.player1 && data.data.player2) {
+    
+                            this.setState({
+                                match_scores: data.data.match_scores,
+                                player1: data.data.player1,
+                                player2: data.data.player2,
+                                winner: data.data.winner
+                            })
+    
+                            console.log('player => ', JSON.stringify(this.state.player1))
+                        }else{
+                            Alert.alert(
+                                '',
+                                'No Players detail found.',
+                                [
+                                    {
+                                        text: 'OK', onPress: () => {
+                                            this.props.navigation.goBack()
+                                        }
+                                    },
+                                ],
+                                { cancelable: false },
+                            );
+                        }
+    
+    
                     }
-
-
-                }
-
-            }).catch((response) => {
-                console.log(response);
+    
+                }).catch((response) => {
+                    console.log(response);
+                })
             })
-        })
+        }
     }
 
     setModalVisible(visible, index=-1) {
