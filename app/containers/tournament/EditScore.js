@@ -304,7 +304,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: '#D3D3D3',
         borderRadius: 4,
         color: 'black',
-        width: 200,
+        width: 100,
         height: 40,
         marginBottom: 4,
         fontFamily: 'Quicksand-Regular',
