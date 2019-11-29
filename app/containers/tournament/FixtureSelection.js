@@ -102,16 +102,16 @@ class FixtureSelection extends BaseComponent {
 
     componentWillUnmount() {
         this.willFocusSubscription.remove();
+        this.refreshEvent.remove()
     }
 
     getFixtureData(callback) {
-
         let tournament_id = this.state.tournament_id
+        console.log('tournament_id=>', tournament_id);
 
         getData('header', (value) => {
-
+            
             this.props.getTournamentFixture(value, tournament_id).then(() => {
-
                 let data = this.props.data.data
                 console.log(' getTournamentFixture ' + JSON.stringify(data));
 
@@ -444,11 +444,13 @@ class FixtureSelection extends BaseComponent {
                                                             onPress={() => {
                                                                 this.setState({
                                                                     selected_f_type: item
-                                                                })
-                                                                this.props.navigation.navigate('TournamentFixture', {
+                                                                },()=>{
+                                                                    this.props.navigation.navigate('TournamentFixture', {
                                                                     data: JSON.stringify(item),
                                                                     title: name + item.name
                                                                 })
+                                                                })
+                                                                
                                                             }}
                                                         >
 

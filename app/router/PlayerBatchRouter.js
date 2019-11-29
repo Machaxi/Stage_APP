@@ -12,6 +12,7 @@ import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import CoachListing from '../containers/GuestScreen/CoachListing'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
+import ProgressPerSession from '../containers/CoachScreen/Batch/ProgressPerSession'
 
 const userBatchModule = createStackNavigator({
 
@@ -69,6 +70,22 @@ const userBatchModule = createStackNavigator({
 
         })
     },
+
+    // ProgressPerSession: {
+    //     screen: ProgressPerSession,
+    //     navigationOptions: ({ navigation }) => ({
+    //         title: "Players Progress Per Session",
+    //         headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+    //         headerRight: <RightMenuToolbar navigationProps={navigation}
+    //             navigation={navigation} showHome={false} />,
+    //         headerTitleStyle: style.headerStyle,
+    //         headerStyle: {
+    //             backgroundColor: '#FFFFFF',
+    //         },
+
+    //     })
+    // },
+
     PlayerAttendance: {
         screen: PlayerAttendance,
         navigationOptions: ({ navigation }) => ({

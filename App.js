@@ -127,21 +127,35 @@ client.interceptors.response.use(response => {
                     logs_data = JSON.stringify(logs_data, null, 2);
                   }
                
-                console.log('Crash Object -> ', JSON.stringify(obj))
+                console.log('Crash Object -> ', JSON.stringify(logs_data))
 
-                firebase.crashlytics().recordCustomError(
-                    'Custom Error',
-                    //'Oh No!',
-                    {
-                        className: 'Api Error',
-                        fileName: 'Api',
-                        functionName: 'render',
-                        lineNumber: 81,
-                        additional:logs_data
-                    }
-                );
+                if(Platform.OS === 'android'){
+                    firebase.crashlytics().recordCustomError(
+                        'Custom Error',
+                        'Oh No!',
+                        [{
+                            className: 'Api Error',
+                            fileName: 'Api',
+                            functionName: 'render',
+                            lineNumber: 81,
+                            additional:logs_data
+                        }]
+                    );
+                } else{
+                    firebase.crashlytics().recordCustomError(
+                        'Custom Error',
+                        'Oh No!',
+                        {
+                            className: 'Api Error',
+                            fileName: 'Api',
+                            functionName: 'render',
+                            lineNumber: 81,
+                            additional:logs_data
+                        }
+                    );
+                }
             } catch (err) {
-                console.log('Error in sending data.')
+                console.log('Error in sending data.', err)
             }
 
 

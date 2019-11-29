@@ -447,11 +447,48 @@ class BatchDetails extends BaseComponent {
                                         </View>
                                     </View>
                                 </View>
-
-
                             </TouchableOpacity>
                         </CustomeCard>
                     </View>
+
+                    {/* <View >
+                        <CustomeCard>
+                            <TouchableOpacity onPress={() => {
+
+                                //console.warn("Touch Press")
+                                this.props.navigation.navigate('ProgressPerSession')
+
+                            }}>
+                                <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
+
+
+                                    <View style={{ flex: 1 }}>
+
+                                        <View style={{
+                                            marginTop: 10,
+                                            flex: 1,
+                                            marginRight: 15,
+                                            marginBottom: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.regular_text_14}>
+                                                Update Player Progress Per Session
+                                            </Text>
+
+                                            <Image source={require('../../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
+
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        </CustomeCard>
+                    </View> */}
+
                     <View >
                         <CustomeCard>
                             <TouchableOpacity onPress={() => {
