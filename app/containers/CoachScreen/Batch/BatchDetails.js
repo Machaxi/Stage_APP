@@ -451,12 +451,16 @@ class BatchDetails extends BaseComponent {
                         </CustomeCard>
                     </View>
 
-                    {/* <View >
+                    <View >
                         <CustomeCard>
                             <TouchableOpacity onPress={() => {
 
                                 //console.warn("Touch Press")
-                                this.props.navigation.navigate('ProgressPerSession')
+                                this.props.navigation.navigate('ProgressPerSession',{
+                                    id: this.state.academy_id,
+                                    batch_id: this.props.navigation.getParam('batch_id'),
+                                    batch: this.state.batchDetails
+                                })
 
                             }}>
                                 <View style={{ margin: 10, flexDirection: 'row', height: 40 }}>
@@ -487,7 +491,7 @@ class BatchDetails extends BaseComponent {
                                 </View>
                             </TouchableOpacity>
                         </CustomeCard>
-                    </View> */}
+                    </View>
 
                     <View >
                         <CustomeCard>

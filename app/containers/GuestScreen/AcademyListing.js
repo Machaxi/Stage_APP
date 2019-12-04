@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, Linking, View, ImageBackground, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
+import {
+    StyleSheet, ActivityIndicator, Linking, View, ImageBackground, TouchableOpacity, Image,
+    FlatList, TextInput, Keyboard, Text, BackHandler
+} from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
 import { getAllAcademy, search, search_auto_suggest, } from '../../redux/reducers/BrowseAcademyReducer'
 import Autocomplete from 'react-native-autocomplete-input';
 import axios from 'axios'
-import BaseComponent, { defaultStyle, getBaseUrl } from './../BaseComponent'
+import BaseComponent, { defaultStyle, getBaseUrl, EVENT_UPDATE_DIALOG } from './../BaseComponent'
 import { RateViewFill } from '../../components/Home/RateViewFill';
 import { getData, storeData, isSignedIn } from '../../components/auth';
 import Events from '../../router/events';
 import FastImage from 'react-native-fast-image'
 import { GUEST } from '../../components/Constants';
 import StarRating from 'react-native-star-rating';
+import UpdateAppDialog from '../../components/custom/UpdateAppDialog'
 
 var filterData = ''
 var notification_count = 0
@@ -130,7 +134,8 @@ class AcademyListing extends BaseComponent {
             isRefreshing: false,
             job_vacancy: false,
             book_court: false,
-            firstInstance: true
+            firstInstance: true,
+            show_must_update_alert: false,
 
         }
         this._handleChange = this._handleChange.bind(this)
@@ -268,6 +273,14 @@ class AcademyListing extends BaseComponent {
 
         this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
             this.checkNotification()
+        });
+
+        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
+            // must_update = true
+            console.log('must update', must_update);
+            this.setState({
+                show_must_update_alert: must_update,
+            })
         });
     }
 
@@ -592,6 +605,19 @@ class AcademyListing extends BaseComponent {
             </View>
         )
     }
+
+    handleClick() {
+        let link = ''
+        if (Platform.OS == 'ios') {
+            link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
+        } else {
+            link = 'market://details?id=com.machaxi'
+        }
+        Linking.canOpenURL(link).then(supported => {
+            supported && Linking.openURL(link);
+        }, (err) => console.log(err));
+    }
+
     _renderItem = ({ item }) => (
 
         <TouchableOpacity activeOpacity={.8}
@@ -780,6 +806,7 @@ class AcademyListing extends BaseComponent {
 
         let academies = this.state.academies
         let firstInstance = this.state.firstInstance
+        let show_must_update_alert = this.state.show_must_update_alert
 
         if (firstInstance == true && !this.state.isRefreshing && this.props.data.loading && !this.state.isAutoSuggest) {
             return (
@@ -814,6 +841,19 @@ class AcademyListing extends BaseComponent {
                         <Text style={defaultStyle.regular_text_14}>{academies == null ? '' : "No Academy Found"}</Text>
                     </View>
                 }
+                <UpdateAppDialog
+                    navigation={this.state.navigation}
+                    exitPressed={() => {
+                        this.setState({show_must_update_alert: false})
+                        BackHandler.exitApp()
+                        //this.props.navigation.goBack(null)
+                    }}
+                    updatePressed={() => {
+                        this.setState({show_must_update_alert: false})
+                        this.handleClick()
+                    }}
+                    visible={show_must_update_alert} 
+                />
             </View>
         );
     }

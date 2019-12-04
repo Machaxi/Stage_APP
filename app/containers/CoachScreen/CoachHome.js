@@ -4,7 +4,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 import { GUEST, PLAYER, COACH, ACADEMY } from "../../components/Constants";
 
-import { View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity,
+    Dimensions, ActivityIndicator, FlatList, ScrollView, BackHandler, Linking 
+} from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
@@ -12,9 +14,12 @@ import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashbo
 import { getData, storeData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime, getFormatTimeDate } from '../BaseComponent';
+import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
+    getFormatTimeDate, EVENT_UPDATE_DIALOG
+} from '../BaseComponent';
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
+import UpdateAppDialog from '../../components/custom/UpdateAppDialog'
 
 var notification_count = 0
 
@@ -139,7 +144,8 @@ class CoachHome extends BaseComponent {
             country: undefined,
             strenthList: null,
             userData: null,
-            userType: ''
+            userType: '',
+            show_must_update_alert: false,
         }
 
 
@@ -182,6 +188,13 @@ class CoachHome extends BaseComponent {
             this.checkNotification()
         });
 
+        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
+            // must_update = true
+            console.log('must update', must_update);
+            this.setState({
+                show_must_update_alert: must_update,
+            })
+        });
 
 
     }
@@ -513,7 +526,20 @@ class CoachHome extends BaseComponent {
 
     };
 
+    handleClick() {
+        let link = ''
+        if (Platform.OS == 'ios') {
+            link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
+        } else {
+            link = 'market://details?id=com.machaxi'
+        }
+        Linking.canOpenURL(link).then(supported => {
+            supported && Linking.openURL(link);
+        }, (err) => console.log(err));
+    }
+
     render() {
+        let show_must_update_alert = this.state.show_must_update_alert
         if (!this.state.refreshing && this.props.data.loading && !this.state.player_profile) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -880,7 +906,20 @@ class CoachHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-
+                    
+                    <UpdateAppDialog
+                        navigation={this.state.navigation}
+                        exitPressed={() => {
+                            this.setState({show_must_update_alert: false})
+                            BackHandler.exitApp()
+                            //this.props.navigation.goBack(null)
+                        }}
+                        updatePressed={() => {
+                            this.setState({show_must_update_alert: false})
+                            this.handleClick()
+                        }}
+                        visible={show_must_update_alert} 
+                    />
 
                 </ScrollView>
             </View>;

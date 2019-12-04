@@ -2,7 +2,10 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import {
+    View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity,
+    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking
+} from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { Card } from 'react-native-paper'
@@ -17,9 +20,8 @@ import { DueView } from '../../components/Home/DueView'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, {
-    getFormattedLevel,
-    getStatsImageById,
-    defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime, RATING_UPDATE, EVENT_EDIT_PROFILE, getFormatTimeDate
+    getFormattedLevel, getStatsImageById,defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime,
+    RATING_UPDATE, EVENT_EDIT_PROFILE, getFormatTimeDate, EVENT_UPDATE_DIALOG
 } from '../BaseComponent'
 import Events from '../../router/events';
 import CustomProgress from '../../components/custom/CustomProgress';
@@ -27,6 +29,7 @@ import firebase from "react-native-firebase";
 import StarRating from 'react-native-star-rating';
 import CustomAnimationProgress from '../../components/custom/CustomAnimationProgress';
 import CustomProgres from '../../components/custom/CustomProgress';
+import UpdateAppDialog from '../../components/custom/UpdateAppDialog'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -179,12 +182,21 @@ class ParentHome extends BaseComponent {
             academy_feedback_data: null,
             coach_feedback_data: null,
             academy_id: '',
-            academy_user_id: ''
+            academy_user_id: '',
+            show_must_update_alert: false,
         }
     }
 
     componentDidMount() {
-        firebase.analytics().logEvent("ParentHome", {})
+        getData('userInfo', (value)=>{
+            var userData = JSON.parse(value)
+            if(userData.user){
+                var userid = userData.user['id']
+                var username = userData.user['name']
+                firebase.analytics().logEvent("ParentHome", {userid: userid, username: username})
+            }
+        })
+        // firebase.analytics().logEvent("ParentHome", {})
 
         this.selfComponentDidMount()
 
@@ -223,6 +235,13 @@ class ParentHome extends BaseComponent {
 
         this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
             this.checkNotification()
+        });
+
+        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
+            // must_update = true
+            this.setState({
+                show_must_update_alert: must_update,
+            })
         });
 
     }
@@ -480,10 +499,23 @@ class ParentHome extends BaseComponent {
         }, 1000);
     };
 
+    handleClick() {
+        let link = ''
+        if (Platform.OS == 'ios') {
+            link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
+        } else {
+            link = 'market://details?id=com.machaxi'
+        }
+        Linking.canOpenURL(link).then(supported => {
+            supported && Linking.openURL(link);
+        }, (err) => console.log(err));
+    }
+
     render() {
 
         let academy_feedback_data = this.state.academy_feedback_data
         let coach_feedback_data = this.state.coach_feedback_data
+        let show_must_update_alert = this.state.show_must_update_alert
         const rewards_ui_array = []
 
         if (this.props.data.loading && !this.state.player_profile) {
@@ -1309,7 +1341,19 @@ class ParentHome extends BaseComponent {
                         : null
                     }
 
-
+                    <UpdateAppDialog
+                        navigation={this.state.navigation}
+                        exitPressed={() => {
+                            this.setState({show_must_update_alert: false})
+                            BackHandler.exitApp()
+                            //this.props.navigation.goBack(null)
+                        }}
+                        updatePressed={() => {
+                            this.setState({show_must_update_alert: false})
+                            this.handleClick()
+                        }}
+                        visible={show_must_update_alert} 
+                    />
                 </ScrollView>
             </View>;
         } else {

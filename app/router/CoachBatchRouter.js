@@ -11,6 +11,8 @@ import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
 import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import CoachListing from '../containers/GuestScreen/CoachListing'
+import ProgressPerSession from '../containers/CoachScreen/Batch/ProgressPerSession'
+import UpdatePlayerProgress from '../containers/CoachScreen/Batch/UpdatePlayerProgress'
 
 const coachBatchModule = createStackNavigator({
 
@@ -80,6 +82,37 @@ const coachBatchModule = createStackNavigator({
 
         })
     },
+
+    ProgressPerSession: {
+        screen: ProgressPerSession,
+        navigationOptions: ({ navigation }) => ({
+            title: "Players Progress Per Session",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
+    UpdatePlayerProgress: {
+        screen: UpdatePlayerProgress,
+        navigationOptions: ({ navigation }) => ({
+            title: "Batch Details",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+
     AttendenceBook: {
         screen: coachAttendenceBook,
         // navigationOptions: ({ navigation }) => ({

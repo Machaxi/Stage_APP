@@ -15,7 +15,7 @@ export default class UpdateAppDialog extends BaseComponent {
         return (
             <Dialog
                 width={width}
-                height={250}
+                height={300}
                 visible={this.props.visible}
                 dialogStyle={{ borderRadius: 12, }}
                 onTouchOutside={() => {
@@ -40,22 +40,18 @@ export default class UpdateAppDialog extends BaseComponent {
                         justifyContent: 'center'
                     }}>
 
-                        <TouchableOpacity
-
-                            onPress={() => {
-                                this.props.updatePressed()
+                        <TouchableOpacity onPress={() => {
+                            this.props.updatePressed()
                             }}
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                            }}>
-                            <View style={{
-                                width: width / 2,
-
-                            }}>
-                                <Text style={[defaultStyle.bold_text_14, {
-                                    marginTop: 20,
-                                }]}>Update App</Text>
+                            }}
+                        >
+                            <View style={{ width: width / 2 }}>
+                                <Text style={[defaultStyle.bold_text_14, { marginTop: 20, }]}>
+                                    Update App
+                                </Text>
                             </View>
                         </TouchableOpacity>
 
