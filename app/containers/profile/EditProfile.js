@@ -445,11 +445,9 @@ class EditProfile extends BaseComponent {
                                     this.pickImage()
                             }}
                         >
-
                             <FastImage
                                 resizeMode="contain"
                                 style={{
-
                                     paddingVertical: 0,
                                     width: 180,
                                     height: 240,
@@ -695,6 +693,12 @@ class EditProfile extends BaseComponent {
                                         // placeholder={"About You"}
                                     />
                                 </View>
+                            </View>
+                        }
+                        {
+                            this.state.user_type === "PLAYER" &&
+                            <View style={{ flex: 1, margin: 20, width: '50%' }}>
+                                <CustomeButtonB onPress={() => this.props.navigation.navigate('EnrollmentForm')}> Enrollment Form</CustomeButtonB>
                             </View>
                         }
                         <View style={{ flex: 1, margin: 20, width: '50%' }}>

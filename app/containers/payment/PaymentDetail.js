@@ -201,6 +201,10 @@ class PaymentDetail extends BaseComponent {
                             <View style={{ width: "33%", marginLeft: 8 }}>
                                 <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Amount</Text>
                                 <Text style={[defaultStyle.bold_text_14, { marginTop: 8 }]}>Rs {item.amount}</Text>
+                                {
+                                    item.gstApplied &&
+                                    <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Gst Inclusive</Text>
+                                }
                             </View>
                         </View>
 

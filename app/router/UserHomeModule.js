@@ -38,7 +38,8 @@ import BookTrial from '../containers/GuestScreen/BookTrial'
 import PaymentHistory from '../containers/payment/PaymentHistory'
 import ImageGuidelines from '../containers/profile/ImageGuidelines'
 import ContactUs from '../containers/util/ContactUs'
-import FaqScreen from '../containers/util/FaqScreen'
+import FaqScreen from '../containers/util/FaqScreen';
+import EnrollmentForm from '../containers/profile/EnrollmentForm';
 
 const userHomeModule = createStackNavigator({
 
@@ -508,6 +509,20 @@ const userHomeModule = createStackNavigator({
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    EnrollmentForm: {
+        screen: EnrollmentForm,
+        navigationOptions: ({ navigation }) => ({
+            title: "Enrollment Form",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#FFFFFF',

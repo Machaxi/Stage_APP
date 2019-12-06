@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, BackHandler, Linking } from 'react-native';
+import { Platform, StyleSheet, Text, View, BackHandler, Linking, AppState } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux'
 import logger from 'redux-logger'
 import { Provider } from 'react-redux'
@@ -24,7 +24,10 @@ import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import RNFirebase from 'react-native-firebase';
-import BaseComponent, { DEBUG_APP, getBaseUrl, ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN, ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER } from './app/containers/BaseComponent';
+import BaseComponent, {
+    DEBUG_APP, getBaseUrl, ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN,
+    ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER
+} from './app/containers/BaseComponent';
 import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
@@ -125,11 +128,11 @@ client.interceptors.response.use(response => {
                 if (Platform.OS === 'ios') {
                     // object literal will crash on iOS, so transform to string
                     logs_data = JSON.stringify(logs_data, null, 2);
-                  }
-               
+                }
+
                 console.log('Crash Object -> ', JSON.stringify(logs_data))
 
-                if(Platform.OS === 'android'){
+                if (Platform.OS === 'android') {
                     firebase.crashlytics().recordCustomError(
                         'Custom Error',
                         'Oh No!',
@@ -138,10 +141,10 @@ client.interceptors.response.use(response => {
                             fileName: 'Api',
                             functionName: 'render',
                             lineNumber: 81,
-                            additional:logs_data
+                            additional: logs_data
                         }]
                     );
-                } else{
+                } else {
                     firebase.crashlytics().recordCustomError(
                         'Custom Error',
                         'Oh No!',
@@ -150,7 +153,7 @@ client.interceptors.response.use(response => {
                             fileName: 'Api',
                             functionName: 'render',
                             lineNumber: 81,
-                            additional:logs_data
+                            additional: logs_data
                         }
                     );
                 }
@@ -199,13 +202,23 @@ branch.subscribe(({ error, params }) => {
     if (clicked_branch_link) {
         let feature = params['~feature']
         if (feature) {
+            let type = params['type']
             let id = params['id']
+            let player_id = params['player_id']
+            let academy_id = params['academy_id']
             if (id) {
                 let obj = {
                     tournament_id: id,
                     feature: feature
                 }
                 console.log('Branchtit=>', feature)
+                Events.publish('deep_linking', obj);
+            }else if(type==='profile'){
+                let obj = {
+                    player_id: player_id, 
+                    type: type,
+                    academy_id: academy_id
+                }
                 Events.publish('deep_linking', obj);
             }
             //console.log('Branchtit=>', feature)
@@ -280,9 +293,11 @@ export default class App extends BaseComponent {
             })
         });
 
-        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, () => {
+        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
+            // must_update = true
+            console.log('must update', must_update);
             this.setState({
-                show_must_update_alert: true,
+                show_must_update_alert: must_update,
             })
         });
 
@@ -300,8 +315,25 @@ export default class App extends BaseComponent {
             alert('You are running debug app.')
     }
 
+    componentDidMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+    }
+
     componentWillMount() {
 
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (nextAppState === 'active') {
+            this.checkForceUpdateAPI();
+        }
+        console.log('nextAppState', nextAppState);
+    };
+
+    checkForceUpdateAPI = () => {
+        this.getNotificationCount((count) => {
+            console.log('notificatio_count', count);
+        })
     }
 
     onReceived(notification) {
@@ -325,6 +357,7 @@ export default class App extends BaseComponent {
     }
 
     componentWillUnmount() {
+        // AppState.removeEventListener('change', this._handleAppStateChange);
         OneSignal.removeEventListener('received', this.onReceived);
         OneSignal.removeEventListener('opened', this.onOpened);
         OneSignal.removeEventListener('ids', this.onIds);
@@ -423,7 +456,6 @@ export default class App extends BaseComponent {
         );
     }
     handleClick() {
-
         let link = ''
         if (Platform.OS == 'ios') {
             link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'

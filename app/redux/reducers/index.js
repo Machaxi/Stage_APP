@@ -31,6 +31,7 @@ import BrowseAcademyReducer from './BrowseAcademyReducer'
 import AcademyBatchReducer from './AcademyBatchReducer'
 import CancelBatchReducer from './CancelBatchReducer'
 import PlayerProgressReducer from './PlayerProgressReducer'
+import EnrollmentFormReducer from './EnrollmentFormReducer'
 
 const rootReducer = combineReducers({
     LoginReducer,
@@ -65,7 +66,8 @@ const rootReducer = combineReducers({
     BrowseAcademyReducer,
     AcademyBatchReducer,
     CancelBatchReducer,
-    PlayerProgressReducer
+    PlayerProgressReducer,
+    EnrollmentFormReducer
 });
 
 export default rootReducer

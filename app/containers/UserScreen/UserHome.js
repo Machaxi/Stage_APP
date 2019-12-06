@@ -1,7 +1,10 @@
 import React from 'react'
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity, Dimensions, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import {
+    View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity,
+    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking 
+} from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
 import { getData, storeData } from "../../components/auth";
@@ -12,7 +15,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, {
     defaultStyle, getFormattedLevel,
     getStatsImageById,
-    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, REFRESH_SCREEN_CALLBACK, getUtcDateFromTime, PROFILE_PIC_UPDATED, getFormatTimeDate
+    EVENT_EDIT_PROFILE, SESSION_DATE_FORMAT, REFRESH_SCREEN_CALLBACK, getUtcDateFromTime,
+    PROFILE_PIC_UPDATED, getFormatTimeDate, EVENT_UPDATE_DIALOG
 } from '../BaseComponent';
 import { Rating } from 'react-native-ratings';
 import moment from 'moment'
@@ -23,7 +27,12 @@ import { RateViewBorder } from '../../components/Home/RateViewBorder';
 import firebase from 'react-native-firebase'
 import CustomAnimationProgress from '../../components/custom/CustomAnimationProgress';
 import StarRating from 'react-native-star-rating';
-import CustomProgres from '../../components/custom/CustomProgress';
+import CustomProgres, { captureRef } from '../../components/custom/CustomProgress';
+import ViewShot from "react-native-view-shot";
+import ImgToBase64 from 'react-native-image-base64';
+import Share from 'react-native-share';
+import branch, { BranchEvent } from 'react-native-branch';
+import UpdateAppDialog from '../../components/custom/UpdateAppDialog'
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -121,36 +130,55 @@ class UserHome extends BaseComponent {
                 </TouchableOpacity>
             ),
             headerRight: (
-                <TouchableOpacity
-                    style={{ marginRight: 8 }}
-                    onPress={() => {
-                        navigation.navigate('NotificationList')
-                    }}
-                    activeOpacity={.8} >
-                    <ImageBackground
-                        resizeMode="contain"
-                        source={require('../../images/ic_notifications.png')}
-                        style={{
-                            width: 22, height: 22, marginLeft: 12,
-                            marginRight: 12,
-                            alignItems: 'flex-end'
-                        }}>
+                <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        style={{  }}
+                        onPress={() => {
+                            navigation.navigate('NotificationList')
+                        }}
+                        activeOpacity={.8} >
+                        <ImageBackground
+                            resizeMode="contain"
+                            source={require('../../images/ic_notifications.png')}
+                            style={{
+                                width: 22, height: 22, marginLeft: 12,
+                                marginRight: 12,
+                                alignItems: 'flex-end'
+                            }}>
 
-                        {navigation.getParam('notification_count', 0) > 0 ? <View style={{
-                            width: 16,
-                            height: 16,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 30 / 2,
-                            backgroundColor: '#ED2638'
-                        }}>
-                            <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                {navigation.getParam('notification_count', '')}</Text>
-                        </View> : null}
+                            {navigation.getParam('notification_count', 0) > 0 ? <View style={{
+                                width: 16,
+                                height: 16,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 30 / 2,
+                                backgroundColor: '#ED2638'
+                            }}>
+                                <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                    {navigation.getParam('notification_count', '')}</Text>
+                            </View> : null}
 
 
-                    </ImageBackground>
-                </TouchableOpacity>
+                        </ImageBackground>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{ marginRight: 8 }}
+                        onPress={() => {
+                            navigation.getParam('shareProfile')();
+                        }}
+                        activeOpacity={.8} >
+                        <ImageBackground
+                            resizeMode="contain"
+                            source={require('../../images/share-profile.png')}
+                            style={{
+                                width: 22, height: 22, marginLeft: 0,
+                                marginRight: 12,
+                                alignItems: 'flex-end'
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
 
             )
         };
@@ -175,8 +203,12 @@ class UserHome extends BaseComponent {
             academy_feedback_data: null,
             coach_feedback_data: null,
             academy_id: '',
-            academy_user_id: ''
+            academy_user_id: '',
+            screenShot: '',
+            show_must_update_alert: false,
         }
+
+        const { navigation } = this.props.navigation.setParams({ shareProfile: this.shareProfile })
         //StatusBar.setBackgroundColor("#262051")
         //StatusBar.setBarStyle('light-content', true)
     }
@@ -184,7 +216,15 @@ class UserHome extends BaseComponent {
         this.willFocusSubscription.remove();
     }
     componentDidMount() {
-        firebase.analytics().logEvent("PlayerHome", {})
+        getData('userInfo', (value)=>{
+            var userData = JSON.parse(value)
+            if(userData.user){
+                var userid = userData.user['id']
+                var username = userData.user['name']
+                firebase.analytics().logEvent("PlayerHome", {userid: userid, username: username})
+            }
+        })
+        // firebase.analytics().logEvent("PlayerHome", {})
         // getData('userInfo',(value)=>{
         //     firebaseAnalytics.logEvent('DASHBOARD',value );
 
@@ -208,12 +248,22 @@ class UserHome extends BaseComponent {
 
         this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
             //alert('event')
-            if (deep_data != null)
+            let type = null;
+            console.log('deep data', deep_data)
+            if (deep_data != null) {
                 storeData('deep_data', JSON.stringify(deep_data))
-            setTimeout(() => {
-                this.props.navigation.navigate('Tournament')
-
-            }, 100)
+                let player_id = deep_data.player_id
+                let academy_id = deep_data.academy_id
+                type = deep_data.type
+                if(type!== null && type === 'profile'){
+                    this.props.navigation.navigate('OtherPlayerDeatils', {player_id: player_id, academy_id: academy_id})
+                }
+            }
+            if(type == null){
+                setTimeout(() => {
+                    this.props.navigation.navigate('Tournament')
+                }, 100)
+            }
         });
 
         this.refreshEvent = Events.subscribe('REFRESH_DASHBOARD', () => {
@@ -231,6 +281,14 @@ class UserHome extends BaseComponent {
 
         this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
             this.checkNotification()
+        });
+
+        this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
+            // must_update = true
+            console.log('must update', must_update);
+            this.setState({
+                show_must_update_alert: must_update,
+            })
         });
     }
 
@@ -250,8 +308,7 @@ class UserHome extends BaseComponent {
 
     getNotifications() {
         this.getNotificationCount((count) => {
-            this.props.navigation.setParams({ notification_count: count });
-            notification_count = count
+            console.log('notificatio_count', count);
         })
     }
 
@@ -382,6 +439,64 @@ class UserHome extends BaseComponent {
 
     }
 
+    shareProfile = async () => {
+        this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
+            locallyIndex: true,
+            //canonicalUrl:  'https://google.com',
+            title: 'Planet World',
+            contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
+            contentMetadata: {
+                customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID+'', academy_id: this.state.academy_id+'' }
+            }
+        })
+        this.buo.logEvent(BranchEvent.ViewItem)
+        console.log("Created Branch Universal Object and logged standard view item event.", BranchEvent.ViewItem)
+        let linkProperties = {
+            feature: 'share',
+            channel: 'whatsapp'
+            //userId: "125",
+        }
+
+        let controlParams = {
+            $desktop_url: 'https://google.com'
+        }
+
+        let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
+        //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
+        console.log("URL ", url)
+        const shareOptions = {
+            title: 'Share via',
+            message: 'Click to Explore More About It !' + url,
+            url: 'data:image/png;base64,' + this.state.screenShot,
+            subject: 'hello !!!!!!!!1',
+            //quote:'hello',
+            //   social: Share.Social.WHATSAPP
+        }
+        Share.open(shareOptions);
+    }
+
+    onCapture = uri => {
+        setTimeout(()=>{
+            ImgToBase64.getBase64String(`file://${uri}`)
+            .then(base64String => {
+                this.setState({ screenShot: base64String })
+            })
+            .catch(err => doSomethingWith(err))
+        }, 1000)
+    }
+
+    handleClick() {
+        let link = ''
+        if (Platform.OS == 'ios') {
+            link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
+        } else {
+            link = 'market://details?id=com.machaxi'
+        }
+        Linking.canOpenURL(link).then(supported => {
+            supported && Linking.openURL(link);
+        }, (err) => console.log(err));
+    }
+
     renderItem = ({ item }) => (
         <TouchableOpacity key={item}
             activeOpacity={.8}
@@ -450,16 +565,12 @@ class UserHome extends BaseComponent {
 
     );
 
-
-
-
-
-
     render() {
 
         let academy_feedback_data = this.state.academy_feedback_data
         let coach_feedback_data = this.state.coach_feedback_data
         let academy_id = this.state.academy_id
+        let show_must_update_alert = this.state.show_must_update_alert
 
         if (this.props.data.loading && !this.state.player_profile) {
             return (
@@ -569,7 +680,7 @@ class UserHome extends BaseComponent {
                         />
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-
+                    <ViewShot onCapture={this.onCapture} captureMode="mount">
                     <PlayerHeader
                         is_tooblar={true}
                         player_profile={this.state.player_profile}
@@ -616,25 +727,39 @@ class UserHome extends BaseComponent {
 
 
                     {this.state.strenthList.length != 0 ?
-                        <View style={{ margin: 10 }}>
-                            <Card style={{ borderRadius: 12 }}>
-                                <View>
-
-                                    <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
-                                    <View style={{
-                                        width: 60,
-                                        height: 3, marginLeft: 10,
-                                        marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
-                                    }}></View>
-
-                                    <FlatList
-                                        data={this.state.strenthList}
-                                        renderItem={this.renderItem}
-                                        keyExtractor={(item, index) => item.id}
-                                    />
-                                </View>
-                            </Card>
-                        </View> : null}
+                        
+                            <View style={{ margin: 10 }}>
+                                <Card style={{ borderRadius: 12 }}>
+                                    <View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <View>
+                                                <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                                <View style={{
+                                                    width: 60,
+                                                    height: 3, marginLeft: 10,
+                                                    marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                                }}></View>
+                                            </View>
+                                            {/* <TouchableOpacity onPress={() => this.shareProfile()}>
+                                                <Image
+                                                    resizeMode="contain"
+                                                    style={{
+                                                        width: 20,
+                                                        height: 20,
+                                                        marginRight: 10,
+                                                    }}
+                                                    source={require('../../images/share-profile.png')}
+                                                />
+                                            </TouchableOpacity> */}
+                                        </View>
+                                        <FlatList
+                                            data={this.state.strenthList}
+                                            renderItem={this.renderItem}
+                                            keyExtractor={(item, index) => item.id}
+                                        />
+                                    </View>
+                                </Card>
+                            </View> : null}
 
 
 
@@ -740,6 +865,7 @@ class UserHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
+                    </ViewShot>
 
                     {/* ================================ ACADEMY FEEDBACk =================== */}
 
@@ -914,10 +1040,6 @@ class UserHome extends BaseComponent {
                                         }]}>{academy_feedback_data.review}</Text>
 
                                     </View>
-
-
-
-
                                 </View>
 
                             </View>
@@ -1144,7 +1266,19 @@ class UserHome extends BaseComponent {
                         </Card>
                         : null
                     }
-
+                    <UpdateAppDialog
+                        navigation={this.state.navigation}
+                        exitPressed={() => {
+                            this.setState({show_must_update_alert: false})
+                            BackHandler.exitApp()
+                            //this.props.navigation.goBack(null)
+                        }}
+                        updatePressed={() => {
+                            this.setState({show_must_update_alert: false})
+                            this.handleClick()
+                        }}
+                        visible={show_must_update_alert} 
+                    />
 
                 </ScrollView>
             </View >;
