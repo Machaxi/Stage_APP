@@ -347,7 +347,9 @@ export default class BaseComponent extends React.Component {
                                 //let visible_challenge = json.data.visible_challenge
 
                                 if (must_update == true) {
-                                    Events.publish(EVENT_UPDATE_DIALOG);
+                                    Events.publish(EVENT_UPDATE_DIALOG, true);
+                                } else {
+                                    Events.publish(EVENT_UPDATE_DIALOG, false);
                                 }
 
                                 //checking sync data

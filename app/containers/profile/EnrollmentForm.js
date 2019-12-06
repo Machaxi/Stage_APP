@@ -74,13 +74,7 @@ class EnrollmentForm extends BaseComponent {
                         let sportPlayed = enrollment.sport_played
                         let disclaimer = enrollment.disclaimer
                         let haveEquipment = enrollment.sport_equipment
-                        let govt_id_pic = enrollment.govt_id_name
-                        var temp = govt_id_pic.split(' ')
-                        if(temp[1] === 'null'){
-                            govt_id_pic = null
-                        } else{
-                            govt_id_pic = temp[1]
-                        }
+                        let govt_id_pic = enrollment.govt_id_link
                         if (joinDate != '' && joinDate !== null) {
                             joinDate = joinDate.split('T')
                             joinDate = moment.utc(joinDate[0]).local().format("DD-MMM-YYYY")
