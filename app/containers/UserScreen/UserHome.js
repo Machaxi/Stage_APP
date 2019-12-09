@@ -155,7 +155,7 @@ class UserHome extends BaseComponent {
                                 backgroundColor: '#ED2638'
                             }}>
                                 <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                    {navigation.getParam('notification_count', '')}</Text>
+                                    {navigation.getParam('notification_count', '') > 99 ? '99+' :  navigation.getParam('notification_count', '')}</Text>
                             </View> : null}
 
 
@@ -308,6 +308,8 @@ class UserHome extends BaseComponent {
 
     getNotifications() {
         this.getNotificationCount((count) => {
+            this.props.navigation.setParams({ notification_count: count });
+            notification_count = count
             console.log('notificatio_count', count);
         })
     }
@@ -440,6 +442,7 @@ class UserHome extends BaseComponent {
     }
 
     shareProfile = async () => {
+        this.setState({refreshing: true})
         this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
             locallyIndex: true,
             //canonicalUrl:  'https://google.com',
@@ -473,6 +476,7 @@ class UserHome extends BaseComponent {
             //   social: Share.Social.WHATSAPP
         }
         Share.open(shareOptions);
+        this.setState({refreshing: false})
     }
 
     onCapture = uri => {
@@ -760,9 +764,8 @@ class UserHome extends BaseComponent {
                                     </View>
                                 </Card>
                             </View> : null}
-
-
-
+                    </ViewShot>
+                    
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
@@ -865,7 +868,7 @@ class UserHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    </ViewShot>
+                    
 
                     {/* ================================ ACADEMY FEEDBACk =================== */}
 

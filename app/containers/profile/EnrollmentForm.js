@@ -149,6 +149,9 @@ class EnrollmentForm extends BaseComponent {
 
     showDisclaimer() {
         this.setState({ showDisclaimer: true })
+        setTimeout(()=> { 
+            this.scrollView.scrollToEnd({ animated: true })
+        }, 100)
     }
 
     saveEnrollmentData() {
@@ -166,6 +169,7 @@ class EnrollmentForm extends BaseComponent {
             this.setState({ spinner: true })
             dict['user_id'] = this.user_id;
             dict['academy_id'] = this.academy_id;
+            dict['joining_date'] = joinDate;
             dict['email_address'] = email;
             dict['house_number'] = houseNumber;
             dict['apartment_name'] = areaName;
@@ -260,7 +264,12 @@ class EnrollmentForm extends BaseComponent {
                     visible={this.state.spinner}
                     textStyle={defaultStyle.spinnerTextStyle}
                 />
-                <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                <ScrollView
+                    style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}
+                    ref={(view) => {
+                        this.scrollView = view;
+                    }}
+                >
                     <View
                         style={{
                             margin: 16,
@@ -488,17 +497,26 @@ class EnrollmentForm extends BaseComponent {
                                     <Text style={[style.text, { marginTop: 5, marginRight: 5 }]}>I agree</Text>
                                     <CheckBox
                                         style={{ marginLeft: 5 }}
-                                        onValueChange={(value) => this.setState({ agreeDisclaimer: value })}
+                                        onValueChange={(value) => { 
+                                            this.setState({ agreeDisclaimer: value }, () => {
+                                                setTimeout(()=> { 
+                                                    this.scrollView.scrollToEnd({ animated: true })
+                                                }, 100)
+                                            })  
+                                        }}
                                         value={this.state.agreeDisclaimer}
                                     />
                                 </View>
                             </View>
                         }
-                        <View style={{ flex: 1, margin: 20, width: '50%' }}>
-                            <CustomeButtonB onPress={() => this.state.agreeDisclaimer ? this.saveEnrollmentData() : this.showSnackBar('please click on I agree')}>
-                                Save
-                            </CustomeButtonB>
-                        </View>
+                        {
+                            this.state.agreeDisclaimer &&
+                            <View style={{ flex: 1, margin: 20, width: '50%' }}>
+                                <CustomeButtonB onPress={() => this.state.agreeDisclaimer ? this.saveEnrollmentData() : this.showSnackBar('please click on I agree')}>
+                                    Save
+                                </CustomeButtonB>
+                            </View>
+                        }
                     </View>
 
                     <UploadImageModel

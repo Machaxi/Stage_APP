@@ -504,8 +504,14 @@ class EditOtherProfile extends BaseComponent {
                                 // trackColor={{false: '#DFDFDF', true: '#67BAF5'}}
                             />
                         </View>
-                            
-                        <View style={{ flex: 1, margin: 20, width: '80%' }}>
+                        
+                        
+                        {/* <View style={{ flex: 1, margin: 20, width: '50%' }}>
+                            <CustomeButtonB onPress={() => this.props.navigation.navigate('EnrollmentForm')}> Enrollment Form</CustomeButtonB>
+                        </View> */}
+                        
+
+                        <View style={{ flex: 1, margin: 20, width: '50%' }}>
                             <CustomeButtonB onPress={() => this.saveUserProfile()}> Save </CustomeButtonB>
                         </View>
                         

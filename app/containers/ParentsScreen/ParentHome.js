@@ -20,7 +20,7 @@ import { DueView } from '../../components/Home/DueView'
 import { RateViewFill } from '../../components/Home/RateViewFill'
 import { RateViewBorder } from '../../components/Home/RateViewBorder'
 import BaseComponent, {
-    getFormattedLevel, getStatsImageById,defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime,
+    getFormattedLevel, getStatsImageById, defaultStyle, SESSION_DATE_FORMAT, getUtcDateFromTime,
     RATING_UPDATE, EVENT_EDIT_PROFILE, getFormatTimeDate, EVENT_UPDATE_DIALOG
 } from '../BaseComponent'
 import Events from '../../router/events';
@@ -30,6 +30,10 @@ import StarRating from 'react-native-star-rating';
 import CustomAnimationProgress from '../../components/custom/CustomAnimationProgress';
 import CustomProgres from '../../components/custom/CustomProgress';
 import UpdateAppDialog from '../../components/custom/UpdateAppDialog'
+import ViewShot from "react-native-view-shot";
+import ImgToBase64 from 'react-native-image-base64';
+import Share from 'react-native-share';
+import branch, { BranchEvent } from 'react-native-branch';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -130,36 +134,53 @@ class ParentHome extends BaseComponent {
                 </TouchableOpacity>
             ),
             headerRight: (
-                <TouchableOpacity
-                    style={{ marginRight: 8 }}
-                    onPress={() => {
-                        navigation.navigate('NotificationList')
-                    }}
-                    activeOpacity={.8} >
-                    <ImageBackground
-                        resizeMode="contain"
-                        source={require('../../images/ic_notifications.png')}
-                        style={{
-                            width: 22, height: 22, marginLeft: 12,
-                            marginRight: 12,
-                            alignItems: 'flex-end'
-                        }}>
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                        style={{}}
+                        onPress={() => {
+                            navigation.navigate('NotificationList')
+                        }}
+                        activeOpacity={.8} >
+                        <ImageBackground
+                            resizeMode="contain"
+                            source={require('../../images/ic_notifications.png')}
+                            style={{
+                                width: 22, height: 22, marginLeft: 12,
+                                marginRight: 12,
+                                alignItems: 'flex-end'
+                            }}>
 
-                        {navigation.getParam('notification_count', 0) > 0 ? <View style={{
-                            width: 16,
-                            height: 16,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 30 / 2,
-                            backgroundColor: '#ED2638'
-                        }}>
-                            <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                {navigation.getParam('notification_count', '')}</Text>
-                        </View> : null}
+                            {navigation.getParam('notification_count', 0) > 0 ? <View style={{
+                                width: 16,
+                                height: 16,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 30 / 2,
+                                backgroundColor: '#ED2638'
+                            }}>
+                                <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                    {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}</Text>
+                            </View> : null}
+                        </ImageBackground>
+                    </TouchableOpacity>
 
-
-                    </ImageBackground>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{ marginRight: 8 }}
+                        onPress={() => {
+                            navigation.getParam('shareProfile')();
+                        }}
+                        activeOpacity={.8} >
+                        <ImageBackground
+                            resizeMode="contain"
+                            source={require('../../images/share-profile.png')}
+                            style={{
+                                width: 22, height: 22, marginLeft: 0,
+                                marginRight: 12,
+                                alignItems: 'flex-end'
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
             )
         };
     };
@@ -185,15 +206,16 @@ class ParentHome extends BaseComponent {
             academy_user_id: '',
             show_must_update_alert: false,
         }
+        const { navigation } = this.props.navigation.setParams({ shareProfile: this.shareProfile })
     }
 
     componentDidMount() {
-        getData('userInfo', (value)=>{
+        getData('userInfo', (value) => {
             var userData = JSON.parse(value)
-            if(userData.user){
+            if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("ParentHome", {userid: userid, username: username})
+                firebase.analytics().logEvent("ParentHome", { userid: userid, username: username })
             }
         })
         // firebase.analytics().logEvent("ParentHome", {})
@@ -220,11 +242,11 @@ class ParentHome extends BaseComponent {
                 let player_id = deep_data.player_id
                 let academy_id = deep_data.academy_id
                 type = deep_data.type
-                if(type!== null && type === 'profile'){
-                    this.props.navigation.navigate('OtherPlayerDeatils', {player_id: player_id, academy_id: academy_id})
+                if (type !== null && type === 'profile') {
+                    this.props.navigation.navigate('OtherPlayerDeatils', { player_id: player_id, academy_id: academy_id })
                 }
             }
-            if(type == null){
+            if (type == null) {
                 setTimeout(() => {
                     this.props.navigation.navigate('Tournament')
                 }, 100)
@@ -256,7 +278,7 @@ class ParentHome extends BaseComponent {
 
     }
 
-    checkNotification(){
+    checkNotification() {
         if (global.NOTIFICATION_DATA) {
             try {
                 let notification_for = global.NOTIFICATION_DATA.notification_for
@@ -363,7 +385,43 @@ class ParentHome extends BaseComponent {
         });
     }
 
+    shareProfile = async () => {
+        this.setState({ refreshing: true })
+        this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
+            locallyIndex: true,
+            //canonicalUrl:  'https://google.com',
+            title: 'Planet World',
+            contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
+            contentMetadata: {
+                customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID + '', academy_id: this.state.academy_id + '' }
+            }
+        })
+        this.buo.logEvent(BranchEvent.ViewItem)
+        console.log("Created Branch Universal Object and logged standard view item event.", BranchEvent.ViewItem)
+        let linkProperties = {
+            feature: 'share',
+            channel: 'whatsapp'
+            //userId: "125",
+        }
 
+        let controlParams = {
+            $desktop_url: 'https://google.com'
+        }
+
+        let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
+        //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
+        console.log("URL ", url)
+        const shareOptions = {
+            title: 'Share via',
+            message: 'Click to Explore More About It !' + url,
+            url: 'data:image/png;base64,' + this.state.screenShot,
+            subject: 'hello !!!!!!!!1',
+            //quote:'hello',
+            //   social: Share.Social.WHATSAPP
+        }
+        Share.open(shareOptions);
+        this.setState({ refreshing: false })
+    }
 
     getPlayerDashboardData(academy_id, player_id, ) {
         getData('header', (value) => {
@@ -497,7 +555,15 @@ class ParentHome extends BaseComponent {
 
     );
 
-
+    onCapture = uri => {
+        setTimeout(() => {
+            ImgToBase64.getBase64String(`file://${uri}`)
+                .then(base64String => {
+                    this.setState({ screenShot: base64String })
+                })
+                .catch(err => doSomethingWith(err))
+        }, 1000)
+    }
 
     onRefresh = () => {
 
@@ -620,43 +686,43 @@ class ParentHome extends BaseComponent {
                         );
                     }
                 }
-                
-                }
-                
-                if (is_reward_point_due) {
-                    
-                    console.log('reward_detail => ', JSON.stringify(reward_detail))
 
-                    let temp_reward_detail = this.filterRewards(reward_detail)
-                    console.log('temp_reward_detail->',JSON.stringify(temp_reward_detail))
+            }
 
-                    for (let i = 0; i < temp_reward_detail.length; i++) {
+            if (is_reward_point_due) {
 
-                        let reward = temp_reward_detail[i]
-                        rewards_ui_array.push(
-                            <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+                console.log('reward_detail => ', JSON.stringify(reward_detail))
 
-                                <View style={{ width: '50%', flexDirection: 'row', }}>
-                                    <View>
-                                        <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Month</Text>
-                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{moment(reward.month, "M").format("MMMM")}</Text>
-                                    </View>
+                let temp_reward_detail = this.filterRewards(reward_detail)
+                console.log('temp_reward_detail->', JSON.stringify(temp_reward_detail))
+
+                for (let i = 0; i < temp_reward_detail.length; i++) {
+
+                    let reward = temp_reward_detail[i]
+                    rewards_ui_array.push(
+                        <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+
+                            <View style={{ width: '50%', flexDirection: 'row', }}>
+                                <View>
+                                    <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Month</Text>
+                                    <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{moment(reward.month, "M").format("MMMM")}</Text>
+                                </View>
 
 
-                                    {/* <View style={{ marginLeft: 24 }}>
+                                {/* <View style={{ marginLeft: 24 }}>
                                     <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Available</Text>
                                     <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{reward_detail.points + 'pts'}</Text>
                                 </View> */}
-                                </View>
-                                <View style={{ width: '40%' }}>
-                                    <CustomeButtonB onPress={() => {
-                                        this.props.navigation.navigate('ParentRewards')
-                                    }}>
-                                        Reward </CustomeButtonB>
-                                </View>
                             </View>
-                        )
-                    }
+                            <View style={{ width: '40%' }}>
+                                <CustomeButtonB onPress={() => {
+                                    this.props.navigation.navigate('ParentRewards')
+                                }}>
+                                    Reward </CustomeButtonB>
+                            </View>
+                        </View>
+                    )
+                }
 
             }
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
@@ -669,18 +735,19 @@ class ParentHome extends BaseComponent {
                         />
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-
-                    <PlayerHeader
-                        player_profile={this.state.player_profile}
-                        is_tooblar={true}
-                    />
+                    <ViewShot onCapture={this.onCapture} captureMode="mount">
+                        <PlayerHeader
+                            player_profile={this.state.player_profile}
+                            is_tooblar={true}
+                        />
+                    </ViewShot>
                     <View style={{ margin: 10, marginTop: 20 }}>
 
                         <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
                             userType: 'coach'
                         })}>
                             Switch Child
-                        </SwitchButton>
+                            </SwitchButton>
                     </View>
 
 
@@ -821,24 +888,24 @@ class ParentHome extends BaseComponent {
 
                     {/* {this.state.strenthList.length != 0 ?
 
-                        <CustomeCard>
-                            <View
-                                style={{
-                                    marginLeft: 12,
-                                    marginRight: 12,
-                                    marginTop: 16
-                                }}
-                            >
-                                <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
-                                <FlatList
-                                    data={this.state.strenthList}
-                                    renderItem={this.renderItem}
-                                    keyExtractor={(item, index) => item.id}
-                                />
-                            </View>
-                        </CustomeCard>
-                        : null
-                    } */}
+                            <CustomeCard>
+                                <View
+                                    style={{
+                                        marginLeft: 12,
+                                        marginRight: 12,
+                                        marginTop: 16
+                                    }}
+                                >
+                                    <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
+                                    <FlatList
+                                        data={this.state.strenthList}
+                                        renderItem={this.renderItem}
+                                        keyExtractor={(item, index) => item.id}
+                                    />
+                                </View>
+                            </CustomeCard>
+                            : null
+                        } */}
                     {this.state.strenthList.length != 0 ?
                         <View style={{ margin: 10 }}>
                             <Card style={{ borderRadius: 12 }}>
@@ -859,7 +926,6 @@ class ParentHome extends BaseComponent {
                                 </View>
                             </Card>
                         </View> : null}
-
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
@@ -905,6 +971,7 @@ class ParentHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
+
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
@@ -1354,15 +1421,15 @@ class ParentHome extends BaseComponent {
                     <UpdateAppDialog
                         navigation={this.state.navigation}
                         exitPressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             BackHandler.exitApp()
                             //this.props.navigation.goBack(null)
                         }}
                         updatePressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             this.handleClick()
                         }}
-                        visible={show_must_update_alert} 
+                        visible={show_must_update_alert}
                     />
                 </ScrollView>
             </View>;
