@@ -32,7 +32,7 @@ export function paymentDues(header, player_id) {
         type: types.PAYMENT_DUES,
         payload: {
             request: {
-                url: `payment/payment-dues?player_id=${player_id}`,
+                url: `payment/payment-dues-academy?player_id=${player_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header,
@@ -85,7 +85,7 @@ export function duePay(header, postData) {
         type: types.PAYMENT_DUES,
         payload: {
             request: {
-                url: `/payment/due-play`,
+                url: `payment/due-pay-multiple`,
                 method: 'POST',
                 data: postData,
                 headers: {

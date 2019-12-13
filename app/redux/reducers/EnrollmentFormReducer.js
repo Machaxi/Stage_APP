@@ -25,15 +25,15 @@ export default function EnrollmentFormReducer(state = initialState, action) {
     }
 }
 
-export function getEnrollmentFormData(header, user_id, academy_id) {
-    console.log("getPlayerDashboard ", header, user_id, academy_id)
+export function getEnrollmentFormData(header, player_id, academy_id) {
+    console.log("getPlayerDashboard ", header, player_id, academy_id)
     if (academy_id == null)
         academy_id = ''
     return {
         type: types.ENROLLMENT_FORM,
         payload: {
             request: {
-                url: `player/player-enrollment?user_id=${user_id}&academy_id=${academy_id}`,
+                url: `player/player-enrollment?player_id=${player_id}&academy_id=${academy_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header

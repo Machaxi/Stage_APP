@@ -33,6 +33,7 @@ import branch, { BranchEvent } from 'react-native-branch'
 import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info';
+import codePush from "react-native-code-push";
 //export const BASE_URL = 'https://www.machaxi.com/api/'
 //export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
@@ -258,7 +259,7 @@ branch.subscribe(({ error, params }) => {
 
 
 
-export default class App extends BaseComponent {
+class App extends BaseComponent {
 
     //static FCM_TOKEN = ''
 
@@ -499,4 +500,8 @@ export default class App extends BaseComponent {
         })
     }
 }
+
+// export default App
+
+export default codePush(App);
 

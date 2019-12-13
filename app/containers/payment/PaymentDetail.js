@@ -4,7 +4,6 @@ import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicat
 import BaseComponent, { defaultStyle, DRIBBLE_LOGO, getPaymentKey } from '../BaseComponent';
 import { FlatList } from 'react-native-gesture-handler';
 import { CustomeCard } from '../../components/Home/Card'
-import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { DueView } from '../../components/Home/DueView';
 import moment from 'moment'
 import { paymentDues, duePay } from "../../redux/reducers/PaymentReducer";
@@ -20,7 +19,7 @@ class PaymentDetail extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            data: null,
             showDialog: false,
             message: '',
             dribble_logo: '',
@@ -53,6 +52,7 @@ class PaymentDetail extends BaseComponent {
             console.warn(value)
             userData = JSON.parse(value)
             const player_id = userData['player_id']
+            const academy_id = parseInt(userData['academy_id'])
             this.state.userData = userData
 
             getData('header', (header) => {
@@ -62,9 +62,15 @@ class PaymentDetail extends BaseComponent {
                     let data = this.props.data.data
                     console.log('paymentDues payload ' + JSON.stringify(this.props.data.data));
                     if (data.success) {
-
+                        let dues = data.data.dues
+                        console.log('dues array', dues)
+                        let paymentData = dues.filter((item) => {
+                            console.log('item is', item.academyId)
+                            return item.academyId === academy_id
+                        })
+                        console.log('filter payment data', paymentData)
                         this.setState({
-                            data: data.data.dues
+                            data: paymentData[0]
                         })
                     }
                 }).catch((response) => {
@@ -84,14 +90,15 @@ class PaymentDetail extends BaseComponent {
         }, 100)
     }
 
-    processPayment(item) {
-
+    processPayment() {
+        const { data } = this.state;
         const logo = this.state.dribble_logo
-        const desc = 'Payment for Academy ' + item.academyName + ' and Batch ' + item.batchName
+        // const desc = 'Payment for Academy ' + data.academyName + ' and Batch ' + item.batchName
+        const desc = 'Payment for Academy ' + data.academyName
         const mobile_number = this.state.userData.user['mobile_number']
         const email = this.state.userData.user['email']
         const name = this.state.userData.user['name']
-        let total = item.amount
+        let total = data.totalAmount
         total = total + '00'
 
         var options = {
@@ -115,7 +122,7 @@ class PaymentDetail extends BaseComponent {
             let payment_details = {
                 razorpay_payment_id: data.razorpay_payment_id
             }
-            this.submitData(payment_details, item, total)
+            this.submitData(payment_details)
         }).catch((error) => {
             // handle failure
             console.log('Razor Rspo ', JSON.stringify(error))
@@ -125,21 +132,21 @@ class PaymentDetail extends BaseComponent {
 
     }
 
-    submitData(payment_details, item, total) {
-
+    submitData(payment_details) {
+        const { data } = this.state
         let subData = {}
-        subData.id = item.dueId
-        subData.amount = total
+        subData.dueIds = data.paymentDueIds
+        subData.amount = data.totalAmount * 100
         subData.payment_details = payment_details
-        let data = {}
-        data['data'] = subData
+        let responseData = {}
+        responseData['data'] = subData
 
         this.progress(true)
 
 
         getData('header', (header) => {
 
-            this.props.duePay(header, data).then(() => {
+            this.props.duePay(header, responseData).then(() => {
 
                 this.progress(false)
 
@@ -167,7 +174,7 @@ class PaymentDetail extends BaseComponent {
                     style={{
                         marginLeft: 12,
                         marginRight: 12,
-                        marginTop: 16
+                        marginVertical: 16
                     }} >
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={defaultStyle.bold_text_14}>{item.academyName}</Text>
@@ -209,25 +216,6 @@ class PaymentDetail extends BaseComponent {
                         </View>
 
                     </View>
-
-                    <View style={{
-                        justifyContent: 'flex-end',
-                        alignItems: 'flex-end',
-                        marginTop: 16,
-                    }}>
-
-                        <View style={{
-                            width: '40%',
-                            justifyContent: 'flex-end',
-
-                            //alignItems: 'flex-end'
-                        }}>{ item.canPayOnline &&
-                            <CustomeButtonB onPress={() => {
-                                this.processPayment(item)
-                            }}>Pay</CustomeButtonB>
-                            }
-                        </View>
-                    </View>
                 </View>
 
             </CustomeCard>
@@ -236,63 +224,93 @@ class PaymentDetail extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.data.length == 0) {
+        if (this.props.data.loading && this.state.data != null) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
-        }
+        } else if (this.state.data != null) {
+            const { paymentDues, totalAmount } = this.state.data
 
-        const data = this.state.data
+            return (
+                <View style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
 
-        return (
-            <View style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
+                    <View>
+                        {/* 
+                        <InfoDialog
+                            visible={this.state.showDialog}
+                            message={this.state.message}
+                        /> */}
 
-                <View>
-                    {/* 
-                    <InfoDialog
-                        visible={this.state.showDialog}
-                        message={this.state.message}
-                    /> */}
+                        <Spinner
+                            visible={this.state.spinner}
+                            textStyle={defaultStyle.spinnerTextStyle}
+                        />
 
-                    <Spinner
-                        visible={this.state.spinner}
-                        textStyle={defaultStyle.spinnerTextStyle}
-                    />
+                        <TouchableOpacity onPress={() =>
+                            this.props.navigation.navigate('PaymentHistory')
+                        }>
+                            <Text style={{
+                                color: '#667DDB',
+                                paddingRight: 12,
+                                paddingLeft: 12,
+                                paddingTop: 12,
+                                paddingBottom: 4,
+                                textAlign: 'right',
+                                fontSize: 10,
+                                fontFamily: 'Quicksand-Regular'
+                            }}>Payment Detail</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                    <TouchableOpacity onPress={() =>
-                        this.props.navigation.navigate('PaymentHistory')
-                    }>
-                        <Text style={{
-                            color: '#667DDB',
-                            paddingRight: 12,
-                            paddingLeft: 12,
-                            paddingTop: 12,
-                            paddingBottom: 4,
-                            textAlign: 'right',
-                            fontSize: 10,
-                            fontFamily: 'Quicksand-Regular'
-                        }}>Payment Detail</Text>
-                    </TouchableOpacity>
+
+                    {paymentDues != null && paymentDues.length > 0 ?
+                        <FlatList
+                            onRefresh={() => this.onRefresh()}
+                            refreshing={this.state.isRefreshing}
+                            data={paymentDues}
+                            extraData={paymentDues}
+                            renderItem={this._renderItem}
+                        /> :
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+                        </View>
+                    }
+
+                    {paymentDues != null && paymentDues.length > 0 &&
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            padding: 12,
+                            borderRadius: 1,
+                            elevation: 1.5,
+                            shadowOpacity: 0.32,
+                            shadowOffset: { width: 0, height: 1, borderBottomRadius: 0 },
+                        }}>
+                            <View style={{ flexDirection: 'column', }}>
+                                <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Total Amount</Text>
+                                <Text style={[defaultStyle.bold_text_14, { marginTop: 4 }]}>Rs {totalAmount}</Text>
+                            </View>
+                            <View style={{ width: '40%' }}>
+                                <Text
+                                    style={styles.rounded_button_half} 
+                                    onPress={() => {this.processPayment()} }>
+                                    Pay
+                                </Text>
+                            </View>
+                        </View>
+                    }
+
                 </View>
-
-
-                {data != null && data.length > 0 ?
-                    <FlatList
-                        onRefresh={() => this.onRefresh()}
-                        refreshing={this.state.isRefreshing}
-                        data={data}
-                        extraData={data}
-                        renderItem={this._renderItem}
-                    /> :
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
-                    </View>}
-
+            );
+        }
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
             </View>
-        );
-
+        )
     }
 
 }
@@ -305,3 +323,19 @@ const mapDispatchToProps = {
     paymentDues, duePay
 };
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentDetail);
+
+const styles = {
+    rounded_button_half: {
+        //width: '70%',
+        padding: 10,
+        borderRadius: 20,
+        //borderWidth: 1,
+        marginLeft: 4,
+        //marginRight: 4,
+        borderColor: '#67BAF5',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Medium'
+    }
+}

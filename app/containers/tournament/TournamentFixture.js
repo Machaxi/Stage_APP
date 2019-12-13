@@ -53,7 +53,6 @@ function calcCenter(x1, y1, x2, y2) {
         y: middle(y1, y2),
     };
 }
-
 class TournamentFixture extends BaseComponent {
 
     static navigationOptions = ({ navigation }) => {
@@ -110,7 +109,7 @@ class TournamentFixture extends BaseComponent {
             zoom: 0.09820492746901595,
             left: 0,
             top: 150,
-
+            view_container:[]
         }
 
         getData('userInfo', (value) => {
@@ -120,7 +119,9 @@ class TournamentFixture extends BaseComponent {
                 let userData = JSON.parse(value)
                 let user_type = userData.user['user_type']
                 //alert(user_type)
-                this.state.is_coach = user_type == COACH || user_type == ACADEMY
+                let data = this.props.navigation.getParam('data')
+                data = JSON.parse(data)
+                this.state.is_coach = user_type == COACH || user_type == ACADEMY || data.can_update_score
                 this.setState({
                     user_type: user_type
                 })
@@ -625,6 +626,7 @@ class TournamentFixture extends BaseComponent {
             console.log('Final-modify => ', JSON.stringify(playerArray))
 
             this.state.array = playerArray
+            this.pre_render(playerArray)
             // setTimeout(() => {
             //     this.setState({
             //         is_show_dialog: false
@@ -641,7 +643,7 @@ class TournamentFixture extends BaseComponent {
         console.log('getMatchScoreById-debug => debug 1 ' + matchid)
         console.log('getMatchScoreById => debug ' + matchid + JSON.stringify(array))
 
-        let data =  this.state.data
+        let data = this.state.data
         let fixture_data = data.tournament_matches
         for (var key in fixture_data) {
             if (fixture_data.hasOwnProperty(key)) {
@@ -654,21 +656,21 @@ class TournamentFixture extends BaseComponent {
                     if (array[i].player1_match && array[i].player1_match.id == matchid) {
                         console.log('getMatchScoreById-debug =>' + matchid + ' player1_match ' + JSON.stringify(array[i].player1_match))
 
-                        console.log('compare match id player1_match '+array[i].player2_match.id+"== "+matchid)
+                        console.log('compare match id player1_match ' + array[i].player2_match.id + "== " + matchid)
 
-                       
-                            console.log('compare match id player1_match-true'+array[i].player1_match.id+"== "+matchid)
-                            return array[i].player1_match.tournament_match_scores
-                       
+
+                        console.log('compare match id player1_match-true' + array[i].player1_match.id + "== " + matchid)
+                        return array[i].player1_match.tournament_match_scores
+
                     }
                     else if (array[i].player2_match && array[i].player2_match.id == matchid) {
                         console.log('getMatchScoreById-debug =>' + matchid + ' player2_match ' + JSON.stringify(array[i].player2_match))
-                        console.log('compare match id '+array[i].player2_match.id+"== "+matchid)
-                        
-                            console.log('compare match id player2_match-true '+array[i].player2_match.id+"== "+matchid)
+                        console.log('compare match id ' + array[i].player2_match.id + "== " + matchid)
 
-                            return array[i].player2_match.tournament_match_scores
-                      
+                        console.log('compare match id player2_match-true ' + array[i].player2_match.id + "== " + matchid)
+
+                        return array[i].player2_match.tournament_match_scores
+
                     }
                 }
             }
@@ -731,25 +733,12 @@ class TournamentFixture extends BaseComponent {
             return 'black'
     }
 
-    render() {
-
-        let array = this.state.array
+    pre_render(array) {
+        //let array = this.state.array
+        console.log('pre_render-before->',array.length)
         let container = []
 
         if (array.length != 0) {
-
-
-            // container.push(
-            //     <Text
-            //         stroke="black"
-            //         strokeWidth="1"
-            //         fontSize="14"
-            //         fontFamily="Quicksand-Regular"
-            //         x={10}
-            //         y={10}
-            //     >{this.state.tournament_name}</Text>
-            // )
-
 
             let height = 45
             let width = 200
@@ -1514,12 +1503,33 @@ class TournamentFixture extends BaseComponent {
 
 
         }
+        console.log('pre_render-after->',container.length)
+        this.state.view_container = container
+
+        this.setState({
+            view_container:container
+        })
+    }
+
+    render() {
+
+
 
         console.warn('Show => ', this.state.is_show_dialog)
         const viewBoxSize = 65;
         const { left, top, zoom } = this.state;
         const resolution = viewBoxSize / Math.min(height, width);//.09//
         console.log('resolution=>' + resolution)
+        console.log('view_container_size',this.state.view_container.length)
+
+
+        if (this.state.view_container.length == 0) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
 
         return (
 
@@ -1536,7 +1546,7 @@ class TournamentFixture extends BaseComponent {
                             translateY: top * resolution,
                             scale: zoom,
                         }}>
-                        {container}
+                        {this.state.view_container}
                     </G>
                 </Svg>
 

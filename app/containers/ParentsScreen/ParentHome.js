@@ -55,7 +55,7 @@ class ParentHome extends BaseComponent {
                         flex: 1
                     }}
                     onPress={() => {
-                        navigation.navigate('SwitchPlayer')
+                        navigation.getParam('switchPlayer')()
                     }}
                     activeOpacity={.8}
                 >
@@ -207,10 +207,12 @@ class ParentHome extends BaseComponent {
             show_must_update_alert: false,
         }
         const { navigation } = this.props.navigation.setParams({ shareProfile: this.shareProfile })
+        this.props.navigation.setParams({ switchPlayer: this.switchPlayer })
     }
 
     componentDidMount() {
         getData('userInfo', (value) => {
+            console.log('userInfo', value)
             var userData = JSON.parse(value)
             if (userData.user) {
                 var userid = userData.user['id']
@@ -276,7 +278,30 @@ class ParentHome extends BaseComponent {
             })
         });
 
+        setTimeout(() => {
+            console.log('component did mount')
+            if(this.viewShot){
+                this.viewShot.capture().then(uri => {
+                    this.onCapture(uri)
+                }).catch(error => {
+                    console.log('error in capture call', error)
+                })
+            } else {
+                console.log('viewshot reference not fount')
+            }
+        }, 5000)
     }
+
+    // componentWillReceiveProps(nextProps, nextState){
+    //     if(nextProps.data !== this.props.data){
+    //         console.log('will recieve props', nextProps)
+    //         setTimeout(()=>{
+    //             this.viewShot.capture().then(uri => {
+    //                 this.onCapture(uri)
+    //             })
+    //         }, 3000)
+    //     }
+    // }
 
     checkNotification() {
         if (global.NOTIFICATION_DATA) {
@@ -387,40 +412,56 @@ class ParentHome extends BaseComponent {
 
     shareProfile = async () => {
         this.setState({ refreshing: true })
-        this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
-            locallyIndex: true,
-            //canonicalUrl:  'https://google.com',
-            title: 'Planet World',
-            contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
-            contentMetadata: {
-                customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID + '', academy_id: this.state.academy_id + '' }
+        if(this.state.screenShot){
+            this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
+                locallyIndex: true,
+                //canonicalUrl:  'https://google.com',
+                title: 'Planet World',
+                contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
+                contentMetadata: {
+                    customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID + '', academy_id: this.state.academy_id + '' }
+                }
+            })
+            this.buo.logEvent(BranchEvent.ViewItem)
+            console.log("Created Branch Universal Object and logged standard view item event.", BranchEvent.ViewItem)
+            let linkProperties = {
+                feature: 'share',
+                channel: 'whatsapp'
+                //userId: "125",
             }
-        })
-        this.buo.logEvent(BranchEvent.ViewItem)
-        console.log("Created Branch Universal Object and logged standard view item event.", BranchEvent.ViewItem)
-        let linkProperties = {
-            feature: 'share',
-            channel: 'whatsapp'
-            //userId: "125",
-        }
 
-        let controlParams = {
-            $desktop_url: 'https://google.com'
-        }
+            let controlParams = {
+                $desktop_url: 'https://google.com'
+            }
 
-        let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
-        //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
-        console.log("URL ", url)
-        const shareOptions = {
-            title: 'Share via',
-            message: 'Click to Explore More About It !' + url,
-            url: 'data:image/png;base64,' + this.state.screenShot,
-            subject: 'hello !!!!!!!!1',
-            //quote:'hello',
-            //   social: Share.Social.WHATSAPP
+            let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
+            //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
+            console.log("URL ", url)
+            const shareOptions = {
+                title: 'Share via',
+                message: 'Click to see my Badminton Stats ' + url,
+                url: 'data:image/png;base64,' + this.state.screenShot,
+                subject: 'hello !!!!!!!!1',
+                //quote:'hello',
+                //   social: Share.Social.WHATSAPP
+            }
+            Share.open(shareOptions);
+            this.setState({ refreshing: false })
+        } else{
+            setTimeout(()=> this.shareProfile(), 1000)
         }
-        Share.open(shareOptions);
-        this.setState({ refreshing: false })
+    }
+
+    onCapture=(uri) => {
+        console.log('uri=>', uri);
+        // setTimeout(() => {
+            ImgToBase64.getBase64String(`file://${uri}`)
+                .then(base64String => {
+                    // console.log('base64String', base64String)
+                    this.setState({ screenShot: base64String })
+                })
+                .catch(err => console.log('error in creating url', err))
+        // }, 10)
     }
 
     getPlayerDashboardData(academy_id, player_id, ) {
@@ -482,6 +523,7 @@ class ParentHome extends BaseComponent {
                         userData['academy_name'] = acedemy_name
                         userData['academy_user_id'] = user1.data['player_profile'].academy_user_id
                         userData['academy_rating'] = user1.data['player_profile'].academy_rating
+                        userData['user_id'] = user1.data['player_profile'].user_id
                         storeData("userInfo", JSON.stringify(userData))
                         Events.publish(EVENT_EDIT_PROFILE);
 
@@ -538,9 +580,9 @@ class ParentHome extends BaseComponent {
                 </View>
                 <View style={{
                     height: 50,
-                    width: 30,
+                    // width: 30,
                     alignItems: 'center',
-                    marginTop: 26, marginRight: 10, marginLeft: 20
+                    marginTop: 26, marginRight: 10, marginLeft: 20,
                 }}>
                     <Image source={require('../../images/ic_drawer_arrow.png')}
                         resizeMode="contain"
@@ -554,16 +596,6 @@ class ParentHome extends BaseComponent {
         </TouchableOpacity>
 
     );
-
-    onCapture = uri => {
-        setTimeout(() => {
-            ImgToBase64.getBase64String(`file://${uri}`)
-                .then(base64String => {
-                    this.setState({ screenShot: base64String })
-                })
-                .catch(err => doSomethingWith(err))
-        }, 1000)
-    }
 
     onRefresh = () => {
 
@@ -587,6 +619,17 @@ class ParentHome extends BaseComponent {
         }, (err) => console.log(err));
     }
 
+    switchPlayer = () => {
+        this.setState({ refreshing: true })
+        if(this.state.screenShot){
+            this.setState({refreshing: false})
+            this.props.navigation.navigate('SwitchPlayer')
+        } else{
+            setTimeout(()=>{this.switchPlayer()}, 1000)
+        }
+    }
+
+
     render() {
 
         let academy_feedback_data = this.state.academy_feedback_data
@@ -603,9 +646,8 @@ class ParentHome extends BaseComponent {
         }
         if (this.state.player_profile) {
             const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, is_reward_point_due,
-                is_payment_due, reward_detail, payment_detail, operations } = this.state.player_profile
-            //console.log('payment_detail=> ', JSON.stringify(payment_detail[0].dueDate))
-
+                is_payment_due, reward_detail, payment_detail_academy, operations } = this.state.player_profile
+            
             sessionArray = [];
             if (operations != null && operations.next_sessions != null) {
                 for (let i = 0; i < operations.next_sessions.length; i++) {
@@ -735,19 +777,16 @@ class ParentHome extends BaseComponent {
                         />
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                    <ViewShot onCapture={this.onCapture} captureMode="mount">
-                        <PlayerHeader
-                            player_profile={this.state.player_profile}
-                            is_tooblar={true}
-                        />
-                    </ViewShot>
-                    <View style={{ margin: 10, marginTop: 20 }}>
+                    <PlayerHeader
+                        player_profile={this.state.player_profile}
+                        is_tooblar={true}
+                    />
+                    <View style={{ margin: 10, marginTop: 20, zIndex: 2 }}>
 
-                        <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
-                            userType: 'coach'
-                        })}>
+                        <SwitchButton onPress={() => this.switchPlayer() }
+                        >
                             Switch Child
-                            </SwitchButton>
+                        </SwitchButton>
                     </View>
 
 
@@ -820,17 +859,17 @@ class ParentHome extends BaseComponent {
                             <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
 
                                 <View style={{ width: '50%', flexDirection: 'row', }}>
-                                    <View>
+                                    {/* <View>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Due Date</Text>
                                         <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>
-                                            {moment.utc(payment_detail[0].dueDate, 'YYYY-MM-DD').local().format("DD-MMM-YYYY")}
+                                            {moment.utc(payment_detail.paymentDues[0].dueDate, 'YYYY-MM-DD').local().format("DD-MMM-YYYY")}
                                         </Text>
-                                    </View>
+                                    </View> */}
 
 
-                                    <View style={{ marginLeft: 24 }}>
+                                    <View style={{  }}>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Amount</Text>
-                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{payment_detail[0].amount}</Text>
+                                        <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{payment_detail_academy.totalAmount}</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '40%' }}>
@@ -886,46 +925,27 @@ class ParentHome extends BaseComponent {
 
 
 
-                    {/* {this.state.strenthList.length != 0 ?
-
-                            <CustomeCard>
-                                <View
-                                    style={{
-                                        marginLeft: 12,
-                                        marginRight: 12,
-                                        marginTop: 16
-                                    }}
-                                >
-                                    <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
-                                    <FlatList
-                                        data={this.state.strenthList}
-                                        renderItem={this.renderItem}
-                                        keyExtractor={(item, index) => item.id}
-                                    />
-                                </View>
-                            </CustomeCard>
-                            : null
-                        } */}
                     {this.state.strenthList.length != 0 ?
-                        <View style={{ margin: 10 }}>
-                            <Card style={{ borderRadius: 12 }}>
-                                <View>
 
-                                    <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
-                                    <View style={{
-                                        width: 60,
-                                        height: 3, marginLeft: 10,
-                                        marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
-                                    }}></View>
-
-                                    <FlatList
-                                        data={this.state.strenthList}
-                                        renderItem={this.renderItem}
-                                        keyExtractor={(item, index) => item.id}
-                                    />
-                                </View>
-                            </Card>
-                        </View> : null}
+                        <CustomeCard>
+                            <View
+                                style={{
+                                    marginLeft: 12,
+                                    marginRight: 12,
+                                    marginTop: 16
+                                }}
+                            >
+                                <Text style={{ fontSize: 14, margin: 10 }}>My Stats</Text>
+                                <FlatList
+                                    data={this.state.strenthList}
+                                    renderItem={this.renderItem}
+                                    keyExtractor={(item, index) => item.id}
+                                />
+                            </View>
+                        </CustomeCard>
+                        : null
+                    }
+                    
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
@@ -1431,6 +1451,38 @@ class ParentHome extends BaseComponent {
                         }}
                         visible={show_must_update_alert}
                     />
+
+                    
+                        <ViewShot 
+                            ref={(ref) => this.viewShot = ref} 
+                            style={{ opacity: 0, position: 'absolute', width: '100%', zIndex: -1 }}
+                        >
+                            <PlayerHeader
+                                player_profile={this.state.player_profile}
+                                is_tooblar={true}
+                            />
+                            {this.state.strenthList.length != 0 ?
+                                <CustomeCard >
+                                    <View
+                                        style={{
+                                            marginLeft: 12,
+                                            marginRight: 12,
+                                            marginTop: 16
+                                        }}
+                                    >
+                                        <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
+                                        <FlatList
+                                            data={this.state.strenthList}
+                                            renderItem={this.renderItem}
+                                            keyExtractor={(item, index) => item.id}
+                                        />
+                                    </View>
+                                </CustomeCard>
+                                : null
+                            }
+
+                        </ViewShot>
+                    
                 </ScrollView>
             </View>;
         } else {

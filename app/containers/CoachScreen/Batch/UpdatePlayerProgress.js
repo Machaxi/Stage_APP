@@ -135,7 +135,6 @@ class UpdatePlayerProgress extends BaseComponent {
                     <TextInput
                         placeholder={'Enter'}
                         style={{
-
                             borderColor: '#CECECE',
                             borderWidth: 0.5, borderRadius: 12,
                             height: 36,

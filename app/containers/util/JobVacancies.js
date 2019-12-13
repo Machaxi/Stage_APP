@@ -82,12 +82,22 @@ class JobVacancies extends BaseComponent {
         // })
 
         this.refreshEvent = Events.subscribe('FROM_REGISTRATION', (deep_data) => {
-            if (deep_data != null)
+            let type = null;
+            console.log('deep data', deep_data)
+            if (deep_data != null) {
                 storeData('deep_data', JSON.stringify(deep_data))
-            setTimeout(() => {
-                this.props.navigation.navigate('Tournament')
-
-            }, 100)
+                let player_id = deep_data.player_id
+                let academy_id = deep_data.academy_id
+                type = deep_data.type
+                if (type !== null && type === 'profile') {
+                    this.props.navigation.navigate('OtherPlayerDeatils', { player_id: player_id, academy_id: academy_id })
+                }
+            }
+            if (type == null) {
+                setTimeout(() => {
+                    this.props.navigation.navigate('Tournament')
+                }, 100)
+            }
         });
 
 

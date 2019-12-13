@@ -32,12 +32,12 @@ class ProgressPerSession extends BaseComponent {
         this.state = {
             country: undefined,
             billingchecked: false,
-            playerList: null,
+            playerList: [],
             batchDetails: null,
             attendenceDate: '26-JUNE-2019',
             searchtxt: '',
             isSearching: false,
-            searchArray: null
+            searchArray: []
         }
         this.state.id = this.props.navigation.getParam('id', '');
     }
@@ -140,8 +140,8 @@ class ProgressPerSession extends BaseComponent {
             )
         }
         if (this.state.batchDetails) {
-            const { batch_name, batch_category, total_players, remaining_players, batch_id, session } = this.state.batchDetails
-
+            const { batch_name, batch_category, remaining_players, batch_id, session } = this.state.batchDetails
+            var total_players = this.state.playerList.length
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: 'white' }}>
 

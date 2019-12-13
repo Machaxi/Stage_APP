@@ -3,6 +3,7 @@ package com.machaxi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.microsoft.codepush.react.CodePush;
 // import com.RNTextInputMask.RNTextInputMaskPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -58,6 +59,11 @@ public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
+    protected String getJSBundleFile(){
+      return CodePush.getJSBundleFile();
+    }
+
+    @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
@@ -96,6 +102,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
 
       // packages.add(new MainReactPackage(),
+            // new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG);
            // new RNTextInputMaskPackage(),
             //new SnackbarPackage());
       // packages.add(new SplashScreenReactPackage());

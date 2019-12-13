@@ -94,6 +94,10 @@ class CoachMenuDrawer extends BaseComponent {
 			userData = (JSON.parse(value))
 			const updated_profile_pic = this.state.updated_profile_pic
 
+			if(!userData.user_id){
+				userData['user_id'] = ''
+			}
+
 			console.log("CoachMenu=> ", JSON.stringify(userData));
 			this.setState({
 				user_type: userData.user['user_type'],
@@ -103,8 +107,8 @@ class CoachMenuDrawer extends BaseComponent {
 				academy_id: userData.academy_id,
 				academy_rating: userData.academy_rating,
 				academy_name: userData.academy_name,
-				profile_pic: updated_profile_pic != '' ? updated_profile_pic : userData.user['profile_pic']
-
+				profile_pic: updated_profile_pic != '' ? updated_profile_pic : userData.user['profile_pic'],
+				user_id: userData.user_id
 			})
 
 			let userType = userData.user['user_type']
@@ -1031,7 +1035,22 @@ class CoachMenuDrawer extends BaseComponent {
 					: null}
 
 
-
+				{
+					this.state.related_players_array != 0 &&
+					<TouchableOpacity activeOpacity={0.8} onPress={() =>
+						this.props.navigation.navigate('EnrollmentForm', {user_id: this.state.user_id, academy_id: this.state.academy_id})}>
+						<View style={styles.drawercell}>
+							<Text style={styles.menu}>
+								Enrollment Form
+							</Text>
+							<Image
+								style={styles.arrow_img}
+								source={require('../images/ic_drawer_arrow.png')}
+							>
+							</Image>
+						</View>
+					</TouchableOpacity>
+				}
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('DietPlan')}>
 

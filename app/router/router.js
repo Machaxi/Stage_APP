@@ -82,6 +82,7 @@ import PaymentHistory from '../containers/payment/PaymentHistory'
 import Test from '../containers/welcome/Test'
 import ContactUs from '../containers/util/ContactUs'
 import FaqScreen from '../containers/util/FaqScreen'
+import EnrollmentForm from '../containers/profile/EnrollmentForm';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -1340,6 +1341,20 @@ const parentHomeModule = createStackNavigator({
 
         })
 
+    },
+    EnrollmentForm: {
+        screen: EnrollmentForm,
+        navigationOptions: ({ navigation }) => ({
+            title: "Enrollment Form",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={true} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
     },
     ImageGuidelines: {
         screen: ImageGuidelines,

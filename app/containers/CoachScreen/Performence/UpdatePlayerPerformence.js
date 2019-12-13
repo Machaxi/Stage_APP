@@ -144,6 +144,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                             textAlign: 'center',
                             padding: 10
                         }}
+                        defaultValue={item.pre_filled_current_month_score}
                         keyboardType={'number-pad'}
                         value={item.score}
                         //onChangeText={(txtscore) => { item.score = txtscore }}

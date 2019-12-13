@@ -3,7 +3,7 @@ import * as Progress from 'react-native-progress';
 
 import {
     View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity,
-    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking 
+    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking
 } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
@@ -130,9 +130,9 @@ class UserHome extends BaseComponent {
                 </TouchableOpacity>
             ),
             headerRight: (
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity
-                        style={{  }}
+                        style={{}}
                         onPress={() => {
                             navigation.navigate('NotificationList')
                         }}
@@ -155,7 +155,7 @@ class UserHome extends BaseComponent {
                                 backgroundColor: '#ED2638'
                             }}>
                                 <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
-                                    {navigation.getParam('notification_count', '') > 99 ? '99+' :  navigation.getParam('notification_count', '')}</Text>
+                                    {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}</Text>
                             </View> : null}
 
 
@@ -204,7 +204,7 @@ class UserHome extends BaseComponent {
             coach_feedback_data: null,
             academy_id: '',
             academy_user_id: '',
-            screenShot: '',
+            screenShot: null,
             show_must_update_alert: false,
         }
 
@@ -216,12 +216,12 @@ class UserHome extends BaseComponent {
         this.willFocusSubscription.remove();
     }
     componentDidMount() {
-        getData('userInfo', (value)=>{
+        getData('userInfo', (value) => {
             var userData = JSON.parse(value)
-            if(userData.user){
+            if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("PlayerHome", {userid: userid, username: username})
+                firebase.analytics().logEvent("PlayerHome", { userid: userid, username: username })
             }
         })
         // firebase.analytics().logEvent("PlayerHome", {})
@@ -255,11 +255,11 @@ class UserHome extends BaseComponent {
                 let player_id = deep_data.player_id
                 let academy_id = deep_data.academy_id
                 type = deep_data.type
-                if(type!== null && type === 'profile'){
-                    this.props.navigation.navigate('OtherPlayerDeatils', {player_id: player_id, academy_id: academy_id})
+                if (type !== null && type === 'profile') {
+                    this.props.navigation.navigate('OtherPlayerDeatils', { player_id: player_id, academy_id: academy_id })
                 }
             }
-            if(type == null){
+            if (type == null) {
                 setTimeout(() => {
                     this.props.navigation.navigate('Tournament')
                 }, 100)
@@ -290,7 +290,30 @@ class UserHome extends BaseComponent {
                 show_must_update_alert: must_update,
             })
         });
+        
+        setTimeout(() => {
+            console.log('component did mount')
+            if(this.viewShot && this.props.data.dashboardData !== '') {
+                this.viewShot.capture().then(uri => {
+                    this.onCapture(uri)
+                })
+            } else {
+                console.log('viewshot reference not fount')
+            }
+        }, 5000)
+        
     }
+
+    // componentWillReceiveProps(nextProps, nextState){
+    //     if(nextProps.data !== this.props.data || nextProps.common !== this.props.common){
+    //         console.log('will recieve props', nextProps)
+    //         setTimeout(()=>{
+    //             this.viewShot.capture().then(uri => {
+    //                 this.onCapture(uri)
+    //             })
+    //         }, 100)
+    //     }
+    // }
 
     checkNotification() {
         if (global.NOTIFICATION_DATA) {
@@ -356,6 +379,7 @@ class UserHome extends BaseComponent {
             this.setState({ refreshing: false });
         }, 1000);
     };
+
     getPlayerDashboardData(academy_id, player_id, ) {
 
         getData('header', (value) => {
@@ -442,51 +466,58 @@ class UserHome extends BaseComponent {
     }
 
     shareProfile = async () => {
-        this.setState({refreshing: true})
-        this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
-            locallyIndex: true,
-            //canonicalUrl:  'https://google.com',
-            title: 'Planet World',
-            contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
-            contentMetadata: {
-                customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID+'', academy_id: this.state.academy_id+'' }
+        this.setState({ refreshing: true })
+        console.log('screenshot', this.state.screenShot)
+        if(this.state.screenShot !== null){
+            this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
+                locallyIndex: true,
+                //canonicalUrl:  'https://google.com',
+                title: 'Planet World',
+                contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
+                contentMetadata: {
+                    customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID + '', academy_id: this.state.academy_id + '' }
+                }
+            })
+            this.buo.logEvent(BranchEvent.ViewItem)
+            console.log("Created Branch Universal Object and logged standard view item event.", BranchEvent.ViewItem)
+            let linkProperties = {
+                feature: 'share',
+                channel: 'whatsapp'
+                //userId: "125",
             }
-        })
-        this.buo.logEvent(BranchEvent.ViewItem)
-        console.log("Created Branch Universal Object and logged standard view item event.", BranchEvent.ViewItem)
-        let linkProperties = {
-            feature: 'share',
-            channel: 'whatsapp'
-            //userId: "125",
-        }
 
-        let controlParams = {
-            $desktop_url: 'https://google.com'
-        }
+            let controlParams = {
+                $desktop_url: 'https://google.com'
+            }
 
-        let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
-        //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
-        console.log("URL ", url)
-        const shareOptions = {
-            title: 'Share via',
-            message: 'Click to Explore More About It !' + url,
-            url: 'data:image/png;base64,' + this.state.screenShot,
-            subject: 'hello !!!!!!!!1',
-            //quote:'hello',
-            //   social: Share.Social.WHATSAPP
+            let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
+            //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
+            console.log("URL ", url)
+            const shareOptions = {
+                title: 'Share via',
+                message: 'Click to see my Badminton Stats ' + url,
+                url: 'data:image/png;base64,' + this.state.screenShot,
+                subject: 'hello !!!!!!!!1',
+                //quote:'hello',
+                //   social: Share.Social.WHATSAPP
+            }
+            Share.open(shareOptions);
+            this.setState({ refreshing: false })
+        } else{
+            setTimeout(()=> this.shareProfile(), 1000)
         }
-        Share.open(shareOptions);
-        this.setState({refreshing: false})
+        
     }
 
     onCapture = uri => {
-        setTimeout(()=>{
+        console.log('uri=>', uri);
+        // setTimeout(() => {
             ImgToBase64.getBase64String(`file://${uri}`)
-            .then(base64String => {
-                this.setState({ screenShot: base64String })
-            })
-            .catch(err => doSomethingWith(err))
-        }, 1000)
+                .then(base64String => {
+                    this.setState({ screenShot: base64String })
+                })
+                .catch(err => doSomethingWith(err))
+        // }, 10)
     }
 
     handleClick() {
@@ -672,7 +703,7 @@ class UserHome extends BaseComponent {
             }
 
 
-            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+            return (<View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 {/* <StatusBar translucent backgroundColor="#264d9b"
                 barStyle="light-content"/> */}
                 <ScrollView
@@ -684,7 +715,36 @@ class UserHome extends BaseComponent {
                         />
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                    <ViewShot onCapture={this.onCapture} captureMode="mount">
+                    
+                        <ViewShot 
+                            ref={(ref) => this.viewShot = ref}
+                            style={{ opacity: 0, position: 'absolute', width: '100%', zIndex: -1 }}
+                        >
+                            <PlayerHeader
+                                is_tooblar={true}
+                                player_profile={this.state.player_profile}
+                            />
+                            {this.state.strenthList.length != 0 ?
+                                <CustomeCard>
+                                    <View
+                                        style={{
+                                            marginLeft: 12,
+                                            marginRight: 12,
+                                            marginTop: 16
+                                        }}
+                                    >
+                                        <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
+                                        <FlatList
+                                            data={this.state.strenthList}
+                                            renderItem={this.renderItem}
+                                            keyExtractor={(item, index) => item.id}
+                                        />
+                                    </View>
+                                </CustomeCard>
+                                : null
+                            }
+                        </ViewShot>
+                    
                     <PlayerHeader
                         is_tooblar={true}
                         player_profile={this.state.player_profile}
@@ -731,41 +791,29 @@ class UserHome extends BaseComponent {
 
 
                     {this.state.strenthList.length != 0 ?
-                        
-                            <View style={{ margin: 10 }}>
-                                <Card style={{ borderRadius: 12 }}>
-                                    <View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <View>
-                                                <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
-                                                <View style={{
-                                                    width: 60,
-                                                    height: 3, marginLeft: 10,
-                                                    marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
-                                                }}></View>
-                                            </View>
-                                            {/* <TouchableOpacity onPress={() => this.shareProfile()}>
-                                                <Image
-                                                    resizeMode="contain"
-                                                    style={{
-                                                        width: 20,
-                                                        height: 20,
-                                                        marginRight: 10,
-                                                    }}
-                                                    source={require('../../images/share-profile.png')}
-                                                />
-                                            </TouchableOpacity> */}
+
+                        <View style={{ margin: 10 }}>
+                            <Card style={{ borderRadius: 12 }}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <View>
+                                            <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                            <View style={{
+                                                width: 60,
+                                                height: 3, marginLeft: 10,
+                                                marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                            }}></View>
                                         </View>
-                                        <FlatList
-                                            data={this.state.strenthList}
-                                            renderItem={this.renderItem}
-                                            keyExtractor={(item, index) => item.id}
-                                        />
                                     </View>
-                                </Card>
-                            </View> : null}
-                    </ViewShot>
-                    
+                                    <FlatList
+                                        data={this.state.strenthList}
+                                        renderItem={this.renderItem}
+                                        keyExtractor={(item, index) => item.id}
+                                    />
+                                </View>
+                            </Card>
+                        </View> : null}
+
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
@@ -868,7 +916,7 @@ class UserHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    
+
 
                     {/* ================================ ACADEMY FEEDBACk =================== */}
 
@@ -1272,19 +1320,20 @@ class UserHome extends BaseComponent {
                     <UpdateAppDialog
                         navigation={this.state.navigation}
                         exitPressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             BackHandler.exitApp()
                             //this.props.navigation.goBack(null)
                         }}
                         updatePressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             this.handleClick()
                         }}
-                        visible={show_must_update_alert} 
+                        visible={show_must_update_alert}
                     />
-
+                    
                 </ScrollView>
-            </View >;
+            </View >
+            )
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

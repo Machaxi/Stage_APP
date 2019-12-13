@@ -1,3 +1,5 @@
 <resources>
     <!-- <string name="app_name">Machaxi</string> -->
+    <!-- staging macaxi<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">STZZS2IqcMuzJOkXCqDQyTStN1084q5RkAvJ_</string> -->
+    <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">g7kKSA7jzVfnqXFjUuzOmiBRmmkkAK2lnW0g6</string>
 </resources>

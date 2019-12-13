@@ -16,15 +16,14 @@ import { getData, storeData } from "../../components/auth";
 import { saveOtherUserProfile, getEnrollmentFormData } from "../../redux/reducers/EnrollmentFormReducer";
 import { CustomeButtonB } from '../../components/Home/SwitchButton'
 import UploadImageModel from '../../components/custom/UploadImageModel'
-import { getDeviceType } from 'react-native-device-info';
 
 
 class EnrollmentForm extends BaseComponent {
 
     constructor(props) {
         super(props)
-        this.user_id = ''
-        this.academy_id = ''
+        this.player_id = null
+        this.academy_id = null
         this.state = {
             spinner: false,
             joinDate: '',
@@ -55,10 +54,11 @@ class EnrollmentForm extends BaseComponent {
         getData('header', value => {
             getData('userInfo', innerValue => {
                 innerValue = JSON.parse(innerValue)
+                console.log('innerValue is', JSON.stringify(innerValue))
                 this.academy_id = innerValue.academy_id
-                this.user_id = innerValue.user.id
-                console.log('user_id', this.user_id)
-                this.props.getEnrollmentFormData(value, this.user_id, this.academy_id).then(() => {
+                this.player_id = innerValue.player_id
+                console.log('player_id', this.player_id)
+                this.props.getEnrollmentFormData(value, this.player_id, this.academy_id).then(() => {
                     this.setState({spinner: false})
                     var enrollData = this.props.data.enrollmentData;
                     if (enrollData.success) {
@@ -167,7 +167,7 @@ class EnrollmentForm extends BaseComponent {
         getData('header', value => {
             var dict = {};
             this.setState({ spinner: true })
-            dict['user_id'] = this.user_id;
+            dict['player_id'] = this.player_id;
             dict['academy_id'] = this.academy_id;
             dict['joining_date'] = joinDate;
             dict['email_address'] = email;
