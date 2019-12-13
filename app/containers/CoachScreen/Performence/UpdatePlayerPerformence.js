@@ -75,20 +75,17 @@ class UpdatePlayerPerformence extends BaseComponent {
                 let user1 = JSON.parse(user);
 
                 if (user1.success == true) {
-                    this.setState({
-                        playerList: user1.data['attributes'],
-                        batchDetails: user1.data
-                    }, () => {
-                        this.state.playerList.map((item, index) => {
-
-                            item.parameters.map((newitem, newindex) => {
-                                this.state.playerList[index].parameters[newindex]['score'] = '';
-                                this.state.playerList[index].parameters[newindex]['attribute_id'] = this.state.playerList[index].attribute_id;
-                            })
-
-                            console.log('this.state.playerList', JSON.stringify(this.state.playerList));
-
+                    let playerList = [...user1.data.attributes]
+                    playerList.map((item, index) => {
+                        item.parameters.map((newitem, newindex) => {
+                            playerList[index].parameters[newindex]['score'] = ''+ newitem.pre_filled_current_month_score;
+                            playerList[index].parameters[newindex]['attribute_id'] = playerList[index].attribute_id;
                         })
+                    })
+                    console.log('playerList', JSON.stringify(playerList));
+                    this.setState({
+                        playerList,
+                        batchDetails: user1.data
                     })
                 }
 
@@ -144,10 +141,8 @@ class UpdatePlayerPerformence extends BaseComponent {
                             textAlign: 'center',
                             padding: 10
                         }}
-                        defaultValue={item.pre_filled_current_month_score}
                         keyboardType={'number-pad'}
                         value={item.score}
-                        //onChangeText={(txtscore) => { item.score = txtscore }}
                         onChangeText={(text) => {
                             if (!this.isNumbericOnly(text)) {
                                 text = ''
@@ -194,7 +189,7 @@ class UpdatePlayerPerformence extends BaseComponent {
         getData('header', (value) => {
             console.log('new data', this.state.playerList);
 
-            var postData = {}, flag = false;
+            var postData = {}
 
 
             var data = {};
@@ -212,7 +207,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                 item.parameters.map((item1, index1) => {
                     var scoreData = {};
                     if (item1.score == '') {
-                        flag = true;
+                        item1.score = '0'
                     }
                     scoreData['attribute_id'] = item.attribute_id;
                     scoreData['parameter_id'] = item1.parameter_id;
@@ -222,9 +217,7 @@ class UpdatePlayerPerformence extends BaseComponent {
 
             })
 
-            if (flag) {
-                alert('Kindly rate on all parameters');
-            } else {
+            
 
                 this.progress(true)
                 postData['data'] = data;
@@ -248,7 +241,7 @@ class UpdatePlayerPerformence extends BaseComponent {
                     //handle form errors
                     console.log(response);
                 })
-            }
+            
 
         });
     }

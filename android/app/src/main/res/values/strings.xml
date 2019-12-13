@@ -2,7 +2,7 @@
     <!-- <string name="app_name">Machaxi</string> -->
     <!-- staging macaxi-android<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">STZZS2IqcMuzJOkXCqDQyTStN1084q5RkAvJ_</string> -->
     <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">g7kKSA7jzVfnqXFjUuzOmiBRmmkkAK2lnW0g6</string>
-    <!-- production macaxi-ios<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">o7ms8MKcHcjVp3kd7OXiSwkyLiAisocUzHbK9</string> -->
+    <!-- staging macaxi-ios<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">o7ms8MKcHcjVp3kd7OXiSwkyLiAisocUzHbK9</string> -->
     <!-- production macaxi-ios<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">wXGw0E65fCUaBkg9lgw5ek3b_Ry8t2JHR8GUp</string> -->
 
 </resources>
