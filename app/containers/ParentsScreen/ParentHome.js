@@ -926,24 +926,23 @@ class ParentHome extends BaseComponent {
 
 
                     {this.state.strenthList.length != 0 ?
-
-                        <CustomeCard>
-                            <View
-                                style={{
-                                    marginLeft: 12,
-                                    marginRight: 12,
-                                    marginTop: 16
-                                }}
-                            >
-                                <Text style={{ fontSize: 14, margin: 10 }}>My Stats</Text>
-                                <FlatList
-                                    data={this.state.strenthList}
-                                    renderItem={this.renderItem}
-                                    keyExtractor={(item, index) => item.id}
-                                />
-                            </View>
-                        </CustomeCard>
-                        : null
+                        <View style={{ margin: 10 }}>
+                            <Card style={{ borderRadius: 12 }}>
+                                <View>
+                                    <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                    <View style={{
+                                        width: 60,
+                                        height: 3, marginLeft: 10,
+                                        marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                    }}></View>
+                                    <FlatList
+                                        data={this.state.strenthList}
+                                        renderItem={this.renderItem}
+                                        keyExtractor={(item, index) => item.id}
+                                    />
+                                </View>
+                            </Card>
+                        </View> : null
                     }
                     
 
@@ -1429,7 +1428,7 @@ class ParentHome extends BaseComponent {
                                             style={[defaultStyle.bold_text_12,
                                             { textAlign: 'center', flex: 1, padding: 16, color: '#707070' }]}>
                                             View Coach
-                                                </Text>
+                                        </Text>
 
                                     </TouchableOpacity>
                                 </Card>
@@ -1462,23 +1461,23 @@ class ParentHome extends BaseComponent {
                                 is_tooblar={true}
                             />
                             {this.state.strenthList.length != 0 ?
-                                <CustomeCard >
-                                    <View
-                                        style={{
-                                            marginLeft: 12,
-                                            marginRight: 12,
-                                            marginTop: 16
-                                        }}
-                                    >
-                                        <Text style={{ fontSize: 14, margin: 10 }}>My Stats </Text>
-                                        <FlatList
-                                            data={this.state.strenthList}
-                                            renderItem={this.renderItem}
-                                            keyExtractor={(item, index) => item.id}
-                                        />
-                                    </View>
-                                </CustomeCard>
-                                : null
+                                <View style={{ margin: 10 }}>
+                                    <Card style={{ borderRadius: 12 }}>
+                                        <View>
+                                            <Text style={[defaultStyle.bold_text_14, { marginLeft: 10, marginTop: 10 }]}>My Stats </Text>
+                                            <View style={{
+                                                width: 60,
+                                                height: 3, marginLeft: 10,
+                                                marginTop: 2, marginBottom: 8, backgroundColor: '#404040'
+                                            }}></View>
+                                            <FlatList
+                                                data={this.state.strenthList}
+                                                renderItem={this.renderItem}
+                                                keyExtractor={(item, index) => item.id}
+                                            />
+                                        </View>
+                                    </Card>
+                                </View> : null
                             }
 
                         </ViewShot>
