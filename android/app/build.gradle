@@ -132,10 +132,9 @@ android {
         applicationId "com.machaxi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "2.0"
+        versionCode 12
+        versionName "2.1.1"
         multiDexEnabled true
-        resValue "string", "app_name", "Machaxi"
 
     }
 
@@ -178,6 +177,7 @@ dexOptions {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+            // resValue "string", "app_name1", "Machaxi1"
         }
     }
     // applicationVariants are e.g. debug, release

@@ -99,7 +99,7 @@ class PaymentDetail extends BaseComponent {
         const email = this.state.userData.user['email']
         const name = this.state.userData.user['name']
         let total = data.totalAmount
-        total = total + '00'
+        total = total * 100
 
         var options = {
             description: desc,
@@ -224,14 +224,14 @@ class PaymentDetail extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.data != null) {
+        if (this.props.data.loading && this.state.data == null) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
                 </View>
             )
         } else if (this.state.data != null) {
-            const { paymentDues, totalAmount } = this.state.data
+            const { paymentDues, totalAmount, canPayOnline } = this.state.data
 
             return (
                 <View style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
@@ -258,9 +258,9 @@ class PaymentDetail extends BaseComponent {
                                 paddingTop: 12,
                                 paddingBottom: 4,
                                 textAlign: 'right',
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontFamily: 'Quicksand-Regular'
-                            }}>Payment Detail</Text>
+                            }}>Payment History</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -273,8 +273,24 @@ class PaymentDetail extends BaseComponent {
                             extraData={paymentDues}
                             renderItem={this._renderItem}
                         /> :
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+                        <View style={{height: '100%'}}>
+                            <TouchableOpacity onPress={() =>
+                                this.props.navigation.navigate('PaymentHistory')
+                            }>
+                                <Text style={{
+                                    color: '#667DDB',
+                                    paddingRight: 12,
+                                    paddingLeft: 12,
+                                    paddingTop: 12,
+                                    paddingBottom: 4,
+                                    textAlign: 'right',
+                                    fontSize: 12,
+                                    fontFamily: 'Quicksand-Regular'
+                                }}>Payment History</Text>
+                            </TouchableOpacity>
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+                            </View>
                         </View>
                     }
 
@@ -294,11 +310,19 @@ class PaymentDetail extends BaseComponent {
                                 <Text style={[defaultStyle.bold_text_14, { marginTop: 4 }]}>Rs {totalAmount}</Text>
                             </View>
                             <View style={{ width: '40%' }}>
-                                <Text
-                                    style={styles.rounded_button_half} 
-                                    onPress={() => {this.processPayment()} }>
-                                    Pay
-                                </Text>
+                                {
+                                    canPayOnline ?
+                                    <Text
+                                        style={styles.rounded_button_half} 
+                                        onPress={() => {this.processPayment()} }>
+                                        Pay
+                                    </Text> :
+                                    <Text
+                                        style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} 
+                                        onPress={() => {}}>
+                                        Pay
+                                    </Text>
+                                }
                             </View>
                         </View>
                     }
@@ -307,8 +331,24 @@ class PaymentDetail extends BaseComponent {
             );
         }
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+            <View style={{height: '100%'}}>
+                <TouchableOpacity onPress={() =>
+                    this.props.navigation.navigate('PaymentHistory')
+                }>
+                    <Text style={{
+                        color: '#667DDB',
+                        paddingRight: 12,
+                        paddingLeft: 12,
+                        paddingTop: 12,
+                        paddingBottom: 4,
+                        textAlign: 'right',
+                        fontSize: 12,
+                        fontFamily: 'Quicksand-Regular'
+                    }}>Payment History</Text>
+                </TouchableOpacity>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+                </View>
             </View>
         )
     }

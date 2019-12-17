@@ -192,7 +192,7 @@ class UpdatePlayerProgress extends BaseComponent {
         getData('header', (value) => {
             console.log('new data', this.state.playerList);
 
-            var postData = {}, flag = false;
+            var postData = {}
 
 
             var data = {};
@@ -210,7 +210,7 @@ class UpdatePlayerProgress extends BaseComponent {
                 item.parameters.map((item1, index1) => {
                     var scoreData = {};
                     if (item1.score == '') {
-                        flag = true;
+                        item1.score = 0
                     }
                     scoreData['attribute_id'] = item.attribute_id;
                     scoreData['parameter_id'] = item1.parameter_id;
@@ -220,9 +220,7 @@ class UpdatePlayerProgress extends BaseComponent {
 
             })
 
-            if (flag) {
-                alert('Kindly rate on all parameters');
-            } else {
+            
 
                 this.progress(true)
                 postData['data'] = data;
@@ -246,7 +244,7 @@ class UpdatePlayerProgress extends BaseComponent {
                     //handle form errors
                     console.log(response);
                 })
-            }
+            
 
         });
     }

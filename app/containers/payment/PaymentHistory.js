@@ -147,7 +147,7 @@ class PaymentHistory extends BaseComponent {
                     alignItems: 'center',
                     //textAlign: 'center'
                 }]}>
-                    {moment(item.transferred_on).format('DD/MM/YYYY')}
+                    {moment(item.payment_date).format('DD/MM/YYYY')}
                 </Text>
                 <Text style={[defaultStyle.regular_text_14, {
                     width: "33%",
