@@ -1,23 +1,24 @@
 import React from 'react'
 
 import { View, Text, Image, Modal, StyleSheet, BackHandler } from 'react-native'
+import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
+import { CheckBox } from 'react-native-elements'
+import { Card } from 'react-native-paper';
+import { connect } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
+import RNPickerSelect from 'react-native-picker-select'
+import RazorpayCheckout from 'react-native-razorpay';
+import firebase from "react-native-firebase";
+import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
+import AbortDialog from './AbortDialog'
 import BaseComponent, {
     defaultStyle, EVENT_SELECT_PLAYER_TOURNAMENT, getPaymentKey,
     getFormattedCategory,
     GO_TO_HOME, TEMP_USER_INFO, getFormattedTournamentLevel, DRIBBLE_LOGO
 } from '../BaseComponent';
-import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
-import { CheckBox } from 'react-native-elements'
-import { Card } from 'react-native-paper';
 import { getData, storeData } from '../../components/auth';
 import { registerTournament, getPlayerSWitcher } from "../../redux/reducers/TournamentReducer";
-import { connect } from 'react-redux';
-import Spinner from 'react-native-loading-spinner-overlay';
 import Events from '../../router/events';
-import RNPickerSelect from 'react-native-picker-select'
-import AbortDialog from './AbortDialog'
-import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
-import RazorpayCheckout from 'react-native-razorpay';
 
 const placeholder = {
     label: 'Select ',
@@ -104,6 +105,9 @@ class RegistrationSteps extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.userId = ''
+        this.userName = ''
+        this.academyId = ''
         this.state = {
             birthdate: "",
             txtname: '',
@@ -325,6 +329,9 @@ class RegistrationSteps extends BaseComponent {
             if (value != '') {
 
                 let userData = JSON.parse(value)
+                this.academy_id = userData['academy_id']
+                this.userid = userData.user['id']
+                this.username = userData.user['name']
                 let user_type = userData.user['user_type']
                 this.setState({
                     user_type: user_type,
@@ -1395,6 +1402,13 @@ class RegistrationSteps extends BaseComponent {
 
         //if fees =0 then not taking to payment gateway, directly calling api
         let fees = this.getTotalAmount()
+        firebase.analytics().logEvent("onRegistrationLoad",
+        { 
+            userid: this.userid, 
+            username: this.username,
+            academyId: this.academy_id,
+            amount: fees
+        })
         if (fees == 0) {
 
             this.submitData(null, fees)
@@ -1402,7 +1416,7 @@ class RegistrationSteps extends BaseComponent {
         } else {
 
             let total = fees
-            total = total + '00'
+            total = total * 100
 
             let userData = this.state.userData
             let user = userData['user']
@@ -1435,6 +1449,13 @@ class RegistrationSteps extends BaseComponent {
                 let payment_details = {
                     razorpay_payment_id: data.razorpay_payment_id
                 }
+                firebase.analytics().logEvent("afterRegistrationSuccess",
+                {   userid: this.userid,
+                    username: this.username,
+                    academyId: this.academy_id,
+                    amount: fees,
+                    razorPayId: data.razorpay_payment_id
+                })
                 this.submitData(payment_details, fees)
             }).catch((error) => {
                 // handle failure

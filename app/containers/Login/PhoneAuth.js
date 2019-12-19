@@ -748,7 +748,7 @@ class PhoneAuth extends BaseComponent {
                     <OTPInputView
                         style={{width: '80%', height: 200}}
                         pinCount={6}
-                        autoFocusOnLoad
+                        // autoFocusOnLoad
                         codeInputFieldStyle={{
                             fontSize: 18,
                             width: 30,

@@ -3,21 +3,25 @@ import React from 'react'
 import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator } from 'react-native'
 import BaseComponent, { defaultStyle, DRIBBLE_LOGO, getPaymentKey } from '../BaseComponent';
 import { FlatList } from 'react-native-gesture-handler';
-import { CustomeCard } from '../../components/Home/Card'
-import { DueView } from '../../components/Home/DueView';
 import moment from 'moment'
-import { paymentDues, duePay } from "../../redux/reducers/PaymentReducer";
 import { connect } from 'react-redux';
-import { getData } from '../../components/auth';
-import InfoDialog from '../../components/custom/InfoDialog'
 import RazorpayCheckout from 'react-native-razorpay';
 import Spinner from 'react-native-loading-spinner-overlay';
+import firebase from "react-native-firebase";
+import { getData } from '../../components/auth';
+import InfoDialog from '../../components/custom/InfoDialog'
+import { CustomeCard } from '../../components/Home/Card'
+import { DueView } from '../../components/Home/DueView';
+import { paymentDues, duePay } from "../../redux/reducers/PaymentReducer";
 
 class PaymentDetail extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+        this.userid = ''
+        this.username = ''
+        this.academy_id = ''
         this.state = {
             data: null,
             showDialog: false,
@@ -52,7 +56,9 @@ class PaymentDetail extends BaseComponent {
             console.warn(value)
             userData = JSON.parse(value)
             const player_id = userData['player_id']
-            const academy_id = parseInt(userData['academy_id'])
+            this.academy_id = userData['academy_id']
+            this.userid = userData.user['id']
+            this.username = userData.user['name']
             this.state.userData = userData
 
             getData('header', (header) => {
@@ -66,11 +72,18 @@ class PaymentDetail extends BaseComponent {
                         console.log('dues array', dues)
                         let paymentData = dues.filter((item) => {
                             console.log('item is', item.academyId)
-                            return item.academyId === academy_id
+                            return item.academyId === this.academy_id
                         })
                         console.log('filter payment data', paymentData)
                         this.setState({
                             data: paymentData[0]
+                        })
+                        firebase.analytics().logEvent("onPaymentDetailLoad",
+                        { 
+                            userid: this.userid, 
+                            username: this.username,
+                            academyId: this.academy_id,
+                            amount: paymentData[0].totalAmount
                         })
                     }
                 }).catch((response) => {
@@ -142,7 +155,13 @@ class PaymentDetail extends BaseComponent {
         responseData['data'] = subData
 
         this.progress(true)
-
+        firebase.analytics().logEvent("afterPaymentDetailSuccess",
+        {   userid: this.userid,
+            username: this.username,
+            academyId: this.academy_id,
+            amount: data.totalAmount,
+            razorPayId: payment_details.razorpay_payment_id
+        })
 
         getData('header', (header) => {
 

@@ -158,7 +158,7 @@ class ParentHome extends BaseComponent {
                                 borderRadius: 30 / 2,
                                 backgroundColor: '#ED2638'
                             }}>
-                                <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
                                     {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}</Text>
                             </View> : null}
                         </ImageBackground>
@@ -1460,7 +1460,7 @@ class ParentHome extends BaseComponent {
                                 player_profile={this.state.player_profile}
                                 is_tooblar={true}
                             />
-                            {this.state.strenthList.length != 0 ?
+                            {/* {this.state.strenthList.length != 0 ?
                                 <View style={{ margin: 10 }}>
                                     <Card style={{ borderRadius: 12 }}>
                                         <View>
@@ -1478,7 +1478,7 @@ class ParentHome extends BaseComponent {
                                         </View>
                                     </Card>
                                 </View> : null
-                            }
+                            } */}
 
                         </ViewShot>
                     

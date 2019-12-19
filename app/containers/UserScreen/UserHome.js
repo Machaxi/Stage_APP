@@ -154,7 +154,7 @@ class UserHome extends BaseComponent {
                                 borderRadius: 30 / 2,
                                 backgroundColor: '#ED2638'
                             }}>
-                                <Text style={[defaultStyle.bold_text_10, { fontSize: 10, color: 'white' }]}>
+                                <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
                                     {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}</Text>
                             </View> : null}
 
@@ -333,7 +333,7 @@ class UserHome extends BaseComponent {
         this.getNotificationCount((count) => {
             this.props.navigation.setParams({ notification_count: count });
             notification_count = count
-            console.log('notificatio_count', count);
+            console.log('notification_count', count);
         })
     }
 
@@ -724,7 +724,7 @@ class UserHome extends BaseComponent {
                                 is_tooblar={true}
                                 player_profile={this.state.player_profile}
                             />
-                            {this.state.strenthList.length != 0 ?
+                            {/* {this.state.strenthList.length != 0 ?
                                 <CustomeCard>
                                     <View
                                         style={{
@@ -742,7 +742,7 @@ class UserHome extends BaseComponent {
                                     </View>
                                 </CustomeCard>
                                 : null
-                            }
+                            } */}
                         </ViewShot>
                     
                     <PlayerHeader
