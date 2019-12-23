@@ -49,12 +49,13 @@ class CustomHeader extends React.Component {
                         <TouchableOpacity
                             onPress={this.toggleDrawer.bind(this)}
                             activeOpacity={.8}
+                            style={{padding: 7}}
                         >
 
                             <Image
 
                                 source={require('../../images/hamburger_white.png')}
-                                style={{ width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
+                                style={{ width: 20, height: 16, marginLeft: 12 }}
                             />
                         </TouchableOpacity>
 

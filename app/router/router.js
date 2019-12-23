@@ -642,6 +642,20 @@ const coachHomeModule = createStackNavigator({
             headerTintColor: '#000',
         }),
     },
+    ViewPlayersListing: {
+        screen: PlayersListing,
+        navigationOptions: ({ navigation }) => ({
+            title: "View Players",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
     AcademyProfile: {
         screen: AcademyProfile,
         navigationOptions: ({ navigation }) => ({

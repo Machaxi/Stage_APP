@@ -1339,13 +1339,17 @@ class TournamentFixture extends BaseComponent {
                         />)
 
                     }
+                    let t1 = i+3
+                    if(i>=4){
+                        t1 = t1 +30
+                    }
 
                     //Down and up lines
                     if (i != col - 1) {
 
 
                         if (pos % 2 == 1) {
-                            let y2 = y + (height * (i + 4) + height * this.square(i))
+                            let y2 = y + (height * (i + (t1)) + height * this.square(i))
                             console.log("i=" + i + " j=" + j + " y1=" + y + " y2=" + y2)
 
                             container.push(<Line
@@ -1358,7 +1362,8 @@ class TournamentFixture extends BaseComponent {
                             />)
                         } else {
 
-                            let y2 = y - (height * (i + 3) + height * this.square(i))
+                            
+                            let y2 = y - (height * (i + (t1)) + height * this.square(i))
 
                             console.log("i=" + i + " j=" + j + " y1=" + y + " y2=" + y2)
                             container.push(<Line

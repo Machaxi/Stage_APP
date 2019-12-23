@@ -21,6 +21,7 @@ export default class AcademyFilter extends BaseComponent {
                     onPress={() => {
                         navigation.goBack();
                     }}
+                    style={{padding: 7}}
                     activeOpacity={.8}>
                     <Image
                         source={require('../../images/go_back_arrow.png')}

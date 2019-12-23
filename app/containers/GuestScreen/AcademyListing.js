@@ -58,10 +58,11 @@ class AcademyListing extends BaseComponent {
                             onPress={() => {
                                 navigation.goBack();
                             }}
+                            style={{padding: 7}}
                             activeOpacity={.8}>
                             <Image
                                 source={require('../../images/go_back_arrow.png')}
-                                style={{ width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
+                                style={{ width: 20, height: 16, marginLeft: 12 }}
                             />
                         </TouchableOpacity>
                         : null}
@@ -69,6 +70,7 @@ class AcademyListing extends BaseComponent {
                         onPress={() => {
                             navigation.toggleDrawer();
                         }}
+                        style={{padding: 7}}
                         activeOpacity={.8}>
                         <Image
                             source={require('../../images/hamburger.png')}

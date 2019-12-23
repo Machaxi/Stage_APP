@@ -44,27 +44,26 @@ class NavigationDrawerStructure extends React.Component {
                 {showBackAction ?
                     <TouchableOpacity
                         activeOpacity={.8}
+                        style={{padding: 10, marginLeft: 12}}
                         onPress={this.toggleToHome.bind(this)}>
 
                         <Image
                             resizeMode="contain"
                             source={require('../images/go_back_arrow.png')}
-                            style={{
-                                marginLeft: 12,
-                                width: 20, height: 16, paddingLeft: 12, paddingRight: 4,
-                                paddingTop: 8, paddingBottom: 8
-                            }}
+                            style={{ width: 20, height: 16 }}
                         />
                     </TouchableOpacity>
                     : null
                 }
 
-                {showDrawer ? <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+                {showDrawer ? <TouchableOpacity 
+                    style={{ padding: 10 }}
+                    onPress={this.toggleDrawer.bind(this)}>
                     {/*Donute Button Image */}
                     <Image
                     resizeMode="contain"
                         source={require('../images/hamburger.png')}
-                        style={{ width: 24, height: 16, marginLeft: 12 }}
+                        style={{ width: 24, height: 16 }}
                     />
                 </TouchableOpacity>
                     : null}

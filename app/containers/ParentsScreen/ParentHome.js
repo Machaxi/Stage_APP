@@ -120,7 +120,7 @@ class ParentHome extends BaseComponent {
             ),
             headerLeft: (
                 <TouchableOpacity
-                    style={{ marginRight: 8 }}
+                    style={{ marginRight: 8, padding: 7 }}
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
@@ -129,7 +129,7 @@ class ParentHome extends BaseComponent {
                     <Image
                         resizeMode="contain"
                         source={require('../../images/hamburger_white.png')}
-                        style={{ width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
                     />
                 </TouchableOpacity>
             ),
@@ -413,10 +413,10 @@ class ParentHome extends BaseComponent {
     shareProfile = async () => {
         this.setState({ refreshing: true })
         if(this.state.screenShot){
-            this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
+            this.buo = await branch.createBranchUniversalObject("machaxi-app", {
                 locallyIndex: true,
                 //canonicalUrl:  'https://google.com',
-                title: 'Planet World',
+                title: 'Machaxi',
                 contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
                 contentMetadata: {
                     customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID + '', academy_id: this.state.academy_id + '' }
@@ -431,17 +431,17 @@ class ParentHome extends BaseComponent {
             }
 
             let controlParams = {
-                $desktop_url: 'https://google.com'
+                $desktop_url: 'https://play.google.com/store/apps/details?id=com.machaxi&hl=en'
             }
 
             let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
             //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
             console.log("URL ", url)
             const shareOptions = {
-                title: 'Share via',
+                title: 'Machaxi App',
                 message: 'Click to see my detailed Badminton Stats ' + url,
                 url: 'data:image/png;base64,' + this.state.screenShot,
-                subject: 'hello !!!!!!!!1',
+                subject: 'Machaxi',
                 //quote:'hello',
                 //   social: Share.Social.WHATSAPP
             }

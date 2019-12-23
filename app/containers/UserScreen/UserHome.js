@@ -119,13 +119,14 @@ class UserHome extends BaseComponent {
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
+                    style={{padding: 7}}
                     activeOpacity={.8}
                 >
 
                     <Image
 
                         source={require('../../images/hamburger_white.png')}
-                        style={{ width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
+                        style={{ width: 20, height: 16, marginLeft: 12 }}
                     />
                 </TouchableOpacity>
             ),
@@ -469,10 +470,10 @@ class UserHome extends BaseComponent {
         this.setState({ refreshing: true })
         console.log('screenshot', this.state.screenShot)
         if(this.state.screenShot !== null){
-            this.buo = await branch.createBranchUniversalObject("planet/Mercury", {
+            this.buo = await branch.createBranchUniversalObject("machaxi-app", {
                 locallyIndex: true,
                 //canonicalUrl:  'https://google.com',
-                title: 'Planet World',
+                title: 'Machaxi',
                 contentImageUrl: 'data:image/png;base64,' + this.state.screenShot,
                 contentMetadata: {
                     customMetadata: { type: 'profile', player_id: global.SELECTED_PLAYER_ID + '', academy_id: this.state.academy_id + '' }
@@ -487,17 +488,17 @@ class UserHome extends BaseComponent {
             }
 
             let controlParams = {
-                $desktop_url: 'https://google.com'
+                $desktop_url: 'https://play.google.com/store/apps/details?id=com.machaxi&hl=en'
             }
 
             let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
             //let {url} = await branchUniversalObject.generateShortUrl(linkProperties)
             console.log("URL ", url)
             const shareOptions = {
-                title: 'Share via',
+                title: 'Machaxi App',
                 message: 'Click to see my detailed Badminton Stats ' + url,
                 url: 'data:image/png;base64,' + this.state.screenShot,
-                subject: 'hello !!!!!!!!1',
+                subject: 'Machaxi',
                 //quote:'hello',
                 //   social: Share.Social.WHATSAPP
             }

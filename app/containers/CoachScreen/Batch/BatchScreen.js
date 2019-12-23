@@ -52,6 +52,7 @@ class BatchScreen extends BaseComponent {
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
+                    style={{padding: 7}}
                     activeOpacity={.8}>
                     <Image
                         source={require('../../../images/hamburger.png')}

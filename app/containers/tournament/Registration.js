@@ -37,11 +37,12 @@ class Registration extends BaseComponent {
                     onPress={() => {
                         navigation.getParam('showConfirmAlert')();
                     }}
+                    style={{padding: 7}}
                     activeOpacity={.8}>
                     <Image
                         resizeMode="contain"
                         source={require('../../images/go_back_arrow.png')}
-                        style={{ padding: 8, width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
+                        style={{ padding: 8, width: 20, height: 16, marginLeft: 12 }}
                     />
                 </TouchableOpacity>
             ),
