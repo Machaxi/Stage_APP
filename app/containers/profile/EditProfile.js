@@ -695,12 +695,12 @@ class EditProfile extends BaseComponent {
                                 </View>
                             </View>
                         }
-                        {
+                        {/* {
                             this.state.user_type === "PLAYER" &&
                             <View style={{ flex: 1, margin: 20, width: '50%' }}>
                                 <CustomeButtonB onPress={() => this.props.navigation.navigate('EnrollmentForm')}> Enrollment Form</CustomeButtonB>
                             </View>
-                        }
+                        } */}
                         <View style={{ flex: 1, margin: 20, width: '50%' }}>
                             <CustomeButtonB onPress={() => this.saveUserProfile()}> Save </CustomeButtonB>
                         </View>

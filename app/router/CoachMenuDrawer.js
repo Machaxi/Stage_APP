@@ -1038,7 +1038,7 @@ class CoachMenuDrawer extends BaseComponent {
 				{
 					this.state.related_players_array != 0 &&
 					<TouchableOpacity activeOpacity={0.8} onPress={() =>
-						this.props.navigation.navigate('EnrollmentForm', {user_id: this.state.user_id, academy_id: this.state.academy_id})}>
+						this.props.navigation.navigate('EnrollmentForm')}>
 						<View style={styles.drawercell}>
 							<Text style={styles.menu}>
 								Enrollment Form

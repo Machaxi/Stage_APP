@@ -243,7 +243,7 @@ class PaymentDetail extends BaseComponent {
 
     render() {
 
-        if (this.props.data.loading && this.state.data == null) {
+        if (this.props.data.loading || this.state.data == null) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />

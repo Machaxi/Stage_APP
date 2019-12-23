@@ -125,7 +125,7 @@ class UserHome extends BaseComponent {
                     <Image
 
                         source={require('../../images/hamburger_white.png')}
-                        style={{ width: 20, height: 16, marginLeft: 12 }}
+                        style={{ width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
                     />
                 </TouchableOpacity>
             ),
@@ -495,7 +495,7 @@ class UserHome extends BaseComponent {
             console.log("URL ", url)
             const shareOptions = {
                 title: 'Share via',
-                message: 'Click to see my Badminton Stats ' + url,
+                message: 'Click to see my detailed Badminton Stats ' + url,
                 url: 'data:image/png;base64,' + this.state.screenShot,
                 subject: 'hello !!!!!!!!1',
                 //quote:'hello',

@@ -54,7 +54,7 @@ class CustomHeader extends React.Component {
                             <Image
 
                                 source={require('../../images/hamburger_white.png')}
-                                style={{ width: 20, height: 16, marginLeft: 12 }}
+                                style={{ width: 20, height: 16, marginLeft: 12, paddingLeft: 3, paddingRight: 3 }}
                             />
                         </TouchableOpacity>
 
