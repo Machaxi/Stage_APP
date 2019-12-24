@@ -479,6 +479,20 @@ class MarkAttendence extends BaseComponent {
                                 </View>
                             </View> : null}
 
+                        <View>
+                            <View style={{
+                                marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
+                                flexDirection: 'row', justifyContent: 'space-between'
+                            }}>
+                                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Compensatory Batches</Text>
+                                <Text
+                                    style={styles.rounded_button_half} 
+                                    onPress={() => {}}>
+                                    Add
+                                </Text>
+                            </View>
+                        </View>
+
                         {this.renderFooterItem()}
                     </View>
                 </ScrollView>
@@ -586,6 +600,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowOffset: { width: 0, height: 1 }, borderBottomRightRadius: 10, borderBottomLeftRadius: 10
 
+    },
+    rounded_button_half: {
+        width: '25%',
+        padding: 10,
+        borderRadius: 20,
+        //borderWidth: 1,
+        marginLeft: 4,
+        //marginRight: 4,
+        borderColor: '#67BAF5',
+        backgroundColor: '#67BAF5',
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Medium'
     }
 
 
