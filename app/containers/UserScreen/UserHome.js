@@ -488,7 +488,10 @@ class UserHome extends BaseComponent {
             }
 
             let controlParams = {
-                $desktop_url: 'https://play.google.com/store/apps/details?id=com.machaxi&hl=en'
+                $desktop_url: Platform.OS === 'android' ? 
+                    'https://play.google.com/store/apps/details?id=com.machaxi&hl=en' :
+                    'https://apps.apple.com/in/app/machaxi-sports-technology/id1484093762',
+                $ios_url: 'https://apps.apple.com/in/app/machaxi-sports-technology/id1484093762'
             }
 
             let { url } = await this.buo.generateShortUrl(linkProperties, controlParams)
