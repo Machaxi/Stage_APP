@@ -112,7 +112,7 @@ class PaymentDetail extends BaseComponent {
         const email = this.state.userData.user['email']
         const name = this.state.userData.user['name']
         let total = data.totalAmount
-        total = total * 100
+        total = Math.round(total * 100)
 
         var options = {
             description: desc,
