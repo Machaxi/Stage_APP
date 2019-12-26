@@ -32,6 +32,7 @@ import phoneauth from '../containers/Login/PhoneAuth'
 import CoachMenuDrawer from './CoachMenuDrawer'
 import EditProfile from '../containers/profile/EditProfile'
 import markAttendence from '../containers/CoachScreen/MarkAttendence'
+import AddCompensatoryBatch from '../containers/CoachScreen/AddCompensatoryBatch'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 
 import { isSignedIn } from "../components/auth";
@@ -550,11 +551,25 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    AddCompensatoryBatch: {
+        screen: AddCompensatoryBatch,
+        navigationOptions: ({ navigation }) => ({
+            title: "Add Compensatory Batch",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false} showBackAction={true}/>,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+        })
+    },
     EditProfile: {
         screen: EditProfile,
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}/>,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,

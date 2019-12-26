@@ -127,7 +127,7 @@ class MarkAttendence extends BaseComponent {
                 flex: 1,
                 flexDirection: 'row',
                 height: 50
-            }}>
+            }} key={item.id}>
 
                 <View style={{
                     flex: 1,
@@ -203,7 +203,7 @@ class MarkAttendence extends BaseComponent {
                 flex: 1,
                 flexDirection: 'row',
                 height: 50
-            }}>
+            }} key={item.id}>
 
                 <View style={{
                     flex: 1,
@@ -487,7 +487,7 @@ class MarkAttendence extends BaseComponent {
                                 <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Compensatory Batches</Text>
                                 <Text
                                     style={styles.rounded_button_half} 
-                                    onPress={() => {}}>
+                                    onPress={() => this.props.navigation.navigate('AddCompensatoryBatch')}>
                                     Add
                                 </Text>
                             </View>
