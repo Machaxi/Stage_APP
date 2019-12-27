@@ -1417,7 +1417,7 @@ class RegistrationSteps extends BaseComponent {
         } else {
 
             let total = fees
-            total = total * 100
+            total = Math.round(total * 100)
 
             let userData = this.state.userData
             let user = userData['user']
@@ -1454,7 +1454,7 @@ class RegistrationSteps extends BaseComponent {
                 {   userid: this.userid,
                     username: this.username,
                     academyId: this.academy_id,
-                    amount: fees,
+                    amount: total,
                     razorPayId: data.razorpay_payment_id
                 })
                 this.submitData(payment_details, fees)

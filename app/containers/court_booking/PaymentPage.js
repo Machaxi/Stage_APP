@@ -58,7 +58,7 @@ class PaymentPage extends BaseComponent {
         getData(getDataFrom, (value) => {
 
           let total = this.state.paymentData.fees
-          total = total + '00'
+          total = Math.round(total * 100)
 
           let userData = JSON.parse(value);
           let user = userData['user']

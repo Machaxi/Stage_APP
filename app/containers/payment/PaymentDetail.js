@@ -63,7 +63,7 @@ class PaymentDetail extends BaseComponent {
 
             getData('header', (header) => {
 
-                this.props.paymentDues(header, player_id).then(() => {
+                this.props.paymentDues(header, player_id, this.academy_id).then(() => {
 
                     let data = this.props.data.data
                     console.log('paymentDues payload ' + JSON.stringify(this.props.data.data));
@@ -149,7 +149,7 @@ class PaymentDetail extends BaseComponent {
         const { data } = this.state
         let subData = {}
         subData.dueIds = data.paymentDueIds
-        subData.amount = data.totalAmount * 100
+        subData.amount = Math.round(data.totalAmount * 100)
         subData.payment_details = payment_details
         let responseData = {}
         responseData['data'] = subData
@@ -267,7 +267,7 @@ class PaymentDetail extends BaseComponent {
                             textStyle={defaultStyle.spinnerTextStyle}
                         />
 
-                        <TouchableOpacity onPress={() =>
+                        {/* <TouchableOpacity onPress={() =>
                             this.props.navigation.navigate('PaymentHistory')
                         }>
                             <Text style={{
@@ -280,7 +280,7 @@ class PaymentDetail extends BaseComponent {
                                 fontSize: 12,
                                 fontFamily: 'Quicksand-Regular'
                             }}>Payment History</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
 
