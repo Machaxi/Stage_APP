@@ -25,14 +25,14 @@ export default function PaymentReducer(state = initialState, action) {
     }
 }
 
-export function paymentDues(header, player_id) {
+export function paymentDues(header, player_id, academy_id) {
     console.log("paymentDues ", header, player_id)
 
     return {
         type: types.PAYMENT_DUES,
         payload: {
             request: {
-                url: `payment/payment-dues-academy?player_id=${player_id}`,
+                url: `payment/payment-dues-academy?player_id=${player_id}&academy_id=${academy_id}`,
                 method: 'GET',
                 headers: {
                     'x-authorization': header,

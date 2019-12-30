@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle, getFormattedTournamentType, getFormattedTournamentLevel, getFormattedCategory } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import { connect } from 'react-redux';
-import { getData } from "../../components/auth";
-import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
-import { COACH } from '../../components/Constants'
 import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons'
 import Events from '../../router/events';
+import { COACH } from '../../components/Constants'
+import { getData } from "../../components/auth";
+import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
+import BaseComponent, {
+    defaultStyle,
+    getFormattedTournamentType,
+    getFormattedTournamentLevel,
+    getFormattedCategory 
+} from '../BaseComponent'
 
 const placeholder = {
     label: 'Select',
@@ -213,6 +219,12 @@ class FixtureSelection extends BaseComponent {
         }
     }
 
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
     render() {
 
         let data = this.state.tournament_data
@@ -230,285 +242,255 @@ class FixtureSelection extends BaseComponent {
         let name = data.name + " "
 
         return (
-
-            <ScrollView>
-
-                <View style={styles.chartContainer}>
-
-                    <Card
-                        style={{
-                            elevation: 2
-                        }}>
-                        <View style={{ marginLeft: 8, marginRight: 8, marginTop: 2 }}>
-                            <Image style={{ height: 150, width: "100%" }}
-                                source={{ uri: data.cover_pic }}
-                            />
-
-
-                            <View style={{
-                                marginLeft: 6,
-                                marginRight: 6,
-                                marginBottom: 12
-                            }}>
-
+            <View>
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+                <ScrollView>
+                    <View style={styles.chartContainer}>
+                        <Card style={{elevation: 2}}>
+                            <View style={{ marginLeft: 8, marginRight: 8, marginTop: 2 }}>
+                                <Image style={{ height: 150, width: "100%" }}
+                                    source={{ uri: data.cover_pic }}
+                                />
                                 <View style={{
-                                    paddingTop: 12, paddingRight: 12,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between'
+                                    marginLeft: 6,
+                                    marginRight: 6,
+                                    marginBottom: 12
                                 }}>
+                                    <View style={{
+                                        paddingTop: 12, paddingRight: 12,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <Text style={defaultStyle.bold_text_14}>
+                                            {data.name}
+                                        </Text>
+                                        {/* <Image
+                                            resizeMode="contain"
+                                            style={{ width: 16, height: 18, marginRight: 8 }}
+                                            source={require('../../images/share.png')}
+                                        /> */}
+                                    </View>
 
-                                    <Text style={defaultStyle.bold_text_14}>
-                                        {data.name}
-                                    </Text>
+                                    <View style={{ paddingTop: 8, flexDirection: 'row' }}>
+                                        <Text style={defaultStyle.bold_text_14}>
+                                            {data.month + " " + data.year}
+                                        </Text>
+                                        <Text style={{
+                                            backgroundColor: '#667DDB',
+                                            textAlign: 'center',
+                                            fontSize: 11,
+                                            marginLeft: 8,
+                                            color: 'white',
+                                            borderRadius: 4,
+                                            paddingLeft: 6,
+                                            paddingRight: 6,
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
+                                            fontFamily: 'Quicksand-Medium'
+                                        }}>{getFormattedTournamentType(data.academic_type)}</Text>
 
-                                    {/* <Image
-                                        resizeMode="contain"
-                                        style={{ width: 16, height: 18, marginRight: 8 }}
-                                        source={require('../../images/share.png')}
-                                    /> */}
-
-                                </View>
-
-
-                                <View style={{ paddingTop: 8, flexDirection: 'row' }}>
-
-                                    <Text style={defaultStyle.bold_text_14}>
-                                        {data.month + " " + data.year}
-                                    </Text>
+                                    </View>
 
                                     <Text style={{
-                                        backgroundColor: '#667DDB',
-                                        textAlign: 'center',
-                                        fontSize: 11,
-                                        marginLeft: 8,
-                                        color: 'white',
-                                        borderRadius: 4,
-                                        paddingLeft: 6,
-                                        paddingRight: 6,
-                                        paddingTop: 2,
-                                        paddingBottom: 2,
-                                        fontFamily: 'Quicksand-Medium'
-                                    }}>{getFormattedTournamentType(data.academic_type)}</Text>
-
-                                </View>
-
-                                <Text style={{
-                                    paddingTop: 6, fontSize: 14,
-                                    color: '#404040',
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    Dates <Text style={defaultStyle.bold_text_14}>
-                                        {Moment(data.start_date).format('DD MMM') + " - " + Moment(data.end_date).format('DD MMM')}
+                                        paddingTop: 6, fontSize: 14,
+                                        color: '#404040',
+                                        fontFamily: 'Quicksand-Regular'
+                                    }}>
+                                        Dates <Text style={defaultStyle.bold_text_14}>
+                                            {Moment(data.start_date).format('DD MMM') + " - " + Moment(data.end_date).format('DD MMM')}
+                                        </Text>
                                     </Text>
-                                </Text>
 
+                                    {size > 0 ?
+                                        <View>
+                                            <Text style={[defaultStyle.bold_text_14, {
+                                                paddingTop: 24,
+                                            }]}>
+                                                Fixtures
+                                            </Text>
 
-                                {size > 0 ?
-                                    <View>
+                                            <View style={{flexDirection: 'row', marginTop: 12}}>
+                                                <View style={{
+                                                    width: '25%',
+                                                }}>
+                                                    <Text style={{
+                                                        fontSize: 10,
+                                                        color: '#A3A5AE',
+                                                        paddingLeft: 2,
+                                                        fontFamily: 'Quicksand-Regular'
+                                                    }}>
+                                                        Select Category
+                                                    </Text>
+
+                                                    {/* <Text style={{
+                                                        fontSize: 14,
+                                                        paddingTop: 6,
+                                                        color: '#404040',
+                                                        fontFamily: 'Quicksand-Regular'
+                                                    }}>
+                                                        U-10
+                                                        </Text> 
+                                                    */}
+                                                    <RNPickerSelect style={{
+                                                    }}
+                                                        placeholder={placeholder}
+                                                        items={this.state.tournament_category}
+                                                        onValueChange={(value) => {
+                                                            this.setState({
+                                                                selected_tournament_category: value,
+                                                            }, () => this.filterMatch());
+                                                            // setTimeout(() => {
+                                                            //     this.filterMatch()
+                                                            // }, 100)
+
+                                                        }}
+                                                        style={pickerSelectStyles}
+                                                        value={this.state.selected_tournament_category}
+                                                        useNativeAndroidPickerStyle={false}
+                                                        ref={(el) => {
+                                                            this.inputRefs.tournament = el;
+                                                        }}
+                                                    />
+                                                    <View style={{
+                                                        width: "100%",
+                                                        backgroundColor: '#C7C7CD',
+                                                        height: 1,
+                                                        marginTop: 2
+                                                    }}></View>
+                                                </View>
+
+                                                <View style={{marginLeft: 16,width: '30%'}}>
+                                                    <Text style={{
+                                                        fontSize: 10,
+                                                        color: '#A3A5AE',
+                                                        paddingLeft: 2,
+                                                        fontFamily: 'Quicksand-Regular'
+                                                    }}>
+                                                        Gender
+                                                    </Text>
+                                                    <RNPickerSelect style={{
+                                                    }}
+                                                        placeholder={placeholder}
+                                                        items={this.state.gender}
+                                                        onValueChange={(value) => {
+                                                            this.setState({
+                                                                selected_gender: value,
+                                                            }, () => this.filterMatch());
+                                                            // setTimeout(() => {
+                                                            //     this.filterMatch()
+                                                            // }, 100)
+                                                        }}
+                                                        style={pickerSelectStyles}
+                                                        value={this.state.selected_gender}
+                                                        useNativeAndroidPickerStyle={false}
+                                                        ref={(el) => {
+                                                            this.inputRefs.gender = el;
+                                                        }}
+
+                                                    // Icon={() => {
+                                                    //     return (
+                                                    //         <Image
+                                                    //             style={{ width: 8, height: 5 }}
+                                                    //             source={require('../../images/ic_down_arrow.png')} />
+                                                    //     )
+                                                    // }}
+
+                                                    />
+
+                                                    <View style={{
+                                                        width: "100%",
+                                                        backgroundColor: '#C7C7CD',
+                                                        height: 1,
+                                                        marginTop: 2
+                                                    }} />
+                                                </View>
+                                            </View>
+                                            <View style={{ marginTop: 20, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }} />
+
+                                            {this.state.fixture_type.length > 0 ?
+                                                <FlatList
+                                                    style={{
+                                                        marginTop: 8,
+                                                        marginBottom: 8
+                                                    }}
+                                                    contentContainerStyle={{
+                                                        margin: 8
+                                                    }}
+                                                    data={this.state.fixture_type}
+                                                    numColumns={2}
+                                                    renderItem={({ item }) =>
+                                                        <View style={{
+                                                            flex: 0.5,
+                                                            marginRight: 8,
+                                                            marginBottom: 4,
+                                                        }}>
+                                                            <TouchableOpacity
+                                                                activeOpacity={1}
+                                                                onPress={() => {
+                                                                    this.setState({
+                                                                        selected_f_type: item
+                                                                    },()=>{
+                                                                        this.props.navigation.navigate('TournamentFixture', {
+                                                                        data: JSON.stringify(item),
+                                                                        title: name + item.name
+                                                                    })
+                                                                    })
+                                                                    
+                                                                }}
+                                                            >
+                                                                <Card style={styles.card_style}>
+                                                                    <View style={{
+                                                                        flexDirection: 'row',
+                                                                        alignItems: 'center'
+                                                                    }}>
+                                                                        <Image
+                                                                            resizeMode="contain"
+                                                                            style={{ width: 40, height: 48, marginLeft: 16 }}
+                                                                            source={this.getIconByType(item.tournament_type)}
+                                                                        />
+                                                                        <Text style={{
+                                                                            fontSize: 14,
+                                                                            color: '#404040',
+                                                                            marginLeft: 12,
+                                                                            fontFamily: 'Quicksand-Regular'
+                                                                        }}>{getFormattedTournamentLevel(item.tournament_type)}</Text>
+                                                                    </View>
+                                                                </Card>
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    }
+                                                /> :
+                                                <Text style={[defaultStyle.bold_text_14, {
+                                                    paddingTop: 24,
+                                                    flex: 1,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    textAlign: 'center'
+                                                }]}>
+                                                    {this.state.selected_tournament_category == '' ?
+                                                        'Select Category to see fixture' : 'Fixture not available'}
+                                                </Text>
+                                            }
+                                        </View> :
 
                                         <Text style={[defaultStyle.bold_text_14, {
                                             paddingTop: 24,
+                                            flex: 1,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            textAlign: 'center'
                                         }]}>
-                                            Fixtures
-                                         </Text>
-
-                                        <View style={{
-                                            flexDirection: 'row',
-                                            marginTop: 12,
-
-                                        }}>
-                                            <View style={{
-                                                width: '25%',
-                                            }}>
-
-                                                <Text style={{
-                                                    fontSize: 10,
-                                                    color: '#A3A5AE',
-                                                    paddingLeft: 2,
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}>
-                                                    Select Category
-                                    </Text>
-
-                                                {/* <Text style={{
-                                            fontSize: 14,
-                                            paddingTop: 6,
-                                            color: '#404040',
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}>
-                                            U-10
-                                 </Text> */}
-                                                <RNPickerSelect style={{
-                                                }}
-                                                    placeholder={placeholder}
-                                                    items={this.state.tournament_category}
-                                                    onValueChange={(value) => {
-                                                        this.setState({
-                                                            selected_tournament_category: value,
-                                                        });
-                                                        setTimeout(() => {
-                                                            this.filterMatch()
-                                                        }, 100)
-
-                                                    }}
-                                                    style={pickerSelectStyles}
-                                                    value={this.state.selected_tournament_category}
-                                                    useNativeAndroidPickerStyle={false}
-                                                    ref={(el) => {
-                                                        this.inputRefs.tournament = el;
-                                                    }}
-                                                />
-
-                                                <View style={{
-                                                    width: "100%",
-                                                    backgroundColor: '#C7C7CD',
-                                                    height: 1,
-                                                    marginTop: 2
-                                                }}></View>
-                                            </View>
-                                            <View style={{
-                                                marginLeft: 16,
-                                                width: '30%',
-                                            }}>
-
-                                                <Text style={{
-                                                    fontSize: 10,
-                                                    color: '#A3A5AE',
-                                                    paddingLeft: 2,
-                                                    fontFamily: 'Quicksand-Regular'
-                                                }}>
-                                                    Gender
-                                    </Text>
-
-                                                <RNPickerSelect style={{
-                                                }}
-                                                    placeholder={placeholder}
-                                                    items={this.state.gender}
-                                                    onValueChange={(value) => {
-                                                        this.setState({
-                                                            selected_gender: value,
-                                                        });
-                                                        setTimeout(() => {
-                                                            this.filterMatch()
-                                                        }, 100)
-                                                    }}
-                                                    style={pickerSelectStyles}
-                                                    value={this.state.selected_gender}
-                                                    useNativeAndroidPickerStyle={false}
-                                                    ref={(el) => {
-                                                        this.inputRefs.gender = el;
-                                                    }}
-
-                                                // Icon={() => {
-                                                //     return (
-                                                //         <Image
-                                                //             style={{ width: 8, height: 5 }}
-                                                //             source={require('../../images/ic_down_arrow.png')} />
-                                                //     )
-                                                // }}
-
-                                                />
-
-
-                                                <View style={{
-                                                    width: "100%",
-                                                    backgroundColor: '#C7C7CD',
-                                                    height: 1,
-                                                    marginTop: 2
-                                                }}></View>
-                                            </View>
-                                        </View>
-                                        <View style={{ marginTop: 20, marginBottom: 8, backgroundColor: '#DFDFDF', height: 1 }}></View>
-
-
-                                        {this.state.fixture_type.length > 0 ?
-                                            <FlatList
-                                                style={{
-                                                    marginTop: 8,
-                                                    marginBottom: 8
-                                                }}
-                                                contentContainerStyle={{
-                                                    margin: 8
-                                                }}
-                                                data={this.state.fixture_type}
-                                                numColumns={2}
-                                                renderItem={({ item }) =>
-
-                                                    <View style={{
-                                                        flex: 0.5,
-                                                        marginRight: 8,
-                                                        marginBottom: 4,
-                                                    }}>
-                                                        <TouchableOpacity
-                                                            activeOpacity={1}
-                                                            onPress={() => {
-                                                                this.setState({
-                                                                    selected_f_type: item
-                                                                },()=>{
-                                                                    this.props.navigation.navigate('TournamentFixture', {
-                                                                    data: JSON.stringify(item),
-                                                                    title: name + item.name
-                                                                })
-                                                                })
-                                                                
-                                                            }}
-                                                        >
-
-                                                            <Card style={styles.card_style}>
-
-                                                                <View style={{
-                                                                    flexDirection: 'row',
-                                                                    alignItems: 'center'
-                                                                }}>
-
-                                                                    <Image
-                                                                        resizeMode="contain"
-                                                                        style={{ width: 40, height: 48, marginLeft: 16 }}
-                                                                        source={this.getIconByType(item.tournament_type)}
-                                                                    />
-
-                                                                    <Text style={{
-                                                                        fontSize: 14,
-                                                                        color: '#404040',
-                                                                        marginLeft: 12,
-                                                                        fontFamily: 'Quicksand-Regular'
-                                                                    }}>{getFormattedTournamentLevel(item.tournament_type)}</Text>
-                                                                </View>
-                                                            </Card>
-                                                        </TouchableOpacity>
-
-                                                    </View>
-
-                                                }
-                                            /> :
-                                            <Text style={[defaultStyle.bold_text_14, {
-                                                paddingTop: 24,
-                                                flex: 1,
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                textAlign: 'center'
-                                            }]}>
-                                                {this.state.selected_tournament_category == '' ?
-                                                    'Select Category to see fixture' : 'Fixture not available'}
-                                            </Text>
-                                        }
-
-                                    </View> :
-
-                                    <Text style={[defaultStyle.bold_text_14, {
-                                        paddingTop: 24,
-                                        flex: 1,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        textAlign: 'center'
-                                    }]}>
-                                        Fixture not available
-                                         </Text>}
+                                            Fixture not available
+                                        </Text>}
+                                </View>
                             </View>
-
-                        </View>
-                    </Card>
-                </View></ScrollView >
+                        </Card>
+                    </View>
+                </ScrollView >
+            </View>
         );
     }
 }

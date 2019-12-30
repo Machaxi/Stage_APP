@@ -4,12 +4,13 @@ import { View, Text, ActivityIndicator, Image, Modal, TextInput,Alert } from 're
 import BaseComponent, { defaultStyle, ImageBackground, formattedName } from '../BaseComponent';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Card } from 'react-native-paper';
-import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
-import { getMatchScore, updateMatchScore, skipSet, giveBye } from "../../redux/reducers/TournamentScorer";
+import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { getData } from "../../components/auth";
 import { SkyFilledButton, SkyBorderButton } from '../../components/Home/SkyFilledButton'
 import EditScore from './EditScore';
+import { getMatchScore, updateMatchScore, skipSet, giveBye } from "../../redux/reducers/TournamentScorer";
+import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 
 class TournamentScorer extends BaseComponent {
 
@@ -178,6 +179,7 @@ class TournamentScorer extends BaseComponent {
     }
 
     submit(match_scores) {
+        this.progress(true)
         let match_id = this.state.match_id
         let subData = {}
         subData['match_scores'] = match_scores
@@ -191,10 +193,9 @@ class TournamentScorer extends BaseComponent {
         this.props.updateMatchScore(header, data).then(() => {
             let data = this.props.data.data
             console.log(' updateMatchScore ' + JSON.stringify(data));
-
             let success = data.success
+            this.progress(false)
             if (success) {
-
                 if (data.data.player1 == null || data.data.player2 == null) {
                     alert('Player detail not found')
                 }
@@ -206,11 +207,9 @@ class TournamentScorer extends BaseComponent {
                         winner: data.data.winner
                     })
                 }
-
-
             }
-
         }).catch((response) => {
+            this.progress(false)
             console.log(response);
         })
     }
@@ -283,22 +282,41 @@ class TournamentScorer extends BaseComponent {
 
                     })
                 }
-
-
             }
-
         }).catch((response) => {
             console.log(response);
         })
     }
 
-    declareWinner(winner_id){
+    declareWinner(winner_id, winner_name=''){
+        if(winner_name != ''){
+            Alert.alert(
+                'Alert',
+                'Are you sure you want to declare "'+winner_name +'" winner.',
+                [
+                    { text: 'Cancel', onPress: () => {} },
+                    { text: 'OK', onPress: () => this.getWinner(winner_id) }
+                ],
+                { cancelable: true },
+            );
+        } else
+            this.getWinner(winner_id)
+    }
+
+    getWinner(winner_id){
         const {currentIndex} = this.state;
         let match_scores = this.state.match_scores
         match_scores[currentIndex]['winner_id'] = winner_id
         console.log('After Update => ', JSON.stringify(match_scores))
         this.submit(match_scores)
     }
+
+    progress(status) {
+        this.setState({
+            spinner: status
+        })
+    }
+
     render() {
         if (!this.state.score_call &&
             (this.props.data.loading || this.state.match_scores == null || this.state.player1 == null)) {
@@ -431,12 +449,7 @@ class TournamentScorer extends BaseComponent {
                     alignItems: 'center',
                     width: 180,
                 }}>
-
-
-                    <TouchableOpacity
-                        onPress={() => {
-                        }}
-                    >
+                    <TouchableOpacity onPress={() => {}}>
                         <View
                             resizeMode="contain"
                             style={{
@@ -445,12 +458,10 @@ class TournamentScorer extends BaseComponent {
                                 marginTop: 8,
                                 marginLeft: 8, marginRight: 8
                             }}>
-
                         </View>
                     </TouchableOpacity>
 
                     <View style={{
-
                         flexDirection: 'row',
                         justifyContent: justifyContent,
                         alignItems: 'center',
@@ -464,14 +475,11 @@ class TournamentScorer extends BaseComponent {
                         borderRadius: 8,
                         backgroundColor: bgcolor
                     }}>
-
-
                         {element.winner_id ?
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
                             }}>
-
                                 <Image
                                     resizeMode="contain"
                                     style={{
@@ -488,22 +496,22 @@ class TournamentScorer extends BaseComponent {
                                     {element.player1_score}
                                 </Text>
                             </View>
-                            : null}
+                            : null
+                        }
 
                         <Text
                             style={{
                                 fontSize: 14,
                                 color: color,
                                 fontFamily: 'Quicksand-Regular',
-                            }}>Set {element.round}</Text>
+                            }}>Set {element.round}
+                        </Text>
 
                         {element.winner_id ?
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center'
                             }}>
-
-
                                 <Text
                                     style={defaultStyle.bold_text_14}>
                                     {element.player2_score}
@@ -520,8 +528,8 @@ class TournamentScorer extends BaseComponent {
                                         require('../../images/winner_badge.png') : null}
                                 />
                             </View>
-                            : null}
-
+                            : null
+                        }
                     </View>
 
                     {start_card_show && previousRound != null && previousRound.round ==
@@ -571,7 +579,6 @@ class TournamentScorer extends BaseComponent {
                                 // this.setModalVisible(true)
                             }}
                         >
-
                             <Image
                                 resizeMode="contain"
                                 style={{
@@ -580,8 +587,7 @@ class TournamentScorer extends BaseComponent {
                                     marginTop: 8,
                                     marginLeft: 16, marginRight: 8
                                 }}
-                                source={
-                                    require('../../images/edit_profile.png')}
+                                source={require('../../images/edit_profile.png')}
                             />
                         </TouchableOpacity>
                         : null
@@ -594,218 +600,486 @@ class TournamentScorer extends BaseComponent {
 
 
         return (
-
-            <ScrollView>
-
-                <View style={{
-                    position: 'absolute',
-                    height: "100%",
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    selfAlign: 'center',
-                    alignContent: 'center',
-                    width: "100%",
-                }}>
-
-
+            <View>
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+                <ScrollView>
                     <View style={{
+                        position: 'absolute',
                         height: "100%",
-                        width: 3,
-                        backgroundColor: '#C4C4C4'
-                    }}></View>
-                </View>
-
-                <View style={{ padding: 16, }}>
-
-                    <View style={{
-
-                        flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        alignContent: 'center'
+                        selfAlign: 'center',
+                        alignContent: 'center',
+                        width: "100%",
                     }}>
-
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                alignContent: 'center'
-                            }}>
-                            <Text
-                                numberOfLines={1}
-                                style={{
-                                    textAlign: 'center',
-                                    color: 'black',
-                                    fontSize: 17,
-                                    fontFamily: 'Quicksand-Medium'
-                                }}
-                            >{formattedName(player1.name)}</Text>
-
-
-                            <View
-                                style={{
-                                    marginTop: 20,
-                                    position: 'relative'
-                                }}>
-
-                                <Image
-                                    resizeMode="contain"
-                                    source={{ uri: player1.profile_pic }}
-                                    style={{ width: 130, height: 180 }}
-                                />
-
-                                {finalWinner != null && finalWinner.id != player1.id
-                                    ?
-                                    <View style={{
-                                        width: 130, height: 180,
-                                        backgroundColor: '#88a5a5a5',
-                                        position: 'absolute'
-                                    }}>
-                                    </View> : null
-                                }
-
-
-                            </View>
-
-                            {finalWinner == null ?
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.giveBye(player1.id)
-                                    }}
-                                >
-
-                                    <Text
-                                        style={{
-                                            color: '#667DDB',
-                                            fontSize: 10,
-                                            marginTop: 20,
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}
-                                    >Give bye</Text>
-                                </TouchableOpacity>
-                                : null
-                            }
-
-
-
-                        </View>
-
-                        <View>
-
-                            <View
-                                style={{ flex: 1 }}
-                            >
-
-                            </View>
-
-                            <View
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 40 / 2,
-                                    marginBottom: 10,
-                                    alignItems: 'center',
-                                    backgroundColor: "#D2D2D2",
-                                    justifyContent: 'center'
-                                }}>
-
-
-
-                                <Text style={{
-                                    justifyContent: 'center',
-                                    textAlign: 'center',
-                                    alignItems: 'center',
-                                    fontSize: 17,
-                                    fontFamily: 'Quicksand-Medium',
-                                    color: 'white'
-
-                                }}>VS</Text>
-
-                            </View>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                alignContent: 'center'
-                            }}>
-                            <Text
-                                numberOfLines={1}
-                                style={{
-                                    textAlign: 'center',
-                                    color: 'black',
-                                    fontSize: 17,
-                                    fontWeight: "400",
-                                    fontFamily: 'Quicksand-Medium'
-                                }}
-                            >{formattedName(player2.name)}</Text>
-
-                            <View
-                                style={{
-                                    marginTop: 20,
-                                    position: 'relative'
-                                }}>
-                                <Image
-                                    resizeMode="contain"
-                                    source={{ uri: player2.profile_pic }}
-                                    style={{ width: 130, height: 180 }}
-
-                                />
-
-                                {finalWinner != null && finalWinner.id != player2.id
-                                    ?
-                                    <View style={{
-                                        width: 130, height: 180,
-                                        backgroundColor: '#88a5a5a5',
-                                        position: 'absolute'
-                                    }}>
-                                    </View> : null
-                                }
-                            </View>
-
-                            {finalWinner == null ?
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.giveBye(player2.id)
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: '#667DDB',
-                                            fontSize: 10,
-                                            marginTop: 20,
-                                            fontFamily: 'Quicksand-Regular'
-                                        }}
-                                    >Give bye</Text>
-                                </TouchableOpacity> : null}
-
-
-                        </View>
+                        <View style={{
+                            height: "100%",
+                            width: 3,
+                            backgroundColor: '#C4C4C4'
+                        }}></View>
                     </View>
 
-                    <View style={{
-
-                    }}>
-
-
-                        {!is_tournament_completed ?
-                            <View>
-
-                                <View style={{
+                    <View style={{ padding: 16, }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            alignContent: 'center'
+                        }}>
+                            <View
+                                style={{
                                     flex: 1,
-                                    marginTop: 10,
-                                    alignContent: 'center',
+                                    justifyContent: 'center',
                                     alignItems: 'center',
+                                    alignContent: 'center'
                                 }}>
+                                <Text
+                                    numberOfLines={1}
+                                    style={{
+                                        textAlign: 'center',
+                                        color: 'black',
+                                        fontSize: 17,
+                                        fontFamily: 'Quicksand-Medium'
+                                    }}
+                                >{formattedName(player1.name)}
+                                </Text>
 
-                                    {match_array}
+                                <View
+                                    style={{
+                                        marginTop: 20,
+                                        position: 'relative'
+                                    }}>
+                                    <Image
+                                        resizeMode="contain"
+                                        source={{ uri: player1.profile_pic }}
+                                        style={{ width: 130, height: 180 }}
+                                    />
+                                    {finalWinner != null && finalWinner.id != player1.id
+                                        ?
+                                        <View style={{
+                                            width: 130, height: 180,
+                                            backgroundColor: '#88a5a5a5',
+                                            position: 'absolute'
+                                        }}>
+                                        </View> : null
+                                    }
+                                </View>
+
+                                {finalWinner == null ?
+                                    <TouchableOpacity onPress={() => {
+                                        this.giveBye(player1.id)}}>
+                                        <Text
+                                            style={{
+                                                color: '#667DDB',
+                                                fontSize: 10,
+                                                marginTop: 20,
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}
+                                        >Give bye</Text>
+                                    </TouchableOpacity>
+                                    : null
+                                }
+                            </View>
+
+                            <View>
+                                <View style={{ flex: 1 }}>
 
                                 </View>
 
-                                {start_card_show && previousRound != null
-                                    ?
+                                <View
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 40 / 2,
+                                        marginBottom: 10,
+                                        alignItems: 'center',
+                                        backgroundColor: "#D2D2D2",
+                                        justifyContent: 'center'
+                                    }}>
+                                    <Text style={{
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                        alignItems: 'center',
+                                        fontSize: 17,
+                                        fontFamily: 'Quicksand-Medium',
+                                        color: 'white'
+
+                                    }}>VS</Text>
+
+                                </View>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    alignContent: 'center'
+                                }}>
+                                <Text
+                                    numberOfLines={1}
+                                    style={{
+                                        textAlign: 'center',
+                                        color: 'black',
+                                        fontSize: 17,
+                                        fontWeight: "400",
+                                        fontFamily: 'Quicksand-Medium'
+                                    }}
+                                >{formattedName(player2.name)}</Text>
+
+                                <View
+                                    style={{
+                                        marginTop: 20,
+                                        position: 'relative'
+                                    }}>
+                                    <Image
+                                        resizeMode="contain"
+                                        source={{ uri: player2.profile_pic }}
+                                        style={{ width: 130, height: 180 }}
+
+                                    />
+
+                                    {finalWinner != null && finalWinner.id != player2.id
+                                        ?
+                                        <View style={{
+                                            width: 130, height: 180,
+                                            backgroundColor: '#88a5a5a5',
+                                            position: 'absolute'
+                                        }}>
+                                        </View> : null
+                                    }
+                                </View>
+
+                                {finalWinner == null ?
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.giveBye(player2.id)
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: '#667DDB',
+                                                fontSize: 10,
+                                                marginTop: 20,
+                                                fontFamily: 'Quicksand-Regular'
+                                            }}
+                                        >Give bye</Text>
+                                    </TouchableOpacity> : null}
+
+
+                            </View>
+                        </View>
+
+                        <View style={{}}>
+                            {!is_tournament_completed ?
+                                <View>
+                                    <View style={{
+                                        flex: 1,
+                                        marginTop: 10,
+                                        alignContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        {match_array}
+                                    </View>
+
+                                    {start_card_show && previousRound != null
+                                        ?
+                                        <Card style={{
+                                            elevation: 4,
+                                            margin: 16,
+                                        }}>
+                                            <View style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 12,
+                                            }}>
+                                                <Text style={defaultStyle.bold_text_14}>Set {previousRound.round}</Text>
+                                                <Text style={[defaultStyle.heavy_bold_text_14, { marginTop: 10 }]}>
+                                                    {previousRound.winner_id == player1.id ?
+                                                        player1.name : player2.name} Won !</Text>
+                                                <Text style={[defaultStyle.heavy_bold_text_14,
+                                                { marginTop: 12 }]}>
+                                                    {previousRound.player1_score} - {previousRound.player2_score}</Text>
+
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                    marginTop: 20,
+                                                    //flex: 2
+                                                }}>
+                                                    <View style={{
+                                                        flex: 1,
+                                                        width: 120,
+                                                        marginRight: 8,
+                                                        alignItems: 'center',
+                                                    }}>
+                                                        <SkyBorderButton
+                                                            onPress={() => {
+                                                                this.skipSet()
+                                                            }}
+                                                        >Skip Set</SkyBorderButton>
+                                                    </View>
+
+                                                    <View style={{
+                                                        flex: 1,
+                                                        width: 120,
+                                                        marginLeft: 8,
+                                                        alignItems: 'center',
+                                                    }}>
+
+                                                        {/* <SkyFilledButton
+                                                            onPress={() => {
+                                                                this.setState({
+                                                                    start_card_show: false,
+                                                                    is_shown: true
+                                                                })
+                                                            }}
+                                                        >Start Set !</SkyFilledButton> */}
+                                                        <TouchableOpacity activeOpacity={.8}
+                                                            style={[style.rounded_button1, {
+                                                                width: 120,
+                                                                // width: "100%",
+                                                            }]}
+                                                            onPress={() => {
+                                                                this.setState({
+                                                                    start_card_show: false,
+                                                                    is_shown: true
+                                                                })
+                                                            }}>
+                                                            <Text
+                                                                style={{
+                                                                    color: 'white',
+                                                                    textAlign: 'center',
+                                                                    fontFamily: 'Quicksand-Medium',
+                                                                }}>
+                                                                Start Set !
+                                                            </Text>
+                                                        </TouchableOpacity>
+
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </Card>
+                                        :
+
+                                        <View>
+                                            <View style={{
+                                                marginTop: 30,
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                alignContent: 'center'
+                                            }}>
+                                                <View style={{
+                                                    flex: 1,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    alignContent: 'center'
+                                                }}>
+                                                    <View
+                                                        style={{
+                                                            flex: 1,
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+
+                                                        }}>
+
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                this.updateScore(true, true)
+                                                            }}
+                                                        >
+
+                                                            <Image
+                                                                source={require('../../images/ic_minus.png')}
+                                                                style={{
+                                                                    width: 30,
+                                                                    height: 30,
+                                                                    marginTop: 5,
+                                                                }}
+                                                            />
+
+                                                        </TouchableOpacity>
+
+                                                        <Text
+                                                            style={{
+                                                                // width: 56,
+                                                                textAlign: 'center',
+                                                                color: '#404040',
+                                                                fontSize: 46,
+                                                                marginLeft: 8,
+                                                                fontFamily: 'Quicksand-Medium'
+                                                            }}>{currentRound.player1_score}</Text>
+
+                                                        <TouchableOpacity
+                                                            activeOpacity={.8}
+                                                            onPress={() => {
+                                                                //true means player1
+                                                                if (!this.state.disable_increasement_p1)
+                                                                    this.updateScore(true, false)
+                                                            }}>
+                                                            <Image
+                                                                source={require('../../images/ic_plus.png')}
+                                                                style={{ width: 48, height: 48 }}
+
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </View>
+
+
+                                                    {/* <View style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        alignContent: 'center',
+                                                        marginLeft: 40,
+                                                    }}>
+                                                        <TouchableOpacity
+                                                            activeOpacity={.8}
+                                                            onPress={() => {
+                                                                //true means player1
+                                                                if (!this.state.disable_increasement_p1)
+                                                                    this.updateScore(true, false)
+                                                            }}>
+                                                            <Image
+                                                                source={require('../../images/ic_plus.png')}
+                                                                style={{ width: 48, height: 48 }}
+
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </View> */}
+
+                                                    <View
+                                                        style={{
+                                                            flex: 1,
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            alignContent: 'center',
+                                                            marginTop: 5,
+                                                        }}
+                                                    >
+                                                        <CustomeButtonB onPress={
+                                                            () => this.declareWinner(player1.id, player1.name)}
+                                                        >Declare Winner</CustomeButtonB>
+                                                    </View>
+                                                </View>
+
+                                                <View style={{
+                                                    flex: 1,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    alignContent: 'center'
+                                                }}>
+
+                                                    <View
+                                                        style={{
+                                                            flex: 1,
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+
+                                                        }}>
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                this.updateScore(false, true)
+                                                            }}
+                                                        >
+                                                            <Image
+                                                                source={require('../../images/ic_minus.png')}
+                                                                style={{
+                                                                    width: 30,
+                                                                    height: 30,
+                                                                    marginTop: 5,
+                                                                }}
+                                                            />
+                                                        </TouchableOpacity>
+                                                        <Text
+                                                            style={{
+                                                                textAlign: 'center',
+                                                                color: '#404040',
+                                                                fontSize: 46,
+                                                                // width: 56,
+                                                                marginLeft: 8,
+                                                                fontFamily: 'Quicksand-Medium'
+                                                            }}>{currentRound.player2_score}</Text>
+                                                        
+                                                        <TouchableOpacity
+                                                            activeOpacity={.8}
+                                                            onPress={() => {
+                                                                //false means player2
+                                                                if (!this.state.disable_increasement_p2)
+                                                                    this.updateScore(false, false)
+                                                            }}>
+                                                            <Image
+                                                                source={require('../../images/ic_plus.png')}
+                                                                style={{ width: 43, height: 43 }}
+
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </View>
+
+
+                                                    {/* <View style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        alignContent: 'center',
+                                                        marginLeft: 40,
+                                                    }}>
+                                                        <TouchableOpacity
+                                                            activeOpacity={.8}
+                                                            onPress={() => {
+                                                                //false means player2
+                                                                if (!this.state.disable_increasement_p2)
+                                                                    this.updateScore(false, false)
+                                                            }}>
+                                                            <Image
+                                                                source={require('../../images/ic_plus.png')}
+                                                                style={{ width: 43, height: 43 }}
+
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </View> */}
+
+                                                    <View
+                                                        style={{
+                                                            flex: 1,
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            alignContent: 'center',
+                                                            marginTop: 5,
+                                                        }}
+                                                    >
+                                                        <CustomeButtonB onPress={
+                                                            () => this.declareWinner(player2.id, player2.name)}
+                                                        >Declare Winner</CustomeButtonB>
+                                                    </View>
+                                                </View>
+                                            </View>
+
+                                            {/* <View style={{
+                                                flex: 1,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                margin: 20,
+                                            }}>
+
+                                                <TouchableOpacity activeOpacity={.8}
+                                                    style={style.rounded_button}
+                                                    onPress={() => {
+
+                                                    }}>
+                                                    <Text style={style.rounded_button_text}>Save</Text>
+                                                </TouchableOpacity>
+
+                                            </View> */}
+                                        </View>}
+                                </View> :
+
+                                <View>
                                     <Card style={{
                                         elevation: 4,
                                         margin: 16,
@@ -816,384 +1090,81 @@ class TournamentScorer extends BaseComponent {
                                             padding: 12,
                                         }}>
 
-                                            <Text style={defaultStyle.bold_text_14}>Set {previousRound.round}</Text>
+                                            <Text style={defaultStyle.bold_text_14}>Game over</Text>
                                             <Text style={[defaultStyle.heavy_bold_text_14, { marginTop: 10 }]}>
-                                                {previousRound.winner_id == player1.id ?
-                                                    player1.name : player2.name} Won !</Text>
-                                            <Text style={[defaultStyle.heavy_bold_text_14,
-                                            { marginTop: 12 }]}>
-                                                {previousRound.player1_score} - {previousRound.player2_score}</Text>
+                                                {finalWinner.name} Won !</Text>
+
+                                            {match_array}
 
                                             <View style={{
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
+                                                flex: 1,
+                                                width: 150,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
                                                 marginTop: 20,
-                                                //flex: 2
                                             }}>
 
-
-                                                <View style={{
-                                                    flex: 1,
-                                                    width: 120,
-                                                    marginRight: 8,
-                                                    alignItems: 'center',
-                                                }}>
-
-                                                    <SkyBorderButton
-                                                        onPress={() => {
-                                                            this.skipSet()
-                                                        }}
-                                                    >Skip Set</SkyBorderButton>
-
-                                                </View>
-
-                                                <View style={{
-                                                    flex: 1,
-                                                    width: 120,
-                                                    marginLeft: 8,
-                                                    alignItems: 'center',
-
-                                                }}>
-
-                                                    {/* <SkyFilledButton
-                                                        onPress={() => {
-                                                            this.setState({
-                                                                start_card_show: false,
-                                                                is_shown: true
-                                                            })
-                                                        }}
-                                                    >Start Set !</SkyFilledButton> */}
-                                                    <TouchableOpacity activeOpacity={.8}
-                                                        style={[style.rounded_button1, {
-                                                            width: 120,
-                                                            // width: "100%",
-                                                        }]}
-                                                        onPress={() => {
-                                                            this.setState({
-                                                                start_card_show: false,
-                                                                is_shown: true
-                                                            })
+                                                <TouchableOpacity activeOpacity={.8}
+                                                    style={[style.rounded_button1, {
+                                                        width: 120,
+                                                        alignItems: 'center'
+                                                        // width: "100%",
+                                                    }]}
+                                                    onPress={() => {
+                                                        this.props.navigation.goBack()
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            color: 'white',
+                                                            textAlign: 'center',
+                                                            fontFamily: 'Quicksand-Medium',
                                                         }}>
-                                                        <Text
-                                                            style={{
-                                                                color: 'white',
-                                                                textAlign: 'center',
-                                                                fontFamily: 'Quicksand-Medium',
-                                                            }}>
-                                                            Start Set !
-                                                        </Text>
-                                                    </TouchableOpacity>
+                                                        Finish
+                                                            </Text>
+                                                </TouchableOpacity>
+                                                {/* <SkyFilledButton
+                                                    onPress={() => {
+                                                        this.props.navigation.goBack()
+                                                    }}
+                                                >Finish</SkyFilledButton> */}
 
-                                                </View>
+
                                             </View>
+
                                         </View>
                                     </Card>
-                                    :
+                                </View>
+                            }
+                        </View>
 
-                                    <View>
-                                        <View style={{
-                                            marginTop: 30,
-                                            flexDirection: 'row',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            alignContent: 'center'
-                                        }}>
+                        {previousRound != null || this.state.edit_index != -1 ?
+                            <EditScore
+                                touchOutside={(round = null, winner_id = null) => {
+                                    this.state.modalVisible = false
+                                    this.setState({
+                                        modalVisible: false
+                                    })
+                                    if (round == null)
+                                        return
 
-                                            <View style={{
-                                                flex: 1,
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                alignContent: 'center'
-                                            }}>
+                                    setTimeout(() => {
+                                        this.editScore(round, winner_id)
+                                    }, 100)
+                                }}
+                                edit_index={this.state.edit_index}
+                                match_score={this.state.match_scores}
+                                player1={player1}
+                                player2={player2}
+                                previousRound={is_tournament_completed == true ?
+                                    edit_instance : previousRound}
+                                visible={this.state.modalVisible}
+                            />
+                            : null}
 
+                    </View >
 
-                                                <View
-                                                    style={{
-                                                        flex: 1,
-                                                        flexDirection: 'row',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-
-                                                    }}>
-
-                                                    <TouchableOpacity
-                                                        onPress={() => {
-                                                            this.updateScore(true, true)
-                                                        }}
-                                                    >
-
-                                                        <Image
-                                                            source={require('../../images/ic_minus.png')}
-                                                            style={{
-                                                                width: 30,
-                                                                height: 30,
-                                                                marginTop: 5,
-                                                            }}
-                                                        />
-
-                                                    </TouchableOpacity>
-
-                                                    <Text
-                                                        style={{
-                                                            width: 56,
-                                                            textAlign: 'center',
-                                                            color: '#404040',
-                                                            fontSize: 46,
-                                                            marginLeft: 8,
-                                                            fontFamily: 'Quicksand-Medium'
-                                                        }}>{currentRound.player1_score}</Text>
-
-                                                    <TouchableOpacity
-                                                        activeOpacity={.8}
-                                                        onPress={() => {
-                                                            //true means player1
-                                                            if (!this.state.disable_increasement_p1)
-                                                                this.updateScore(true, false)
-                                                        }}>
-                                                        <Image
-                                                            source={require('../../images/ic_plus.png')}
-                                                            style={{ width: 48, height: 48 }}
-
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-
-
-                                                {/* <View style={{
-                                                    flex: 1,
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    alignContent: 'center',
-                                                    marginLeft: 40,
-                                                }}>
-                                                    <TouchableOpacity
-                                                        activeOpacity={.8}
-                                                        onPress={() => {
-                                                            //true means player1
-                                                            if (!this.state.disable_increasement_p1)
-                                                                this.updateScore(true, false)
-                                                        }}>
-                                                        <Image
-                                                            source={require('../../images/ic_plus.png')}
-                                                            style={{ width: 48, height: 48 }}
-
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View> */}
-
-                                                <View
-                                                    style={{
-                                                        flex: 1,
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        alignContent: 'center',
-                                                        marginTop: 5,
-                                                    }}
-                                                >
-                                                    <CustomeButtonB onPress={
-                                                        () => this.declareWinner(player1.id)}
-                                                    >Declare Winner</CustomeButtonB>
-                                                </View>
-                                            </View>
-
-                                            <View style={{
-                                                flex: 1,
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                alignContent: 'center'
-                                            }}>
-
-                                                <View
-                                                    style={{
-                                                        flex: 1,
-                                                        flexDirection: 'row',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-
-                                                    }}>
-                                                    <TouchableOpacity
-                                                        onPress={() => {
-                                                            this.updateScore(false, true)
-                                                        }}
-                                                    >
-                                                        <Image
-                                                            source={require('../../images/ic_minus.png')}
-                                                            style={{
-                                                                width: 30,
-                                                                height: 30,
-                                                                marginTop: 5,
-                                                            }}
-                                                        />
-                                                    </TouchableOpacity>
-                                                    <Text
-                                                        style={{
-                                                            textAlign: 'center',
-                                                            color: '#404040',
-                                                            fontSize: 46,
-                                                            width: 56,
-                                                            marginLeft: 8,
-                                                            fontFamily: 'Quicksand-Medium'
-                                                        }}>{currentRound.player2_score}</Text>
-                                                    
-                                                    <TouchableOpacity
-                                                        activeOpacity={.8}
-                                                        onPress={() => {
-                                                            //false means player2
-                                                            if (!this.state.disable_increasement_p2)
-                                                                this.updateScore(false, false)
-                                                        }}>
-                                                        <Image
-                                                            source={require('../../images/ic_plus.png')}
-                                                            style={{ width: 43, height: 43 }}
-
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-
-
-                                                {/* <View style={{
-                                                    flex: 1,
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    alignContent: 'center',
-                                                    marginLeft: 40,
-                                                }}>
-                                                    <TouchableOpacity
-                                                        activeOpacity={.8}
-                                                        onPress={() => {
-                                                            //false means player2
-                                                            if (!this.state.disable_increasement_p2)
-                                                                this.updateScore(false, false)
-                                                        }}>
-                                                        <Image
-                                                            source={require('../../images/ic_plus.png')}
-                                                            style={{ width: 43, height: 43 }}
-
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View> */}
-
-                                                <View
-                                                    style={{
-                                                        flex: 1,
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        alignContent: 'center',
-                                                        marginTop: 5,
-                                                    }}
-                                                >
-                                                    <CustomeButtonB onPress={
-                                                        () => this.declareWinner(player2.id)}
-                                                    >Declare Winner</CustomeButtonB>
-                                                </View>
-                                            </View>
-
-                                        </View>
-
-                                        {/* <View style={{
-                                            flex: 1,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                        }}>
-
-                                            <TouchableOpacity activeOpacity={.8}
-                                                style={style.rounded_button}
-                                                onPress={() => {
-
-                                                }}>
-                                                <Text style={style.rounded_button_text}>Save</Text>
-                                            </TouchableOpacity>
-
-                                        </View> */}
-                                    </View>}
-                            </View> :
-
-                            <View>
-                                <Card style={{
-                                    elevation: 4,
-                                    margin: 16,
-                                }}>
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        padding: 12,
-                                    }}>
-
-                                        <Text style={defaultStyle.bold_text_14}>Game over</Text>
-                                        <Text style={[defaultStyle.heavy_bold_text_14, { marginTop: 10 }]}>
-                                            {finalWinner.name} Won !</Text>
-
-                                        {match_array}
-
-                                        <View style={{
-                                            flex: 1,
-                                            width: 150,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: 20,
-                                        }}>
-
-                                            <TouchableOpacity activeOpacity={.8}
-                                                style={[style.rounded_button1, {
-                                                    width: 120,
-                                                    alignItems: 'center'
-                                                    // width: "100%",
-                                                }]}
-                                                onPress={() => {
-                                                    this.props.navigation.goBack()
-                                                }}>
-                                                <Text
-                                                    style={{
-                                                        color: 'white',
-                                                        textAlign: 'center',
-                                                        fontFamily: 'Quicksand-Medium',
-                                                    }}>
-                                                    Finish
-                                                        </Text>
-                                            </TouchableOpacity>
-                                            {/* <SkyFilledButton
-                                                onPress={() => {
-                                                    this.props.navigation.goBack()
-                                                }}
-                                            >Finish</SkyFilledButton> */}
-
-
-                                        </View>
-
-                                    </View>
-                                </Card>
-                            </View>
-                        }
-                    </View>
-
-                    {previousRound != null || this.state.edit_index != -1 ?
-                        <EditScore
-                            touchOutside={(round = null, winner_id = null) => {
-                                this.state.modalVisible = false
-                                this.setState({
-                                    modalVisible: false
-                                })
-                                if (round == null)
-                                    return
-
-                                setTimeout(() => {
-                                    this.editScore(round, winner_id)
-                                }, 100)
-                            }}
-                            edit_index={this.state.edit_index}
-                            match_score={this.state.match_scores}
-                            player1={player1}
-                            player2={player2}
-                            previousRound={is_tournament_completed == true ?
-                                edit_instance : previousRound}
-                            visible={this.state.modalVisible}
-                        />
-                        : null}
-
-                </View >
-
-            </ScrollView >
+                </ScrollView >
+            </View>
 
         );
     }
