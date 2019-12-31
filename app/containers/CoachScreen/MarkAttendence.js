@@ -35,8 +35,12 @@ class MarkAttendence extends BaseComponent {
             playerList: null,
             coachesList: null,
             batchDetails: null,
-            spinner: false
+            spinner: false,
+            compensatory: null
         }
+        this.compensatoryEvent = Events.subscribe('CompensatoryData', (data) => {
+            this.setState({compensatory: data})
+        });
     }
 
     componentDidMount() {
@@ -339,6 +343,7 @@ class MarkAttendence extends BaseComponent {
 
 
     render() {
+        console.log('compensatory data', this.state.compensatory)
         if (this.props.data.loading && !this.state.batchDetails) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -487,7 +492,7 @@ class MarkAttendence extends BaseComponent {
                                 <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Compensatory Batches</Text>
                                 <Text
                                     style={styles.rounded_button_half} 
-                                    onPress={() => this.props.navigation.navigate('AddCompensatoryBatch')}>
+                                    onPress={() => this.props.navigation.navigate('AddCompensatoryBatch', {batch_id: this.props.navigation.getParam('batch_id')})}>
                                     Add
                                 </Text>
                             </View>

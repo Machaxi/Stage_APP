@@ -553,17 +553,17 @@ const coachHomeModule = createStackNavigator({
     },
     AddCompensatoryBatch: {
         screen: AddCompensatoryBatch,
-        navigationOptions: ({ navigation }) => ({
-            title: "Add Compensatory Batch",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false} showBackAction={true}/>,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-        })
+        // navigationOptions: ({ navigation }) => ({
+        //     title: "Add Compensatory Batch",
+        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+        //         showDrawer={false} showBackAction={true}/>,
+        //     headerRight: <RightMenuToolbar navigationProps={navigation}
+        //         navigation={navigation} showNotification={false} />,
+        //     headerTitleStyle: style.headerStyle,
+        //     headerStyle: {
+        //         backgroundColor: '#FFFFFF',
+        //     },
+        // })
     },
     EditProfile: {
         screen: EditProfile,
