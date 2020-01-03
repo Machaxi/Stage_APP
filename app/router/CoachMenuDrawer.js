@@ -361,7 +361,7 @@ class CoachMenuDrawer extends BaseComponent {
 								{mobileNumber}</Text> */}
 							<View style={{ marginTop: 8 }}>
 								<TouchableOpacity activeOpacity={.8} onPress={() => {
-									this.props.navigation.navigate('EditProfile')
+									this.props.navigation.navigate('EditProfile', {relations: []})
 								}}>
 
 									<View style={{
@@ -566,7 +566,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 							<View style={{ marginTop: 8 }}>
 								<TouchableOpacity activeOpacity={.8} onPress={() => {
-									this.props.navigation.navigate('EditProfile')
+									this.props.navigation.navigate('EditProfile', {relations: []})
 								}}>
 
 									<View style={{
@@ -967,7 +967,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 								<TouchableOpacity activeOpacity={.8} onPress={() => {
-									this.props.navigation.navigate('EditProfile')
+									this.props.navigation.navigate('EditProfile', {relations: this.state.related_players})
 								}}>
 
 									<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>

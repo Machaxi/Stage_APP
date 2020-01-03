@@ -45,7 +45,6 @@ class MarkAttendence extends BaseComponent {
 
     componentDidMount() {
         var userData;
-        console.log('in component did mount')
         getData('header', (value) => {
             console.log("header =>>>>", value);
         });
@@ -301,12 +300,18 @@ class MarkAttendence extends BaseComponent {
             // const NewDate = moment(yourDate).format('YYYY-MM-DD')
             const NewDate = moment(session.session_date).format('YYYY-MM-DD');
             console.log("savePlayerAttendence", NewDate);
+            const {compensatory} = this.state
+            var compensatory_batch = compensatory.map(item => {
+                return {batch_id: item.batch_id, player_id: item.player_id, is_present: item.is_present}
+            })
+            console.log('compesatory batches', compensatory_batch)
             var dataDic = {};
             var dict = {};
             dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
             dict['attendance_date'] = NewDate;
             dict['players'] = this.state.playerList
             dict['coaches'] = this.state.coachesList
+            dict['compensatory'] = compensatory_batch
 
 
             dataDic['data'] = dict;
@@ -340,10 +345,82 @@ class MarkAttendence extends BaseComponent {
         });
     }
 
-
+    renderNewBatches =(item, index) => (
+        <View style={{marginBottom: 10}}>
+            <View style={{ backgroundColor: 'white' }}>
+                <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={defaultStyle.bold_text_14}>Batch : {item.batch_name} </Text>
+                </View>
+            </View>
+            <View style={{
+                marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
+                flexDirection: 'row', justifyContent: 'space-between'
+            }}>
+                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Player </Text>
+                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
+            </View>
+            <View style={{
+                backgroundColor: 'white',
+                height: 50,
+            }}>
+                <View style={{
+                    flex: 1,
+                    marginLeft: 18,
+                    marginRight: 25,
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={[defaultStyle.regular_text_14, {
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }]}>
+                        {item.player_name}
+                    </Text>
+                    <View style={{ backgroundColor: 'white', marginTop: 0 }}>
+                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
+                            activeOpacity={.8}
+                            checkedIcon={<Image style={{
+                                width: 18,
+                                height: 18
+                            }} resizeMode="contain"
+                                source={require('../../images/ic_checkbox_on.png')} />}
+                            uncheckedIcon={<Image style={{
+                                width: 18,
+                                height: 18
+                            }} resizeMode="contain"
+                                source={require('../../images/ic_checkbox_off.png')} />}
+                            containerStyle={{
+                                backgroundColor: 'white',
+                                borderWidth: 0,
+                                padding: 4,
+                                margin: 0,
+                                marginTop: 0,
+                            }}
+                            checked={item.is_present}
+                            onPress={() => {
+                                let compensatoryData = [...this.state.compensatory];
+                                compensatoryData[index].is_present = !compensatoryData[index].is_present
+                                this.setState({ compensatory: compensatoryData });
+                                console.log('compensatory', JSON.stringify(compensatoryData));
+                            }}
+                        />
+                    </View>
+                </View>
+            </View>          
+        </View>
+    )
 
     render() {
-        console.log('compensatory data', this.state.compensatory)
+        const {compensatory} = this.state
+        let newBatches = []
+        if(compensatory != null && compensatory.length > 0){
+            for (let i = 0; i < compensatory.length; i++) {
+                let item = compensatory[i]
+                newBatches.push(this.renderNewBatches(item, i))
+            }
+        }
+
         if (this.props.data.loading && !this.state.batchDetails) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -492,11 +569,16 @@ class MarkAttendence extends BaseComponent {
                                 <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Compensatory Batches</Text>
                                 <Text
                                     style={styles.rounded_button_half} 
-                                    onPress={() => this.props.navigation.navigate('AddCompensatoryBatch', {batch_id: this.props.navigation.getParam('batch_id')})}>
+                                    onPress={() => this.props.navigation.navigate('AddCompensatoryBatch', {
+                                        batch_id: this.props.navigation.getParam('batch_id'),
+                                        compensatory: this.state.compensatory
+                                        })}>
                                     Add
                                 </Text>
                             </View>
                         </View>
+                        
+                        { newBatches }
 
                         {this.renderFooterItem()}
                     </View>
@@ -523,39 +605,6 @@ const mapDispatchToProps = {
     getCoachBatchAttendence, saveCoachBatchAttendence
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MarkAttendence);
-
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        // paddingVertical: 12,
-        //paddingHorizontal: 10,
-        borderWidth: 0,
-        borderColor: '#D3D3D3',
-        borderRadius: 4,
-        color: 'white',
-        // paddingLeft: 10,
-
-        // alignItems: 'stretch',
-        // // justifyContent: 'right',
-        alignSelf: 'center',
-        height: 40,
-        marginRight: 10,
-        marginTop: 5,
-        marginBottom: 5
-        // to ensure the text is never behind the icon
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: '#614051',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-});
 
 const styles = StyleSheet.create({
     navBar: {

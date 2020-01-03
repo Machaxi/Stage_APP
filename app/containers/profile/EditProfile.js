@@ -1,18 +1,12 @@
 import React from 'react'
 
 import { View, ImageBackground, Text, TextInput, Image, Alert, Platform, StyleSheet } from 'react-native'
-import BaseComponent, {getBaseUrl, defaultStyle, EVENT_EDIT_PROFILE, TOURNAMENT_REGISTER } from '../BaseComponent';
-import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import {Switch} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload'
-import { getData, storeData } from "../../components/auth";
-import { saveUserStartupProfile, getUserProfile } from "../../redux/reducers/ProfileReducer";
-import {coachDetail} from '../../redux/reducers/AcademyReducer';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Events from '../../router/events';
 import moment from 'moment'
 import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
@@ -20,7 +14,20 @@ import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RNPickerSelect from 'react-native-picker-select';
+import Events from '../../router/events';
+import { saveUserStartupProfile, getUserProfile } from "../../redux/reducers/ProfileReducer";
+import {coachDetail} from '../../redux/reducers/AcademyReducer';
+import { getData, storeData } from "../../components/auth";
+import { CustomeButtonB, SwitchButton, } from '../../components/Home/SwitchButton'
 import InfoMessage from '../../components/custom/InfoMessage';
+import { PARENT } from "../../components/Constants";
+import BaseComponent, {
+    getBaseUrl,
+    defaultStyle,
+    EVENT_EDIT_PROFILE,
+    TOURNAMENT_REGISTER,
+    formattedName
+} from '../BaseComponent';
 
 
 const month = [
@@ -46,6 +53,9 @@ class EditProfile extends BaseComponent {
 
     constructor(props) {
         super(props)
+        this.user_id = ''
+        this.login_user = ''
+        this.parent_user_id = ''
         this.state = {
             birthdate: "",
             txtname: '',
@@ -65,7 +75,9 @@ class EditProfile extends BaseComponent {
             review: '',
             totalExperience: '',
             coach_id: '',
-            showMessage: false
+            showMessage: false,
+            relations: [],
+            parentChild: []
         }
         this.year = []
         for(var i=0; i<50; i++){
@@ -89,8 +101,14 @@ class EditProfile extends BaseComponent {
             // this.state.birthdate = userData.user['dob']
             // this.state.txtname = userData.user['name']
             // this.state.txtphone = userData.user['mobile_number']
+            this.login_user = userData.user['user_type']
+            this.parent_user_id = userData.user['id']
+            if(this.login_user === PARENT)
+                this.user_id = userData.user_id
+            else
+                this.user_id = userData.user['id']
             this.setState({
-                // txtname: userData.user['name'],
+                txtname: userData.user['name'],
                 // txtphone: userData.user['mobile_number'],
                 // birthdate: userData.user['dob'],
                 // profile_pic: userData.user['profile_pic'],
@@ -118,32 +136,20 @@ class EditProfile extends BaseComponent {
     }
 
     componentDidMount(){
-        getData('header', (value)=>{
-            this.props.getUserProfile(value).then(()=>{
-                var userData = this.props.userProfile.profileData.data
-                let date = userData.user['dob']
-                if (date != '' && date !== null) {
-                    date = date.split('T')
-                    date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
-                    //console.warn('m date ,', date)
-                    this.state.birthdate = date
-                }
-                this.setState({
-                    txtname: userData.user['name'],
-                    txtphone: userData.user['phone_number'],
-                    hideUser: userData.user['is_stats_hidden'],
-                    birthdate: date,
-                    profile_pic: userData.user['profile_pic'],
-                    totalExperience: userData.user['experience'],
-                    review: userData.user['about'],
-                    // user_type: userData.user['user_type'],
-                    is_image_processed: false//userData.user['is_image_processed']
-                }, () => this.getYearMonth())
-            }).catch((response) =>{
-                console.log(response);
+        console.log('relations', this.props.navigation.getParam('relations'))
+        let relations = this.props.navigation.getParam('relations')
+        if(relations !== undefined && relations.length > 0){
+            getData('userInfo', value => {
+                userData = (JSON.parse(value))
+                let parentChild = relations.map(item => {
+                    return {value: item.user_id, label: formattedName(item.name)}
+                })
+                parentChild.push({value: this.parent_user_id, label: formattedName(userData.user['name'])})
+                this.setState({parentChild})
             })
-        })
-
+        }
+        
+        this.getUserData()
         // getData('header', (value) => {
         //     getData('userInfo', (innerValue) => {
         //         let userData = JSON.parse(innerValue)
@@ -160,6 +166,37 @@ class EditProfile extends BaseComponent {
         //         }
         //     })
         // })
+    }
+
+    getUserData() {
+        this.progress(true)
+        getData('header', (value)=>{
+            this.props.getUserProfile(value, this.user_id).then(()=>{
+                var userData = this.props.userProfile.profileData.data
+                let date = userData.user['dob']
+                if (date != '' && date !== null) {
+                    date = date.split('T')
+                    date = moment.utc(date[0]).local().format("DD-MMM-YYYY")
+                    //console.warn('m date ,', date)
+                    this.state.birthdate = date
+                }
+                this.progress(false)
+                this.setState({
+                    txtname: userData.user['name'],
+                    txtphone: userData.user['phone_number'],
+                    hideUser: userData.user['is_stats_hidden'],
+                    birthdate: date,
+                    profile_pic: userData.user['profile_pic'],
+                    totalExperience: userData.user['experience'],
+                    review: userData.user['about'],
+                    user_type: userData.user['user_type'],
+                    is_image_processed: false//userData.user['is_image_processed']
+                }, () => this.getYearMonth())
+            }).catch((response) =>{
+                this.progress(false)
+                console.log(response);
+            })
+        })
     }
 
     getYearMonth(){
@@ -205,6 +242,7 @@ class EditProfile extends BaseComponent {
                 dict['phone_number'] = phone_number;
                 dict['name'] = txtname;
                 dict['dob'] = birthdate;
+                dict['user_id'] = this.user_id;
                 //formData.append('post', JSON.stringify(dict));
 
                 let file = null
@@ -244,9 +282,9 @@ class EditProfile extends BaseComponent {
                 param.push(post)
 
                 console.log('profile data=> ', JSON.stringify(dict))
-
+                console.log('param is', JSON.stringify(param))
                 let url = getBaseUrl() + 'user/profile'
-
+                console.log('api url is', url)
                 RNFetchBlob.
                     config({ timeout: 1000 * 60 })
                     .fetch('POST', url, {
@@ -267,7 +305,8 @@ class EditProfile extends BaseComponent {
                         if (success) {
 
                             // alert('Success.')
-                            this.updatePrefData(JSON.stringify(data.data))
+                            if(this.parent_user_id === this.user_id)
+                                this.updatePrefData(JSON.stringify(data.data))
 
                             if (this.state.is_navigation_to_tournament) {
                                 storeData(TOURNAMENT_REGISTER, '')
@@ -439,6 +478,27 @@ class EditProfile extends BaseComponent {
 
                         }}
                     >
+                        { (this.login_user === PARENT || this.state.user_type === PARENT) &&
+                            <View style={{width: '35%', paddingLeft: 8, marginBottom: 10}}>
+                                <RNPickerSelect
+                                    placeholder={{}}
+                                    items={this.state.parentChild}
+                                    onValueChange={(value) => {
+                                    console.log(value)
+                                        this.user_id = value
+                                        this.getUserData();
+                                    }}
+                                    style={pickerSelectStyles}
+                                    value={this.user_id}
+                                    useNativeAndroidPickerStyle={false}
+                                />
+                                <View style={{
+                                    backgroundColor: '#C7C7CD',
+                                    height: 1,
+                                    marginTop: 2
+                                }}></View>
+                            </View>
+                        }
                         <TouchableOpacity
                             onPress={() => {
                                 if (is_image_processed != true)

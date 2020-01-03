@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { connect } from 'react-redux';
+import { connect, batch } from 'react-redux';
 import {
     View,
     Text,
@@ -27,12 +27,12 @@ class AddCompensatoryBatch extends BaseComponent {
     static navigationOptions = ({ navigation }) => {
 
         return {
-            headerTitle: 'Add Compensatory Batch',
+            headerTitle: 'Add Compensatory Class',
             headerTitleStyle: defaultStyle.headerStyle,
             headerLeft: (
                 <TouchableOpacity
                     onPress={() => {
-                        Events.publish('CompensatoryData', navigation.getParam('selectedBatch')());
+                        Events.publish('CompensatoryData', navigation.getParam('passCompensatoryBatch')());
                         navigation.goBack();
                     }}
                     style={{padding: 7}}
@@ -47,7 +47,7 @@ class AddCompensatoryBatch extends BaseComponent {
             headerRight: (
                 <TouchableOpacity
                     onPress={() => {
-                        Events.publish('CompensatoryData', navigation.getParam('selectedBatch')());
+                        Events.publish('CompensatoryData', navigation.getParam('passCompensatoryBatch')());
                         navigation.goBack()
                     }}
                     activeOpacity={.8}
@@ -75,15 +75,15 @@ class AddCompensatoryBatch extends BaseComponent {
             query: '',
             players: [],
             batches: [],
-            selectedBatch: {}
+            selectedBatch: [],
+            playerBatchIndex: ''
         }
-        const {navigation} = this.props.navigation.setParams({ selectedBatch: this.selectedBatch })
+        const {navigation} = this.props.navigation.setParams({ passCompensatoryBatch: this.passCompensatoryBatch })
     }
     componentDidMount() {
     }
 
     handleChange = (e)=> {
-        console.log('_handleChange => ', e)
         this.setState({
             query: e,
             showSuggestion: true
@@ -101,7 +101,7 @@ class AddCompensatoryBatch extends BaseComponent {
                 this.setState({ spinner: false })
                 if(success){
                     let data = this.props.players.res.data
-                    this.setState({players: data.players}, ()=>console.log('players are', this.state.players))
+                    this.setState({players: data.players})
                 }
             }).catch(response => {
                 this.setState({ spinner: false })
@@ -115,33 +115,74 @@ class AddCompensatoryBatch extends BaseComponent {
         console.warn('handle key ', this.state.query)
     }
 
-    addPlayerBatch(index){
-        console.log('indside add player')
+    addPlayerBatch(batchObj, index){
+        console.log('playerBatchIndex', this.state.playerBatchIndex)
+        let batch = batchObj.item
         let batches = [...this.state.batches]
-        for (let i = 0; i < batches.length; i++) {
-            console.log('batch', batches[i])
-            let item = batches[i]
-            if(item.compensatory_batch == null){
-                if(batches[i].batch_id == index)
-                    batches[i].compensatory_batch = true
-                else
-                    batches[i].compensatory_batch = false
-            } else if(batches[i].batch_id == index ){
-                batches[i].compensatory_batch = true
-            } else {
-                batches[i].compensatory_batch = false
+
+        var selectedBatchChange = false
+        var selectedArrayIndex = ''
+        for(let i = 0; i < batches.length; i++){
+            var batchArrayObj = batches[i]
+                let noWarning = batchArrayObj.map(innerBatch => {
+                    if(innerBatch === batch){
+                        selectedBatchChange = (batch.player_name === this.state.query)
+                    }
+                    return batch.player_name === this.state.query
+                })
+            if(selectedBatchChange){
+                selectedArrayIndex = i
+                break
             }
         }
-        console.log('batches are', batches);
-        var selectedBatch = batches.filter(item => {
-            return item.compensatory_batch
-        })
-        console.log('filtered data', selectedBatch)
-        this.setState({batches, selectedBatch: selectedBatch[0]});
+        var selectedBatch = [...this.state.selectedBatch]
+        if(selectedBatchChange){
+            let batchArray = batches[selectedArrayIndex]
+            for (let i = 0; i < batchArray.length; i++) {
+                let item = batchArray[i]
+                if(item.compensatory_batch == null){
+                    if(batchArray[i].batch_id == index)
+                        batchArray[i].compensatory_batch = true
+                    else
+                        batchArray[i].compensatory_batch = false
+                } else if(batchArray[i].batch_id == index ){
+                    batchArray[i].compensatory_batch = true
+                } else {
+                    batchArray[i].compensatory_batch = false
+                }
+            }
+            batches[selectedArrayIndex] = batchArray
+            var selectedBatchObj = batchArray.filter(item => {
+                return item.compensatory_batch
+            })
+            console.log('selectedBatchObj', selectedBatchObj)
+            selectedBatch = selectedBatch.filter(item => {
+                console.log("item is", item)
+                console.log('query', this.state.query)
+                return item.player_name !== this.state.query
+            })
+            console.log('selectedBatch', selectedBatch)
+            selectedBatch.push(selectedBatchObj[0])
+        } else
+            alert('Player Selected is different')
+
+        console.log('selectedBatch=>', selectedBatch)
+        this.setState({batches, selectedBatch});
     }
 
-    selectedBatch = () => {
-        return this.state.selectedBatch
+    passCompensatoryBatch = () => {
+        let compensatoryBatches = []
+        let compensatory = this.props.navigation.getParam('compensatory')
+        if(compensatory != null){
+            compensatoryBatches = [...compensatory]
+        }
+        compensatoryBatches = compensatoryBatches.filter(item => {
+            return item.player_name !== this.state.query
+        })
+        if(this.state.selectedBatch.length !== 0)
+            compensatoryBatches = [...compensatoryBatches, ...this.state.selectedBatch]
+            // compensatoryBatches.push(this.state.selectedBatch)
+        return compensatoryBatches
     }
     
     playerSelected = (name, player_id) => {
@@ -156,7 +197,33 @@ class AddCompensatoryBatch extends BaseComponent {
                     let user1 = JSON.parse(user)
                     this.setState({ spinner: false })
                     if(user1.success){
-                        this.setState({batches: user1.data.batches})
+                        let playerBatches = [...user1.data.batches]
+                        let newBatches = playerBatches.map((item, index) => {
+                            playerBatches[index].player_name = name
+                            playerBatches[index].player_id = player_id
+                            playerBatches[index].is_present = true
+                            return playerBatches[index]
+                        })
+                        let batches = [...this.state.batches]
+                        let userBatchExist = ''
+                        for(let i = 0; i< batches.length; i++){
+                            let batchArray = batches[i]
+                            let userBatch = batchArray.map(batch => {
+                                userBatchExist = (batch.player_name === name)
+                                return batch.player_name === name
+                            })
+                            console.log('userBatchExist', userBatchExist)
+                            if(userBatchExist){
+                                this.setState({playerBatchIndex: i})
+                                break
+                            }
+                        }
+                        if(userBatchExist === '' || !userBatchExist)
+                            this.setState({playerBatchIndex: 0})
+                        console.log('userBatchExist', userBatchExist)
+                        if(userBatchExist === '' || !userBatchExist)
+                            batches.unshift(playerBatches)
+                        this.setState({batches})
                     }
                 }).catch(response => {
                     this.setState({ spinner: false })
@@ -166,8 +233,9 @@ class AddCompensatoryBatch extends BaseComponent {
         })
     } 
 
-    renderItem = (item) => {
-        return (
+    renderItem = (item, index) => {
+        var innerItem = item.item 
+        return(
             <View style={{
                 marginLeft: 18,
                 marginRight: 25,
@@ -175,17 +243,17 @@ class AddCompensatoryBatch extends BaseComponent {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 height: 50
-            }} key={item.batch_id}>
+            }}>
                 <Text style={[defaultStyle.regular_text_14, {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }]}>
-                    {item.batch_name}
+                    {innerItem.batch_name}
                 </Text>
 
                 <View style={{ backgroundColor: 'white', marginTop: 0 }}>
                     <TouchableOpacity
-                        onPress={() => this.addPlayerBatch(item.batch_id)}
+                        onPress={() => this.addPlayerBatch(item, innerItem.batch_id)}
                     >
                         <Image
                             style={{
@@ -194,7 +262,7 @@ class AddCompensatoryBatch extends BaseComponent {
                                 marginRight: 8
                             }}
                             source={
-                                item.compensatory_batch ? require('../../images/ic_radio_button_checked.png')
+                                innerItem.compensatory_batch ? require('../../images/ic_radio_button_checked.png')
                                 : require('../../images/ic_radio_button_unchecked.png')
                             }
                         />
@@ -204,17 +272,25 @@ class AddCompensatoryBatch extends BaseComponent {
         )
     }
 
+    renderBatches = (playerBatch) => {
+        let batchItem = playerBatch.item
+
+        return(<Card style={{margin: 16, borderRadius: 5}} >
+                    {
+                        batchItem[0] != null &&
+                        <Text style={{marginLeft: 18, marginTop: 5}}>{batchItem[0].player_name}</Text>
+                    }
+                    <FlatList
+                        // keyboardShouldPersistTaps={'handled'}
+                        data={batchItem}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => index}
+                    />
+                </Card>
+        )
+    }
+
     render() {
-        let batch_list = []
-        if (this.state.batches.length > 0) {
-
-            for (let i = 0; i < this.state.batches.length; i++) {
-                let item = this.state.batches[i]
-                console.log('obj=>', JSON.stringify(item))
-                batch_list.push(this.renderItem(item))
-            }
-        }
-
         return(
             <View style={styles.chartContainer}>
                 <Spinner
@@ -270,13 +346,15 @@ class AddCompensatoryBatch extends BaseComponent {
                             }
                         </Card>
                     </View>
-                    { !this.state.showSuggestion &&
-                        <Card style={{margin: 16, borderRadius: 5}}>
-                            {/* <Text>
-                                Batches
-                            </Text> */}
-                            { batch_list }
-                        </Card>
+                    { this.state.batches.length > 0 &&
+                        <View>
+                            <FlatList
+                                keyboardShouldPersistTaps={'handled'}
+                                data={this.state.batches}
+                                renderItem={this.renderBatches}
+                                keyExtractor={(item, index) => ''+index}
+                            />
+                        </View>
                     }
             </View>
         )
