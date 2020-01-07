@@ -1,26 +1,22 @@
 
 import React from 'react'
-import { connect, batch } from 'react-redux';
+import { connect } from 'react-redux';
 import {
     View,
     Text,
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    ActivityIndicator,
     FlatList,
-    ScrollView,
     Image
 } from 'react-native';
-import { getCoachBatchAttendence, saveCoachBatchAttendence } from "../../redux/reducers/BatchReducer";
 import { Card, } from 'react-native-paper';
-import { RadioButton } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { getData } from "../../components/auth";
 import Events from '../../router/events';
 import { getCompensatoryPlayers } from '../../redux/reducers/CompensatoryBatchReducer'
 import { getPlayerBatch } from "../../redux/reducers/PlayerBatchReducer";
-import BaseComponent, { getFormatTimeDate, defaultStyle, EVENT_REFRESH_DASHBOARD } from '../BaseComponent'
+import BaseComponent, { defaultStyle } from '../BaseComponent'
 
 class AddCompensatoryBatch extends BaseComponent {
 
@@ -56,7 +52,7 @@ class AddCompensatoryBatch extends BaseComponent {
                         style={{
                             marginRight: 12,
                             fontFamily: 'Quicksand-Regular',
-                            fontSize: 10,
+                            fontSize: 14,
                             color: '#667DDB'
                         }}
                     >Done</Text>

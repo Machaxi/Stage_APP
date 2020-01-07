@@ -203,8 +203,14 @@ class PaymentDetail extends BaseComponent {
                     </View>
                     <View style={{ height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }} />
 
-                    <Text style={[defaultStyle.bold_text_14, { marginRight: 16, }]}>{item.playerName}</Text>
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={[defaultStyle.bold_text_14, { marginRight: 16, }]}>{item.playerName}</Text>
+                        <View style={{ flexDirection: 'row', width: '66%' }}>
+                            <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE', marginTop: 1 }]}>Term: </Text>
+                            <Text>{moment.utc(item.dueDate, 'YYYY-MM-DD').local().format("DD/MM/YYYY")} - </Text>
+                            <Text>{moment.utc(item.nextDueDate, 'YYYY-MM-DD').subtract(1, 'days').local().format("DD/MM/YYYY")}</Text>
+                        </View>
+                    </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
 
                         <View style={{ flexDirection: 'row', flex: 1 }}>

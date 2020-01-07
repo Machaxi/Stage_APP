@@ -304,7 +304,7 @@ class MarkAttendence extends BaseComponent {
             var compensatory_batch = compensatory.map(item => {
                 return {batch_id: item.batch_id, player_id: item.player_id, is_present: item.is_present}
             })
-            console.log('compesatory batches', compensatory_batch)
+            console.log('compensatory batches', compensatory_batch)
             var dataDic = {};
             var dict = {};
             dict['batch_id'] = this.props.navigation.getParam('batch_id')//user.phoneNumber;
@@ -566,7 +566,7 @@ class MarkAttendence extends BaseComponent {
                                 marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
                                 flexDirection: 'row', justifyContent: 'space-between'
                             }}>
-                                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Compensatory Batches</Text>
+                                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Compensatory Classes</Text>
                                 <Text
                                     style={styles.rounded_button_half} 
                                     onPress={() => this.props.navigation.navigate('AddCompensatoryBatch', {

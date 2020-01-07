@@ -154,6 +154,7 @@ class MyCalendar extends BaseComponent {
         //console.warn('attendanceSummary', data);
         //console.warn('this.state.isAttendanceHappenedInMonth', this.state.isAttendanceHappenedInMonth);
         //console.warn('this.state.selectedDateData', this.state.selectedDateData);
+        const {selectedDateData} = this.state
         return (
 
             <View style={styles.summaryCardOuter}>
@@ -177,9 +178,9 @@ class MyCalendar extends BaseComponent {
                                 <Text style={styles.attSessionValue}>{data.session_attended}/{data.total_session}</Text>
                             </View>
                             {
-                                this.state.selectedDateData != null &&
+                                selectedDateData != null &&
 
-                                (this.state.selectedDateData.session_scheduled == false ?
+                                (selectedDateData.session_scheduled == false ?
                                     <View style={{
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -188,15 +189,15 @@ class MyCalendar extends BaseComponent {
                                         defaultStyle.regular_text_14
                                     }>No attendance for this month</Text></View>
                                     : (
-                                        this.state.selectedDateData.is_cancelled == true ?
+                                        selectedDateData.is_cancelled == true ?
                                             <View>
                                                 <Text style={[defaultStyle.regular_text_14, {
                                                     color: '#A3A5AE'
-                                                }]}>Session cancelled due to - {this.state.selectedDateData.cancellation_reason}</Text></View> : (
-                                                this.state.selectedDateData.attendance_happened == false ? <View>
+                                                }]}>Session cancelled due to - {selectedDateData.cancellation_reason}</Text></View> : (
+                                                selectedDateData.attendance_happened == false ? <View>
                                                     <Text style={[defaultStyle.regular_text_14, {
                                                         color: '#A3A5AE'
-                                                    }]}>{this.getCancelLabel(this.state.selectedDateData)}</Text></View> : (
+                                                    }]}>{this.getCancelLabel(selectedDateData)}</Text></View> : (
                                                         <View>
                                                             <View style={styles.summaryText}>
                                                                 <Text style={styles.attendanceText}>Attendance </Text>
@@ -209,11 +210,11 @@ class MyCalendar extends BaseComponent {
                                                                 <Text style={styles.attSessionLabel}>Time</Text>
                                                             </View>
                                                             <View style={styles.attSessionValueOuter}>
-                                                                <Text style={styles.attSessionValue}>{this.state.selectedDateData.session_name}</Text>
-                                                                <Text style={styles.attSessionValue}>{this.state.selectedDateData.is_present ? 'P' : 'A'}</Text>
+                                                                <Text style={styles.attSessionValue}>{selectedDateData.session_name}</Text>
+                                                                <Text style={styles.attSessionValue}>{selectedDateData.is_present ? 'P' : 'A'}</Text>
                                                                 <Text style={styles.attSessionValue}>
-                                                                    {getFormatTime(this.state.selectedDateData.start_time)} -
-                                                                {getFormatTime(this.state.selectedDateData.end_time)}</Text>
+                                                                    {getFormatTime(selectedDateData.start_time)} -
+                                                                {getFormatTime(selectedDateData.end_time)}</Text>
                                                             </View>
                                                         </View>
                                                     )
@@ -268,11 +269,12 @@ class MyCalendar extends BaseComponent {
     }
 
     onDateSelected(item) {
+        console.log('item is', item)
         let date = item
         let day = this.state.currentDay;
         let month = this.state.currentMonth;
         let year = this.state.currentYear;
-        console.log(date + "/" + (+month) + "/" + year)
+        console.log(day + "/" + (+month) + "/" + year)
         console.log('onDateSelected', JSON.stringify(item));
         this.state.selectedDate = new Date(year, (month - 1), item.day);
         console.log(new Date(2019, 7, 10));
@@ -320,6 +322,7 @@ class MyCalendar extends BaseComponent {
                         onPress={() => {
                             let currentMonth = this.state.currentMonth
                             let currentYear = this.state.currentYear
+                            this.setState({ selectedDateData: null })
                             if (currentMonth == 1) {
                                 currentMonth = 12
                                 currentYear = +currentYear - 1
@@ -361,6 +364,7 @@ class MyCalendar extends BaseComponent {
                         onPress={() => {
                             let currentMonth = this.state.currentMonth
                             let currentYear = this.state.currentYear
+                            this.setState({ selectedDateData: null })
                             if (currentMonth == 12) {
                                 currentMonth = 1
                                 currentYear = +currentYear + 1
@@ -397,31 +401,31 @@ class MyCalendar extends BaseComponent {
                     <Text style={
                         styles.text_header}>
                         Mon
-            </Text>
+                    </Text>
                     <Text style={
                         styles.text_header}>
                         Tue
-            </Text>
+                    </Text>
                     <Text style={
                         styles.text_header}>
                         Wed
-            </Text>
+                    </Text>
                     <Text style={
                         styles.text_header}>
                         Thu
-            </Text>
+                    </Text>
                     <Text style={
                         styles.text_header}>
                         Fri
-            </Text>
+                    </Text>
                     <Text style={
                         styles.text_header}>
                         Sat
-            </Text>
+                    </Text>
                     <Text style={
                         styles.text_header}>
                         Sun
-            </Text>
+                    </Text>
                 </View>
 
             </View>
@@ -458,11 +462,12 @@ class MyCalendar extends BaseComponent {
         //     }
         // }
 
-        if (item.is_cancelled == true || (item.session_scheduled == true &&
+        if (item.is_present && item.is_compensatory !== undefined && item.is_compensatory) {
+            resource = require("../../images/check.png")
+        } else if (item.is_cancelled == true || (item.session_scheduled == true &&
             item.attendance_happened == false)) {
             resource = require("../../images/gray_circle.png")
-        }
-        else if (item.attendance_happened && item.is_present) {
+        } else if (item.attendance_happened && item.is_present) {
             resource = require("../../images/calendar_right.png")
         } else if (item.attendance_happened && !item.is_present) {
             resource = require("../../images/calendar_cross.png")

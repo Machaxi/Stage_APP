@@ -101,7 +101,7 @@ export default class MonthYearDialog extends BaseComponent {
                         <TouchableOpacity
                             onPress={() => {
                                 let year = this.state.year
-                                year = +year - 1
+                                year = +year + 1
                                 this.setState({
                                     year
                                 })
