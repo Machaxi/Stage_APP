@@ -175,7 +175,7 @@ class AcademyListing extends BaseComponent {
         const book_court = this.state.book_court
 
         this.props.getAllAcademy(query, job_vacancy, book_court).then(() => {
-            //console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
+            console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
             let status = this.props.data.res.success
             if (status) {
                 let list = this.props.data.res.data.academies
@@ -655,8 +655,8 @@ class AcademyListing extends BaseComponent {
                     </Image> */}
 
                     <FastImage
-                        //resizeMode={FastImage.resizeMode.contain}
-                        style={{ height: 130, width: "100%", borderRadius: 16, }}
+                        resizeMode={FastImage.resizeMode.stretch}
+                        style={{ height: 150, width: "100%", borderRadius: 16 }}
                         source={{ uri: item.cover_pic }}
                     />
 
