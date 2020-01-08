@@ -433,10 +433,16 @@ class FixtureSelection extends BaseComponent {
                                                                     this.setState({
                                                                         selected_f_type: item
                                                                     },()=>{
-                                                                        this.props.navigation.navigate('TournamentFixture', {
-                                                                        data: JSON.stringify(item),
-                                                                        title: name + item.name
-                                                                    })
+
+                                                                        this.props.navigation.navigate('TournamentMatchList', {
+                                                                            data: JSON.stringify(item),
+                                                                            title: name + item.name
+                                                                        })
+
+                                                                    //     this.props.navigation.navigate('TournamentFixture', {
+                                                                    //     data: JSON.stringify(item),
+                                                                    //     title: name + item.name
+                                                                    // })
                                                                     })
                                                                     
                                                                 }}
