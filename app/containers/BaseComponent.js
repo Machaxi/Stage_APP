@@ -596,6 +596,8 @@ export function getStatsImageById(id) {
             return require('../images/home_core_strength.png')
         case "7":
             return require('../images/home_match_temperament.png')
+        case "8":
+            return require('../images/Effort.png')
     }
     return require('../images/Mysatus.png')
 
