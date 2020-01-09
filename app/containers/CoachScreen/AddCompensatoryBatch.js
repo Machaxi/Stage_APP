@@ -89,18 +89,18 @@ class AddCompensatoryBatch extends BaseComponent {
     }
 
     getSuggestions(query) {
-        this.setState({ spinner: true })
+        // this.setState({ spinner: true })
         getData('header', (value) => {
             this.props.getCompensatoryPlayers(value, query, this.batch_id).then(()=> {
                 console.log('players are', this.props.players.res)
                 let success = this.props.players.res.success
-                this.setState({ spinner: false })
+                // this.setState({ spinner: false })
                 if(success){
                     let data = this.props.players.res.data
                     this.setState({players: data.players})
                 }
             }).catch(response => {
-                this.setState({ spinner: false })
+                // this.setState({ spinner: false })
                 console.log('error in searching user', response)
             })
         })
