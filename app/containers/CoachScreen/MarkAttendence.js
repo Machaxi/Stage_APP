@@ -301,9 +301,12 @@ class MarkAttendence extends BaseComponent {
             const NewDate = moment(session.session_date).format('YYYY-MM-DD');
             console.log("savePlayerAttendence", NewDate);
             const {compensatory} = this.state
-            var compensatory_batch = compensatory.map(item => {
-                return {batch_id: item.batch_id, player_id: item.player_id, is_present: item.is_present}
-            })
+            var compensatory_batch = []
+            if(compensatory !== null){
+                compensatory_batch = compensatory.map(item => {
+                    return {batch_id: item.batch_id, player_id: item.player_id, is_present: item.is_present}
+                })
+            }
             console.log('compensatory batches', compensatory_batch)
             var dataDic = {};
             var dict = {};
