@@ -527,7 +527,7 @@ class UserHome extends BaseComponent {
     handleClick() {
         let link = ''
         if (Platform.OS == 'ios') {
-            link = 'itms-apps://itunes.apple.com/us/app/id${APP_STORE_LINK_ID}?mt=8'
+            link = 'itms-apps://itunes.apple.com/us/app/id${1484093762}?mt=8'
         } else {
             link = 'market://details?id=com.machaxi'
         }

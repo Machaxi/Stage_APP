@@ -273,7 +273,7 @@ class PaymentDetail extends BaseComponent {
                             textStyle={defaultStyle.spinnerTextStyle}
                         />
 
-                        {/* <TouchableOpacity onPress={() =>
+                        <TouchableOpacity onPress={() =>
                             this.props.navigation.navigate('PaymentHistory')
                         }>
                             <Text style={{
@@ -286,7 +286,7 @@ class PaymentDetail extends BaseComponent {
                                 fontSize: 12,
                                 fontFamily: 'Quicksand-Regular'
                             }}>Payment History</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </View>
 
 
@@ -298,25 +298,9 @@ class PaymentDetail extends BaseComponent {
                             extraData={paymentDues}
                             renderItem={this._renderItem}
                         /> :
-                        <View style={{height: '100%'}}>
-                            <TouchableOpacity onPress={() =>
-                                this.props.navigation.navigate('PaymentHistory')
-                            }>
-                                <Text style={{
-                                    color: '#667DDB',
-                                    paddingRight: 12,
-                                    paddingLeft: 12,
-                                    paddingTop: 12,
-                                    paddingBottom: 4,
-                                    textAlign: 'right',
-                                    fontSize: 12,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>Payment History</Text>
-                            </TouchableOpacity>
                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                 <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
                             </View>
-                        </View>
                     }
 
                     {paymentDues != null && paymentDues.length > 0 &&
