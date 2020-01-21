@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
+import Moment from 'moment';
+import Share from 'react-native-share';
+import { connect } from 'react-redux';
+import firebase from "react-native-firebase";
 import BaseComponent, {
     defaultStyle,
     getFormattedRound,
@@ -11,12 +15,8 @@ import BaseComponent, {
     getFormattedTournamentType
 } from '../BaseComponent'
 import { ScrollView } from 'react-native-gesture-handler';
-import Moment from 'moment';
 import { storeData, isSignedIn, getData } from '../../components/auth';
-import Share from 'react-native-share';
 import { getTournamentById } from "../../redux/reducers/UpcomingReducer";
-import { connect } from 'react-redux';
-import firebase from "react-native-firebase";
 
 class UpcomingTournamentDetail extends BaseComponent {
 
@@ -30,6 +30,7 @@ class UpcomingTournamentDetail extends BaseComponent {
         let data = this.props.navigation.getParam('data');
         if (data) {
             this.state.data = data
+            this.setState({tournament_id: data.id})
             storeData("detail", JSON.stringify(this.state.data))
         } else {
             this.state.tournament_id = this.props.navigation.getParam('tournament_id')
@@ -58,16 +59,13 @@ class UpcomingTournamentDetail extends BaseComponent {
 
                 let success = data.success
                 if (success) {
-
-                    //console.log(' getUpcomingTournament ' + JSON.stringify(data.data.tournaments));
                     let tournament = data.data.tournament
                     this.setState({
                         data: tournament
                     })
-                    this.state.tournament = tournament
+                    // this.state.tournament = tournament
                     storeData("detail", JSON.stringify(tournament))
                 }
-
             }).catch((response) => {
                 this.setState({ isRefreshing: false })
                 console.log(response);
@@ -465,7 +463,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                         elevation: 4
                     }}>
 
-                        <TouchableOpacity activeOpacity={.8}
+                        {/* <TouchableOpacity activeOpacity={.8}
                             style={styles.rounded_button_white}
                             onPress={() => {
                                 this.props.navigation.goBack()
@@ -478,7 +476,21 @@ class UpcomingTournamentDetail extends BaseComponent {
                                 }}
                             >
                                 Close
-                    </Text>
+                            </Text>
+                        </TouchableOpacity> */}
+
+                        <TouchableOpacity activeOpacity={.8}
+                            style={styles.rounded_button}
+                            onPress={() => {
+                                this.props.navigation.navigate('FixtureSelection', {id: this.state.tournament_id})
+                            }}>
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    fontFamily: 'Quicksand-Medium'
+                                }}
+                            >View Fixtures</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity activeOpacity={.8}
