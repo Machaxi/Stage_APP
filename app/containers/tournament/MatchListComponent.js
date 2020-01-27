@@ -21,7 +21,7 @@ class MatchListComponent extends BaseComponent {
             coactList: [],
             academy_id: '',
             performance_dialog: false,
-            matchList:[],
+            matchList: [],
         }
 
         getData('userInfo', (value) => {
@@ -59,7 +59,7 @@ class MatchListComponent extends BaseComponent {
 
         //console.warn('hjhc', this.props.jumpTo)
         this.setState({
-            matchList: this.props.jumpTo
+            matchList: this.props.jumpTo.data
         })
 
         // var userData;
@@ -85,7 +85,26 @@ class MatchListComponent extends BaseComponent {
         //let date = moment.utc("01/01/1970 12:00 PM").local().format("hh:mm a")
         //console.warn(date)
     }
-    renderMatchItem = ({ item,index }) => {
+    renderMatchItem = ({ item, index }) => {
+
+        if (item.tournament_match_scores.length == 0 && item.bye_given == false) {
+            item.tournament_match_scores = [{
+                "round": 1,
+                "player1_score": 0,
+                "player2_score": 0
+            }, {
+                "round": 2,
+                "player1_score": 0,
+                "player2_score": 0
+            },
+            {
+                "round": 3,
+                "player1_score": 0,
+                "player2_score": 0
+            }]
+        }
+
+        //console.log('item', item);
 
         // let profile_pic = checkProfilePic(item.profile_pic)
         // let ratings = item.ratings
@@ -94,6 +113,7 @@ class MatchListComponent extends BaseComponent {
         // ratings = ratings.toFixed(1)
 
         return (
+
             <CustomeCard>
                 <View
                     style={{
@@ -104,55 +124,187 @@ class MatchListComponent extends BaseComponent {
                     }}
                 >
 
-                        <Text style={defaultStyle.bold_text_10}>{'Match NO'+index }</Text>
-                        {/*<TouchableOpacity*/}
-                            {/*onPress={() => {*/}
-                                {/*this.props.navigation.navigate('PlayerAttendance',*/}
-                                    {/*{ batch_id: this.props.jumpTo.batch_id })*/}
-                            {/*}}>*/}
-                            {/*<Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]}>View Details </Text>*/}
-                        {/*</TouchableOpacity>*/}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            {
+                                item.match_number ? <View><Text style={defaultStyle.bold_text_10}>{'Match No. ' + item.match_number}</Text></View> :
+                                    <View><Text style={defaultStyle.bold_text_10}>{'Match No. ' + (index + 1)}</Text></View>
+                            }
+                            {
+                                item.bye_given &&
+                                <View>
+                                    <View
+                                        style={{
+                                            backgroundColor: '#9b9eA8',
+                                            borderRadius: 4, marginLeft: 10
+                                        }}>
+                                        <Text style={{
+                                            paddingLeft: 6,
+                                            paddingRight: 6,
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
+                                            fontFamily: 'Quicksand-Medium',
+                                            fontSize: 10,
+                                            color: '#fff',
+                                        }}>Bye
+                                    </Text>
+                                    </View>
+                                </View>
 
-                    <View style={defaultStyle.line_style} />
-                    <View style={{  flexDirection: 'row', justifyContent: 'space-between' }}>
+                            }
+                        </View>
+                        <View>
+                            {
+                                !!item.venue &&
+                                <View style={{ justifyContent: 'flex-end' }}>
+                                    <Text style={[defaultStyle.bold_text_10, { marginLeft: 5, textAlign: 'right' }]}>
+                                        {item.venue}
+                                    </Text>
+                                </View>
 
-                       <View style={{width:'50%',borderRightWidth:1, borderRightColor: '#DFDFDF'}}
-                       >
-                           <View style={{alignItems:'center'}}>
-                           <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player1.name}</Text>
-                           </View>
-                           { item.tournament_match_scores.map((matchScore, index) => {
-
-                             return ( <View style={{  flexDirection: 'row', justifyContent: 'space-between',marginRight:5 }}>
-                                   <Text style={defaultStyle.bold_text_10}>{'set'+ (index + 1)} </Text>
-                                   <Text style={defaultStyle.bold_text_10}>{matchScore.player1_score}</Text>
-                               </View> )
-                           })}
-
-                       </View>
-                        <View style={{width:'50%'}}>
-                            <View style={{alignItems:'center'}}>
-                            <Text style={defaultStyle.heavy_bold_text_14}>{item.player2.name}</Text>
-                            </View>
-                            { item.tournament_match_scores.map((matchScore, index) => {
-                            return ( <View style={{  flexDirection: 'row', justifyContent: 'space-between',marginLeft:5,marginRight:5 }}>
-                            <Text style={defaultStyle.bold_text_10}>{'set'+ (index + 1)} </Text>
-                            <Text style={defaultStyle.bold_text_10}>{matchScore.player2_score}</Text>
-                        </View> )
-                            })}
+                            }
+                            {
+                                item.start_datetime &&
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={[defaultStyle.bold_text_10, { marginLeft: 5 }]}>
+                                        {moment.utc(item.start_datetime).local().format(SESSION_DATE_FORMAT) + ','}
+                                    </Text>
+                                    <Text style={[defaultStyle.bold_text_10, { marginLeft: 5 }]}>
+                                        {moment.utc(item.start_datetime).local().format("hh:mm a")}
+                                    </Text>
+                                </View>
+                            }
                         </View>
                     </View>
+
+
+
                     <View style={defaultStyle.line_style} />
-                    <View  style={{alignItems:'center',marginTop:10,marginBottom:20}}>
-                    <TouchableOpacity
-                    onPress={() => {
-                    this.props.navigation.navigate('PlayerAttendance',
-                    { batch_id: this.props.jumpTo.batch_id })
-                    }}>
-                    <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]}>Update Score </Text>
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                        {
+                            item.player1 ?
+                                <View style={{ width: '50%' }}
+                                >
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player1.name}</Text>
+                                        {
+                                            item.winner && item.winner.id == item.player1.id &&
+                                            <Image source={require('../../images/winner_badge.png')}
+                                                resizeMode='contain'
+                                                style={{
+                                                    width: 12, height: 16, marginLeft: 10
+                                                }}></Image>
+                                        }
+
+                                    </View>
+                                </View> : (
+                                    item.player1_match ?
+                                        <View style={{ width: '50%', alignItems: 'center' }}>
+                                            <Text style={[defaultStyle.heavy_bold_text_14,]}> {'Match ' + item.player1_match.match_number + ' winner'}</Text>
+                                        </View> :
+                                        ((item.winner && item.bye_given) ?
+                                            <View style={{ width: '50%', alignItems: 'center' }}>
+                                                <Text style={[defaultStyle.heavy_bold_text_14,]}> {'No player'}</Text>
+                                            </View> :
+                                            <View style={{ width: '50%', alignItems: 'center' }}>
+                                                <Text style={[defaultStyle.heavy_bold_text_14,]}> {'To be decided'}</Text>
+                                            </View>)
+                                )
+                        }
+                        {
+                            item.player2 ?
+                                <View style={{ width: '50%' }}
+                                >
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player2.name}</Text>
+                                        {
+                                            item.winner && item.winner.id == item.player2.id &&
+                                            <Image source={require('../../images/winner_badge.png')}
+                                                resizeMode='contain'
+                                                style={{
+                                                    width: 12, height: 16, marginLeft: 10
+                                                }}></Image>
+                                        }
+                                    </View>
+                                </View> : (
+                                    item.player2_match ?
+                                        <View style={{ width: '50%', alignItems: 'center' }}>
+                                            <Text style={[defaultStyle.heavy_bold_text_14,]}> {'Match ' + item.player2_match.match_number + ' winner'}</Text>
+                                        </View>
+                                        : (
+                                            (item.winner && item.bye_given) ?
+                                                <View style={{ width: '50%', alignItems: 'center' }}>
+                                                    <Text style={[defaultStyle.heavy_bold_text_14,]}> {'No player'}</Text>
+                                                </View> :
+                                                <View style={{ width: '50%', alignItems: 'center' }}>
+                                                    <Text style={[defaultStyle.heavy_bold_text_14,]}> {'To be decided'}</Text>
+                                                </View>
+                                        )
+                                )
+                        }
                     </View>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                            <View style={{ width: '50%' }}
+                            >
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={[defaultStyle.heavy_bold_text_14,]}> {'Match ' + item.player1_match.match_number + ' winner'}</Text>
+                                </View>
+                            </View>
+                            <View style={{ width: '50%' }}>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={defaultStyle.heavy_bold_text_14}>{'Match ' + item.player2_match.match_number + ' winner'}</Text>
+                                </View>
+                            </View>
+                            </View> */}
+                    <View style={{ marginTop: 10 }}>
+                        {!item.bye_given && item.tournament_match_scores.map((matchScore, index) => {
+                            return (<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 3 }}>
+                                <View style={{}}>
+                                    <Text style={defaultStyle.bold_text_12}>{matchScore.player1_score}</Text>
+                                </View>
+                                <View style={{ marginLeft: 62, marginRight: 62 }}>
+                                    <Text style={[defaultStyle.bold_text_10, { color: '#C4C4C5' }]}>{'Set ' + (index + 1)} </Text>
+                                </View>
+                                <View style={{}}>
+                                    <Text style={defaultStyle.bold_text_12}>{matchScore.player2_score}</Text>
+                                </View>
+                            </View>)
+                        })}
+                    </View>
+
+                    {/* <View style={{ marginTop: 10 }}>
+                                {item.tournament_match_scores.map((matchScore, index) => {
+                                    return (<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 3 }}>
+                                        <View style={{}}>
+                                            <Text style={defaultStyle.bold_text_12}>{matchScore.player1_score}</Text>
+                                        </View>
+                                        <View style={{ marginLeft: 62, marginRight: 62 }}>
+                                            <Text style={[defaultStyle.bold_text_10, { color: '#C4C4C5' }]}>{'Set ' + (index + 1)} </Text>
+                                        </View>
+                                        <View style={{}}>
+                                            <Text style={defaultStyle.bold_text_12}>{matchScore.player2_score}</Text>
+                                        </View>
+                                    </View>)
+                                })}
+                            </View> */}
+
+                    <View style={defaultStyle.line_style} />
+
+                    {
+                        (this.props.jumpTo.can_update_score && item.player1 && item.player2) &&
+                        <View style={{ alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
+                            <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} onPress={() => {
+                                this.props.navigation.navigate('TournamentScorer', {
+                                    match_id: item.id
+                                })
+
+                            }}>Update Score</Text>
+                        </View>
+                    }
                 </View>
+
             </CustomeCard>
         )
     };
@@ -190,7 +342,7 @@ class MatchListComponent extends BaseComponent {
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 5,justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
                         <Text style={[defaultStyle.regular_text_14, {
                             textDecorationLine: 'line-through',
 
@@ -203,7 +355,7 @@ class MatchListComponent extends BaseComponent {
                             marginLeft: 10,
                         }]}>
                             {getFormatTimeDate(session_date, start_time)
-                            + " - " + getFormatTimeDate(session_date, end_time)}
+                                + " - " + getFormatTimeDate(session_date, end_time)}
                         </Text>
 
                     </View>
@@ -228,7 +380,7 @@ class MatchListComponent extends BaseComponent {
                         </Text>
                         <Text style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}>
                             {getFormatTimeDate(session_date, start_time)
-                            + " - " + getFormatTimeDate(session_date, end_time)}
+                                + " - " + getFormatTimeDate(session_date, end_time)}
                         </Text>
 
                     </View>
@@ -240,8 +392,8 @@ class MatchListComponent extends BaseComponent {
     }
     render() {
 
-        console.log( ' this.props.jumpTo',this.props.jumpTo)
-      // const { session } = this.props.jumpTo
+        console.log(' this.props.jumpTo', this.props.jumpTo)
+        // const { session } = this.props.jumpTo
         // const {routine_name, batch_name, batch_category,batch_id} = this.state.coach_profile.attandence_batch[0]
         // const {is_canceled, end_time,session_date, start_time} = this.state.coach_profile.attandence_batch[0].session
 
@@ -253,33 +405,33 @@ class MatchListComponent extends BaseComponent {
         return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
             {/*<ProgressIngreeDialog*/}
-                {/*touchOutside={(item) => {*/}
-                    {/*this.setState({*/}
-                        {/*performance_dialog: false*/}
-                    {/*})*/}
-                    {/*setTimeout(() => {*/}
+            {/*touchOutside={(item) => {*/}
+            {/*this.setState({*/}
+            {/*performance_dialog: false*/}
+            {/*})*/}
+            {/*setTimeout(() => {*/}
 
-                        {/*if (item != null) {*/}
-                            {/*item.score = 0*/}
-                            {/*item.batchId = batch_id*/}
-                            {/*this.props.navigation.navigate('ViewPlayerPerformance',*/}
-                                {/*{ performance_data: item });*/}
-                        {/*}*/}
-                    {/*}, 50)*/}
-                {/*}}*/}
-                {/*performance_data={this.props.jumpTo.progress_attributes}*/}
-                {/*visible={this.state.performance_dialog}*/}
+            {/*if (item != null) {*/}
+            {/*item.score = 0*/}
+            {/*item.batchId = batch_id*/}
+            {/*this.props.navigation.navigate('ViewPlayerPerformance',*/}
+            {/*{ performance_data: item });*/}
+            {/*}*/}
+            {/*}, 50)*/}
+            {/*}}*/}
+            {/*performance_data={this.props.jumpTo.progress_attrstateibutes}*/}
+            {/*visible={this.state.performance_dialog}*/}
             {/*/>*/}
 
-            <ScrollView style={{ flex: 1, marginTop: 0,height:'100%', backgroundColor: '#F7F7F7' }}>
+            <ScrollView style={{ flex: 1, marginTop: 0, height: '100%', backgroundColor: '#F7F7F7' }}>
                 {/*// <View style={{margin: 10}}>*/}
 
                 {this.state.matchList ?
                     <FlatList
-                        data={this.state.matchList}
-                      //  extraData={this.state.is_refresh}
+                        data={this.props.jumpTo.data}
+                        //  extraData={this.state.is_refresh}
                         renderItem={this.renderMatchItem}
-                    /> :null
+                    /> : null
                 }
 
 
@@ -292,12 +444,13 @@ class MatchListComponent extends BaseComponent {
 export default MatchListComponent;
 
 const styles = StyleSheet.create({
-        labelText: {
-            marginBottom: 5,
-            color: '#A3A5AE',
-            fontSize: 10,
+    labelText: {
+        marginBottom: 5,
+        color: '#A3A5AE',
+        fontSize: 10,
 
-            // backgroundColor: 'blue',
-        },
-    }
+        // backgroundColor: 'blue',
+    },
+    confirmBtn: { width: "100%", marginLeft: 0, marginRight: 0, fontFamily: 'Quicksand-Regular', },
+}
 );

@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { View, ImageBackground, Text,StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
+import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
@@ -11,7 +11,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlayerBatchComponent from '../../containers/PlayerBatch/PlayerBatchComponent'
 import BaseComponent, { defaultStyle, REFRESH_SCREEN_CALLBACK } from '../BaseComponent';
 import moment from 'moment'
-import {PLAYER, FAMILY, PARENT, ACADEMY, COACH} from '../../components/Constants';
+import { PLAYER, FAMILY, PARENT, ACADEMY, COACH } from '../../components/Constants';
 import Events from '../../router/events';
 import firebase from "react-native-firebase";
 import { Text as MyText } from 'react-native'
@@ -32,12 +32,12 @@ class TournamentMatchList extends BaseComponent {
                     //alignItems: 'center'
                 }}><MyText
                     style={defaultStyle.bold_text_12}>{navigation.getParam('title')}
-                </MyText></View>),
+                    </MyText></View>),
             headerTitleStyle: defaultStyle.headerStyle,
 
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                                                   showDrawer={false}
-                                                   showBackAction={true} />
+                showDrawer={false}
+                showBackAction={true} />
             ,
             headerRight: (
                 <TouchableOpacity
@@ -90,8 +90,10 @@ class TournamentMatchList extends BaseComponent {
             zoom: 0.09820492746901595,
             left: 0,
             top: 150,
-            view_container:[]
-
+            view_container: [],
+            tournamentFormat: '',
+            selectedGroupMatches: true,
+            showTabs: false
         }
         if (global.click_batch_id != undefined) {
             this.state.click_batch_id = global.click_batch_id
@@ -104,7 +106,7 @@ class TournamentMatchList extends BaseComponent {
 
 
     componentDidMount() {
-        getData('userInfo', (value)=>{
+        getData('userInfo', (value) => {
             var userData = JSON.parse(value)
             // if(userData.user){
             //     var userid = userData.user['id']
@@ -131,11 +133,23 @@ class TournamentMatchList extends BaseComponent {
             }
         });
 
+        this.state.tournamentFormat = this.props.navigation.getParam('tournamentFormat');
+
+        console.log('tournamentFormat', this.state.tournamentFormat);
+
+
 
         let data = this.props.navigation.getParam('data')
         console.log('Tournament Fixture -> ' + data)
-        this.init(data)
+        let json = JSON.parse(data)
 
+        if (json.tournament_matches.length == 0 && json.group_matches.length == 0) {
+            this.state.showTabs = false;
+        } else {
+            this.state.showTabs = true;
+        }
+
+        this.init(data)
 
         this.refreshEvent = Events.subscribe('REFRESH_FIXTURE', (data) => {
             // alert('REFRESH_FIXTURE')
@@ -169,9 +183,9 @@ class TournamentMatchList extends BaseComponent {
 
 
     init(data) {
-       // alert('teste')
+        // alert('teste')
         let json = JSON.parse(data)
-        console.log('FiXTURE DATA',json);
+        console.log('FiXTURE DATA', json);
         this.state.tournament_name = json.name
 
         let title = this.state.academy_name + " " + json.name
@@ -180,20 +194,52 @@ class TournamentMatchList extends BaseComponent {
             tournament_name: title
         })
         this.state.data = json
-      //  this.showFixture(json)
-       // tournament_matches
-      // console.log('json.tournament_matches',(json.tournament_matches).getAllKeys())
-        let fixture_data = json.tournament_matches
+        //  this.showFixture(json)
+        // tournament_matches
+        // console.log('json.tournament_matches',(json.tournament_matches).getAllKeys())
+
+        let fixture_data;
         var temparra = [];
-        var batchArray= [];
+        var batchArray = [];
         var i = 0;
+
+        console.log('jsin', json);
+
+        if (this.state.tournamentFormat == 'KNOCK_OUT') {
+            console.log('in if');
+            console.log('fixture_data11111', json.tournament_matches);
+            fixture_data = json.tournament_matches
+        } else {
+            console.log('in else');
+            console.log('fixture_data11111', json.tournament_matches);
+            if (this.state.selectedGroupMatches) {
+                fixture_data = json.group_matches
+            } else {
+                fixture_data = json.tournament_matches
+            }
+
+        }
+
+        console.log('fixture_data', fixture_data)
+
         for (var key in fixture_data) {
-            const obj = { 'key': i, 'title': 'Round'+ key };
+            const obj = {};
+            if (this.state.tournamentFormat == 'KNOCK_OUT') {
+                obj = { 'key': i, 'title': 'Round ' + key };
+            } else {
+                if (this.state.selectedGroupMatches) {
+                    obj = { 'key': i, 'title': key };
+                } else {
+                    obj = { 'key': i, 'title': 'Round ' + key };
+                }
+
+            }
             i = i + 1;
             temparra.push(obj);
+            console.log('fixture_data[key]', fixture_data[key])
             batchArray.push(fixture_data[key])
         }
-        if ((json.tournament_matches)) {
+        if ((json.tournament_matches) || (json.group_matches)) {
             // var temparra = [];
             // for (let i = 0; i < (json.tournament_matches).length; i++) {
             //     let batch = (json.tournament_matches)[i]
@@ -207,10 +253,11 @@ class TournamentMatchList extends BaseComponent {
             //
             // }
 
-            console.log('temparra',batchArray)
+            console.log('temparra', batchArray)
             this.setState({
                 batchList: batchArray,
-                routes: temparra
+                routes: temparra,
+                allMatches: batchArray
                 // strenthList:user1.data.player_profile['stats']
 
             })
@@ -246,7 +293,13 @@ class TournamentMatchList extends BaseComponent {
         />
     );
     renderScene = ({ route, jumpTo }) => {
-        return <MatchListComponent jumpTo={this.state.batchList[route.key]} navigation={this.props.navigation} />;
+        let data = this.props.navigation.getParam('data');
+        data = JSON.parse(data)
+        var matchData = {
+            'data': this.state.batchList[route.key],
+            'can_update_score': data.can_update_score
+        };
+        return <MatchListComponent jumpTo={matchData} navigation={this.props.navigation} />;
         // case 'albums': return <AlbumsRoute jumpTo={jumpTo} />;
 
     };
@@ -269,19 +322,84 @@ class TournamentMatchList extends BaseComponent {
                 </View>
             )
         }
-        if (this.state.batchList && this.state.batchList.length > 0) {
+
+        if (this.state.showTabs) {
+
+            let buttonStyle;
+            if (this.state.selectedGroupMatches == true) {
+                buttonStyleFirst = { width: '50%', backgroundColor: 'white' };
+                buttonStyleSecond = { width: '50%' };
+            }
+            else {
+                buttonStyleFirst = { width: '50%' };
+                buttonStyleSecond = { width: '50%', backgroundColor: 'white' };
+            }
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+
                 <PTRView onRefresh={this._refresh} >
 
-                    <TabView
-                        navigationState={this.state}
-                        renderTabBar={this._renderTabBar}
-                        renderScene={this.renderScene}
+                    {this.state.tournamentFormat == 'ROUND_ROBIN_KNOCK_OUT' &&
 
-                        onIndexChange={index => this.setState({ index })}
-                        initialLayout={{ width: Dimensions.get('window').width }}
-                    />
+                        <View style={{ flexDirection: 'row', backgroundColor: '#F7F7F7' }}>
+
+                            <TouchableOpacity style={buttonStyleFirst} activeOpacity={.8} onPress={() => {
+                                if (this.state.selectedGroupMatches == false) {
+                                    this.setState({
+                                        selectedGroupMatches: true
+                                    }, () => {
+                                        let data = this.props.navigation.getParam('data')
+                                        this.init(data)
+                                    })
+                                }
+                            }}>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={styles.rounded_button_150}>
+                                        Group Stage
+                                </Text>
+                                </View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={buttonStyleSecond} activeOpacity={.8} onPress={() => {
+                                if (this.state.selectedGroupMatches == true) {
+                                    this.setState({
+                                        selectedGroupMatches: false
+                                    }, () => {
+                                        let data = this.props.navigation.getParam('data')
+                                        this.init(data)
+                                    })
+                                }
+                            }}>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={styles.rounded_button_150}>
+                                        Knockout Stage
+                                </Text>
+                                </View>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    }
+
+                    {
+                        this.state.batchList && this.state.batchList.length > 0 ?
+
+                            <TabView
+                                navigationState={this.state}
+                                renderTabBar={this._renderTabBar}
+                                renderScene={this.renderScene}
+
+                                onIndexChange={index => this.setState({ index })}
+                                initialLayout={{ width: Dimensions.get('window').width }}
+                            /> :
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {this.state.batchList ? 'No Matches Found' : ''}
+                                </Text>
+                            </View>
+                    }
+
+
                 </PTRView>
 
             </View>;
@@ -388,6 +506,18 @@ const styles = StyleSheet.create({
     },
     scene: {
         flex: 1,
+    },
+    rounded_button_150: {
+        //flex: 1,
+        //width: '50%',
+        padding: 10,
+        //alignItems: 'center',
+        //justifyContent: 'center',
+        //backgroundColor: '#67BAF5',
+        color: 'black',
+        //borderRadius: 5,
+        //textAlign: 'center',
+        fontFamily: 'Quicksand-Medium'
     },
 
 

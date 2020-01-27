@@ -39,12 +39,12 @@ class UpcomingTournamentDetail extends BaseComponent {
     }
 
     fetchTournamentData(tournament_id) {
-        getData('userInfo', (value)=>{
+        getData('userInfo', (value) => {
             var userData = JSON.parse(value)
-            if(userData.user){
+            if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("UpcomingTournament", {userid: userid, username: username})
+                firebase.analytics().logEvent("UpcomingTournament", { userid: userid, username: username })
             }
         })
         // firebase.analytics().logEvent("UpcomingTournament", {})
@@ -452,6 +452,7 @@ class UpcomingTournamentDetail extends BaseComponent {
 
                 <View style={defaultStyle.line_style}></View>
 
+
                 <View style={{
                     elevation: 4,
                 }}>
@@ -468,7 +469,10 @@ class UpcomingTournamentDetail extends BaseComponent {
                         <TouchableOpacity activeOpacity={.8}
                             style={styles.rounded_button_white}
                             onPress={() => {
-                                this.props.navigation.goBack()
+                                this.props.navigation.navigate('FixtureSelection', {
+                                    id: this.state.tournament_id
+                                })
+                                //this.getFixtureData(item.id)
                             }}>
                             <Text
                                 style={{
@@ -477,7 +481,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                     fontFamily: 'Quicksand-Medium'
                                 }}
                             >
-                                Close
+                                View Matches
                     </Text>
                         </TouchableOpacity>
 
