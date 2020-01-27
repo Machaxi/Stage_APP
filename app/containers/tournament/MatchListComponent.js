@@ -190,10 +190,10 @@ class MatchListComponent extends BaseComponent {
                                         <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player1.name}</Text>
                                         {
                                             item.winner && item.winner.id == item.player1.id &&
-                                            <Image source={require('../../images/winner_badge.png')}
+                                            <Image source={require('../../images/trophy.png')}
                                                 resizeMode='contain'
                                                 style={{
-                                                    width: 12, height: 16, marginLeft: 10
+                                                    width: 14, height: 18, marginLeft: 10
                                                 }}></Image>
                                         }
 
@@ -220,10 +220,10 @@ class MatchListComponent extends BaseComponent {
                                         <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player2.name}</Text>
                                         {
                                             item.winner && item.winner.id == item.player2.id &&
-                                            <Image source={require('../../images/winner_badge.png')}
+                                            <Image source={require('../../images/trophy.png')}
                                                 resizeMode='contain'
                                                 style={{
-                                                    width: 12, height: 16, marginLeft: 10
+                                                    width: 14, height: 18, marginLeft: 10
                                                 }}></Image>
                                         }
                                     </View>
