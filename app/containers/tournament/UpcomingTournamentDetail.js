@@ -467,7 +467,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                     }}>
 
                         <TouchableOpacity activeOpacity={.8}
-                            style={styles.rounded_button_white}
+                            style={[styles.rounded_button_white,{backgroundColor: '#67BAF5'}]}
                             onPress={() => {
                                 this.props.navigation.navigate('FixtureSelection', {
                                     id: this.state.tournament_id
@@ -476,12 +476,12 @@ class UpcomingTournamentDetail extends BaseComponent {
                             }}>
                             <Text
                                 style={{
-                                    color: '#67BAF5',
+                                    color: '#fff',
                                     textAlign: 'center',
                                     fontFamily: 'Quicksand-Medium'
                                 }}
                             >
-                                View Matches
+                                View Fixtures
                     </Text>
                         </TouchableOpacity>
 

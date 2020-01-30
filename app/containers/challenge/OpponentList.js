@@ -57,7 +57,7 @@ class OpponentList extends BaseComponent {
             let player_id = userData['player_id'];
 
             getData('header', (value) => {
-                this.props.getOpponentList(value, userData['academy_id'], page, size,player_id).then(() => {
+                this.props.getOpponentList(value, userData['academy_id'], page, size, player_id).then(() => {
                     let data = this.props.data.data
                     console.log(' getOpponentList ' + JSON.stringify(data));
                     this.setState({
@@ -330,11 +330,15 @@ class OpponentList extends BaseComponent {
         <View style={styles.playerCard}>
             <TouchableOpacity
                 activeOpacity={.8}
+                disabled={!item.can_challenge ? true : false}
+                style={!item.can_challenge ? { opacity: 0.6 } : {}}
                 onPress={() => {
-                    this.setModalVisible(true)
-                    this.setState({
-                        selectedOpponentData: item
-                    })
+                    if (item.can_challenge) {
+                        this.setModalVisible(true)
+                        this.setState({
+                            selectedOpponentData: item
+                        })
+                    }
                 }}>
                 <ImageBackground resizeMode='contain' style={{ height: 180, width: '100%' }}
                     source={require('../../images/batch_card.png')}
