@@ -39,23 +39,23 @@ class TournamentMatchList extends BaseComponent {
                 showDrawer={false}
                 showBackAction={true} />
             ,
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => {
-                        //navigation.navigate('SwitchPlayer')
-                    }}
-                    activeOpacity={.8}
-                >
-                    <Text
-                        style={{
-                            marginRight: 12,
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 10,
-                            color: '#667DDB'
-                        }} >Refresh</Text>
-                </TouchableOpacity>
+            // headerRight: (
+            //     <TouchableOpacity
+            //         onPress={() => {
+            //             //navigation.navigate('SwitchPlayer')
+            //         }}
+            //         activeOpacity={.8}
+            //     >
+            //         <Text
+            //             style={{
+            //                 marginRight: 12,
+            //                 fontFamily: 'Quicksand-Regular',
+            //                 fontSize: 10,
+            //                 color: '#667DDB'
+            //             }} >Refresh</Text>
+            //     </TouchableOpacity>
 
-            )
+            // )
         };
 
     };
@@ -392,10 +392,12 @@ class TournamentMatchList extends BaseComponent {
                                 onIndexChange={index => this.setState({ index })}
                                 initialLayout={{ width: Dimensions.get('window').width }}
                             /> :
-                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                <Text style={defaultStyle.regular_text_14}>
-                                    {this.state.batchList ? 'No Matches Found' : ''}
-                                </Text>
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 }}>
+                                <View>
+                                    <Text style={defaultStyle.regular_text_14}>
+                                        {this.state.batchList ? 'No Matches Found' : ''}
+                                    </Text>
+                                </View>
                             </View>
                     }
 

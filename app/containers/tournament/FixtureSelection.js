@@ -511,9 +511,13 @@ class FixtureSelection extends BaseComponent {
                                                     // this.props.navigation.navigate('FixtureSelection', { id: item.id, 'clickedBtn': 'fixtures' })
 
                                                     if (this.state.fixture_type.length == 1) {
-                                                        this.props.navigation.navigate('TournamentFixture', {
-                                                            data: JSON.stringify(this.state.fixture_type[0]),
-                                                            title: name + this.state.fixture_type[0].name
+                                                        this.setState({
+                                                            selected_f_type: this.state.fixture_type[0]
+                                                        }, () => {
+                                                            this.props.navigation.navigate('TournamentFixture', {
+                                                                data: JSON.stringify(this.state.fixture_type[0]),
+                                                                title: name + this.state.fixture_type[0].name
+                                                            })
                                                         })
                                                     } else {
                                                         this.props.navigation.navigate('TournamentFixture', {
@@ -540,10 +544,14 @@ class FixtureSelection extends BaseComponent {
                                                     // })
 
                                                     if (this.state.fixture_type.length == 1) {
-                                                        this.props.navigation.navigate('TournamentMatchList', {
-                                                            data: JSON.stringify(this.state.fixture_type[0]),
-                                                            title: name + this.state.fixture_type[0].name,
-                                                            tournamentFormat: this.state.tournament_data.tournament_format
+                                                        this.setState({
+                                                            selected_f_type: this.state.fixture_type[0]
+                                                        }, () => {
+                                                            this.props.navigation.navigate('TournamentMatchList', {
+                                                                data: JSON.stringify(this.state.fixture_type[0]),
+                                                                title: name + this.state.fixture_type[0].name,
+                                                                tournamentFormat: this.state.tournament_data.tournament_format
+                                                            })
                                                         })
                                                     } else {
                                                         this.props.navigation.navigate('TournamentMatchList', {
@@ -582,11 +590,16 @@ class FixtureSelection extends BaseComponent {
                                                     // })
 
                                                     if (this.state.fixture_type.length == 1) {
-                                                        this.props.navigation.navigate('TournamentMatchList', {
-                                                            data: JSON.stringify(this.state.fixture_type[0]),
-                                                            title: name + this.state.fixture_type[0].name,
-                                                            tournamentFormat: this.state.tournament_data.tournament_format
+                                                        this.setState({
+                                                            selected_f_type: this.state.fixture_type[0]
+                                                        }, () => {
+                                                            this.props.navigation.navigate('TournamentMatchList', {
+                                                                data: JSON.stringify(this.state.fixture_type[0]),
+                                                                title: name + this.state.fixture_type[0].name,
+                                                                tournamentFormat: this.state.tournament_data.tournament_format
+                                                            })
                                                         })
+
                                                     } else {
                                                         this.props.navigation.navigate('TournamentMatchList', {
                                                             data: JSON.stringify(this.state.selected_f_type),
