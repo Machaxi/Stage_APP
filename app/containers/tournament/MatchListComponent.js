@@ -187,7 +187,7 @@ class MatchListComponent extends BaseComponent {
                                 <View style={{ width: '50%' }}
                                 >
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player1.name}</Text>
+                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player1_description}</Text>
                                         {
                                             item.winner && item.winner.id == item.player1.id &&
                                             <Image source={require('../../images/trophy.png')}
@@ -217,7 +217,7 @@ class MatchListComponent extends BaseComponent {
                                 <View style={{ width: '50%' }}
                                 >
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player2.name}</Text>
+                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player2_description}</Text>
                                         {
                                             item.winner && item.winner.id == item.player2.id &&
                                             <Image source={require('../../images/trophy.png')}
