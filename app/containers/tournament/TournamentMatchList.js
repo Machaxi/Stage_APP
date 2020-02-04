@@ -225,12 +225,20 @@ class TournamentMatchList extends BaseComponent {
         for (var key in fixture_data) {
             const obj = {};
             if (this.state.tournamentFormat == 'KNOCK_OUT') {
-                obj = { 'key': i, 'title': 'Round ' + key };
+                if(fixture_data[key][0].is_final==true) {
+                    obj = { 'key': i, 'title': 'Finals' };
+                } else {
+                    obj = { 'key': i, 'title': 'Round ' + key };
+                }
             } else {
                 if (this.state.selectedGroupMatches) {
                     obj = { 'key': i, 'title': key };
                 } else {
-                    obj = { 'key': i, 'title': 'Round ' + key };
+                    if(fixture_data[key][0].is_final==true) {
+                        obj = { 'key': i, 'title': 'Finals' };
+                    } else {
+                        obj = { 'key': i, 'title': 'Round ' + key };
+                    }
                 }
 
             }

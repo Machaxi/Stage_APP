@@ -55,6 +55,15 @@ class MatchListComponent extends BaseComponent {
         }
     }
 
+    goToPlayerDetail(id) {
+        console.log('goToPlayerDetail======================', id);
+        this.props.navigation.navigate('OtherPlayerDeatils', {
+            player_id: id,
+            fixture: true
+        })
+
+    }
+
     componentDidMount() {
 
         //console.warn('hjhc', this.props.jumpTo)
@@ -187,7 +196,11 @@ class MatchListComponent extends BaseComponent {
                                 <View style={{ width: '50%' }}
                                 >
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player1_description}</Text>
+                                        <Text style={[defaultStyle.heavy_bold_text_14, item.player1.user_type == "PLAYER" ? {color: 'blue'} : {}]} onPress={() => {
+                                            if(item.player1.user_type == "PLAYER") {
+                                                this.goToPlayerDetail(item.player1.user_id)
+                                            }
+                                        }}>{item.player1_description}</Text>
                                         {
                                             item.winner && item.winner.id == item.player1.id &&
                                             <Image source={require('../../images/trophy.png')}
@@ -217,7 +230,11 @@ class MatchListComponent extends BaseComponent {
                                 <View style={{ width: '50%' }}
                                 >
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={[defaultStyle.heavy_bold_text_14,]}>{item.player2_description}</Text>
+                                        <Text style={[defaultStyle.heavy_bold_text_14,item.player2.user_type == "PLAYER" ? {color: 'blue'}: {}]} onPress={() => {
+                                            if(item.player2.user_type == "PLAYER") {
+                                                this.goToPlayerDetail(item.player2.user_id)
+                                            }
+                                        }}>{item.player2_description}</Text>
                                         {
                                             item.winner && item.winner.id == item.player2.id &&
                                             <Image source={require('../../images/trophy.png')}
