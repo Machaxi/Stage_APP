@@ -40,12 +40,12 @@ class UpcomingTournamentDetail extends BaseComponent {
     }
 
     fetchTournamentData(tournament_id) {
-        getData('userInfo', (value)=>{
+        getData('userInfo', (value) => {
             var userData = JSON.parse(value)
-            if(userData.user){
+            if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("UpcomingTournament", {userid: userid, username: username})
+                firebase.analytics().logEvent("UpcomingTournament", { userid: userid, username: username })
             }
         })
         // firebase.analytics().logEvent("UpcomingTournament", {})
@@ -450,6 +450,7 @@ class UpcomingTournamentDetail extends BaseComponent {
 
                 <View style={defaultStyle.line_style}></View>
 
+
                 <View style={{
                     elevation: 4,
                 }}>
@@ -463,34 +464,23 @@ class UpcomingTournamentDetail extends BaseComponent {
                         elevation: 4
                     }}>
 
-                        {/* <TouchableOpacity activeOpacity={.8}
-                            style={styles.rounded_button_white}
+                        <TouchableOpacity activeOpacity={.8}
+                            style={[styles.rounded_button_white,{backgroundColor: '#67BAF5'}]}
                             onPress={() => {
-                                this.props.navigation.goBack()
+                                this.props.navigation.navigate('FixtureSelection', {
+                                    id: this.state.tournament_id
+                                })
+                                //this.getFixtureData(item.id)
                             }}>
                             <Text
                                 style={{
-                                    color: '#67BAF5',
+                                    color: '#fff',
                                     textAlign: 'center',
                                     fontFamily: 'Quicksand-Medium'
                                 }}
                             >
-                                Close
-                            </Text>
-                        </TouchableOpacity> */}
-
-                        <TouchableOpacity activeOpacity={.8}
-                            style={styles.rounded_button}
-                            onPress={() => {
-                                this.props.navigation.navigate('FixtureSelection', {id: this.state.tournament_id})
-                            }}>
-                            <Text
-                                style={{
-                                    color: 'white',
-                                    textAlign: 'center',
-                                    fontFamily: 'Quicksand-Medium'
-                                }}
-                            >View Fixtures</Text>
+                                View Fixtures
+                    </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity activeOpacity={.8}

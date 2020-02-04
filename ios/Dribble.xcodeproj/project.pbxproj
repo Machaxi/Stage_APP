@@ -5,43 +5,28 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
-		0047DE71B9CC4A498F8C11A8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D571A395E08B49649009E409 /* FontAwesome.ttf */; };
 		00E356F31AD99517003FC87E /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
-		0BB78C9FF018408EBD2A71C7 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60AA73A8CD67489E9AA55CE0 /* FontAwesome5_Brands.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1AABBA2F7DBD417B812F2B6E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C670BD445FF4AC29F50D06D /* Entypo.ttf */; };
-		1F4FE658DA524CA795EB14AC /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D5BA613FC08423EBFDCDA7E /* Zocial.ttf */; };
-		247F9D3A0B2F407085B32FE6 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9197A23C7F5479B845E1129 /* MaterialCommunityIcons.ttf */; };
 		2DCD954D1E0B4F2C00145EB5 /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
-		39FE186DCB194B6CA6E23ADA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3532B16D2EFF4744BA759E71 /* AntDesign.ttf */; };
-		449C2C4E0BE34D7BBD6A18DF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2914638E5834733BA9EEA4F /* Feather.ttf */; };
-		578198CE2BED42919C805A87 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FFE6FC481A34737AA2F511B /* EvilIcons.ttf */; };
-		82A660DBFF2B642015B06671 /* libPods-Dribble.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E3950F35E7A0C6D3EC059C9 /* libPods-Dribble.a */; };
-		85DAA372481308126BEC9485 /* libPods-DribbleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E6B40C78949C299533E6710 /* libPods-DribbleTests.a */; };
-		8C568AC3629E40219264D564 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA401DAAFFB748159660A81C /* Fontisto.ttf */; };
-		A2136010236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A213600F236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a */; };
-		A21CAD3A236FEC4300C4DF6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A21CAD37236FEC4300C4DF6F /* GoogleService-Info.plist */; };
-		A22C6CC623320EAE00AE9F60 /* new_splash_logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A22C6CC323320EAE00AE9F60 /* new_splash_logo.jpg */; };
+		7C18C45A930B94D3E591BF8D /* libPods-DribbleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE01E04CED7A014757AC0FA0 /* libPods-DribbleTests.a */; };
+		A21CAD3A236FEC4300C4DF6F /* (null) in Resources */ = {isa = PBXBuildFile; };
 		A2346D60232B607B009565AC /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5C232B607B009565AC /* BebasNeue-Regular.ttf */; };
 		A2346D61232B607B009565AC /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5D232B607B009565AC /* Quicksand-Bold.ttf */; };
 		A2346D62232B607B009565AC /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5E232B607B009565AC /* Quicksand-Medium.ttf */; };
 		A2346D63232B607B009565AC /* Quicksand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2346D5F232B607B009565AC /* Quicksand-Regular.ttf */; };
+		A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A251647523DF2372005F3FB2 /* GoogleService-Info.plist */; };
 		A2695805233B9B2F00AF8563 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2695804233B9B2F00AF8563 /* NotificationService.swift */; };
 		A2695809233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A2695802233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A2CAB429232F62C900ACA14E /* Razorpay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAB428232F62C900ACA14E /* Razorpay.framework */; };
 		A2CAB42A232F62C900ACA14E /* Razorpay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAB428232F62C900ACA14E /* Razorpay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2CAB42B232F62DA00ACA14E /* libRazorpayCheckout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2346D6A232B94D7009565AC /* libRazorpayCheckout.a */; };
-		B5C0272589CA43B3A4365220 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FEDADAE6E61144D581B35959 /* MaterialIcons.ttf */; };
-		B9106352017141B092B21112 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F364B9ADDD5743B5B29B9DBC /* Ionicons.ttf */; };
-		BCD659523BDB4AAEA737BEDF /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDDE3F4DC54D4256A724F01F /* Octicons.ttf */; };
-		D534026C51BD497BAC33068B /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE8286FB45C7447096C459DB /* SimpleLineIcons.ttf */; };
-		D7AEC0B876ED4EEBA0653470 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 203A1AAD10DF49E7B8608C0F /* FontAwesome5_Solid.ttf */; };
-		DD55356CAA3F4BE5B14C050A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94D790718AB04CC694BEB0EB /* Foundation.ttf */; };
-		EE5D03C5686744E9BECF2E2F /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B4044DAC0F747DAA7CA77FE /* FontAwesome5_Regular.ttf */; };
+		DEBAE3371354C967CADD6375 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F147318ADF78ADA94977CA4D /* libPods-OneSignalNotificationServiceExtension.a */; };
+		FFD393947B6B42EAFBC79940 /* libPods-Dribble.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AEB2DEEE870A236C3BA8AF5A /* libPods-Dribble.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +43,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RazorpayCheckout;
+		};
+		A24ED1EC23B103CE006A2D07 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = Dribble;
 		};
 		A2695807233B9B2F00AF8563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -105,6 +97,7 @@
 		00E356EE1AD99517003FC87E /* DribbleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DribbleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* DribbleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DribbleTests.m; sourceTree = "<group>"; };
+		0365D8A3D49B4166C907DA76 /* Pods-DribbleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DribbleTests.release.xcconfig"; path = "Target Support Files/Pods-DribbleTests/Pods-DribbleTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Dribble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dribble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Dribble/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Dribble/AppDelegate.m; sourceTree = "<group>"; };
@@ -112,30 +105,20 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Dribble/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Dribble/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Dribble/main.m; sourceTree = "<group>"; };
+		147F21617435D512EA83A311 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		1E7E8AF8AE744B6BB54C3B52 /* libRNTextInputMask.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNTextInputMask.a; sourceTree = "<group>"; };
 		203A1AAD10DF49E7B8608C0F /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
-		259C97DF4F14BADEE4E803AC /* Pods-Dribble.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble.debug.xcconfig"; path = "Target Support Files/Pods-Dribble/Pods-Dribble.debug.xcconfig"; sourceTree = "<group>"; };
-		2C132E15083E224763CAD16B /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Dribble-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dribble-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFE6FC481A34737AA2F511B /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		3532B16D2EFF4744BA759E71 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		37C4EA4432DEB88990B42911 /* libPods-Dribble-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Dribble-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4DF59BDDDD08DF85B4F5D390 /* Pods-Dribble-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Dribble-tvOS/Pods-Dribble-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		58AFCFD630B08DB26891BB45 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		39C4D4F20A44A0B8409FFAF5 /* Pods-Dribble.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble.debug.xcconfig"; path = "Target Support Files/Pods-Dribble/Pods-Dribble.debug.xcconfig"; sourceTree = "<group>"; };
 		5B4044DAC0F747DAA7CA77FE /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		5CEB32FA3BA21E44EB9C0256 /* Pods-Dribble-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-Dribble-OneSignalNotificationServiceExtension/Pods-Dribble-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		60AA73A8CD67489E9AA55CE0 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
-		6F60B1100C8ECF83B299CE3D /* Pods-Dribble.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble.release.xcconfig"; path = "Target Support Files/Pods-Dribble/Pods-Dribble.release.xcconfig"; sourceTree = "<group>"; };
 		72029F77D6F847CFA1405B98 /* RNTextInputMask.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNTextInputMask.xcodeproj; path = "../node_modules/react-native-text-input-mask/ios/RNTextInputMask.xcodeproj"; sourceTree = "<group>"; };
-		89B4290FB4C8EC3854B82147 /* Pods-DribbleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DribbleTests.debug.xcconfig"; path = "Target Support Files/Pods-DribbleTests/Pods-DribbleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8C670BD445FF4AC29F50D06D /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		8D5BA613FC08423EBFDCDA7E /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		941CC390BC6D49CB36E2BD28 /* Pods-DribbleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DribbleTests.debug.xcconfig"; path = "Target Support Files/Pods-DribbleTests/Pods-DribbleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		94D790718AB04CC694BEB0EB /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		9E3950F35E7A0C6D3EC059C9 /* libPods-Dribble.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Dribble.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E6B40C78949C299533E6710 /* libPods-DribbleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DribbleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9EFCAF0EECE0BFD234164522 /* Pods-DribbleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DribbleTests.release.xcconfig"; path = "Target Support Files/Pods-DribbleTests/Pods-DribbleTests.release.xcconfig"; sourceTree = "<group>"; };
-		A213600F236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A21CAD37236FEC4300C4DF6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A229A1C9232A8168006F9F9B /* Razorpay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Razorpay.framework; path = "../node_modules/react-native-razorpay/ios/Razorpay.framework"; sourceTree = "<group>"; };
 		A22C6CC323320EAE00AE9F60 /* new_splash_logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = new_splash_logo.jpg; sourceTree = "<group>"; };
 		A2346D5C232B607B009565AC /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
@@ -143,22 +126,25 @@
 		A2346D5E232B607B009565AC /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand-Medium.ttf"; sourceTree = "<group>"; };
 		A2346D5F232B607B009565AC /* Quicksand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand-Regular.ttf"; sourceTree = "<group>"; };
 		A2346D64232B94D7009565AC /* RazorpayCheckout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RazorpayCheckout.xcodeproj; path = "../node_modules/react-native-razorpay/ios/RazorpayCheckout.xcodeproj"; sourceTree = "<group>"; };
+		A251647523DF2372005F3FB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A2695802233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2695804233B9B2F00AF8563 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		A2695806233B9B2F00AF8563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2695810233BA2FC00AF8563 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		A2837896233200DC0019E155 /* Dribble.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Dribble.entitlements; path = Dribble/Dribble.entitlements; sourceTree = "<group>"; };
 		A2CAB428232F62C900ACA14E /* Razorpay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Razorpay.framework; path = "../node_modules/react-native-razorpay/ios/Razorpay.framework"; sourceTree = "<group>"; };
+		AEB2DEEE870A236C3BA8AF5A /* libPods-Dribble.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Dribble.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9197A23C7F5479B845E1129 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		BDDE3F4DC54D4256A724F01F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		BE01E04CED7A014757AC0FA0 /* libPods-DribbleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DribbleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2914638E5834733BA9EEA4F /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		C5033110B4ED79E42F51338B /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		CE8286FB45C7447096C459DB /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		D571A395E08B49649009E409 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
-		DDC6C4193991BB8D19172448 /* Pods-Dribble-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-Dribble-OneSignalNotificationServiceExtension/Pods-Dribble-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
-		E0727718E9F0325FCF1AEF40 /* Pods-Dribble-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Dribble-tvOS/Pods-Dribble-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		E9F44E3FE1F18F91F2387B52 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F147318ADF78ADA94977CA4D /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2F59DA106DC564BC5B98909 /* Pods-Dribble.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble.release.xcconfig"; path = "Target Support Files/Pods-Dribble/Pods-Dribble.release.xcconfig"; sourceTree = "<group>"; };
 		F364B9ADDD5743B5B29B9DBC /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		FA401DAAFFB748159660A81C /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		FEDADAE6E61144D581B35959 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -169,7 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85DAA372481308126BEC9485 /* libPods-DribbleTests.a in Frameworks */,
+				7C18C45A930B94D3E591BF8D /* libPods-DribbleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +165,7 @@
 			files = (
 				A2CAB42B232F62DA00ACA14E /* libRazorpayCheckout.a in Frameworks */,
 				A2CAB429232F62C900ACA14E /* Razorpay.framework in Frameworks */,
-				82A660DBFF2B642015B06671 /* libPods-Dribble.a in Frameworks */,
+				FFD393947B6B42EAFBC79940 /* libPods-Dribble.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2136010236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				DEBAE3371354C967CADD6375 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,7 +207,7 @@
 		13B07FAE1A68108700A75B9A /* Dribble */ = {
 			isa = PBXGroup;
 			children = (
-				A21CAD37236FEC4300C4DF6F /* GoogleService-Info.plist */,
+				A251647523DF2372005F3FB2 /* GoogleService-Info.plist */,
 				A2837896233200DC0019E155 /* Dribble.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -238,14 +224,12 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A213600F236C5C97003047F7 /* libPods-OneSignalNotificationServiceExtension.a */,
 				A229A1C9232A8168006F9F9B /* Razorpay.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				9E3950F35E7A0C6D3EC059C9 /* libPods-Dribble.a */,
-				37C4EA4432DEB88990B42911 /* libPods-Dribble-tvOS.a */,
-				9E6B40C78949C299533E6710 /* libPods-DribbleTests.a */,
-				2C132E15083E224763CAD16B /* libPods-OneSignalNotificationServiceExtension.a */,
+				AEB2DEEE870A236C3BA8AF5A /* libPods-Dribble.a */,
+				BE01E04CED7A014757AC0FA0 /* libPods-DribbleTests.a */,
+				F147318ADF78ADA94977CA4D /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -253,16 +237,12 @@
 		6E19BA30950239942293E627 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				259C97DF4F14BADEE4E803AC /* Pods-Dribble.debug.xcconfig */,
-				6F60B1100C8ECF83B299CE3D /* Pods-Dribble.release.xcconfig */,
-				E0727718E9F0325FCF1AEF40 /* Pods-Dribble-tvOS.debug.xcconfig */,
-				4DF59BDDDD08DF85B4F5D390 /* Pods-Dribble-tvOS.release.xcconfig */,
-				89B4290FB4C8EC3854B82147 /* Pods-DribbleTests.debug.xcconfig */,
-				9EFCAF0EECE0BFD234164522 /* Pods-DribbleTests.release.xcconfig */,
-				5CEB32FA3BA21E44EB9C0256 /* Pods-Dribble-OneSignalNotificationServiceExtension.debug.xcconfig */,
-				DDC6C4193991BB8D19172448 /* Pods-Dribble-OneSignalNotificationServiceExtension.release.xcconfig */,
-				58AFCFD630B08DB26891BB45 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
-				C5033110B4ED79E42F51338B /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				39C4D4F20A44A0B8409FFAF5 /* Pods-Dribble.debug.xcconfig */,
+				F2F59DA106DC564BC5B98909 /* Pods-Dribble.release.xcconfig */,
+				941CC390BC6D49CB36E2BD28 /* Pods-DribbleTests.debug.xcconfig */,
+				0365D8A3D49B4166C907DA76 /* Pods-DribbleTests.release.xcconfig */,
+				147F21617435D512EA83A311 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				E9F44E3FE1F18F91F2387B52 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -382,7 +362,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "DribbleTests" */;
 			buildPhases = (
-				6C2EF8A7DA44A2389D9EBB41 /* [CP] Check Pods Manifest.lock */,
+				219D6E2580AD30D890240AA4 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -401,17 +381,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Dribble" */;
 			buildPhases = (
-				00046B9D0D641B532E4812C6 /* [CP] Check Pods Manifest.lock */,
+				0D2A4CAB4C2CA4CECDC7E823 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				877979DDF6A81BC1A338DA27 /* [CP] Copy Pods Resources */,
 				A2346D6F232B9526009565AC /* Embed Frameworks */,
 				A26957F3233B902200AF8563 /* Embed App Extensions */,
 				A2ABD3EE235DA163007EE2B5 /* ShellScript */,
 				A290F666237D6ADB00D1DE45 /* ShellScript */,
+				DC1539FC3F4A3D559659BDB7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -434,6 +414,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A24ED1ED23B103CE006A2D07 /* PBXTargetDependency */,
 			);
 			name = "Dribble-tvOSTests";
 			productName = "Dribble-tvOSTests";
@@ -444,7 +425,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A269580A233B9B2F00AF8563 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
 			buildPhases = (
-				A91B5B045AC59DADA0396BBF /* [CP] Check Pods Manifest.lock */,
+				EB7F5A62F010B255C7775FA7 /* [CP] Check Pods Manifest.lock */,
 				A26957FE233B9B2F00AF8563 /* Sources */,
 				A26957FF233B9B2F00AF8563 /* Frameworks */,
 				A2695800233B9B2F00AF8563 /* Resources */,
@@ -492,7 +473,7 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = T8DLD62Q6U;
 						ProvisioningStyle = Automatic;
-						TestTargetID = 2D02E47A1E0B4A5D006451C7;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					A2695801233B9B2F00AF8563 = {
 						CreatedOnToolsVersion = 10.3;
@@ -568,29 +549,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				A21CAD3A236FEC4300C4DF6F /* GoogleService-Info.plist in Resources */,
-				39FE186DCB194B6CA6E23ADA /* AntDesign.ttf in Resources */,
-				1AABBA2F7DBD417B812F2B6E /* Entypo.ttf in Resources */,
-				578198CE2BED42919C805A87 /* EvilIcons.ttf in Resources */,
+				A21CAD3A236FEC4300C4DF6F /* (null) in Resources */,
 				A2346D62232B607B009565AC /* Quicksand-Medium.ttf in Resources */,
-				449C2C4E0BE34D7BBD6A18DF /* Feather.ttf in Resources */,
-				0047DE71B9CC4A498F8C11A8 /* FontAwesome.ttf in Resources */,
 				A2346D61232B607B009565AC /* Quicksand-Bold.ttf in Resources */,
-				0BB78C9FF018408EBD2A71C7 /* FontAwesome5_Brands.ttf in Resources */,
-				EE5D03C5686744E9BECF2E2F /* FontAwesome5_Regular.ttf in Resources */,
-				D7AEC0B876ED4EEBA0653470 /* FontAwesome5_Solid.ttf in Resources */,
 				A2346D60232B607B009565AC /* BebasNeue-Regular.ttf in Resources */,
-				8C568AC3629E40219264D564 /* Fontisto.ttf in Resources */,
-				A22C6CC623320EAE00AE9F60 /* new_splash_logo.jpg in Resources */,
-				DD55356CAA3F4BE5B14C050A /* Foundation.ttf in Resources */,
 				A2346D63232B607B009565AC /* Quicksand-Regular.ttf in Resources */,
-				B9106352017141B092B21112 /* Ionicons.ttf in Resources */,
-				247F9D3A0B2F407085B32FE6 /* MaterialCommunityIcons.ttf in Resources */,
-				B5C0272589CA43B3A4365220 /* MaterialIcons.ttf in Resources */,
-				BCD659523BDB4AAEA737BEDF /* Octicons.ttf in Resources */,
-				D534026C51BD497BAC33068B /* SimpleLineIcons.ttf in Resources */,
-				1F4FE658DA524CA795EB14AC /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,7 +576,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00046B9D0D641B532E4812C6 /* [CP] Check Pods Manifest.lock */ = {
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+		};
+		0D2A4CAB4C2CA4CECDC7E823 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -633,21 +612,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native code and images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
-		};
-		6C2EF8A7DA44A2389D9EBB41 /* [CP] Check Pods Manifest.lock */ = {
+		219D6E2580AD30D890240AA4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -669,7 +634,41 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		877979DDF6A81BC1A338DA27 /* [CP] Copy Pods Resources */ = {
+		A290F666237D6ADB00D1DE45 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		A2ABD3EE235DA163007EE2B5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "APP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\n\n# This script loops through the frameworks embedded in the application and\n# removes unused architectures.\nfind \"$APP_PATH\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\n\nEXTRACTED_ARCHS=()\n\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\n\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\n\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\n\ndone\n";
+		};
+		DC1539FC3F4A3D559659BDB7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -719,41 +718,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dribble/Pods-Dribble-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A290F666237D6ADB00D1DE45 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
-		};
-		A2ABD3EE235DA163007EE2B5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "APP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\n\n# This script loops through the frameworks embedded in the application and\n# removes unused architectures.\nfind \"$APP_PATH\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\n\nEXTRACTED_ARCHS=()\n\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\n\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\n\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\n\ndone\n";
-		};
-		A91B5B045AC59DADA0396BBF /* [CP] Check Pods Manifest.lock */ = {
+		EB7F5A62F010B255C7775FA7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -838,6 +803,11 @@
 			target = 13B07F861A680F5B00A75B9A /* Dribble */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
+		A24ED1ED23B103CE006A2D07 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* Dribble */;
+			targetProxy = A24ED1EC23B103CE006A2D07 /* PBXContainerItemProxy */;
+		};
 		A2695808233B9B2F00AF8563 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A2695801233B9B2F00AF8563 /* OneSignalNotificationServiceExtension */;
@@ -860,7 +830,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89B4290FB4C8EC3854B82147 /* Pods-DribbleTests.debug.xcconfig */;
+			baseConfigurationReference = 941CC390BC6D49CB36E2BD28 /* Pods-DribbleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
@@ -892,7 +862,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9EFCAF0EECE0BFD234164522 /* Pods-DribbleTests.release.xcconfig */;
+			baseConfigurationReference = 0365D8A3D49B4166C907DA76 /* Pods-DribbleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -921,14 +891,14 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 259C97DF4F14BADEE4E803AC /* Pods-Dribble.debug.xcconfig */;
+			baseConfigurationReference = 39C4D4F20A44A0B8409FFAF5 /* Pods-Dribble.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.9.6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
@@ -941,7 +911,9 @@
 					"$(SRCROOT)/../node_modules/react-native-text-input-mask/ios/**",
 				);
 				INFOPLIST_FILE = Dribble/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.9.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -956,14 +928,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6F60B1100C8ECF83B299CE3D /* Pods-Dribble.release.xcconfig */;
+			baseConfigurationReference = F2F59DA106DC564BC5B98909 /* Pods-Dribble.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.9.6;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -975,7 +947,9 @@
 					"$(SRCROOT)/../node_modules/react-native-text-input-mask/ios/**",
 				);
 				INFOPLIST_FILE = Dribble/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.9.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1018,7 +992,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Dribble-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dribble-tvOS.app/Dribble-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dribble.app/Dribble";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
@@ -1053,7 +1027,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Dribble-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dribble-tvOS.app/Dribble-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dribble.app/Dribble";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -1159,7 +1133,7 @@
 		};
 		A269580B233B9B2F00AF8563 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58AFCFD630B08DB26891BB45 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			baseConfigurationReference = 147F21617435D512EA83A311 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1170,6 +1144,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.9.52;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1180,6 +1155,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+				MARKETING_VERSION = 2.9.52;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.machaxi.OneSignalNotificationServiceExtension;
@@ -1189,13 +1165,13 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		A269580C233B9B2F00AF8563 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C5033110B4ED79E42F51338B /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			baseConfigurationReference = E9F44E3FE1F18F91F2387B52 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1207,6 +1183,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2.9.52;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1217,6 +1194,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+				MARKETING_VERSION = 2.9.52;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.machaxi.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1224,7 +1202,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

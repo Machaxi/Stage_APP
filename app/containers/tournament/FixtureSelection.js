@@ -12,11 +12,12 @@ import Events from '../../router/events';
 import { COACH } from '../../components/Constants'
 import { getData } from "../../components/auth";
 import { getRegisteredTournament, getTournamentFixture } from "../../redux/reducers/TournamentReducer";
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import BaseComponent, {
     defaultStyle,
     getFormattedTournamentType,
     getFormattedTournamentLevel,
-    getFormattedCategory 
+    getFormattedCategory
 } from '../BaseComponent'
 
 const placeholder = {
@@ -43,7 +44,9 @@ class FixtureSelection extends BaseComponent {
             gender: [{ label: 'Male', value: 'Male' },
             { label: 'Female', value: 'Female' }],
             fixture_type: [],
-            selected_f_type: null
+            selected_f_type: null,
+            clickedBtn: null,
+            selectedCat: '',
 
         }
 
@@ -66,6 +69,7 @@ class FixtureSelection extends BaseComponent {
             }
         });
 
+        this.state.clickedBtn = this.props.navigation.getParam('clickedBtn');
 
         this.dialogRef = React.createRef();
 
@@ -73,7 +77,7 @@ class FixtureSelection extends BaseComponent {
         this.willFocusSubscription = this.props.navigation.addListener(
             'willFocus',
             () => {
-                this.setState({selected_tournament_category: '', fixture_type: []}, () => {
+                this.setState({ selected_tournament_category: '', fixture_type: [] }, () => {
                     this.state.tournament_id = this.props.navigation.getParam('id')
                     this.getFixtureData()
                 })
@@ -89,7 +93,7 @@ class FixtureSelection extends BaseComponent {
                 let previous_selected = this.state.selected_f_type
                 let latest_data = null;
                 let tournament_fixtures = this.state.tournament_fixtures
-                console.log('tournament_fixtures->',JSON.stringify(tournament_fixtures))
+                console.log('tournament_fixtures->', JSON.stringify(tournament_fixtures))
                 for (let i = 0; i < tournament_fixtures.length; i++) {
                     let element = tournament_fixtures[i]
                     console.log('compare' + element.id + '==' + previous_selected.id)
@@ -100,7 +104,7 @@ class FixtureSelection extends BaseComponent {
                 }
                 if (latest_data) {
                     console.log('LatestData=>', JSON.stringify(latest_data))
-                    Events.publish('REFRESH_FIXTURE',latest_data);
+                    Events.publish('REFRESH_FIXTURE', latest_data);
                 }
             })
         });
@@ -116,7 +120,7 @@ class FixtureSelection extends BaseComponent {
         console.log('tournament_id=>', tournament_id);
 
         getData('header', (value) => {
-            
+
             this.props.getTournamentFixture(value, tournament_id).then(() => {
                 let data = this.props.data.data
                 console.log(' getTournamentFixture ' + JSON.stringify(data));
@@ -249,7 +253,7 @@ class FixtureSelection extends BaseComponent {
                 />
                 <ScrollView>
                     <View style={styles.chartContainer}>
-                        <Card style={{elevation: 2}}>
+                        <Card style={{ elevation: 2 }}>
                             <View style={{ marginLeft: 8, marginRight: 8, marginTop: 2 }}>
                                 <Image style={{ height: 150, width: "100%" }}
                                     source={{ uri: data.cover_pic }}
@@ -312,7 +316,7 @@ class FixtureSelection extends BaseComponent {
                                                 Fixtures
                                             </Text>
 
-                                            <View style={{flexDirection: 'row', marginTop: 12}}>
+                                            <View style={{ flexDirection: 'row', marginTop: 12 }}>
                                                 <View style={{
                                                     width: '25%',
                                                 }}>
@@ -362,7 +366,7 @@ class FixtureSelection extends BaseComponent {
                                                     }}></View>
                                                 </View>
 
-                                                <View style={{marginLeft: 16,width: '30%'}}>
+                                                <View style={{ marginLeft: 16, width: '30%' }}>
                                                     <Text style={{
                                                         fontSize: 10,
                                                         color: '#A3A5AE',
@@ -425,23 +429,34 @@ class FixtureSelection extends BaseComponent {
                                                         <View style={{
                                                             flex: 0.5,
                                                             marginRight: 8,
-                                                            marginBottom: 4,
+                                                            marginBottom: 4
                                                         }}>
                                                             <TouchableOpacity
                                                                 activeOpacity={1}
                                                                 onPress={() => {
                                                                     this.setState({
-                                                                        selected_f_type: item
-                                                                    },()=>{
-                                                                        this.props.navigation.navigate('TournamentFixture', {
-                                                                        data: JSON.stringify(item),
-                                                                        title: name + item.name
+                                                                        selected_f_type: item,
+                                                                        selectedCat: item.id
+                                                                    }, () => {
+
+                                                                        /*if (this.state.clickedBtn == null || this.state.clickedBtn == 'fixtures') {
+                                                                            this.props.navigation.navigate('TournamentFixture', {
+                                                                                data: JSON.stringify(item),
+                                                                                title: name + item.name
+                                                                            })
+                                                                        } else {
+                                                                            this.props.navigation.navigate('TournamentMatchList', {
+                                                                                data: JSON.stringify(item),
+                                                                                title: name + item.name,
+                                                                                tournamentFormat: this.state.tournament_data.tournament_format
+                                                                            })
+                                                                        }*/
                                                                     })
-                                                                    })
-                                                                    
+
                                                                 }}
                                                             >
-                                                                <Card style={styles.card_style}>
+
+                                                                <Card style={[styles.card_style, (this.state.selectedCat == item.id) ? { backgroundColor: '#efefef' } : {}]}>
                                                                     <View style={{
                                                                         flexDirection: 'row',
                                                                         alignItems: 'center'
@@ -456,7 +471,8 @@ class FixtureSelection extends BaseComponent {
                                                                             color: '#404040',
                                                                             marginLeft: 12,
                                                                             fontFamily: 'Quicksand-Regular'
-                                                                        }}>{getFormattedTournamentLevel(item.tournament_type)}</Text>
+                                                                        }}>{getFormattedTournamentLevel(item.tournament_type)}
+                                                                        </Text>
                                                                     </View>
                                                                 </Card>
                                                             </TouchableOpacity>
@@ -485,6 +501,123 @@ class FixtureSelection extends BaseComponent {
                                         }]}>
                                             Fixture not available
                                         </Text>}
+
+                                    {
+                                        (this.state.fixture_type.length > 0 && (this.state.fixture_type.length == 1 ? true : (this.state.selected_f_type != null ? true : false))) && this.state.tournament_data.tournament_format == 'KNOCK_OUT' &&
+                                        <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 10 }}>
+
+                                            <TouchableOpacity activeOpacity={.8}
+                                                onPress={() => {
+                                                    // this.props.navigation.navigate('FixtureSelection', { id: item.id, 'clickedBtn': 'fixtures' })
+
+                                                    if (this.state.fixture_type.length == 1) {
+                                                        this.setState({
+                                                            selected_f_type: this.state.fixture_type[0]
+                                                        }, () => {
+                                                            this.props.navigation.navigate('TournamentFixture', {
+                                                                data: JSON.stringify(this.state.fixture_type[0]),
+                                                                title: name + this.state.fixture_type[0].name
+                                                            })
+                                                        })
+                                                    } else {
+                                                        this.props.navigation.navigate('TournamentFixture', {
+                                                            data: JSON.stringify(this.state.selected_f_type),
+                                                            title: name + this.state.selected_f_type.name
+                                                        })
+                                                    }
+
+
+                                                }}
+                                            >
+                                                <View>
+                                                    <Text style={defaultStyle.rounded_button_150}>
+                                                        View Fixtures
+                                                        </Text>
+                                                </View>
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity activeOpacity={.8}
+                                                style={{ marginLeft: 10 }}
+                                                onPress={() => {
+                                                    // this.props.navigation.navigate('FixtureSelection', {
+                                                    //     id: item.id, 'clickedBtn': 'matches'
+                                                    // })
+
+                                                    if (this.state.fixture_type.length == 1) {
+                                                        this.setState({
+                                                            selected_f_type: this.state.fixture_type[0]
+                                                        }, () => {
+                                                            this.props.navigation.navigate('TournamentMatchList', {
+                                                                data: JSON.stringify(this.state.fixture_type[0]),
+                                                                title: name + this.state.fixture_type[0].name,
+                                                                tournamentFormat: this.state.tournament_data.tournament_format
+                                                            })
+                                                        })
+                                                    } else {
+                                                        this.props.navigation.navigate('TournamentMatchList', {
+                                                            data: JSON.stringify(this.state.selected_f_type),
+                                                            title: name + this.state.selected_f_type.name,
+                                                            tournamentFormat: this.state.tournament_data.tournament_format
+                                                        })
+                                                    }
+
+
+                                                }}
+                                            >
+                                                <View>
+                                                    <Text style={defaultStyle.rounded_button_150}>
+                                                        View Matches
+                                                        </Text>
+                                                </View>
+                                            </TouchableOpacity>
+
+                                        </View>
+                                    }
+
+                                    {
+                                        (this.state.fixture_type.length > 0 && (this.state.fixture_type.length == 1 ? true : (this.state.selected_f_type != null ? true : false))) && this.state.tournament_data.tournament_format == 'ROUND_ROBIN_KNOCK_OUT' &&
+                                        <View style={{
+                                            margin: 16,
+                                            alignSelf: 'center',
+                                            width: 150,
+                                        }}>
+
+
+                                            <SkyFilledButton
+                                                onPress={() => {
+                                                    // this.props.navigation.navigate('FixtureSelection', {
+                                                    //     id: item.id, 'clickedBtn': 'matches'
+                                                    // })
+
+                                                    if (this.state.fixture_type.length == 1) {
+                                                        this.setState({
+                                                            selected_f_type: this.state.fixture_type[0]
+                                                        }, () => {
+                                                            this.props.navigation.navigate('TournamentMatchList', {
+                                                                data: JSON.stringify(this.state.fixture_type[0]),
+                                                                title: name + this.state.fixture_type[0].name,
+                                                                tournamentFormat: this.state.tournament_data.tournament_format
+                                                            })
+                                                        })
+
+                                                    } else {
+                                                        this.props.navigation.navigate('TournamentMatchList', {
+                                                            data: JSON.stringify(this.state.selected_f_type),
+                                                            title: name + this.state.selected_f_type.name,
+                                                            tournamentFormat: this.state.tournament_data.tournament_format
+                                                        })
+                                                    }
+
+
+                                                }}
+                                            >
+                                                View Matches
+                                            </SkyFilledButton>
+
+                                        </View>
+                                    }
+
+
                                 </View>
                             </View>
                         </Card>
