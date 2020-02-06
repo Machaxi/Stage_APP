@@ -444,8 +444,40 @@ class RegisteredRoute extends BaseComponent {
                                         })
                                         //this.getFixtureData(item.id)
                                     }}
-                                >View Fixtures</SkyFilledButton>
+                                >View Matches</SkyFilledButton>
                             </View>
+
+                            {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 10 }}>
+
+                                <TouchableOpacity activeOpacity={.8}
+                                    style={styles.rounded_button_white}
+                                    onPress={() => {
+                                        this.props.navigation.navigate('FixtureSelection', { id: item.id, 'clickedBtn': 'fixtures' })
+                                    }}
+                                >
+                                    <View>
+                                        <Text style={defaultStyle.rounded_button_150}>
+                                            View Fixtures
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity activeOpacity={.8}
+                                    style={[{ marginLeft: 10 }, styles.rounded_button_white]}
+                                    onPress={() => {
+                                        this.props.navigation.navigate('FixtureSelection', {
+                                            id: item.id, 'clickedBtn': 'matches'
+                                        })
+                                    }}
+                                >
+                                    <View>
+                                        <Text style={defaultStyle.rounded_button_150}>
+                                            View Matches
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                            </View> */}
 
                         </View>
                     </View>

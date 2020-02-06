@@ -202,12 +202,12 @@ class ResultsRoute extends BaseComponent {
                             </Text>
 
                             <View style={{
-                                paddingTop: 8,
+                                paddingBottom: 6,
                                 flexDirection: 'row',
                                 flex: 1,
                                 justifyContent: 'space-between'
                             }}>
-                                <Text style={defaultStyle.regular_text_14}>
+                                <Text style={defaultStyle.bold_text_14}>
                                     {data.name}
                                 </Text>
 
@@ -258,13 +258,13 @@ class ResultsRoute extends BaseComponent {
 
                         </Image> */}
                         <FastImage
-                        style={{
-                            height: 150, width: "100%",
-                            borderTopLeftRadius: 12,
-                            borderTopRightRadius: 12,
-                        }}
-                        source={{ uri: item.cover_pic }}
-                    />
+                            style={{
+                                height: 150, width: "100%",
+                                borderTopLeftRadius: 12,
+                                borderTopRightRadius: 12,
+                            }}
+                            source={{ uri: item.cover_pic }}
+                        />
 
                         <View style={{
                             paddingLeft: 16,
@@ -356,29 +356,6 @@ class ResultsRoute extends BaseComponent {
                                 {array}
                             </View>
 
-
-
-                            {/* <TouchableOpacity activeOpacity={.8}
-                                onPress={() => {
-                                    this.props.navigation.navigate('TournamentFixture')
-                                }}
-                            >
-
-                                <View style={{
-                                    width: '100%',
-                                    marginTop: 12,
-                                    marginBottom: 8,
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-
-                                    <Text style={defaultStyle.rounded_button_150}>
-                                        View Fixtures
-                                </Text>
-                                </View>
-                            </TouchableOpacity> */}
-
                             <View style={{
                                 margin: 16,
                                 alignSelf: 'center',
@@ -389,15 +366,55 @@ class ResultsRoute extends BaseComponent {
                                         this.props.navigation.navigate('FixtureSelection', {
                                             id: item.id
                                         })
+                                        //this.getFixtureData(item.id)
                                     }}
-                                >View Fixtures</SkyFilledButton>
+                                >View Matches</SkyFilledButton>
                             </View>
+
+
+
+                            {/* <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+
+                                <TouchableOpacity activeOpacity={.8}
+                                    onPress={() => {
+                                        this.props.navigation.navigate('FixtureSelection', { id: item.id, 'clickedBtn': 'fixtures' })
+                                    }}
+                                >
+
+                                    <View>
+
+                                        <Text style={defaultStyle.rounded_button_150}>
+                                            View Fixtures
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity activeOpacity={.8}
+                                    style={{ marginLeft: 10 }}
+                                    onPress={() => {
+                                        this.props.navigation.navigate('FixtureSelection', {
+                                            id: item.id, 'clickedBtn': 'matches'
+                                        })
+                                    }}
+                                >
+
+                                    <View>
+
+                                        <Text style={defaultStyle.rounded_button_150}>
+                                            View Matches
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                            </View> */}
+
+
                         </View>
 
                     </View>
 
                 </Card>
-            </TouchableOpacity>
+            </TouchableOpacity >
 
         )
     };
@@ -478,5 +495,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'Quicksand-Regular'
     },
+    // rounded_button: {
+    //     width: '48%',
+    //     height: 44,
+    //     padding: 10,
+    //     borderRadius: 23,
+    //     //borderWidth: 1,
+    //     marginLeft: 4,
+    //     marginRight: 4,
+    //     //borderColor: '#67BAF5',
+    //     backgroundColor: '#67BAF5',
+    //     justifyContent: 'center',
+    //     fontFamily: 'Quicksand-Regular'
+    // },
 });
 

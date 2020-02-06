@@ -91,7 +91,7 @@ export function giveBye(header, data) {
         type: types.GET_TOURNAMENT_SCORER,
         payload: {
             request: {
-                url: `tournament/give-bye                `,
+                url: `tournament/give-bye`,
                 method: 'POST',
                 data: data,
                 headers: {

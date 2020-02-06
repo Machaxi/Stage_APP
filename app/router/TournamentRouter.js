@@ -2,6 +2,7 @@ import React from 'react'
 
 import ResultsTournamentDetail from "../containers/tournament/ResultsTournamentDetail";
 import TournamentFixture from "../containers/tournament/TournamentFixture";
+import TournamentMatchList from "../containers/tournament/TournamentMatchList";
 import UpcomingTournamentDetail from "../containers/tournament/UpcomingTournamentDetail";
 import TournamentScorer from "../containers/tournament/TournamentScorer";
 import RegisteredTournamentDetail from "../containers/tournament/RegisteredTournamentDetail";
@@ -112,7 +113,9 @@ const TournamentModule = createStackNavigator({
         //     headerTintColor: '#000',
         // }),
     },
-
+    TournamentMatchList:{
+        screen: TournamentMatchList,
+    },
 
     TournamentScorer: {
         screen: TournamentScorer,

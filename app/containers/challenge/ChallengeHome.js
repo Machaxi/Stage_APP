@@ -155,7 +155,7 @@ class ChallengeHome extends BaseComponent {
                     }
                     onIndexChange={this._handleIndexChange}
                 />
-                <View style={{
+                {/* <View style={{
                     justifyContent: 'center',
                     alignItems: 'center',
                     textAlign: 'center',
@@ -171,7 +171,7 @@ class ChallengeHome extends BaseComponent {
                         color: 'white',
                         fontFamily: 'Quicksand-Medium'
                     }}>Launching Soon</Text>
-                </View>
+                </View> */}
             </>
         );
     }

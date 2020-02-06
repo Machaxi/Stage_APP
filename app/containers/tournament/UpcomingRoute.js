@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, Keyboard, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
-import BaseComponent, { defaultStyle,REFRESH_SCREEN_CALLBACK, getFormattedTournamentType } from '../BaseComponent'
+import BaseComponent, { defaultStyle, REFRESH_SCREEN_CALLBACK, getFormattedTournamentType } from '../BaseComponent'
 import { getData, storeData } from "../../components/auth";
 import { getUpcomingTournament } from "../../redux/reducers/UpcomingReducer";
 import { connect } from 'react-redux';
 import Moment from 'moment';
 import Events from '../../router/events';
 import FastImage from 'react-native-fast-image'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 
 var filterData = ''
 
@@ -290,7 +291,7 @@ class UpcomingRoute extends BaseComponent {
                         </Text>
 
                         <Text style={{
-                            paddingTop: 6, fontSize: 14,
+                            paddingTop: 6, fontSize: 14, paddingBottom: 10,
                             color: '#FF7373',
                             fontFamily: 'Quicksand-Regular'
                         }}>
@@ -299,6 +300,58 @@ class UpcomingRoute extends BaseComponent {
 
                             </Text>
                         </Text>
+
+                        <View style={{
+                            margin: 16,
+                            alignSelf: 'center',
+                            width: 150,
+                        }}>
+                            <SkyFilledButton
+                                onPress={() => {
+
+                                    this.props.navigation.navigate('UpcomingTournamentDetail', {
+                                        tournament_id:
+                                            item.id
+                                    })
+                                    //this.props.navigation.navigate('UpcomingTournamentDetail', { data: item })
+
+                                    //this.getFixtureData(item.id)
+                                }}
+                            >Register</SkyFilledButton>
+                        </View>
+
+
+                        {/* <View style={{ flexDirection: 'row' }}>
+
+                            <TouchableOpacity activeOpacity={.8}
+                                style={styles.rounded_button_white}
+                                onPress={() => {
+                                    this.props.navigation.navigate('FixtureSelection', { id: item.id, 'clickedBtn': 'fixtures' })
+                                }}
+                            >
+                                <View>
+                                    <Text style={defaultStyle.rounded_button_150}>
+                                        View Fixtures
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity activeOpacity={.8}
+                                style={[{ marginLeft: 10 }, styles.rounded_button_white]}
+                                onPress={() => {
+                                    this.props.navigation.navigate('FixtureSelection', {
+                                        id: item.id, 'clickedBtn': 'matches'
+                                    })
+                                }}
+                            >
+                                <View>
+                                    <Text style={defaultStyle.rounded_button_150}>
+                                        View Matches
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+
+                        </View> */}
 
                     </View>
 
