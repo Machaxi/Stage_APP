@@ -1424,7 +1424,8 @@ class TournamentFixture extends BaseComponent {
                     container.push(<Rect
 
                         onPressOut={() => {
-                            const user_type = array[i][j].user_type
+                            const user_type = winner.user_type
+                            // const user_type = array[i][j].user_type
                             if (user_type == PLAYER) {
                                 let id = array[i][j].user_id
                                 console.warn("playerid : " + id)
@@ -1438,7 +1439,8 @@ class TournamentFixture extends BaseComponent {
                             }
                         }}
                         onPressIn={() => {
-                            const user_type = array[i][j].user_type
+                            const user_type = winner.user_type
+                            // const user_type = array[i][j].user_type
                             if (user_type == PLAYER) {
                                 let id = array[i][j].user_id
                                 console.warn("playerid : " + id)
@@ -1452,8 +1454,8 @@ class TournamentFixture extends BaseComponent {
                             }
                         }}
                         onPress={() => {
-
-                            const user_type = array[i][j].user_type
+                            const user_type = winner.user_type
+                            // const user_type = array[i][j].user_type
                             if (user_type == PLAYER) {
                                 let id = array[i][j].user_id
                                 console.warn("playerid : " + id)

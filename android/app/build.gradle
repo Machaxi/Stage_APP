@@ -132,8 +132,8 @@ android {
         applicationId "com.machaxi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "2.1.5"
+        versionCode 20
+        versionName "2.1.9"
         multiDexEnabled true
 
     }

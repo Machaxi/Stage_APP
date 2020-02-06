@@ -1,11 +1,10 @@
 import React from 'react'
 import * as Progress from 'react-native-progress';
 
-import { View, ImageBackground, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
-import { getData, storeData } from "../../components/auth";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import { getData } from "../../components/auth";
 import { getPlayerPerformance } from "../../redux/reducers/PerformenceReducer";
 import { connect } from 'react-redux';
-import LinearGradient from 'react-native-linear-gradient';
 import BaseComponent, { defaultStyle, getStatsImageById, EVENT_CLEAR_GRAPH } from '../BaseComponent';
 import moment from 'moment'
 import RNPickerSelect from 'react-native-picker-select'
@@ -174,8 +173,8 @@ class ViewPlayerPerformance extends BaseComponent {
     }
 
     const statId = this.state.performanceData.id;
-    if (this.state.month != '' && this.state.performanceData.year != '') {
-      formatted_date = moment(this.state.month + "/" + this.state.performanceData.year, 'MM-YYYY').format("MMM'YY")
+    if (this.state.month != '' && this.state.year != '') {
+      formatted_date = moment(this.state.month + "/" + this.state.year, 'MM-YYYY').format("MMM'YY")
       //alert(formatted_date)
     }
 

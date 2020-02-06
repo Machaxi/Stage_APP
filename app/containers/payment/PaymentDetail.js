@@ -207,8 +207,8 @@ class PaymentDetail extends BaseComponent {
                         <Text style={[defaultStyle.bold_text_14, { marginRight: 16, }]}>{item.playerName}</Text>
                         <View style={{ flexDirection: 'row', width: '66%' }}>
                             <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE', marginTop: 1 }]}>Term: </Text>
-                            <Text>{moment.utc(item.dueDate, 'YYYY-MM-DD').local().format("DD/MM/YYYY")} - </Text>
-                            <Text>{moment.utc(item.nextDueDate, 'YYYY-MM-DD').subtract(1, 'days').local().format("DD/MM/YYYY")}</Text>
+                            <Text style={defaultStyle.bold_text_14}>{moment.utc(item.dueDate, 'YYYY-MM-DD').local().format("DD/MM/YYYY")} - </Text>
+                            <Text style={defaultStyle.bold_text_14}>{moment.utc(item.nextDueDate, 'YYYY-MM-DD').subtract(1, 'days').local().format("DD/MM/YYYY")}</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
@@ -273,7 +273,7 @@ class PaymentDetail extends BaseComponent {
                             textStyle={defaultStyle.spinnerTextStyle}
                         />
 
-                        {/* <TouchableOpacity onPress={() =>
+                        <TouchableOpacity onPress={() =>
                             this.props.navigation.navigate('PaymentHistory')
                         }>
                             <Text style={{
@@ -286,7 +286,7 @@ class PaymentDetail extends BaseComponent {
                                 fontSize: 12,
                                 fontFamily: 'Quicksand-Regular'
                             }}>Payment History</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </View>
 
 
@@ -298,25 +298,9 @@ class PaymentDetail extends BaseComponent {
                             extraData={paymentDues}
                             renderItem={this._renderItem}
                         /> :
-                        <View style={{height: '100%'}}>
-                            <TouchableOpacity onPress={() =>
-                                this.props.navigation.navigate('PaymentHistory')
-                            }>
-                                <Text style={{
-                                    color: '#667DDB',
-                                    paddingRight: 12,
-                                    paddingLeft: 12,
-                                    paddingTop: 12,
-                                    paddingBottom: 4,
-                                    textAlign: 'right',
-                                    fontSize: 12,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>Payment History</Text>
-                            </TouchableOpacity>
                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                 <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
                             </View>
-                        </View>
                     }
 
                     {paymentDues != null && paymentDues.length > 0 &&

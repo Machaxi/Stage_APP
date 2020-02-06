@@ -597,7 +597,7 @@ class EditProfile extends BaseComponent {
                             }}
                         >
                             <Text style={style.text}>
-                                <Text style={{ color: 'red' }}>*</Text>Mobile Number
+                                Mobile Number
                             </Text>
 
                             <TextInput
