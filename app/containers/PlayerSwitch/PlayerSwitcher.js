@@ -125,8 +125,11 @@ class PlayerSwitcher extends BaseComponent {
                 storeData("userInfo", JSON.stringify(tempuserData))
                 storeData('academy_name', item.academy_name)
                 storeData('academy_id', item.academy_id)
-                this.props.navigation.navigate('CHome', { academy_name: item.academy_name })
-
+                if(item.can_book_court) {
+                    this.props.navigation.navigate('CoachBookHome', { academy_name: item.academy_name })
+                } else {
+                    this.props.navigation.navigate('CoachHome', { academy_name: item.academy_name })
+                }
             }}>
 
                 <View style={{ margin: 10, marginTop: 20, marginBottom: 10 }}>
@@ -225,9 +228,17 @@ class PlayerSwitcher extends BaseComponent {
                     storeData('player_id', item.id)
 
                     if (tempuserData.user['user_type'] == 'PLAYER') {
-                        this.props.navigation.navigate('UHome')
+                        if(item.can_book_court) {
+                            this.props.navigation.navigate('UserBookHome')
+                        } else {
+                            this.props.navigation.navigate('UserHome')
+                        }
                     } else {
-                        this.props.navigation.navigate('PHome')
+                        if(item.can_book_court) {
+                            this.props.navigation.navigate('ParentBookHome')
+                        } else {
+                            this.props.navigation.navigate('ParentHome')
+                        }
                     }
 
 

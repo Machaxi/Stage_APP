@@ -43,12 +43,12 @@ class Splash extends BaseComponent {
 
         // firebase.analytics().logEvent("APP_START", {})
         //firebase.analytics().logEvent("testing_dribble", {})
-        getData('userInfo', (value)=>{
+        getData('userInfo', (value) => {
             var userData = JSON.parse(value)
-            if(userData.user){
+            if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("SplashScreen", {userid: userid, username: username})
+                firebase.analytics().logEvent("SplashScreen", { userid: userid, username: username })
             }
         })
         // firebase.analytics().logEvent("SplashScreen", {})
@@ -118,20 +118,32 @@ class Splash extends BaseComponent {
                             console.log("SplashScreen=> ", JSON.stringify(userData));
                             if (userType == GUEST) {
                                 console.warn(userType)
-                                this.props.navigation.navigate('GHome')
+                                this.props.navigation.navigate('GuestBookHome')
                             }
                             else if (userData.academy_id != null) {
                                 console.log(userData);
                                 if (userType == GUEST) {
-                                    this.props.navigation.navigate('GHome')
+                                    this.props.navigation.navigate('GuestBookHome')
                                 } else if (userType == PLAYER) {
-                                    this.props.navigation.navigate('UHome')
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('UserBookHome');
+                                    } else {
+                                        this.props.navigation.navigate('UserHome');
+                                    }
 
                                 } else if (userType == COACH || userType == ACADEMY) {
-                                    this.props.navigation.navigate('CHome')
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('CoachBookHome');
+                                    } else {
+                                        this.props.navigation.navigate('CoachHome');
+                                    }
                                 }
                                 else if (userType == PARENT) {
-                                    this.props.navigation.navigate('PHome')
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('ParentBookHome');
+                                    } else {
+                                        this.props.navigation.navigate('ParentHome');
+                                    }
                                 }
 
                             } else {

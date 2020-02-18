@@ -3,7 +3,7 @@ import * as Progress from 'react-native-progress';
 
 import {
     View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity,
-    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking
+    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking, TextInput, Modal
 } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
@@ -33,6 +33,9 @@ import ImgToBase64 from 'react-native-image-base64';
 import Share from 'react-native-share';
 import branch, { BranchEvent } from 'react-native-branch';
 import UpdateAppDialog from '../../components/custom/UpdateAppDialog'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
+import { postFeedbackMultiple } from '../../redux/reducers/FeedbackReduer'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 var deviceWidth = Dimensions.get('window').width - 20;
 
@@ -119,7 +122,7 @@ class UserHome extends BaseComponent {
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
-                    style={{padding: 7}}
+                    style={{ padding: 7 }}
                     activeOpacity={.8}
                 >
 
@@ -207,6 +210,9 @@ class UserHome extends BaseComponent {
             academy_user_id: '',
             screenShot: null,
             show_must_update_alert: false,
+            currentCoachFeedback: null,
+            modalVisible: false,
+            spinner: false,
         }
 
         const { navigation } = this.props.navigation.setParams({ shareProfile: this.shareProfile })
@@ -291,10 +297,10 @@ class UserHome extends BaseComponent {
                 show_must_update_alert: must_update,
             })
         });
-        
+
         setTimeout(() => {
             console.log('component did mount')
-            if(this.viewShot && this.props.data.dashboardData !== '') {
+            if (this.viewShot && this.props.data.dashboardData !== '') {
                 this.viewShot.capture().then(uri => {
                     this.onCapture(uri)
                 })
@@ -302,7 +308,7 @@ class UserHome extends BaseComponent {
                 console.log('viewshot reference not fount')
             }
         }, 5000)
-        
+
     }
 
     // componentWillReceiveProps(nextProps, nextState){
@@ -411,6 +417,12 @@ class UserHome extends BaseComponent {
                     })
                 }
 
+                if (user1.data['dashboard_coach_rating']) {
+                    this.setState({
+                        currentCoachFeedback: user1.data['dashboard_coach_rating']
+                    })
+                }
+
                 try {
                     const profile_pic = user1.data.player_profile.profile_pic
                     Events.publish(PROFILE_PIC_UPDATED, profile_pic);
@@ -466,10 +478,67 @@ class UserHome extends BaseComponent {
 
     }
 
+    submitFeedback() {
+
+        console.log("currentCoachFeedback => ", this.state.currentCoachFeedback)
+        var array = [];
+        var coachFeedbackData = {};
+
+        if (!this.state.currentCoachFeedback.rating) {
+            alert('Please select rating')
+        }
+        else if (!this.state.currentCoachFeedback.review) {
+            alert('Please write review.')
+        }
+        else {
+            coachFeedbackData['academyId'] = this.state.currentCoachFeedback.academyId;
+            coachFeedbackData['targetId'] = this.state.currentCoachFeedback.targetId;
+            coachFeedbackData['attendanceId'] = this.state.currentCoachFeedback.attendanceId;
+            coachFeedbackData['review'] = this.state.currentCoachFeedback.review;
+            coachFeedbackData['rating'] = this.state.currentCoachFeedback.rating;
+            array[0] = coachFeedbackData;
+            var data = {};
+            data['data'] = array
+            console.log('Deepika=>=======================', data)
+            this.setState({
+                spinner: true
+            })
+            getData('header', (value) => {
+                this.props.postFeedbackMultiple(value, data).then(() => {
+                    this.setState({
+                        currentCoachFeedback: null
+                    })
+                    this.setState({
+                        spinner: false
+                    })
+                    console.log('this.props', this.props);
+                    let data = this.props.feedback.data;
+                    if (data.success) {
+                        this.setState({
+                            modalVisible: true
+                        })
+                    } else {
+                        alert("Something went wrong.")
+                    }
+                }).catch((response) => {
+                    console.log(response);
+                    this.setState({
+                        spinner: false
+                    })
+                })
+
+            })
+        }
+    }
+
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
+
     shareProfile = async () => {
         this.setState({ refreshing: true })
         console.log('screenshot', this.state.screenShot)
-        if(this.state.screenShot !== null){
+        if (this.state.screenShot !== null) {
             this.buo = await branch.createBranchUniversalObject("machaxi-app", {
                 locallyIndex: true,
                 //canonicalUrl:  'https://google.com',
@@ -488,7 +557,7 @@ class UserHome extends BaseComponent {
             }
 
             let controlParams = {
-                $desktop_url: Platform.OS === 'android' ? 
+                $desktop_url: Platform.OS === 'android' ?
                     'https://play.google.com/store/apps/details?id=com.machaxi&hl=en' :
                     'https://apps.apple.com/in/app/machaxi-sports-technology/id1484093762',
                 $ios_url: 'https://apps.apple.com/in/app/machaxi-sports-technology/id1484093762'
@@ -507,20 +576,20 @@ class UserHome extends BaseComponent {
             }
             Share.open(shareOptions);
             this.setState({ refreshing: false })
-        } else{
-            setTimeout(()=> this.shareProfile(), 1000)
+        } else {
+            setTimeout(() => this.shareProfile(), 1000)
         }
-        
+
     }
 
     onCapture = uri => {
         console.log('uri=>', uri);
         // setTimeout(() => {
-            ImgToBase64.getBase64String(`file://${uri}`)
-                .then(base64String => {
-                    this.setState({ screenShot: base64String })
-                })
-                .catch(err => doSomethingWith(err))
+        ImgToBase64.getBase64String(`file://${uri}`)
+            .then(base64String => {
+                this.setState({ screenShot: base64String })
+            })
+            .catch(err => doSomethingWith(err))
         // }, 10)
     }
 
@@ -710,6 +779,13 @@ class UserHome extends BaseComponent {
             return (<View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
                 {/* <StatusBar translucent backgroundColor="#264d9b"
                 barStyle="light-content"/> */}
+
+                <Spinner
+                    visible={this.state.spinner}
+                    textStyle={defaultStyle.spinnerTextStyle}
+                />
+
+
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -719,16 +795,16 @@ class UserHome extends BaseComponent {
                         />
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                    
-                        <ViewShot 
-                            ref={(ref) => this.viewShot = ref}
-                            style={{ opacity: 0, position: 'absolute', width: '100%', zIndex: -1 }}
-                        >
-                            <PlayerHeader
-                                is_tooblar={true}
-                                player_profile={this.state.player_profile}
-                            />
-                            {/* {this.state.strenthList.length != 0 ?
+
+                    <ViewShot
+                        ref={(ref) => this.viewShot = ref}
+                        style={{ opacity: 0, position: 'absolute', width: '100%', zIndex: -1 }}
+                    >
+                        <PlayerHeader
+                            is_tooblar={true}
+                            player_profile={this.state.player_profile}
+                        />
+                        {/* {this.state.strenthList.length != 0 ?
                                 <CustomeCard>
                                     <View
                                         style={{
@@ -747,8 +823,8 @@ class UserHome extends BaseComponent {
                                 </CustomeCard>
                                 : null
                             } */}
-                        </ViewShot>
-                    
+                    </ViewShot>
+
                     <PlayerHeader
                         is_tooblar={true}
                         player_profile={this.state.player_profile}
@@ -1334,8 +1410,141 @@ class UserHome extends BaseComponent {
                         }}
                         visible={show_must_update_alert}
                     />
-                    
+
                 </ScrollView>
+
+                {
+                    this.state.currentCoachFeedback != null &&
+                    <Card style={{ elevation: 2 }}>
+                        <View style={styles.feedbackCard}>
+                            <View style={styles.feedbackHeader}>
+                                <Text style={styles.feedbackHeaderTitle}>Coach Feedback</Text>
+                                <Text></Text>
+                                <TouchableOpacity activeOpacity={.8} onPress={() => {
+                                    this.setState({
+                                        currentCoachFeedback: null
+                                    })
+                                }}>
+                                    <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.feedbackHeaderBorder}></View>
+                            <Text style={styles.feedbackSubHeading}>Your Feedback</Text>
+                            <StarRating
+                                style={styles.ratingContainer}
+                                containerStyle={{
+                                    width: 100,
+                                }}
+                                starSize={20}
+                                disabled={false}
+                                emptyStar={require('../../images/ic_empty_star.png')}
+                                fullStar={require('../../images/ic_star.png')}
+                                halfStar={require('../../images/ic_half_star.png')}
+                                iconSet={'Ionicons'}
+                                maxStars={5}
+                                rating={this.state.currentCoachFeedback.rating == undefined ? 0 : this.state.currentCoachFeedback.rating}
+                                selectedStar={(rating) => {
+                                    let coachInfo = this.state.currentCoachFeedback
+                                    coachInfo.rating = rating
+                                    this.setState({
+                                        currentCoachFeedback: coachInfo
+                                    })
+                                }}
+                                fullStarColor={'#F8F29F'}
+                            />
+                            <TextInput
+                                style={styles.feedbackTextArea}
+                                onChangeText={
+                                    (review) => {
+                                        this.state.currentCoachFeedback.review = review;
+                                    }
+                                }
+                                multiline={true}
+                                placeholder={"What's your feedback?"}
+                            >
+                            </TextInput>
+                            < View style={{
+                                alignSelf: 'center',
+                                width: 100,
+                            }}>
+                                <SkyFilledButton
+                                    onPress={() => {
+                                        this.submitFeedback()
+                                    }}
+                                >Submit</SkyFilledButton>
+                            </View>
+                        </View>
+                    </Card>
+                }
+
+
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                    }}>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+                        padding: 16
+                    }}>
+                        <View style={{
+                            width: 300,
+                            borderRadius: 16,
+                            backgroundColor: 'white',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: 300,
+                        }}>
+
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    color: 'black',
+                                    fontWeight: "400",
+                                    fontFamily: 'Quicksand-Medium'
+                                }}
+                            >Success</Text>
+
+                            <Image
+                                style={{ marginTop: 16, height: 100, width: 100 }}
+                                source={require('../../images/success_icon.png')}
+                            ></Image>
+
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    marginTop: 16,
+                                    color: 'black',
+                                    fontWeight: "400",
+                                    textAlign: 'center',
+                                    fontFamily: 'Quicksand-Regular'
+                                }}
+                            >Thank you ! Your feedback has been succesfully submitted.</Text>
+
+                            <View style={{
+                                margin: 16,
+                                alignSelf: 'center',
+                                width: 100,
+                            }}>
+                                <SkyFilledButton
+                                    onPress={() => {
+                                        this.setModalVisible(false);
+                                        this.props.navigation.goBack(null);
+                                    }}
+                                >OK</SkyFilledButton>
+                            </View>
+
+                        </View>
+
+                    </View>
+                </Modal>
+
             </View >
             )
         } else {
@@ -1350,11 +1559,12 @@ class UserHome extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.DashboardReducer,
-        common: state.CommonReducer
+        common: state.CommonReducer,
+        feedback: state.FeedbackReducer,
     };
 };
 const mapDispatchToProps = {
-    getPlayerDashboard, getNotificationCount
+    getPlayerDashboard, getNotificationCount, postFeedbackMultiple
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UserHome);
 
@@ -1448,7 +1658,56 @@ const styles = StyleSheet.create({
         //marginTop: 20,
         marginBottom: 15
     },
-
-
-
+    feedbackCard: {
+        padding: 16,
+        paddingTop: 10
+    },
+    feedbackHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    feedbackHeaderTitle: {
+        fontSize: 14,
+        color: '#404040',
+        fontWeight: "400",
+        fontFamily: 'Quicksand-Medium'
+    },
+    closeImg: {
+        height: 30,
+        width: 30,
+    },
+    feedbackHeaderBorder: {
+        width: "100%",
+        marginTop: 10,
+        marginBottom: 10,
+        height: 1,
+        backgroundColor: '#DFDFDF'
+    },
+    feedbackSubHeading: {
+        fontSize: 14,
+        color: '#404040',
+        fontWeight: "400",
+        fontFamily: 'Quicksand-Medium'
+    },
+    ratingContainer: {
+        marginLeft: 10,
+        height: 30,
+        width: 80,
+        paddingTop: 16,
+    },
+    feedbackTextArea: {
+        borderColor: "#CECECE",
+        borderWidth: 1,
+        height: 100,
+        width: "100%",
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 14,
+        padding: 4,
+        textAlign: 'left',
+        justifyContent: 'flex-start',
+        borderRadius: 8,
+        fontFamily: 'Quicksand-Regular',
+        textAlignVertical: 'top'
+    }
 });
