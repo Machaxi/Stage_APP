@@ -502,6 +502,9 @@ class DashboardRoute extends BaseComponent {
               </TouchableOpacity>
             </View>
           </View>
+          <View style={{marginHorizontal: 16, alignItems: 'center', justifyContent: 'center'}}>
+            <Text style={{fontSize: 12, fontFamily: 'Quicksand-Medium',  color: '#707070'}}>You can challenge only 5 players ranked above you</Text>
+          </View>
         </Card>
       </TouchableOpacity>
 
@@ -876,7 +879,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     height: 200,
     width: "35%",
-    marginBottom: 16
+    //marginBottom: 16
   },
   playerBackImage: {
     height: 182,
