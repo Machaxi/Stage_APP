@@ -174,26 +174,33 @@ class AcademyListing extends BaseComponent {
         const job_vacancy = this.state.job_vacancy
         const book_court = this.state.book_court
 
-        this.props.getAllAcademy(query, job_vacancy, book_court).then(() => {
-            console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
-            let status = this.props.data.res.success
-            if (status) {
-                let list = this.props.data.res.data.academies
 
-                this.setState({
-                    academies: list,
-                    isRefreshing: false
-                })
-                setTimeout(() => {
-                    this.state.firstInstance = false
+        getData('header', (value) => {
 
-                }, 1000)
+            this.props.getAllAcademy(value, query, job_vacancy, book_court).then(() => {
+                console.warn('Res=> ' + JSON.stringify(this.props.data.res.data.academies))
+                let status = this.props.data.res.success
+                if (status) {
+                    let list = this.props.data.res.data.academies
+    
+                    this.setState({
+                        academies: list,
+                        isRefreshing: false
+                    })
+                    setTimeout(() => {
+                        this.state.firstInstance = false
+    
+                    }, 1000)
+    
+                }
+            }).catch((response) => {
+                console.log(response);
+                this.setState({ isRefreshing: false })
+            })
+          
+        });
 
-            }
-        }).catch((response) => {
-            console.log(response);
-            this.setState({ isRefreshing: false })
-        })
+        
     }
 
     componentDidMount() {

@@ -26,22 +26,41 @@ export default function BrowseAcademyReducer(state = initialState, action) {
 }
 
 
-export function getAllAcademy(query, job_vacancy,book_court) {
+export function getAllAcademy(header, query, job_vacancy, book_court) {
+    console.log('header => ', header)
     console.log('getAllAcademy => ', query)
     let url = `global/academy/all?${query}`
     if (job_vacancy) {
         url = `global/academy/all?vacancy=1&${query}`
-    }else if(book_court){
+    } else if (book_court) {
         url = `global/academy/all?book_and_play=1&${query}`
     }
-    return {
-        type: types.GET_BROWSE_ACADEMY,
-        payload: {
-            request: {
-                url: url
+
+    if (header == '' || header == undefined) {
+        return {
+            type: types.GET_BROWSE_ACADEMY,
+            payload: {
+                request: {
+                    url: url
+                }
             }
-        }
-    };
+        };
+    } else {
+        return {
+            type: types.GET_BROWSE_ACADEMY,
+            payload: {
+                request: {
+                    url: url,
+                    headers: {
+                        'x-authorization': header
+
+                    },
+                }
+            }
+        };
+    }
+
+
 
 
 
