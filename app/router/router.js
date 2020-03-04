@@ -414,18 +414,12 @@ const GuestHomeModule = createStackNavigator({
         screen: GuestTrialTerms,
         navigationOptions: ({ navigation }) => ({
             title: "Trial Session",
-            headerTitleStyle: style.headerStyle,
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showDrawer={false}
                 showBackAction={true}
             />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
         })
     },
     SaveGuestTrial: {
@@ -1324,17 +1318,17 @@ const tabBarControllerBookGuest = createBottomTabNavigator(
             }
 
         },
-        BookandPlay: {
-            screen: BookPlayModule,
-            navigationOptions: {
-                tabBarLabel: 'Book and Play',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Book&Play'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_booking.png')} />,
-            }
-        },
+        // BookandPlay: {
+        //     screen: BookPlayModule,
+        //     navigationOptions: {
+        //         tabBarLabel: 'Book and Play',
+        //         tabBarLabel: ({ focused }) =>
+        //             <TabBarHighlightLabel
+        //                 label='Book&Play'
+        //                 focused={focused}
+        //                 activeIcon={require('../images/ic_tab_booking.png')} />,
+        //     }
+        // },
 
     })
 
