@@ -35,7 +35,8 @@ class PlayerSwitcher extends BaseComponent {
 
         console.log("PlayerSwitcher");
         getData('userInfo', (value) => {
-            userData = JSON.parse(value)
+            userData = JSON.parse(value);
+            console.log('userData=================', userData);
             this.setState({
                 userData: JSON.parse(value)
             });
@@ -46,7 +47,7 @@ class PlayerSwitcher extends BaseComponent {
             } else if (userData.user['user_type'] == 'FAMILY') {
                 this.getPlayerSwitchingData()
 
-            } if (userData.user['user_type'] == 'COACH') {
+            } if (userData.user['user_type'] == 'COACH' || userData.user['user_type'] == 'ACADEMY') {
 
                 this.getCoatchSwitchingData();
             }
@@ -125,7 +126,7 @@ class PlayerSwitcher extends BaseComponent {
                 storeData("userInfo", JSON.stringify(tempuserData))
                 storeData('academy_name', item.academy_name)
                 storeData('academy_id', item.academy_id)
-                if(item.can_book_court) {
+                if (item.can_book_court) {
                     this.props.navigation.navigate('CoachBookHome', { academy_name: item.academy_name })
                 } else {
                     this.props.navigation.navigate('CoachHome', { academy_name: item.academy_name })
@@ -228,13 +229,13 @@ class PlayerSwitcher extends BaseComponent {
                     storeData('player_id', item.id)
 
                     if (tempuserData.user['user_type'] == 'PLAYER') {
-                        if(item.can_book_court) {
+                        if (item.can_book_court) {
                             this.props.navigation.navigate('UserBookHome')
                         } else {
                             this.props.navigation.navigate('UserHome')
                         }
                     } else {
-                        if(item.can_book_court) {
+                        if (item.can_book_court) {
                             this.props.navigation.navigate('ParentBookHome')
                         } else {
                             this.props.navigation.navigate('ParentHome')
@@ -320,7 +321,7 @@ class PlayerSwitcher extends BaseComponent {
                         }
                     </View>
 
-                    <View style={{ margin: 5 }}>
+                    {/* <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
@@ -372,7 +373,7 @@ class PlayerSwitcher extends BaseComponent {
 
                             </TouchableOpacity>
                         </Card>
-                    </View>
+                    </View> */}
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>

@@ -4,8 +4,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 import { GUEST, PLAYER, COACH, ACADEMY } from "../../components/Constants";
 
-import { View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity,
-    Dimensions, ActivityIndicator, FlatList, ScrollView, BackHandler, Linking 
+import {
+    View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity,
+    Dimensions, ActivityIndicator, FlatList, ScrollView, BackHandler, Linking
 } from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
@@ -14,7 +15,8 @@ import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashbo
 import { getData, storeData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
+import BaseComponent, {
+    defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
     getFormatTimeDate, EVENT_UPDATE_DIALOG
 } from '../BaseComponent';
 import Events from '../../router/events';
@@ -38,7 +40,7 @@ class CoachHome extends BaseComponent {
                     }}
                     onPress={() => {
                         let userType = navigation.getParam('userType', '')
-                        if (userType == COACH)
+                        if (userType == COACH || userType == ACADEMY)
                             navigation.navigate('SwitchPlayer')
                     }}
                     activeOpacity={.8}
@@ -85,7 +87,7 @@ class CoachHome extends BaseComponent {
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
-                    style={{padding: 7}}
+                    style={{ padding: 7 }}
                     activeOpacity={.8}>
                     <Image
                         source={require('../../images/hamburger.png')}
@@ -119,7 +121,7 @@ class CoachHome extends BaseComponent {
                             backgroundColor: '#ED2638'
                         }}>
                             <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
-                                {navigation.getParam('notification_count', '') > 99 ? '99+' :  navigation.getParam('notification_count', '')}
+                                {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}
                             </Text>
                         </View> : null}
 
@@ -576,7 +578,7 @@ class CoachHome extends BaseComponent {
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                    {this.state.userType == COACH ?
+                    {this.state.userType == COACH || this.state.userType == ACADEMY ?
                         <View style={{ margin: 10, marginTop: 20 }}>
 
                             <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
@@ -914,19 +916,19 @@ class CoachHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    
+
                     <UpdateAppDialog
                         navigation={this.state.navigation}
                         exitPressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             BackHandler.exitApp()
                             //this.props.navigation.goBack(null)
                         }}
                         updatePressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             this.handleClick()
                         }}
-                        visible={show_must_update_alert} 
+                        visible={show_must_update_alert}
                     />
 
                 </ScrollView>

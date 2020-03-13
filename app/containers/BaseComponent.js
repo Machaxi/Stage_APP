@@ -477,11 +477,25 @@ export default class BaseComponent extends React.Component {
                             this.props.navigation.navigate('UserHome');
                         }
 
-                    } else if (userType == COACH || userType == ACADEMY) {
+                    } else if (userType == COACH) {
                         if (userData.can_book_court) {
                             this.props.navigation.navigate('CoachBookHome');
                         } else {
                             this.props.navigation.navigate('CoachHome');
+                        }
+                    }
+                    else if (userType == ACADEMY) {
+                        storeData('multiple', userData.has_multiple_acadmies)
+                        if (userData.has_multiple_acadmies == false) {
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('CoachBookHome');
+                            } else {
+                                this.props.navigation.navigate('CoachHome');
+                            }
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
                         }
                     }
                     else if (userType == PARENT) {
