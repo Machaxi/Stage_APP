@@ -225,7 +225,7 @@ export default class GuestTrial extends BaseComponent {
         </View>
 
 
-         <LinearGradient locations={[0.37, 1.18]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={245} style={{marginHorizontal: 10, marginTop: -80, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)',  elevation: 4, shadowRadius: 18,
+         <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{marginHorizontal: 10, marginTop: -80, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)',  elevation: 4, shadowRadius: 18,
            shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }}}>
       
             <View>
