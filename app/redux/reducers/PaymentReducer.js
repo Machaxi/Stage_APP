@@ -80,12 +80,63 @@ export function getPaymentHistory(header, month, year, academy_id, player_user_i
 }
 
 export function duePay(header, postData) {
-    console.log('duePay=> ',JSON.stringify(postData))
+    console.log('duePay=> ', JSON.stringify(postData))
     return {
         type: types.PAYMENT_DUES,
         payload: {
             request: {
                 url: `payment/due-pay-multiple`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
+
+export function getAcademyPaymentDues(header, postData) {
+    console.log('duePay=> ', JSON.stringify(postData))
+    return {
+        type: types.PAYMENT_DUES,
+        payload: {
+            request: {
+                url: `payment/academy-payment-dues`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
+
+export function settlePaymentDues(header, postData) {
+    console.log('duePay=> ', JSON.stringify(postData))
+    return {
+        type: types.PAYMENT_DUES,
+        payload: {
+            request: {
+                url: `payment/settle-payment`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
+
+export function getAcademyPaymentList(header, postData, page, size) {
+    console.log('duePay=> ', JSON.stringify(postData))
+    return {
+        type: types.PAYMENT_DUES,
+        payload: {
+            request: {
+                url: `payment/academy-payment-list?page=${page}&size=${size}`,
                 method: 'POST',
                 data: postData,
                 headers: {

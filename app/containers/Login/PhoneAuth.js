@@ -327,11 +327,19 @@ class PhoneAuth extends BaseComponent {
                                 storeData("userInfo", JSON.stringify(userData))
                                 storeData('academy_name', userData.user.name)
                                 console.log('coach userData => ', JSON.stringify(userData))
-                                if (userData.can_book_court) {
-                                    this.props.navigation.navigate('CoachBookHome')
+                                storeData('multiple', userData.has_multiple_acadmies)
+                                if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('CoachBookHome');
+                                    } else {
+                                        this.props.navigation.navigate('CoachHome');
+                                    }
                                 } else {
-                                    this.props.navigation.navigate('CoachHome');
+                                    this.props.navigation.navigate('SwitchPlayer', {
+                                        userType: COACH
+                                    })
                                 }
+
 
                                 // }
 
@@ -486,10 +494,16 @@ class PhoneAuth extends BaseComponent {
                         storeData("userInfo", JSON.stringify(userData))
                         storeData('academy_name', userData.user.name)
                         console.log('coach userData => ', JSON.stringify(userData))
-                        if (userData.can_book_court) {
-                            this.props.navigation.navigate('CoachBookHome');
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('CoachBookHome');
+                            } else {
+                                this.props.navigation.navigate('CoachHome');
+                            }
                         } else {
-                            this.props.navigation.navigate('CoachHome');
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
                         }
 
                     }

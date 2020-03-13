@@ -87,6 +87,8 @@ import EnrollmentForm from '../containers/profile/EnrollmentForm';
 import GuestTrial from '../containers/GuestScreen/GuestTrial'
 import GuestTrialTerms from '../containers/GuestScreen/GuestTrialTerms'
 import SaveGuestTrial from '../containers/GuestScreen/SaveGuestTrial'
+import PaymentDues from '../containers/payment/PaymentDues'
+import PaymentReport from '../containers/payment/PaymentReport'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -1121,6 +1123,38 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    DuePaymentsScreen: {
+        screen: PaymentDues,
+        navigationOptions: ({ navigation }) => ({
+            title: "Due Payments",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    PaymentReport: {
+        screen: PaymentReport,
+        navigationOptions: ({ navigation }) => ({
+            title: "Due Payments",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    }
 
 
 }, {
