@@ -752,7 +752,7 @@ class CoachMenuDrawer extends BaseComponent {
 					this.state.user_type == ACADEMY &&
 					<TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('DuePaymentsScreen')}>
 						<View style={styles.drawercell}>
-							<Text style={styles.menu_coach}>Due Payments</Text>
+							<Text style={styles.menu_coach}>Payment Dues</Text>
 							<Image
 								style={styles.arrow_img}
 								source={require('../images/ic_drawer_arrow.png')}

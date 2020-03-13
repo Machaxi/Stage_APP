@@ -239,14 +239,14 @@ class PaymentReport extends BaseComponent {
                     width: 100,
                     textAlign: 'center',
                 }]}>
-                    {item.refund_ref_id}
+                    {item.refId}
                 </Text>
 
                 <Text style={[defaultStyle.regular_text_14, {
                     width: 90,
                     textAlign: 'center',
                 }]}>
-                    {/* Rs {item.amount} */} ATTPL
+                    {item.batches}
                 </Text>
 
 
@@ -254,7 +254,7 @@ class PaymentReport extends BaseComponent {
                     width: 90,
                     textAlign: 'center',
                 }]}>
-                    {/* Rs {item.amount} */} Navdeep
+                    {item.player_name}
                 </Text>
 
                 <Text style={[defaultStyle.regular_text_14, {
