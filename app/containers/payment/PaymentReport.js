@@ -236,7 +236,7 @@ class PaymentReport extends BaseComponent {
                 </Text>
 
                 <Text style={[defaultStyle.regular_text_14, {
-                    width: 100,
+                    width: 200,
                     textAlign: 'center',
                 }]}>
                     {item.refId}
@@ -356,7 +356,7 @@ class PaymentReport extends BaseComponent {
 
                 <Text style={[defaultStyle.bold_text_10, {
                     color: '#A3A5AE',
-                    width: 90,
+                    width: 200,
                     textAlign: 'center',
                 }]}>
                     Reference ID

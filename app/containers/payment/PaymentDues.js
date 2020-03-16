@@ -98,7 +98,7 @@ class PaymentDues extends BaseComponent {
     return (
       <View style={styles.searchOuter}>
         <Card style={styles.searchCard}>
-          <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => {
+          <TextInput style={styles.searchBox} placeholder="Search Player" onChangeText={text => {
             this.state.query = text
             const data = this.find(this.state.query);
             this.state.paymentDueData = data;
