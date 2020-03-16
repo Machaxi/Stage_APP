@@ -1126,7 +1126,7 @@ const coachHomeModule = createStackNavigator({
     DuePaymentsScreen: {
         screen: PaymentDues,
         navigationOptions: ({ navigation }) => ({
-            title: "Due Payments",
+            title: "Payment Dues",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showMenuAction={false}
                 showBackAction={true} />,
@@ -1142,7 +1142,7 @@ const coachHomeModule = createStackNavigator({
     PaymentReport: {
         screen: PaymentReport,
         navigationOptions: ({ navigation }) => ({
-            title: "Due Payments",
+            title: "Payment Report",
             headerLeft: <NavigationDrawerStructure navigationProps={navigation}
                 showMenuAction={false}
                 showBackAction={true} />,

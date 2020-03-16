@@ -94,7 +94,10 @@ class PaymentReport extends BaseComponent {
         let page = this.state.page
         let size = 10
         if (this.state.pagination == false) {
-            this.progress(true);
+            //this.progress(true);
+            this.setState({
+                spinner: true
+            })
         }
         let subData = {}
         subData.academyId = this.state.academyId;
@@ -114,7 +117,9 @@ class PaymentReport extends BaseComponent {
 
                 let data = this.props.data.data;
                 if (this.state.pagination == false) {
-                    this.progress(false);
+                    this.setState({
+                        spinner: false
+                    })
                 }
                 console.log('paymentDues payload ' + JSON.stringify(this.props.data.data));
                 if (data.success) {
@@ -151,7 +156,9 @@ class PaymentReport extends BaseComponent {
                 }
             }).catch((response) => {
                 if (this.state.pagination == false) {
-                    this.progress(false);
+                    this.setState({
+                        spinner: false
+                    })
                 }
                 console.log(response);
             })
@@ -236,17 +243,17 @@ class PaymentReport extends BaseComponent {
                 </Text>
 
                 <Text style={[defaultStyle.regular_text_14, {
-                    width: 100,
+                    width: 200,
                     textAlign: 'center',
                 }]}>
-                    {item.refund_ref_id}
+                    {item.refId}
                 </Text>
 
                 <Text style={[defaultStyle.regular_text_14, {
                     width: 90,
                     textAlign: 'center',
                 }]}>
-                    {/* Rs {item.amount} */} ATTPL
+                    {item.batches}
                 </Text>
 
 
@@ -254,7 +261,7 @@ class PaymentReport extends BaseComponent {
                     width: 90,
                     textAlign: 'center',
                 }]}>
-                    {/* Rs {item.amount} */} Navdeep
+                    {item.player_name}
                 </Text>
 
                 <Text style={[defaultStyle.regular_text_14, {
@@ -356,7 +363,7 @@ class PaymentReport extends BaseComponent {
 
                 <Text style={[defaultStyle.bold_text_10, {
                     color: '#A3A5AE',
-                    width: 90,
+                    width: 200,
                     textAlign: 'center',
                 }]}>
                     Reference ID
@@ -412,10 +419,10 @@ class PaymentReport extends BaseComponent {
         return (
             <View style={{ flex: 1, backgroundColor: '#fff' }}>
 
-                <Spinner
+                {/* <Spinner
                     visible={this.state.spinner}
                     textStyle={defaultStyle.spinnerTextStyle}
-                />
+                /> */}
 
 
                 <View style={{
@@ -595,10 +602,14 @@ class PaymentReport extends BaseComponent {
                             stickyHeaderIndices={[0]}
                         />
                     </ScrollView>
-                    :
-                    <View style={styles.noDataOuter}>
-                        <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
-                    </View>
+                    : 
+                    (this.state.spinner ?
+                      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                    <ActivityIndicator size="large" color="#67BAF5" />
+                                </View>: <View style={styles.noDataOuter}>
+                      <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+                    </View>)
+                    
                 }
 
             </View>

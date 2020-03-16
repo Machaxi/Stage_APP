@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator, ScrollView, Modal, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator, ScrollView, Modal, TextInput, StyleSheet, KeyboardAvoidingView , Keyboard} from 'react-native';
 import { Card } from 'react-native-paper';
 import BaseComponent, { defaultStyle, getPaymentKey } from '../BaseComponent';
 import { FlatList } from 'react-native-gesture-handler';
@@ -54,6 +54,8 @@ class PaymentDues extends BaseComponent {
       fromDate: '',
       toDate: '',
       academyId: '',
+      modalSpinner: false
+      //history_progress: false
     };
     this.inputRefs = {
       paymentMethodValue: null,
@@ -98,7 +100,7 @@ class PaymentDues extends BaseComponent {
     return (
       <View style={styles.searchOuter}>
         <Card style={styles.searchCard}>
-          <TextInput style={styles.searchBox} placeholder="Search" onChangeText={text => {
+          <TextInput style={styles.searchBox} placeholder="Search Player" onChangeText={text => {
             this.state.query = text
             const data = this.find(this.state.query);
             this.state.paymentDueData = data;
@@ -132,7 +134,11 @@ class PaymentDues extends BaseComponent {
     let responseData = {}
     responseData['data'] = subData
 
-    this.progress(true);
+    //this.progress(true);
+
+    this.setState({
+      spinner: true
+  })
 
     getData('header', (header) => {
 
@@ -140,7 +146,7 @@ class PaymentDues extends BaseComponent {
 
         let data = this.props.data.data
         console.log('paymentDues payload ' + this.props.data.data);
-        this.progress(false);
+        //this.progress(false);
         if (data.success) {
           let dues = data.data.academy_payment_dues;
           if (dues == 'No Data Available') {
@@ -151,9 +157,14 @@ class PaymentDues extends BaseComponent {
             paymentDueData: dues,
           })
         }
+        this.setState({
+          spinner: false
+      })
       }).catch((response) => {
-        this.progress(false);
         console.log(response);
+        this.setState({
+          spinner: false
+      })
       })
     });
     //  });
@@ -193,8 +204,9 @@ class PaymentDues extends BaseComponent {
   }
 
   progress(status) {
+    this.state.modalSpinner = status;
     this.setState({
-      spinner: status
+      modalSpinner: status
     })
   }
 
@@ -248,8 +260,13 @@ class PaymentDues extends BaseComponent {
     return (
       <View>
         <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
-          <View style={styles.modalOuter}>
-            <View style={styles.modalBox}>
+          <View style={styles.modalOuter} onStartShouldSetResponder={() => {
+                        //alert('OnPress','Clicked on View');
+                        console.log('Clicked on View')
+                        Keyboard.dismiss();
+                    }}>
+            <KeyboardAvoidingView behavior="padding">
+            <View style={styles.modalBox} onPress={Keyboard.dismiss}>
               <View style={styles.modalHeadingOuter}>
                 <Text></Text>
                 <Text style={defaultStyle.bold_text_16}>Your Dues</Text>
@@ -377,6 +394,9 @@ class PaymentDues extends BaseComponent {
               </TouchableOpacity>
 
             </View>
+
+            </KeyboardAvoidingView>
+
           </View>
         </Modal>
       </View>
@@ -467,7 +487,7 @@ class PaymentDues extends BaseComponent {
         <View style={styles.container}>
 
           <Spinner
-            visible={this.state.spinner}
+            visible={this.state.modalSpinner}
             textStyle={defaultStyle.spinnerTextStyle}
           />
 
@@ -503,8 +523,18 @@ class PaymentDues extends BaseComponent {
                     this.setState({
                       selectedBatch: value,
                     }, () => {
-                      this.getDues();
+                        this.getDues();
                     });
+
+                  //   this.setState({
+                  //     selectedBatch: value,
+                  // });
+                  // if(value!=null){
+                  //     setTimeout(() => {
+                  //         this.getDues()
+                  //     }, 50)
+                  // }
+
                   }}
                   style={pickerSelectStyles}
                   value={this.state.selectedBatch}
@@ -618,17 +648,22 @@ class PaymentDues extends BaseComponent {
               </View>
             </View>
           </View>
-          {this.state.paymentDueData != null && this.state.paymentDueData.length > 0 ?
+          {this.state.paymentDueData != null && this.state.paymentDueData.length > 0 && this.state.spinner==false?
             <FlatList
               data={this.state.paymentDueData}
               extraData={this.state.paymentDueData}
               renderItem={this._renderItem}
             />
-            :
-            <View style={styles.noDataOuter}>
+            : 
+            (this.state.spinner ?
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <ActivityIndicator size="large" color="#67BAF5" />
+                        </View>: <View style={styles.noDataOuter}>
               <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
-            </View>
+            </View>)
+           
           }
+
 
           {this.settleDuesModal()}
 
@@ -673,6 +708,7 @@ const styles = {
   },
   searchBox: {
     marginLeft: 8,
+    height: 40,
     backgroundColor: 'white',
     borderRadius: 16,
     fontFamily: 'Quicksand-Regular'
