@@ -3,7 +3,7 @@ import * as Progress from 'react-native-progress';
 
 import {
     View, ImageBackground, Text, StyleSheet, Image, RefreshControl, StatusBar, TouchableOpacity,
-    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking, TextInput, Modal
+    Dimensions, FlatList, ScrollView, ActivityIndicator, BackHandler, Linking, TextInput, Modal, KeyboardAvoidingView, Keyboard
 } from 'react-native';
 import { CustomeCard } from '../../components/Home/Card'
 import { Card } from 'react-native-paper'
@@ -1428,14 +1428,21 @@ class UserHome extends BaseComponent {
                         alignItems: 'center',
                         backgroundColor: 'rgba(52, 52, 52, 0.8)',
                         padding: 16
+                    }} onStartShouldSetResponder={() => {
+                        //alert('OnPress','Clicked on View');
+                        console.log('Clicked on View')
+                        Keyboard.dismiss();
                     }}>
 
-                         <Card style={{  flexDirection: 'column',
+<KeyboardAvoidingView behavior="padding" style={{  flexDirection: 'column',
                     position: 'absolute',
                     left: 0,
                     right: 0,
                     bottom: 0,shadowColor: 'black',  elevation: 4, shadowRadius: 9,
                     shadowOpacity: 0.08, shadowOffset: { width: 0, height: 3 } }}>
+
+
+                         <Card onPress={Keyboard.dismiss}>
                         <View style={styles.feedbackCard}>
                             <View style={styles.feedbackHeader}>
                                 <Text>
@@ -1530,6 +1537,9 @@ class UserHome extends BaseComponent {
                             </View>
                         </View>
                     </Card>
+
+                    </KeyboardAvoidingView>
+
 
                     </View>
 

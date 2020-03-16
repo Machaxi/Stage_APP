@@ -897,7 +897,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.9.6;
+				CURRENT_PROJECT_VERSION = 2.9.7;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
@@ -912,7 +912,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.9.6;
+				MARKETING_VERSION = 2.9.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -934,7 +934,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.9.6;
+				CURRENT_PROJECT_VERSION = 2.9.7;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -948,7 +948,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.9.6;
+				MARKETING_VERSION = 2.9.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1143,7 +1143,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.9.52;
+				CURRENT_PROJECT_VERSION = 2.9.6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1154,7 +1154,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
-				MARKETING_VERSION = 2.9.52;
+				MARKETING_VERSION = 2.9.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.machaxi.OneSignalNotificationServiceExtension;
@@ -1182,7 +1182,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.9.52;
+				CURRENT_PROJECT_VERSION = 2.9.6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1193,7 +1193,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
-				MARKETING_VERSION = 2.9.52;
+				MARKETING_VERSION = 2.9.6;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.machaxi.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
