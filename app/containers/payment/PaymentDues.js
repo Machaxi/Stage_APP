@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator, ScrollView, Modal, TextInput, StyleSheet, KeyboardAvoidingView , Keyboard} from 'react-native';
+import { View, Text, Image, Linking, Platform, TouchableOpacity, ActivityIndicator, ScrollView, Modal, TextInput, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { Card } from 'react-native-paper';
 import BaseComponent, { defaultStyle, getPaymentKey } from '../BaseComponent';
 import { FlatList } from 'react-native-gesture-handler';
@@ -54,7 +54,8 @@ class PaymentDues extends BaseComponent {
       fromDate: '',
       toDate: '',
       academyId: '',
-      modalSpinner: false
+      modalSpinner: false,
+      totalPaymentDues: 0,
       //history_progress: false
     };
     this.inputRefs = {
@@ -138,14 +139,14 @@ class PaymentDues extends BaseComponent {
 
     this.setState({
       spinner: true
-  })
+    })
 
     getData('header', (header) => {
 
       this.props.getAcademyPaymentDues(header, responseData).then(() => {
 
         let data = this.props.data.data
-        console.log('paymentDues payload ' + this.props.data.data);
+        console.log('paymentDues payload ' + JSON.stringify(this.props.data.data));
         //this.progress(false);
         if (data.success) {
           let dues = data.data.academy_payment_dues;
@@ -155,16 +156,17 @@ class PaymentDues extends BaseComponent {
           this.setState({
             initialData: dues,
             paymentDueData: dues,
+            totalPaymentDues: data.data.sum_of_dues
           })
         }
         this.setState({
           spinner: false
-      })
+        })
       }).catch((response) => {
         console.log(response);
         this.setState({
           spinner: false
-      })
+        })
       })
     });
     //  });
@@ -261,139 +263,139 @@ class PaymentDues extends BaseComponent {
       <View>
         <Modal animationType="none" transparent={true} visible={this.state.modalVisible}>
           <View style={styles.modalOuter} onStartShouldSetResponder={() => {
-                        //alert('OnPress','Clicked on View');
-                        console.log('Clicked on View')
-                        Keyboard.dismiss();
-                    }}>
+            //alert('OnPress','Clicked on View');
+            console.log('Clicked on View')
+            Keyboard.dismiss();
+          }}>
             <KeyboardAvoidingView behavior="padding">
-            <View style={styles.modalBox} onPress={Keyboard.dismiss}>
-              <View style={styles.modalHeadingOuter}>
-                <Text></Text>
-                <Text style={defaultStyle.bold_text_16}>Your Dues</Text>
-                <TouchableOpacity activeOpacity={.8} onPress={() => { this.setModalVisible(false); }}>
-                  <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
-                </TouchableOpacity>
-              </View>
+              <View style={styles.modalBox} onPress={Keyboard.dismiss}>
+                <View style={styles.modalHeadingOuter}>
+                  <Text></Text>
+                  <Text style={defaultStyle.bold_text_16}>Your Dues</Text>
+                  <TouchableOpacity activeOpacity={.8} onPress={() => { this.setModalVisible(false); }}>
+                    <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                  </TouchableOpacity>
+                </View>
 
-              <View style={{
-                paddingLeft: 20,
-                paddingRight: 20,
-                paddingTop: 12,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-                <View style={{ width: '50%' }}>
-                  <Text style={defaultStyle.bold_text_14}>
-                    Amount
+                <View style={{
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  paddingTop: 12,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                  <View style={{ width: '50%' }}>
+                    <Text style={defaultStyle.bold_text_14}>
+                      Amount
                         </Text>
-                </View>
-
-                <View style={{
-                  alignItems: 'center',
-                  alignSelf: 'center',
-                  flex: 1,
-                  alignContent: 'center',
-                  width: '45%',
-                }}>
-
-                  <TextInput
-                    style={{
-                      borderColor: '#CECECE',
-                      borderWidth: 0.5, borderRadius: 12,
-                      height: 36,
-                      fontFamily: 'Quicksand-Regular',
-                      width: 70,
-                      textAlign: 'center',
-                      padding: 10
-                    }}
-                    keyboardType={'number-pad'}
-                    value={this.state.amount.toString()}
-                    onChangeText={(text) => {
-                      this.setState({
-                        amount: text
-                      })
-                    }}
-                  ></TextInput>
-                </View>
-              </View>
-
-
-
-              <View style={{
-                paddingLeft: 20,
-                paddingRight: 20,
-                paddingTop: 8,
-                paddingBottom: 8,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-
-                <View style={{ width: '50%' }}>
-                  <Text style={defaultStyle.bold_text_14}>
-                    Payment Method
-                    </Text>
-                </View>
-
-
-                <View style={{
-                  width: '40.33%', alignItems: 'center',
-                  alignSelf: 'center', alignContent: 'center'
-                }}>
-
-                  <RNPickerSelect
-                    placeholder={{}}
-                    items={this.state.paymentMethods}
-                    onValueChange={(value) => {
-                      console.log(value)
-                      this.setState({
-                        paymentMethodValue: value,
-                      });
-                    }}
-                    style={paymentMethodPickerStyles}
-                    value={this.state.paymentMethodValue}
-                    useNativeAndroidPickerStyle={false}
-                    ref={(el) => {
-                      this.inputRefs.paymentMethodValue = el;
-                    }}
-                  />
+                  </View>
 
                   <View style={{
-                    width: 110,
-                    backgroundColor: '#A3A5AE',
-                    height: 1
-                  }}></View>
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    flex: 1,
+                    alignContent: 'center',
+                    width: '45%',
+                  }}>
+
+                    <TextInput
+                      style={{
+                        borderColor: '#CECECE',
+                        borderWidth: 0.5, borderRadius: 12,
+                        height: 36,
+                        fontFamily: 'Quicksand-Regular',
+                        width: 70,
+                        textAlign: 'center',
+                        padding: 10
+                      }}
+                      keyboardType={'number-pad'}
+                      value={this.state.amount.toString()}
+                      onChangeText={(text) => {
+                        this.setState({
+                          amount: text
+                        })
+                      }}
+                    ></TextInput>
+                  </View>
+                </View>
+
+
+
+                <View style={{
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+
+                  <View style={{ width: '50%' }}>
+                    <Text style={defaultStyle.bold_text_14}>
+                      Payment Method
+                    </Text>
+                  </View>
+
+
+                  <View style={{
+                    width: '40.33%', alignItems: 'center',
+                    alignSelf: 'center', alignContent: 'center'
+                  }}>
+
+                    <RNPickerSelect
+                      placeholder={{}}
+                      items={this.state.paymentMethods}
+                      onValueChange={(value) => {
+                        console.log(value)
+                        this.setState({
+                          paymentMethodValue: value,
+                        });
+                      }}
+                      style={paymentMethodPickerStyles}
+                      value={this.state.paymentMethodValue}
+                      useNativeAndroidPickerStyle={false}
+                      ref={(el) => {
+                        this.inputRefs.paymentMethodValue = el;
+                      }}
+                    />
+
+                    <View style={{
+                      width: 110,
+                      backgroundColor: '#A3A5AE',
+                      height: 1
+                    }}></View>
+
+                  </View>
 
                 </View>
 
-              </View>
-
-              <View style={{
-                paddingLeft: 20,
-                paddingRight: 20,
-              }}>
-                <View>
-                  <Text style={defaultStyle.bold_text_14}>Remark</Text>
-                </View>
-                <TextInput
-                  style={styles.remarkTextArea}
-                  onChangeText={
-                    (remark) => {
-                      this.state.remark = remark;
+                <View style={{
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                }}>
+                  <View>
+                    <Text style={defaultStyle.bold_text_14}>Remark</Text>
+                  </View>
+                  <TextInput
+                    style={styles.remarkTextArea}
+                    onChangeText={
+                      (remark) => {
+                        this.state.remark = remark;
+                      }
                     }
-                  }
-                  multiline={true}
-                  placeholder={"Remark (optional)?"}
-                >
-                </TextInput>
+                    multiline={true}
+                    placeholder={"Remark (optional)?"}
+                  >
+                  </TextInput>
+                </View>
+
+                <TouchableOpacity style={styles.confirmBtnOuter} activeOpacity={.8} onPress={() => {
+                  this.settleDue();
+                }}>
+                  <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} >Settle Payment</Text>
+                </TouchableOpacity>
+
               </View>
-
-              <TouchableOpacity style={styles.confirmBtnOuter} activeOpacity={.8} onPress={() => {
-                this.settleDue();
-              }}>
-                <Text style={[defaultStyle.rounded_button, styles.confirmBtn]} >Settle Payment</Text>
-              </TouchableOpacity>
-
-            </View>
 
             </KeyboardAvoidingView>
 
@@ -523,17 +525,17 @@ class PaymentDues extends BaseComponent {
                     this.setState({
                       selectedBatch: value,
                     }, () => {
-                        this.getDues();
+                      this.getDues();
                     });
 
-                  //   this.setState({
-                  //     selectedBatch: value,
-                  // });
-                  // if(value!=null){
-                  //     setTimeout(() => {
-                  //         this.getDues()
-                  //     }, 50)
-                  // }
+                    //   this.setState({
+                    //     selectedBatch: value,
+                    // });
+                    // if(value!=null){
+                    //     setTimeout(() => {
+                    //         this.getDues()
+                    //     }, 50)
+                    // }
 
                   }}
                   style={pickerSelectStyles}
@@ -646,22 +648,26 @@ class PaymentDues extends BaseComponent {
                   />
                 </View>
               </View>
+              <View style={{ flexDirection: 'row', marginTop: 7 }}>
+                <Text style={[defaultStyle.bold_text_14, { color: '#667DDB' }]}>{"Total Payment Dues:  "}</Text>
+                <Text style={defaultStyle.bold_text_14}>Rs {this.state.totalPaymentDues}</Text>
+              </View>
             </View>
           </View>
-          {this.state.paymentDueData != null && this.state.paymentDueData.length > 0 && this.state.spinner==false?
+          {this.state.paymentDueData != null && this.state.paymentDueData.length > 0 && this.state.spinner == false ?
             <FlatList
               data={this.state.paymentDueData}
               extraData={this.state.paymentDueData}
               renderItem={this._renderItem}
             />
-            : 
+            :
             (this.state.spinner ?
               <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <ActivityIndicator size="large" color="#67BAF5" />
-                        </View>: <View style={styles.noDataOuter}>
-              <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
-            </View>)
-           
+                <ActivityIndicator size="large" color="#67BAF5" />
+              </View> : <View style={styles.noDataOuter}>
+                <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+              </View>)
+
           }
 
 

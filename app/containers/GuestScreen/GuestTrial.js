@@ -221,14 +221,30 @@ export default class GuestTrial extends BaseComponent {
         <ScrollView onScroll={this.handleScroll}>
 
 
-          <View style={{ height: 200, backgroundColor: 'grey' }}>
-          </View>
+
+          <Image resizeMode='contain' style={{
+            height: 236,
+          }}
+            source={require('../../images/trial_banner.png')}
+          />
+          {/* <View style={{ height: 236, backgroundColor: 'grey' }}>
+          </View> */}
 
 
           <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{
             marginHorizontal: 10, marginTop: -80, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
             shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }
           }}>
+
+            <Image resizeMode='contain' style={{
+              position: 'absolute',
+              top: 5,
+              left: 245,
+              right: 0,
+              bottom: 0,
+            }}
+              source={require('../../images/small_dots.png')}
+            ></Image>
 
             <View>
               <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>Bored of routine workout?</Text>
@@ -254,7 +270,9 @@ export default class GuestTrial extends BaseComponent {
               </Text>
             </View>
 
-            <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'flex-end' }}>
+            <TouchableOpacity style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'flex-end' }} onPress={() => {
+              this.props.navigation.navigate('GuestTrialTerms')
+            }}>
               <Image resizeMode="contain" style={{ width: 26, height: 26, marginRight: -10, marginTop: -7 }} source={require('../../images/vector.png')}></Image>
 
               <View>
@@ -264,7 +282,7 @@ export default class GuestTrial extends BaseComponent {
               <Image resizeMode="contain" style={{ width: 12, height: 12, marginLeft: 5, marginTop: 5 }} source={require('../../images/right_arrow.png')}>
               </Image>
 
-            </View>
+            </TouchableOpacity>
 
           </LinearGradient>
 
@@ -275,6 +293,26 @@ export default class GuestTrial extends BaseComponent {
             </Text>
             </View>
             <View style={{ width: '13%', height: 2, backgroundColor: '#67BAF5', marginTop: 10, marginBottom: 40 }}>
+            </View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
+              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/badminton.png')}>
+              </Image>
+              <View style={{ width: '75%', marginLeft: 25 }}>
+                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+                  Learn badminton the easy and fun way
+                </Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
+              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/muscle.png')}>
+              </Image>
+              <View style={{ width: '75%', marginLeft: 25 }}>
+                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+                  Stay fit and in shape with unique, fun workout patterns
+                </Text>
+              </View>
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
@@ -373,7 +411,7 @@ export default class GuestTrial extends BaseComponent {
               height: 40
             }}
               onPress={() => {
-                this.props.navigation.navigate('GuestTrialTerms')
+                this.props.navigation.navigate('SaveGuestTrial')
               }}>
               <Text style={{
                 color: 'white',

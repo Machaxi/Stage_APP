@@ -48,6 +48,15 @@ class GuestTrialTerms extends BaseComponent {
         {/* <LinearGradient locations={[0.17, 0.97]} colors={['#A1DFFF', '#F4F4F4']}> */}
         <ScrollView>
           <LinearGradient locations={[0.17, 0.97]} colors={['#A1DFFF', '#F4F4F4']} style={{ padding: 40 }} useAngle angle={194}>
+            <Image resizeMode='contain' style={{
+              position: 'absolute',
+              top: '30%',
+              left: '67%',
+              right: 0,
+              bottom: 0,
+            }}
+              source={require('../../images/dots.png')}
+            ></Image>
             <View>
               <Text style={{ fontFamily: 'Nunito-ExtraBold', fontSize: 18, color: '#000000' }}>The Fitminton Style!</Text>
               <Text style={{ fontFamily: 'Nunito-SemiBold', fontSize: 18, color: '#3E3E3E' }}>membership benefits</Text>
@@ -56,15 +65,30 @@ class GuestTrialTerms extends BaseComponent {
             </View>
 
             <View style={{
-              backgroundColor: '#F5F5F5', marginTop: 25, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 5, shadowColor: 'black', elevation: 4, shadowRadius: 15,
+              backgroundColor: '#F5F5F5', marginTop: 25, justifyContent: 'center', alignItems: 'center', borderRadius: 5, shadowColor: 'black', elevation: 4, shadowRadius: 15,
               shadowOpacity: 0.06, shadowOffset: { width: 0, height: 4 }
             }}>
-              <Text style={{ paddingLeft: 10, paddingTop: 20, paddingBottom: 20, fontFamily: 'Nunito-SemiBold', fontSize: 15, color: '#3E3E3E' }}>
-                Fitminton sale is live.
+              <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10, alignItems: 'center' }}>
+                <Text style={{ paddingLeft: 10, fontFamily: 'Nunito-SemiBold', fontSize: 15, color: '#3E3E3E' }}>
+                  Fitminton sale is live.
+                  </Text>
+                <Text style={{ paddingRight: 10, fontFamily: 'Nunito-Bold', fontSize: 15, color: '#FF3A6A' }}>
+                  {" Flat 50% off"}
                 </Text>
-              <Text style={{ paddingRight: 10, paddingTop: 20, paddingBottom: 20, fontFamily: 'Nunito-Bold', fontSize: 15, color: '#FF3A6A' }}>
-                {" Flat 50% off"}
-              </Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', paddingBottom: 10, paddingTop: 2 }}>
+                <Text style={{ fontFamily: 'Nunito-SemiBold', fontSize: 15, color: '#3E3E3E' }}>
+                  {"(Starting from: "}
+                </Text>
+                <Text style={{ textDecorationLine: 'line-through', color: '#AAAAAA', fontFamily: 'Nunito-SemiBold', fontSize: 15, }}>
+                  4000
+                </Text>
+                <Text style={{ fontFamily: 'Nunito-SemiBold', fontSize: 15, color: '#3E3E3E' }}>
+                  {" 2000)"}
+                </Text>
+              </View>
+
             </View>
 
             <View>
@@ -168,7 +192,7 @@ class GuestTrialTerms extends BaseComponent {
                 <View style={{ paddingLeft: 28, marginTop: -33 }}>
                   <Text>
                     <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#000000' }}>
-                      Mention your progress:
+                      Monitor your progress:
                   </Text>
                     <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', color: '#3E3E3E' }}>
                       {" Track your on-court progress and compare your skills with your friends as you progress"}

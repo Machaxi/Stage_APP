@@ -56,6 +56,7 @@ class PaymentReport extends BaseComponent {
             pagination: false,
             page: 0,
             clearPaymentDataArray: false,
+            totalRevenue: 0
         };
         this.inputRefs = {
             paymentMethodValue: null,
@@ -134,7 +135,8 @@ class PaymentReport extends BaseComponent {
                     if (list == 'No Data Available' && this.state.pagination == false) {
                         allPayments = [];
                         this.setState({
-                            paymentListData: allPayments
+                            paymentListData: allPayments,
+                            totalRevenue: data.data.total_revenue
                         })
                     } else {
                         if (list != 'No Data Available') {
@@ -147,7 +149,8 @@ class PaymentReport extends BaseComponent {
                                 allPayments.push(list[i]);
                             }
                             this.setState({
-                                paymentListData: allPayments
+                                paymentListData: allPayments,
+                                totalRevenue: data.data.total_revenue
                             })
                         }
                     }
@@ -574,9 +577,13 @@ class PaymentReport extends BaseComponent {
                             />
                         </View>
                     </View>
+                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                        <Text style={[defaultStyle.bold_text_14, { color: '#667DDB' }]}>{"Total Revenue:  "}</Text>
+                        <Text style={defaultStyle.bold_text_14}>Rs {this.state.totalRevenue}</Text>
+                    </View>
                 </View>
 
-                {this.state.paymentListData != null && this.state.paymentListData.length > 0 ?
+                {this.state.paymentListData != null && this.state.paymentListData.length > 0 && this.state.spinner == false ?
                     <ScrollView horizontal={true} persistentScrollbar={true}>
                         <FlatList
                             onEndReachedThreshold={0.1}
@@ -602,14 +609,14 @@ class PaymentReport extends BaseComponent {
                             stickyHeaderIndices={[0]}
                         />
                     </ScrollView>
-                    : 
+                    :
                     (this.state.spinner ?
-                      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                    <ActivityIndicator size="large" color="#67BAF5" />
-                                </View>: <View style={styles.noDataOuter}>
-                      <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
-                    </View>)
-                    
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <ActivityIndicator size="large" color="#67BAF5" />
+                        </View> : <View style={styles.noDataOuter}>
+                            <Text style={defaultStyle.regular_text_14}>No payment due.</Text>
+                        </View>)
+
                 }
 
             </View>

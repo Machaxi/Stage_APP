@@ -62,18 +62,19 @@ class TrialSession extends BaseComponent {
     postData['data'] = data;
     console.log('postData', JSON.stringify(postData));
     this.progress(true);
-      this.props.saveTrialSessionData(postData).then(() => {
-        let data = this.props.data.data
-        this.progress(false);
-        let success = data.success
-        if (success) {
-          alert(data.data.Success);
-        }
+    this.props.saveTrialSessionData(postData).then(() => {
+      let data = this.props.data.data
+      this.progress(false);
+      let success = data.success
+      if (success) {
+        alert(data.data.Success);
+        this.props.navigation.navigate('GuestTrial');
+      }
 
-      }).catch((response) => {
-        this.progress(false);
-        console.log(response);
-      })
+    }).catch((response) => {
+      this.progress(false);
+      console.log(response);
+    })
   }
 
 
@@ -136,7 +137,7 @@ class TrialSession extends BaseComponent {
           onPress={() => {
             this.checkUserDetails()
           }}>
-          <Text style={styles.btnTextStyle}>Save</Text>
+          <Text style={styles.btnTextStyle}>Submit</Text>
         </TouchableOpacity>
 
       </View>
