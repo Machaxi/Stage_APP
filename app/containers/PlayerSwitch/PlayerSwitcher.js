@@ -375,59 +375,62 @@ class PlayerSwitcher extends BaseComponent {
                         </Card>
                     </View> */}
 
-                    <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
+                    {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY' || userData.user['user_type'] == 'COACH') &&
 
-                                console.warn("Touch Press")
-                                this.props.navigation.navigate('AcademyListing')
+                        <View style={{ margin: 5 }}>
+                            <Card style={{ margin: 5, borderRadius: 10 }}>
+                                <TouchableOpacity onPress={() => {
 
-                            }}>
+                                    console.warn("Touch Press")
+                                    this.props.navigation.navigate('AcademyListing')
 
-                                <View style={{
-                                    margin: 10,
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    height: 40
                                 }}>
 
-                                    <Image
-                                        resizeMode="contain"
-                                        source={require('../../images/browse_academy.png')}
-                                        style={{
-                                            width: 30,
-                                            height: 30,
-                                            marginRight: 20,
-                                        }} />
-                                    <View style={{ flex: 1 }}>
+                                    <View style={{
+                                        margin: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        height: 40
+                                    }}>
 
-                                        <View style={{
-                                            flex: 1,
-                                            alignItems: 'center',
-                                            marginRight: 15,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.bold_text_14}>
-                                                Browse other Academies
+                                        <Image
+                                            resizeMode="contain"
+                                            source={require('../../images/browse_academy.png')}
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 20,
+                                            }} />
+                                        <View style={{ flex: 1 }}>
+
+                                            <View style={{
+                                                flex: 1,
+                                                alignItems: 'center',
+                                                marginRight: 15,
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                            }}>
+                                                <Text style={defaultStyle.bold_text_14}>
+                                                    Browse other Academies
                                             </Text>
 
-                                            <Image
-                                                resizeMode="contain"
-                                                source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0,
-                                                }} />
+                                                <Image
+                                                    resizeMode="contain"
+                                                    source={require('../../images/path.png')}
+                                                    style={{
+                                                        width: 19,
+                                                        height: 13, marginRight: 0,
+                                                    }} />
 
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
 
 
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
+                                </TouchableOpacity>
+                            </Card>
+                        </View>
+                    }
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>

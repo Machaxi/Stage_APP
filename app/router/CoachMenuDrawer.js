@@ -78,6 +78,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 		this.refreshEvent = Events.subscribe(PROFILE_PIC_UPDATED, (obj) => {
 
+			console.log('PROFILE_PIC_UPDATED', PROFILE_PIC_UPDATED);
+
 			if (obj) {
 				this.setState({
 					updated_profile_pic: obj,
@@ -676,21 +678,23 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('AcademyListing')}>
+				{user_type == COACH &&
+					<TouchableOpacity activeOpacity={0.8} onPress={() =>
+						this.props.navigation.navigate('AcademyListing')}>
 
-					<View style={styles.drawercell}>
+						<View style={styles.drawercell}>
 
-						<Text style={styles.menu_coach}>
-							Browse Academies
+							<Text style={styles.menu_coach}>
+								Other Machaxi Centres
 								</Text>
 
-						<Image
-							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						/>
-					</View>
-				</TouchableOpacity>
+							<Image
+								style={styles.arrow_img}
+								source={require('../images/ic_drawer_arrow.png')}
+							/>
+						</View>
+					</TouchableOpacity>
+				}
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
 					this.props.navigation.navigate('AcademyListing', {
@@ -1142,7 +1146,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							Browse Academies
+							Other Machaxi Centres
 								</Text>
 
 						<Image

@@ -82,10 +82,10 @@ class GuestTrialTerms extends BaseComponent {
                   {"(Starting from: "}
                 </Text>
                 <Text style={{ textDecorationLine: 'line-through', color: '#AAAAAA', fontFamily: 'Nunito-SemiBold', fontSize: 15, }}>
-                  4000
+                  Rs. 4000
                 </Text>
                 <Text style={{ fontFamily: 'Nunito-SemiBold', fontSize: 15, color: '#3E3E3E' }}>
-                  {" 2000)"}
+                  {"  "}Rs. 2000)
                 </Text>
               </View>
 

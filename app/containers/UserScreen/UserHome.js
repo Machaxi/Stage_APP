@@ -973,7 +973,7 @@ class UserHome extends BaseComponent {
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={defaultStyle.bold_text_14}>
-                                                Browse Academies
+                                                Other Machaxi Centres
                                         </Text>
 
                                             <Image
@@ -1414,141 +1414,143 @@ class UserHome extends BaseComponent {
                     this.state.currentCoachFeedback != null &&
 
                     <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={this.state.currentCoachFeedback != null}
-                    onRequestClose={() => {
-                        //alert('Modal has been closed.');
-                    }}>
+                        animationType="none"
+                        transparent={true}
+                        visible={this.state.currentCoachFeedback != null}
+                        onRequestClose={() => {
+                            //alert('Modal has been closed.');
+                        }}>
 
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: 'rgba(52, 52, 52, 0.8)',
-                        padding: 16
-                    }} onStartShouldSetResponder={() => {
-                        //alert('OnPress','Clicked on View');
-                        console.log('Clicked on View')
-                        Keyboard.dismiss();
-                    }}>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'rgba(52, 52, 52, 0.8)',
+                            padding: 16
+                        }} onStartShouldSetResponder={() => {
+                            //alert('OnPress','Clicked on View');
+                            console.log('Clicked on View')
+                            Keyboard.dismiss();
+                        }}>
 
-<KeyboardAvoidingView behavior="padding" style={{  flexDirection: 'column',
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    bottom: 0,shadowColor: 'black',  elevation: 4, shadowRadius: 9,
-                    shadowOpacity: 0.08, shadowOffset: { width: 0, height: 3 } }}>
-
-
-                         <Card onPress={Keyboard.dismiss}>
-                        <View style={styles.feedbackCard}>
-                            <View style={styles.feedbackHeader}>
-                                <Text>
-                                    <Text style={defaultStyle.bold_text_14}>Coach Feedback: </Text>
-                                    <Text style={[defaultStyle.bold_text_16, { fontFamily: 'Quicksand-Bold'}]}>{' ' + this.state.currentCoachFeedback.targetUserName}</Text>
-                                </Text>
-                                
-                                
-                                <TouchableOpacity activeOpacity={.8} onPress={() => {
-                                    this.setState({
-                                        currentCoachFeedback: null
-                                    })
-                                }}>
-                                    <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.feedbackHeaderBorder}></View>
-
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-
-                                <View>
-                                    <Text style={defaultStyle.bold_text_14}>Your Feedback</Text>
-                                    <StarRating
-                                        style={styles.ratingContainer}
-                                        containerStyle={{
-                                            width: 100,
-                                        }}
-                                        starSize={20}
-                                        disabled={false}
-                                        emptyStar={require('../../images/ic_empty_star.png')}
-                                        fullStar={require('../../images/ic_star.png')}
-                                        halfStar={require('../../images/ic_half_star.png')}
-                                        iconSet={'Ionicons'}
-                                        maxStars={5}
-                                        rating={this.state.currentCoachFeedback.rating == undefined ? 0 : this.state.currentCoachFeedback.rating}
-                                        selectedStar={(rating) => {
-                                            let coachInfo = this.state.currentCoachFeedback
-                                            coachInfo.rating = rating
-                                            this.setState({
-                                                dashboard_coach_rating: coachInfo
-                                            })
-                                        }}
-                                        fullStarColor={'#F8F29F'}
-                                    />
-
-                                </View>
-                                
-                                <View>
-
-                                    <Text style={defaultStyle.bold_text_14}>{moment.utc(this.state.currentCoachFeedback.attendanceDate).local().format(SESSION_DATE_FORMAT)}</Text>
-                                    <Text style={defaultStyle.bold_text_14}>{this.state.currentCoachFeedback.sessionName}</Text>
-                                    
-                                </View>
-
-
-                             </View>
-
-
-                           
-                            <TextInput
-                                style={styles.feedbackTextArea}
-                                onChangeText={
-                                    (review) => {
-                                        this.state.currentCoachFeedback.review = review;
-                                    }
-                                }
-                                multiline={true}
-                                placeholder={"What's your feedback (optional)?"}
-                            >
-                            </TextInput>
-
-                            < View style={{
-                                alignSelf: 'center',
-                                width: 100,
+                            <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null} style={{
+                                flexDirection: 'column',
+                                position: 'absolute',
+                                left: 0,
+                                right: 0,
+                                bottom: 0, shadowColor: 'black', elevation: 4, shadowRadius: 9,
+                                shadowOpacity: 0.08, shadowOffset: { width: 0, height: 3 }
                             }}>
-                                <TouchableOpacity activeOpacity={.8}
-                                    style={styles.rounded_button}
-                                    onPress={() => {
-                                        this.submitFeedback()
-                                    }}>
-                                    <Text
-                                        style={{
-                                            fontSize: 14,
-                                            color: 'white',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            fontFamily: 'Quicksand-Medium',
+
+
+                                <Card onPress={Keyboard.dismiss}>
+                                    <View style={styles.feedbackCard}>
+                                        <View style={styles.feedbackHeader}>
+                                            <Text>
+                                                <Text style={defaultStyle.bold_text_14}>Coach Feedback: </Text>
+                                                <Text style={[defaultStyle.bold_text_16, { fontFamily: 'Quicksand-Bold' }]}>{' ' + this.state.currentCoachFeedback.targetUserName}</Text>
+                                            </Text>
+
+
+                                            <TouchableOpacity activeOpacity={.8} onPress={() => {
+                                                this.setState({
+                                                    currentCoachFeedback: null
+                                                })
+                                            }}>
+                                                <Image style={styles.closeImg} source={require('../../images/ic_close.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.feedbackHeaderBorder}></View>
+
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                                            <View>
+                                                <Text style={defaultStyle.bold_text_14}>Your Feedback</Text>
+                                                <StarRating
+                                                    style={styles.ratingContainer}
+                                                    containerStyle={{
+                                                        width: 100,
+                                                    }}
+                                                    starSize={20}
+                                                    disabled={false}
+                                                    emptyStar={require('../../images/ic_empty_star.png')}
+                                                    fullStar={require('../../images/ic_star.png')}
+                                                    halfStar={require('../../images/ic_half_star.png')}
+                                                    iconSet={'Ionicons'}
+                                                    maxStars={5}
+                                                    rating={this.state.currentCoachFeedback.rating == undefined ? 0 : this.state.currentCoachFeedback.rating}
+                                                    selectedStar={(rating) => {
+                                                        let coachInfo = this.state.currentCoachFeedback
+                                                        coachInfo.rating = rating
+                                                        this.setState({
+                                                            dashboard_coach_rating: coachInfo
+                                                        })
+                                                    }}
+                                                    fullStarColor={'#F8F29F'}
+                                                />
+
+                                            </View>
+
+                                            <View>
+
+                                                <Text style={defaultStyle.bold_text_14}>{moment.utc(this.state.currentCoachFeedback.attendanceDate).local().format(SESSION_DATE_FORMAT)}</Text>
+                                                <Text style={defaultStyle.bold_text_14}>{this.state.currentCoachFeedback.sessionName}</Text>
+
+                                            </View>
+
+
+                                        </View>
+
+
+
+                                        <TextInput
+                                            style={styles.feedbackTextArea}
+                                            onChangeText={
+                                                (review) => {
+                                                    this.state.currentCoachFeedback.review = review;
+                                                }
+                                            }
+                                            multiline={true}
+                                            placeholder={"What's your feedback (optional)?"}
+                                        >
+                                        </TextInput>
+
+                                        < View style={{
+                                            alignSelf: 'center',
+                                            width: 100,
                                         }}>
-                                        Submit
+                                            <TouchableOpacity activeOpacity={.8}
+                                                style={styles.rounded_button}
+                                                onPress={() => {
+                                                    this.submitFeedback()
+                                                }}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 14,
+                                                        color: 'white',
+                                                        textAlign: 'center',
+                                                        justifyContent: 'center',
+                                                        fontFamily: 'Quicksand-Medium',
+                                                    }}>
+                                                    Submit
                                     </Text>
-                                </TouchableOpacity>
-                            </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </Card>
+
+                            </KeyboardAvoidingView>
+
+
                         </View>
-                    </Card>
-
-                    </KeyboardAvoidingView>
 
 
-                    </View>
 
-                    
-                   
-                </Modal>
+                    </Modal>
                 }
 
-                
+
 
 
                 {/* {
@@ -1827,7 +1829,7 @@ const styles = StyleSheet.create({
         marginRight: 4,
         borderColor: '#67BAF5',
         backgroundColor: '#67BAF5',
-        justifyContent:'center',
+        justifyContent: 'center',
 
     },
     confirmBtnOuter: {

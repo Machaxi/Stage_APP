@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import moment from 'moment'
 import BaseComponent, {
     defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
-    getFormatTimeDate, EVENT_UPDATE_DIALOG
+    getFormatTimeDate, EVENT_UPDATE_DIALOG, PROFILE_PIC_UPDATED, EVENT_EDIT_PROFILE
 } from '../BaseComponent';
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
@@ -335,6 +335,13 @@ class CoachHome extends BaseComponent {
                 console.log(' getCoachDashboard payload ' + user);
                 let user1 = JSON.parse(user)
 
+                try {
+                    const profile_pic = user1.data.coach_profile['profile_pic']
+                    Events.publish(PROFILE_PIC_UPDATED, profile_pic);
+                } catch (err) {
+
+                }
+
                 if (user1.success == true) {
                     global.rating = user1.data.coach_profile['ratings']
                     this.setState({
@@ -343,6 +350,7 @@ class CoachHome extends BaseComponent {
                         // strenthList:user1.data.player_profile['stats']
 
                     })
+                    Events.publish(EVENT_EDIT_PROFILE);
                 }
                 this.setState({ refreshing: false });
             }).catch((response) => {
@@ -875,47 +883,48 @@ class CoachHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
+                    {this.state.userType == COACH &&
+                        <View style={{ margin: 5 }}>
+                            <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
+                                <TouchableOpacity onPress={() => {
 
-                                //console.warn("Touch Press")
-                                this.props.navigation.navigate('AcademyListing')
+                                    //console.warn("Touch Press")
+                                    this.props.navigation.navigate('AcademyListing')
 
-                            }}>
-                                <View style={{
-                                    marginLeft: 10, marginRight: 10,
-                                    flexDirection: 'row', height: 50
                                 }}>
-
-
-
                                     <View style={{
-                                        flex: 1,
-                                        marginRight: 15,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
+                                        marginLeft: 10, marginRight: 10,
+                                        flexDirection: 'row', height: 50
                                     }}>
-                                        <Text style={defaultStyle.regular_text_14}>
-                                            Browse Academies
+
+
+
+                                        <View style={{
+                                            flex: 1,
+                                            marginRight: 15,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.regular_text_14}>
+                                                Other Machaxi Centres
                                             </Text>
 
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                resizeMode: "contain",
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    resizeMode: "contain",
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
+
+                                        </View>
 
                                     </View>
 
-                                </View>
 
-
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
+                                </TouchableOpacity>
+                            </Card>
+                        </View>}
 
                     <UpdateAppDialog
                         navigation={this.state.navigation}

@@ -280,7 +280,7 @@ class ParentHome extends BaseComponent {
 
         setTimeout(() => {
             console.log('component did mount')
-            if(this.viewShot){
+            if (this.viewShot) {
                 this.viewShot.capture().then(uri => {
                     this.onCapture(uri)
                 }).catch(error => {
@@ -412,7 +412,7 @@ class ParentHome extends BaseComponent {
 
     shareProfile = async () => {
         this.setState({ refreshing: true })
-        if(this.state.screenShot){
+        if (this.state.screenShot) {
             this.buo = await branch.createBranchUniversalObject("machaxi-app", {
                 locallyIndex: true,
                 //canonicalUrl:  'https://google.com',
@@ -431,7 +431,7 @@ class ParentHome extends BaseComponent {
             }
 
             let controlParams = {
-                $desktop_url: Platform.OS === 'android' ? 
+                $desktop_url: Platform.OS === 'android' ?
                     'https://play.google.com/store/apps/details?id=com.machaxi&hl=en' :
                     'https://apps.apple.com/in/app/machaxi-sports-technology/id1484093762',
                 $ios_url: 'https://apps.apple.com/in/app/machaxi-sports-technology/id1484093762'
@@ -450,20 +450,20 @@ class ParentHome extends BaseComponent {
             }
             Share.open(shareOptions);
             this.setState({ refreshing: false })
-        } else{
-            setTimeout(()=> this.shareProfile(), 1000)
+        } else {
+            setTimeout(() => this.shareProfile(), 1000)
         }
     }
 
-    onCapture=(uri) => {
+    onCapture = (uri) => {
         console.log('uri=>', uri);
         // setTimeout(() => {
-            ImgToBase64.getBase64String(`file://${uri}`)
-                .then(base64String => {
-                    // console.log('base64String', base64String)
-                    this.setState({ screenShot: base64String })
-                })
-                .catch(err => console.log('error in creating url', err))
+        ImgToBase64.getBase64String(`file://${uri}`)
+            .then(base64String => {
+                // console.log('base64String', base64String)
+                this.setState({ screenShot: base64String })
+            })
+            .catch(err => console.log('error in creating url', err))
         // }, 10)
     }
 
@@ -624,11 +624,11 @@ class ParentHome extends BaseComponent {
 
     switchPlayer = () => {
         this.setState({ refreshing: true })
-        if(this.state.screenShot){
-            this.setState({refreshing: false})
+        if (this.state.screenShot) {
+            this.setState({ refreshing: false })
             this.props.navigation.navigate('SwitchPlayer')
-        } else{
-            setTimeout(()=>{this.switchPlayer()}, 1000)
+        } else {
+            setTimeout(() => { this.switchPlayer() }, 1000)
         }
     }
 
@@ -650,7 +650,7 @@ class ParentHome extends BaseComponent {
         if (this.state.player_profile) {
             const { name, academy_name, badge, rank, score, player_level, reward_point, player_category, is_reward_point_due,
                 is_payment_due, reward_detail, payment_detail_academy, operations } = this.state.player_profile
-            
+
             sessionArray = [];
             if (operations != null && operations.next_sessions != null) {
                 for (let i = 0; i < operations.next_sessions.length; i++) {
@@ -786,7 +786,7 @@ class ParentHome extends BaseComponent {
                     />
                     <View style={{ margin: 10, marginTop: 20, zIndex: 2 }}>
 
-                        <SwitchButton onPress={() => this.switchPlayer() }
+                        <SwitchButton onPress={() => this.switchPlayer()}
                         >
                             Switch Child
                         </SwitchButton>
@@ -870,7 +870,7 @@ class ParentHome extends BaseComponent {
                                     </View> */}
 
 
-                                    <View style={{  }}>
+                                    <View style={{}}>
                                         <Text style={[defaultStyle.bold_text_10, { color: '#A3A5AE' }]}>Amount</Text>
                                         <Text style={[defaultStyle.bold_text_14, { marginTop: 10 }]}>{payment_detail_academy.totalAmount}</Text>
                                     </View>
@@ -947,7 +947,7 @@ class ParentHome extends BaseComponent {
                             </Card>
                         </View> : null
                     }
-                    
+
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
@@ -1021,7 +1021,7 @@ class ParentHome extends BaseComponent {
                                             justifyContent: 'space-between',
                                         }}>
                                             <Text style={defaultStyle.bold_text_14}>
-                                                Browse Academies
+                                                Other Machaxi Centres
                                         </Text>
 
                                             <Image source={require('../../images/path.png')}
@@ -1454,16 +1454,16 @@ class ParentHome extends BaseComponent {
                         visible={show_must_update_alert}
                     />
 
-                    
-                        <ViewShot 
-                            ref={(ref) => this.viewShot = ref} 
-                            style={{ opacity: 0, position: 'absolute', width: '100%', zIndex: -1 }}
-                        >
-                            <PlayerHeader
-                                player_profile={this.state.player_profile}
-                                is_tooblar={true}
-                            />
-                            {/* {this.state.strenthList.length != 0 ?
+
+                    <ViewShot
+                        ref={(ref) => this.viewShot = ref}
+                        style={{ opacity: 0, position: 'absolute', width: '100%', zIndex: -1 }}
+                    >
+                        <PlayerHeader
+                            player_profile={this.state.player_profile}
+                            is_tooblar={true}
+                        />
+                        {/* {this.state.strenthList.length != 0 ?
                                 <View style={{ margin: 10 }}>
                                     <Card style={{ borderRadius: 12 }}>
                                         <View>
@@ -1483,8 +1483,8 @@ class ParentHome extends BaseComponent {
                                 </View> : null
                             } */}
 
-                        </ViewShot>
-                    
+                    </ViewShot>
+
                 </ScrollView>
             </View>;
         } else {

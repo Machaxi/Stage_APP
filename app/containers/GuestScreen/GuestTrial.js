@@ -200,7 +200,6 @@ export default class GuestTrial extends BaseComponent {
 
   handleScroll = (event) => {
     if (event.nativeEvent.contentOffset.y > 100) {
-      console.log("Height is this ", event.nativeEvent.contentOffset.y);
       this.props.navigation.setParams({ showHeader: "True" })
     }
     else {
@@ -223,68 +222,69 @@ export default class GuestTrial extends BaseComponent {
 
 
           <Image resizeMode='contain' style={{
-            height: 236,
           }}
             source={require('../../images/trial_banner.png')}
           />
           {/* <View style={{ height: 236, backgroundColor: 'grey' }}>
           </View> */}
 
-
-          <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{
-            marginHorizontal: 10, marginTop: -80, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
-            shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }
-          }}>
-
-            <Image resizeMode='contain' style={{
-              position: 'absolute',
-              top: 5,
-              left: 245,
-              right: 0,
-              bottom: 0,
-            }}
-              source={require('../../images/small_dots.png')}
-            ></Image>
-
-            <View>
-              <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>Bored of routine workout?</Text>
-              <Text>
-                <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
-                  Stay fit -
-                  </Text>
-                <Text style={{ fontSize: 18, fontFamily: 'Nunito-ExtraBold', color: '#000000' }}>
-                  {" The Fitminton Style!"}
-                </Text>
-              </Text>
-            </View>
-
-            <View style={{ width: '13%', height: 2, backgroundColor: '#67BAF5', marginTop: 5, marginBottom: 10 }}>
-            </View>
-
-            <View>
-              <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', color: '#3E3E3E' }}>
-                Fitminton sale is live.
-              </Text>
-              <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#3E3E3E' }}>
-                Flat 50 % off
-              </Text>
-            </View>
-
-            <TouchableOpacity style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'flex-end' }} onPress={() => {
-              this.props.navigation.navigate('GuestTrialTerms')
+          <View onStartShouldSetResponder={() => {
+            //alert('OnPress','Clicked on View');
+            this.props.navigation.navigate('GuestTrialTerms')
+          }} >
+            <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{
+              marginHorizontal: 10, marginTop: -110, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
+              shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }
             }}>
-              <Image resizeMode="contain" style={{ width: 26, height: 26, marginRight: -10, marginTop: -7 }} source={require('../../images/vector.png')}></Image>
+
+              <Image resizeMode='contain' style={{
+                position: 'absolute',
+                top: 5,
+                left: 245,
+                right: 0,
+                bottom: 0,
+              }}
+                source={require('../../images/small_dots.png')}
+              ></Image>
 
               <View>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#000000' }}>Explore membership benefits</Text>
+                <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>Bored of routine workout?</Text>
+                <Text>
+                  <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+                    Stay fit -
+                  </Text>
+                  <Text style={{ fontSize: 18, fontFamily: 'Nunito-ExtraBold', color: '#000000' }}>
+                    {" The Fitminton Style!"}
+                  </Text>
+                </Text>
               </View>
 
-              <Image resizeMode="contain" style={{ width: 12, height: 12, marginLeft: 5, marginTop: 5 }} source={require('../../images/right_arrow.png')}>
-              </Image>
+              <View style={{ width: '13%', height: 2, backgroundColor: '#67BAF5', marginTop: 5, marginBottom: 10 }}>
+              </View>
 
-            </TouchableOpacity>
+              <View>
+                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', color: '#3E3E3E' }}>
+                  Fitminton sale is live.
+              </Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#3E3E3E' }}>
+                  Flat 50 % off
+              </Text>
+              </View>
 
-          </LinearGradient>
+              <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'flex-end' }} >
+                <Image resizeMode="contain" style={{ width: 26, height: 26, marginRight: -10, marginTop: -7 }} source={require('../../images/vector.png')}></Image>
+
+                <View>
+                  <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#000000' }}>Explore membership benefits</Text>
+                </View>
+
+                <Image resizeMode="contain" style={{ width: 12, height: 12, marginLeft: 5, marginTop: 5 }} source={require('../../images/right_arrow.png')}>
+                </Image>
+
+              </View>
+
+            </LinearGradient>
+          </View>
 
           <View style={{ marginTop: 30, marginHorizontal: 40 }}>
             <View>
@@ -351,17 +351,6 @@ export default class GuestTrial extends BaseComponent {
               <View style={{ width: '75%', marginLeft: 25 }}>
                 <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
                   Curated interactive sessions led by trained professionals
-                </Text>
-              </View>
-            </View>
-
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/ticket.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
-                  One tournament ticket free with every membership purchase
                 </Text>
               </View>
             </View>
