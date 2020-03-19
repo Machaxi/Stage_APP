@@ -222,16 +222,17 @@ export default class GuestTrial extends BaseComponent {
 
 
           <Image resizeMode='contain' style={{
+            width: '100%'
           }}
             source={require('../../images/trial_banner.png')}
           />
           {/* <View style={{ height: 236, backgroundColor: 'grey' }}>
           </View> */}
 
-          <View onStartShouldSetResponder={() => {
+          <TouchableOpacity onPress={() => {
             //alert('OnPress','Clicked on View');
             this.props.navigation.navigate('GuestTrialTerms')
-          }} >
+          }} activeOpacity={1}>
             <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{
               marginHorizontal: 10, marginTop: -110, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
               shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }
@@ -284,7 +285,7 @@ export default class GuestTrial extends BaseComponent {
               </View>
 
             </LinearGradient>
-          </View>
+          </TouchableOpacity>
 
           <View style={{ marginTop: 30, marginHorizontal: 40 }}>
             <View>
