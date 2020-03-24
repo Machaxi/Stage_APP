@@ -30,7 +30,7 @@ class ContactUs extends BaseComponent {
                         marginBottom: 20,
                         flex: 1
                     }]}>
-                        For any issues that you are facing, please send an e-mail to hello@machaxi.com and we will try to respond back to you within 24-48 hours.
+                        For any issues that you are facing, please send us an e-mail to hello@machaxi.com or call us on 96639 79929 and we will try to respond back to you within 24-48 hours.
                     </Text>
 
 
