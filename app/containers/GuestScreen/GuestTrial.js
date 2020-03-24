@@ -221,8 +221,8 @@ export default class GuestTrial extends BaseComponent {
 
 
 
-          <Image resizeMode='contain' style={{
-            width: '100%'
+          <Image resizeMode='cover' style={{
+            width: '100%',
           }}
             source={require('../../images/trial_banner.png')}
           />
@@ -234,7 +234,7 @@ export default class GuestTrial extends BaseComponent {
             this.props.navigation.navigate('GuestTrialTerms')
           }} activeOpacity={1}>
             <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{
-              marginHorizontal: 10, marginTop: -110, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
+              marginHorizontal: 10, marginTop: -100, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
               shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }
             }}>
 
