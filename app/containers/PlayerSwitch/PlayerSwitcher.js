@@ -411,7 +411,7 @@ class PlayerSwitcher extends BaseComponent {
                                                 justifyContent: 'space-between',
                                             }}>
                                                 <Text style={defaultStyle.bold_text_14}>
-                                                    Browse other Academies
+                                                    Other Machaxi Centres
                                             </Text>
 
                                                 <Image
