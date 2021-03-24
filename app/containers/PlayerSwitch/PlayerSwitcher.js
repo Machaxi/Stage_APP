@@ -35,7 +35,8 @@ class PlayerSwitcher extends BaseComponent {
 
         console.log("PlayerSwitcher");
         getData('userInfo', (value) => {
-            userData = JSON.parse(value)
+            userData = JSON.parse(value);
+            console.log('userData=================', userData);
             this.setState({
                 userData: JSON.parse(value)
             });
@@ -46,7 +47,7 @@ class PlayerSwitcher extends BaseComponent {
             } else if (userData.user['user_type'] == 'FAMILY') {
                 this.getPlayerSwitchingData()
 
-            } if (userData.user['user_type'] == 'COACH') {
+            } if (userData.user['user_type'] == 'COACH' || userData.user['user_type'] == 'ACADEMY') {
 
                 this.getCoatchSwitchingData();
             }
@@ -125,8 +126,11 @@ class PlayerSwitcher extends BaseComponent {
                 storeData("userInfo", JSON.stringify(tempuserData))
                 storeData('academy_name', item.academy_name)
                 storeData('academy_id', item.academy_id)
-                this.props.navigation.navigate('CHome', { academy_name: item.academy_name })
-
+                if (item.can_book_court) {
+                    this.props.navigation.navigate('CoachBookHome', { academy_name: item.academy_name })
+                } else {
+                    this.props.navigation.navigate('CoachHome', { academy_name: item.academy_name })
+                }
             }}>
 
                 <View style={{ margin: 10, marginTop: 20, marginBottom: 10 }}>
@@ -225,9 +229,17 @@ class PlayerSwitcher extends BaseComponent {
                     storeData('player_id', item.id)
 
                     if (tempuserData.user['user_type'] == 'PLAYER') {
-                        this.props.navigation.navigate('UHome')
+                        if (item.can_book_court) {
+                            this.props.navigation.navigate('UserBookHome')
+                        } else {
+                            this.props.navigation.navigate('UserHome')
+                        }
                     } else {
-                        this.props.navigation.navigate('PHome')
+                        if (item.can_book_court) {
+                            this.props.navigation.navigate('ParentBookHome')
+                        } else {
+                            this.props.navigation.navigate('ParentHome')
+                        }
                     }
 
 
@@ -309,7 +321,7 @@ class PlayerSwitcher extends BaseComponent {
                         }
                     </View>
 
-                    <View style={{ margin: 5 }}>
+                    {/* <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
@@ -361,61 +373,64 @@ class PlayerSwitcher extends BaseComponent {
 
                             </TouchableOpacity>
                         </Card>
-                    </View>
+                    </View> */}
 
-                    <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
+                    {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY' || userData.user['user_type'] == 'COACH') &&
 
-                                console.warn("Touch Press")
-                                this.props.navigation.navigate('AcademyListing')
+                        <View style={{ margin: 5 }}>
+                            <Card style={{ margin: 5, borderRadius: 10 }}>
+                                <TouchableOpacity onPress={() => {
 
-                            }}>
+                                    console.warn("Touch Press")
+                                    this.props.navigation.navigate('AcademyListing')
 
-                                <View style={{
-                                    margin: 10,
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    height: 40
                                 }}>
 
-                                    <Image
-                                        resizeMode="contain"
-                                        source={require('../../images/browse_academy.png')}
-                                        style={{
-                                            width: 30,
-                                            height: 30,
-                                            marginRight: 20,
-                                        }} />
-                                    <View style={{ flex: 1 }}>
+                                    <View style={{
+                                        margin: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        height: 40
+                                    }}>
 
-                                        <View style={{
-                                            flex: 1,
-                                            alignItems: 'center',
-                                            marginRight: 15,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.bold_text_14}>
-                                                Browse other Academies
+                                        <Image
+                                            resizeMode="contain"
+                                            source={require('../../images/browse_academy.png')}
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 20,
+                                            }} />
+                                        <View style={{ flex: 1 }}>
+
+                                            <View style={{
+                                                flex: 1,
+                                                alignItems: 'center',
+                                                marginRight: 15,
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                            }}>
+                                                <Text style={defaultStyle.bold_text_14}>
+                                                    Other Machaxi Centres
                                             </Text>
 
-                                            <Image
-                                                resizeMode="contain"
-                                                source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13, marginRight: 0,
-                                                }} />
+                                                <Image
+                                                    resizeMode="contain"
+                                                    source={require('../../images/path.png')}
+                                                    style={{
+                                                        width: 19,
+                                                        height: 13, marginRight: 0,
+                                                    }} />
 
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
 
 
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
+                                </TouchableOpacity>
+                            </Card>
+                        </View>
+                    }
 
                     <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>

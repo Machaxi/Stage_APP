@@ -4,8 +4,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import * as Progress from 'react-native-progress';
 import { GUEST, PLAYER, COACH, ACADEMY } from "../../components/Constants";
 
-import { View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity,
-    Dimensions, ActivityIndicator, FlatList, ScrollView, BackHandler, Linking 
+import {
+    View, ImageBackground, Text, StyleSheet, RefreshControl, Image, TouchableOpacity,
+    Dimensions, ActivityIndicator, FlatList, ScrollView, BackHandler, Linking
 } from 'react-native';
 import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
@@ -14,8 +15,9 @@ import { getCoachDashboard, getCoachSWitcher } from "../../redux/reducers/dashbo
 import { getData, storeData } from "../../components/auth";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import BaseComponent, { defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
-    getFormatTimeDate, EVENT_UPDATE_DIALOG
+import BaseComponent, {
+    defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
+    getFormatTimeDate, EVENT_UPDATE_DIALOG, PROFILE_PIC_UPDATED, EVENT_EDIT_PROFILE
 } from '../BaseComponent';
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
@@ -38,7 +40,7 @@ class CoachHome extends BaseComponent {
                     }}
                     onPress={() => {
                         let userType = navigation.getParam('userType', '')
-                        if (userType == COACH)
+                        if (userType == COACH || userType == ACADEMY)
                             navigation.navigate('SwitchPlayer')
                     }}
                     activeOpacity={.8}
@@ -85,7 +87,7 @@ class CoachHome extends BaseComponent {
                     onPress={() => {
                         navigation.toggleDrawer();
                     }}
-                    style={{padding: 7}}
+                    style={{ padding: 7 }}
                     activeOpacity={.8}>
                     <Image
                         source={require('../../images/hamburger.png')}
@@ -119,7 +121,7 @@ class CoachHome extends BaseComponent {
                             backgroundColor: '#ED2638'
                         }}>
                             <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
-                                {navigation.getParam('notification_count', '') > 99 ? '99+' :  navigation.getParam('notification_count', '')}
+                                {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}
                             </Text>
                         </View> : null}
 
@@ -333,6 +335,13 @@ class CoachHome extends BaseComponent {
                 console.log(' getCoachDashboard payload ' + user);
                 let user1 = JSON.parse(user)
 
+                try {
+                    const profile_pic = user1.data.coach_profile['profile_pic']
+                    Events.publish(PROFILE_PIC_UPDATED, profile_pic);
+                } catch (err) {
+
+                }
+
                 if (user1.success == true) {
                     global.rating = user1.data.coach_profile['ratings']
                     this.setState({
@@ -341,6 +350,7 @@ class CoachHome extends BaseComponent {
                         // strenthList:user1.data.player_profile['stats']
 
                     })
+                    Events.publish(EVENT_EDIT_PROFILE);
                 }
                 this.setState({ refreshing: false });
             }).catch((response) => {
@@ -576,7 +586,7 @@ class CoachHome extends BaseComponent {
                     }
                     style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
 
-                    {this.state.userType == COACH ?
+                    {this.state.userType == COACH || this.state.userType == ACADEMY ?
                         <View style={{ margin: 10, marginTop: 20 }}>
 
                             <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
@@ -873,60 +883,61 @@ class CoachHome extends BaseComponent {
                             </TouchableOpacity>
                         </Card>
                     </View>
-                    <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
+                    {this.state.userType == COACH &&
+                        <View style={{ margin: 5 }}>
+                            <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
+                                <TouchableOpacity onPress={() => {
 
-                                //console.warn("Touch Press")
-                                this.props.navigation.navigate('AcademyListing')
+                                    //console.warn("Touch Press")
+                                    this.props.navigation.navigate('AcademyListing')
 
-                            }}>
-                                <View style={{
-                                    marginLeft: 10, marginRight: 10,
-                                    flexDirection: 'row', height: 50
                                 }}>
-
-
-
                                     <View style={{
-                                        flex: 1,
-                                        marginRight: 15,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
+                                        marginLeft: 10, marginRight: 10,
+                                        flexDirection: 'row', height: 50
                                     }}>
-                                        <Text style={defaultStyle.regular_text_14}>
-                                            Browse Academies
+
+
+
+                                        <View style={{
+                                            flex: 1,
+                                            marginRight: 15,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <Text style={defaultStyle.regular_text_14}>
+                                                Other Machaxi Centres
                                             </Text>
 
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                resizeMode: "contain",
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
+                                            <Image source={require('../../images/path.png')}
+                                                style={{
+                                                    width: 19,
+                                                    resizeMode: "contain",
+                                                    height: 13, marginRight: 0, marginTop: 5
+                                                }} />
+
+                                        </View>
 
                                     </View>
 
-                                </View>
 
+                                </TouchableOpacity>
+                            </Card>
+                        </View>}
 
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
-                    
                     <UpdateAppDialog
                         navigation={this.state.navigation}
                         exitPressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             BackHandler.exitApp()
                             //this.props.navigation.goBack(null)
                         }}
                         updatePressed={() => {
-                            this.setState({show_must_update_alert: false})
+                            this.setState({ show_must_update_alert: false })
                             this.handleClick()
                         }}
-                        visible={show_must_update_alert} 
+                        visible={show_must_update_alert}
                     />
 
                 </ScrollView>

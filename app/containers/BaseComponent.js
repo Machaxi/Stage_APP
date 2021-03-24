@@ -79,8 +79,8 @@ global.SELECTED_PLAYER_ID = ''
 
 //===============================================================================================
 
-export const DEBUG_APP = false
-export const PROD_DEBUG = false
+export const DEBUG_APP = true
+export const PROD_DEBUG = true
 
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b"
@@ -466,25 +466,55 @@ export default class BaseComponent extends React.Component {
                 //console.warn('academy_id ', userData.academy_id)
 
                 if (userType == GUEST) {
-                    this.props.navigation.navigate('GHome')
+                    this.props.navigation.navigate('GuestBookHome')
                 }
                 else if (academy_id != null) {
 
                     if (userType == PLAYER) {
-                        this.props.navigation.navigate('UHome')
+                        if (userData.can_book_court) {
+                            this.props.navigation.navigate('UserBookHome');
+                        } else {
+                            this.props.navigation.navigate('UserHome');
+                        }
 
-                    } else if (userType == COACH || userType == ACADEMY) {
-                        this.props.navigation.navigate('CHome')
+                    } else if (userType == COACH) {
+                        if (userData.can_book_court) {
+                            this.props.navigation.navigate('CoachBookHome');
+                        } else {
+                            this.props.navigation.navigate('CoachHome');
+                        }
+                    }
+                    else if (userType == ACADEMY) {
+                        storeData('multiple', userData.has_multiple_acadmies)
+                        if (userData.has_multiple_acadmies == false) {
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('CoachBookHome');
+                            } else {
+                                this.props.navigation.navigate('CoachHome');
+                            }
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
+                        }
                     }
                     else if (userType == PARENT) {
-                        this.props.navigation.navigate('PHome')
+                        if (userData.can_book_court) {
+                            this.props.navigation.navigate('ParentBookHome');
+                        } else {
+                            this.props.navigation.navigate('ParentHome');
+                        }
                     }
                 }
                 else {
                     if (userType == PLAYER) {
                         //this.props.navigation.navigate('UHome')
                         if (!userData.has_multiple_acadmies) {
-                            this.props.navigation.navigate('UHome')
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('UserBookHome');
+                            } else {
+                                this.props.navigation.navigate('UserHome');
+                            }
 
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
@@ -495,7 +525,11 @@ export default class BaseComponent extends React.Component {
                         //this.props.navigation.navigate('CHome')
                         storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false) {
-                            this.props.navigation.navigate('CHome')
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('CoachBookHome');
+                            } else {
+                                this.props.navigation.navigate('CoachHome');
+                            }
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
                                 userType: COACH
@@ -505,7 +539,11 @@ export default class BaseComponent extends React.Component {
                     else if (userType == PARENT) {
                         //this.props.navigation.navigate('PHome')
                         if (userData.has_multiple_acadmies == false) {
-                            this.props.navigation.navigate('PHome')
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('ParentBookHome');
+                            } else {
+                                this.props.navigation.navigate('ParentHome');
+                            }
 
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
@@ -515,7 +553,7 @@ export default class BaseComponent extends React.Component {
                     }
                 }
             } else {
-                this.props.navigation.navigate('GHome')
+                this.props.navigation.navigate('GuestBookHome')
             }
 
             if (data != null)
@@ -538,7 +576,7 @@ export default class BaseComponent extends React.Component {
                 //console.warn('academy_id ', userData.academy_id)
 
                 if (userType == GUEST) {
-                    this.props.navigation.navigate('GHome')
+                    this.props.navigation.navigate('GuestBookHome')
                 }
                 else {
                     if (userType == PLAYER) {
@@ -558,7 +596,7 @@ export default class BaseComponent extends React.Component {
                     }
                 }
             } else {
-                this.props.navigation.navigate('GHome')
+                this.props.navigation.navigate('GuestBookHome')
             }
         });
     }

@@ -199,9 +199,22 @@ class UpcomingRoute extends BaseComponent {
             </View>
         )
     }
-    _renderItem = ({ item }) => (
 
-        <TouchableOpacity activeOpacity={.8}
+
+    _renderItem = ({ item }) => {
+
+        let split = item.registration_last_date.split("T")
+        let reg_last = split[0] + " 23:59:59"
+        let last_date = Moment(reg_last).format("X")
+        var today = new Date();
+        let today_time = Moment(today).format("X")
+        let show_register = item.can_register;
+        if (show_register) {
+            if (today_time > last_date)
+                show_register = false
+        }
+
+        return (<TouchableOpacity activeOpacity={.8}
             onPress={() => {
                 this.props.navigation.navigate('UpcomingTournamentDetail', {
                     tournament_id:
@@ -301,24 +314,26 @@ class UpcomingRoute extends BaseComponent {
                             </Text>
                         </Text>
 
-                        <View style={{
-                            margin: 16,
-                            alignSelf: 'center',
-                            width: 150,
-                        }}>
-                            <SkyFilledButton
-                                onPress={() => {
+                        <TouchableOpacity activeOpacity={.8}
+                            style={[styles.rounded_button, {
+                                backgroundColor: show_register ? '#67BAF5' : 'gray', marginTop: 16, marginBottom: 16, alignSelf: 'center',
+                            }]}
+                            onPress={() => {
 
-                                    this.props.navigation.navigate('UpcomingTournamentDetail', {
-                                        tournament_id:
-                                            item.id
-                                    })
-                                    //this.props.navigation.navigate('UpcomingTournamentDetail', { data: item })
+                                this.props.navigation.navigate('UpcomingTournamentDetail', {
+                                    tournament_id:
+                                        item.id
+                                })
 
-                                    //this.getFixtureData(item.id)
+                            }}>
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    fontFamily: 'Quicksand-Medium'
                                 }}
-                            >Register</SkyFilledButton>
-                        </View>
+                            >Register</Text>
+                        </TouchableOpacity>
 
 
                         {/* <View style={{ flexDirection: 'row' }}>
@@ -359,9 +374,9 @@ class UpcomingRoute extends BaseComponent {
                 </View>
 
             </Card>
-        </TouchableOpacity>
+        </TouchableOpacity>);
 
-    );
+    };
 
     render() {
 

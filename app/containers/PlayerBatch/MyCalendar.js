@@ -154,7 +154,7 @@ class MyCalendar extends BaseComponent {
         //console.warn('attendanceSummary', data);
         //console.warn('this.state.isAttendanceHappenedInMonth', this.state.isAttendanceHappenedInMonth);
         //console.warn('this.state.selectedDateData', this.state.selectedDateData);
-        const {selectedDateData} = this.state
+        const { selectedDateData } = this.state
         return (
 
             <View style={styles.summaryCardOuter}>
@@ -246,9 +246,17 @@ class MyCalendar extends BaseComponent {
         let d = new Date(currentYear, currentMonth - 1, 1);
         //alert("First Day is " + currentMonth + " y = " + currentYear+" days "+days);
 
+
+        console.log('currentMonth', currentMonth);
+        console.log('currentYear', currentYear);
+        console.log('days', days);
+        console.log('d', d);
+        console.log('d.getDay()', d.getDay());
+
+
         let index = 0
         let array = []
-        for (let i = 1; i < d.getDay(); i++) {
+        for (let i = 1; i <= d.getDay(); i++) {
             array[index++] = { day: "" }
         }
 
@@ -257,7 +265,7 @@ class MyCalendar extends BaseComponent {
         }
 
 
-        for (let i = index; i <= 35; i++) {
+        for (let i = index; i <= 34; i++) {
             array[index++] = { day: "" }
         }
 
@@ -400,6 +408,10 @@ class MyCalendar extends BaseComponent {
                 }}>
                     <Text style={
                         styles.text_header}>
+                        Sun
+                    </Text>
+                    <Text style={
+                        styles.text_header}>
                         Mon
                     </Text>
                     <Text style={
@@ -421,10 +433,6 @@ class MyCalendar extends BaseComponent {
                     <Text style={
                         styles.text_header}>
                         Sat
-                    </Text>
-                    <Text style={
-                        styles.text_header}>
-                        Sun
                     </Text>
                 </View>
 
@@ -534,16 +542,16 @@ class MyCalendar extends BaseComponent {
                         showsVerticalScrollIndicator={false}
                         scrollEnabled={false}
                         style={{
-                            height: 300
+                            //height: 325
                         }}
                         contentContainerStyle={{
-                            flexGrow: 0,
+                            flexGrow: 1,
 
                         }}
                         columnWrapperStyle={{
                             flex: 1,
                             alignItems: 'center',
-                            justifyContent: 'space-between'
+                            //justifyContent: 'space-between'
                         }}
 
                         numColumns={7}

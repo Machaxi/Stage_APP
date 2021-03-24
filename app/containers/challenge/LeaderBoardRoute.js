@@ -172,7 +172,7 @@ class LeaderboardRoute extends BaseComponent {
     return (
 
       <View style={styles.dashboardPageContainer} >
-        <PTRView onRefresh={this._refresh} >  
+        {/* <PTRView onRefresh={this._refresh} >   */}
           {this.listHeader()}
 
           <View style={{ width: '45.33%', paddingLeft: 16 }}>
@@ -267,7 +267,7 @@ class LeaderboardRoute extends BaseComponent {
           }
 
 
-        </PTRView>
+        {/* </PTRView> */}
       </View>
     );
   }
@@ -300,6 +300,7 @@ const styles = StyleSheet.create({
     elevation: 1
   },
   searchBox: {
+    height: 40,
     marginLeft: 8,
     backgroundColor: 'white',
     borderRadius: 16,

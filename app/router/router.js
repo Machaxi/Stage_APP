@@ -84,6 +84,11 @@ import Test from '../containers/welcome/Test'
 import ContactUs from '../containers/util/ContactUs'
 import FaqScreen from '../containers/util/FaqScreen'
 import EnrollmentForm from '../containers/profile/EnrollmentForm';
+import GuestTrial from '../containers/GuestScreen/GuestTrial'
+import GuestTrialTerms from '../containers/GuestScreen/GuestTrialTerms'
+import SaveGuestTrial from '../containers/GuestScreen/SaveGuestTrial'
+import PaymentDues from '../containers/payment/PaymentDues'
+import PaymentReport from '../containers/payment/PaymentReport'
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -145,9 +150,9 @@ const loginModule = createStackNavigator({
         screen: ImageGuidelines,
         navigationOptions: ({ navigation }) => ({
             title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
-            showMenuAction={false} 
-            showBackAction={true} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -162,6 +167,9 @@ const loginModule = createStackNavigator({
 
 const GuestHomeModule = createStackNavigator({
     //All the screen from the Screen1 will be indexed here
+    GuestTrial: {
+        screen: GuestTrial,
+    },
     AcademyListing: {
         screen: AcademyListing,
     },
@@ -392,9 +400,9 @@ const GuestHomeModule = createStackNavigator({
         screen: ImageGuidelines,
         navigationOptions: ({ navigation }) => ({
             title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
-            showMenuAction={false} 
-            showBackAction={true} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -404,13 +412,41 @@ const GuestHomeModule = createStackNavigator({
 
         })
     },
+    GuestTrialTerms: {
+        screen: GuestTrialTerms,
+        navigationOptions: ({ navigation }) => ({
+            title: "Trial Session",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+        })
+    },
+    SaveGuestTrial: {
+        screen: SaveGuestTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "Trial Session",
+            headerTitleStyle: style.headerStyle,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showDrawer={false}
+                showBackAction={true}
+            />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showNotification={false} />,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
 
-    
+            headerTintColor: '#000',
+        })
+    }
+
 
 })
 
-
-const tabBarController = createBottomTabNavigator(
+const tabBarControllerBook = createBottomTabNavigator(
     {
         Home: {
             screen: userHomeModule,
@@ -474,6 +510,81 @@ const tabBarController = createBottomTabNavigator(
             }
 
         },
+
+    })
+
+
+const playerBookDrawer = createDrawerNavigator({
+
+
+    playerfirst: {
+        screen: tabBarControllerBook,
+        // navigationOptions: {
+        //     header: <CustomHeader title="Academy" />,
+        // }
+    },
+
+}, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.86,
+    }
+);
+
+
+const tabBarController = createBottomTabNavigator(
+    {
+        Home: {
+            screen: userHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Home',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Home'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
+
+            },
+
+
+        },
+        Batch: {
+            screen: userBatchModule,
+            navigationOptions: {
+                tabBarLabel: 'Batch',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Batch'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_batch.png')} />,
+            }
+
+        },
+        Tournament: {
+            screen: TournamentModule,
+            navigationOptions: {
+                tabBarLabel: 'Tournament',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Tournament'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
+            }
+
+        },
+        Challenge: {
+            screen: userChallengeModule,
+            navigationOptions: {
+                tabBarLabel: 'Challenge',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Challenge'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_challenge.png')} />,
+            }
+
+        }
 
     })
 
@@ -569,7 +680,7 @@ const coachHomeModule = createStackNavigator({
         screen: EditProfile,
         navigationOptions: ({ navigation }) => ({
             title: "Edit Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}/>,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -1000,9 +1111,9 @@ const coachHomeModule = createStackNavigator({
         screen: ImageGuidelines,
         navigationOptions: ({ navigation }) => ({
             title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} 
-            showMenuAction={false} 
-            showBackAction={true} />,
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
             headerRight: <RightMenuToolbar navigationProps={navigation}
                 navigation={navigation} showHome={false} />,
             headerTitleStyle: style.headerStyle,
@@ -1012,6 +1123,38 @@ const coachHomeModule = createStackNavigator({
 
         })
     },
+    DuePaymentsScreen: {
+        screen: PaymentDues,
+        navigationOptions: ({ navigation }) => ({
+            title: "Payment Dues",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    },
+    PaymentReport: {
+        screen: PaymentReport,
+        navigationOptions: ({ navigation }) => ({
+            title: "Payment Report",
+            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+                showMenuAction={false}
+                showBackAction={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation}
+                navigation={navigation} showHome={false} />,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#FFFFFF',
+            },
+
+        })
+    }
 
 
 }, {
@@ -1022,8 +1165,7 @@ const coachHomeModule = createStackNavigator({
     }
 );
 
-
-const tabBarControllerCoach = createBottomTabNavigator(
+const tabBarControllerBookCoach = createBottomTabNavigator(
     {
         Home: {
             screen: coachHomeModule,
@@ -1091,6 +1233,81 @@ const tabBarControllerCoach = createBottomTabNavigator(
 
 
 
+const coachBookDrawer = createDrawerNavigator({
+
+
+    coachfirst: {
+        screen: tabBarControllerBookCoach,
+        // navigationOptions: {
+        //     header: <CustomHeader title="Academy" />,
+        // }
+    },
+
+}, {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.86,
+    }
+);
+
+
+const tabBarControllerCoach = createBottomTabNavigator(
+    {
+        Home: {
+            screen: coachHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Home',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Home'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
+
+            },
+
+
+        },
+        Batch: {
+            screen: coachBatchModule,
+            navigationOptions: {
+                tabBarLabel: 'Batch',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Batch'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_batch.png')} />,
+            }
+
+        },
+        Tournament: {
+            screen: TournamentModule,
+            navigationOptions: {
+                tabBarLabel: 'Tournament',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Tournament'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
+            }
+
+        },
+        Performence: {
+            screen: coachPerfomenceModule,
+            navigationOptions: {
+                tabBarLabel: 'Performance',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Performance'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_performance.png')} />,
+            }
+
+        }
+    })
+
+
+
 const coachDrawer = createDrawerNavigator({
 
 
@@ -1109,7 +1326,7 @@ const coachDrawer = createDrawerNavigator({
     }
 );
 
-const tabBarControllerGuest = createBottomTabNavigator(
+const tabBarControllerBookGuest = createBottomTabNavigator(
     {
         Home: {
             screen: GuestHomeModule,
@@ -1135,26 +1352,25 @@ const tabBarControllerGuest = createBottomTabNavigator(
             }
 
         },
-        BookandPlay: {
-            screen: BookPlayModule,
-            navigationOptions: {
-                tabBarLabel: 'Book and Play',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Book&Play'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_booking.png')} />,
-            }
-        },
+        // BookandPlay: {
+        //     screen: BookPlayModule,
+        //     navigationOptions: {
+        //         tabBarLabel: 'Book and Play',
+        //         tabBarLabel: ({ focused }) =>
+        //             <TabBarHighlightLabel
+        //                 label='Book&Play'
+        //                 focused={focused}
+        //                 activeIcon={require('../images/ic_tab_booking.png')} />,
+        //     }
+        // },
 
     })
 
-
-const guestDrawer = createDrawerNavigator({
+const guestBookDrawer = createDrawerNavigator({
 
 
     Guestfirst: {
-        screen: tabBarControllerGuest,
+        screen: tabBarControllerBookGuest,
         // navigationOptions: {
         //     header: <CustomHeader title="Academy" />,
         // }
@@ -1618,8 +1834,7 @@ const parentHomeModule = createStackNavigator({
 }
 );
 
-
-const tabBarControllerParent = createBottomTabNavigator(
+const tabBarControllerBookParent = createBottomTabNavigator(
     {
         Home: {
             screen: parentHomeModule,
@@ -1685,6 +1900,80 @@ const tabBarControllerParent = createBottomTabNavigator(
 
     })
 
+
+const tabBarControllerParent = createBottomTabNavigator(
+    {
+        Home: {
+            screen: parentHomeModule,
+            navigationOptions: {
+                tabBarLabel: 'Home',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Home'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_home.png')} />,
+            },
+
+
+        },
+        Batch: {
+            screen: userBatchModule,
+            navigationOptions: {
+                tabBarLabel: 'Batch',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Batch'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_batch.png')} />,
+            }
+
+        },
+        Tournament: {
+            screen: TournamentModule,
+            navigationOptions: {
+                tabBarLabel: 'Tournament',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Tournament'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_tournament.png')} />,
+            }
+
+        },
+        Challenge: {
+            screen: userChallengeModule,
+            navigationOptions: {
+                tabBarLabel: 'Challenge',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Challenge'
+                        focused={focused}
+                        activeIcon={require('../images/ic_tab_challenge.png')} />,
+            }
+
+        }
+
+    })
+
+const parentBookDrawer = createDrawerNavigator({
+
+
+    Guestfirst: {
+        screen: tabBarControllerBookParent,
+        // navigationOptions: {
+        //     header: <CustomHeader title="Academy" />,
+        // }
+    },
+
+},
+    {
+        contentComponent: ({ navigation }) => {
+            return (<CoachMenuDrawer navigation={navigation} />)
+        },
+        drawerWidth: Dimensions.get('window').width * 0.86,
+    }
+);
+
 const parentDrawer = createDrawerNavigator({
 
 
@@ -1703,6 +1992,7 @@ const parentDrawer = createDrawerNavigator({
         drawerWidth: Dimensions.get('window').width * 0.86,
     }
 );
+
 const TournamentRegistration = createStackNavigator({
 
     Registration: {
@@ -1816,18 +2106,31 @@ const BaseNavigator = createSwitchNavigator({
     Login: {
         screen: loginModule
     },
-    PHome: {
-        screen: parentDrawer
+    /* navigation with book and play*/
+    ParentBookHome: {
+        screen: parentBookDrawer
     },
-    GHome: {
-        screen: guestDrawer,
+    GuestBookHome: {
+        screen: guestBookDrawer,
 
     },
-    CHome: {
+    CoachBookHome: {
+        screen: coachBookDrawer,
+
+    },
+    UserBookHome: {
+        screen: playerBookDrawer,
+
+    },
+    /* navigation without book and play*/
+    ParentHome: {
+        screen: parentDrawer
+    },
+    CoachHome: {
         screen: coachDrawer,
 
     },
-    UHome: {
+    UserHome: {
         screen: playerDrawer,
 
     },

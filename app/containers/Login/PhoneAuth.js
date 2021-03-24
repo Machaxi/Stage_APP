@@ -167,10 +167,10 @@ class PhoneAuth extends BaseComponent {
                 })
                 .catch(error => {
                     this.progress(false)
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         alert(`Code Confirm Error: ${error.message}`)
 
-                    },500)
+                    }, 500)
                     this.setState({ message: `Code Confirm Error: ${error.message}` })
                 }
                 );
@@ -217,140 +217,163 @@ class PhoneAuth extends BaseComponent {
             this.setState({
                 isCall: false
             }, () => {
-                    console.log('phoneNumber=>', JSON.stringify(user1))
-                    let os = "IOS"
-                    if (Platform.OS === 'android') {
-                        os = "android";
-                    }
-                    let fcm_token = this.state.firebase_token
-                    let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
+                console.log('phoneNumber=>', JSON.stringify(user1))
+                let os = "IOS"
+                if (Platform.OS === 'android') {
+                    os = "android";
+                }
+                let fcm_token = this.state.firebase_token
+                let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
 
-                    var dataDic = {};
-                    var dict = {};
-                    dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
-                    dict['firebase_token'] = token;
-                    dict['device_type'] = os;
-                    dict['app_version'] = '1.1.0';
-                    dict['fcm_token'] = fcm_token;
-                    dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
-                    dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
-                    dict['has_firebase_check'] = getFirebaseCheck();
-
-
-                    dataDic['data'] = dict;
-                    console.log("dicttttc ", JSON.stringify(dict))
-
-                    this.progress(true)
-                    this.props.doLogin(dataDic).then(() => {
-                        this.progress(false)
-                        //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
-                        //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
-                        let user = JSON.stringify(this.props.data.user);
-                        console.log('doLogin-payload ' + JSON.stringify(user));
-                        let user1 = JSON.parse(user)
-
-                        if (user1.success == true) {
-                            console.log(' user response  ' + user1.success_message);
-
-                            var userData = user1['data'];
-                            var userInfoData = userData['user'];
-                            storeData("userInfo", JSON.stringify(userData))
-                            onSignIn()
-
-                            let is_navigation_to_tournament = this.state.is_navigation_to_tournament
-                            //Registarion for tournament
-                            // if (is_navigation_to_tournament) {
-
-                            //     if (userData.is_existing_user == true)
-                            //         this.props.navigation.navigate('RegistrationSteps')
-                            //     else
-                            //         this.props.navigation.navigate('EditProfile')
-
-                            //     storeData(TOURNAMENT_REGISTER, false)
-                            // } else {
+                var dataDic = {};
+                var dict = {};
+                dict['phone_number'] = user1.phoneNumber;//"+919214088636"//
+                dict['firebase_token'] = token;
+                dict['device_type'] = os;
+                dict['app_version'] = '1.1.0';
+                dict['fcm_token'] = fcm_token;
+                dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
+                dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
+                dict['has_firebase_check'] = getFirebaseCheck();
 
 
-                            if (userData.is_existing_user == true) {
-                                if (userInfoData.user_type == GUEST) {
+                dataDic['data'] = dict;
+                console.log("dicttttc ", JSON.stringify(dict))
 
-                                    this.props.navigation.navigate('GHome')
+                this.progress(true)
+                this.props.doLogin(dataDic).then(() => {
+                    this.progress(false)
+                    //  console.log(' user response payload ' +  JSON.stringify(this.props.data));
+                    //console.log(' user response payload ' +  JSON.stringify( this.props.data.user));
+                    let user = JSON.stringify(this.props.data.user);
+                    console.log('doLogin-payload ' + JSON.stringify(user));
+                    let user1 = JSON.parse(user)
 
-                                } else if (userInfoData.user_type == PLAYER) {
-                                    storeData('multiple', userData.has_multiple_acadmies)
-                                    if (!userData.has_multiple_acadmies && userData.academy_id != null) {
-                                        this.props.navigation.navigate('UHome')
+                    if (user1.success == true) {
+                        console.log(' user response  ' + user1.success_message);
 
+                        var userData = user1['data'];
+                        var userInfoData = userData['user'];
+                        storeData("userInfo", JSON.stringify(userData))
+                        onSignIn()
+
+                        let is_navigation_to_tournament = this.state.is_navigation_to_tournament
+                        //Registarion for tournament
+                        // if (is_navigation_to_tournament) {
+
+                        //     if (userData.is_existing_user == true)
+                        //         this.props.navigation.navigate('RegistrationSteps')
+                        //     else
+                        //         this.props.navigation.navigate('EditProfile')
+
+                        //     storeData(TOURNAMENT_REGISTER, false)
+                        // } else {
+
+
+                        if (userData.is_existing_user == true) {
+                            if (userInfoData.user_type == GUEST) {
+                                this.props.navigation.navigate('GuestBookHome');
+                            } else if (userInfoData.user_type == PLAYER) {
+                                storeData('multiple', userData.has_multiple_acadmies)
+                                if (!userData.has_multiple_acadmies && userData.academy_id != null) {
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('UserBookHome');
                                     } else {
-                                        this.props.navigation.navigate('SwitchPlayer', {
-                                            userType: 'PLAYER'
-                                        })
+                                        this.props.navigation.navigate('UserHome');
+                                    }
+                                } else {
+                                    this.props.navigation.navigate('SwitchPlayer', {
+                                        userType: 'PLAYER'
+                                    })
+                                }
+
+                            } else if (userInfoData.user_type == PARENT) {
+                                storeData('multiple', userData.has_multiple_acadmies)
+                                if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('ParentBookHome');
+                                    } else {
+                                        this.props.navigation.navigate('ParentHome');
                                     }
 
-                                } else if (userInfoData.user_type == PARENT) {
-                                    storeData('multiple', userData.has_multiple_acadmies)
-                                    if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                                        this.props.navigation.navigate('PHome')
+                                } else {
+                                    this.props.navigation.navigate('SwitchPlayer', {
+                                        userType: PLAYER
+                                    })
+                                }
 
+                            }
+                            else if (userInfoData.user_type == COACH) {
+                                storeData('multiple', userData.has_multiple_acadmies)
+                                if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('CoachBookHome')
                                     } else {
-                                        this.props.navigation.navigate('SwitchPlayer', {
-                                            userType: PLAYER
-                                        })
+                                        this.props.navigation.navigate('CoachHome');
                                     }
-
+                                } else {
+                                    this.props.navigation.navigate('SwitchPlayer', {
+                                        userType: COACH
+                                    })
                                 }
-                                else if (userInfoData.user_type == COACH) {
-                                    storeData('multiple', userData.has_multiple_acadmies)
-                                    if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                                        this.props.navigation.navigate('CHome')
+
+                            }
+                            else if (userInfoData.user_type == ACADEMY) {
+                                //==================== NOTE ==========================
+                                //      Forcefully adding coach_id = '', to run coach section as academy
+                                //      academy section does not require coach_id
+                                //=====================================================
+                                userData['coach_id'] = ''
+                                storeData("userInfo", JSON.stringify(userData))
+                                storeData('academy_name', userData.user.name)
+                                console.log('coach userData => ', JSON.stringify(userData))
+                                storeData('multiple', userData.has_multiple_acadmies)
+                                if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                                    if (userData.can_book_court) {
+                                        this.props.navigation.navigate('CoachBookHome');
                                     } else {
-                                        this.props.navigation.navigate('SwitchPlayer', {
-                                            userType: COACH
-                                        })
+                                        this.props.navigation.navigate('CoachHome');
                                     }
-
+                                } else {
+                                    this.props.navigation.navigate('SwitchPlayer', {
+                                        userType: COACH
+                                    })
                                 }
-                                else if (userInfoData.user_type == ACADEMY) {
-                                    //==================== NOTE ==========================
-                                    //      Forcefully adding coach_id = '', to run coach section as academy
-                                    //      academy section does not require coach_id
-                                    //=====================================================
-                                    userData['coach_id'] = ''
-                                    storeData("userInfo", JSON.stringify(userData))
-                                    storeData('academy_name', userData.user.name)
-                                    console.log('coach userData => ', JSON.stringify(userData))
-                                    this.props.navigation.navigate('CHome')
 
-                                    // }
 
-                                    //
-                                    // if(otherParam == true){
-                                    //     this.props.navigation.navigate('DrawerNavigator')
-                                    // }
-                                    // else
-                                    // {
-                                    //     this.props.navigation.goBack();
+                                // }
 
-                                }
-                                else {
-                                    this.props.navigation.navigate('EditProfile')
-                                }
-                            } else {
-                                this.props.navigation.navigate('GHome')
-                                setTimeout(() => {
-                                    Events.publish('OPEN_PROFILE')
-                                }, 500)
+                                //
+                                // if(otherParam == true){
+                                //     this.props.navigation.navigate('DrawerNavigator')
+                                // }
+                                // else
+                                // {
+                                //     this.props.navigation.goBack();
+
+                            }
+                            else {
+                                this.props.navigation.navigate('EditProfile')
                             }
                         } else {
-                            alert('Invalid credentials')
+                            this.props.navigation.navigate('GuestBookHome');
+                            setTimeout(() => {
+                                Events.publish('OPEN_PROFILE')
+                            }, 500)
                         }
+                    } else {
+                        alert('Invalid credentials')
+                    }
 
 
-                    }).catch((response) => {
-                        this.progress(false)
-                        //handle form errors
-                        console.log(response);
-                    })
-                }
+
+
+                }).catch((response) => {
+                    this.progress(false)
+                    //handle form errors
+                    console.log(response);
+                })
+            }
             )
         }
     }
@@ -415,13 +438,15 @@ class PhoneAuth extends BaseComponent {
 
                 if (userData.is_existing_user == true) {
                     if (userInfoData.user_type == GUEST) {
-
-                        this.props.navigation.navigate('GHome')
-
+                        this.props.navigation.navigate('GuestBookHome');
                     } else if (userInfoData.user_type == PLAYER) {
                         storeData('multiple', userData.has_multiple_acadmies)
                         if (!userData.has_multiple_acadmies && userData.academy_id != null) {
-                            this.props.navigation.navigate('UHome')
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('UserBookHome');
+                            } else {
+                                this.props.navigation.navigate('UserHome');
+                            }
 
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
@@ -432,7 +457,11 @@ class PhoneAuth extends BaseComponent {
                     } else if (userInfoData.user_type == PARENT) {
                         storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                            this.props.navigation.navigate('PHome')
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('ParentBookHome');
+                            } else {
+                                this.props.navigation.navigate('ParentHome');
+                            }
 
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
@@ -444,7 +473,11 @@ class PhoneAuth extends BaseComponent {
                     else if (userInfoData.user_type == COACH) {
                         storeData('multiple', userData.has_multiple_acadmies)
                         if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                            this.props.navigation.navigate('CHome')
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('CoachBookHome');
+                            } else {
+                                this.props.navigation.navigate('CoachHome');
+                            }
                         } else {
                             this.props.navigation.navigate('SwitchPlayer', {
                                 userType: COACH
@@ -461,7 +494,17 @@ class PhoneAuth extends BaseComponent {
                         storeData("userInfo", JSON.stringify(userData))
                         storeData('academy_name', userData.user.name)
                         console.log('coach userData => ', JSON.stringify(userData))
-                        this.props.navigation.navigate('CHome')
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                            if (userData.can_book_court) {
+                                this.props.navigation.navigate('CoachBookHome');
+                            } else {
+                                this.props.navigation.navigate('CoachHome');
+                            }
+                        } else {
+                            this.props.navigation.navigate('SwitchPlayer', {
+                                userType: COACH
+                            })
+                        }
 
                     }
 
@@ -480,8 +523,7 @@ class PhoneAuth extends BaseComponent {
                         this.props.navigation.navigate('EditProfile')
                     }
                 } else {
-
-                    this.props.navigation.navigate('GHome')
+                    this.props.navigation.navigate('GuestBookHome');
                     setTimeout(() => {
                         Events.publish('OPEN_PROFILE')
                     }, 500)
@@ -638,7 +680,7 @@ class PhoneAuth extends BaseComponent {
                         alignItems: 'center'
                     }}
                     onPress={() => {
-                        this.props.navigation.navigate('GHome')
+                        this.props.navigation.navigate('GuestBookHome')
                     }}>
 
                     <Text style={{
@@ -745,39 +787,39 @@ class PhoneAuth extends BaseComponent {
 
                 {
                     Platform.OS == 'ios' ?
-                    <OTPInputView
-                        style={{width: '80%', height: 200}}
-                        pinCount={6}
-                        // autoFocusOnLoad
-                        codeInputFieldStyle={{
-                            fontSize: 18,
-                            width: 30,
-                            height: 45,
-                            borderWidth: 0,
-                            borderBottomWidth: 1,
-                        }}
-                        codeInputHighlightStyle={{borderColor: "#03DAC6",}}
-                        onCodeFilled = {(code) => this.verify(code)}
-                    /> :
-                    <CodeInput
-                        ref="codeinput"
-                        className="border-b"
-                        keyboardType="numeric"
-                        activeColor="#C4C4C4"
-                        inactiveColor="#C4C4C4"
-                        inputPosition='left'
+                        <OTPInputView
+                            style={{ width: '80%', height: 200 }}
+                            pinCount={6}
+                            // autoFocusOnLoad
+                            codeInputFieldStyle={{
+                                fontSize: 18,
+                                width: 30,
+                                height: 45,
+                                borderWidth: 0,
+                                borderBottomWidth: 1,
+                            }}
+                            codeInputHighlightStyle={{ borderColor: "#03DAC6", }}
+                            onCodeFilled={(code) => this.verify(code)}
+                        /> :
+                        <CodeInput
+                            ref="codeinput"
+                            className="border-b"
+                            keyboardType="numeric"
+                            activeColor="#C4C4C4"
+                            inactiveColor="#C4C4C4"
+                            inputPosition='left'
 
-                        cellBorderWidth={1}
-                        space={10}
-                        autoFocus={true}
-                        codeLength={6}
-                        size={40}
-                        onFulfill={(code) => this.verify(code)}
-                        containerStyle={{ marginTop: 50, height: 60, flex: 0 }}
-                        codeInputStyle={{ color: "#404040", fontSize: 32, }}
-                    />
+                            cellBorderWidth={1}
+                            space={10}
+                            autoFocus={true}
+                            codeLength={6}
+                            size={40}
+                            onFulfill={(code) => this.verify(code)}
+                            containerStyle={{ marginTop: 50, height: 60, flex: 0 }}
+                            codeInputStyle={{ color: "#404040", fontSize: 32, }}
+                        />
                 }
-                
+
 
 
                 <View style={{

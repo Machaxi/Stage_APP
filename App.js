@@ -312,8 +312,10 @@ class App extends BaseComponent {
         OneSignal.enableVibrate(true);
         OneSignal.inFocusDisplaying(2)
 
-        if (DEBUG_APP)
-            alert('You are running debug app.')
+        if (DEBUG_APP){
+            //alert('You are running debug app.')
+        }
+            
     }
 
     componentDidMount() {

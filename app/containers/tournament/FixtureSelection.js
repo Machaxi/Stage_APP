@@ -184,6 +184,11 @@ class FixtureSelection extends BaseComponent {
         let gender = this.state.selected_gender
         const filter = []
 
+        console.log('this.state.selected_tournament_category', this.state.selected_tournament_category)
+
+        console.log('this.state.selected_gender', this.state.selected_gender)
+
+
         if (category != '') {
 
             const tournament_fixtures = this.state.tournament_fixtures
@@ -345,7 +350,12 @@ class FixtureSelection extends BaseComponent {
                                                         onValueChange={(value) => {
                                                             this.setState({
                                                                 selected_tournament_category: value,
-                                                            }, () => this.filterMatch());
+                                                            }, () => {
+
+                                                                if (this.state.selected_tournament_category != '' && this.state.selected_gender) {
+                                                                    this.filterMatch();
+                                                                }
+                                                            });
                                                             // setTimeout(() => {
                                                             //     this.filterMatch()
                                                             // }, 100)
@@ -382,7 +392,11 @@ class FixtureSelection extends BaseComponent {
                                                         onValueChange={(value) => {
                                                             this.setState({
                                                                 selected_gender: value,
-                                                            }, () => this.filterMatch());
+                                                            }, () => {
+                                                                if (this.state.selected_tournament_category != '' && this.state.selected_gender) {
+                                                                    this.filterMatch()
+                                                                }
+                                                            });
                                                             // setTimeout(() => {
                                                             //     this.filterMatch()
                                                             // }, 100)
@@ -486,8 +500,10 @@ class FixtureSelection extends BaseComponent {
                                                     alignItems: 'center',
                                                     textAlign: 'center'
                                                 }]}>
-                                                    {this.state.selected_tournament_category == '' ?
-                                                        'Select Category to see fixture' : 'Fixture not available'}
+                                                    {(this.state.selected_tournament_category == '' && this.state.selected_gender == '') ?
+                                                        'Fixture not available' :
+                                                        (this.state.selected_tournament_category == '') ? 'Select Category to see fixture' : 'Select Gender to see fixture'
+                                                    }
                                                 </Text>
                                             }
                                         </View> :

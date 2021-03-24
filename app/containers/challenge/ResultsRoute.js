@@ -267,7 +267,7 @@ class ResultsRoute extends BaseComponent {
 
       <View style={styles.resultsPageContainer} >
         <PTRView onRefresh={this._refresh} >
-          <View style={{ width: '45.33%', paddingLeft: 16 }}>
+          <View style={{ width: '45.33%', paddingLeft: 16, marginTop: 15 }}>
 
             <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
             <MonthYearDialog
