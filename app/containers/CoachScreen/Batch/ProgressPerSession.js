@@ -40,6 +40,7 @@ class ProgressPerSession extends BaseComponent {
             searchArray: []
         }
         this.state.id = this.props.navigation.getParam('id', '');
+        this.state.batchId = this.props.navigation.getParam('batch_id','')
     }
 
     componentDidMount() {
@@ -53,8 +54,8 @@ class ProgressPerSession extends BaseComponent {
         console.log('in component did mount');
         getData('header', (value) => {
 
-            this.props.getAcademyPlayersList(this.state.id, value).then(() => {
-                console.log('Res=> ' + JSON.stringify(this.props.data.res))
+            this.props.getBatchPlayersList(value,this.state.batchId).then(() => {
+                console.log('Players Res=> ' , JSON.stringify(this.props.data.res))
                 let status = this.props.data.res.success
                 if (status) {
                     let user1 = this.props.data.res
@@ -246,7 +247,8 @@ const mapStateToProps = state => {
                 };
             };
 const mapDispatchToProps = {
-                        getAcademyPlayersList
+                        getAcademyPlayersList,
+                        getBatchPlayersList
                     };
                     export default connect(mapStateToProps, mapDispatchToProps)(ProgressPerSession);
                     
