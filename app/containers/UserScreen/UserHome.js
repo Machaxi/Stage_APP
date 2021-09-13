@@ -63,6 +63,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import SportSpinner from "../../components/custom/SportSpinner";
 import BottomSheet from "react-native-simple-bottom-sheet";
 import ItemSelection from "../../components/custom/ItemSelection";
+import RNPickerSelect from "react-native-picker-select";
 var deviceWidth = Dimensions.get("window").width - 20;
 
 var is_show_badge = false;
@@ -250,6 +251,8 @@ class UserHome extends BaseComponent {
       modalVisible: false,
       spinner: false,
       sportsOptionsVisible: false,
+      currentSportName: "",
+      isStatsLoading: false,
     };
 
     const { navigation } = this.props.navigation.setParams({
@@ -258,6 +261,7 @@ class UserHome extends BaseComponent {
     //StatusBar.setBackgroundColor("#262051")
     //StatusBar.setBarStyle('light-content', true)
   }
+
   componentWillUnmount() {
     this.backHandler.remove();
     this.willFocusSubscription.remove();
@@ -452,20 +456,27 @@ class UserHome extends BaseComponent {
           let sportsList, currentSportId, currentSportName;
 
           if (user1.data["sports"] != null) {
-            sportsList = user1.data["sports"];
+            sportsList = user1.data["sports"].map((item) => {
+              return { label: item.name, value: item.id };
+            });
             this.setState({ sportsList });
           }
-          console.log(sportsList);
+
           //Getting current Sport Id
           if (user1.data["player_profile"] != null) {
             currentSportId = user1.data["player_profile"].sport_id;
+
             currentSportName = sportsList.find((item) => {
-              return item.id == currentSportId;
-            }).name;
+              return item.value == currentSportId;
+            }).label;
+
             this.setState({
               currentSportId,
-              currentSportName,
             });
+            //  this.setState({
+            //    currentSportId,
+            //    currentSportName,
+            //  });
           }
 
           if (user1.data["coach_data"] != null && user1.data["coach_data"]) {
@@ -534,9 +545,11 @@ class UserHome extends BaseComponent {
               Events.publish(EVENT_EDIT_PROFILE);
             });
           }
+          this.setState({ isStatsLoading: false });
         })
         .catch((response) => {
           //handle form errors
+          this.setState({ isStatsLoading: false });
           console.log(response);
         });
     });
@@ -759,7 +772,8 @@ class UserHome extends BaseComponent {
     this.setState({ sportsOptionsVisible: true });
   };
   onSportItemSelected = (item) => {
-    const currentSportId = item.id;
+    this.setState({ isStatsLoading: true });
+    const currentSportId = item.value;
     this.getPlayerDashboardData(
       this.state.academy_id,
       global.SELECTED_PLAYER_ID,
@@ -767,7 +781,6 @@ class UserHome extends BaseComponent {
     );
     this.setState({
       currentSportId,
-      currentSportName: item.name,
       sportsOptionsVisible: false,
     });
   };
@@ -780,10 +793,14 @@ class UserHome extends BaseComponent {
     let academy_id = this.state.academy_id;
     let show_must_update_alert = this.state.show_must_update_alert;
 
-    if (this.props.data.loading) {
+    if (this.props.data.loading && !this.state.isStatsLoading) {
       return (
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <ActivityIndicator size="large" color="#67BAF5" />
         </View>
@@ -933,12 +950,12 @@ class UserHome extends BaseComponent {
             visible={this.state.spinner}
             textStyle={defaultStyle.spinnerTextStyle}
           />
-          <ItemSelection
+          {/* <ItemSelection
             visible={this.state.sportsOptionsVisible}
             data={this.state.sportsList}
             onItemSelected={this.onSportItemSelected}
             onSelectionCancelled={this.onSelectionCancelled}
-          />
+          /> */}
 
           <ScrollView
             refreshControl={
@@ -964,10 +981,10 @@ class UserHome extends BaseComponent {
                 player_profile={this.state.player_profile}
               />
             </ViewShot>
-            <SportSpinner
+            {/* <SportSpinner
               displayText={this.state.currentSportName}
               onClicked={this.onSportSpinnerClicked}
-            />
+            /> */}
             <PlayerHeader
               is_tooblar={true}
               player_profile={this.state.player_profile}
@@ -1010,14 +1027,20 @@ class UserHome extends BaseComponent {
               </CustomeCard>
             ) : null}
 
-            {this.state.strenthList.length != 0 ? (
-              <View style={{ margin: 10 }}>
-                <Card style={{ borderRadius: 12 }}>
-                  <View>
+            <View style={{ margin: 10 }}>
+              <Card style={{ borderRadius: 12 }}>
+                <View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginRight: 10,
+                    }}
+                  >
                     <View
                       style={{
                         flexDirection: "row",
-                        justifyContent: "space-between",
                         alignItems: "center",
                       }}
                     >
@@ -1030,6 +1053,7 @@ class UserHome extends BaseComponent {
                         >
                           My Stats{" "}
                         </Text>
+
                         <View
                           style={{
                             width: 60,
@@ -1042,15 +1066,64 @@ class UserHome extends BaseComponent {
                         />
                       </View>
                     </View>
+                    <View style={{ minWidth: "40%" }}>
+                      <RNPickerSelect
+                        placeholder={{}}
+                        items={this.state.sportsList}
+                        onValueChange={(value, index) => {
+                          this.onSportItemSelected(
+                            this.state.sportsList[index]
+                          );
+                        }}
+                        style={pickerSelectStyles}
+                        value={this.state.currentSportId}
+                        useNativeAndroidPickerStyle={false}
+                      />
+                      <View
+                        style={{
+                          width: "100%",
+                          backgroundColor: "#C7C7CD",
+                          height: 1,
+                          marginTop: 2,
+                        }}
+                      />
+                    </View>
+                  </View>
+                  {this.state.isStatsLoading ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 20,
+                        marginBottom: 20,
+                      }}
+                    >
+                      <ActivityIndicator size="small" color="#67BAF5" />
+                    </View>
+                  ) : this.state.strenthList.length != 0 ? (
                     <FlatList
                       data={this.state.strenthList}
                       renderItem={this.renderItem}
                       keyExtractor={(item, index) => item.id}
                     />
-                  </View>
-                </Card>
-              </View>
-            ) : null}
+                  ) : (
+                    <View
+                      style={{
+                        marginTop: 30,
+                        flex: 1,
+                        alignContent: "center",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginBottom: 20,
+                      }}
+                    >
+                      <Text>No data to show</Text>
+                    </View>
+                  )}
+                </View>
+              </Card>
+            </View>
 
             <View style={{ margin: 5 }}>
               <Card style={{ margin: 5, borderRadius: 10 }}>
@@ -2062,36 +2135,29 @@ export default connect(
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    fontSize: 16,
-    // paddingVertical: 12,
-    //paddingHorizontal: 10,
-    borderWidth: 0,
-    borderColor: "#D3D3D3",
-    borderRadius: 4,
-    color: "white",
-    // paddingLeft: 10,
-
-    // alignItems: 'stretch',
-    // // justifyContent: 'right',
-    alignSelf: "center",
-    height: 40,
-    marginRight: 10,
-    marginTop: 5,
-    marginBottom: 5,
-    // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
+    fontSize: 14,
     paddingVertical: 8,
-    borderWidth: 0.5,
+    //paddingHorizontal: 10,
     borderColor: "#614051",
     borderRadius: 8,
     color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
+    //marginBottom: 4,
+    //alignItems: 'center',
+    //textAlign: 'center',
+    fontFamily: "Quicksand-Regular",
+
+    // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    paddingVertical: 4,
+    fontSize: 14,
+    fontFamily: "Quicksand-Regular",
+    borderColor: "#614051",
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 10, // to ensure the text is never behind the icon
   },
 });
-
 const styles = StyleSheet.create({
   navBar: {
     height: 60,
