@@ -200,7 +200,9 @@ class CancelSession extends BaseComponent {
                     if (user1.success == true) {
                         let msg = user1.success_message
                         alert(msg)
-                        this.getBatchData()
+                        setTimeout(()=>{
+                            this.getBatchData()
+                        },500)
                     }
 
                 }).catch((response) => {
