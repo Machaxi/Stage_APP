@@ -49,7 +49,12 @@ export function getPlayerDashboard(header, player_id, academy_id, sport_id) {
   };
 }
 
-export function getOtherPlayerDashboard(academy_id, player_id, header) {
+export function getOtherPlayerDashboard(
+  academy_id,
+  player_id,
+  header,
+  sport_id
+) {
   console.log("getPlayerDashboard ", player_id, academy_id);
   // var header =
   //     getData('header', (value) => {
@@ -59,7 +64,10 @@ export function getOtherPlayerDashboard(academy_id, player_id, header) {
     type: types.GET_DASHBOARD,
     payload: {
       request: {
-        url: `global/player/academic-profile?player_id=${player_id}&academy_id=${academy_id}`,
+        url:
+          sport_id != "undefined" && sport_id != null
+            ? `global/player/academic-profile?player_id=${player_id}&academy_id=${academy_id}&sport_id=${sport_id}`
+            : `global/player/academic-profile?player_id=${player_id}&academy_id=${academy_id}`,
         method: "GET",
         // data: postdata,
         headers: {

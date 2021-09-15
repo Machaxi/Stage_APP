@@ -64,6 +64,7 @@ import SportSpinner from "../../components/custom/SportSpinner";
 import BottomSheet from "react-native-simple-bottom-sheet";
 import ItemSelection from "../../components/custom/ItemSelection";
 import RNPickerSelect from "react-native-picker-select";
+import MyStats from "../../components/custom/MyStats";
 var deviceWidth = Dimensions.get("window").width - 20;
 
 var is_show_badge = false;
@@ -696,78 +697,6 @@ class UserHome extends BaseComponent {
       (err) => console.log(err)
     );
   }
-
-  renderItem = ({ item }) => (
-    <TouchableOpacity
-      key={item}
-      activeOpacity={0.8}
-      onPress={() => {
-        this.props.navigation.navigate("ViewPlayerPerformance", {
-          performance_data: item,
-        });
-      }}
-    >
-      <View style={{ margin: 10, flexDirection: "row", height: 60 }}>
-        <Image
-          resizeMode="contain"
-          source={getStatsImageById(item.id)}
-          style={{
-            width: 40,
-            height: 40,
-            marginRight: 20,
-            alignItems: "center",
-          }}
-        />
-        <View>
-          <View
-            style={{
-              marginLeft: 8,
-              marginRight: 15,
-              marginBottom: 5,
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={defaultStyle.bold_text_14}>{item.name}</Text>
-            <Text style={defaultStyle.bold_text_12}>{item.score}</Text>
-          </View>
-          {/* <Progress.Bar style={{
-                        backgroundColor: '#E1E1E1',
-                        color: '#305F82', borderRadius: 11, borderWidth: 0
-                    }}
-                        progress={item.score / 100}
-                        width={deviceWidth - 130} height={14} /> */}
-
-          <CustomAnimationProgress
-            percent={item.score}
-            width={deviceWidth - 120}
-            height={14}
-          />
-        </View>
-        <View
-          style={{
-            height: 50,
-            //width: 30,
-            alignItems: "center",
-            marginTop: 26,
-            marginRight: 10,
-            marginLeft: 20,
-          }}
-        >
-          <Image
-            source={require("../../images/ic_drawer_arrow.png")}
-            resizeMode="contain"
-            style={{
-              width: 5,
-              height: 11,
-              marginRight: 10,
-            }}
-          />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
   onSportSpinnerClicked = () => {
     this.setState({ sportsOptionsVisible: true });
   };
@@ -782,6 +711,11 @@ class UserHome extends BaseComponent {
     this.setState({
       currentSportId,
       sportsOptionsVisible: false,
+    });
+  };
+  onStatItemClicked = (item) => {
+    this.props.navigation.navigate("ViewPlayerPerformance", {
+      performance_data: item,
     });
   };
   onSelectionCancelled = () => {
@@ -950,12 +884,6 @@ class UserHome extends BaseComponent {
             visible={this.state.spinner}
             textStyle={defaultStyle.spinnerTextStyle}
           />
-          {/* <ItemSelection
-            visible={this.state.sportsOptionsVisible}
-            data={this.state.sportsList}
-            onItemSelected={this.onSportItemSelected}
-            onSelectionCancelled={this.onSelectionCancelled}
-          /> */}
 
           <ScrollView
             refreshControl={
@@ -1027,104 +955,14 @@ class UserHome extends BaseComponent {
               </CustomeCard>
             ) : null}
 
-            <View style={{ margin: 10 }}>
-              <Card style={{ borderRadius: 12 }}>
-                <View>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginRight: 10,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <View>
-                        <Text
-                          style={[
-                            defaultStyle.bold_text_14,
-                            { marginLeft: 10, marginTop: 10 },
-                          ]}
-                        >
-                          My Stats{" "}
-                        </Text>
-
-                        <View
-                          style={{
-                            width: 60,
-                            height: 3,
-                            marginLeft: 10,
-                            marginTop: 2,
-                            marginBottom: 8,
-                            backgroundColor: "#404040",
-                          }}
-                        />
-                      </View>
-                    </View>
-                    <View style={{ minWidth: "40%" }}>
-                      <RNPickerSelect
-                        placeholder={{}}
-                        items={this.state.sportsList}
-                        onValueChange={(value, index) => {
-                          this.onSportItemSelected(
-                            this.state.sportsList[index]
-                          );
-                        }}
-                        style={pickerSelectStyles}
-                        value={this.state.currentSportId}
-                        useNativeAndroidPickerStyle={false}
-                      />
-                      <View
-                        style={{
-                          width: "100%",
-                          backgroundColor: "#C7C7CD",
-                          height: 1,
-                          marginTop: 2,
-                        }}
-                      />
-                    </View>
-                  </View>
-                  {this.state.isStatsLoading ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: 20,
-                        marginBottom: 20,
-                      }}
-                    >
-                      <ActivityIndicator size="small" color="#67BAF5" />
-                    </View>
-                  ) : this.state.strenthList.length != 0 ? (
-                    <FlatList
-                      data={this.state.strenthList}
-                      renderItem={this.renderItem}
-                      keyExtractor={(item, index) => item.id}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        marginTop: 30,
-                        flex: 1,
-                        alignContent: "center",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        marginBottom: 20,
-                      }}
-                    >
-                      <Text>No data to show</Text>
-                    </View>
-                  )}
-                </View>
-              </Card>
-            </View>
-
+            <MyStats
+              data={this.state.sportsList}
+              currentSportId={this.state.currentSportId}
+              isStatsLoading={this.state.isStatsLoading}
+              strenthList={this.state.strenthList}
+              onSportItemSelected={this.onSportItemSelected}
+              onStatItemClicked={this.onStatItemClicked}
+            />
             <View style={{ margin: 5 }}>
               <Card style={{ margin: 5, borderRadius: 10 }}>
                 <TouchableOpacity
