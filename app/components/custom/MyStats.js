@@ -132,6 +132,17 @@ const MyStats = (props) => {
                 onValueChange={(value, index) => {
                   props.onSportItemSelected(props.data[index]);
                 }}
+                Icon={()=>{
+                 return <Image
+                  style={{
+                    width:10,
+                    alignSelf:'center',
+                    marginTop:15,
+                    height:8
+                  }}
+                  source={require("../../images/down_arrow_reward.png")}
+                  />
+                }}
                 style={pickerSelectStyles}
                 value={props.currentSportId}
                 useNativeAndroidPickerStyle={false}
