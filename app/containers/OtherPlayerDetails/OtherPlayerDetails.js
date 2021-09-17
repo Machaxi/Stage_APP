@@ -28,10 +28,7 @@ import {
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
 import PlayerHeader from "../../components/custom/PlayerHeader";
-import BaseComponent, {
-  defaultStyle,
-  getStatsImageById,
-} from "../BaseComponent";
+import BaseComponent, { defaultStyle } from "../BaseComponent";
 import CustomAnimationProgress from "../../components/custom/CustomAnimationProgress";
 import { PLAYER, PARENT } from "../../components/Constants";
 import CustomProgres from "../../components/custom/CustomProgress";

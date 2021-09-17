@@ -17,6 +17,7 @@ var deviceWidth = Dimensions.get("window").width - 20;
 import {
   defaultStyle,
   getStatsImageById,
+  getStatsImageBySportId,
 } from "../../containers/BaseComponent";
 
 import RNPickerSelect from "react-native-picker-select";
@@ -33,7 +34,7 @@ const MyStats = (props) => {
       <View style={{ margin: 10, flexDirection: "row", height: 60 }}>
         <Image
           resizeMode="contain"
-          source={getStatsImageById(item.id)}
+          source={getStatsImageBySportId(props.currentSportId)}
           style={{
             width: 40,
             height: 40,
@@ -132,16 +133,18 @@ const MyStats = (props) => {
                 onValueChange={(value, index) => {
                   props.onSportItemSelected(props.data[index]);
                 }}
-                Icon={()=>{
-                 return <Image
-                  style={{
-                    width:10,
-                    alignSelf:'center',
-                    marginTop:15,
-                    height:8
-                  }}
-                  source={require("../../images/down_arrow_reward.png")}
-                  />
+                Icon={() => {
+                  return (
+                    <Image
+                      style={{
+                        width: 10,
+                        alignSelf: "center",
+                        marginTop: 15,
+                        height: 8,
+                      }}
+                      source={require("../../images/down_arrow_reward.png")}
+                    />
+                  );
                 }}
                 style={pickerSelectStyles}
                 value={props.currentSportId}

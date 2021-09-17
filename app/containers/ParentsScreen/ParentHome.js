@@ -38,7 +38,6 @@ import { RateViewFill } from "../../components/Home/RateViewFill";
 import { RateViewBorder } from "../../components/Home/RateViewBorder";
 import BaseComponent, {
   getFormattedLevel,
-  getStatsImageById,
   defaultStyle,
   SESSION_DATE_FORMAT,
   getUtcDateFromTime,

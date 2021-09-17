@@ -31,7 +31,6 @@ import LinearGradient from "react-native-linear-gradient";
 import BaseComponent, {
   defaultStyle,
   getFormattedLevel,
-  getStatsImageById,
   EVENT_EDIT_PROFILE,
   SESSION_DATE_FORMAT,
   REFRESH_SCREEN_CALLBACK,
@@ -60,10 +59,6 @@ import UpdateAppDialog from "../../components/custom/UpdateAppDialog";
 import { SkyFilledButton } from "../../components/Home/SkyFilledButton";
 import { postFeedbackMultiple } from "../../redux/reducers/FeedbackReduer";
 import Spinner from "react-native-loading-spinner-overlay";
-import SportSpinner from "../../components/custom/SportSpinner";
-import BottomSheet from "react-native-simple-bottom-sheet";
-import ItemSelection from "../../components/custom/ItemSelection";
-import RNPickerSelect from "react-native-picker-select";
 import MyStats from "../../components/custom/MyStats";
 var deviceWidth = Dimensions.get("window").width - 20;
 
