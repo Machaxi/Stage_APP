@@ -12,23 +12,22 @@ export default class MonthYearDialog extends BaseComponent {
     constructor(props) {
         super(props)
         this.state = {
-            months: [
-                { key: 'JAN' },
-                { key: 'FEB' },
-                { key: 'MAR' },
-                { key: 'APR' },
-                { key: 'MAY' },
-                { key: 'JUN' },
-                { key: 'JUL' },
-                { key: 'AUG' },
-                { key: 'SEP' },
-                { key: 'OCT' },
-                { key: 'NOV' },
-                { key: 'DEC' },
-            ],
-            year: 2019
-
-        }
+          months: [
+            { key: "JAN" },
+            { key: "FEB" },
+            { key: "MAR" },
+            { key: "APR" },
+            { key: "MAY" },
+            { key: "JUN" },
+            { key: "JUL" },
+            { key: "AUG" },
+            { key: "SEP" },
+            { key: "OCT" },
+            { key: "NOV" },
+            { key: "DEC" },
+          ],
+          year: this.props.currentYear,
+        };
     }
 
     _renderItem = ({ item, index }) => {
@@ -54,7 +53,7 @@ export default class MonthYearDialog extends BaseComponent {
     }
 
     render() {
-
+       
         return (
             <Dialog
                 width={width}

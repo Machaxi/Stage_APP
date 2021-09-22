@@ -709,6 +709,7 @@ class UserHome extends BaseComponent {
     });
   };
   onStatItemClicked = (item) => {
+    console.log("ITEM", item);
     this.props.navigation.navigate("ViewPlayerPerformance", {
       performance_data: item,
     });

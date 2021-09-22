@@ -251,243 +251,390 @@ class PlayerBatchComponent extends BaseComponent {
             this.sessionMangement(session)
         // this.scoreMangement(tournaments)
 
-        return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-
+        return (
+          <View
+            style={{
+              flex: 1,
+              marginTop: 0,
+              backgroundColor: "#F7F7F7",
+            }}
+          >
             <ProgressIngreeDialog
-                touchOutside={(item) => {
-                    this.setState({
-                        performance_dialog: false
-                    })
-                    setTimeout(() => {
-
-                        if (item != null) {
-                            item.score = 0
-                            item.batchId = batch_id
-                            this.props.navigation.navigate('ViewPlayerPerformance',
-                                { performance_data: item });
-                        }
-                    }, 50)
-                }}
-                performance_data={this.props.jumpTo.progress_attributes}
-                visible={this.state.performance_dialog}
+              touchOutside={(item) => {
+                this.setState({
+                  performance_dialog: false,
+                });
+                setTimeout(() => {
+                  if (item != null) {
+                    item.score = 0;
+                    item.batchId = batch_id;
+                    this.props.navigation.navigate(
+                      "ViewPlayerPerformance",
+                      { performance_data: item }
+                    );
+                  }
+                }, 50);
+              }}
+              performance_data={this.props.jumpTo.progress_attributes}
+              sportId={this.props.jumpTo.sport_id}
+              visible={this.state.performance_dialog}
             />
 
-            <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                {/*// <View style={{margin: 10}}>*/}
+            <ScrollView
+              style={{
+                flex: 1,
+                marginTop: 0,
+                backgroundColor: "#F7F7F7",
+              }}
+            >
+              {/*// <View style={{margin: 10}}>*/}
 
-                {session != undefined ?
-                    <CustomeCard >
-                        <View
-                            style={{
-                                marginLeft: 12,
-                                marginRight: 12,
-                                marginTop: 16
-                            }}
-                        >
-                            <Text style={defaultStyle.bold_text_10}>
-                                Next Session : {session.routine_name == null ? "" : session.routine_name}
-                            </Text>
-
-
-                            <View style={defaultStyle.line_style} />
-                            {sessionArray}
-                        </View>
-                    </CustomeCard> : null}
-                {/*</View>*/}
-
+              {session != undefined ? (
                 <CustomeCard>
-                    <View
-                        style={{
-                            marginLeft: 12,
-                            marginRight: 12,
-                            marginTop: 16
-                        }}
+                  <View
+                    style={{
+                      marginLeft: 12,
+                      marginRight: 12,
+                      marginTop: 16,
+                    }}
+                  >
+                    <Text style={defaultStyle.bold_text_10}>
+                      Next Session :{" "}
+                      {session.routine_name == null
+                        ? ""
+                        : session.routine_name}
+                    </Text>
+
+                    <View style={defaultStyle.line_style} />
+                    {sessionArray}
+                  </View>
+                </CustomeCard>
+              ) : null}
+              {/*</View>*/}
+
+              <CustomeCard>
+                <View
+                  style={{
+                    marginLeft: 12,
+                    marginRight: 12,
+                    marginTop: 16,
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text style={defaultStyle.bold_text_10}>
+                      Attendance Summary
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate(
+                          "PlayerAttendance",
+                          { batch_id: this.props.jumpTo.batch_id }
+                        );
+                      }}
                     >
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={defaultStyle.bold_text_10}>Attendance Summary</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate('PlayerAttendance',
-                                        { batch_id: this.props.jumpTo.batch_id })
-                                }}>
-                                <Text style={[defaultStyle.regular_text_12, { color: '#667DDB' }]}>View Details </Text>
-                            </TouchableOpacity>
-                        </View>
+                      <Text
+                        style={[
+                          defaultStyle.regular_text_12,
+                          { color: "#667DDB" },
+                        ]}
+                      >
+                        View Details{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
-                        <View style={defaultStyle.line_style} />
+                  <View style={defaultStyle.line_style} />
 
-                        <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
-                            <View style={{ marginRight: 12 }} >
-                                <Text style={[defaultStyle.regular_text_10, {
-                                    marginBottom: 5
-                                }]}>Overall</Text>
-                                <Text style={defaultStyle.regular_text_14}>{attendance.overall_attendance + '%'}</Text>
-                            </View>
-                            <View style={{ width: 1, felx: 1, backgroundColor: '#DFDFDF', marginLeft: 10, marginRight: 10 }} />
-                            <View style={{ marginRight: 12 }}>
-                                <Text style={[defaultStyle.regular_text_10, {
-                                    marginBottom: 5
-                                }]}>This Month</Text>
-                                <Text style={defaultStyle.regular_text_14}>{attendance.attendance + '%'}</Text>
-                            </View>
-                            <View style={{ marginLeft: 20 }}>
-                                <Text style={[defaultStyle.regular_text_10, {
-                                    marginBottom: 5
-                                }]}>Sessions attended</Text>
-
-                                <Text style={defaultStyle.regular_text_14}>{attendance.session_attended + ' of ' + attendance.total_session + ' (' + attendance.month + ')'}</Text>
-                            </View>
-
-                        </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      felx: 1,
+                      marginTop: 4,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <View style={{ marginRight: 12 }}>
+                      <Text
+                        style={[
+                          defaultStyle.regular_text_10,
+                          {
+                            marginBottom: 5,
+                          },
+                        ]}
+                      >
+                        Overall
+                      </Text>
+                      <Text style={defaultStyle.regular_text_14}>
+                        {attendance.overall_attendance + "%"}
+                      </Text>
                     </View>
+                    <View
+                      style={{
+                        width: 1,
+                        felx: 1,
+                        backgroundColor: "#DFDFDF",
+                        marginLeft: 10,
+                        marginRight: 10,
+                      }}
+                    />
+                    <View style={{ marginRight: 12 }}>
+                      <Text
+                        style={[
+                          defaultStyle.regular_text_10,
+                          {
+                            marginBottom: 5,
+                          },
+                        ]}
+                      >
+                        This Month
+                      </Text>
+                      <Text style={defaultStyle.regular_text_14}>
+                        {attendance.attendance + "%"}
+                      </Text>
+                    </View>
+                    <View style={{ marginLeft: 20 }}>
+                      <Text
+                        style={[
+                          defaultStyle.regular_text_10,
+                          {
+                            marginBottom: 5,
+                          },
+                        ]}
+                      >
+                        Sessions attended
+                      </Text>
+
+                      <Text style={defaultStyle.regular_text_14}>
+                        {attendance.session_attended +
+                          " of " +
+                          attendance.total_session +
+                          " (" +
+                          attendance.month +
+                          ")"}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </CustomeCard>
+
+              {operations.weekday || operations.weekend ? (
+                <CustomeCard>
+                  <View
+                    style={{
+                      marginLeft: 12,
+                      marginRight: 12,
+                      marginTop: 16,
+                    }}
+                  >
+                    <Text style={defaultStyle.bold_text_10}>
+                      Timing
+                    </Text>
+
+                    <View style={defaultStyle.line_style} />
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        felx: 1,
+                        marginTop: 4,
+                        marginBottom: 10,
+                      }}
+                    >
+                      {operations.weekday ? (
+                        <View style={{ width: "60%" }}>
+                          <Text
+                            style={[
+                              defaultStyle.regular_text_10,
+                              {
+                                marginBottom: 5,
+                              },
+                            ]}
+                          >
+                            Weekdays
+                          </Text>
+                          <Text
+                            style={[
+                              defaultStyle.regular_text_14,
+                              { marginBottom: 5 },
+                            ]}
+                          >
+                            {operations.weekday.days.join(" ")}
+                          </Text>
+                          <Text style={defaultStyle.regular_text_12}>
+                            {getFormatTime(
+                              operations.weekday.start_time
+                            ) +
+                              " - " +
+                              getFormatTime(
+                                operations.weekday.end_time
+                              )}
+                          </Text>
+                        </View>
+                      ) : null}
+
+                      {operations.weekend ? (
+                        <View style={{ width: "40%" }}>
+                          <Text
+                            style={[
+                              defaultStyle.regular_text_10,
+                              {
+                                marginBottom: 5,
+                              },
+                            ]}
+                          >
+                            Weekends
+                          </Text>
+                          <Text
+                            style={[
+                              defaultStyle.regular_text_14,
+                              { marginBottom: 5 },
+                            ]}
+                          >
+                            {operations.weekend.days.join(" ")}
+                          </Text>
+                          <Text style={defaultStyle.regular_text_12}>
+                            {getFormatTime(
+                              operations.weekend.start_time
+                            ) +
+                              " - " +
+                              getFormatTime(
+                                operations.weekend.end_time
+                              )}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  </View>
+                </CustomeCard>
+              ) : null}
+              {this.state.coactList.length > 0 ? (
+                <CustomeCard>
+                  <View
+                    style={{
+                      marginLeft: 12,
+                      marginRight: 12,
+                      marginTop: 16,
+                    }}
+                  >
+                    <Text style={defaultStyle.bold_text_10}>Coach</Text>
+
+                    <View style={defaultStyle.line_style} />
+
+                    <FlatList
+                      data={this.state.coactList}
+                      renderItem={this.renderItem}
+                      keyExtractor={(item, index) => item.id}
+                    />
+                  </View>
+                </CustomeCard>
+              ) : null}
+
+              <View>
+                <CustomeCard>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.warn("Touch Press");
+                      this.props.navigation.navigate("PlayersListing", {
+                        batch_id: this.props.jumpTo.batch_id,
+                        List_type: "BATCH",
+                      });
+                    }}
+                  >
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        marginTop: 8,
+                        marginBottom: 8,
+                        flexDirection: "row",
+                        height: 40,
+                      }}
+                    >
+                      <View style={{ flex: 1 }}>
+                        <View
+                          style={{
+                            marginTop: 10,
+                            flex: 1,
+                            marginRight: 15,
+                            marginBottom: 5,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Text style={defaultStyle.regular_text_14}>
+                            View Batchmates
+                          </Text>
+
+                          <Image
+                            source={require("../../images/path.png")}
+                            style={{
+                              width: 19,
+                              height: 13,
+                              marginRight: 0,
+                              marginTop: 5,
+                            }}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
                 </CustomeCard>
 
-                {operations.weekday || operations.weekend ?
-                    <CustomeCard >
+                <CustomeCard>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        performance_dialog: true,
+                      });
+                    }}
+                  >
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        marginTop: 8,
+                        marginBottom: 8,
+                        flexDirection: "row",
+                        height: 40,
+                      }}
+                    >
+                      <View style={{ flex: 1 }}>
                         <View
-                            style={{
-                                marginLeft: 12,
-                                marginRight: 12,
-                                marginTop: 16
-                            }}
+                          style={{
+                            marginTop: 10,
+                            flex: 1,
+                            marginRight: 15,
+                            marginBottom: 5,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
                         >
-                            <Text style={defaultStyle.bold_text_10}>Timing</Text>
+                          <Text style={defaultStyle.regular_text_14}>
+                            View Performance
+                          </Text>
 
-                            <View style={defaultStyle.line_style} />
-
-                            <View style={{ flexDirection: 'row', felx: 1, marginTop: 4, marginBottom: 10 }}>
-                                {operations.weekday ?
-                                    <View style={{ width: '60%' }}>
-                                        <Text style={[defaultStyle.regular_text_10, {
-                                            marginBottom: 5
-                                        }]}>Weekdays</Text>
-                                        <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekday.days.join(' ')}</Text>
-                                        <Text style={defaultStyle.regular_text_12}>
-                                            {getFormatTime(operations.weekday.start_time)
-                                                + ' - ' +
-                                                getFormatTime(operations.weekday.end_time)
-                                            }</Text>
-                                    </View>
-                                    : null}
-
-                                {operations.weekend ?
-
-                                    <View style={{ width: '40%' }}>
-                                        <Text style={[defaultStyle.regular_text_10, {
-                                            marginBottom: 5
-                                        }]}>Weekends</Text>
-                                        <Text style={[defaultStyle.regular_text_14, { marginBottom: 5 }]}>{operations.weekend.days.join(' ')}</Text>
-                                        <Text style={defaultStyle.regular_text_12}>
-
-                                            {getFormatTime(operations.weekend.start_time)
-                                                + ' - ' +
-                                                getFormatTime(operations.weekend.end_time)
-                                            }</Text>
-                                    </View> : null
-                                }
-                            </View>
-                        </View>
-                    </CustomeCard> : null
-                }
-                {this.state.coactList.length > 0 ?
-                    <CustomeCard>
-                        <View
+                          <Image
+                            source={require("../../images/path.png")}
                             style={{
-                                marginLeft: 12,
-                                marginRight: 12,
-                                marginTop: 16
+                              width: 19,
+                              height: 13,
+                              marginRight: 0,
+                              marginTop: 5,
                             }}
-                        >
-                            <Text style={defaultStyle.bold_text_10}>Coach</Text>
-
-                            <View style={defaultStyle.line_style} />
-
-                            <FlatList
-                                data={this.state.coactList}
-                                renderItem={this.renderItem}
-                                keyExtractor={(item, index) => item.id}
-                            />
+                          />
                         </View>
-                    </CustomeCard> : null}
-
-                <View>
-                    <CustomeCard>
-                        <TouchableOpacity onPress={() => {
-
-                            console.warn("Touch Press")
-                            this.props.navigation.navigate('PlayersListing',
-                                { batch_id: this.props.jumpTo.batch_id, List_type: 'BATCH' })
-
-                        }}>
-                            <View style={{ marginLeft: 8, marginTop: 8, marginBottom: 8, flexDirection: 'row', height: 40 }}>
-
-                                <View style={{ flex: 1 }}>
-
-                                    <View style={{
-                                        marginTop: 10,
-                                        flex: 1,
-                                        marginRight: 15,
-                                        marginBottom: 5,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text
-                                            style={defaultStyle.regular_text_14}>
-                                            View Batchmates
-                                            </Text>
-
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
-
-                                    </View>
-                                </View>
-                            </View>
-
-                        </TouchableOpacity>
-                    </CustomeCard>
-
-                    <CustomeCard>
-                        <TouchableOpacity onPress={() => {
-                            this.setState({
-                                performance_dialog: true
-                            })
-                        }}>
-                            <View style={{ marginLeft: 8, marginTop: 8, marginBottom: 8, flexDirection: 'row', height: 40 }}>
-
-                                <View style={{ flex: 1 }}>
-
-                                    <View style={{
-                                        marginTop: 10,
-                                        flex: 1,
-                                        marginRight: 15,
-                                        marginBottom: 5,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text
-                                            style={defaultStyle.regular_text_14}>
-                                            View Performance
-                                            </Text>
-
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
-
-                                    </View>
-                                </View>
-                            </View>
-
-                        </TouchableOpacity>
-                    </CustomeCard>
-                </View>
-
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </CustomeCard>
+              </View>
             </ScrollView>
-        </View>
+          </View>
+        );
 
     }
 }

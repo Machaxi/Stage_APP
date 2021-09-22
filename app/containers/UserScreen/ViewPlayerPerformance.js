@@ -255,6 +255,7 @@ class ViewPlayerPerformance extends BaseComponent {
             });
           }}
           visible={this.state.show_month_dialog}
+          currentYear={this.state.year}
         />
 
         <View style={styles.statsOuter}>
@@ -274,7 +275,9 @@ class ViewPlayerPerformance extends BaseComponent {
             </Text>
 
             <View style={styles.statsProgressOuter}>
-              <Text style={[defaultStyle.bold_text_12, { color: "#A3A5AE" }]}>
+              <Text
+                style={[defaultStyle.bold_text_12, { color: "#A3A5AE" }]}
+              >
                 Current Score
               </Text>
               <Text style={defaultStyle.bold_text_12}>

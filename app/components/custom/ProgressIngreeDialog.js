@@ -1,95 +1,102 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
-import BaseComponent, { defaultStyle, getStatsImageById } from '../../containers/BaseComponent';
-import CustomProgres from './CustomProgress';
+import BaseComponent, {
+  defaultStyle,
+  getStatsImageBySportId,
+} from "../../containers/BaseComponent";
+import CustomProgres from "./CustomProgress";
 
-const width = 300
+const width = 300;
 
 export default class ProgressIngreeDialog extends BaseComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+    };
+  }
 
+  _renderItem = ({ item, index }) => {
+    //console.log('item->', item)
+    var deviceWidth = width - 20;
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            data: [],
+    return (
+      <TouchableOpacity
+        key={item}
+        activeOpacity={0.8}
+        onPress={() => {
+          this.props.touchOutside(item);
+        }}
+      >
+        <View
+          style={{
+            margin: 10,
+            alignItems: "center",
+            flexDirection: "row",
+            height: 60,
+          }}
+        >
+          <Image
+            resizeMode="contain"
+            source={getStatsImageBySportId(this.props.sportId)}
+            style={{
+              width: 40,
+              height: 40,
+              marginRight: 20,
+              alignItems: "center",
+            }}
+          />
+          <View>
+            <View
+              style={{
+                marginLeft: 8,
+                //marginRight: 15,
+                flexDirection: "row",
+                alignItems: "center",
+                //justifyContent: 'space-between',
+              }}
+            >
+              <Text
+                style={[
+                  defaultStyle.bold_text_14,
+                  {
+                    width: "75%",
+                  },
+                ]}
+              >
+                {item.name}
+              </Text>
 
-        }
-    }
+              <Image
+                source={require("../../images/ic_drawer_arrow.png")}
+                resizeMode="contain"
+                style={{
+                  justifyContent: "center",
+                  width: 5,
+                  height: 11,
+                  marginLeft: 10,
+                }}
+              />
 
-    _renderItem = ({ item, index }) => {
-        //console.log('item->', item)
-        var deviceWidth = width - 20;
-
-
-        return (
-            <TouchableOpacity key={item}
-                activeOpacity={.8}
-                onPress={() => {
-                    this.props.touchOutside(item);
-                }}>
-                <View style={{
-                    margin: 10,
-                    alignItems: 'center',
-                    flexDirection: 'row', height: 60
-                }}>
-
-                    <Image
-                        resizeMode="contain"
-                        source={getStatsImageById(item.id)}
-                        style={{
-                            width: 40,
-                            height: 40,
-                            marginRight: 20,
-                            alignItems: 'center'
-                        }} />
-                    <View>
-
-                        <View style={{
-                            marginLeft: 8,
-                            //marginRight: 15,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            //justifyContent: 'space-between',
-                        }}>
-                            <Text
-                                style={[defaultStyle.bold_text_14, {
-                                    width: "75%"
-                                }]}>
-                                {item.name}
-                            </Text>
-
-                            <Image
-                                source={require('../../images/ic_drawer_arrow.png')}
-                                resizeMode="contain"
-                                style={{
-                                    justifyContent: 'center',
-                                    width: 5,
-                                    height: 11,
-                                    marginLeft:10
-                                }} />
-
-
-                            {/* <Text style={defaultStyle.bold_text_12}>
+              {/* <Text style={defaultStyle.bold_text_12}>
                                 {item.score}
                             </Text> */}
-                        </View>
-                        {/* <Progress.Bar style={{
+            </View>
+            {/* <Progress.Bar style={{
                         backgroundColor: '#E1E1E1',
                         color: '#305F82', borderRadius: 11, borderWidth: 0
                     }}
                         progress={item.score / 100}
                         width={deviceWidth - 130} height={14} /> */}
 
-                        {/* <CustomProgres
+            {/* <CustomProgres
                             percent={0}
                             width={deviceWidth - 120}
                             height={14}
                         /> */}
-
-
-                    </View>
-                    {/* <View style={{
+          </View>
+          {/* <View style={{
                         height: 50,
                         //width: 30,
                         alignItems: 'center',
@@ -97,29 +104,26 @@ export default class ProgressIngreeDialog extends BaseComponent {
                     }}>
                         
                     </View> */}
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
-                </View>
-            </TouchableOpacity>
-        )
-    }
+  render() {
+    const data = this.props.performance_data;
 
-    render() {
-
-        const data = this.props.performance_data
-
-        return (
-            <Dialog
-                width={width}
-                height={500}
-                visible={this.props.visible}
-                dialogStyle={{ borderRadius: 12, }}
-                onTouchOutside={() => {
-                    this.props.touchOutside();
-                }}
-            >
-                <DialogContent style={styles.contentContainer}>
-
-                    {/* <View style={{
+    return (
+      <Dialog
+        width={width}
+        height={500}
+        visible={this.props.visible}
+        dialogStyle={{ borderRadius: 12 }}
+        onTouchOutside={() => {
+          this.props.touchOutside();
+        }}
+      >
+        <DialogContent style={styles.contentContainer}>
+          {/* <View style={{
                         flexDirection: 'row',
                         paddingTop: 16,
                         paddingBottom: 16,
@@ -130,17 +134,16 @@ export default class ProgressIngreeDialog extends BaseComponent {
                     </View>
 
                     <View style={styles.header}></View> */}
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        numColumns={1}
-                        data={data}
-                        renderItem={this._renderItem}
-                    />
-
-                </DialogContent>
-            </Dialog>
-        )
-    }
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            numColumns={1}
+            data={data}
+            renderItem={this._renderItem}
+          />
+        </DialogContent>
+      </Dialog>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

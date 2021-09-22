@@ -211,178 +211,378 @@ export default class GuestTrial extends BaseComponent {
 
     return (
       <View style={styles.chartContainer}>
-
-
-
-
-
-
         <ScrollView onScroll={this.handleScroll}>
-
-
-
-          <Image resizeMode='cover' style={{
-            width: '100%',
-          }}
-            source={require('../../images/trial_banner.png')}
+          <Image
+            resizeMode="cover"
+            style={{
+              width: "100%",
+            }}
+            source={require("../../images/trial_banner.png")}
           />
           {/* <View style={{ height: 236, backgroundColor: 'grey' }}>
           </View> */}
 
-          <TouchableOpacity onPress={() => {
-            //alert('OnPress','Clicked on View');
-            this.props.navigation.navigate('GuestTrialTerms')
-          }} activeOpacity={1}>
-            <LinearGradient locations={[0, 1]} colors={['#A1E0FF', '#FFFFFF']} useAngle angle={255} style={{
-              marginHorizontal: 10, marginTop: -100, marginBottom: 16, padding: 22, borderRadius: 12, shadowColor: 'rgba(0, 0, 0, 0.12)', elevation: 4, shadowRadius: 18,
-              shadowOpacity: 0.06, shadowOffset: { width: 0, height: 3 }
-            }}>
-
-              <Image resizeMode='contain' style={{
-                position: 'absolute',
-                top: 5,
-                left: 245,
-                right: 0,
-                bottom: 0,
+          <TouchableOpacity
+            onPress={() => {
+              //alert('OnPress','Clicked on View');
+              this.props.navigation.navigate("GuestTrialTerms");
+            }}
+            activeOpacity={1}
+          >
+            <LinearGradient
+              locations={[0, 1]}
+              colors={["#A1E0FF", "#FFFFFF"]}
+              useAngle
+              angle={255}
+              style={{
+                marginHorizontal: 10,
+                marginTop: -100,
+                marginBottom: 16,
+                padding: 22,
+                borderRadius: 12,
+                shadowColor: "rgba(0, 0, 0, 0.12)",
+                elevation: 4,
+                shadowRadius: 18,
+                shadowOpacity: 0.06,
+                shadowOffset: { width: 0, height: 3 },
               }}
-                source={require('../../images/small_dots.png')}
-              ></Image>
+            >
+              <Image
+                resizeMode="contain"
+                style={{
+                  position: "absolute",
+                  top: 5,
+                  left: 245,
+                  right: 0,
+                  bottom: 0,
+                }}
+                source={require("../../images/small_dots.png")}
+              />
 
               <View>
-                <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>Bored of routine workout?</Text>
+                <Text
+                  style={{
+                    width: "60%",
+                    fontSize: 18,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
+                  Sports Coaching & Fitness Training in Gated communities
+                </Text>
                 <Text>
-                  <Text style={{ fontSize: 18, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
-                    Stay fit -
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "Nunito-SemiBold",
+                      color: "#3E3E3E",
+                    }}
+                  >
+                    (Kids & Adults)
                   </Text>
-                  <Text style={{ fontSize: 18, fontFamily: 'Nunito-ExtraBold', color: '#000000' }}>
+                  {/*  <Text
+                    style={{
+                      fontSize: 18,
+                      fontFamily: "Nunito-ExtraBold",
+                      color: "#000000",
+                    }}
+                  >
                     {" The Fitminton Style!"}
-                  </Text>
+                  </Text>*/}
                 </Text>
               </View>
 
-              <View style={{ width: '13%', height: 2, backgroundColor: '#67BAF5', marginTop: 5, marginBottom: 10 }}>
-              </View>
+              <View
+                style={{
+                  width: "13%",
+                  height: 2,
+                  backgroundColor: "#67BAF5",
+                  marginTop: 5,
+                  marginBottom: 10,
+                }}
+              />
 
               <View>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', color: '#3E3E3E' }}>
-                  Fitminton sale is live.
-              </Text>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#3E3E3E' }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-Regular",
+                    color: "#3E3E3E",
+                  }}
+                >
+                  Badminton, Tennis, TT, Squash, Basketball, Swimming, Yoga,
+                  Zumba, Cricket and more...
+                </Text>
+                {/* <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-Bold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Flat 50 % off
-              </Text>
+                </Text> */}
               </View>
 
-              <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'flex-end' }} >
-                <Image resizeMode="contain" style={{ width: 26, height: 26, marginRight: -10, marginTop: -7 }} source={require('../../images/vector.png')}></Image>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 20,
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Image
+                  resizeMode="contain"
+                  style={{
+                    width: 26,
+                    height: 26,
+                    marginRight: -10,
+                    marginTop: -7,
+                  }}
+                  source={require("../../images/vector.png")}
+                />
 
                 <View>
-                  <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', color: '#000000' }}>Explore membership benefits</Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "Nunito-Bold",
+                      color: "#000000",
+                    }}
+                  >
+                    Why Machaxi?
+                  </Text>
                 </View>
 
-                <Image resizeMode="contain" style={{ width: 12, height: 12, marginLeft: 5, marginTop: 5 }} source={require('../../images/right_arrow.png')}>
-                </Image>
-
+                <Image
+                  resizeMode="contain"
+                  style={{
+                    width: 12,
+                    height: 12,
+                    marginLeft: 5,
+                    marginTop: 5,
+                  }}
+                  source={require("../../images/right_arrow.png")}
+                />
               </View>
-
             </LinearGradient>
           </TouchableOpacity>
 
           <View style={{ marginTop: 30, marginHorizontal: 40 }}>
             <View>
-              <Text style={{ fontSize: 18, fontFamily: 'Nunito-Bold', color: '#000000' }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: "Nunito-Bold",
+                  color: "#000000",
+                }}
+              >
                 Why train with us?
-            </Text>
+              </Text>
             </View>
-            <View style={{ width: '13%', height: 2, backgroundColor: '#67BAF5', marginTop: 10, marginBottom: 40 }}>
-            </View>
+            <View
+              style={{
+                width: "13%",
+                height: 2,
+                backgroundColor: "#67BAF5",
+                marginTop: 10,
+                marginBottom: 40,
+              }}
+            />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/badminton.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
-                  Learn badminton the easy and fun way
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 40,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/badminton.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
+                  Learn sports the easy and fun way
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/muscle.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 40,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/muscle.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Stay fit and in shape with unique, fun workout patterns
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/sport_shoes.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 40,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/sport_shoes.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Energy packed non-repetitive sessions everyday for you
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/calendar.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 40,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/calendar.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Pick your own preferred schedule
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/mobile.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 40,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/mobile.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Track your performance and progress through Machaxi app
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 40 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/coach.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 40,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/coach.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Curated interactive sessions led by trained professionals
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 130 }}>
-              <Image resizeMode="contain" style={{ width: 60, height: 60, marginTop: -10 }} source={require('../../images/tour_trophy.png')}>
-              </Image>
-              <View style={{ width: '75%', marginLeft: 25 }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-SemiBold', color: '#3E3E3E' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 130,
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 60, height: 60, marginTop: -10 }}
+                source={require("../../images/tour_trophy.png")}
+              />
+              <View style={{ width: "75%", marginLeft: 25 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    color: "#3E3E3E",
+                  }}
+                >
                   Free tournament participation every month
                 </Text>
               </View>
             </View>
-
           </View>
-
         </ScrollView>
 
-        <ImageBackground resizeMode='contain' style={{
-          flexDirection: 'column',
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: -14, alignItems: 'center',
-          justifyContent: 'center', alignSelf: 'center',
-          height: 130,
-          width: '100%'
-        }}
-          source={require('../../images/Rectangle.png')}
+        <ImageBackground
+          resizeMode="contain"
+          style={{
+            flexDirection: "column",
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: -14,
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "center",
+            height: 130,
+            width: "100%",
+          }}
+          source={require("../../images/Rectangle.png")}
         >
-
           {/* <LinearGradient style={{
     flexDirection: 'column',
     position: 'absolute',
@@ -390,36 +590,56 @@ export default class GuestTrial extends BaseComponent {
     right: 0,
     bottom: 0, alignItems: 'center', paddingTop: 150, paddingBottom: 30, justifyContent: 'center',alignSelf: 'center'}} colors={['rgba(255, 255, 255, 0)', '#ffffff']}  locations={[0.28, 0.78]}> */}
 
-          <LinearGradient colors={['#FF3A99', '#FF3A6A']} locations={[0, 1]} useAngle angle={255} style={{
-            borderRadius: 24, shadowColor: 'rgba(0, 0, 0, 0.2)', elevation: 4, shadowRadius: 9,
-            shadowOpacity: 0.08, shadowOffset: { width: 0, height: 3 }
-          }}>
-
-            <TouchableOpacity style={{
-              width: 172,
-              padding: 10,
-              height: 40
+          <LinearGradient
+            colors={["#FF3A99", "#FF3A6A"]}
+            locations={[0, 1]}
+            useAngle
+            angle={255}
+            style={{
+              borderRadius: 24,
+              shadowColor: "rgba(0, 0, 0, 0.2)",
+              elevation: 4,
+              shadowRadius: 9,
+              shadowOpacity: 0.08,
+              shadowOffset: { width: 0, height: 3 },
             }}
+          >
+            <TouchableOpacity
+              style={{
+                width: 172,
+                padding: 10,
+                height: 40,
+              }}
               onPress={() => {
-                this.props.navigation.navigate('SaveGuestTrial')
-              }}>
-              <Text style={{
-                color: 'white',
-                textAlign: 'center',
-                fontFamily: 'Quicksand-Regular', fontSize: 14
-              }}>Book trial session</Text>
+                this.props.navigation.navigate("SaveGuestTrial");
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  fontFamily: "Quicksand-Regular",
+                  fontSize: 14,
+                }}
+              >
+                Book trial session
+              </Text>
             </TouchableOpacity>
-
           </LinearGradient>
 
-
-          <View style={{ marginTop: 5, textAlign: 'center', }}>
-            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 14, color: '#3E3E3E' }}>For all age groups</Text>
+          <View style={{ marginTop: 5, textAlign: "center" }}>
+            <Text
+              style={{
+                fontFamily: "Nunito-Bold",
+                fontSize: 14,
+                color: "#3E3E3E",
+              }}
+            >
+              For all age groups
+            </Text>
           </View>
           {/* </LinearGradient> */}
         </ImageBackground>
-
-
 
         {/* <View
           style={styles.trialOuter}>
