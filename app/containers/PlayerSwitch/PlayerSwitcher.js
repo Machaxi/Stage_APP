@@ -292,36 +292,67 @@ class PlayerSwitcher extends BaseComponent {
 
 
         return (
+          <View
+            style={{
+              flex: 1,
+              marginTop: 0,
+              backgroundColor: "#F7F7F7",
+            }}
+          >
+            {userData ? (
+              <ScrollView
+                style={{
+                  flex: 1,
+                  marginTop: 0,
+                  backgroundColor: "#F7F7F7",
+                }}
+              >
+                {userData.user["user_type"] == "PLAYER" ||
+                userData.user["user_type"] == "FAMILY" ? null : (
+                  <View
+                    style={{
+                      marginTop: 15,
+                      marginBottom: 0,
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={defaultStyle.regular_text_14}>
+                      Select Academy
+                    </Text>
+                  </View>
+                )}
 
-            <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-                {userData ? <ScrollView style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-
-                    {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? null : <View style={{ marginTop: 15, marginBottom: 0, flex: 1, alignItems: 'center' }}>
-                        <Text style={defaultStyle.regular_text_14}>Select Academy</Text></View>}
-
-                    <View>
-
-
-                        {this.state.itemList.length > 0 ?
-                            <FlatList
-                                data={this.state.itemList}
-                                renderItem={(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') ? this.renderItem : this.renderItemAcedemic}
-                                keyExtractor={(item, index) => item.id}
-                            /> :
-                            <View style={{
-                                flex: 1,
-                                padding: 20,
-                                marginBottom: 20,
-                                alignItems: 'center', justifyContent: 'center'
-                            }}>
-                                <Text style={defaultStyle.bold_text_14}>
-                                    You don't have any academy assigned yet.
-                                </Text>
-                            </View>
-                        }
+                <View>
+                  {this.state.itemList.length > 0 ? (
+                    <FlatList
+                      data={this.state.itemList}
+                      renderItem={
+                        userData.user["user_type"] == "PLAYER" ||
+                        userData.user["user_type"] == "FAMILY"
+                          ? this.renderItem
+                          : this.renderItemAcedemic
+                      }
+                      keyExtractor={(item, index) => item.id}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        flex: 1,
+                        padding: 20,
+                        marginBottom: 20,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text style={defaultStyle.bold_text_14}>
+                        You don't have any academy assigned yet.
+                      </Text>
                     </View>
+                  )}
+                </View>
 
-                    {/* <View style={{ margin: 5 }}>
+                {/* <View style={{ margin: 5 }}>
                         <Card style={{ margin: 5, borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => {
 
@@ -375,134 +406,143 @@ class PlayerSwitcher extends BaseComponent {
                         </Card>
                     </View> */}
 
-                    {(userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY' || userData.user['user_type'] == 'COACH') &&
-
-                        <View style={{ margin: 5 }}>
-                            <Card style={{ margin: 5, borderRadius: 10 }}>
-                                <TouchableOpacity onPress={() => {
-
-                                    console.warn("Touch Press")
-                                    this.props.navigation.navigate('AcademyListing')
-
-                                }}>
-
-                                    <View style={{
-                                        margin: 10,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        height: 40
-                                    }}>
-
-                                        <Image
-                                            resizeMode="contain"
-                                            source={require('../../images/browse_academy.png')}
-                                            style={{
-                                                width: 30,
-                                                height: 30,
-                                                marginRight: 20,
-                                            }} />
-                                        <View style={{ flex: 1 }}>
-
-                                            <View style={{
-                                                flex: 1,
-                                                alignItems: 'center',
-                                                marginRight: 15,
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                            }}>
-                                                <Text style={defaultStyle.bold_text_14}>
-                                                    Other Machaxi Centres
-                                            </Text>
-
-                                                <Image
-                                                    resizeMode="contain"
-                                                    source={require('../../images/path.png')}
-                                                    style={{
-                                                        width: 19,
-                                                        height: 13, marginRight: 0,
-                                                    }} />
-
-                                            </View>
-                                        </View>
-                                    </View>
-
-
-                                </TouchableOpacity>
-                            </Card>
-                        </View>
-                    }
-
-                    <View style={{ margin: 5 }}>
-                        <Card style={{ margin: 5, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
-                                this.props.navigation.navigate('WebViewScreen')
-                            }}>
-                                <View style={{
-                                    margin: 10,
-                                    alignItems: 'center',
-                                    flexDirection: 'row', height: 40
-                                }}>
-
-                                    <Image
-                                        resizeMode="contain"
-                                        source={require('../../images/about_dribble.png')}
-                                        style={{
-                                            width: 26,
-                                            height: 26,
-                                            marginRight: 20,
-                                        }} />
-                                    <View style={{ flex: 1 }}>
-
-                                        <View style={{
-                                            alignItems: 'center',
-                                            flex: 1,
-                                            marginRight: 15,
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.bold_text_14}>
-                                                About Machaxi
-                                            </Text>
-
-                                            <Image
-                                                resizeMode="contain"
-                                                source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    height: 13,
-                                                }} />
-
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
-
-
-                    {this.state.itemList.length == 0 ?
-                        <View style={{
-                            flex: 1,
-                            padding: 20,
-                            alignItems: 'center', justifyContent: 'center'
-                        }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.logout(this.props.navigation)
-                                }}
+                {(userData.user["user_type"] == "PLAYER" ||
+                  userData.user["user_type"] == "FAMILY" ||
+                  userData.user["user_type"] == "COACH") && (
+                  <View style={{ margin: 5 }}>
+                    <Card style={{ margin: 5, borderRadius: 10 }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.warn("Touch Press");
+                          this.props.navigation.navigate(
+                            "AcademyListing"
+                          );
+                        }}
+                      >
+                        <View
+                          style={{
+                            margin: 10,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            height: 40,
+                          }}
+                        >
+                          <Image
+                            resizeMode="contain"
+                            source={require("../../images/browse_academy.png")}
+                            style={{
+                              width: 30,
+                              height: 30,
+                              marginRight: 20,
+                            }}
+                          />
+                          <View style={{ flex: 1 }}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: "center",
+                                marginRight: 15,
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                              }}
                             >
+                              <Text style={defaultStyle.bold_text_14}>
+                                Other Coaching & Fitness Training
+                              </Text>
 
-                                <Text style={defaultStyle.bold_text_14}>
-                                    Logout</Text>
-                            </TouchableOpacity>
+                              <Image
+                                resizeMode="contain"
+                                source={require("../../images/path.png")}
+                                style={{
+                                  width: 19,
+                                  height: 13,
+                                  marginRight: 0,
+                                }}
+                              />
+                            </View>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </Card>
+                  </View>
+                )}
 
-                        </View> : null}
+                <View style={{ margin: 5 }}>
+                  <Card style={{ margin: 5, borderRadius: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate("WebViewScreen");
+                      }}
+                    >
+                      <View
+                        style={{
+                          margin: 10,
+                          alignItems: "center",
+                          flexDirection: "row",
+                          height: 40,
+                        }}
+                      >
+                        <Image
+                          resizeMode="contain"
+                          source={require("../../images/about_dribble.png")}
+                          style={{
+                            width: 26,
+                            height: 26,
+                            marginRight: 20,
+                          }}
+                        />
+                        <View style={{ flex: 1 }}>
+                          <View
+                            style={{
+                              alignItems: "center",
+                              flex: 1,
+                              marginRight: 15,
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text style={defaultStyle.bold_text_14}>
+                              About Machaxi
+                            </Text>
 
+                            <Image
+                              resizeMode="contain"
+                              source={require("../../images/path.png")}
+                              style={{
+                                width: 19,
+                                height: 13,
+                              }}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </Card>
+                </View>
 
-                </ScrollView> : null}
-            </View>
+                {this.state.itemList.length == 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      padding: 20,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.logout(this.props.navigation);
+                      }}
+                    >
+                      <Text style={defaultStyle.bold_text_14}>
+                        Logout
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+              </ScrollView>
+            ) : null}
+          </View>
         );
 
     }

@@ -685,7 +685,7 @@ class CoachMenuDrawer extends BaseComponent {
 						<View style={styles.drawercell}>
 
 							<Text style={styles.menu_coach}>
-								Other Machaxi Centres
+								Other Coaching & Fitness Training
 								</Text>
 
 							<Image
@@ -1146,7 +1146,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							Other Machaxi Centres
+							Other Coaching & Fitness Training
 								</Text>
 
 						<Image

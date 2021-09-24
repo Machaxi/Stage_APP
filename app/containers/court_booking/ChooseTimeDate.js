@@ -1428,316 +1428,507 @@ class ChooseTimeDate extends BaseComponent {
 
 
         return (
-
-            <View style={styles.bookingContainer}>
-                <Spinner visible={this.state.spinner} textStyle={defaultStyle.spinnerTextStyle}
-                />
-                <ScrollView>
-                    <View style={styles.sportPickerLabel}>
-                        <Text style={styles.headingLabel}>Pick a Sport</Text>
-                    </View>
-                    {
-                        this.state.sportsData != null &&
-
-                        <ScrollView horizontal={true} style={styles.sportPicker} >
-
-                            {
-                                this.state.sportsData.map((element, index) => {
-
-                                    let pickerStyle;
-                                    if (element.is_selected == true) {
-                                        pickerStyle = styles.sportPickerSelected;
-                                        textStyle = [defaultStyle.bold_text_12, styles.whiteColor]
-                                    }
-                                    else if (element.is_selected == false) {
-                                        pickerStyle = styles.sportPickerUnselected;
-                                        textStyle = defaultStyle.bold_text_12
-                                    }
-
-                                    return (
-                                        <TouchableOpacity
-                                            activeOpacity={1}
-                                            onPress={() => { this.toggleSportsSelector(element.id) }}>
-                                            <View style={pickerStyle}>
-                                                <View style={{ marginLeft: 19, marginRight: 15, marginVertical: 17 }}>
-                                                    <Image
-                                                        resizeMode="contain"
-                                                        source={this.getSportImage(element)}
-                                                        style={{
-                                                            width: 25,
-                                                            height: 25
-                                                        }} />
-                                                </View>
-                                                <View style={{ marginVertical: 17, maxWidth: 65, marginRight: 18 }}>
-                                                    <Text style={textStyle}>{element.name}</Text>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </ScrollView>
+          <View style={styles.bookingContainer}>
+            <Spinner
+              visible={this.state.spinner}
+              textStyle={defaultStyle.spinnerTextStyle}
+            />
+            <ScrollView>
+              <View style={styles.sportPickerLabel}>
+                <Text style={styles.headingLabel}>Pick a Sport</Text>
+              </View>
+              {this.state.sportsData != null && (
+                <ScrollView
+                  horizontal={true}
+                  style={styles.sportPicker}
+                >
+                  {this.state.sportsData.map((element, index) => {
+                    let pickerStyle;
+                    if (element.is_selected == true) {
+                      pickerStyle = styles.sportPickerSelected;
+                      textStyle = [
+                        defaultStyle.bold_text_12,
+                        styles.whiteColor,
+                      ];
+                    } else if (element.is_selected == false) {
+                      pickerStyle = styles.sportPickerUnselected;
+                      textStyle = defaultStyle.bold_text_12;
                     }
 
-                    <View style={styles.datePickerLabel}>
-                        <Text style={styles.headingLabel}>Pick a Date</Text>
-                    </View>
+                    return (
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => {
+                          this.toggleSportsSelector(element.id);
+                        }}
+                      >
+                        <View style={pickerStyle}>
+                          <View
+                            style={{
+                              marginLeft: 19,
+                              marginRight: 15,
+                              marginVertical: 17,
+                            }}
+                          >
+                            <Image
+                              resizeMode="contain"
+                              source={this.getSportImage(element)}
+                              style={{
+                                width: 25,
+                                height: 25,
+                              }}
+                            />
+                          </View>
+                          <View
+                            style={{
+                              marginVertical: 17,
+                              maxWidth: 65,
+                              marginRight: 18,
+                            }}
+                          >
+                            <Text style={textStyle}>
+                              {element.name}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              )}
 
-                    {
-                        this.state.calendarData != null &&
-                        <ScrollView horizontal={true} style={styles.datePicker}>
-                            {
-                                this.state.calendarData.map((element, index) => {
-                                    let pickerStyle, textStyleLarge, textStyleSmall
-                                    if (element.selected == true) {
-                                        pickerStyle = styles.datePickerSelected;
-                                        textStyleLarge = [defaultStyle.bold_text_14, styles.whiteColor];
-                                        textStyleSmall = [defaultStyle.bold_text_10, styles.whiteColor];
+              <View style={styles.datePickerLabel}>
+                <Text style={styles.headingLabel}>Pick a Date</Text>
+              </View>
 
-                                    }
-                                    else if (element.selected == false) {
-                                        pickerStyle = styles.datePickerUnselected;
-                                        textStyleLarge = defaultStyle.bold_text_14;
-                                        textStyleSmall = defaultStyle.bold_text_10;
-                                    }
-
-                                    return (
-                                        <TouchableOpacity
-                                            activeOpacity={1}
-                                            onPress={() => { this.toggleDateSelector(element.date) }}>
-                                            <View style={pickerStyle}>
-                                                <View style={{ marginBottom: 6 }}>
-                                                    <Text style={textStyleSmall}>{element.month}</Text>
-                                                </View>
-                                                <View>
-                                                    <Text style={textStyleLarge}>{element.day}</Text>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </ScrollView>
+              {this.state.calendarData != null && (
+                <ScrollView horizontal={true} style={styles.datePicker}>
+                  {this.state.calendarData.map((element, index) => {
+                    let pickerStyle, textStyleLarge, textStyleSmall;
+                    if (element.selected == true) {
+                      pickerStyle = styles.datePickerSelected;
+                      textStyleLarge = [
+                        defaultStyle.bold_text_14,
+                        styles.whiteColor,
+                      ];
+                      textStyleSmall = [
+                        defaultStyle.bold_text_10,
+                        styles.whiteColor,
+                      ];
+                    } else if (element.selected == false) {
+                      pickerStyle = styles.datePickerUnselected;
+                      textStyleLarge = defaultStyle.bold_text_14;
+                      textStyleSmall = defaultStyle.bold_text_10;
                     }
 
-                    <View style={styles.timePickerLabel}>
-                        <Text style={styles.headingLabel}>Pick Time Slot</Text>
+                    return (
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => {
+                          this.toggleDateSelector(element.date);
+                        }}
+                      >
+                        <View style={pickerStyle}>
+                          <View style={{ marginBottom: 6 }}>
+                            <Text style={textStyleSmall}>
+                              {element.month}
+                            </Text>
+                          </View>
+                          <View>
+                            <Text style={textStyleLarge}>
+                              {element.day}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              )}
+
+              <View style={styles.timePickerLabel}>
+                <Text style={styles.headingLabel}>Pick Time Slot</Text>
+              </View>
+
+              {this.state.courtBookingDetails != null && (
+                <View>
+                  <View style={styles.slotsLabelOuter}>
+                    <View style={{ flexDirection: "row" }}>
+                      <View style={{ width: "37.33%" }}>
+                        <Text
+                          style={[
+                            styles.slotsLabel,
+                            { marginBottom: 10 },
+                          ]}
+                        >
+                          Duration
+                        </Text>
+                      </View>
+                      <View style={{ width: "62.66%" }}>
+                        <Text
+                          style={[
+                            styles.slotsLabel,
+                            { marginBottom: 10 },
+                          ]}
+                        >
+                          Time Range
+                        </Text>
+                      </View>
                     </View>
+                    <View style={{ flexDirection: "row" }}>
+                      {this.state.selectedSportTimeData != null && (
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            width: "37.33%",
+                          }}
+                        >
+                          <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPress={() => {
+                              this.decrementDuration();
+                            }}
+                          >
+                            <Image
+                              source={require("../../images/minus.png")}
+                              style={{}}
+                            />
+                          </TouchableOpacity>
 
+                          <View
+                            style={{
+                              marginHorizontal: 12,
+                              marginTop: -5,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Quicksand-Regular",
+                                fontSize: 16,
+                                color: "#404040",
+                              }}
+                            >
+                              {
+                                this.convertMinsToHrs(
+                                  this.state.selectedDuration
+                                ).split(" ")[0]
+                              }
+                            </Text>
+                            <Text
+                              style={{
+                                fontFamily: "Quicksand-Regular",
+                                fontSize: 12,
+                                color: "#404040",
+                              }}
+                            >
+                              {
+                                this.convertMinsToHrs(
+                                  this.state.selectedDuration
+                                ).split(" ")[1]
+                              }
+                            </Text>
+                          </View>
 
-                    {
-                        this.state.courtBookingDetails != null &&
-
-                        <View>
-
-                            <View style={styles.slotsLabelOuter}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ width: '37.33%', }}><Text style={[styles.slotsLabel, { marginBottom: 10 }]}>Duration</Text></View>
-                                    <View style={{ width: '62.66%', }}><Text style={[styles.slotsLabel, { marginBottom: 10 }]}>Time Range</Text></View >
-
-                                </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    {
-                                        this.state.selectedSportTimeData != null &&
-
-                                        <View style={{ flexDirection: 'row', width: '37.33%' }}>
-
-                                            <TouchableOpacity
-                                                activeOpacity={.8}
-                                                onPress={() => { this.decrementDuration() }}>
-                                                <Image source={require('../../images/minus.png')} style={{}}></Image>
-                                            </TouchableOpacity>
-
-                                            <View style={{ marginHorizontal: 12, marginTop: -5 }}>
-                                                <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[0]}</Text>
-                                                <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 12, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[1]}</Text>
-                                            </View>
-
-                                            {
-                                                this.convertMinsToHrs(this.state.selectedDuration).split(' ')[2] &&
-
-                                                <View style={{ marginTop: -5 }}>
-                                                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[2]}</Text>
-                                                    <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 12, color: '#404040' }}>{this.convertMinsToHrs(this.state.selectedDuration).split(' ')[3]}</Text>
-                                                </View>
-
-                                            }
-
-                                            <TouchableOpacity
-                                                activeOpacity={.8}
-                                                onPress={() => { this.incrementDuration() }}>
-                                                <Image
-                                                    source={require('../../images/plus.png')} style={{}}></Image>
-                                            </TouchableOpacity>
-
-                                        </View>
-
-                                    }
-
-                                    <View style={{ width: '62.66%', }}><Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 16, color: '#404040' }}>
-                                        {this.convertMinsToHrsMins(this.state.selectedTimeRange.startTime)} - {this.convertMinsToHrsMins(this.state.selectedTimeRange.endTime)}</Text></View>
-                                </View>
-                            </View>
-
-                            {/* Time slider starts */}
-
-                            {
-                                this.state.sliderData != null && this.state.sliderData.length > block_array ?
-
-                                    <View>
-                                        <View>
-                                            <Image resizeMode="contain" style={{
-                                                alignSelf: 'center',
-                                                justifyContent: 'center',
-                                                alignItems: 'center', width: 50, height: 50
-                                            }}
-                                                source={require('../../images/ic_navigation.png')} />
-                                        </View>
-
-
-                                        <Carousel
-                                            ref={(c) => { this._carousel = c; }}
-                                            data={this.state.sliderData}
-                                            loop={false}
-                                            renderItem={this.renderItem}
-                                            itemWidth={itemWidth}
-                                            onSnapToItem={(index) => {
-                                                console.log("Moved to=====> " + index)
-                                                this.state.selectedIndex = index;
-                                                this.setState({
-                                                    selectedIndex: index
-
-                                                }, () => {
-                                                    var timing = {};
-                                                    let data = this.state.sliderData[this.state.selectedIndex + block_array]
-                                                    if (data) {
-                                                        console.log('CarosoulData->', JSON.stringify(data))
-                                                        if (data.deadslot) {
-                                                            this.setState({
-                                                                availableCourts: [],
-                                                                courtInfoMessage: NO_COURT_MSG
-                                                            })
-                                                        } else {
-                                                            timing['startTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes;
-                                                            timing['endTime'] = this.state.sliderData[this.state.selectedIndex + block_array].minutes + this.state.selectedDuration;
-                                                            this.setState({
-                                                                selectedTimeRange: timing,
-                                                                totalNoOfHours: 0,
-                                                                totalCost: 0
-                                                            }, () => {
-                                                                this.checkCourtAvailability();
-                                                            })
-                                                        }
-
-                                                    }
-                                                })
-                                            }}
-
-                                            onScroll={(event) => {
-                                                // 114 is the item width
-                                                if (event.nativeEvent.contentOffset.x % itemWidth === 0) {
-                                                    if (this.state.selectedIndex + block_array == this.state.sliderData.length - 1) {
-                                                        //alert('last')
-                                                        // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
-                                                        //   event.nativeEvent.contentOffset.y});
-                                                    }
-                                                    //ReactNativeHapticFeedback.trigger('impactLight', true)
-                                                    //console.log('onScroll-> ', event.nativeEvent.contentOffset.x)
-                                                    let val = (this.state.sliderData.length - block_array) * itemWidth
-                                                    console.log('onScroll-> ', event.nativeEvent.contentOffset.x + "== " + val)
-                                                    if (event.nativeEvent.contentOffset.x >= val) {
-                                                        // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y: 
-                                                        //   event.nativeEvent.contentOffset.y});
-                                                        //alert('outside')
-                                                        console.log('outside')
-                                                        this._carousel.snapToItem(this.state.sliderData.length - block_array - 2)
-                                                        setTimeout(() => {
-                                                            this._carousel.snapToItem(this.state.sliderData.length - block_array - 2)
-                                                        }, 100)
-                                                    }
-                                                }
-                                            }}
-                                            //onScroll={(event) => this.handleScroll(event)}
-                                            itemHeight={80}
-                                            lockScrollWhileSnapping={false}
-                                            sliderWidth={360}//Dimensions.get('window').width
-                                            inactiveSlideOpacity={1}
-                                            inactiveSlideScale={1}
-                                            activeSlideAlignment={'start'}
-                                            //slideStyle={{ marginLeft: 14 }}
-                                            loopClonesPerSide={10}
-                                            useScrollView={true}
-                                        />
-
-                                    </View> : null
-                            }
-
-
-                            {
-                                (this.state.availableCourts != null && this.state.availableCourts.length > 0) &&
-                                <View style={{ paddingLeft: 12, marginBottom: 10 }}>
-                                    <Text style={styles.headingLabel}>Select Court</Text>
-                                </View>
-                            }
-
-                            {
-                                (this.state.availableCourts != null && this.state.courtInfoMessage != '' && this.state.availableCourts.length == 0) &&
-
-                                <View style={{ paddingHorizontal: 12, marginTop: 30 }}>
-                                    <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#A3A5AE' }}>{this.state.courtInfoMessage}</Text>
-                                </View>
-                            }
-
-                            <ScrollView horizontal={true} style={styles.courtPicker}>
-
+                          {this.convertMinsToHrs(
+                            this.state.selectedDuration
+                          ).split(" ")[2] && (
+                            <View style={{ marginTop: -5 }}>
+                              <Text
+                                style={{
+                                  fontFamily: "Quicksand-Regular",
+                                  fontSize: 16,
+                                  color: "#404040",
+                                }}
+                              >
                                 {
-                                    this.state.availableCourts != null &&
-
-                                    this.state.availableCourts.map((element, index) => {
-
-                                        let pickerStyle, textStyleLarge;
-                                        if (element.disabled == true) {
-                                            pickerStyle = styles.courtPickerDisabled;
-                                            textStyleLarge = defaultStyle.bold_text_14;
-                                        }
-                                        else if (element.selected == true) {
-                                            pickerStyle = styles.courtPickerSelected;
-                                            textStyleLarge = [defaultStyle.bold_text_14, styles.whiteColor];
-                                        }
-                                        else if (element.selected == false) {
-                                            pickerStyle = styles.courtPickerUnSelected;
-                                            textStyleLarge = defaultStyle.bold_text_14;
-                                        }
-
-                                        return (
-
-                                            <TouchableOpacity
-                                                activeOpacity={1}
-                                                onPress={() => { this.courtSelector(index) }}>
-                                                <View style={pickerStyle}>
-                                                    <View style={{ marginBottom: 0 }}>
-                                                        <Text style={textStyleLarge}>{element.name}</Text>
-                                                    </View>
-                                                </View>
-                                            </TouchableOpacity>
-                                        )
-                                    })
+                                  this.convertMinsToHrs(
+                                    this.state.selectedDuration
+                                  ).split(" ")[2]
                                 }
-                            </ScrollView>
+                              </Text>
+                              <Text
+                                style={{
+                                  fontFamily: "Quicksand-Regular",
+                                  fontSize: 12,
+                                  color: "#404040",
+                                }}
+                              >
+                                {
+                                  this.convertMinsToHrs(
+                                    this.state.selectedDuration
+                                  ).split(" ")[3]
+                                }
+                              </Text>
+                            </View>
+                          )}
 
-                            {this.state.selectedSportTimeData.rules ?
-                                < View style={{ marginTop: 30, paddingLeft: 12 }}>
-                                    <View>
-                                        <Text style={styles.headingLabel}>Playing Rules</Text>
-                                        <View style={{ marginTop: 12 }}>
-                                            <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 14, color: '#404040' }}>
-                                                {this.state.selectedSportTimeData.rules}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View> : null}
+                          <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPress={() => {
+                              this.incrementDuration();
+                            }}
+                          >
+                            <Image
+                              source={require("../../images/plus.png")}
+                              style={{}}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      )}
 
-                            <View style={{ marginTop: 16, paddingLeft: 12, marginBottom: 20 }}>
+                      <View style={{ width: "62.66%" }}>
+                        <Text
+                          style={{
+                            fontFamily: "Quicksand-Regular",
+                            fontSize: 16,
+                            color: "#404040",
+                          }}
+                        >
+                          {this.convertMinsToHrsMins(
+                            this.state.selectedTimeRange.startTime
+                          )}{" "}
+                          -{" "}
+                          {this.convertMinsToHrsMins(
+                            this.state.selectedTimeRange.endTime
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+
+                  {/* Time slider starts */}
+
+                  {this.state.sliderData != null &&
+                  this.state.sliderData.length > block_array ? (
+                    <View>
+                      <View>
+                        <Image
+                          resizeMode="contain"
+                          style={{
+                            alignSelf: "center",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: 50,
+                            height: 50,
+                          }}
+                          source={require("../../images/ic_navigation.png")}
+                        />
+                      </View>
+
+                      <Carousel
+                        ref={(c) => {
+                          this._carousel = c;
+                        }}
+                        data={this.state.sliderData}
+                        loop={false}
+                        renderItem={this.renderItem}
+                        itemWidth={itemWidth}
+                        onSnapToItem={(index) => {
+                          console.log("Moved to=====> " + index);
+                          this.state.selectedIndex = index;
+                          this.setState(
+                            {
+                              selectedIndex: index,
+                            },
+                            () => {
+                              var timing = {};
+                              let data = this.state.sliderData[
+                                this.state.selectedIndex + block_array
+                              ];
+                              if (data) {
+                                console.log(
+                                  "CarosoulData->",
+                                  JSON.stringify(data)
+                                );
+                                if (data.deadslot) {
+                                  this.setState({
+                                    availableCourts: [],
+                                    courtInfoMessage: NO_COURT_MSG,
+                                  });
+                                } else {
+                                  timing[
+                                    "startTime"
+                                  ] = this.state.sliderData[
+                                    this.state.selectedIndex +
+                                      block_array
+                                  ].minutes;
+                                  timing["endTime"] =
+                                    this.state.sliderData[
+                                      this.state.selectedIndex +
+                                        block_array
+                                    ].minutes +
+                                    this.state.selectedDuration;
+                                  this.setState(
+                                    {
+                                      selectedTimeRange: timing,
+                                      totalNoOfHours: 0,
+                                      totalCost: 0,
+                                    },
+                                    () => {
+                                      this.checkCourtAvailability();
+                                    }
+                                  );
+                                }
+                              }
+                            }
+                          );
+                        }}
+                        onScroll={(event) => {
+                          // 114 is the item width
+                          if (
+                            event.nativeEvent.contentOffset.x %
+                              itemWidth ===
+                            0
+                          ) {
+                            if (
+                              this.state.selectedIndex + block_array ==
+                              this.state.sliderData.length - 1
+                            ) {
+                              //alert('last')
+                              // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y:
+                              //   event.nativeEvent.contentOffset.y});
+                            }
+                            //ReactNativeHapticFeedback.trigger('impactLight', true)
+                            //console.log('onScroll-> ', event.nativeEvent.contentOffset.x)
+                            let val =
+                              (this.state.sliderData.length -
+                                block_array) *
+                              itemWidth;
+                            console.log(
+                              "onScroll-> ",
+                              event.nativeEvent.contentOffset.x +
+                                "== " +
+                                val
+                            );
+                            if (
+                              event.nativeEvent.contentOffset.x >= val
+                            ) {
+                              // this._carousel.scrollTo({x: event.nativeEvent.contentOffset.x, y:
+                              //   event.nativeEvent.contentOffset.y});
+                              //alert('outside')
+                              console.log("outside");
+                              this._carousel.snapToItem(
+                                this.state.sliderData.length -
+                                  block_array -
+                                  2
+                              );
+                              setTimeout(() => {
+                                this._carousel.snapToItem(
+                                  this.state.sliderData.length -
+                                    block_array -
+                                    2
+                                );
+                              }, 100);
+                            }
+                          }
+                        }}
+                        //onScroll={(event) => this.handleScroll(event)}
+                        itemHeight={80}
+                        lockScrollWhileSnapping={false}
+                        sliderWidth={360} //Dimensions.get('window').width
+                        inactiveSlideOpacity={1}
+                        inactiveSlideScale={1}
+                        activeSlideAlignment={"start"}
+                        //slideStyle={{ marginLeft: 14 }}
+                        loopClonesPerSide={10}
+                        useScrollView={true}
+                      />
+                    </View>
+                  ) : null}
+
+                  {this.state.availableCourts != null &&
+                    this.state.availableCourts.length > 0 && (
+                      <View
+                        style={{ paddingLeft: 12, marginBottom: 10 }}
+                      >
+                        <Text style={styles.headingLabel}>
+                          Select Court
+                        </Text>
+                      </View>
+                    )}
+
+                  {this.state.availableCourts != null &&
+                    this.state.courtInfoMessage != "" &&
+                    this.state.availableCourts.length == 0 && (
+                      <View
+                        style={{ paddingHorizontal: 12, marginTop: 30 }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Quicksand-Medium",
+                            fontSize: 14,
+                            color: "#A3A5AE",
+                          }}
+                        >
+                          {this.state.courtInfoMessage}
+                        </Text>
+                      </View>
+                    )}
+
+                  <ScrollView
+                    horizontal={true}
+                    style={styles.courtPicker}
+                  >
+                    {this.state.availableCourts != null &&
+                      this.state.availableCourts.map(
+                        (element, index) => {
+                          let pickerStyle, textStyleLarge;
+                          if (element.disabled == true) {
+                            pickerStyle = styles.courtPickerDisabled;
+                            textStyleLarge = defaultStyle.bold_text_14;
+                          } else if (element.selected == true) {
+                            pickerStyle = styles.courtPickerSelected;
+                            textStyleLarge = [
+                              defaultStyle.bold_text_14,
+                              styles.whiteColor,
+                            ];
+                          } else if (element.selected == false) {
+                            pickerStyle = styles.courtPickerUnSelected;
+                            textStyleLarge = defaultStyle.bold_text_14;
+                          }
+
+                          return (
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              onPress={() => {
+                                this.courtSelector(index);
+                              }}
+                            >
+                              <View style={pickerStyle}>
+                                <View style={{ marginBottom: 0 }}>
+                                  <Text style={textStyleLarge}>
+                                    {element.name}
+                                  </Text>
+                                </View>
+                              </View>
+                            </TouchableOpacity>
+                          );
+                        }
+                      )}
+                  </ScrollView>
+
+                  {this.state.selectedSportTimeData.rules ? (
+                    <View style={{ marginTop: 30, paddingLeft: 12 }}>
+                      <View>
+                        <Text style={styles.headingLabel}>
+                          Playing Rules
+                        </Text>
+                        <View style={{ marginTop: 12 }}>
+                          <Text
+                            style={{
+                              fontFamily: "Quicksand-Regular",
+                              fontSize: 14,
+                              color: "#404040",
+                            }}
+                          >
+                            {this.state.selectedSportTimeData.rules}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  ) : null}
+
+                  {/* <View style={{ marginTop: 16, paddingLeft: 12, marginBottom: 20 }}>
                                 <View>
                                     <Text style={styles.headingLabel}>Reschedule/Cancellation</Text>
                                     <View style={{ marginTop: 12 }}>
@@ -1746,35 +1937,80 @@ class ChooseTimeDate extends BaseComponent {
                                         </Text>
                                     </View>
                                 </View>
-                            </View>
-                        </View>
-                    }
-                </ScrollView>
-                <View style={{ padding: 12, borderRadius: 1, elevation: 1.5, shadowOpacity: 0.32, shadowOffset: { width: 0, height: 1, borderBottomRadius: 0 } }}>
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
-                        <View style={{ display: 'flex' }}>
-                            <Text style={{ fontFamily: 'Quicksand-Regular', fontSize: 12, color: '#404040' }}>Total Cost</Text>
-                            <Text style={{ fontFamily: 'Quicksand-Medium', fontSize: 14, color: '#404040' }}>Rs {this.state.totalCost}</Text>
-                        </View>
-                        <View style={{ width: '48%' }}>
-                            {
-                                this.state.selectedCourtIds.length == 0 || this.state.totalCost == 0 ?
-                                    <Text style={[styles.rounded_button_half, { backgroundColor: '#DDDDDD' }]} onPress={() => {
-                                        //this.showPaymentModal();
-                                    }}>Pay Now</Text> :
-                                    <Text style={styles.rounded_button_half} onPress={() => {
-                                        this.showPaymentModal();
-                                    }}>Pay Now</Text>
-                            }
-                        </View>
-                    </View>
+                            </View> */}
                 </View>
+              )}
+            </ScrollView>
+            <View
+              style={{
+                padding: 12,
+                borderRadius: 1,
+                elevation: 1.5,
+                shadowOpacity: 0.32,
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                  borderBottomRadius: 0,
+                },
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: 5,
+                }}
+              >
+                <View style={{ display: "flex" }}>
+                  <Text
+                    style={{
+                      fontFamily: "Quicksand-Regular",
+                      fontSize: 12,
+                      color: "#404040",
+                    }}
+                  >
+                    Total Cost
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "Quicksand-Medium",
+                      fontSize: 14,
+                      color: "#404040",
+                    }}
+                  >
+                    Rs {this.state.totalCost}
+                  </Text>
+                </View>
+                <View style={{ width: "48%" }}>
+                  {this.state.selectedCourtIds.length == 0 ||
+                  this.state.totalCost == 0 ? (
+                    <Text
+                      style={[
+                        styles.rounded_button_half,
+                        { backgroundColor: "#DDDDDD" },
+                      ]}
+                      onPress={() => {
+                        //this.showPaymentModal();
+                      }}
+                    >
+                      Pay Now
+                    </Text>
+                  ) : (
+                    <Text
+                      style={styles.rounded_button_half}
+                      onPress={() => {
+                        this.showPaymentModal();
+                      }}
+                    >
+                      Pay Now
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </View>
 
-                {this.paymentModal()}
-
-            </View >
-
+            {this.paymentModal()}
+          </View>
         );
 
     }

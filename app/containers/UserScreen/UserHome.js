@@ -872,7 +872,9 @@ class UserHome extends BaseComponent {
       }
 
       return (
-        <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}>
+        <View
+          style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}
+        >
           {/* <StatusBar translucent backgroundColor="#264d9b"
                 barStyle="light-content"/> */}
 
@@ -936,14 +938,17 @@ class UserHome extends BaseComponent {
                     }}
                   >
                     <Text style={defaultStyle.bold_text_10}>
-                      Next Session : {operations.next_sessions[0].routine_name}
+                      Next Session :{" "}
+                      {operations.next_sessions[0].routine_name}
                     </Text>
                     <Text style={defaultStyle.bold_text_10}>
                       {operations.batch_name}
                     </Text>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
-                    <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
+                    <View
+                      style={[defaultStyle.line_style, { marginTop: 0 }]}
+                    />
 
                     {sessionArray}
                   </View>
@@ -1050,7 +1055,7 @@ class UserHome extends BaseComponent {
                         }}
                       >
                         <Text style={defaultStyle.bold_text_14}>
-                          Other Machaxi Centres
+                          Other Coaching & Fitness Training
                         </Text>
 
                         <Image
@@ -1111,7 +1116,10 @@ class UserHome extends BaseComponent {
                     }}
                   >
                     <Text
-                      style={[defaultStyle.bold_text_14, { color: "#707070" }]}
+                      style={[
+                        defaultStyle.bold_text_14,
+                        { color: "#707070" },
+                      ]}
                     >
                       {academy_feedback_data.target.name}
                     </Text>
@@ -1150,7 +1158,8 @@ class UserHome extends BaseComponent {
                         iconSet={"Ionicons"}
                         maxStars={5}
                         rating={
-                          academy_feedback_data.target.avgFeedbackEntities[0]
+                          academy_feedback_data.target
+                            .avgFeedbackEntities[0]
                             ? academy_feedback_data.target
                                 .avgFeedbackEntities[0].avgRating
                             : 0
@@ -1172,9 +1181,10 @@ class UserHome extends BaseComponent {
                                         academy_feedback_data.target.avgFeedbackEntities[0].avgRating
                                         */}
                       <RateViewBorder>
-                        {academy_feedback_data.target.avgFeedbackEntities[0]
-                          ? academy_feedback_data.target.avgFeedbackEntities[0]
-                              .avgRating
+                        {academy_feedback_data.target
+                          .avgFeedbackEntities[0]
+                          ? academy_feedback_data.target
+                              .avgFeedbackEntities[0].avgRating
                           : 0}
                       </RateViewBorder>
                     </View>
@@ -1330,7 +1340,9 @@ class UserHome extends BaseComponent {
                     marginTop: 16,
                   }}
                 >
-                  <Text style={defaultStyle.bold_text_10}>Coach Feedback</Text>
+                  <Text style={defaultStyle.bold_text_10}>
+                    Coach Feedback
+                  </Text>
                 </View>
 
                 <View
@@ -1418,8 +1430,8 @@ class UserHome extends BaseComponent {
                         iconSet={"Ionicons"}
                         maxStars={5}
                         rating={
-                          coach_feedback_data.target.avgFeedbackEntities[0]
-                            .avgRating
+                          coach_feedback_data.target
+                            .avgFeedbackEntities[0].avgRating
                         }
                         ratingBackgroundColor={"#ff2200"}
                         fullStarColor={"#F4FC9A"}
@@ -1438,8 +1450,8 @@ class UserHome extends BaseComponent {
                                         coach_feedback_data.target.avgFeedbackEntities[0].avgRating */}
                       <RateViewBorder>
                         {
-                          coach_feedback_data.target.avgFeedbackEntities[0]
-                            .avgRating
+                          coach_feedback_data.target
+                            .avgFeedbackEntities[0].avgRating
                         }
                       </RateViewBorder>
                     </View>
@@ -1552,10 +1564,13 @@ class UserHome extends BaseComponent {
                 >
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate("CoachProfileDetail", {
-                        academy_id: coach_feedback_data.academyId,
-                        coach_id: coach_feedback_data.target.entity_id,
-                      });
+                      this.props.navigation.navigate(
+                        "CoachProfileDetail",
+                        {
+                          academy_id: coach_feedback_data.academyId,
+                          coach_id: coach_feedback_data.target.entity_id,
+                        }
+                      );
                     }}
                   >
                     <Text
@@ -1643,7 +1658,8 @@ class UserHome extends BaseComponent {
                             ]}
                           >
                             {" " +
-                              this.state.currentCoachFeedback.targetUserName}
+                              this.state.currentCoachFeedback
+                                .targetUserName}
                           </Text>
                         </Text>
 
@@ -1692,7 +1708,8 @@ class UserHome extends BaseComponent {
                                 : this.state.currentCoachFeedback.rating
                             }
                             selectedStar={(rating) => {
-                              let coachInfo = this.state.currentCoachFeedback;
+                              let coachInfo = this.state
+                                .currentCoachFeedback;
                               coachInfo.rating = rating;
                               this.setState({
                                 dashboard_coach_rating: coachInfo,
@@ -1706,7 +1723,8 @@ class UserHome extends BaseComponent {
                           <Text style={defaultStyle.bold_text_14}>
                             {moment
                               .utc(
-                                this.state.currentCoachFeedback.attendanceDate
+                                this.state.currentCoachFeedback
+                                  .attendanceDate
                               )
                               .local()
                               .format(SESSION_DATE_FORMAT)}
@@ -1917,7 +1935,8 @@ class UserHome extends BaseComponent {
                     fontFamily: "Quicksand-Regular",
                   }}
                 >
-                  Thank you ! Your feedback has been succesfully submitted.
+                  Thank you ! Your feedback has been succesfully
+                  submitted.
                 </Text>
 
                 <View

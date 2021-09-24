@@ -885,7 +885,9 @@ class ParentHome extends BaseComponent {
         }
       }
       return (
-        <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}>
+        <View
+          style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}
+        >
           <ScrollView
             refreshControl={
               <RefreshControl
@@ -928,14 +930,17 @@ class ParentHome extends BaseComponent {
                     }}
                   >
                     <Text style={defaultStyle.bold_text_10}>
-                      Next Session : {operations.next_sessions[0].routine_name}
+                      Next Session :{" "}
+                      {operations.next_sessions[0].routine_name}
                     </Text>
                     <Text style={defaultStyle.bold_text_10}>
                       {operations.batch_name}
                     </Text>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
-                    <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
+                    <View
+                      style={[defaultStyle.line_style, { marginTop: 0 }]}
+                    />
 
                     {sessionArray}
                   </View>
@@ -960,9 +965,14 @@ class ParentHome extends BaseComponent {
                     }}
                   >
                     <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
                     >
-                      <Text style={defaultStyle.bold_text_10}>Payment</Text>
+                      <Text style={defaultStyle.bold_text_10}>
+                        Payment
+                      </Text>
                       <View style={{ marginLeft: 10 }}>
                         <DueView />
                       </View>
@@ -995,7 +1005,10 @@ class ParentHome extends BaseComponent {
                   />
 
                   <Text
-                    style={[defaultStyle.bold_text_14, { marginRight: 16 }]}
+                    style={[
+                      defaultStyle.bold_text_14,
+                      { marginRight: 16 },
+                    ]}
                   >
                     {name}
                   </Text>
@@ -1025,7 +1038,10 @@ class ParentHome extends BaseComponent {
                           Amount
                         </Text>
                         <Text
-                          style={[defaultStyle.bold_text_14, { marginTop: 10 }]}
+                          style={[
+                            defaultStyle.bold_text_14,
+                            { marginTop: 10 },
+                          ]}
                         >
                           {payment_detail_academy.totalAmount}
                         </Text>
@@ -1062,7 +1078,10 @@ class ParentHome extends BaseComponent {
                     }}
                   >
                     <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
                     >
                       <Text style={defaultStyle.bold_text_10}>
                         Reward Points
@@ -1098,7 +1117,10 @@ class ParentHome extends BaseComponent {
                   />
 
                   <Text
-                    style={[defaultStyle.bold_text_14, { marginRight: 16 }]}
+                    style={[
+                      defaultStyle.bold_text_14,
+                      { marginRight: 16 },
+                    ]}
                   >
                     {name}
                   </Text>
@@ -1129,7 +1151,11 @@ class ParentHome extends BaseComponent {
                   }}
                 >
                   <View
-                    style={{ margin: 10, flexDirection: "row", height: 40 }}
+                    style={{
+                      margin: 10,
+                      flexDirection: "row",
+                      height: 40,
+                    }}
                   >
                     <Image
                       source={require("../../images/view_academy_player.png")}
@@ -1181,7 +1207,11 @@ class ParentHome extends BaseComponent {
                   }}
                 >
                   <View
-                    style={{ margin: 10, flexDirection: "row", height: 40 }}
+                    style={{
+                      margin: 10,
+                      flexDirection: "row",
+                      height: 40,
+                    }}
                   >
                     <Image
                       source={require("../../images/browse_academy.png")}
@@ -1205,7 +1235,7 @@ class ParentHome extends BaseComponent {
                         }}
                       >
                         <Text style={defaultStyle.bold_text_14}>
-                          Other Machaxi Centres
+                          Other Coaching & Fitness Training
                         </Text>
 
                         <Image
@@ -1264,7 +1294,10 @@ class ParentHome extends BaseComponent {
                     }}
                   >
                     <Text
-                      style={[defaultStyle.bold_text_14, { color: "#707070" }]}
+                      style={[
+                        defaultStyle.bold_text_14,
+                        { color: "#707070" },
+                      ]}
                     >
                       {academy_feedback_data.target.name}
                     </Text>
@@ -1304,7 +1337,8 @@ class ParentHome extends BaseComponent {
                         iconSet={"Ionicons"}
                         maxStars={5}
                         rating={
-                          academy_feedback_data.target.avgFeedbackEntities[0]
+                          academy_feedback_data.target
+                            .avgFeedbackEntities[0]
                             ? academy_feedback_data.target
                                 .avgFeedbackEntities[0].avgRating
                             : 0
@@ -1324,9 +1358,10 @@ class ParentHome extends BaseComponent {
                                             fontFamily: 'Quicksand-Medium'
                                         }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
                       <RateViewBorder>
-                        {academy_feedback_data.target.avgFeedbackEntities[0]
-                          ? academy_feedback_data.target.avgFeedbackEntities[0]
-                              .avgRating
+                        {academy_feedback_data.target
+                          .avgFeedbackEntities[0]
+                          ? academy_feedback_data.target
+                              .avgFeedbackEntities[0].avgRating
                           : 0}
                       </RateViewBorder>
                     </View>
@@ -1553,8 +1588,8 @@ class ParentHome extends BaseComponent {
                           iconSet={"Ionicons"}
                           maxStars={5}
                           rating={
-                            coach_feedback_data.target.avgFeedbackEntities[0]
-                              .avgRating
+                            coach_feedback_data.target
+                              .avgFeedbackEntities[0].avgRating
                           }
                           ratingBackgroundColor={"#ff2200"}
                           fullStarColor={"#F4FC9A"}
@@ -1572,8 +1607,8 @@ class ParentHome extends BaseComponent {
                                             }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
                         <RateViewBorder>
                           {
-                            coach_feedback_data.target.avgFeedbackEntities[0]
-                              .avgRating
+                            coach_feedback_data.target
+                              .avgFeedbackEntities[0].avgRating
                           }
                         </RateViewBorder>
                       </View>
@@ -1685,10 +1720,14 @@ class ParentHome extends BaseComponent {
                   >
                     <TouchableOpacity
                       onPress={() => {
-                        this.props.navigation.navigate("CoachProfileDetail", {
-                          academy_id: coach_feedback_data.academyId,
-                          coach_id: coach_feedback_data.target.entity_id,
-                        });
+                        this.props.navigation.navigate(
+                          "CoachProfileDetail",
+                          {
+                            academy_id: coach_feedback_data.academyId,
+                            coach_id:
+                              coach_feedback_data.target.entity_id,
+                          }
+                        );
                       }}
                     >
                       <Text

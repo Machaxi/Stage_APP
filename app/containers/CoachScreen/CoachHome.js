@@ -575,103 +575,136 @@ class CoachHome extends BaseComponent {
 
             this.scoreMangement(tournaments)
 
-            return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: 0,
+                  backgroundColor: "#F7F7F7",
+                }}
+              >
                 <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.onRefresh}
-                            title="Pull to refresh"
-                        />
-                    }
-                    style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={this.state.refreshing}
+                      onRefresh={this.onRefresh}
+                      title="Pull to refresh"
+                    />
+                  }
+                  style={{
+                    flex: 1,
+                    marginTop: 0,
+                    backgroundColor: "#F7F7F7",
+                  }}
+                >
+                  {this.state.userType == COACH ||
+                  this.state.userType == ACADEMY ? (
+                    <View style={{ margin: 10, marginTop: 20 }}>
+                      <SwitchButton
+                        onPress={() =>
+                          this.props.navigation.navigate(
+                            "SwitchPlayer",
+                            {
+                              userType: "coach",
+                            }
+                          )
+                        }
+                      >
+                        Switch Academy
+                      </SwitchButton>
+                    </View>
+                  ) : null}
 
-                    {this.state.userType == COACH || this.state.userType == ACADEMY ?
-                        <View style={{ margin: 10, marginTop: 20 }}>
+                  {is_attandence_due ? (
+                    <CustomeCard>
+                      <View
+                        style={{
+                          marginLeft: 12,
+                          marginRight: 12,
+                          marginTop: 16,
+                        }}
+                      >
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={defaultStyle.bold_text_10}>
+                            Attendance
+                          </Text>
 
-                            <SwitchButton onPress={() => this.props.navigation.navigate('SwitchPlayer', {
-                                userType: 'coach'
-                            })}>
-                                Switch Academy
-                     </SwitchButton>
-                        </View> : null}
-
-
-
-                    {is_attandence_due ?
-
-                        <CustomeCard>
-                            <View
-                                style={{
-                                    marginLeft: 12,
-                                    marginRight: 12,
-                                    marginTop: 16
-                                }}
-                            >
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={defaultStyle.bold_text_10}>Attendance</Text>
-
-                                    {is_attandence_due ?
-                                        <View
-                                            style={{ marginLeft: 10 }}>
-                                            <DueView />
-                                        </View> : null}
-                                </View>
-                                <View style={defaultStyle.line_style} />
-
-                                {attendenceArray}
+                          {is_attandence_due ? (
+                            <View style={{ marginLeft: 10 }}>
+                              <DueView />
                             </View>
-                        </CustomeCard> : null}
+                          ) : null}
+                        </View>
+                        <View style={defaultStyle.line_style} />
 
-                    {sessionArray.length > 0 ?
-                        <CustomeCard>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate('BatchDetails', {
-                                        batch_id: operations.batch_id,
-                                        batch_name: operations.batch_name
-                                    })
-                                }}
-                            >
+                        {attendenceArray}
+                      </View>
+                    </CustomeCard>
+                  ) : null}
 
-                                <View
-                                    style={{
-                                        marginLeft: 12,
-                                        marginRight: 12,
-                                        marginTop: 16,
+                  {sessionArray.length > 0 ? (
+                    <CustomeCard>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.props.navigation.navigate(
+                            "BatchDetails",
+                            {
+                              batch_id: operations.batch_id,
+                              batch_name: operations.batch_name,
+                            }
+                          );
+                        }}
+                      >
+                        <View
+                          style={{
+                            marginLeft: 12,
+                            marginRight: 12,
+                            marginTop: 16,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text style={defaultStyle.bold_text_10}>
+                              Next Session :{" "}
+                              {
+                                operations.next_sessions[0]
+                                  .routine_name
+                              }
+                            </Text>
+                            <Text style={defaultStyle.bold_text_10}>
+                              {operations.batch_name}
+                            </Text>
 
-                                    }} >
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between'
-                                        }}>
-                                        <Text style={defaultStyle.bold_text_10}>Next Session : {operations.next_sessions[0].routine_name}</Text>
-                                        <Text style={defaultStyle.bold_text_10}>{operations.batch_name}</Text>
-
-                                        {/* {operations.attendance.attendance != undefined ?
+                            {/* {operations.attendance.attendance != undefined ?
                                     <Text style={{ color: '#667DDB' }}>{'Attendance  - ' + operations.attendance.attendance + '% (' + operations.attendance.month + ')'}</Text>
                                     : null
                                 } */}
-                                    </View>
-                                    <View style={defaultStyle.line_style} />
-                                    {sessionArray}
-                                </View></TouchableOpacity>
+                          </View>
+                          <View style={defaultStyle.line_style} />
+                          {sessionArray}
+                        </View>
+                      </TouchableOpacity>
+                    </CustomeCard>
+                  ) : null}
 
-                        </CustomeCard> : null}
-
-
-                    {is_performance_due ? <CustomeCard>
-                        <View
-                            style={{
-                                marginLeft: 12,
-                                marginRight: 12,
-                                marginTop: 16
-                            }}
-                        >
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={defaultStyle.bold_text_10}>Update Player Performance</Text>
-                                {/* <View
+                  {is_performance_due ? (
+                    <CustomeCard>
+                      <View
+                        style={{
+                          marginLeft: 12,
+                          marginRight: 12,
+                          marginTop: 16,
+                        }}
+                      >
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={defaultStyle.bold_text_10}>
+                            Update Player Performance
+                          </Text>
+                          {/* <View
                                     style={{ backgroundColor: '#FF7373', marginRight: 10, marginLeft: 10, borderRadius: 5 }}>
                                     <Text style={{
                                         marginTop: 2,
@@ -683,265 +716,373 @@ class CoachHome extends BaseComponent {
                                         marginLeft: 10,
                                     }}>Due</Text>
                                 </View> */}
-                                <View
-                                    style={{ marginLeft: 10 }}>
-                                    <DueView />
-                                </View>
-                            </View>
-                            <View style={defaultStyle.line_style} />
-
-                            <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                                <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to update performance of
-                                players.</Text>
-
-                            </View>
-                            <CustomeButtonB onPress={() => {
-                                this.props.navigation.navigate('CoachPerformence')
-                                //alert('under development')
-                            }}>
-                                Update Progress</CustomeButtonB>
+                          <View style={{ marginLeft: 10 }}>
+                            <DueView />
+                          </View>
                         </View>
-                    </CustomeCard> : null}
+                        <View style={defaultStyle.line_style} />
 
-
-                    {is_scorer && tournaments.length > 0 ?
-
-                        <CustomeCard>
-                            <View
-                                style={{
-                                    marginLeft: 12,
-                                    marginRight: 12,
-                                    marginTop: 16
-                                }}
-                            >
-                                <View
-                                    style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={defaultStyle.bold_text_10}>Scorer</Text>
-                                    {/*<Text style={{color:'#667DDB'}}>Attendance - 80% (Jul)</Text>*/}
-                                </View>
-                                <View style={defaultStyle.line_style} />
-
-                                {scoreArray}
-
-                            </View>
-                        </CustomeCard> : null}
-
-                    {is_reward_point_due ? <CustomeCard>
                         <View
+                          style={{
+                            flexDirection: "row",
+                            margin: 10,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_14,
+                              { marginRight: 20 },
+                            ]}
+                          >
+                            You are yet to update performance of
+                            players.
+                          </Text>
+                        </View>
+                        <CustomeButtonB
+                          onPress={() => {
+                            this.props.navigation.navigate(
+                              "CoachPerformence"
+                            );
+                            //alert('under development')
+                          }}
+                        >
+                          Update Progress
+                        </CustomeButtonB>
+                      </View>
+                    </CustomeCard>
+                  ) : null}
+
+                  {is_scorer && tournaments.length > 0 ? (
+                    <CustomeCard>
+                      <View
+                        style={{
+                          marginLeft: 12,
+                          marginRight: 12,
+                          marginTop: 16,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Text style={defaultStyle.bold_text_10}>
+                            Scorer
+                          </Text>
+                          {/*<Text style={{color:'#667DDB'}}>Attendance - 80% (Jul)</Text>*/}
+                        </View>
+                        <View style={defaultStyle.line_style} />
+
+                        {scoreArray}
+                      </View>
+                    </CustomeCard>
+                  ) : null}
+
+                  {is_reward_point_due ? (
+                    <CustomeCard>
+                      <View
+                        style={{
+                          marginLeft: 12,
+                          marginRight: 12,
+                          marginTop: 16,
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                            flexDirection: "row",
+                          }}
+                        >
+                          <Text style={defaultStyle.bold_text_10}>
+                            Reward Point
+                          </Text>
+                          <View style={{ marginLeft: 10 }}>
+                            <DueView />
+                          </View>
+                        </View>
+                        <View style={defaultStyle.line_style} />
+
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            margin: 10,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_14,
+                              { marginRight: 20 },
+                            ]}
+                          >
+                            You are yet to Reward the players .
+                          </Text>
+                        </View>
+                        <CustomeButtonB
+                          onPress={() => {
+                            this.props.navigation.navigate(
+                              "CoachRewardPoints"
+                            );
+                          }}
+                        >
+                          Reward Players
+                        </CustomeButtonB>
+                      </View>
+                    </CustomeCard>
+                  ) : null}
+
+                  <View style={{ margin: 5 }}>
+                    <Card
+                      style={{
+                        marginLeft: 5,
+                        marginRight: 5,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.warn("Touch Press");
+                          // this.props.navigation.navigate('PlayersListing')
+                          this.props.navigation.navigate(
+                            "PlayersListing",
+                            { id: this.state.userData.academy_id }
+                          );
+                          //
+                        }}
+                      >
+                        <View
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 10,
+                            flexDirection: "row",
+                            height: 50,
+                          }}
+                        >
+                          <View
                             style={{
-                                marginLeft: 12,
-                                marginRight: 12,
-                                marginTop: 16
-                            }}>
+                              flex: 1,
+                              marginRight: 15,
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text
+                              style={defaultStyle.regular_text_14}
+                            >
+                              View Academy Players
+                            </Text>
 
-                            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                <Text style={defaultStyle.bold_text_10} >Reward Point</Text>
-                                <View
-                                    style={{ marginLeft: 10 }}>
-                                    <DueView />
-                                </View>
-                            </View>
-                            <View style={defaultStyle.line_style} />
-
-                            <View style={{ flexDirection: 'row', margin: 10, marginBottom: 20 }}>
-                                <Text style={[defaultStyle.bold_text_14, { marginRight: 20 }]}>You are yet to Reward the players .</Text>
-
-                            </View>
-                            <CustomeButtonB onPress={() => {
-                                this.props.navigation.navigate('CoachRewardPoints')
-                            }}>
-                                Reward Players</CustomeButtonB>
+                            <Image
+                              source={require("../../images/path.png")}
+                              style={{
+                                width: 19,
+                                resizeMode: "contain",
+                                height: 13,
+                                marginRight: 0,
+                                marginTop: 5,
+                              }}
+                            />
+                          </View>
                         </View>
-                    </CustomeCard> : null}
+                      </TouchableOpacity>
+                    </Card>
+                  </View>
 
-
-
+                  {this.state.userType == COACH ? (
                     <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
+                      <Card
+                        style={{
+                          marginLeft: 5,
+                          marginRight: 5,
+                          borderRadius: 10,
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            //console.warn("Touch Press")
+                            this.props.navigation.navigate(
+                              "CoachMyFeedbackListing"
+                            );
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginLeft: 10,
+                              marginRight: 10,
+                              flexDirection: "row",
+                              height: 50,
+                            }}
+                          >
+                            <View
+                              style={{
+                                flex: 1,
+                                marginRight: 15,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <Text
+                                style={defaultStyle.regular_text_14}
+                              >
+                                View my Feedback
+                              </Text>
 
-                                console.warn("Touch Press")
-                                // this.props.navigation.navigate('PlayersListing')
-                                this.props.navigation.navigate('PlayersListing', { id: this.state.userData.academy_id })
-                                //
-                            }}>
-                                <View style={{
-                                    marginLeft: 10, marginRight: 10,
-                                    flexDirection: 'row', height: 50
-                                }}>
-
-
-                                    <View style={{
-                                        flex: 1,
-                                        marginRight: 15,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text style={defaultStyle.regular_text_14}>
-                                            View Academy Players
-                                            </Text>
-
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                resizeMode: "contain",
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
-
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </Card>
+                              <Image
+                                source={require("../../images/path.png")}
+                                style={{
+                                  width: 19,
+                                  resizeMode: "contain",
+                                  height: 13,
+                                  marginRight: 0,
+                                  marginTop: 5,
+                                }}
+                              />
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      </Card>
                     </View>
+                  ) : null}
+                  <View style={{ margin: 5 }}>
+                    <Card
+                      style={{
+                        marginLeft: 5,
+                        marginRight: 5,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          //console.warn("Touch Press")
+                          //this.props.navigation.navigate('JobVacancies')
+                          this.props.navigation.navigate(
+                            "AcademyListing",
+                            {
+                              vacancy: true,
+                            }
+                          );
+                        }}
+                      >
+                        <View
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 10,
+                            flexDirection: "row",
+                            height: 50,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flex: 1,
+                              marginRight: 15,
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text
+                              style={defaultStyle.regular_text_14}
+                            >
+                              Job vacancies
+                            </Text>
 
-                    {this.state.userType == COACH ?
-                        <View style={{ margin: 5 }}>
-                            <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
-                                <TouchableOpacity onPress={() => {
-
-                                    //console.warn("Touch Press")
-                                    this.props.navigation.navigate('CoachMyFeedbackListing')
-
-                                }}>
-                                    <View style={{
-                                        marginLeft: 10,
-                                        marginRight: 10,
-                                        flexDirection: 'row', height: 50
-                                    }}>
-
-
-
-                                        <View style={{
-                                            flex: 1,
-                                            marginRight: 15,
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.regular_text_14}>
-                                                View my Feedback
-                                            </Text>
-
-                                            <Image source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    resizeMode: "contain",
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
-
-                                        </View>
-                                    </View>
-
-
-                                </TouchableOpacity>
-                            </Card>
+                            <Image
+                              source={require("../../images/path.png")}
+                              style={{
+                                width: 19,
+                                resizeMode: "contain",
+                                height: 13,
+                                marginRight: 0,
+                                marginTop: 5,
+                              }}
+                            />
+                          </View>
                         </View>
-                        : null}
+                      </TouchableOpacity>
+                    </Card>
+                  </View>
+                  {this.state.userType == COACH && (
                     <View style={{ margin: 5 }}>
-                        <Card style={{ marginLeft: 5, marginRight: 5, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => {
+                      <Card
+                        style={{
+                          marginLeft: 5,
+                          marginRight: 5,
+                          marginBottom: 20,
+                          borderRadius: 10,
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            //console.warn("Touch Press")
+                            this.props.navigation.navigate(
+                              "AcademyListing"
+                            );
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginLeft: 10,
+                              marginRight: 10,
+                              flexDirection: "row",
+                              height: 50,
+                            }}
+                          >
+                            <View
+                              style={{
+                                flex: 1,
+                                marginRight: 15,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <Text
+                                style={defaultStyle.regular_text_14}
+                              >
+                                Other Coaching & Fitness Training
+                              </Text>
 
-                                //console.warn("Touch Press")
-                                //this.props.navigation.navigate('JobVacancies')
-                                this.props.navigation.navigate('AcademyListing', {
-                                    vacancy: true
-                                })
-
-                            }}>
-                                <View style={{
-                                    marginLeft: 10, marginRight: 10,
-                                    flexDirection: 'row', height: 50
-                                }}>
-
-
-
-                                    <View style={{
-                                        flex: 1,
-                                        marginRight: 15,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <Text style={defaultStyle.regular_text_14}>
-                                            Job vacancies
-                                            </Text>
-
-                                        <Image source={require('../../images/path.png')}
-                                            style={{
-                                                width: 19,
-                                                resizeMode: "contain",
-                                                height: 13, marginRight: 0, marginTop: 5
-                                            }} />
-
-                                    </View>
-                                </View>
-
-
-                            </TouchableOpacity>
-                        </Card>
+                              <Image
+                                source={require("../../images/path.png")}
+                                style={{
+                                  width: 19,
+                                  resizeMode: "contain",
+                                  height: 13,
+                                  marginRight: 0,
+                                  marginTop: 5,
+                                }}
+                              />
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      </Card>
                     </View>
-                    {this.state.userType == COACH &&
-                        <View style={{ margin: 5 }}>
-                            <Card style={{ marginLeft: 5, marginRight: 5, marginBottom: 20, borderRadius: 10 }}>
-                                <TouchableOpacity onPress={() => {
+                  )}
 
-                                    //console.warn("Touch Press")
-                                    this.props.navigation.navigate('AcademyListing')
-
-                                }}>
-                                    <View style={{
-                                        marginLeft: 10, marginRight: 10,
-                                        flexDirection: 'row', height: 50
-                                    }}>
-
-
-
-                                        <View style={{
-                                            flex: 1,
-                                            marginRight: 15,
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                        }}>
-                                            <Text style={defaultStyle.regular_text_14}>
-                                                Other Machaxi Centres
-                                            </Text>
-
-                                            <Image source={require('../../images/path.png')}
-                                                style={{
-                                                    width: 19,
-                                                    resizeMode: "contain",
-                                                    height: 13, marginRight: 0, marginTop: 5
-                                                }} />
-
-                                        </View>
-
-                                    </View>
-
-
-                                </TouchableOpacity>
-                            </Card>
-                        </View>}
-
-                    <UpdateAppDialog
-                        navigation={this.state.navigation}
-                        exitPressed={() => {
-                            this.setState({ show_must_update_alert: false })
-                            BackHandler.exitApp()
-                            //this.props.navigation.goBack(null)
-                        }}
-                        updatePressed={() => {
-                            this.setState({ show_must_update_alert: false })
-                            this.handleClick()
-                        }}
-                        visible={show_must_update_alert}
-                    />
-
+                  <UpdateAppDialog
+                    navigation={this.state.navigation}
+                    exitPressed={() => {
+                      this.setState({
+                        show_must_update_alert: false,
+                      });
+                      BackHandler.exitApp();
+                      //this.props.navigation.goBack(null)
+                    }}
+                    updatePressed={() => {
+                      this.setState({
+                        show_must_update_alert: false,
+                      });
+                      this.handleClick();
+                    }}
+                    visible={show_must_update_alert}
+                  />
                 </ScrollView>
-            </View>;
+              </View>
+            );
         } else {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
