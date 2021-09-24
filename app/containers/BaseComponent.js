@@ -581,26 +581,28 @@ export function getStatsImageBySportId(id) {
   switch (id) {
     case "1":
       return require("../images/sports/badminton.png");
-    case "2":
-      return require("../images/sports/swimming.png");
-    case "6":
-      return require("../images/sports/tt.png");
-    case "7":
-      return require("../images/sports/cricket.png");
     case "8":
-      return require("../images/sports/lawn_tennis.png");
+      return require("../images/sports/tt.png");
     case "9":
-      return require("../images/sports/squash.png");
-    case "10":
-      return require("../images/sports/karate.png");
-    case "11":
-      return require("../images/sports/zumba.png");
-    case "12":
-      return require("../images/sports/yoga.png");
-    case "13":
-      return require("../images/sports/taekwondo.png");
-    case "14":
       return require("../images/sports/basketball.png");
+    case "10":
+      return require("../images/sports/lawn_tennis.png");
+    case "11":
+      return require("../images/sports/swimming.png");
+    case "12":
+      return require("../images/sports/squash.png");
+    case "13":
+      return require("../images/sports/cricket.png");
+    case "14":
+      return require("../images/sports/yoga.png");
+    case "15":
+      return require("../images/sports/zumba.png");
+    case "16":
+      return require("../images/sports/dance.png");
+    case "17":
+      return require("../images/sports/taekwondo.png");
+    case "18":
+      return require("../images/sports/karate.png");
   }
   return require("../images/sports/common.png");
 }
