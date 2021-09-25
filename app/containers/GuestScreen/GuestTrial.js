@@ -367,7 +367,53 @@ export default class GuestTrial extends BaseComponent {
               </View>
             </LinearGradient>
           </TouchableOpacity>
-
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              flexDirection: "column",
+              alignContent: "center",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <LinearGradient
+              colors={["#FF3A99", "#FF3A6A"]}
+              locations={[0, 1]}
+              useAngle
+              angle={255}
+              style={{
+                borderRadius: 24,
+                shadowColor: "rgba(0, 0, 0, 0.2)",
+                elevation: 4,
+                shadowRadius: 9,
+                shadowOpacity: 0.08,
+                shadowOffset: { width: 0, height: 3 },
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  width: 252,
+                  padding: 10,
+                  height: 40,
+                }}
+                onPress={() => {
+                  this.props.navigation.navigate("AcademyListing");
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    fontFamily: "Quicksand-Regular",
+                    fontSize: 14,
+                  }}
+                >
+                  My Society Coaching Batches
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
           <View style={{ marginTop: 30, marginHorizontal: 40 }}>
             <View>
               <Text

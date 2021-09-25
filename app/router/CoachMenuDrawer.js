@@ -667,7 +667,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu_coach}>
-							View Academy feedback
+							View Society Feedback
 						</Text>
 
 						<Image
@@ -685,7 +685,7 @@ class CoachMenuDrawer extends BaseComponent {
 						<View style={styles.drawercell}>
 
 							<Text style={styles.menu_coach}>
-								Other Coaching & Fitness Training
+								My Society Coaching Batches
 								</Text>
 
 							<Image
@@ -1146,7 +1146,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							Other Coaching & Fitness Training
+							My Society Coaching Batches
 								</Text>
 
 						<Image
@@ -1184,7 +1184,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 					{/* <Text style={defaultStyle.regular_text_10}>
-						Academy Feedback
+						Society Feedback
 					</Text> */}
 
 					<View style={{
@@ -1237,7 +1237,7 @@ class CoachMenuDrawer extends BaseComponent {
 							onPress={() => {
 								this.props.navigation.navigate('WriteFeedback',
 									{ academy_id: this.state.academy_id, player_id: this.state.player_id })
-							}}>Academy-Coach Feedback</SkyFilledButton>
+							}}>Society-Coach Feedback</SkyFilledButton>
 					</View>
 
 					{/* <TouchableOpacity

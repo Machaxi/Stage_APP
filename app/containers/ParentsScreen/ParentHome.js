@@ -1179,7 +1179,7 @@ class ParentHome extends BaseComponent {
                         }}
                       >
                         <Text style={defaultStyle.bold_text_14}>
-                          View Academy Players
+                          View Society Players
                         </Text>
 
                         <Image
@@ -1235,7 +1235,7 @@ class ParentHome extends BaseComponent {
                         }}
                       >
                         <Text style={defaultStyle.bold_text_14}>
-                          Other Coaching & Fitness Training
+                          My Society Coaching Batches
                         </Text>
 
                         <Image
@@ -1254,7 +1254,7 @@ class ParentHome extends BaseComponent {
               </Card>
             </View>
 
-            {/* ================================ ACADEMY FEEDBACk =================== */}
+            {/* ================================ Society Feedback =================== */}
 
             {academy_feedback_data != null ? (
               <Card
@@ -1273,7 +1273,7 @@ class ParentHome extends BaseComponent {
                   }}
                 >
                   <Text style={defaultStyle.bold_text_10}>
-                    Academy Feedback
+                    Society Feedback
                   </Text>
                 </View>
 

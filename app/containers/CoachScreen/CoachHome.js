@@ -872,7 +872,7 @@ class CoachHome extends BaseComponent {
                             <Text
                               style={defaultStyle.regular_text_14}
                             >
-                              View Academy Players
+                              View Society Players
                             </Text>
 
                             <Image
@@ -1043,7 +1043,7 @@ class CoachHome extends BaseComponent {
                               <Text
                                 style={defaultStyle.regular_text_14}
                               >
-                                Other Coaching & Fitness Training
+                                My Society Coaching Batches
                               </Text>
 
                               <Image

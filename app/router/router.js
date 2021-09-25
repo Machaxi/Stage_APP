@@ -609,560 +609,744 @@ const playerDrawer = createDrawerNavigator({
     }
 );
 
-const coachHomeModule = createStackNavigator({
-
-
+const coachHomeModule = createStackNavigator(
+  {
     CoachHome: {
-        screen: coachhome,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: "Machaxi",
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //         showBackAction={false}
-        //     />,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showHome={false} />,
-        //     headerTitleStyle: style.headerStyle,
-        //     headerStyle: {
-        //         backgroundColor: '#FFFFFF',
-        //     },
+      screen: coachhome,
+      // navigationOptions: ({ navigation }) => ({
+      //     title: "Machaxi",
+      //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+      //         showBackAction={false}
+      //     />,
+      //     headerRight: <RightMenuToolbar navigationProps={navigation}
+      //         navigation={navigation} showHome={false} />,
+      //     headerTitleStyle: style.headerStyle,
+      //     headerStyle: {
+      //         backgroundColor: '#FFFFFF',
+      //     },
 
-        // })
-
-
+      // })
     },
     CoachMyFeedbackListing: {
-        screen: CoachMyFeedbackListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "My Feedback",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: CoachMyFeedbackListing,
+      navigationOptions: ({ navigation }) => ({
+        title: "My Feedback",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+            showDrawer={false}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
 
     MarkAttendence: {
-        screen: markAttendence,
-        navigationOptions: ({ navigation }) => ({
-            title: "Mark Attendence",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: markAttendence,
+      navigationOptions: ({ navigation }) => ({
+        title: "Mark Attendence",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     AddCompensatoryBatch: {
-        screen: AddCompensatoryBatch,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: "Add Compensatory Batch",
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //         showDrawer={false} showBackAction={true}/>,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showNotification={false} />,
-        //     headerTitleStyle: style.headerStyle,
-        //     headerStyle: {
-        //         backgroundColor: '#FFFFFF',
-        //     },
-        // })
+      screen: AddCompensatoryBatch,
+      // navigationOptions: ({ navigation }) => ({
+      //     title: "Add Compensatory Batch",
+      //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+      //         showDrawer={false} showBackAction={true}/>,
+      //     headerRight: <RightMenuToolbar navigationProps={navigation}
+      //         navigation={navigation} showNotification={false} />,
+      //     headerTitleStyle: style.headerStyle,
+      //     headerStyle: {
+      //         backgroundColor: '#FFFFFF',
+      //     },
+      // })
     },
     EditProfile: {
-        screen: EditProfile,
-        navigationOptions: ({ navigation }) => ({
-            title: "Edit Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: EditProfile,
+      navigationOptions: ({ navigation }) => ({
+        title: "Edit Profile",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     CoachRewardPoints: {
-        screen: CoachRewardsPoints,
-        navigationOptions: ({ navigation }) => ({
-            title: "Reward points",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={true} showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: CoachRewardsPoints,
+      navigationOptions: ({ navigation }) => ({
+        title: "Reward points",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={true}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     CoachGiveRewards: {
-        screen: CoachGiveRewards,
-        navigationOptions: ({ navigation }) => ({
-            title: "Award Players",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={true} showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: CoachGiveRewards,
+      navigationOptions: ({ navigation }) => ({
+        title: "Award Players",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={true}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
 
-
     PlayersListing: {
-        screen: PlayersListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: PlayersListing,
+      navigationOptions: ({ navigation }) => ({
+        title: "Players Listing",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     OtherPlayerDeatils: {
-        screen: otherplayerDetails,
-        navigationOptions: ({ navigation }) => ({
-            title: "Player Detail",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: otherplayerDetails,
+      navigationOptions: ({ navigation }) => ({
+        title: "Player Detail",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     AcademyListing: {
-        screen: AcademyListing,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Machaxi',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+      screen: AcademyListing,
+      navigationOptions: ({ navigation }) => ({
+        title: "Machaxi",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showNotification={false}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
 
-            headerTintColor: '#000',
-        }),
+        headerTintColor: "#000",
+      }),
     },
     ViewPlayersListing: {
-        screen: PlayersListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "View Players",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: PlayersListing,
+      navigationOptions: ({ navigation }) => ({
+        title: "View Players",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     AcademyProfile: {
-        screen: AcademyProfile,
-        navigationOptions: ({ navigation }) => ({
-            //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
-            title: "Academy Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-        })
+      screen: AcademyProfile,
+      navigationOptions: ({ navigation }) => ({
+        //header: <CustomHeader title="Academy Profile" showBackArrow={true} />,
+        title: "Academy Profile",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     CoachListing: {
-        screen: CoachListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "Coach Listing",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: CoachListing,
+      navigationOptions: ({ navigation }) => ({
+        title: "Coach Listing",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     PlayersListing: {
-        screen: PlayersListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "Players Listing",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: PlayersListing,
+      navigationOptions: ({ navigation }) => ({
+        title: "Players Listing",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     CoachProfileDetail: {
-        screen: CoachProfileDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: "Coach Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
+      screen: CoachProfileDetail,
+      navigationOptions: ({ navigation }) => ({
+        title: "Coach Profile",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     EditProfile: {
-        screen: EditProfile,
-        navigationOptions: ({ navigation }) => ({
-            title: "Edit Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
+      screen: EditProfile,
+      navigationOptions: ({ navigation }) => ({
+        title: "Edit Profile",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     WriteFeedback: {
-        screen: WriteFeedback,
-        navigationOptions: ({ navigation }) => ({
-            title: "Write Feedbacks",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
+      screen: WriteFeedback,
+      navigationOptions: ({ navigation }) => ({
+        title: "Write Feedbacks",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     WriteAcademyFeedback: {
-        screen: WriteAcademyFeedback,
-        navigationOptions: ({ navigation }) => ({
-            title: "Give Feedback",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
+      screen: WriteAcademyFeedback,
+      navigationOptions: ({ navigation }) => ({
+        title: "Give Feedback",
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     AcademyFeedbackListing: {
-        screen: AcademyFeedbackListing,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: "Academy Feedback",
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showHome={false} />,
-        //     headerTitleStyle: style.headerStyle,
-        //     headerStyle: {
-        //         backgroundColor: '#FFFFFF',
-        //     },
+      screen: AcademyFeedbackListing,
+      // navigationOptions: ({ navigation }) => ({
+      //     title: "Society Feedback",
+      //     headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      //     headerRight: <RightMenuToolbar navigationProps={navigation}
+      //         navigation={navigation} showHome={false} />,
+      //     headerTitleStyle: style.headerStyle,
+      //     headerStyle: {
+      //         backgroundColor: '#FFFFFF',
+      //     },
 
-        // })
-
+      // })
     },
 
     TournamentFixture: {
-        screen: TournamentFixture,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Fixture',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-            headerTintColor: '#000',
-        })
+      screen: TournamentFixture,
+      navigationOptions: ({ navigation }) => ({
+        title: "Fixture",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showNotification={false}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+        headerTintColor: "#000",
+      }),
     },
     ChallengeDisputeScreen: {
-        screen: ChallengeDisputeScreen,
-        navigationOptions: ({ navigation }) => ({
-            title: "Challenge Dispute",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-        }),
+      screen: ChallengeDisputeScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: "Challenge Dispute",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     TournamentScorer: {
-        screen: TournamentScorer,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Scorer',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+      screen: TournamentScorer,
+      navigationOptions: ({ navigation }) => ({
+        title: "Tournament Scorer",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+            showDrawer={false}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showNotification={false}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
 
-            headerTintColor: '#000',
-        }),
+        headerTintColor: "#000",
+      }),
     },
     AcademyFilter: {
-        screen: AcademyFilter,
-
+      screen: AcademyFilter,
     },
 
     JobVacancies: {
-        screen: JobVacancies,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Job Vacancies',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={true}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false}
-                showHome={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+      screen: JobVacancies,
+      navigationOptions: ({ navigation }) => ({
+        title: "Job Vacancies",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={true}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showNotification={false}
+            showHome={true}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
 
-            headerTintColor: '#000',
-        }),
+        headerTintColor: "#000",
+      }),
     },
     TournamentGallerySlider: {
-        screen: TournamentGallerySlider,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Gallery',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+      screen: TournamentGallerySlider,
+      navigationOptions: ({ navigation }) => ({
+        title: "Gallery",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showNotification={false}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
 
-            headerTintColor: '#000',
-        }),
+        headerTintColor: "#000",
+      }),
     },
     TournamentGallerySliderZoom: {
-        screen: TournamentGallerySliderZoom,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Gallery',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+      screen: TournamentGallerySliderZoom,
+      navigationOptions: ({ navigation }) => ({
+        title: "Gallery",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showNotification={false}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
 
-            headerTintColor: '#000',
-        }),
+        headerTintColor: "#000",
+      }),
     },
     AcademyBatch: {
-        screen: AcademyBatch,
-        navigationOptions: ({ navigation }) => ({
-            title: "View Batches",
-            headerLeft: <NavigationDrawerStructure
-                showDrawer={false}
-                navigationProps={navigation} showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
+      screen: AcademyBatch,
+      navigationOptions: ({ navigation }) => ({
+        title: "View Batches",
+        headerLeft: (
+          <NavigationDrawerStructure
+            showDrawer={false}
+            navigationProps={navigation}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
 
     WebViewScreen: {
-        screen: WebViewScreen,
-        navigationOptions: ({ navigation }) => ({
-            title: "About Us",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation}
-                showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: WebViewScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: "About Us",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+            showDrawer={false}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     BookTrial: {
-        screen: BookTrial,
-        navigationOptions: ({ navigation }) => ({
-            title: "Book Trial",
-            headerLeft: <NavigationDrawerStructure
-                showDrawer={false}
-                navigationProps={navigation} showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-
+      screen: BookTrial,
+      navigationOptions: ({ navigation }) => ({
+        title: "Book Trial",
+        headerLeft: (
+          <NavigationDrawerStructure
+            showDrawer={false}
+            navigationProps={navigation}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     LeaderboardRoute: {
-        screen: LeaderboardRoute,
-        navigationOptions: ({ navigation }) => ({
-            title: "Challenge Leaderboard",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showBackAction={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-        }),
+      screen: LeaderboardRoute,
+      navigationOptions: ({ navigation }) => ({
+        title: "Challenge Leaderboard",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     NotificationList: {
-        screen: NotificationList,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Notification',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false}
-                showBackAction={true}
+      screen: NotificationList,
+      navigationOptions: ({ navigation }) => ({
+        title: "Notification",
+        headerTitleStyle: style.headerStyle,
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showDrawer={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
 
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-
+        headerTintColor: "#000",
+      }),
     },
     ContactUs: {
-        screen: ContactUs,
-        navigationOptions: ({ navigation }) => ({
-            title: "Contact Us",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: ContactUs,
+      navigationOptions: ({ navigation }) => ({
+        title: "Contact Us",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showBackAction={true}
+            showDrawer={false}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     ImageGuidelines: {
-        screen: ImageGuidelines,
-        navigationOptions: ({ navigation }) => ({
-            title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showMenuAction={false}
-                showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: ImageGuidelines,
+      navigationOptions: ({ navigation }) => ({
+        title: "Image Guidelines",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showMenuAction={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     DuePaymentsScreen: {
-        screen: PaymentDues,
-        navigationOptions: ({ navigation }) => ({
-            title: "Payment Dues",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showMenuAction={false}
-                showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
+      screen: PaymentDues,
+      navigationOptions: ({ navigation }) => ({
+        title: "Payment Dues",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showMenuAction={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }),
     },
     PaymentReport: {
-        screen: PaymentReport,
-        navigationOptions: ({ navigation }) => ({
-            title: "Payment Report",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showMenuAction={false}
-                showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    }
-
-
-}, {
-        contentComponent: ({ navigation }) => {
-            return (<CoachMenuDrawer navigation={navigation} />)
+      screen: PaymentReport,
+      navigationOptions: ({ navigation }) => ({
+        title: "Payment Report",
+        headerLeft: (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            showMenuAction={false}
+            showBackAction={true}
+          />
+        ),
+        headerRight: (
+          <RightMenuToolbar
+            navigationProps={navigation}
+            navigation={navigation}
+            showHome={false}
+          />
+        ),
+        headerTitleStyle: style.headerStyle,
+        headerStyle: {
+          backgroundColor: "#FFFFFF",
         },
-        drawerWidth: Dimensions.get('window').width * 0.86,
-    }
+      }),
+    },
+  },
+  {
+    contentComponent: ({ navigation }) => {
+      return <CoachMenuDrawer navigation={navigation} />;
+    },
+    drawerWidth: Dimensions.get("window").width * 0.86,
+  }
 );
 
 const tabBarControllerBookCoach = createBottomTabNavigator(

@@ -21,40 +21,42 @@ class AcademyFeedbackListing extends BaseComponent {
     static navigationOptions = ({ navigation }) => {
 
         return {
-            headerTitle: 'Academy Feedback',
-            headerTitleStyle: defaultStyle.headerStyle,
+          headerTitle: "Society Feedback",
+          headerTitleStyle: defaultStyle.headerStyle,
 
-            headerLeft: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.toggleDrawer();
-                    }}
-                    style={{padding: 7}}
-                    activeOpacity={.8}>
-                    <Image
-                        source={require('../../images/hamburger.png')}
-                        style={{ width: 20, height: 16, marginLeft: 12 }}
-                    />
-                </TouchableOpacity>
-            ),
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.getParam('filter')();
-                    }}
-                    activeOpacity={.8}
-                >
-                    <Text
-                        style={{
-                            marginRight: 12,
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 12,
-                            color: '#667DDB'
-                        }}
-                    >Filter</Text>
-                </TouchableOpacity>
-
-            )
+          headerLeft: (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.toggleDrawer();
+              }}
+              style={{ padding: 7 }}
+              activeOpacity={0.8}
+            >
+              <Image
+                source={require("../../images/hamburger.png")}
+                style={{ width: 20, height: 16, marginLeft: 12 }}
+              />
+            </TouchableOpacity>
+          ),
+          headerRight: (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.getParam("filter")();
+              }}
+              activeOpacity={0.8}
+            >
+              <Text
+                style={{
+                  marginRight: 12,
+                  fontFamily: "Quicksand-Regular",
+                  fontSize: 12,
+                  color: "#667DDB",
+                }}
+              >
+                Filter
+              </Text>
+            </TouchableOpacity>
+          ),
         };
 
     };

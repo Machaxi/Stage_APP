@@ -13,194 +13,178 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 
 class WriteFeedbackListing extends BaseComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      academy_id: "",
+      academy_user_id: "",
+      spinner: false,
+      coaches: [],
+    };
+    this.state.academy_id = this.props.navigation.getParam("academy_id", "");
+    this.state.player_id = this.props.navigation.getParam("player_id", "");
+    //console.warn("Data " + this.state.academy_id + "" + this.state.player_id)
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            modalVisible: false,
-            academy_id: '',
-            academy_user_id:'',
-            spinner: false,
-            coaches: []
-        };
-        this.state.academy_id = this.props.navigation.getParam('academy_id', '');
-        this.state.player_id = this.props.navigation.getParam('player_id', '');
-        //console.warn("Data " + this.state.academy_id + "" + this.state.player_id)
-    }
+  componentDidMount() {
+    let academy_id = this.state.academy_id;
+    let player_id = this.state.player_id;
 
-    componentDidMount() {
+    getData("userInfo", (value) => {
+      console.log("userInfo=> ", value);
+      const json = JSON.parse(value);
+      this.state.academy_user_id = json.academy_user_id;
+    });
 
-        let academy_id = this.state.academy_id
-        let player_id = this.state.player_id
+    //adding academy cell manually
 
-        getData('userInfo',(value)=>{
-            console.log('userInfo=> ',value)
-            const json = JSON.parse(value)
-            this.state.academy_user_id = json.academy_user_id
-        })
+    // let newObj = { review: '', rating: 0, is_coach: false }
+    // list[count++] = newObj
+    // this.setState({
+    //     coaches: list
+    // })
 
-        //adding academy cell manually
+    getData("header", (value) => {
+      this.props
+        .getCoachListing(value, academy_id, player_id)
+        .then(() => {
+          let coaches = [];
+          console.warn("Res=> " + JSON.stringify(this.props.data));
+          let data = this.props.data.data;
+          if (data.success) {
+            let list = [];
+            let count = 0;
+            let newObj = { review: "", rating: 0, is_coach: false };
+            list[count++] = newObj;
+            // this.setState({
+            //     coaches: list
+            // })
 
+            if (data.data.coach_data != null) {
+              coaches = data.data.coach_data.coaches;
 
-        // let newObj = { review: '', rating: 0, is_coach: false }
-        // list[count++] = newObj
-        // this.setState({
-        //     coaches: list
-        // })
-
-        getData('header', (value) => {
-
-            this.props.getCoachListing(value, academy_id, player_id).then(() => {
-
-                let coaches = []
-                console.warn('Res=> ' + JSON.stringify(this.props.data))
-                let data = this.props.data.data
-                if (data.success) {
-
-                    let list = []
-                    let count = 0
-                    let newObj = { review: '', rating: 0, is_coach: false }
-                    list[count++] = newObj
-                    // this.setState({
-                    //     coaches: list
-                    // })
-
-                    if (data.data.coach_data!=null) {
-
-                        coaches = data.data.coach_data.coaches
-
-                        for (let i = 0; i < coaches.length; i++) {
-
-                            let obj = coaches[i]
-                            let newObj1 = { ...obj, review: '', rating: 0, is_coach: true }
-                            list[count++] = newObj1
-                        }
-                    }
-
-
-                    this.setState({
-                        coaches: list
-                    })
-
-
-                } else {
-                    alert("Something went wrong.")
-                }
-
-
-
-            }).catch((response) => {
-                console.log(response);
-            })
-
-        })
-
-    }
-
-
-    submitFeedback() {
-
-        console.warn("submitFeedback => ", this.state.coaches)
-        let coaches = this.state.coaches
-        var array = []
-
-        for (let i = 0; i < coaches.length; i++) {
-
-            let obj = coaches[i]
-
-            var dict = {};
-            if (obj.is_coach) {
-                dict['targetId'] = obj.id
-            } else {
-                dict['targetId'] = this.state.academy_user_id
+              for (let i = 0; i < coaches.length; i++) {
+                let obj = coaches[i];
+                let newObj1 = { ...obj, review: "", rating: 0, is_coach: true };
+                list[count++] = newObj1;
+              }
             }
-            dict['academyId'] = this.state.academy_id;
-            dict['review'] = obj.review
-            dict['rating'] = obj.rating
-            array.push(dict)
 
-        }
-        var data = {};
-        data['data'] = array
-        console.warn('data=>', data)
-        this.setState({
-            spinner: true
+            this.setState({
+              coaches: list,
+            });
+          } else {
+            alert("Something went wrong.");
+          }
         })
+        .catch((response) => {
+          console.log(response);
+        });
+    });
+  }
 
-        getData('header', (value) => {
+  submitFeedback() {
+    console.warn("submitFeedback => ", this.state.coaches);
+    let coaches = this.state.coaches;
+    var array = [];
 
-            this.props.postFeedbackMultiple(value, data).then(() => {
+    for (let i = 0; i < coaches.length; i++) {
+      let obj = coaches[i];
 
-                this.setState({
-                    spinner: false
-                })
-                //console.warn('Res=> ' + JSON.stringify(this.props.data))
-                let data = this.props.data.data
-                if (data.success) {
-                    this.setState({
-                        modalVisible: true
-                    })
-                } else {
-                    alert("Something went wrong.")
-                }
+      var dict = {};
+      if (obj.is_coach) {
+        dict["targetId"] = obj.id;
+      } else {
+        dict["targetId"] = this.state.academy_user_id;
+      }
+      dict["academyId"] = this.state.academy_id;
+      dict["review"] = obj.review;
+      dict["rating"] = obj.rating;
+      array.push(dict);
+    }
+    var data = {};
+    data["data"] = array;
+    console.warn("data=>", data);
+    this.setState({
+      spinner: true,
+    });
 
-
-            }).catch((response) => {
-                console.log(response);
-                this.setState({
-                    spinner: false
-                })
-            })
-
+    getData("header", (value) => {
+      this.props
+        .postFeedbackMultiple(value, data)
+        .then(() => {
+          this.setState({
+            spinner: false,
+          });
+          //console.warn('Res=> ' + JSON.stringify(this.props.data))
+          let data = this.props.data.data;
+          if (data.success) {
+            this.setState({
+              modalVisible: true,
+            });
+          } else {
+            alert("Something went wrong.");
+          }
         })
+        .catch((response) => {
+          console.log(response);
+          this.setState({
+            spinner: false,
+          });
+        });
+    });
+  }
 
-    }
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
+  _renderItem = ({ item, index }) => (
+    <Card
+      style={{
+        borderRadius: 16,
+        marginLeft: 16,
+        marginRight: 16,
+        marginTop: 12,
+        marginBottom: 12,
+        elevation: 2,
+      }}
+    >
+      <View style={{ padding: 16 }}>
+        <Text
+          style={{
+            fontSize: 14,
+            color: "#404040",
+            fontWeight: "400",
+            fontFamily: "Quicksand-Medium",
+          }}
+        >
+          {item.is_coach ? "Coach Feedback" : "Society Feedback"}
+        </Text>
 
-    setModalVisible(visible) {
-        this.setState({ modalVisible: visible });
-    }
+        <View
+          style={{
+            width: "100%",
+            marginTop: 10,
+            marginBottom: 10,
+            height: 1,
+            backgroundColor: "#DFDFDF",
+          }}
+        />
 
-    _renderItem = ({ item, index }) => (
-        <Card
-            style={{
-                borderRadius: 16,
-                marginLeft: 16,
-                marginRight: 16,
-                marginTop: 12,
-                marginBottom: 12,
-                elevation: 2
+        <Text
+          style={{
+            fontSize: 14,
+            color: "#404040",
+            fontWeight: "400",
+            fontFamily: "Quicksand-Medium",
+          }}
+        >
+          {item.is_coach ? item.name : "Your Feedback"}
+        </Text>
 
-            }}>
-            <View style={{ padding: 16 }}>
-
-                <Text style={{
-                    fontSize: 14,
-                    color: '#404040',
-                    fontWeight: "400",
-                    fontFamily: 'Quicksand-Medium'
-                }}>
-
-                    {item.is_coach ? "Coach Feedback" : "Academy Feedback"}
-
-                </Text>
-
-                <View style={{
-                    width: "100%",
-                    marginTop: 10, marginBottom: 10,
-                    height: 1, backgroundColor: '#DFDFDF'
-                }}></View>
-
-                <Text style={{
-                    fontSize: 14,
-                    color: '#404040',
-                    fontWeight: "400",
-                    fontFamily: 'Quicksand-Medium'
-                }}>
-                    {item.is_coach ? item.name : "Your Feedback"}
-                </Text>
-
-                {/* <Rating
+        {/* <Rating
                     type='custom'
                     ratingColor='#F4FC9A'
                     ratingBackgroundColor='#D7D7D7'
@@ -210,172 +194,166 @@ class WriteFeedbackListing extends BaseComponent {
                     onFinishRating={(score) => item.rating = score}
                     style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16, }}
                 /> */}
-                <StarRating
-                    style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16, }}
-                    containerStyle={{
-                        width: 100,
-                    }}
-                    starSize={20}
-                    disabled={false}
-                    emptyStar={require('../../images/ic_empty_star.png')}
-                    fullStar={require('../../images/ic_star.png')}
-                    halfStar={require('../../images/ic_half_star.png')}
-                    iconSet={'Ionicons'}
-                    maxStars={5}
-                    rating={item.rating == undefined ? 0 : item.rating}
-                    selectedStar={(rating) => {
+        <StarRating
+          style={{ marginLeft: 10, height: 30, width: 80, paddingTop: 16 }}
+          containerStyle={{
+            width: 100,
+          }}
+          starSize={20}
+          disabled={false}
+          emptyStar={require("../../images/ic_empty_star.png")}
+          fullStar={require("../../images/ic_star.png")}
+          halfStar={require("../../images/ic_half_star.png")}
+          iconSet={"Ionicons"}
+          maxStars={5}
+          rating={item.rating == undefined ? 0 : item.rating}
+          selectedStar={(rating) => {
+            let coaches = [...this.state.coaches];
+            coaches[+index].rating = rating;
+            console.warn("coaches => ", JSON.stringify(coaches));
+            this.setState({
+              coaches: coaches,
+            });
+            //console.warn(rating + '====' + index)
+            //item.rating = rating
+          }}
+          fullStarColor={"#F8F29F"}
+        />
 
-                        let coaches = [...this.state.coaches]
-                        coaches[+index].rating = rating
-                        console.warn('coaches => ', JSON.stringify(coaches))
-                        this.setState({
-                            coaches: coaches
-                        })
-                        //console.warn(rating + '====' + index)
-                        //item.rating = rating
-                    }}
-                    fullStarColor={'#F8F29F'}
+        <TextInput
+          style={{
+            borderColor: "#CECECE",
+            borderWidth: 1,
+            height: 100,
+            width: "100%",
+            marginTop: 16,
+            marginBottom: 16,
+            fontSize: 14,
+            padding: 4,
+            textAlign: "left",
+            justifyContent: "flex-start",
+            borderRadius: 8,
+            fontFamily: "Quicksand-Regular",
+            textAlignVertical: "top",
+          }}
+          onChangeText={(review) => (item.review = review)}
+          multiline={true}
+          placeholder={"What's your feedback?"}
+        />
+      </View>
+    </Card>
+  );
+
+  render() {
+    let coaches = this.state.coaches;
+
+    if (this.props.data.loading && coaches.length <= 1) {
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator size="large" color="#67BAF5" />
+        </View>
+      );
+    }
+
+    return (
+      <ScrollView>
+        <View style={styles.chartContainer}>
+          <Spinner
+            visible={this.state.spinner}
+            textStyle={defaultStyle.spinnerTextStyle}
+          />
+
+          <Modal
+            animationType="none"
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                //backgroundColor: '#0E0E0E',
+                //opacity: 0.56,
+                backgroundColor: "rgba(52, 52, 52, 0.8)",
+                padding: 16,
+              }}
+            >
+              <View
+                style={{
+                  width: 300,
+                  borderRadius: 16,
+                  backgroundColor: "white",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: 300,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: "black",
+                    fontWeight: "400",
+                    fontFamily: "Quicksand-Medium",
+                  }}
+                >
+                  Success
+                </Text>
+
+                <Image
+                  style={{ marginTop: 16, height: 100, width: 100 }}
+                  source={require("../../images/success_icon.png")}
                 />
 
-
-                <TextInput
-                    style={{
-                        borderColor: "#CECECE",
-                        borderWidth: 1,
-                        height: 100,
-                        width: "100%",
-                        marginTop: 16,
-                        marginBottom: 16,
-                        fontSize: 14,
-                        padding: 4,
-                        textAlign: 'left',
-                        justifyContent: 'flex-start',
-                        borderRadius: 8,
-                        fontFamily: 'Quicksand-Regular',
-                        textAlignVertical: 'top'
-                    }}
-                    onChangeText={(review) => item.review = review}
-                    multiline={true}
-                    placeholder={"What's your feedback?"}
+                <Text
+                  style={{
+                    fontSize: 14,
+                    marginTop: 16,
+                    color: "black",
+                    fontWeight: "400",
+                    textAlign: "center",
+                    fontFamily: "Quicksand-Regular",
+                  }}
                 >
+                  Thank you ! Your feedback has been succesfully submitted.
+                </Text>
 
-                </TextInput>
-
-            </View>
-
-        </Card>
-    );
-
-
-    render() {
-
-        let coaches = this.state.coaches
-
-        if (this.props.data.loading && coaches.length <= 1) {
-            return (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#67BAF5" />
-                </View>
-            )
-        }
-
-
-
-        return (
-
-
-            <ScrollView>
-
-                <View style={styles.chartContainer}>
-
-                    <Spinner
-                        visible={this.state.spinner}
-                        textStyle={defaultStyle.spinnerTextStyle}
-                    />
-
-                    <Modal
-                        animationType="none"
-                        transparent={true}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
-                        }}>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            //backgroundColor: '#0E0E0E',
-                            //opacity: 0.56,
-                            backgroundColor: 'rgba(52, 52, 52, 0.8)',
-                            padding: 16
-                        }}>
-                            <View style={{
-                                width: 300,
-                                borderRadius: 16,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: 300,
-                            }}>
-
-                                <Text
-                                    style={{
-                                        fontSize: 16,
-                                        color: 'black',
-                                        fontWeight: "400",
-                                        fontFamily: 'Quicksand-Medium'
-                                    }}
-                                >Success</Text>
-
-                                <Image
-                                    style={{ marginTop: 16, height: 100, width: 100 }}
-                                    source={require('../../images/success_icon.png')}
-                                ></Image>
-
-                                <Text
-                                    style={{
-                                        fontSize: 14,
-                                        marginTop: 16,
-                                        color: 'black',
-                                        fontWeight: "400",
-                                        textAlign: 'center',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}
-                                >Thank you ! Your feedback has been succesfully submitted.</Text>
-
-                                {/* <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
+                {/* <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
                                     onPress={() => {
                                         this.setModalVisible(false);
                                         this.props.navigation.goBack(null);
                                     }}>
                                     OK</Text> */}
 
-                                <View style={{
-                                    margin: 16,
-                                    alignSelf: 'center',
-                                    width: 100,
-                                }}>
-                                    <SkyFilledButton
-                                        onPress={() => {
-                                            this.setModalVisible(false);
-                                            this.props.navigation.goBack(null);
-                                        }}
-                                    >OK</SkyFilledButton>
-                                </View>
+                <View
+                  style={{
+                    margin: 16,
+                    alignSelf: "center",
+                    width: 100,
+                  }}
+                >
+                  <SkyFilledButton
+                    onPress={() => {
+                      this.setModalVisible(false);
+                      this.props.navigation.goBack(null);
+                    }}
+                  >
+                    OK
+                  </SkyFilledButton>
+                </View>
+              </View>
+            </View>
+          </Modal>
 
-                            </View>
+          <FlatList data={coaches} renderItem={this._renderItem} />
 
-                        </View>
-                    </Modal>
-
-
-                    <FlatList
-                        data={coaches}
-                        renderItem={this._renderItem}
-                    />
-
-                    {/* <View style={{
+          {/* <View style={{
                         marginTop: 16, marginBottom: 16,
                         justifyContent: 'center', alignItems: 'center'
                     }}>
@@ -388,26 +366,29 @@ class WriteFeedbackListing extends BaseComponent {
                             Submit</Text>
                     </View> */}
 
-                    {coaches.length > 0 ?
-                        < View style={{
-                            margin: 16,
-                            alignSelf: 'center',
-                            width: 100,
-                        }}>
-                            <SkyFilledButton
-                                onPress={() => {
-                                    this.submitFeedback()
-                                }}
-                            >Submit</SkyFilledButton>
-                        </View>
-                        : null}
+          {coaches.length > 0 ? (
+            <View
+              style={{
+                margin: 16,
+                alignSelf: "center",
+                width: 100,
+              }}
+            >
+              <SkyFilledButton
+                onPress={() => {
+                  this.submitFeedback();
+                }}
+              >
+                Submit
+              </SkyFilledButton>
+            </View>
+          ) : null}
 
-                    <KeyboardSpacer/>
-
-                </View>
-            </ScrollView >
-        );
-    }
+          <KeyboardSpacer />
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 const mapStateToProps = state => {

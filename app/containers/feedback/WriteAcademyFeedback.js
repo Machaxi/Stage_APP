@@ -100,126 +100,142 @@ class WriteAcademyFeedback extends BaseComponent {
     render() {
 
         return (
+          <ScrollView style={styles.chartContainer}>
+            <View>
+              <Spinner
+                visible={this.state.spinner}
+                textStyle={defaultStyle.spinnerTextStyle}
+              />
 
-            <ScrollView style={styles.chartContainer}>
+              <Modal
+                animationType="none"
+                transparent={true}
+                visible={this.state.modalVisible}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    //backgroundColor: '#0E0E0E',
+                    //opacity: 0.56,
+                    backgroundColor: "rgba(52, 52, 52, 0.8)",
+                    padding: 16,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 300,
+                      borderRadius: 16,
+                      backgroundColor: "white",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 300,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: "black",
+                        fontWeight: "400",
+                        fontFamily: "Quicksand-Medium",
+                      }}
+                    >
+                      Success
+                    </Text>
 
-                <View>
-
-                    <Spinner
-                        visible={this.state.spinner}
-                        textStyle={defaultStyle.spinnerTextStyle}
+                    <Image
+                      style={{ marginTop: 16, height: 100, width: 100 }}
+                      source={require("../../images/success_icon.png")}
                     />
 
-                    <Modal
-                        animationType="none"
-                        transparent={true}
-                        visible={this.state.modalVisible}
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        marginTop: 16,
+                        color: "black",
+                        fontWeight: "400",
+                        textAlign: "center",
+                        fontFamily: "Quicksand-Regular",
+                      }}
                     >
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            //backgroundColor: '#0E0E0E',
-                            //opacity: 0.56,
-                            backgroundColor: 'rgba(52, 52, 52, 0.8)',
-                            padding: 16
-                        }}>
-                            <View style={{
-                                width: 300,
-                                borderRadius: 16,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: 300,
-                            }}>
+                      Thank you ! Your feedback has been succesfully
+                      submitted.
+                    </Text>
 
-                                <Text
-                                    style={{
-                                        fontSize: 16,
-                                        color: 'black',
-                                        fontWeight: "400",
-                                        fontFamily: 'Quicksand-Medium'
-                                    }}
-                                >Success</Text>
-
-                                <Image
-                                    style={{ marginTop: 16, height: 100, width: 100 }}
-                                    source={require('../../images/success_icon.png')}
-                                ></Image>
-
-                                <Text
-                                    style={{
-                                        fontSize: 14,
-                                        marginTop: 16,
-                                        color: 'black',
-                                        fontWeight: "400",
-                                        textAlign: 'center',
-                                        fontFamily: 'Quicksand-Regular'
-                                    }}
-                                >Thank you ! Your feedback has been succesfully submitted.</Text>
-
-                                {/* <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
+                    {/* <Text style={[styles.rounded_button, { marginTop: 16, width: 70 }]}
                                     onPress={() => {
                                         this.setModalVisible(false);
                                         this.props.navigation.goBack(null);
                                     }}>
                                     OK</Text> */}
 
-                                <View style={{
-                                    margin: 16,
-                                    alignSelf: 'center',
-                                    width: 100,
-                                }}>
-                                    <SkyFilledButton
-                                        onPress={() => {
-                                            this.setModalVisible(false);
-                                            this.props.navigation.goBack(null);
-                                        }}
-                                    >OK</SkyFilledButton>
-                                </View>
+                    <View
+                      style={{
+                        margin: 16,
+                        alignSelf: "center",
+                        width: 100,
+                      }}
+                    >
+                      <SkyFilledButton
+                        onPress={() => {
+                          this.setModalVisible(false);
+                          this.props.navigation.goBack(null);
+                        }}
+                      >
+                        OK
+                      </SkyFilledButton>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+              <Card
+                style={{
+                  borderRadius: 16,
+                  marginLeft: 16,
+                  marginRight: 16,
+                  marginTop: 12,
+                  marginBottom: 12,
+                  elevation: 2,
+                }}
+              >
+                <View style={{ padding: 16 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "#404040",
+                      fontWeight: "400",
+                      fontFamily: "Quicksand-Medium",
+                    }}
+                  >
+                    {this.state.is_coach
+                      ? "Coach Feedback"
+                      : "Society Feedback"}
+                  </Text>
 
-                            </View>
-                        </View>
-                    </Modal>
-                    <Card
-                        style={{
-                            borderRadius: 16,
-                            marginLeft: 16,
-                            marginRight: 16,
-                            marginTop: 12,
-                            marginBottom: 12,
-                            elevation: 2
+                  <View
+                    style={{
+                      width: "100%",
+                      marginTop: 10,
+                      marginBottom: 10,
+                      height: 1,
+                      backgroundColor: "#DFDFDF",
+                    }}
+                  />
 
-                        }}>
-                        <View style={{ padding: 16 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "#404040",
+                      fontWeight: "400",
+                      fontFamily: "Quicksand-Medium",
+                    }}
+                  >
+                    Your Feedback
+                  </Text>
 
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontWeight: "400",
-                                fontFamily: 'Quicksand-Medium'
-                            }}>
-                                {this.state.is_coach ? "Coach Feedback" : "Academy Feedback"}
-
-                            </Text>
-
-                            <View style={{
-                                width: "100%",
-                                marginTop: 10, marginBottom: 10,
-                                height: 1, backgroundColor: '#DFDFDF'
-                            }}></View>
-
-                            <Text style={{
-                                fontSize: 14,
-                                color: '#404040',
-                                fontWeight: "400",
-                                fontFamily: 'Quicksand-Medium'
-                            }}>
-                                Your Feedback
-                            </Text>
-
-                            {/* <Rating
+                  {/* <Rating
                                 type='custom'
                                 ratingColor='#F4FC9A'
                                 ratingBackgroundColor='#D7D7D7'
@@ -253,60 +269,53 @@ class WriteAcademyFeedback extends BaseComponent {
 
                             /> */}
 
+                  <StarRating
+                    style={{
+                      paddingTop: 16,
+                    }}
+                    containerStyle={{
+                      width: 150,
+                    }}
+                    starSize={28}
+                    disabled={false}
+                    emptyStar={require("../../images/ic_empty_star.png")}
+                    fullStar={require("../../images/ic_star.png")}
+                    halfStar={require("../../images/ic_half_star.png")}
+                    iconSet={"Ionicons"}
+                    maxStars={5}
+                    rating={this.state.rating}
+                    selectedStar={(rating) =>
+                      this.setState({
+                        rating: rating,
+                      })
+                    }
+                    fullStarColor={"#F8F29F"}
+                  />
 
-                            <StarRating
-                                style={{
-                                    paddingTop: 16,
-                                }}
-                                containerStyle={{
-                                    width: 150,
-                                }}
-                                starSize={28}
-                                disabled={false}
-                                emptyStar={require('../../images/ic_empty_star.png')}
-                                fullStar={require('../../images/ic_star.png')}
-                                halfStar={require('../../images/ic_half_star.png')}
-                                iconSet={'Ionicons'}
-                                maxStars={5}
-                                rating={this.state.rating}
-                                selectedStar={(rating) => this.setState({
-                                    rating: rating
-                                })}
-                                fullStarColor={'#F8F29F'}
-                            />
+                  <TextInput
+                    style={{
+                      borderColor: "#CECECE",
+                      borderWidth: 1,
+                      height: 100,
+                      width: "100%",
+                      marginTop: 16,
+                      marginBottom: 16,
+                      fontSize: 14,
+                      padding: 4,
+                      textAlign: "left",
+                      justifyContent: "flex-start",
+                      borderRadius: 8,
+                      fontFamily: "Quicksand-Regular",
+                      textAlignVertical: "top",
+                    }}
+                    onChangeText={(review) => this.setState({ review })}
+                    multiline={true}
+                    placeholder={"What's your feedback?"}
+                  />
+                </View>
+              </Card>
 
-
-                            <TextInput
-                                style={{
-                                    borderColor: "#CECECE",
-                                    borderWidth: 1,
-                                    height: 100,
-                                    width: "100%",
-                                    marginTop: 16,
-                                    marginBottom: 16,
-                                    fontSize: 14,
-                                    padding: 4,
-                                    textAlign: 'left',
-                                    justifyContent: 'flex-start',
-                                    borderRadius: 8,
-                                    fontFamily: 'Quicksand-Regular',
-                                    textAlignVertical: 'top'
-                                }}
-                                onChangeText={(review) => this.setState({ review })}
-                                multiline={true}
-                                placeholder={"What's your feedback?"}
-                            >
-
-                            </TextInput>
-
-
-
-
-                        </View>
-
-                    </Card>
-
-                    {/* <View style={{
+              {/* <View style={{
                         marginTop: 16, marginBottom: 16,
                         justifyContent: 'center', alignItems: 'center'
                     }}>
@@ -319,20 +328,23 @@ class WriteAcademyFeedback extends BaseComponent {
                             Submit</Text>
                     </View> */}
 
-                    <View style={{
-                        margin: 16,
-                        alignSelf: 'center',
-                        width: 100,
-                    }}>
-                        <SkyFilledButton
-                            onPress={() => {
-                                this.sendFeedback()
-                            }}
-                        >Submit</SkyFilledButton>
-                    </View>
-
-                </View>
-            </ScrollView >
+              <View
+                style={{
+                  margin: 16,
+                  alignSelf: "center",
+                  width: 100,
+                }}
+              >
+                <SkyFilledButton
+                  onPress={() => {
+                    this.sendFeedback();
+                  }}
+                >
+                  Submit
+                </SkyFilledButton>
+              </View>
+            </View>
+          </ScrollView>
         );
     }
 }
