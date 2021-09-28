@@ -428,60 +428,68 @@ class AcademyProfile extends BaseComponent {
         const feedback_count = this.state.feedback_count
 
         return (
+          <ScrollView style={styles.chartContainer}>
+            <View>
+              <Spinner
+                visible={this.state.spinner}
+                textStyle={defaultStyle.spinnerTextStyle}
+              />
 
-            <ScrollView style={styles.chartContainer}>
+              <FilterDialog
+                touchOutside={(id, type) => {
+                  this.sort(id, type, true);
+                }}
+                visible={filter_dialog}
+              />
 
-                <View>
-                    <Spinner
-                        visible={this.state.spinner}
-                        textStyle={defaultStyle.spinnerTextStyle}
+              <Card
+                style={{
+                  elevation: 2,
+                }}
+              >
+                <View style={{}}>
+                  {gallery.length == 0 ? (
+                    <Image
+                      style={{ height: 150, width: "100%" }}
+                      source={{ uri: academy.cover_pic }}
                     />
-
-                    <FilterDialog
-                        touchOutside={(id, type) => {
-                            this.sort(id, type, true)
+                  ) : (
+                    <View
+                      style={{
+                        position: "relative",
+                      }}
+                    >
+                      <Swiper
+                        containerStyle={
+                          Platform.OS === "ios" ? styles.wrapper : null
+                        }
+                        style={
+                          Platform.OS === "ios" ? null : styles.wrapper
+                        }
+                        ref={(ref) => (this.swiper = ref)}
+                        showsPagination={true}
+                        activeDotColor="white"
+                        paginationStyle={{
+                          bottom: 0,
+                          left: 0,
+                          top: 120,
+                          right: 0,
                         }}
-                        visible={filter_dialog} />
+                        //onIndexChanged={this.updateState.bind(this)}
+                        loop={false}
+                      >
+                        {gallery.map((item, index) => {
+                          return (
+                            <Image
+                              key={index}
+                              source={{ uri: item.image }}
+                              style={styles.sliderImage}
+                            />
+                          );
+                        })}
+                      </Swiper>
 
-                    <Card
-                        style={{
-                            elevation: 2,
-
-                        }}>
-                        <View style={{}}>
-
-                            {gallery.length == 0 ?
-                                <Image style={{ height: 150, width: "100%", }}
-                                    source={{ uri: academy.cover_pic }}
-                                /> :
-
-                                <View style={{
-                                    position: 'relative',
-                                }}>
-
-                                    <Swiper
-                                        containerStyle={Platform.OS === "ios" ? styles.wrapper : null}
-                                        style={Platform.OS === "ios" ? null : styles.wrapper}
-                                        ref={ref => this.swiper = ref}
-                                        showsPagination={true}
-                                        activeDotColor="white"
-                                        paginationStyle={{ bottom: 0, left: 0, top: 120, right: 0 }}
-                                        //onIndexChanged={this.updateState.bind(this)}
-                                        loop={false} >
-                                        {
-                                            gallery.map((item, index) => {
-                                                return (
-
-                                                    <Image key={index}
-                                                        source={{ uri: item.image }}
-                                                        style={styles.sliderImage} />
-                                                )
-                                            })
-                                        }
-
-                                    </Swiper>
-
-                                    {/* <View style={{
+                      {/* <View style={{
 
                                         alignItems: 'flex-end',
                                         justifyContent: 'flex-end',
@@ -506,31 +514,39 @@ class AcademyProfile extends BaseComponent {
                                             padding: 8
                                         }]}>+{gallery.length}</Text>
                                     </View> */}
+                    </View>
+                  )}
 
-                                </View>
+                  <View
+                    style={{
+                      marginLeft: 8,
+                      marginRight: 8,
+                      marginTop: 1,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Quicksand-Medium",
+                        paddingTop: 12,
+                        fontSize: 18,
+                        color: "gray",
+                      }}
+                    >
+                      {" "}
+                      {academy.name}
+                    </Text>
 
-                            }
-
-                            <View style={{
-                                marginLeft: 8, marginRight: 8, marginTop: 1
-                            }}>
-
-
-                                <Text style={{
-                                    fontFamily: 'Quicksand-Medium',
-                                    paddingTop: 12,
-                                    fontSize: 18, color: 'gray'
-                                }}> {academy.name}</Text>
-
-                                <View style={{
-                                    alignItems: 'center',
-                                    paddingTop: 8,
-                                    paddingBottom: 12,
-                                    marginLeft: 6,
-                                    flexDirection: 'row', flex: 1
-                                }}>
-
-                                    {/* <Rating
+                    <View
+                      style={{
+                        alignItems: "center",
+                        paddingTop: 8,
+                        paddingBottom: 12,
+                        marginLeft: 6,
+                        flexDirection: "row",
+                        flex: 1,
+                      }}
+                    >
+                      {/* <Rating
                                         type='custom'
                                         ratingColor='#F4FC9A'
                                         ratingBackgroundColor='#D7D7D7'
@@ -540,29 +556,29 @@ class AcademyProfile extends BaseComponent {
                                         startingValue={academy.ratings}
                                         style={{ width: 80 }}
                                     /> */}
-                                    <StarRating
-                                        style={{
-                                            //height: 24, 
-                                            width: 70,
-                                            marginRight: 6,
-                                        }}
-                                        containerStyle={{
-                                            width: 70,
-                                            marginRight: 6
-                                        }}
-                                        starSize={14}
-                                        disabled={true}
-                                        emptyStar={require('../../images/ic_empty_star.png')}
-                                        fullStar={require('../../images/ic_star.png')}
-                                        halfStar={require('../../images/ic_half_star.png')}
-                                        iconSet={'Ionicons'}
-                                        maxStars={5}
-                                        rating={academy.ratings}
-                                        ratingBackgroundColor={"#ff2200"}
-                                        fullStarColor={'#F4FC9A'}
-                                    />
+                      <StarRating
+                        style={{
+                          //height: 24,
+                          width: 70,
+                          marginRight: 6,
+                        }}
+                        containerStyle={{
+                          width: 70,
+                          marginRight: 6,
+                        }}
+                        starSize={14}
+                        disabled={true}
+                        emptyStar={require("../../images/ic_empty_star.png")}
+                        fullStar={require("../../images/ic_star.png")}
+                        halfStar={require("../../images/ic_half_star.png")}
+                        iconSet={"Ionicons"}
+                        maxStars={5}
+                        rating={academy.ratings}
+                        ratingBackgroundColor={"#ff2200"}
+                        fullStarColor={"#F4FC9A"}
+                      />
 
-                                    {/* <Text style={{
+                      {/* <Text style={{
                                     backgroundColor: '#D6D6D6', height: 19, width: 30, textAlign: 'center',
                                     fontSize: 12,
                                     alignItems: 'center',
@@ -570,311 +586,376 @@ class AcademyProfile extends BaseComponent {
                                     color: '#707070',
                                     borderRadius: 12,
                                 }}>{academy.ratings.toFixed(1)}</Text> */}
-                                    <RateViewFill>{academy.ratings}</RateViewFill>
-                                </View>
+                      <RateViewFill>{academy.ratings}</RateViewFill>
+                    </View>
 
-                                <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+                    <View
+                      style={{ flexDirection: "row", marginBottom: 16 }}
+                    >
+                      {coaching_enabled ? (
+                        <TouchableOpacity
+                          activeOpacity={0.8}
+                          style={[defaultStyle.rounded_button, {}]}
+                          onPress={() => {
+                            if (coaching_enabled) {
+                              this.props.navigation.navigate(
+                                "AcademyBatch",
+                                { academy_id: this.state.id }
+                              );
+                            }
+                          }}
+                        >
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_14,
+                              { color: "white" },
+                            ]}
+                          >
+                            View Batches
+                          </Text>
+                        </TouchableOpacity>
+                      ) : null}
 
-                                    {coaching_enabled ?
-                                        <TouchableOpacity
-                                            activeOpacity={.8}
-                                            style={[defaultStyle.rounded_button, {
-                                            }]} onPress={() => {
-                                                if (coaching_enabled) {
-                                                    this.props.navigation.navigate('AcademyBatch',
-                                                        { academy_id: this.state.id })
-                                                }
-                                            }
-                                            }
-                                        >
+                      {book_and_play_enabled ? (
+                        <TouchableOpacity
+                          activeOpacity={0.8}
+                          style={[defaultStyle.rounded_button, {}]}
+                          onPress={() => {
+                            if (book_and_play_enabled) {
+                              this.props.navigation.navigate(
+                                "ChooseTimeDate",
+                                {
+                                  id: this.state.id,
+                                  name: academy.name,
+                                }
+                              );
+                            }
+                          }}
+                        >
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_14,
+                              { color: "white" },
+                            ]}
+                          >
+                            Book Court
+                          </Text>
+                        </TouchableOpacity>
+                      ) : null}
 
-                                            <Text
-                                                style={[defaultStyle.bold_text_14,
-                                                { color: 'white' }]}
-                                            >
-                                                View Batches
-                                </Text>
-                                        </TouchableOpacity> : null}
-
-                                    {book_and_play_enabled ?
-                                        <TouchableOpacity
-                                            activeOpacity={.8}
-                                            style={[defaultStyle.rounded_button, {
-                                            }]}
-                                            onPress={() => {
-                                                if (book_and_play_enabled) {
-                                                    this.props.navigation.navigate('ChooseTimeDate',
-                                                        {
-                                                            id: this.state.id,
-                                                            name: academy.name
-                                                        })
-                                                }
-                                            }}>
-
-                                            <Text
-                                                style={[defaultStyle.bold_text_14,
-                                                { color: 'white' }]}
-                                            >
-                                                Book Court
-                                             </Text>
-                                        </TouchableOpacity> : null}
-
-                                    {/* <Text
+                      {/* <Text
                                     style={styles.rounded_button}
                                 >
                                     Book Court
                                 </Text> */}
-
-                                </View>
-                            </View>
-                        </View>
-                    </Card>
-
-                    <Card
-                        style={styles.card_style}>
-
-
-                        <View style={{ padding: 12 }}>
-
-                            <Text style={defaultStyle.bold_text_10}>Founder's Corner</Text>
-                            <View style={{ marginTop: 8, marginBottom: 8, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-
-                            <ReadMoreText
-                                limitLines={3}
-                                renderFooter={this.renderFooter} >
-
-                                <Text style={defaultStyle.regular_text_14}>{about}</Text>
-
-                            </ReadMoreText>
-                        </View>
-
-                    </Card>
-
-                    <Card
-                        style={styles.card_style}>
-
-
-                        <View style={{ padding: 12 }}>
-
-                            <Text style={defaultStyle.bold_text_10}>Offering</Text>
-                            <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={defaultStyle.regular_text_14}>{academy.offering} </Text>
-                        </View>
-
-                    </Card>
-
-                    <Card
-                        style={styles.card_style}>
-
-
-                        <View style={{ padding: 12 }}>
-
-                            <Text style={defaultStyle.bold_text_10}>Address</Text>
-                            <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                            <Text style={defaultStyle.regular_text_14}>{academy.locality} </Text>
-                        </View>
-
-                    </Card>
-
-                    {facilities != null ?
-                        <Card
-                            style={styles.card_style}>
-
-                            <View style={{ padding: 12 }}>
-
-                                <Text style={defaultStyle.bold_text_10}>Facilities</Text>
-                                <View style={{ marginTop: 4, marginBottom: 4, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-                                <Text style={defaultStyle.regular_text_14}>{facilities}</Text>
-                            </View>
-
-                        </Card> : null
-                    }
-
-
-                    {academy.top_player != undefined ?
-                        < Card
-                            style={styles.card_style}>
-
-                            <View style={{ padding: 12 }}>
-
-                                <Text style={defaultStyle.bold_text_10}>Best Player (Badminton)</Text>
-                                <View style={{ marginTop: 6, marginBottom: 6, height: 1, width: '100%', backgroundColor: '#dfdfdf' }}></View>
-
-                                <View style={{
-                                    marginTop: 8,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-
-                                    {this._renderPlayerItem(academy.top_player)}
-
-                                </View>
-                            </View>
-
-                        </Card> : null}
-
-                    <TouchableOpacity
-                        activeOpacity={.8}
-                        onPress={() => {
-                            this.props.navigation.navigate('ViewPlayersListing', { id: academy.id })
-                        }}
-                    >
-                        <Card
-                            style={styles.card_style}>
-
-                            <View style={{ padding: 16, flexDirection: 'row' }}>
-                                <Text style={[defaultStyle.regular_text_14, { width: '90%' }]}>View Players</Text>
-                                <Image
-                                    resizeMode="contain"
-                                    style={{ width: 19, height: 13, }}
-                                    source={require('../../images/path.png')}
-                                ></Image>
-                            </View>
-
-                        </Card>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        activeOpacity={.8}
-                        onPress={() => {
-                            this.props.navigation.navigate('CoachListing', { academy_id: this.state.id })
-                        }}
-                    >
-
-                        <Card
-                            style={styles.card_style}>
-
-                            <View style={{ padding: 16, flexDirection: 'row' }}>
-                                <Text style={[defaultStyle.regular_text_14, { width: '90%' }]}>View Coaches</Text>
-                                <Image
-                                    resizeMode="contain"
-                                    style={{ width: 19, height: 13, }}
-                                    source={require('../../images/path.png')}
-                                ></Image>
-                            </View>
-
-                        </Card>
-                    </TouchableOpacity>
-
-
-                    {showFeedback ?
-                        // <TouchableOpacity
-                        //     activeOpacity={.8}
-                        //     onPress={() => {
-                        //         this.props.navigation.navigate('WriteAcademyFeedback',
-
-                        //             { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
-                        //     }}>
-
-                        //     <View
-
-                        //         style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
-
-                        //         <Text
-                        //             style={styles.filled_button}
-                        //         >
-                        //             Give Feedback
-                        //     </Text>
-
-                        //     </View>
-                        // </TouchableOpacity>
-                        <View
-                            style={{ margin: 12 }}
-                        >
-                            <SkyFilledButton
-                                onPress={() => {
-                                    this.props.navigation.navigate('WriteAcademyFeedback',
-
-                                        {
-                                            is_coach: false, academy_id: this.state.id,
-                                            target_id: user_id
-                                        })
-                                }}>
-
-                                Give Feedback</SkyFilledButton></View>
-                        : null}
-
-
-                    {feedback.length != 0 ?
-                        <Card
-                            style={{
-                                elevation: 2,
-                                backgroundColor: 'white',
-                                borderRadius: 10,
-                                marginTop: 10,
-                            }}
-                        >
-                            <View
-                                style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
-                            >
-
-                                <View style={{
-
-                                    flexDirection: 'row',
-                                    flex: 1,
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <Text
-                                        style={[defaultStyle.bold_text_14, {
-                                            color: '#707070'
-                                        }]}
-                                    >
-                                        Reviews ({feedback_count})
-                            </Text>
-
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            this.setState({
-                                                filter_dialog: true
-                                            })
-                                        }} >
-
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text
-                                                style={[defaultStyle.bold_text_12, { color: '#707070', fontSize: 12, marginRight: 2 }]}>
-                                                Sort</Text>
-                                            <Image
-                                                style={{ width: 24, height: 15, }}
-                                                source={require('../../images/filter_rating.png')}
-                                            ></Image>
-
-                                        </View>
-                                    </TouchableOpacity>
-
-                                </View>
-
-                                <View
-                                    style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
-                                ></View>
-
-
-                            </View>
-
-
-                            <FlatList
-                                onEndReachedThreshold={0.1}
-                                onEndReached={({ distanceFromEnd }) => {
-                                    console.log('on end reached ', distanceFromEnd);
-                                    let page = this.state.page
-                                    page = page + 1
-                                    this.state.page = page
-
-                                    console.log('page => ', this.state.page)
-                                    let sortType = this.state.sortType
-                                    let type = this.state.type
-                                    this.getAcademyFeedbacks(sortType, type, false)
-                                }}
-                                extraData={feedback}
-                                data={feedback}
-                                renderItem={this._renderRatingItem}
-                            />
-
-                        </Card>
-                        : null}
-
+                    </View>
+                  </View>
                 </View>
-            </ScrollView >
+              </Card>
 
+              <Card style={styles.card_style}>
+                <View style={{ padding: 12 }}>
+                  <Text style={defaultStyle.bold_text_10}>
+                    About Society
+                  </Text>
+                  <View
+                    style={{
+                      marginTop: 8,
+                      marginBottom: 8,
+                      height: 1,
+                      width: "100%",
+                      backgroundColor: "#dfdfdf",
+                    }}
+                  />
+
+                  <ReadMoreText
+                    limitLines={3}
+                    renderFooter={this.renderFooter}
+                  >
+                    <Text style={defaultStyle.regular_text_14}>
+                      {about}
+                    </Text>
+                  </ReadMoreText>
+                </View>
+              </Card>
+
+              <Card style={styles.card_style}>
+                <View style={{ padding: 12 }}>
+                  <Text style={defaultStyle.bold_text_10}>
+                    Offering
+                  </Text>
+                  <View
+                    style={{
+                      marginTop: 4,
+                      marginBottom: 4,
+                      height: 1,
+                      width: "100%",
+                      backgroundColor: "#dfdfdf",
+                    }}
+                  />
+                  <Text style={defaultStyle.regular_text_14}>
+                    {academy.offering}{" "}
+                  </Text>
+                </View>
+              </Card>
+
+              <Card style={styles.card_style}>
+                <View style={{ padding: 12 }}>
+                  <Text style={defaultStyle.bold_text_10}>Address</Text>
+                  <View
+                    style={{
+                      marginTop: 4,
+                      marginBottom: 4,
+                      height: 1,
+                      width: "100%",
+                      backgroundColor: "#dfdfdf",
+                    }}
+                  />
+                  <Text style={defaultStyle.regular_text_14}>
+                    {academy.locality}{" "}
+                  </Text>
+                </View>
+              </Card>
+
+              {facilities != null ? (
+                <Card style={styles.card_style}>
+                  <View style={{ padding: 12 }}>
+                    <Text style={defaultStyle.bold_text_10}>
+                      Facilities
+                    </Text>
+                    <View
+                      style={{
+                        marginTop: 4,
+                        marginBottom: 4,
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#dfdfdf",
+                      }}
+                    />
+                    <Text style={defaultStyle.regular_text_14}>
+                      {facilities}
+                    </Text>
+                  </View>
+                </Card>
+              ) : null}
+
+              {academy.top_player != undefined ? (
+                <Card style={styles.card_style}>
+                  <View style={{ padding: 12 }}>
+                    <Text style={defaultStyle.bold_text_10}>
+                      Highest Ranked Athlete
+                    </Text>
+                    <View
+                      style={{
+                        marginTop: 6,
+                        marginBottom: 6,
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#dfdfdf",
+                      }}
+                    />
+
+                    <View
+                      style={{
+                        marginTop: 8,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {this._renderPlayerItem(academy.top_player)}
+                    </View>
+                  </View>
+                </Card>
+              ) : null}
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  this.props.navigation.navigate("ViewPlayersListing", {
+                    id: academy.id,
+                  });
+                }}
+              >
+                <Card style={styles.card_style}>
+                  <View style={{ padding: 16, flexDirection: "row" }}>
+                    <Text
+                      style={[
+                        defaultStyle.regular_text_14,
+                        { width: "90%" },
+                      ]}
+                    >
+                      View Players
+                    </Text>
+                    <Image
+                      resizeMode="contain"
+                      style={{ width: 19, height: 13 }}
+                      source={require("../../images/path.png")}
+                    />
+                  </View>
+                </Card>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  this.props.navigation.navigate("CoachListing", {
+                    academy_id: this.state.id,
+                  });
+                }}
+              >
+                <Card style={styles.card_style}>
+                  <View style={{ padding: 16, flexDirection: "row" }}>
+                    <Text
+                      style={[
+                        defaultStyle.regular_text_14,
+                        { width: "90%" },
+                      ]}
+                    >
+                      View Coaches
+                    </Text>
+                    <Image
+                      resizeMode="contain"
+                      style={{ width: 19, height: 13 }}
+                      source={require("../../images/path.png")}
+                    />
+                  </View>
+                </Card>
+              </TouchableOpacity>
+
+              {showFeedback ? (
+                // <TouchableOpacity
+                //     activeOpacity={.8}
+                //     onPress={() => {
+                //         this.props.navigation.navigate('WriteAcademyFeedback',
+
+                //             { is_coach: false, academy_id: this.state.id, target_id: this.state.id })
+                //     }}>
+
+                //     <View
+
+                //         style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+
+                //         <Text
+                //             style={styles.filled_button}
+                //         >
+                //             Give Feedback
+                //     </Text>
+
+                //     </View>
+                // </TouchableOpacity>
+                <View style={{ margin: 12 }}>
+                  <SkyFilledButton
+                    onPress={() => {
+                      this.props.navigation.navigate(
+                        "WriteAcademyFeedback",
+
+                        {
+                          is_coach: false,
+                          academy_id: this.state.id,
+                          target_id: user_id,
+                        }
+                      );
+                    }}
+                  >
+                    Give Feedback
+                  </SkyFilledButton>
+                </View>
+              ) : null}
+
+              {feedback.length != 0 ? (
+                <Card
+                  style={{
+                    elevation: 2,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    marginTop: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      marginLeft: 12,
+                      marginRight: 12,
+                      marginTop: 12,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        flex: 1,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={[
+                          defaultStyle.bold_text_14,
+                          {
+                            color: "#707070",
+                          },
+                        ]}
+                      >
+                        Reviews ({feedback_count})
+                      </Text>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            filter_dialog: true,
+                          });
+                        }}
+                      >
+                        <View style={{ flexDirection: "row" }}>
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_12,
+                              {
+                                color: "#707070",
+                                fontSize: 12,
+                                marginRight: 2,
+                              },
+                            ]}
+                          >
+                            Sort
+                          </Text>
+                          <Image
+                            style={{ width: 24, height: 15 }}
+                            source={require("../../images/filter_rating.png")}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                      style={{
+                        width: "100%",
+                        height: 1,
+                        backgroundColor: "#DFDFDF",
+                        marginTop: 8,
+                        marginBottom: 8,
+                      }}
+                    />
+                  </View>
+
+                  <FlatList
+                    onEndReachedThreshold={0.1}
+                    onEndReached={({ distanceFromEnd }) => {
+                      console.log("on end reached ", distanceFromEnd);
+                      let page = this.state.page;
+                      page = page + 1;
+                      this.state.page = page;
+
+                      console.log("page => ", this.state.page);
+                      let sortType = this.state.sortType;
+                      let type = this.state.type;
+                      this.getAcademyFeedbacks(sortType, type, false);
+                    }}
+                    extraData={feedback}
+                    data={feedback}
+                    renderItem={this._renderRatingItem}
+                  />
+                </Card>
+              ) : null}
+            </View>
+          </ScrollView>
         );
     }
 }
