@@ -17,6 +17,7 @@ xmlns:tools="http://schemas.android.com/tools"
       tools:replace="android:appComponentFactory"
       android:appComponentFactory="whateverString"
       android:usesCleartextTraffic="true"
+      android:requestLegacyExternalStorage="true"
       android:theme="@style/AppTheme">
 
    <activity
