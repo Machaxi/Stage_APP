@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'Dribble' do
@@ -38,10 +38,13 @@ target 'Dribble' do
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
-
+ 
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Messaging'
+  pod 'GoogleUtilities'
+  
+  
   
   
   # Pods for PodTest
@@ -56,6 +59,9 @@ target 'Dribble' do
   pod 'RNSnackbar', :path => '../node_modules/react-native-snackbar'
 
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
+  
+
+  pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
 
   target 'DribbleTests' do
     inherit! :search_paths
@@ -83,6 +89,23 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     if target.name == "React"
       target.remove_from_project
+      find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+          "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
+          find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+              "RCTBridgeModuleNameForClass(module))", "RCTBridgeModuleNameForClass(Class(module)))")
+     
     end
   end
+end
+def find_and_replace(dir, findstr, replacestr)
+  Dir[dir].each do |name|
+      text = File.read(name)
+      replace = text.gsub(findstr,replacestr)
+      if text != replace
+          puts "Fix: " + name
+          File.open(name, "w") { |file| file.puts replace }
+          STDOUT.flush
+      end
+  end
+  Dir[dir + '*/'].each(&method(:find_and_replace))
 end

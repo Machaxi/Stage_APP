@@ -206,6 +206,7 @@ dexOptions {
   
 
 dependencies {
+    implementation project(':react-native-fast-image')
     implementation project(':react-native-code-push')
     implementation project(':react-native-snackbar')
     implementation project(':react-native-splash-screen')

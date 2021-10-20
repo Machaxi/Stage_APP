@@ -3,6 +3,7 @@ package com.machaxi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dylanvann.fastimage.FastImageViewPackage;
 import com.microsoft.codepush.react.CodePush;
 // import com.RNTextInputMask.RNTextInputMaskPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
@@ -102,6 +103,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
 
       // packages.add(new MainReactPackage(),
+            new FastImageViewPackage(),
             // new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG);
            // new RNTextInputMaskPackage(),
             //new SnackbarPackage());
