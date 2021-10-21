@@ -103,7 +103,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new MyReactNativePackage());
 
       // packages.add(new MainReactPackage(),
-            new FastImageViewPackage(),
+         
             // new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG);
            // new RNTextInputMaskPackage(),
             //new SnackbarPackage());
@@ -128,6 +128,7 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new RNGestureHandlerPackage());
        //packages.add(new RNFirebasePackage());
       // packages.add(new SnackbarPackage());
+     // packages.add( new FastImageViewPackage());
        packages.add(new RNFirebaseAuthPackage());
        packages.add(new RNFirebaseNotificationsPackage());
        packages.add(new RNFirebaseMessagingPackage());
