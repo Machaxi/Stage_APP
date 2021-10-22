@@ -312,205 +312,227 @@ class PaymentHistory extends BaseComponent {
 
 
         return (
-            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+          <View style={{ flex: 1, backgroundColor: "#fff" }}>
+            <MonthYearDialog
+              touchOutside={(month, year) => {
+                if (month != undefined && year != undefined) {
+                  //alert(month + "-" + year)
+                  this.state.selected_month = month;
+                  this.state.selected_year = year;
 
-                <MonthYearDialog
-                    touchOutside={(month, year) => {
-                        if (month != undefined && year != undefined) {
-                            //alert(month + "-" + year)
-                            this.state.selected_month = month
-                            this.state.selected_year = year
-
-                            if (this.state.selected_academy != null &&
-                                this.state.selected_player != null) {
-                                this.fetchHistory()
-                            }
-                        }
-                        this.setState({
-                            show_month_dialog: false
-                        })
+                  if (
+                    this.state.selected_academy != null &&
+                    this.state.selected_player != null
+                  ) {
+                    this.fetchHistory();
+                  }
+                }
+                this.setState({
+                  show_month_dialog: false,
+                });
+              }}
+              visible={this.state.show_month_dialog}
+              currentYear={this.state.selected_year}
+            />
+            <View
+              style={{
+                paddingLeft: 12,
+                paddingTop: 16,
+                paddingBottom: 16,
+                paddingRight: 12,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{
+                    width: "40%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: "#A3A5AE",
+                      paddingLeft: 2,
+                      fontFamily: "Quicksand-Regular",
                     }}
-                    visible={this.state.show_month_dialog}
-                />
-                <View style={{
-                    paddingLeft: 12,
-                    paddingTop: 16,
-                    paddingBottom: 16,
-                    paddingRight: 12
-                }}>
+                  >
+                    Player
+                  </Text>
 
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
+                  <RNPickerSelect
+                    style={{}}
+                    placeholder={placeholder}
+                    items={player_drop}
+                    onValueChange={(value) => {
+                      this.setState({
+                        selected_player: value,
+                      });
+                      setTimeout(() => {
+                        this.filterMatch();
+                      }, 100);
+                    }}
+                    style={pickerSelectStyles}
+                    value={this.state.selected_tournament_category}
+                    useNativeAndroidPickerStyle={false}
+                    ref={(el) => {
+                      this.inputRefs.players = el;
+                    }}
+                  />
 
-                    }}>
-
-                        <View style={{
-                            width: '40%',
-                        }}>
-
-                            <Text style={{
-                                fontSize: 10,
-                                color: '#A3A5AE',
-                                paddingLeft: 2,
-                                fontFamily: 'Quicksand-Regular'
-                            }}>
-                                Player
-                                    </Text>
-
-                            <RNPickerSelect style={{
-                            }}
-                                placeholder={placeholder}
-                                items={player_drop}
-                                onValueChange={(value) => {
-                                    this.setState({
-                                        selected_player: value,
-                                    });
-                                    setTimeout(() => {
-                                        this.filterMatch()
-                                    }, 100)
-
-                                }}
-                                style={pickerSelectStyles}
-                                value={this.state.selected_tournament_category}
-                                useNativeAndroidPickerStyle={false}
-                                ref={(el) => {
-                                    this.inputRefs.players = el;
-                                }}
-                            />
-
-                            <View style={{
-                                width: "100%",
-                                backgroundColor: '#C7C7CD',
-                                height: 1,
-                                marginTop: 2
-                            }}></View>
-                        </View>
-                        <View style={{
-                            marginLeft: 16,
-                            width: '40%',
-                        }}>
-
-                            <Text style={{
-                                fontSize: 10,
-                                color: '#A3A5AE',
-                                paddingLeft: 2,
-                                fontFamily: 'Quicksand-Regular'
-                            }}>Academy</Text>
-
-                            <RNPickerSelect style={{
-                            }}
-                                placeholder={placeholder}
-                                items={academy_drop}
-                                onValueChange={(value) => {
-                                    this.setState({
-                                        selected_academy: value,
-                                    });
-                                    if(value!=null){
-                                        setTimeout(() => {
-                                            this.fetchHistory()
-                                        }, 50)
-                                    }
-                                    
-                                }}
-                                style={pickerSelectStyles}
-                                value={this.state.selected_academy}
-                                useNativeAndroidPickerStyle={false}
-                                ref={(el) => {
-                                    this.inputRefs.gender = el;
-                                }}
-                            />
-
-
-                            <View style={{
-                                width: "100%",
-                                backgroundColor: '#C7C7CD',
-                                height: 1,
-                                marginTop: 2
-                            }}></View>
-                        </View>
-                    </View>
-
-
-
-                    <View>
-
-                        <Text style={{
-                            fontSize: 10,
-                            color: '#A3A5AE',
-                            paddingLeft: 2,
-                            marginTop: 16,
-                            fontFamily: 'Quicksand-Regular'
-                        }}>
-                            Month and Year
-                                    </Text>
-
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.setState({
-                                    show_month_dialog: true
-                                })
-                            }}
-                        >
-
-
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginTop: 8,
-                                width: 110,
-                                justifyContent: 'space-between'
-                            }}>
-
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: '#404040',
-                                    paddingLeft: 2,
-                                    fontFamily: 'Quicksand-Regular'
-                                }}>
-                                    {formatted_date}
-                                </Text>
-
-                                <Image
-                                    style={{ width: 8, height: 5 }}
-                                    source={require('../../images/ic_down_arrow.png')} />
-                            </View>
-                            <View
-                                style={{
-                                    width: 110,
-                                    marginTop: 4,
-                                    backgroundColor: '#614051',
-                                    height: 1
-                                }}
-                            ></View>
-                        </TouchableOpacity>
-
-                    </View>
-
+                  <View
+                    style={{
+                      width: "100%",
+                      backgroundColor: "#C7C7CD",
+                      height: 1,
+                      marginTop: 2,
+                    }}
+                  />
                 </View>
+                <View
+                  style={{
+                    marginLeft: 16,
+                    width: "40%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: "#A3A5AE",
+                      paddingLeft: 2,
+                      fontFamily: "Quicksand-Regular",
+                    }}
+                  >
+                    Academy
+                  </Text>
 
+                  <RNPickerSelect
+                    style={{}}
+                    placeholder={placeholder}
+                    items={academy_drop}
+                    onValueChange={(value) => {
+                      this.setState({
+                        selected_academy: value,
+                      });
+                      if (value != null) {
+                        setTimeout(() => {
+                          this.fetchHistory();
+                        }, 50);
+                      }
+                    }}
+                    style={pickerSelectStyles}
+                    value={this.state.selected_academy}
+                    useNativeAndroidPickerStyle={false}
+                    ref={(el) => {
+                      this.inputRefs.gender = el;
+                    }}
+                  />
 
+                  <View
+                    style={{
+                      width: "100%",
+                      backgroundColor: "#C7C7CD",
+                      height: 1,
+                      marginTop: 2,
+                    }}
+                  />
+                </View>
+              </View>
 
+              <View>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: "#A3A5AE",
+                    paddingLeft: 2,
+                    marginTop: 16,
+                    fontFamily: "Quicksand-Regular",
+                  }}
+                >
+                  Month and Year
+                </Text>
 
-                {payment_history != null && payment_history.length > 0 ?
-                    <FlatList
-                        ListHeaderComponent={this._renderHeaderItem}
-                        data={payment_history}
-                        extraData={payment_history}
-                        renderItem={this._renderItem}
-                    /> :
-                    (history_progress ?
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <ActivityIndicator size="large" color="#67BAF5" />
-                        </View>
-                        :
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={defaultStyle.regular_text_14}>
-                                {payment_history == null ? "Please choose player and academy" : "No payment history."}
-                            </Text>
-                        </View>)}
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      show_month_dialog: true,
+                    });
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: 8,
+                      width: 110,
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "#404040",
+                        paddingLeft: 2,
+                        fontFamily: "Quicksand-Regular",
+                      }}
+                    >
+                      {formatted_date}
+                    </Text>
 
+                    <Image
+                      style={{ width: 8, height: 5 }}
+                      source={require("../../images/ic_down_arrow.png")}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      width: 110,
+                      marginTop: 4,
+                      backgroundColor: "#614051",
+                      height: 1,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
+
+            {payment_history != null && payment_history.length > 0 ? (
+              <FlatList
+                ListHeaderComponent={this._renderHeaderItem}
+                data={payment_history}
+                extraData={payment_history}
+                renderItem={this._renderItem}
+              />
+            ) : history_progress ? (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#67BAF5" />
+              </View>
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={defaultStyle.regular_text_14}>
+                  {payment_history == null
+                    ? "Please choose player and academy"
+                    : "No payment history."}
+                </Text>
+              </View>
+            )}
+          </View>
         );
 
     }

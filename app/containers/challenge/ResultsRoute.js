@@ -264,66 +264,69 @@ class ResultsRoute extends BaseComponent {
     }
 
     return (
-
-      <View style={styles.resultsPageContainer} >
-        <PTRView onRefresh={this._refresh} >
-          <View style={{ width: '45.33%', paddingLeft: 16, marginTop: 15 }}>
-
-            <View><Text style={styles.filterPlaceholder}>Showing for</Text></View>
+      <View style={styles.resultsPageContainer}>
+        <PTRView onRefresh={this._refresh}>
+          <View style={{ width: "45.33%", paddingLeft: 16, marginTop: 15 }}>
+            <View>
+              <Text style={styles.filterPlaceholder}>Showing for</Text>
+            </View>
             <MonthYearDialog
               touchOutside={(month, year) => {
                 if (month != undefined && year != undefined) {
                   //alert(month + "-" + year)
-                  this.state.selected_month = month
-                  this.state.selected_year = year
+                  this.state.selected_month = month;
+                  this.state.selected_year = year;
                   setTimeout(() => {
-                    this.getResultsData()
-                  }, 50)
+                    this.getResultsData();
+                  }, 50);
                 }
                 this.setState({
-                  show_month_dialog: false
-                })
-
-
+                  show_month_dialog: false,
+                });
               }}
               visible={this.state.show_month_dialog}
+              currentYear={this.state.selected_year}
             />
             <TouchableOpacity
               onPress={() => {
                 this.setState({
-                  show_month_dialog: true
-                })
+                  show_month_dialog: true,
+                });
               }}
             >
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: 8,
-                width: 90,
-                justifyContent: 'space-between'
-              }}>
-
-                <Text style={{
-                  fontSize: 14,
-                  color: '#404040',
-                  paddingLeft: 2,
-                  fontFamily: 'Quicksand-Medium'
-                }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 8,
+                  width: 90,
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: "#404040",
+                    paddingLeft: 2,
+                    fontFamily: "Quicksand-Medium",
+                  }}
+                >
                   {formatted_date}
                 </Text>
 
                 <Image
                   style={{ width: 8, height: 5 }}
-                  source={require('../../images/ic_down_arrow.png')} />
+                  source={require("../../images/ic_down_arrow.png")}
+                />
               </View>
               <View
                 style={{
                   width: 90,
                   marginTop: 4,
-                  backgroundColor: '#A3A5AE',
-                  height: 1
+                  backgroundColor: "#A3A5AE",
+                  height: 1,
                 }}
-              ></View>
+              />
             </TouchableOpacity>
 
             {/* <RNPickerSelect
@@ -350,7 +353,6 @@ class ResultsRoute extends BaseComponent {
               backgroundColor: '#A3A5AE',
               height: 1
             }}></View> */}
-
           </View>
 
           <View style={styles.totalGamesLabelOuter}>
@@ -361,38 +363,38 @@ class ResultsRoute extends BaseComponent {
 
           <View style={styles.totalGamesValueOuter}>
             <Text style={styles.gameValue}>{data.total_count}</Text>
-            <View style={[styles.wonValue, { flex: 1, flexDirection: 'row' }]}>
-              <View><Text>{data.win}</Text></View>
-              <View style={{ marginLeft: 5 }}><Image
-                resizeMode='contain'
-                source={require('../../images/win_badge.png')} style={{
-                  marginTop: 2,
-                  width: 12,
-                  height: 16,
-                }}></Image></View>
+            <View
+              style={[styles.wonValue, { flex: 1, flexDirection: "row" }]}
+            >
+              <View>
+                <Text>{data.win}</Text>
+              </View>
+              <View style={{ marginLeft: 5 }}>
+                <Image
+                  resizeMode="contain"
+                  source={require("../../images/win_badge.png")}
+                  style={{
+                    marginTop: 2,
+                    width: 12,
+                    height: 16,
+                  }}
+                />
+              </View>
             </View>
             <Text style={styles.lostValue}>{data.loss}</Text>
           </View>
 
-          {
-            data.challenges.length > 0 &&
+          {data.challenges.length > 0 && (
             <View style={styles.totalResultsLabelOuter}>
               <Text style={styles.opponentLabel}>Match</Text>
               <Text style={styles.scoreLabel}>Score</Text>
               <Text style={styles.resultLabel}>Result</Text>
             </View>
-          }
+          )}
 
-          <FlatList
-            data={data.challenges}
-            renderItem={this._renderItem}
-          />
+          <FlatList data={data.challenges} renderItem={this._renderItem} />
         </PTRView>
       </View>
-
-
-
-
     );
   }
 }
