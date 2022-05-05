@@ -898,7 +898,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.0.3.0;
+				CURRENT_PROJECT_VERSION = 3.0.4.0;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
@@ -913,7 +913,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.0.3;
+				MARKETING_VERSION = 3.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -936,7 +936,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.0.3.0;
+				CURRENT_PROJECT_VERSION = 3.0.4.0;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -950,7 +950,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.0.3;
+				MARKETING_VERSION = 3.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
