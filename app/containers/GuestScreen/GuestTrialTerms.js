@@ -500,7 +500,7 @@ class GuestTrialTerms extends BaseComponent {
           >
             <TouchableOpacity
               style={{
-                width: 172,
+                width: 252,
                 padding: 10,
                 height: 40,
               }}
@@ -516,7 +516,7 @@ class GuestTrialTerms extends BaseComponent {
                   fontSize: 14,
                 }}
               >
-                Book trial session
+                Buy Coaching Membership
               </Text>
             </TouchableOpacity>
           </LinearGradient>

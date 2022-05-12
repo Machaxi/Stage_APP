@@ -593,6 +593,7 @@ class AcademyProfile extends BaseComponent {
                       style={{ flexDirection: "row", marginBottom: 16 }}
                     >
                       {coaching_enabled ? (
+                        <View style={{flexDirection:"row"}}>
                         <TouchableOpacity
                           activeOpacity={0.8}
                           style={[defaultStyle.rounded_button, {}]}
@@ -614,6 +615,28 @@ class AcademyProfile extends BaseComponent {
                             View Batches
                           </Text>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                          activeOpacity={0.8}
+                          style={[defaultStyle.rounded_button, {}]}
+                          onPress={() => {
+                            if (coaching_enabled) {
+                              this.props.navigation.navigate(
+                                "AcademyBatch",
+                                { academy_id: this.state.id }
+                              );
+                            }
+                          }}
+                        >
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_14,
+                              { color: "white" },
+                            ]}
+                          >
+                            Purchase Membership
+                          </Text>
+                        </TouchableOpacity>
+                        </View>
                       ) : null}
 
                       {book_and_play_enabled ? (

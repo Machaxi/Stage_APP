@@ -561,7 +561,7 @@ class AcademyListing extends BaseComponent {
               height: 45,
               fontFamily: "Quicksand-Regular",
             }}
-            placeholder="Search"
+            placeholder="Search by locality or society/academy name"
           />
 
           <FlatList
