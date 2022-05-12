@@ -197,36 +197,27 @@ export function getBatchPlayersList(header, batch_id) {
 
 }
 
-export function getAcademyBatchDetail(academy_id, proficiency, rating, availability) {
+export function getAcademyBatchDetail(academy_id, proficiency, rating, availability, timing, sports) {
 
     console.log('availability', availability);
 
-    let url;
-    if (proficiency == '' && rating == '' && availability == '') {
-        url = `global/academy/batches?academy_id=${academy_id}`;
-    } else {
-        if (proficiency == '' && rating == '') {
-            url = `global/academy/batches?academy_id=${academy_id}&is_available=${availability}`;
-        }
-        else if (rating == '' && availability == '') {
-            url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}`;
-        }
-        else if (proficiency == '' && availability == '') {
-            url = `global/academy/batches?academy_id=${academy_id}&coachRatings=${rating}`;
-        }
-        else if (proficiency == '') {
-            url = `global/academy/batches?academy_id=${academy_id}&coachRatings=${rating}&is_available=${availability}`;
-        }
-        else if (rating == '') {
-            url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}&is_available=${availability}`;
-        }
-        else if (availability == '') {
-            url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}&coachRatings=${rating}`;
-        }
-        else {
-            url = `global/academy/batches?academy_id=${academy_id}&proficiency=${proficiency}&coachRatings=${rating}&is_available=${availability}`;
-        }
-    }
+    let url=`global/academy/batches?academy_id=${academy_id}`;
+    
+    if(proficiency!="")
+        url+=`&proficiency=${proficiency}`;
+
+    if(rating!="")
+        url+=`&coachRatings=${rating}`;
+
+    if(availability!="")
+        url+=`&is_available=${availability}`;
+
+    if(timing!="")
+        url+=`&timing=${timing}`;
+
+    if(sports!="")
+        url+=`&sports=${sports}`;
+    
     return {
         type: types.DO_LOGIN,
         payload: {
