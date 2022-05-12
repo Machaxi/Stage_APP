@@ -601,7 +601,7 @@ class AcademyProfile extends BaseComponent {
                             if (coaching_enabled) {
                               this.props.navigation.navigate(
                                 "AcademyBatch",
-                                { academy_id: this.state.id }
+                                { academy_id: this.state.id, academy: this.state.academy }
                               );
                             }
                           }}
@@ -622,7 +622,7 @@ class AcademyProfile extends BaseComponent {
                             if (coaching_enabled) {
                               this.props.navigation.navigate(
                                 "AcademyBatch",
-                                { academy_id: this.state.id }
+                                { academy_id: this.state.id, academy: this.state.academy }
                               );
                             }
                           }}

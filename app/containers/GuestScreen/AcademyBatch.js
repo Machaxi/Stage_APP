@@ -52,27 +52,47 @@ class AcademyBatch extends BaseComponent {
         { 'value': '4', 'label': '4' },
         { 'value': '5', 'label': '>4' }
       ],
+      timing: [
+        { 'value': '', 'label': 'All' },
+        { 'value': 'Morning', 'label': 'Morning' },
+        { 'value': 'Afternoon', 'label': 'Afternoon' },
+        { 'value': 'Evening', 'label': 'Evening' }
+      ],
+      sports:[],
       ratingValue: '',
+      timingValue:'',
+      sportValue:'',
       academyId: null,
       batchDetails: null,
       availability: ''
     }
     this.inputRefs = {
       proficiencyValue: null,
-      ratingValue: null
+      ratingValue: null,
+      timingValue:null,
+      sportsValue:null,
     };
     this.state.academyId = this.props.navigation.getParam('academy_id');
+    let academy = this.props.navigation.getParam('academy');
+    this.convertSportsForDropDown(academy.sports)
+
+  }
+
+  convertSportsForDropDown(sports){
+    let updatedSports = sports.map((item)=>{
+          return {value: item["sport_id"], label: item["name"]}
+    });
+    updatedSports= [{value:"",label:"ALL"},...updatedSports];
+    this.state.sports = updatedSports;
   }
 
   componentDidMount() {
-
     this.getBatchData();
   }
 
   getBatchData() {
 
-    this.props.getAcademyBatchDetail(this.state.academyId, this.state.proficiencyValue, this.state.ratingValue, this.state.availability).then(() => {
-
+    this.props.getAcademyBatchDetail(this.state.academyId, this.state.proficiencyValue, this.state.ratingValue, this.state.availability, this.state.timingValue, this.state.sportValue).then(() => {
       console.log("dataaaaaaaaaaaaaa", this.props.data.res.data.batches);
       let status = this.props.data.res.success
       if (status) {
@@ -309,6 +329,75 @@ class AcademyBatch extends BaseComponent {
 
           </View>
 
+          <View style={styles.dropDownFilter}>
+
+            <View style={{ width: '45.33%' }}>
+
+              <View><Text style={styles.filterPlaceholder}>Select Sport</Text></View>
+
+              <RNPickerSelect
+                placeholder={{}}
+                items={this.state.sports}
+                onValueChange={(value) => {
+                  console.log(value)
+                  this.setState({
+                    sportValue: value,
+                  }, () => {
+                    this.getBatchData();
+                  });
+                  //this.fetchBatchByAcademy(value)
+                }}
+                style={pickerSelectStyles}
+                value={this.state.sportValue}
+                useNativeAndroidPickerStyle={false}
+                ref={(el) => {
+                  this.inputRefs.sportValue = el;
+                }}
+              />
+
+
+
+              <View style={{
+                width: 100,
+                backgroundColor: '#A3A5AE',
+                height: 1
+              }}></View>
+
+
+            </View>
+
+            <View style={{ width: '45.33%' }}>
+
+              <View><Text style={styles.filterPlaceholder}>Select Timing</Text></View>
+
+              <RNPickerSelect
+                placeholder={{}}
+                items={this.state.timing}
+                onValueChange={(value) => {
+                  console.log(value)
+                  this.setState({
+                    timingValue: value,
+                  }, () => {
+                    this.getBatchData();
+                  });
+                  //this.fetchBatchByAcademy(value)
+                }}
+                style={pickerSelectStyles}
+                value={this.state.timingValue}
+                useNativeAndroidPickerStyle={false}
+                ref={(el) => {
+                  this.inputRefs.timingValue = el;
+                }}
+              />
+              <View style={{
+                width: 100,
+                backgroundColor: '#A3A5AE',
+                height: 1
+              }}></View>
+          </View>
+
+</View>
+
           <View style={styles.toggleOuter}>
             <View style={styles.toggleAvailable}>
               <View><Text style={styles.availableLabel}>Availability</Text></View>
@@ -510,7 +599,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Medium',
   },
   filterOuter: {
-    padding: 16
+    padding: 16,
+   
   },
   availableLabel: {
     color: '#404040',
@@ -523,7 +613,8 @@ const styles = StyleSheet.create({
   dropDownFilter: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom:15
   },
   filterPlaceholder: {
     fontSize: 10,
