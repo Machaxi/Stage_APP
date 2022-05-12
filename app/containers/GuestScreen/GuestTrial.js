@@ -1,214 +1,289 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-  StyleSheet, Linking, View, ImageBackground, TouchableOpacity, Image, Text, ScrollView
-} from 'react-native';
-import { Card, } from 'react-native-paper';
-import BaseComponent, { defaultStyle, getBaseUrl, EVENT_UPDATE_DIALOG } from './../BaseComponent'
-import Events from '../../router/events';
-import FastImage from 'react-native-fast-image';
-import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
-import LinearGradient from 'react-native-linear-gradient';
+  StyleSheet,
+  Linking,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+  Image,
+  Text,
+  ScrollView,
+} from "react-native";
+import { Card } from "react-native-paper";
+import BaseComponent, {
+  defaultStyle,
+  getBaseUrl,
+  EVENT_UPDATE_DIALOG,
+} from "./../BaseComponent";
+import Events from "../../router/events";
+import FastImage from "react-native-fast-image";
+import { SkyFilledButton } from "../../components/Home/SkyFilledButton";
+import LinearGradient from "react-native-linear-gradient";
+import { getGlobalHeadersData } from "../../redux/reducers/BrowseAcademyReducer";
+import { getData, storeData, isSignedIn } from "../../components/auth";
 
-var notification_count = 0
-
+var notification_count = 0;
+var arr = [
+  { heading: "Head1", subHead: "SubHead1" },
+  { heading: "Head2", subHead: "SubHead2" },
+  { heading: "Head3", subHead: "SubHead3" },
+  { heading: "Head4", subHead: "SubHead4" },
+];
+var intervalID = 0;
 export default class GuestTrial extends BaseComponent {
-
   static navigationOptions = ({ navigation }) => {
-
     return {
       headerTitle: (
-        <View style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          alignSelf: 'center',
-          flex: 1,
-        }}>
-          {
-            navigation.getParam('showHeader') === "True" ? <Text
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "center",
+            flex: 1,
+          }}
+        >
+          {navigation.getParam("showHeader") === "True" ? (
+            <Text
               style={{
-                fontFamily: 'Quicksand-Bold',
+                fontFamily: "Quicksand-Bold",
                 fontSize: 16,
-                color: 'black', letterSpacing: 5,
-              }}>{'MACHAXI'}</Text> : <Text
-                style={{
-                  fontFamily: 'Quicksand-Bold',
-                  fontSize: 16,
-                  color: 'white', letterSpacing: 5,
-                }}>{'MACHAXI'}</Text>
-          }
+                color: "black",
+                letterSpacing: 5,
+              }}
+            >
+              {"MACHAXI"}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontFamily: "Quicksand-Bold",
+                fontSize: 16,
+                color: "white",
+                letterSpacing: 5,
+              }}
+            >
+              {"MACHAXI"}
+            </Text>
+          )}
         </View>
       ),
-      headerStyle: {
-
-      },
+      headerStyle: {},
       headerTransparent:
-        navigation.getParam('showHeader') === "True" ? false : true,
+        navigation.getParam("showHeader") === "True" ? false : true,
       headerTitleStyle: styles.headerStyle,
       headerLeft: (
-        <View style={{
-          flexDirection: 'row'
-        }}>
-          {navigation.getParam('show_back') ?
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          {navigation.getParam("show_back") ? (
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
               }}
               style={{ padding: 7 }}
-              activeOpacity={.8}>
+              activeOpacity={0.8}
+            >
               <Image
-                source={require('../../images/go_back_arrow.png')}
+                source={require("../../images/go_back_arrow.png")}
                 style={{ width: 20, height: 16, marginLeft: 12 }}
               />
             </TouchableOpacity>
-            : null}
+          ) : null}
           <TouchableOpacity
             onPress={() => {
               navigation.toggleDrawer();
             }}
             style={{ padding: 7 }}
-            activeOpacity={.8}>
-            {navigation.getParam('showHeader') === "True" ? <Image
-              source={require('../../images/hamburger.png')}
-              style={{ width: 20, height: 16, marginLeft: 12 }}
-            /> : <Image
-                source={require('../../images/hamburger_white.png')}
+            activeOpacity={0.8}
+          >
+            {navigation.getParam("showHeader") === "True" ? (
+              <Image
+                source={require("../../images/hamburger.png")}
                 style={{ width: 20, height: 16, marginLeft: 12 }}
-              />}
-
+              />
+            ) : (
+              <Image
+                source={require("../../images/hamburger_white.png")}
+                style={{ width: 20, height: 16, marginLeft: 12 }}
+              />
+            )}
           </TouchableOpacity>
         </View>
-
       ),
-      headerRight: (
-        navigation.getParam('show_bell') == undefined ?
-          <View></View> :
+      headerRight:
+        navigation.getParam("show_bell") == undefined ? (
+          <View />
+        ) : (
           <TouchableOpacity
             style={{ marginRight: 8 }}
             onPress={() => {
-              navigation.navigate('NotificationList')
+              navigation.navigate("NotificationList");
             }}
-            activeOpacity={.8} >
+            activeOpacity={0.8}
+          >
             <ImageBackground
               resizeMode="contain"
-              source={require('../../images/bellicon.png')}
+              source={require("../../images/bellicon.png")}
               style={{
-                width: 22, height: 22, marginLeft: 12,
+                width: 22,
+                height: 22,
+                marginLeft: 12,
                 marginRight: 12,
-                alignItems: 'flex-end'
-              }}>
-
-              {navigation.getParam('notification_count', 0) > 0 ? <View style={{
-                width: 16,
-                height: 16,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 30 / 2,
-                backgroundColor: '#ED2638'
-              }}>
-                <Text style={[defaultStyle.bold_text_10, { fontSize: 8, color: 'white' }]}>
-                  {navigation.getParam('notification_count', '') > 99 ? '99+' : navigation.getParam('notification_count', '')}
-                </Text>
-              </View> : null}
+                alignItems: "flex-end",
+              }}
+            >
+              {navigation.getParam("notification_count", 0) > 0 ? (
+                <View
+                  style={{
+                    width: 16,
+                    height: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 30 / 2,
+                    backgroundColor: "#ED2638",
+                  }}
+                >
+                  <Text
+                    style={[
+                      defaultStyle.bold_text_10,
+                      { fontSize: 8, color: "white" },
+                    ]}
+                  >
+                    {navigation.getParam("notification_count", "") > 99
+                      ? "99+"
+                      : navigation.getParam("notification_count", "")}
+                  </Text>
+                </View>
+              ) : null}
             </ImageBackground>
           </TouchableOpacity>
-
-      )
+        ),
     };
-
   };
 
-
   constructor(props) {
-    super(props)
+    super(props);
     this.secondTextInputRef = React.createRef();
-    this.setNavigation(this.props.navigation)
+    this.setNavigation(this.props.navigation);
     this.state = {
       show_must_update_alert: false,
+      timerValue: 0,
+      heading: "",
+      subHeading: "",
+      headersArray: [],
+    };
 
-    }
+    this.setNavigation(this.props.navigation);
 
-    this.setNavigation(this.props.navigation)
-
-    const { navigation } = this.props.navigation.setParams({ showHeader: "False" })
+    const { navigation } = this.props.navigation.setParams({
+      showHeader: "False",
+    });
     //this.props.navigation.setParams({ switchPlayer: this.switchPlayer })
 
     //this.props.navigation.setParams({ handleSave: "Heloo" });
     //this.props.navigation.setParams({ showHeader: "False"})
-
   }
 
+  async getGlobalHeaders() {
+    const resp = await fetch(
+      "http://stage.dribblediary.com/api/global/headers"
+    );
+    const data = await resp.json();
+    console.warn("data----->", data?.data?.data);
+    this.setState(
+      {
+        headersArray: data?.data?.data,
+      },
+      () => {
+        intervalID = setInterval(() => {
+          console.warn(this.state.timerValue, "===this.state.timerValue");
+          this.setState((prevState) => {
+            if (this.state.timerValue == this.state.headersArray.length - 1) {
+              return { timerValue: 0 };
+            } else {
+              return { timerValue: prevState.timerValue + 1 };
+            }
+          });
+        }, 3000);
+      }
+    );
+  }
 
   componentDidMount() {
-
     this.willFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
+      "willFocus",
       () => {
-        this.getNotifications()
+        this.getNotifications();
+        this.getGlobalHeaders();
       }
     );
 
-    this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
-      this.getNotifications()
+    this.refreshEvent = Events.subscribe("NOTIFICATION_CALL", (msg) => {
+      this.getNotifications();
     });
 
+    this.checkNotification();
 
-    this.checkNotification()
-
-    this.refreshEvent = Events.subscribe('NOTIFICATION_CLICKED', (msg) => {
-      this.checkNotification()
+    this.refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
+      this.checkNotification();
     });
 
     this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
       // must_update = true
-      console.log('must update', must_update);
+      console.log("must update", must_update);
       this.setState({
         show_must_update_alert: must_update,
-      })
+      });
     });
+  }
+
+  componentWillUnmount() {
+    clearInterval(intervalID);
   }
 
   checkNotification() {
     if (global.NOTIFICATION_DATA) {
       try {
-        let notification_for = global.NOTIFICATION_DATA.notification_for
-        this.notificationOpenScreen(notification_for)
-        global.NOTIFICATION_DATA = null
-
-      } catch (err) {
-      }
+        let notification_for = global.NOTIFICATION_DATA.notification_for;
+        this.notificationOpenScreen(notification_for);
+        global.NOTIFICATION_DATA = null;
+      } catch (err) {}
     }
   }
 
   getNotifications() {
     this.getNotificationCount((count) => {
       this.props.navigation.setParams({ notification_count: count });
-      notification_count = count
-    })
+      notification_count = count;
+    });
   }
 
   handleClick() {
-    let link = ''
-    if (Platform.OS == 'ios') {
-      link = 'itms-apps://itunes.apple.com/us/app/id${1484093762}?mt=8'
+    let link = "";
+    if (Platform.OS == "ios") {
+      link = "itms-apps://itunes.apple.com/us/app/id${1484093762}?mt=8";
     } else {
-      link = 'market://details?id=com.machaxi'
+      link = "market://details?id=com.machaxi";
     }
-    Linking.canOpenURL(link).then(supported => {
-      supported && Linking.openURL(link);
-    }, (err) => console.log(err));
+    Linking.canOpenURL(link).then(
+      (supported) => {
+        supported && Linking.openURL(link);
+      },
+      (err) => console.log(err)
+    );
   }
 
   handleScroll = (event) => {
     if (event.nativeEvent.contentOffset.y > 100) {
-      this.props.navigation.setParams({ showHeader: "True" })
+      this.props.navigation.setParams({ showHeader: "True" });
+    } else {
+      this.props.navigation.setParams({ showHeader: "False" });
     }
-    else {
-      this.props.navigation.setParams({ showHeader: "False" })
-    }
-  }
+  };
 
   render() {
-
     return (
       <View style={styles.chartContainer}>
         <ScrollView onScroll={this.handleScroll}>
@@ -268,7 +343,7 @@ export default class GuestTrial extends BaseComponent {
                     color: "#3E3E3E",
                   }}
                 >
-                  Sports Coaching & Fitness Training in Gated communities
+                  {this.state.headersArray[this.state.timerValue]?.heading}
                 </Text>
                 <Text>
                   <Text
@@ -310,8 +385,7 @@ export default class GuestTrial extends BaseComponent {
                     color: "#3E3E3E",
                   }}
                 >
-                  Badminton, Tennis, TT, Squash, Basketball, Swimming, Yoga,
-                  Zumba, Cricket and more...
+                  {this.state.headersArray[this.state.timerValue]?.subHeading}
                 </Text>
                 {/* <Text
                   style={{
@@ -705,34 +779,34 @@ export default class GuestTrial extends BaseComponent {
 const styles = StyleSheet.create({
   chartContainer: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: "#F7F7F7",
     //padding: 16
   },
   trialOuter: {
-    alignSelf: 'flex-end',
-    flexDirection: 'row',
+    alignSelf: "flex-end",
+    flexDirection: "row",
     margin: 12,
   },
   bannerCardStyle: {
     borderRadius: 16,
     marginTop: 20,
     marginBottom: 30,
-    elevation: 2
+    elevation: 2,
   },
   bannerImage: {
     height: 150,
     width: "100%",
-    borderRadius: 16
+    borderRadius: 16,
   },
   browseCard: {
     margin: 5,
-    borderRadius: 10
+    borderRadius: 10,
   },
   browseInnerStyle: {
     margin: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 40
+    flexDirection: "row",
+    alignItems: "center",
+    height: 40,
   },
   browseImgStyle: {
     width: 40,
@@ -742,14 +816,13 @@ const styles = StyleSheet.create({
   cardInner: {
     flex: 1,
     marginRight: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   rightArrowStyle: {
     width: 19,
     height: 13,
     marginRight: 0,
-  }
+  },
 });
-
