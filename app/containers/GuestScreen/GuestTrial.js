@@ -409,7 +409,7 @@ export default class GuestTrial extends BaseComponent {
                     fontSize: 14,
                   }}
                 >
-                  My Society Coaching Batches
+                  Buy Coaching Membership
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
@@ -613,79 +613,7 @@ export default class GuestTrial extends BaseComponent {
           </View>
         </ScrollView>
 
-        <ImageBackground
-          resizeMode="contain"
-          style={{
-            flexDirection: "column",
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: -14,
-            alignItems: "center",
-            justifyContent: "center",
-            alignSelf: "center",
-            height: 130,
-            width: "100%",
-          }}
-          source={require("../../images/Rectangle.png")}
-        >
-          {/* <LinearGradient style={{
-    flexDirection: 'column',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0, alignItems: 'center', paddingTop: 150, paddingBottom: 30, justifyContent: 'center',alignSelf: 'center'}} colors={['rgba(255, 255, 255, 0)', '#ffffff']}  locations={[0.28, 0.78]}> */}
-
-          <LinearGradient
-            colors={["#FF3A99", "#FF3A6A"]}
-            locations={[0, 1]}
-            useAngle
-            angle={255}
-            style={{
-              borderRadius: 24,
-              shadowColor: "rgba(0, 0, 0, 0.2)",
-              elevation: 4,
-              shadowRadius: 9,
-              shadowOpacity: 0.08,
-              shadowOffset: { width: 0, height: 3 },
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                width: 172,
-                padding: 10,
-                height: 40,
-              }}
-              onPress={() => {
-                this.props.navigation.navigate("SaveGuestTrial");
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  fontFamily: "Quicksand-Regular",
-                  fontSize: 14,
-                }}
-              >
-                Book trial session
-              </Text>
-            </TouchableOpacity>
-          </LinearGradient>
-
-          <View style={{ marginTop: 5, textAlign: "center" }}>
-            <Text
-              style={{
-                fontFamily: "Nunito-Bold",
-                fontSize: 14,
-                color: "#3E3E3E",
-              }}
-            >
-              For all age groups
-            </Text>
-          </View>
-          {/* </LinearGradient> */}
-        </ImageBackground>
+        
 
         {/* <View
           style={styles.trialOuter}>
