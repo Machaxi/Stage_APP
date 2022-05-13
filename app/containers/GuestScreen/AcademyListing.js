@@ -12,6 +12,8 @@ import {
   Keyboard,
   Text,
   BackHandler,
+  PermissionsAndroid,
+  Platform,
 } from "react-native";
 import { Card } from "react-native-paper";
 import { Rating } from "react-native-ratings";
@@ -35,6 +37,7 @@ import FastImage from "react-native-fast-image";
 import { GUEST } from "../../components/Constants";
 import StarRating from "react-native-star-rating";
 import UpdateAppDialog from "../../components/custom/UpdateAppDialog";
+import Geolocation from "react-native-geolocation-service";
 
 var filterData = "";
 var notification_count = 0;
@@ -172,6 +175,8 @@ class AcademyListing extends BaseComponent {
       book_court: false,
       firstInstance: true,
       show_must_update_alert: false,
+      latitude: 0.0,
+      longitude: 0.0,
     };
     this._handleChange = this._handleChange.bind(this);
     this.state.job_vacancy = this.props.navigation.getParam("vacancy");
@@ -204,10 +209,17 @@ class AcademyListing extends BaseComponent {
   getAcademyList(query) {
     const job_vacancy = this.state.job_vacancy;
     const book_court = this.state.book_court;
-
+    //fetch user location here in query pass latlngs
+    const updatedQuery =
+      query +
+      "&user_latitude=" +
+      this.state.latitude +
+      "&user_longitude=" +
+      this.state.longitude;
+    console.warn("query==>", updatedQuery);
     getData("header", (value) => {
       this.props
-        .getAllAcademy(value, query, job_vacancy, book_court)
+        .getAllAcademy(value, updatedQuery, job_vacancy, book_court)
         .then(() => {
           console.warn(
             "Res=> " + JSON.stringify(this.props.data.res.data.academies)
@@ -232,7 +244,55 @@ class AcademyListing extends BaseComponent {
     });
   }
 
+  async requestPermissions() {
+    if (Platform.OS === "ios") {
+      const auth = await Geolocation.requestAuthorization("whenInUse");
+      if (auth === "granted") {
+        this.fetchLocation();
+      }
+    }
+
+    if (Platform.OS === "android") {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      );
+      if ("granted" === PermissionsAndroid.RESULTS.GRANTED) {
+        this.fetchLocation();
+      } else {
+        alert("Please provide location permission");
+      }
+    }
+  }
+
+  fetchLocation() {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        var lats = parseFloat(position.coords.latitude);
+        var lngs = parseFloat(position.coords.longitude);
+        console.warn(lats, "--lats");
+        console.warn(lngs, "--lngs");
+        // alert(lats);
+        this.setState(
+          {
+            latitude: lats,
+            longitude: lngs,
+          },
+          () => {
+            this.getAcademyList("");
+          }
+        );
+      },
+      (error) => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+  }
+
   componentDidMount() {
+    this.requestPermissions();
     // getData('deep_linking', (value) => {
     //     console.warn('deep->', value)
     //     if (value == 'true') {
@@ -278,6 +338,7 @@ class AcademyListing extends BaseComponent {
       "willFocus",
       () => {
         this.getNotifications();
+        this.requestPermissions();
       }
     );
 
@@ -307,7 +368,7 @@ class AcademyListing extends BaseComponent {
       }
     });
 
-    this.getAcademyList("");
+    this.requestPermissions();
 
     this.checkNotification();
 
@@ -696,17 +757,31 @@ class AcademyListing extends BaseComponent {
             source={{ uri: item.cover_pic }}
           /> */}
 
-          <Text
-            style={{
-              paddingTop: 12,
-              paddingLeft: 12,
-              fontSize: 16,
-              color: "#707070",
-              fontFamily: "Quicksand-Medium",
-            }}
-          >
-            {item.name}
-          </Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={{
+                paddingTop: 12,
+                paddingLeft: 12,
+                fontSize: 16,
+                flex: 1,
+                color: "#707070",
+                fontFamily: "Quicksand-Medium",
+              }}
+            >
+              {item.name}
+            </Text>
+            <Text
+              style={{
+                paddingTop: 12,
+                paddingRight: 12,
+                fontSize: 16,
+                color: "#707070",
+                fontFamily: "Quicksand-Medium",
+              }}
+            >
+              {parseFloat(item.distance)}
+            </Text>
+          </View>
 
           <View
             style={{
