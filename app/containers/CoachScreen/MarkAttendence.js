@@ -125,7 +125,6 @@ class MarkAttendence extends BaseComponent {
             <View style={{
                 marginLeft: 10,
                 marginRight: 10,
-
                 alignItems: 'center',
                 flex: 1,
                 flexDirection: 'row',
@@ -139,16 +138,24 @@ class MarkAttendence extends BaseComponent {
                     alignItems: 'center',
                     //marginBottom: 5,
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
                 }}>
                     <Text style={[defaultStyle.regular_text_14, {
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        flex:1,
                     }]}>
                         {item.name}
                     </Text>
-                    <View style={{ backgroundColor: 'white', marginTop: 0 }}>
-                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
+                    {item.Due &&
+                    <Text style={[defaultStyle.regular_text_14, {
+                        color:item.Due.color,
+                        width:'50%',
+                    }]}>
+                        {item.Due.label}
+                    </Text>
+                    }
+                    <View style={{ marginTop: 0 }}>
+                        <CheckBox style={{ height: 30, width: 30, alignItems: 'right', backgroundColor: 'red' }}
                             activeOpacity={.8}
                             checkedIcon={<Image style={{
                                 width: 18,
