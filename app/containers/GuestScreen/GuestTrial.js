@@ -346,7 +346,7 @@ export default class GuestTrial extends BaseComponent {
                   {this.state.headersArray[this.state.timerValue]?.heading}
                 </Text>
                 <Text>
-                  <Text
+                {/* <Text
                     style={{
                       fontSize: 14,
                       fontFamily: "Nunito-SemiBold",
@@ -354,7 +354,7 @@ export default class GuestTrial extends BaseComponent {
                     }}
                   >
                     (Kids & Adults)
-                  </Text>
+                  </Text>  */}
                   {/*  <Text
                     style={{
                       fontSize: 18,

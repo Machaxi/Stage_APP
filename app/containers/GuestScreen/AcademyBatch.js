@@ -216,28 +216,37 @@ class AcademyBatch extends BaseComponent {
 
         <View style={{
           flex: 1,
-          justifyContent: 'center',
+          flexDirection:'row',
+          justifyContent: 'space-between',
           alignItems: 'center'
         }}>
 
           <TouchableOpacity
+           style={[defaultStyle.rounded_button, {}]}
             activeOpacity={.8}
             onPress={() => {
               this.props.navigation.navigate('BookTrial', {
                 data: item,
                 academyId: this.state.academyId
               })
-              //alert('Under development')
             }}
           >
-            <View style={[styles.challengeBtnOuter, {
-              width: 150,
-            }]}>
-              <Text style={defaultStyle.rounded_button_150}>Book Trial Session</Text>
-            </View>
+           
+              <Text style={{ color: "white" }}>Book Trial Session</Text>
+           
           </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={.8}
+            style={[defaultStyle.rounded_button, {}]}
+            onPress={() => {
+              
+            }}
+          >
+              <Text style={{ color: "white" }}>Buy Membership</Text>
+          </TouchableOpacity>
+         
         </View>
-
+        
 
       </Card>
     </View>

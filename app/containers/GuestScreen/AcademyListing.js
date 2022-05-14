@@ -779,7 +779,7 @@ class AcademyListing extends BaseComponent {
                 fontFamily: "Quicksand-Medium",
               }}
             >
-              {parseFloat(item.distance)}
+              {item.distance}
             </Text>
           </View>
 

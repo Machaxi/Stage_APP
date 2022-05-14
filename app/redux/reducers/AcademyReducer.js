@@ -216,7 +216,7 @@ export function getAcademyBatchDetail(academy_id, proficiency, rating, availabil
         url+=`&timing=${timing}`;
 
     if(sports!="")
-        url+=`&sports=${sports}`;
+        url+=`&sport_id=${sports}`;
     
     return {
         type: types.DO_LOGIN,
