@@ -54,7 +54,8 @@ export default class AcademyFilter extends BaseComponent {
 
     constructor(props) {
         super(props)
-
+        const sports =  props.navigation.getParam("sports");
+       // console.log("SPORTS",props.navigation.props.state.params);
         this.state = {
             refresh: false,
             filterData: [
@@ -62,7 +63,12 @@ export default class AcademyFilter extends BaseComponent {
                     id: 1,
                     title: "Sports Categories",
                     expand: false,
-                    data: [{ pid: 1, name: "Badminton", is_selected: true, rating: false }],
+                    data: 
+                        sports.map(item=>{
+                            return { pid: 1, name: item.name, id: item.id, is_selected: false, rating: false }
+                        })
+                        
+                    ,
                 },
                 {
                     id: 2,
@@ -103,7 +109,6 @@ export default class AcademyFilter extends BaseComponent {
     }
 
     _renderItem = ({ item }) => (
-
 
         <View>
 

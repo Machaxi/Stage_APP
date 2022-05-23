@@ -198,7 +198,6 @@ export default class GuestTrial extends BaseComponent {
       },
       () => {
         intervalID = setInterval(() => {
-          console.warn(this.state.timerValue, "===this.state.timerValue");
           this.setState((prevState) => {
             if (this.state.timerValue == this.state.headersArray.length - 1) {
               return { timerValue: 0 };

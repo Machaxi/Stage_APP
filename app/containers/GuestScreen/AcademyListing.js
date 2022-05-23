@@ -166,6 +166,7 @@ class AcademyListing extends BaseComponent {
     this.setNavigation(this.props.navigation);
     this.state = {
       academies: null,
+      sports:null,
       query: "",
       autodata: [],
       suggestionResult: [],
@@ -216,7 +217,7 @@ class AcademyListing extends BaseComponent {
       this.state.latitude +
       "&user_longitude=" +
       this.state.longitude;
-    console.warn("query==>", updatedQuery);
+
     getData("header", (value) => {
       this.props
         .getAllAcademy(value, updatedQuery, job_vacancy, book_court)
@@ -227,9 +228,10 @@ class AcademyListing extends BaseComponent {
           let status = this.props.data.res.success;
           if (status) {
             let list = this.props.data.res.data.academies;
-
+            let sports =  this.props.data.res.data.Sports;
             this.setState({
               academies: list,
+              sports,
               isRefreshing: false,
             });
             setTimeout(() => {
@@ -338,7 +340,6 @@ class AcademyListing extends BaseComponent {
       "willFocus",
       () => {
         this.getNotifications();
-        this.requestPermissions();
       }
     );
 
@@ -367,8 +368,6 @@ class AcademyListing extends BaseComponent {
         }, 100);
       }
     });
-
-    this.requestPermissions();
 
     this.checkNotification();
 
@@ -404,38 +403,42 @@ class AcademyListing extends BaseComponent {
 
   onFilterSelected(data) {
     filterData = data;
-
     if (data != "") {
-      //query_param = query
-
-      let sport_type = "sport=Badminton";
+      let sport_type = "";
       let academy_rating = "";
       let coach_rating = "";
+      let sports_array = filterData[0];
       let academy_array = filterData[1];
       let coach_array = filterData[2];
 
+      for (let i = 0; i < sports_array.data.length; i++) {
+        let obj = sports_array.data[i];
+        if (obj.is_selected)
+          sport_type = sport_type + obj.id + ",";
+      }
+      if (sports_array.data.length > 0)
+        sport_type = sport_type.substring(0, sport_type.length - 1);
+
       for (let i = 0; i < academy_array.data.length; i++) {
         let obj = academy_array.data[i];
-        if (obj.is_selected) {
-          academy_rating = academy_rating + "academy_ratings=" + obj.name + "&";
-        }
+        if (obj.is_selected)
+          academy_rating = academy_rating + obj.name + ",";
       }
-      if (academy_rating.length > 0) {
+
+      if (academy_array.data.length > 0) {
         academy_rating = academy_rating.substring(0, academy_rating.length - 1);
       }
 
       for (let i = 0; i < coach_array.data.length; i++) {
         let obj = coach_array.data[i];
-        if (obj.is_selected) {
-          coach_rating = coach_rating + "coach_ratings=" + obj.name + "&";
-        }
-      }
-      if (coach_rating.length > 0) {
-        coach_rating = coach_rating.substring(0, coach_rating.length - 1);
+        if (obj.is_selected)
+          coach_rating = coach_rating + obj.name + ",";
       }
 
-      let query = sport_type + "&" + academy_rating + "&" + coach_rating;
-      console.warn("selected = > ", query);
+      if (coach_array.data.length > 0)
+        coach_rating = coach_rating.substring(0, coach_rating.length - 1);
+
+      let query = "sport="+ sport_type + "&academy_ratings=" + academy_rating + "&coach_ratings=" + coach_rating;
       this.getAcademyList(query);
     } else {
       this.getAcademyList("");
@@ -688,6 +691,7 @@ class AcademyListing extends BaseComponent {
             this.props.navigation.navigate("AcademyFilter", {
               onFilterSelected: this.onFilterSelected.bind(this),
               filterData: filterData,
+              sports:this.state.sports
             });
           }}
         >
