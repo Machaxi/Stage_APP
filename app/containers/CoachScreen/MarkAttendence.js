@@ -16,6 +16,7 @@ import BaseComponent, { getFormatTimeDate, defaultStyle, EVENT_REFRESH_DASHBOARD
 import Events from '../../router/events';
 import { ACADEMY, COACH } from '../../components/Constants';
 import Spinner from 'react-native-loading-spinner-overlay';
+import InfoDialog from '../../components/custom/InfoDialog';
 
 
 class MarkAttendence extends BaseComponent {
@@ -28,7 +29,9 @@ class MarkAttendence extends BaseComponent {
 
         };
         this.state = {
-
+            showDialog:false,
+            message:"",
+            title:"",
             //  coach_profile:null,
             country: undefined,
             billingchecked: false,
@@ -343,8 +346,8 @@ class MarkAttendence extends BaseComponent {
                     //     // batchDetails:user1.data['batch']
                     //
                     // })
-                    this.props.navigation.goBack()
-                    Events.publish(EVENT_REFRESH_DASHBOARD);
+                    this.setState({title:"Success",message:"Attendance saved successfully.",showDialog:true})
+                    
                 }
 
             }).catch((response) => {
@@ -475,7 +478,19 @@ class MarkAttendence extends BaseComponent {
             // this.scoreMangement(tournaments)
 
             return <View style={{ flex: 1, marginTop: 0, backgroundColor: '#F7F7F7' }}>
-
+ <InfoDialog
+            touchOutside={() => {
+                this.setState({
+                    showDialog: false,
+                    message: ''
+                })
+                this.props.navigation.goBack()
+                    Events.publish(EVENT_REFRESH_DASHBOARD);
+            }}
+            title={this.state.title}
+        visible={this.state.showDialog}
+        message={this.state.message}
+    /> 
                 <Spinner
                     visible={this.state.spinner}
                     textStyle={defaultStyle.spinnerTextStyle}

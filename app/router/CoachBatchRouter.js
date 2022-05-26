@@ -13,6 +13,7 @@ import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDeta
 import CoachListing from '../containers/GuestScreen/CoachListing'
 import ProgressPerSession from '../containers/CoachScreen/Batch/ProgressPerSession'
 import UpdatePlayerProgress from '../containers/CoachScreen/Batch/UpdatePlayerProgress'
+import AddCompensatoryBatch from '../containers/CoachScreen/AddCompensatoryBatch';
 
 const coachBatchModule = createStackNavigator({
 
@@ -130,6 +131,9 @@ const coachBatchModule = createStackNavigator({
         // })
 
     },
+    AddCompensatoryBatch: {
+        screen: AddCompensatoryBatch,
+      },
 
     CoachProfileDetail: {
         screen: CoachProfileDetail,

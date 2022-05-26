@@ -24,7 +24,7 @@ export default class InfoDialog extends BaseComponent {
 
                     <Text style={[defaultStyle.bold_text_14, {
                         padding: 16,
-                    }]}>Oops</Text>
+                    }]}>{this.props.title}</Text>
                     <View style={styles.header}></View>
 
                     <Text style={[defaultStyle.regular_text_14, { padding: 8, marginBottom: 20 }]}>
@@ -56,6 +56,9 @@ export default class InfoDialog extends BaseComponent {
     }
 }
 
+InfoDialog.defaultProps={
+    title:"oops"
+}
 const styles = StyleSheet.create({
     contentContainer: {
         flexDirection: 'column',
