@@ -157,7 +157,7 @@ class CoachAttendenceBook extends React.Component {
 
     }
 
-    renderCoachItem(item) {
+    renderCoachItem=({item})=> {
         return (
 
             <View style={{
@@ -251,8 +251,7 @@ class CoachAttendenceBook extends React.Component {
         </View>
     );
 
-    renderPlayerItem(item) {
-       
+    renderPlayerItem =({item})=> {
         return (
 
             <View style={{
@@ -434,25 +433,27 @@ class CoachAttendenceBook extends React.Component {
             let batch_id = this.state.batch_data.batch_id
 
             let player_list = []
-            if (this.state.playerList && this.state.playerList.length > 0) {
+            
+            // if (this.state.playerList && this.state.playerList.length > 0) {
 
-                for (let i = 0; i < this.state.playerList.length; i++) {
-                    let item = this.state.playerList[i]
-                    player_list.push(this.renderPlayerItem(item))
-                }
-            }
+            //     for (let i = 0; i < this.state.playerList.length; i++) {
+            //         let item = this.state.playerList[i]
+            //         this.renderPlayerItem(item)
+            //        // player_list.push(this.renderPlayerItem(item))
+            //     }
+            // }
             console.log("Player List:", player_list);
 
             let coaches_list = []
-            if (this.state.coachesList && this.state.coachesList.length > 0) {
+            // if (this.state.coachesList && this.state.coachesList.length > 0) {
 
-                for (let i = 0; i < this.state.coachesList.length; i++) {
-                    let item = this.state.coachesList[i]
-                    console.log('obj=>', JSON.stringify(item))
-                    coaches_list.push(this.renderCoachItem(item))
+            //     for (let i = 0; i < this.state.coachesList.length; i++) {
+            //         let item = this.state.coachesList[i]
+            //         console.log('obj=>', JSON.stringify(item))
+            //         coaches_list.push(this.renderCoachItem(item))
 
-                }
-            }
+            //     }
+            // }
             console.log("Coach List:", coaches_list);
             // this.attedenceMangement(attandence_batch)
             //
@@ -550,9 +551,10 @@ class CoachAttendenceBook extends React.Component {
                     <View style={
                         { backgroundColor: 'white', marginTop: -10, flex: 1 }}>
                         <View>
-                            {player_list}
+                        <FlatList data={this.state.playerList} renderItem={this.renderPlayerItem }/>
+                           
                         </View>
-                        {coaches_list.length > 0 ?
+                        {this.state.coachesList.length > 0 ?
                             <View>
                                 <View style={{backgroundColor: '#F7F7F7',
                 paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10,
@@ -565,7 +567,7 @@ class CoachAttendenceBook extends React.Component {
                                 <View style={
                                     { backgroundColor: 'white', marginTop: -10, flex: 1 }}>
                                     <View>
-                                        {coaches_list}
+                                    <FlatList data={this.state.coachesList} renderItem={this.renderCoachItem }/>
                                     </View>
                                 </View>
                             </View> : null}
