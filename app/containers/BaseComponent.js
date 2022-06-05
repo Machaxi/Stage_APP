@@ -113,6 +113,9 @@ export function getShowLoginByName() {
     else return false;
   }
 }
+export function getRazorPayEmail() {
+  return "hello@machaxi.com";
+}
 
 export default class BaseComponent extends React.Component {
   static isUserLoggedIn = false;

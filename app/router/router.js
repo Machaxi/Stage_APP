@@ -176,7 +176,13 @@ const GuestHomeModule = createStackNavigator({
   AcademyFilter: {
     screen: AcademyFilter,
   },
-
+  Login: {
+    screen: phoneauth,
+    navigationOptions: {
+        header: null
+        //header:null
+    }
+},
   AcademyProfile: {
     screen: AcademyProfile,
     navigationOptions: ({ navigation }) => ({
@@ -2495,6 +2501,7 @@ const EmptyStack = createStackNavigator({
 })
 
 const BaseNavigator = createSwitchNavigator({
+
     // Main: {
     //     screen: InitialNavigator
     // },

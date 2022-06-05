@@ -7,6 +7,7 @@ const initialState = {
     error: null,
 };
 export default function PaymentReducer(state = initialState, action) {
+    console.log("D", state, action);
     switch (action.type) {
         case types.PAYMENT_DUES:
             return { ...state, loading: true };
@@ -20,6 +21,12 @@ export default function PaymentReducer(state = initialState, action) {
                 loading: false,
                 error: 'Error while fetching user'
             };
+        case types.PAYMENT_BUYMEMBERSHIP_SUCCESS:
+            console.log("Inside",action.payload.data)
+                return { ...state, loading: false, data: action.payload.data };
+        case types.SUBMITPAYMENTCONFIRMATION:
+            console.log("Inside",action.payload.data)
+                return { ...state, loading: false, data: action.payload.data };
         default:
             return state;
     }
@@ -137,6 +144,40 @@ export function getAcademyPaymentList(header, postData, page, size) {
         payload: {
             request: {
                 url: `payment/academy-payment-list?page=${page}&size=${size}`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
+
+export function startBatchPayment(header, postData) {
+    console.log('BatchPayment=> ', JSON.stringify(postData))
+    return {
+        type: types.PAYMENT_BUYMEMBERSHIP,
+        payload: {
+            request: {
+                url: `batch/player/select-weekly-plan`,
+                method: 'POST',
+                data: postData,
+                headers: {
+                    'x-authorization': header
+                },
+            }
+        }
+    };
+}
+
+export function submitPaymentConfirmation(header, postData) {
+    console.log('Submit Payment Info=> ', JSON.stringify(postData))
+    return {
+        type: types.SUBMITPAYMENTCONFIRMATION,
+        payload: {
+            request: {
+                url: `payment/due-subscription-plan-payment`,
                 method: 'POST',
                 data: postData,
                 headers: {

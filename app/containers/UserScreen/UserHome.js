@@ -933,17 +933,34 @@ class UserHome extends BaseComponent {
                       paddingRight: 12,
                       justifyContent: "space-between",
                       flexDirection: "row",
-                      paddingTop: 16,
-                      paddingBottom: 12,
+                      paddingTop: 8,
+                      paddingBottom: 8,
+                      alignItems:"center"
                     }}
                   >
                     <Text style={defaultStyle.bold_text_10}>
                       Next Session :{" "}
                       {operations.next_sessions[0].routine_name}
                     </Text>
+                   
+                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+                    {operations.whats_app_url &&  <TouchableOpacity onPress={()=>{
+                      Linking.openURL(operations.whats_app_url);
+                    }}>
+                    <Image
+                            resizeMode="contain"
+                            style={{
+                                width: 30,
+                                height: 30,
+                                marginRight:30
+                            }}
+                            source={require('../../images/whatsapp_logo.png')}
+                        />
+                        </TouchableOpacity>}
                     <Text style={defaultStyle.bold_text_10}>
                       {operations.batch_name}
                     </Text>
+                    </View>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
                     <View
@@ -981,6 +998,7 @@ class UserHome extends BaseComponent {
                       height: 40,
                     }}
                   >
+                  
                     <Image
                       source={require("../../images/view_academy_player.png")}
                       resizeMode="contain"
@@ -990,6 +1008,7 @@ class UserHome extends BaseComponent {
                         marginRight: 20,
                       }}
                     />
+                    
                     <View style={{ flex: 1 }}>
                       <View
                         style={{

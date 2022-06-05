@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, ImageBackground, Switch } from 'react-native';
 import { Card, Text, } from 'react-native-paper';
-import { Rating } from 'react-native-ratings';
-import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
-import FilterDialog from './FilterDialog'
 import { getAcademyBatchDetail } from '../../redux/reducers/AcademyReducer'
-import BaseComponent, { defaultStyle, formattedName, getFormatTime } from '../BaseComponent';
-import Spinner from 'react-native-loading-spinner-overlay';
+import {submitPaymentConfirmation} from "../../redux/reducers/PaymentReducer"
+import BaseComponent, { defaultStyle, formattedName, getFormatTime, getPaymentKey,getRazorPayEmail } from '../BaseComponent';
 import RNPickerSelect from 'react-native-picker-select';
-import moment from 'moment'
+import RBSheet from "react-native-raw-bottom-sheet";
+import PlanPurchaseView from '../../components/custom/PlanPurchaseView';
+import RazorpayCheckout from 'react-native-razorpay';
 
 const placeholderProf = {
   label: 'Select Proficiency',
@@ -58,10 +57,10 @@ class AcademyBatch extends BaseComponent {
         { 'value': 'Afternoon', 'label': 'Afternoon' },
         { 'value': 'Evening', 'label': 'Evening' }
       ],
-      sports:[],
+      sports: [],
       ratingValue: '',
-      timingValue:'',
-      sportValue:'',
+      timingValue: '',
+      sportValue: '',
       academyId: null,
       batchDetails: null,
       availability: ''
@@ -69,8 +68,8 @@ class AcademyBatch extends BaseComponent {
     this.inputRefs = {
       proficiencyValue: null,
       ratingValue: null,
-      timingValue:null,
-      sportsValue:null,
+      timingValue: null,
+      sportsValue: null,
     };
     this.state.academyId = this.props.navigation.getParam('academy_id');
     let academy = this.props.navigation.getParam('academy');
@@ -78,11 +77,11 @@ class AcademyBatch extends BaseComponent {
 
   }
 
-  convertSportsForDropDown(sports){
-    let updatedSports = sports.map((item)=>{
-          return {value: item["sport_id"], label: item["name"]}
+  convertSportsForDropDown(sports) {
+    let updatedSports = sports.map((item) => {
+      return { value: item["sport_id"], label: item["name"] }
     });
-    updatedSports= [{value:"",label:"ALL"},...updatedSports];
+    updatedSports = [{ value: "", label: "ALL" }, ...updatedSports];
     this.state.sports = updatedSports;
   }
 
@@ -110,6 +109,7 @@ class AcademyBatch extends BaseComponent {
   }
 
   _renderItem = ({ item }) => (
+    
     <View style={styles.batchContainerOuter}>
       <Card style={styles.batchCardContainer}>
         <Text style={styles.batchCardHeader}>{item.batch_name}</Text>
@@ -216,13 +216,13 @@ class AcademyBatch extends BaseComponent {
 
         <View style={{
           flex: 1,
-          flexDirection:'row',
+          flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
 
           <TouchableOpacity
-           style={[defaultStyle.rounded_button, {}]}
+            style={[defaultStyle.rounded_button, {}]}
             activeOpacity={.8}
             onPress={() => {
               this.props.navigation.navigate('BookTrial', {
@@ -231,28 +231,75 @@ class AcademyBatch extends BaseComponent {
               })
             }}
           >
-           
-              <Text style={{ color: "white" }}>Book Trial Session</Text>
-           
+
+            <Text style={{ color: "white" }}>Book Trial Session</Text>
+
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={.8}
             style={[defaultStyle.rounded_button, {}]}
             onPress={() => {
-              
+              this.setState({selectedBatchId: item.batch_id});
+              this.RBSheet.open()
             }}
           >
-              <Text style={{ color: "white" }}>Buy Membership</Text>
+            <Text style={{ color: "white" }}>Buy Membership</Text>
           </TouchableOpacity>
-         
+
         </View>
-        
+
 
       </Card>
     </View>
 
   )
 
+  handleOnLoginRequired = ()=>{
+      this.RBSheet.close()
+      this.props.navigation.navigate('Login')
+  }
+  handleOnBottomSheetCloseRequired = ()=>{
+    this.RBSheet.close()
+  }
+  handleOnStartPayment=(orderId, amount, userId, userName, mobileNumber)=>{
+      this.RBSheet.close()
+      var options = {
+        description: "Payment for Subscription",
+        currency: 'INR',
+        key: getPaymentKey(),
+        amount: amount*100,
+        name: 'Machaxi',
+        prefill: {
+            email: getRazorPayEmail(),
+            contact: mobileNumber,
+            name: userName
+        },
+        theme: { color: '#67BAF5' }
+      }
+  
+      RazorpayCheckout.open(options).then((data) => {
+        // handle success
+        console.log('Razor Rspo ', JSON.stringify(data))
+        let payment_details = {
+            razorpay_payment_id: data.razorpay_payment_id
+        }
+        console.log("Payment Details", data);
+        this.submitPaymentConfirmation(orderId, amount, payment_details)
+    }).catch((error) => {
+        console.log('Razor Rspo ', JSON.stringify(error))
+        alert('Payment could not succeed. Please try again.')
+    });
+  }
+
+  submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
+    getData('header', async (value) => {
+      let postData = {data:{due_order_id:orderId, amount, paymentDetails}}
+      this.props.submitPaymentConfirmation(value,postData).then((result)=>{
+        console.log("REsult", result);
+      });
+    });
+      
+  }
   render() {
 
     let data = this.state.batchDetails;
@@ -279,7 +326,6 @@ class AcademyBatch extends BaseComponent {
                 placeholder={{}}
                 items={this.state.proficiency}
                 onValueChange={(value) => {
-                  console.log(value)
                   this.setState({
                     proficiencyValue: value,
                   }, () => {
@@ -403,9 +449,9 @@ class AcademyBatch extends BaseComponent {
                 backgroundColor: '#A3A5AE',
                 height: 1
               }}></View>
-          </View>
+            </View>
 
-</View>
+          </View>
 
           <View style={styles.toggleOuter}>
             <View style={styles.toggleAvailable}>
@@ -444,7 +490,24 @@ class AcademyBatch extends BaseComponent {
         }
 
 
+
+        <RBSheet
+          ref={ref => {
+            this.RBSheet = ref;
+          }}
+          height={300}
+          openDuration={250}
+          customStyles={{
+            container: {
+              justifyContent: "center",
+              alignItems: "center"
+            }
+          }}
+        >
+          <PlanPurchaseView batchId={this.state.selectedBatchId} onClosed={this.handleOnBottomSheetCloseRequired} onLoginRequired={this.handleOnLoginRequired} onStartPayment={this.handleOnStartPayment} />
+        </RBSheet>
       </View>
+
     );
   }
 }
@@ -455,7 +518,7 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = {
-  getAcademyBatchDetail
+  getAcademyBatchDetail, submitPaymentConfirmation
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AcademyBatch);
@@ -609,7 +672,7 @@ const styles = StyleSheet.create({
   },
   filterOuter: {
     padding: 16,
-   
+
   },
   availableLabel: {
     color: '#404040',
@@ -623,7 +686,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom:15
+    marginBottom: 15
   },
   filterPlaceholder: {
     fontSize: 10,
