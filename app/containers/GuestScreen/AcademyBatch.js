@@ -293,9 +293,14 @@ class AcademyBatch extends BaseComponent {
 
   submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
     getData('header', async (value) => {
-      let postData = {data:{due_order_id:orderId, amount, paymentDetails}}
+      let postData = {data:{due_order_id:orderId, amount, payment_details:paymentDetails}}
       this.props.submitPaymentConfirmation(value,postData).then((result)=>{
-        console.log("REsult", result);
+        result = result.payload.data;
+        if(result.success){
+          alert(result.success_message);
+        }else{
+          alert(result.error_message);
+        }
       });
     });
       

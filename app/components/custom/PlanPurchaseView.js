@@ -140,7 +140,7 @@ const PlanPurchaseView = (props) => {
             const data = myData.payload.data.data;
             props.onStartPayment(data.order_id, data.amount, userId, userName, mobileNumber);
           } else {
-            alert("Problem Processing payment, Please relogin and Try again.")
+            alert(myData.payload.data.error_message)
           }
 
         })
