@@ -109,6 +109,9 @@
 		<string>Quicksand-Regular.ttf</string>
 		<string>Quicksand-Medium.ttf</string>
 		<string>BebasNeue-Regular.ttf</string>
+		<string>Nunito-Bold.ttf</string>
+		<string>Nunito-SemiBold.ttf</string>
+		<string>Nunito-Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

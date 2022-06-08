@@ -26,6 +26,10 @@
 		A2CAB42A232F62C900ACA14E /* Razorpay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAB428232F62C900ACA14E /* Razorpay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2CAB42B232F62DA00ACA14E /* libRazorpayCheckout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2346D6A232B94D7009565AC /* libRazorpayCheckout.a */; };
 		DEBAE3371354C967CADD6375 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F147318ADF78ADA94977CA4D /* libPods-OneSignalNotificationServiceExtension.a */; };
+		FA2FF74F2850FA9F0064F16F /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA2FF74C2850FA9F0064F16F /* Nunito-Bold.ttf */; };
+		FA2FF7532850FBE40064F16F /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA2FF7502850FBE40064F16F /* Nunito-ExtraBold.ttf */; };
+		FA2FF7542850FBE40064F16F /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA2FF7512850FBE40064F16F /* Nunito-Regular.ttf */; };
+		FA2FF7552850FBE40064F16F /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA2FF7522850FBE40064F16F /* Nunito-SemiBold.ttf */; };
 		FFD393947B6B42EAFBC79940 /* libPods-Dribble.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AEB2DEEE870A236C3BA8AF5A /* libPods-Dribble.a */; };
 /* End PBXBuildFile section */
 
@@ -146,6 +150,10 @@
 		F147318ADF78ADA94977CA4D /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F59DA106DC564BC5B98909 /* Pods-Dribble.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble.release.xcconfig"; path = "Target Support Files/Pods-Dribble/Pods-Dribble.release.xcconfig"; sourceTree = "<group>"; };
 		F364B9ADDD5743B5B29B9DBC /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		FA2FF74C2850FA9F0064F16F /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-Bold.ttf"; path = "../../app/fonts/Nunito-Bold.ttf"; sourceTree = "<group>"; };
+		FA2FF7502850FBE40064F16F /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-ExtraBold.ttf"; path = "../../app/fonts/Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
+		FA2FF7512850FBE40064F16F /* Nunito-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-Regular.ttf"; path = "../../app/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
+		FA2FF7522850FBE40064F16F /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-SemiBold.ttf"; path = "../../app/fonts/Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
 		FA401DAAFFB748159660A81C /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		FEDADAE6E61144D581B35959 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -313,7 +321,11 @@
 		A2346D5B232B607B009565AC /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				FA2FF7502850FBE40064F16F /* Nunito-ExtraBold.ttf */,
+				FA2FF7512850FBE40064F16F /* Nunito-Regular.ttf */,
+				FA2FF7522850FBE40064F16F /* Nunito-SemiBold.ttf */,
 				A2346D5C232B607B009565AC /* BebasNeue-Regular.ttf */,
+				FA2FF74C2850FA9F0064F16F /* Nunito-Bold.ttf */,
 				A2346D5D232B607B009565AC /* Quicksand-Bold.ttf */,
 				A2346D5E232B607B009565AC /* Quicksand-Medium.ttf */,
 				A2346D5F232B607B009565AC /* Quicksand-Regular.ttf */,
@@ -548,12 +560,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA2FF7552850FBE40064F16F /* Nunito-SemiBold.ttf in Resources */,
+				FA2FF7542850FBE40064F16F /* Nunito-Regular.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				A21CAD3A236FEC4300C4DF6F /* (null) in Resources */,
+				FA2FF74F2850FA9F0064F16F /* Nunito-Bold.ttf in Resources */,
 				A2346D62232B607B009565AC /* Quicksand-Medium.ttf in Resources */,
 				A2346D61232B607B009565AC /* Quicksand-Bold.ttf in Resources */,
+				FA2FF7532850FBE40064F16F /* Nunito-ExtraBold.ttf in Resources */,
 				A2346D60232B607B009565AC /* BebasNeue-Regular.ttf in Resources */,
 				A2346D63232B607B009565AC /* Quicksand-Regular.ttf in Resources */,
 			);
