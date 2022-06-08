@@ -7,7 +7,7 @@ import moment from 'moment'
 import { connect } from 'react-redux';
 import RazorpayCheckout from 'react-native-razorpay';
 import Spinner from 'react-native-loading-spinner-overlay';
-import firebase from "react-native-firebase";
+import * as Analytics from "../../Analytics"
 import { getData } from '../../components/auth';
 import InfoDialog from '../../components/custom/InfoDialog'
 import { CustomeCard } from '../../components/Home/Card'
@@ -78,7 +78,7 @@ class PaymentDetail extends BaseComponent {
                         this.setState({
                             data: paymentData[0]
                         })
-                        firebase.analytics().logEvent("onPaymentDetailLoad",
+                        Analytics.logEvent("onPaymentDetailLoad",
                         { 
                             userid: this.userid, 
                             username: this.username,
@@ -155,7 +155,7 @@ class PaymentDetail extends BaseComponent {
         responseData['data'] = subData
 
         this.progress(true)
-        firebase.analytics().logEvent("afterPaymentDetailSuccess",
+        Analytics.logEvent("afterPaymentDetailSuccess",
         {   userid: this.userid,
             username: this.username,
             academyId: this.academy_id,

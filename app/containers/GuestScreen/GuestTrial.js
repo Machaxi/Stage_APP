@@ -386,15 +386,7 @@ export default class GuestTrial extends BaseComponent {
                 >
                   {this.state.headersArray[this.state.timerValue]?.subHeading}
                 </Text>
-                {/* <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "Nunito-Bold",
-                    color: "#3E3E3E",
-                  }}
-                >
-                  Flat 50 % off
-                </Text> */}
+
               </View>
 
               <View

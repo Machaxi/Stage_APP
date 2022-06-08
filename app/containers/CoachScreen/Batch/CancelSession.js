@@ -3,10 +3,8 @@ import React from 'react'
 import { View, ImageBackground, Text, Image, TextInput } from 'react-native'
 import { Button } from 'react-native-paper';
 import BaseComponent, { defaultStyle } from '../../BaseComponent';
-import firebase from "react-native-firebase";
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
-//import firebase from 'react-native-firebase';
 import moment from 'moment'
 import { getData } from '../../../components/auth';
 import { getBatchOperational, cancelBatch } from "../../../redux/reducers/CancelBatchReducer";

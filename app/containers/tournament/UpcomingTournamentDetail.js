@@ -5,7 +5,7 @@ import { Rating } from 'react-native-ratings';
 import Moment from 'moment';
 import Share from 'react-native-share';
 import { connect } from 'react-redux';
-import firebase from "react-native-firebase";
+import * as Analytics from "../../Analytics"
 import BaseComponent, {
     defaultStyle,
     getFormattedRound,
@@ -45,10 +45,9 @@ class UpcomingTournamentDetail extends BaseComponent {
             if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("UpcomingTournament", { userid: userid, username: username })
+               Analytics.logEvent("UpcomingTournament", { userid: userid, username: username })
             }
         })
-        // firebase.analytics().logEvent("UpcomingTournament", {})
 
 
         getData('header', (value) => {

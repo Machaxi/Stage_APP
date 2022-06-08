@@ -7,12 +7,9 @@ import ResultsRoute from './ResultsRoute'
 import LeaderboardRoute from './LeaderBoardRoute'
 import BaseComponent, { defaultStyle } from '../BaseComponent';
 import { Button } from 'react-native-paper';
-import firebase from "react-native-firebase";
 import { onSignOut } from "../../components/auth";
 import { getData, storeData } from '../../components/auth';
 import { PLAYER, PARENT, COACH } from '../../components/Constants';
-
-//import firebase from 'react-native-firebase';
 
 class ChallengeHome extends BaseComponent {
 

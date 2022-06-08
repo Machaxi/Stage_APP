@@ -12,7 +12,6 @@ import { isSignedIn, getData } from "../components/auth";
 import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 
 import { onSignOut, clearData } from "../components/auth";
-import firebase from 'react-native-firebase';
 import BaseComponent, { defaultStyle, camelCase, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
 import { getRelationsDetails, logout } from "../redux/reducers/RelationReducer";
 import { connect } from 'react-redux';

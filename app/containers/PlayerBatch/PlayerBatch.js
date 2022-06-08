@@ -13,7 +13,7 @@ import BaseComponent, { defaultStyle, REFRESH_SCREEN_CALLBACK } from '../BaseCom
 import moment from 'moment'
 import { PLAYER, FAMILY, PARENT } from '../../components/Constants';
 import Events from '../../router/events';
-import firebase from "react-native-firebase";
+import * as Analytics from "../../Analytics"
 import PTRView from 'react-native-pull-to-refresh';
 
 class PlayerBatch extends BaseComponent {
@@ -93,7 +93,7 @@ class PlayerBatch extends BaseComponent {
             if(userData.user){
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("PlayerBatch", {userid: userid, username: username})
+              Analytics.logEvent("PlayerBatch", {userid: userid, username: username})
             }
         })
         // firebase.analytics().logEvent("PlayerBatch", {})

@@ -48,7 +48,7 @@ import BaseComponent, {
 } from "../BaseComponent";
 import Events from "../../router/events";
 import CustomProgress from "../../components/custom/CustomProgress";
-import firebase from "react-native-firebase";
+import * as Analytics from "../../Analytics"
 import StarRating from "react-native-star-rating";
 import CustomAnimationProgress from "../../components/custom/CustomAnimationProgress";
 import CustomProgres from "../../components/custom/CustomProgress";
@@ -265,9 +265,7 @@ class ParentHome extends BaseComponent {
       if (userData.user) {
         var userid = userData.user["id"];
         var username = userData.user["name"];
-        firebase
-          .analytics()
-          .logEvent("ParentHome", { userid: userid, username: username });
+        Analytics.logEvent("ParentHome", { userid: userid, username: username });
       }
     });
     // firebase.analytics().logEvent("ParentHome", {})

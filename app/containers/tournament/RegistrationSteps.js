@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNPickerSelect from 'react-native-picker-select'
 import RazorpayCheckout from 'react-native-razorpay';
-import firebase from "react-native-firebase";
+import * as Analytics from "../../Analytics"
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../../components/Constants'
 import AbortDialog from './AbortDialog'
 import BaseComponent, {
@@ -1450,7 +1450,7 @@ class RegistrationSteps extends BaseComponent {
                 let payment_details = {
                     razorpay_payment_id: data.razorpay_payment_id
                 }
-                firebase.analytics().logEvent("afterRegistrationSuccess",
+                Analytics.logEvent("afterRegistrationSuccess",
                 {   userid: this.userid,
                     username: this.username,
                     academyId: this.academy_id,

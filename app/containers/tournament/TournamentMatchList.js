@@ -13,7 +13,6 @@ import BaseComponent, { defaultStyle, REFRESH_SCREEN_CALLBACK } from '../BaseCom
 import moment from 'moment'
 import { PLAYER, FAMILY, PARENT, ACADEMY, COACH } from '../../components/Constants';
 import Events from '../../router/events';
-import firebase from "react-native-firebase";
 import { Text as MyText } from 'react-native'
 import PTRView from 'react-native-pull-to-refresh';
 import NavigationDrawerStructure from '../../router/NavigationDrawerStructure';

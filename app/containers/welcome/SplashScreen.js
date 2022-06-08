@@ -5,8 +5,9 @@ import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth"
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
-import firebase from "react-native-firebase";
+//a//import firebase from "react-native-firebase";
 import SplashScreen from 'react-native-splash-screen'
+import * as Analytics from "../../Analytics"
 
 var is_deep_linking = false
 var deep_data
@@ -40,24 +41,16 @@ class Splash extends BaseComponent {
 
         //     }
         // });
-
-        // firebase.analytics().logEvent("APP_START", {})
-        //firebase.analytics().logEvent("testing_dribble", {})
+        Analytics.logEvent("Splash");
         getData('userInfo', (value) => {
             var userData = JSON.parse(value)
             if (userData.user) {
                 var userid = userData.user['id']
                 var username = userData.user['name']
-                firebase.analytics().logEvent("SplashScreen", { userid: userid, username: username })
+                
+                Analytics.logEvent("SplashScreen", { userid: userid, username: username })
             }
         })
-        // firebase.analytics().logEvent("SplashScreen", {})
-        // firebase.analytics().setCurrentScreen()
-        // firebase.analytics().setUserId('testing')
-        //firebase.crashlytics().log('Test Message!');
-
-
-        //1a476280-04c6-40a5-b76e-6cc4da41669e
     }
 
     componentDidMount() {

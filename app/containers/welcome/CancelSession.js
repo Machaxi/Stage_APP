@@ -3,11 +3,9 @@ import React from 'react'
 import { View, ImageBackground, Text, Image, TextInput } from 'react-native'
 import { Button } from 'react-native-paper';
 import BaseComponent, { defaultStyle } from '../BaseComponent';
-import firebase from "react-native-firebase";
 import { onSignOut } from "../../components/auth";
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
-//import firebase from 'react-native-firebase';
 
 class CancelSession extends BaseComponent {
 
