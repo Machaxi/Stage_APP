@@ -404,10 +404,8 @@ class CoachHome extends BaseComponent {
                                         getFormatTimeDate(session_date, end_time)}</Text>
                             </View>
                             <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id })}>
-                                Mark Attendance</CustomeButtonB>
+                                Mark/Edit Attendance</CustomeButtonB>
                         </View>}
-
-
                 </View>
             );
         }

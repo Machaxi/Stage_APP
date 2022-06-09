@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services' // apply after this line
+apply plugin: 'com.google.firebase.crashlytics'
 
 import com.android.build.OutputFile
 
@@ -226,20 +228,11 @@ dependencies {
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-firebase')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    //implementation 'com.google.firebase:firebase-core:15+'
-    implementation "com.google.firebase:firebase-auth:17.0.0"
-    //implementation "com.google.firebase:firebase-messaging:15+"
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation "com.google.firebase:firebase-messaging:18.0.0"
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    implementation 'com.google.firebase:firebase-analytics:15+'
-    //implementation "com.google.firebase:firebase-crashlytics:15+"
     implementation files('libs/universal-image-loader-1.9.3.jar')
     implementation "com.google.android.gms:play-services-base:18.0.1"
     implementation "com.google.android.gms:play-services-location:19.0.1"
@@ -255,7 +248,6 @@ dependencies {
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
-apply plugin: 'io.fabric'
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
@@ -263,4 +255,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
-com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

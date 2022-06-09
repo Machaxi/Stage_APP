@@ -7,7 +7,7 @@ import axios from "axios";
 import { client } from "../../App";
 import moment from "moment";
 import { StatusBar } from "react-native";
-import firebase from "react-native-firebase";
+import auth from '@react-native-firebase/auth';
 import Snackbar from "react-native-snackbar";
 
 msg = "GUEST";
@@ -250,7 +250,7 @@ export default class BaseComponent extends React.Component {
     clearData();
     global.USER_TYPE = "";
     global.SELECTED_PLAYER_ID = "";
-    firebase.auth().signOut();
+    auth().signOut();
     myNavigation.navigate("Login");
   }
 

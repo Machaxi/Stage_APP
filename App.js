@@ -23,7 +23,6 @@ import InfoDialog from './app/components/custom/InfoDialog'
 import UpdateAppDialog from './app/components/custom/UpdateAppDialog'
 import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
-import RNFirebase from 'react-native-firebase';
 import BaseComponent, {
     DEBUG_APP, getBaseUrl, ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN,
     ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER
@@ -34,6 +33,8 @@ import DropdownAlert from 'react-native-dropdownalert';
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info';
 import codePush from "react-native-code-push";
+import crashlytics from '@react-native-firebase/crashlytics';
+import messaging from '@react-native-firebase/messaging';
 //export const BASE_URL = 'https://www.machaxi.com/api/'
 //export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
@@ -112,7 +113,7 @@ client.interceptors.response.use(response => {
 
 
 
-            firebase.crashlytics().log('Api Error ' + error.response);
+            crashlytics().log('Api Error ' + error.response);
             console.log('error => ' + JSON.stringify(error.response))
             Events.publish('ShowDialog', msg);
 
@@ -134,7 +135,7 @@ client.interceptors.response.use(response => {
                 console.log('Crash Object -> ', JSON.stringify(logs_data))
 
                 if (Platform.OS === 'android') {
-                    firebase.crashlytics().recordCustomError(
+                    crashlytics().recordCustomError(
                         'Custom Error',
                         'Oh No!',
                         [{
@@ -146,7 +147,7 @@ client.interceptors.response.use(response => {
                         }]
                     );
                 } else {
-                    firebase.crashlytics().recordCustomError(
+                    crashlytics().recordCustomError(
                         'Custom Error',
                         'Oh No!',
                         {
@@ -188,7 +189,6 @@ const configurationOptions = {
     debug: true,
     promptOnMissingPlayServices: true
 }
-const firebase = RNFirebase.initializeApp(configurationOptions)
 
 branch.subscribe(({ error, params }) => {
     if (error) {
@@ -274,14 +274,12 @@ class App extends BaseComponent {
         console.disableYellowBox = true;
         console.reportErrorsAsExceptions = false;
 
-
-
-        firebase.messaging().getToken().then((token) => {
+        messaging().getToken().then((token) => {
             //alert('Token ',token)
             console.log('firebase token ', token)
         });
 
-        firebase.messaging().onTokenRefresh((token) => {
+        messaging().onTokenRefresh((token) => {
             //alert('Token ',token)
             console.log('firebase token ', token)
         });

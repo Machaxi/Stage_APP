@@ -633,7 +633,7 @@ class AcademyProfile extends BaseComponent {
                               { color: "white" },
                             ]}
                           >
-                            Purchase Membership
+                            Buy Membership
                           </Text>
                         </TouchableOpacity>
                         </View>

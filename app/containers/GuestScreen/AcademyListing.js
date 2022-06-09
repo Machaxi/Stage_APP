@@ -247,22 +247,31 @@ class AcademyListing extends BaseComponent {
   }
 
   async requestPermissions() {
+    let isPermissionGranted = false;
+
     if (Platform.OS === "ios") {
       const auth = await Geolocation.requestAuthorization("whenInUse");
-      if (auth === "granted") {
-        this.fetchLocation();
-      }
+      if (auth === "granted")
+        isPermissionGranted=true;
+       
     }
 
     if (Platform.OS === "android") {
-      await PermissionsAndroid.request(
+      let res = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
       );
-      if ("granted" === PermissionsAndroid.RESULTS.GRANTED) {
-        this.fetchLocation();
-      } else {
-        alert("Please provide location permission");
-      }
+      if (res=== PermissionsAndroid.RESULTS.GRANTED)
+        isPermissionGranted=true;
+        
+    }
+
+    if(isPermissionGranted)
+    {
+      this.fetchLocation();
+    }
+    else {
+      this.getAcademyList("");
+      alert("Please provide location permission to show distance of societies.");
     }
   }
 
@@ -272,9 +281,6 @@ class AcademyListing extends BaseComponent {
         console.log(position);
         var lats = parseFloat(position.coords.latitude);
         var lngs = parseFloat(position.coords.longitude);
-        console.warn(lats, "--lats");
-        console.warn(lngs, "--lngs");
-        // alert(lats);
         this.setState(
           {
             latitude: lats,
@@ -785,6 +791,7 @@ class AcademyListing extends BaseComponent {
             >
               {item.distance}
             </Text>
+           
           </View>
 
           <View
@@ -795,19 +802,10 @@ class AcademyListing extends BaseComponent {
               marginLeft: 12,
               flexDirection: "row",
               flex: 1,
+              justifyContent:"space-between"
             }}
           >
-            {/* <Rating
-                            type='custom'
-                            ratingColor='#F4FC9A'
-                            ratingBackgroundColor='#D7D7D7'
-                            ratingCount={5}
-                            imageSize={12}
-                            readonly={true}
-                            startingValue={item.ratings}
-                            style={{ width: 80 }}
-                        /> */}
-
+           <View style={{ flexDirection: "row"}}>
             <StarRating
               style={{
                 //height: 24,
@@ -829,16 +827,17 @@ class AcademyListing extends BaseComponent {
               ratingBackgroundColor={"#ff2200"}
               fullStarColor={"#F4FC9A"}
             />
-
-            {/* <Text style={{
-                            backgroundColor: '#DFDFDF', height: 19, width: 30, textAlign: 'center',
-                            fontSize: 12,
-                            color: '#707070',
-                            paddingTop: 0,
-                            borderRadius: 12,
-                            fontFamily: 'Quicksand-Medium'
-                        }}>{item.ratings.toFixed(1)}</Text> */}
             <RateViewFill>{item.ratings}</RateViewFill>
+            </View>
+            <Image
+                          resizeMode="contain"
+                          source={require("../../images/path.png")}
+                          style={{
+                            width: 19,
+                            height: 13,
+                            marginRight: 15,
+                          }}
+                        />
           </View>
 
           {this.state.job_vacancy ? (

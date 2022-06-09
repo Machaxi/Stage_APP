@@ -5,7 +5,6 @@ import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth"
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
-//a//import firebase from "react-native-firebase";
 import SplashScreen from 'react-native-splash-screen'
 import * as Analytics from "../../Analytics"
 

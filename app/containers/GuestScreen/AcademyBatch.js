@@ -81,7 +81,7 @@ class AcademyBatch extends BaseComponent {
     let updatedSports = sports.map((item) => {
       return { value: item["sport_id"], label: item["name"] }
     });
-    updatedSports = [{ value: "", label: "ALL" }, ...updatedSports];
+    updatedSports = [{ value: "", label: "All" }, ...updatedSports];
     this.state.sports = updatedSports;
   }
 

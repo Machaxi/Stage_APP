@@ -4,7 +4,7 @@ import { doLogin, doFBLogin, doLoginTest } from '../../redux/reducers/loginReduc
 import { connect } from 'react-redux';
 import { getData, onSignOut, storeData, onSignIn } from '../../components/auth'
 
-import firebase from 'react-native-firebase';
+import auth from '@react-native-firebase/auth';
 import { PARENT, ACADEMY } from "../../components/Constants";
 import { GUEST, PLAYER, COACH } from "../../components/Constants";
 import CodeInput from 'react-native-confirmation-code-input';
@@ -68,7 +68,7 @@ class PhoneAuth extends BaseComponent {
 
     componentDidMount() {
         this.signOut()
-        this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        this.unsubscribe = auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({ user1: user.toJSON() });
                 console.log('componentDidMount=>', JSON.stringify(user))
@@ -84,6 +84,8 @@ class PhoneAuth extends BaseComponent {
                 });
             }
         });
+
+
         // firebase.auth().currentUser.getIdToken(true).then((token) => {
         //     // this.setState({
         //     //     token:token,
@@ -124,7 +126,7 @@ class PhoneAuth extends BaseComponent {
         this.setState({ message: 'Sending code ...' });
         this.progress(true)
 
-        firebase.auth().signInWithPhoneNumber(phoneNumber)
+        auth().signInWithPhoneNumber(phoneNumber)
             .then(confirmResult => {
                 this.progress(false)
                 this.setState({ confirmResult, message: 'Code has been sent!' })
@@ -149,7 +151,7 @@ class PhoneAuth extends BaseComponent {
                     console.log('user1----' + JSON.stringify(user1))
                     this.state.user1 = user1
                     this.setState({ message: 'Code Confirmed!' });
-                    firebase.auth().currentUser.getIdToken(true).then((token) => {
+                    auth().currentUser.getIdToken(true).then((token) => {
                         console.log("token===", token)
                         this.setState({
                             token: token,
@@ -178,7 +180,7 @@ class PhoneAuth extends BaseComponent {
     };
 
     signOut = () => {
-        firebase.auth().signOut();
+       auth().signOut();
         onSignOut()
         // removeItem()
 
@@ -187,8 +189,7 @@ class PhoneAuth extends BaseComponent {
 
     getToken() {
         // console.warn('getToken')
-        firebase
-            .auth()
+            auth()
             .currentUser.getIdToken(true)
             .then(token => {
                 console.log("token", token);

@@ -9,7 +9,6 @@ import com.microsoft.codepush.react.CodePush;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import cl.json.RNSharePackage;
-import io.invertase.firebase.RNFirebasePackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 
@@ -27,22 +26,14 @@ import com.BV.LinearGradient.LinearGradientPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import io.invertase.firebase.RNFirebasePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import io.invertase.firebase.auth.RNFirebaseAuthPackage;
-import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
-import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
-//import io.invertase.firebase.crashlytics.RNFirebaseCrashlyticsPackage; // <-- Add this line
-import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage; // <-- Add this line
 
 
 import java.util.Arrays;
 import java.util.List;
-import com.google.firebase.FirebaseApp;
 import com.machaxi.CustomToastPackage;
 import com.facebook.react.PackageList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -128,11 +119,6 @@ public class MainApplication extends Application implements ReactApplication {
       // packages.add(new RNGestureHandlerPackage());
        //packages.add(new RNFirebasePackage());
       // packages.add(new SnackbarPackage());
-       packages.add(new RNFirebaseAuthPackage());
-       packages.add(new RNFirebaseNotificationsPackage());
-       packages.add(new RNFirebaseMessagingPackage());
-      packages.add(new RNFirebaseAnalyticsPackage());
-      packages.add(new RNFirebaseCrashlyticsPackage());
       packages.add(new CustomToastPackage());
       return packages;
     }
@@ -152,13 +138,6 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-     try {
-          FirebaseApp.initializeApp(this);
-      }
-      catch (Exception e) {
-      }
-
-      
 
     SoLoader.init(this, /* native exopackage */ false);
     Branch.getAutoInstance(this);

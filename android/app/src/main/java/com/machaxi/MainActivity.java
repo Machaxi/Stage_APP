@@ -6,12 +6,10 @@ import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import io.branch.rnbranch.*; // <-- add this
 import android.content.Intent; // <-- and this
-import com.crashlytics.android.Crashlytics;
 import android.util.Log;
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen; // here
 
-import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends ReactActivity {
 

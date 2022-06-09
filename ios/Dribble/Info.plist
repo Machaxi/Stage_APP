@@ -85,7 +85,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>To show nearby academy</string>
+	<string>To show distance of societies from your loccationo</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To show distance of societies from your loccationo</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To Set Profile picture</string>
 	<key>UIAppFonts</key>
@@ -134,8 +136,6 @@
 	<false/>
 	<key>branch_app_domain</key>
 	<string>dribble.test-app.link</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To show nearby academy</string>
 	<key>branch_key</key>
 	<dict>
 		<key>live</key>

@@ -45,7 +45,7 @@ import Events from "../../router/events";
 import PlayerHeader from "../../components/custom/PlayerHeader";
 import { RateViewFill } from "../../components/Home/RateViewFill";
 import { RateViewBorder } from "../../components/Home/RateViewBorder";
-import firebase from "react-native-firebase";
+import * as Analytics from "../../Analytics"
 import CustomAnimationProgress from "../../components/custom/CustomAnimationProgress";
 import StarRating from "react-native-star-rating";
 import CustomProgres, {
@@ -268,9 +268,7 @@ class UserHome extends BaseComponent {
       if (userData.user) {
         var userid = userData.user["id"];
         var username = userData.user["name"];
-        firebase
-          .analytics()
-          .logEvent("PlayerHome", { userid: userid, username: username });
+        Analytics.logEvent("PlayerHome", { userid: userid, username: username });
       }
     });
     // firebase.analytics().logEvent("PlayerHome", {})
@@ -944,7 +942,7 @@ class UserHome extends BaseComponent {
                     </Text>
                    
                     <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-                    {operations.whats_app_url &&  <TouchableOpacity onPress={()=>{
+                    {(operations.whats_app_url &&  operations.whats_app_url!="") ? <TouchableOpacity onPress={()=>{
                       Linking.openURL(operations.whats_app_url);
                     }}>
                     <Image
@@ -956,7 +954,7 @@ class UserHome extends BaseComponent {
                             }}
                             source={require('../../images/whatsapp_logo.png')}
                         />
-                        </TouchableOpacity>}
+                        </TouchableOpacity>:null}
                     <Text style={defaultStyle.bold_text_10}>
                       {operations.batch_name}
                     </Text>
