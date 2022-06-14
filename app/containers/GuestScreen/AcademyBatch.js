@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, ImageBackground, Switch } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Image, FlatList, TextInput, ImageBackground, Switch, Linking } from 'react-native';
 import { Card, Text, } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { getData, storeData } from "../../components/auth";
@@ -10,6 +10,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import RBSheet from "react-native-raw-bottom-sheet";
 import PlanPurchaseView from '../../components/custom/PlanPurchaseView';
 import RazorpayCheckout from 'react-native-razorpay';
+import globalStyles from "../../mystyle"
+import { COPENSATORY_BATCH_FAIL } from '../../actions/actionTypes';
 
 const placeholderProf = {
   label: 'Select Proficiency',
@@ -71,8 +73,10 @@ class AcademyBatch extends BaseComponent {
       timingValue: null,
       sportsValue: null,
     };
-    this.state.academyId = this.props.navigation.getParam('academy_id');
+
+    this.state.academyId =this.props.navigation.getParam('academy_id');
     let academy = this.props.navigation.getParam('academy');
+    this.state.academy=academy;
     this.convertSportsForDropDown(academy.sports)
 
   }
@@ -139,22 +143,67 @@ class AcademyBatch extends BaseComponent {
             }
             {
               item.operations.weekend ?
-                <View style={{ marginTop: 10 }}><Text style={styles.batchValue}>
-                  {/* {item.operations.weekend.start_time}- {item.operations.weekend.end_time} */}
-                  {getFormatTime(item.operations.weekend.start_time)} - {getFormatTime(item.operations.weekend.end_time)}
+                <View style={{ marginTop: 10 }}>
+                  <Text style={styles.batchValue}>
+                    {getFormatTime(item.operations.weekend.start_time)} - {getFormatTime(item.operations.weekend.end_time)}
 
-                </Text></View> : <View><Text>-</Text></View>
+                  </Text>
+                </View> : <View><Text>-</Text></View>
             }
           </View>
 
         </View>
+        <View style={styles.batchWeekTimeOuter}>
 
-        <View style={styles.batchLabelOuter}>
-          <Text style={styles.batchLabel}>Monthly Fees</Text>
-        </View>
+         
 
-        <View style={styles.batchValueOuter}>
-          <Text style={styles.batchValuefullWidth}>Rs {item.monthly_fees} onwards</Text>
+          <View style={{ width: '55%' }}>
+            <View style={styles.batchLabelOuter}>
+              <Text style={styles.batchLabel}>Monthly Fees</Text>
+            </View>
+
+            <View style={styles.batchValueOuter}>
+              <Text style={styles.batchValuefullWidth}>Rs {item.monthly_fees} onwards</Text>
+            </View>
+          </View>
+
+          
+
+          <View style={{ width: '45%', justifyContent:"flex-end" }}>
+          <TouchableOpacity
+             style={globalStyles.rounded_button_100_percent}
+              activeOpacity={.8}
+              onPress={() => {
+                if(this.state.academy && this.state.academy.contact_number){
+                  const phoneNumber = this.state.academy.contact_number;
+                  if (phoneNumber != undefined)
+                  {
+                    if (Platform.OS === 'ios')
+                      Linking.openURL(`telprompt:${phoneNumber}`);
+                    else
+                      Linking.openURL(`tel:${phoneNumber}`);
+                  }
+                }
+              }}
+            >
+
+                <Text
+                  style={[
+                    defaultStyle.bold_text_14,
+                    {
+                      textAlign: "center",
+                      justifyContent: "center",
+                      fontSize: 14,
+                      color: "white",
+                    },
+                  ]}
+                >
+                  Call
+                </Text>
+
+            </TouchableOpacity>
+          </View>
+
         </View>
 
         {item.coaches.length > 0 &&

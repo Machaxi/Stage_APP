@@ -8,6 +8,7 @@ import { Card } from 'react-native-paper'
 import { SwitchButton, CustomeButtonB } from '../../components/Home/SwitchButton'
 import { CustomeCard } from '../../components/Home/Card'
 import { getCoachBatchAttendence, saveCoachBatchAttendence } from "../../redux/reducers/BatchReducer";
+import { getCoachBatchAttendenceDetails } from "../../redux/reducers/BatchAttendenceReducer";
 import { getData } from "../../components/auth";
 import { connect } from 'react-redux';
 import { CheckBox } from 'react-native-elements'
@@ -39,7 +40,8 @@ class MarkAttendence extends BaseComponent {
             coachesList: null,
             batchDetails: null,
             spinner: false,
-            compensatory: null
+            compensatory: null,
+            sessionDate:null,
         }
         this.compensatoryEvent = Events.subscribe('CompensatoryData', (data) => {
             this.setState({compensatory: data})
@@ -62,47 +64,61 @@ class MarkAttendence extends BaseComponent {
             let userType = userData.user['user_type']
 
             if (userType == COACH || userType == ACADEMY) {
-
-                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'))
-
+                this.getCoachAttendencedData(this.props.navigation.getParam('batch_id'),this.props.navigation.getParam('session_date'))
+                
             }
 
 
         });
     }
 
-    getCoachAttendencedData(btach_id) {
+    getCoachAttendencedData(btach_id, sessionDate) {
         getData('header', (value) => {
             console.log("header", value, btach_id);
-            this.props.getCoachBatchAttendence(value, btach_id).then(() => {
+            this.props.getCoachBatchAttendenceDetails(value, btach_id, sessionDate).then(() => {
                 // console.log(' user response payload ' + JSON.stringify(this.props.data));
                 // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-                let user = JSON.stringify(this.props.data.batchdata);
-                console.log(' user response payload ' + user);
+                let user = JSON.stringify(this.props.attendanceDetails.batchdata);
+                console.log("user", user);
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
 
-                    let players = user1.data['players']
-                    for (let i = 0; i < players.length; i++) {
-                        let obj = players[i]
-                        obj.is_present = true
-                        players[i] = obj
+                    let compPlayers =   user1.data["compAttendancePlayers"];
+                    let compPlayersMapped =[];
+                    if(compPlayers){
+                        compPlayersMapped = compPlayers.map((item)=>{
+                            return {
+                                player_id:item.id,
+                                player_name:item.name,
+                                batch_id:item.operations.batch_id,
+                                batch_name:item.operations.batch_name,
+                                is_present:item.is_present,
+                                Due: item.Due,
+                            }
+                        })
                     }
 
-                    let coaches = user1.data['coaches']
-                    for (let i = 0; i < coaches.length; i++) {
-                        let obj = coaches[i]
-                        obj.is_present = true
-                        coaches[i] = obj
-                    }
+                     let players = user1.data['players']
+                    // for (let i = 0; i < players.length; i++) {
+                    //     let obj = players[i]
+                    //     obj.is_present = true
+                    //     players[i] = obj
+                    // }
+
+                     let coaches = user1.data['coaches']
+                    // for (let i = 0; i < coaches.length; i++) {
+                    //     let obj = coaches[i]
+                    //     obj.is_present = true
+                    //     coaches[i] = obj
+                    // }
 
 
                     this.setState({
                         playerList: players,
                         coachesList: coaches,
-                        batchDetails: user1.data['batch']
-
+                        batchDetails: user1.data['batch'],
+                        compensatory:compPlayersMapped
                     })
                 }
 
@@ -358,18 +374,19 @@ class MarkAttendence extends BaseComponent {
         });
     }
 
-    renderNewBatches =(item, index) => (
-        <View style={{marginBottom: 10}}>
+    renderCompStudents =({item})=>{
+        return (
+<View style={{marginBottom: 10}}>
             <View style={{ backgroundColor: 'white' }}>
                 <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={defaultStyle.bold_text_14}>Batch : {item.batch_name} </Text>
                 </View>
             </View>
-            <View style={{
-                marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
+            <View style={{backgroundColor: '#F7F7F7',
+                paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10,
                 flexDirection: 'row', justifyContent: 'space-between'
             }}>
-                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Player </Text>
+                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Player </Text>
                 <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
             </View>
             <View style={{
@@ -386,12 +403,22 @@ class MarkAttendence extends BaseComponent {
                 }}>
                     <Text style={[defaultStyle.regular_text_14, {
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        flex:1,
                     }]}>
                         {item.player_name}
                     </Text>
-                    <View style={{ backgroundColor: 'white', marginTop: 0 }}>
-                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
+                   
+                    {item.Due &&
+                    <Text style={[defaultStyle.regular_text_14, {
+                        color:item.Due.color,
+                        width:'50%',
+                    }]}>
+                        {item.Due.label}
+                    </Text>
+                    }
+                    <View style={{ marginTop: 0 }}>
+                        <CheckBox style={{ height: 30, width: 30, alignItems: 'right', backgroundColor: 'red' }}
                             activeOpacity={.8}
                             checkedIcon={<Image style={{
                                 width: 18,
@@ -409,30 +436,28 @@ class MarkAttendence extends BaseComponent {
                                 padding: 4,
                                 margin: 0,
                                 marginTop: 0,
+
                             }}
                             checked={item.is_present}
                             onPress={() => {
                                 let compensatoryData = [...this.state.compensatory];
+                                let index = compensatoryData.findIndex(el.player_id === item.player_id);
                                 compensatoryData[index].is_present = !compensatoryData[index].is_present
                                 this.setState({ compensatory: compensatoryData });
                                 console.log('compensatory', JSON.stringify(compensatoryData));
                             }}
                         />
                     </View>
+                    
                 </View>
             </View>          
         </View>
-    )
+        );
+    }
 
     render() {
         const {compensatory} = this.state
-        let newBatches = []
-        if(compensatory != null && compensatory.length > 0){
-            for (let i = 0; i < compensatory.length; i++) {
-                let item = compensatory[i]
-                newBatches.push(this.renderNewBatches(item, i))
-            }
-        }
+
 
         if (this.props.data.loading && !this.state.batchDetails) {
             return (
@@ -603,8 +628,7 @@ class MarkAttendence extends BaseComponent {
                             </View>
                         </View>
                         
-                        { newBatches }
-
+                        <FlatList data={this.state.compensatory} renderItem={this.renderCompStudents }/>
                         {this.renderFooterItem()}
                     </View>
                 </ScrollView>
@@ -624,10 +648,11 @@ class MarkAttendence extends BaseComponent {
 const mapStateToProps = state => {
     return {
         data: state.BatchReducer,
+        attendanceDetails:state.BatchAttendenceReducer
     };
 };
 const mapDispatchToProps = {
-    getCoachBatchAttendence, saveCoachBatchAttendence
+    getCoachBatchAttendence, saveCoachBatchAttendence, getCoachBatchAttendenceDetails
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MarkAttendence);
 

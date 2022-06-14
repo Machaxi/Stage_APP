@@ -177,11 +177,10 @@ class AddCompensatoryBatch extends BaseComponent {
         })
         if(this.state.selectedBatch.length !== 0)
             compensatoryBatches = [...compensatoryBatches, ...this.state.selectedBatch]
-            // compensatoryBatches.push(this.state.selectedBatch)
         return compensatoryBatches
     }
     
-    playerSelected = (name, player_id) => {
+    playerSelected = (name, player_id, due) => {
         this.setState({query: name, showSuggestion: false, spinner: true})
         getData('header', value => {
             getData('userInfo', innerValue => {
@@ -197,6 +196,7 @@ class AddCompensatoryBatch extends BaseComponent {
                         let newBatches = playerBatches.map((item, index) => {
                             playerBatches[index].player_name = name
                             playerBatches[index].player_id = player_id
+                            playerBatches[index].Due = due
                             playerBatches[index].is_present = true
                             return playerBatches[index]
                         })
@@ -325,7 +325,7 @@ class AddCompensatoryBatch extends BaseComponent {
                                     data={this.state.players}
                                     renderItem={({ item }) =>{ 
                                         return <TouchableOpacity onPress={() => {
-                                                this.playerSelected(item.name, item.id)} }
+                                                this.playerSelected(item.name, item.id, item.Due)} }
                                                 >
                                                 <Text style={{
                                                     marginTop: 6,

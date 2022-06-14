@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import moment from 'moment'
 import BaseComponent, {
     defaultStyle, EVENT_REFRESH_DASHBOARD, getUtcDateFromTime,
-    getFormatTimeDate, EVENT_UPDATE_DIALOG, PROFILE_PIC_UPDATED, EVENT_EDIT_PROFILE
+    getFormatTimeDate, EVENT_UPDATE_DIALOG, PROFILE_PIC_UPDATED, EVENT_EDIT_PROFILE, getUtcDateFromTimeFormatted
 } from '../BaseComponent';
 import Events from '../../router/events';
 import { DueView } from '../../components/Home/DueView';
@@ -403,7 +403,7 @@ class CoachHome extends BaseComponent {
                                         + "  -   " +
                                         getFormatTimeDate(session_date, end_time)}</Text>
                             </View>
-                            <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id })}>
+                            <CustomeButtonB onPress={() => this.props.navigation.navigate('MarkAttendence', { batch_id: batch_id, session_date: getUtcDateFromTimeFormatted(session_date,start_time) })}>
                                 Mark/Edit Attendance</CustomeButtonB>
                         </View>}
                 </View>

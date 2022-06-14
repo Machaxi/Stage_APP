@@ -900,7 +900,6 @@ class AcademyListing extends BaseComponent {
                     },
                   ]}
                 >
-                  {" "}
                   Call
                 </Text>
               </TouchableOpacity>

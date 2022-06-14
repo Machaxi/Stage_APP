@@ -138,12 +138,27 @@ class CoachAttendenceBook extends React.Component {
 
 
                 if (user1.success == true) {
+                    let compPlayers =   user1.data["compAttendancePlayers"];
+                    let compPlayersMapped =[];
+                    if(compPlayers){
+                        compPlayersMapped = compPlayers.map((item)=>{
+                            return {
+                                player_id:item.id,
+                                player_name:item.name,
+                                batch_id:item.operations.batch_id,
+                                batch_name:item.operations.batch_name,
+                                is_present:item.is_present,
+                                Due: item.Due,
+                            }
+                        })
+                    }
+
                     this.setState({
                         playerList: user1.data['players'],
                         batchDetails: user1.data['batch'],
                         session: user1.data['batch'].session,
                         coachesList:user1.data['coaches'],
-
+                        compensatory:compPlayersMapped
                     })
                 }
 
@@ -270,6 +285,7 @@ class CoachAttendenceBook extends React.Component {
                     alignItems: 'center',
                     //marginBottom: 5,
                     flexDirection: 'row',
+                    justifyContent: 'space-between',
                 }}>
                     <Text style={[defaultStyle.regular_text_14, {
                         justifyContent: 'center',
@@ -278,6 +294,7 @@ class CoachAttendenceBook extends React.Component {
                     }]}>
                         {item.name}
                     </Text>
+                   
                     {item.Due &&
                     <Text style={[defaultStyle.regular_text_14, {
                         color:item.Due.color,
@@ -333,73 +350,89 @@ class CoachAttendenceBook extends React.Component {
             </View>
         )
     };
+    renderCompStudents = ({ item }) => {
 
-    renderNewBatches =(item, index) => (
-        
-        <View style={{marginBottom: 10}}>
-            <View style={{ backgroundColor: 'white' }}>
-                <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={defaultStyle.bold_text_14}>Batch : {item.batch_name} </Text>
-                </View>
-            </View>
-            <View style={{backgroundColor: '#F7F7F7',
-                paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10,
-                flexDirection: 'row', justifyContent: 'space-between'
-            }}>
-                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14, marginBottom: 10 }}>Player </Text>
-                <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
-            </View>
-            <View style={{
-                backgroundColor: 'white',
-                height: 50,
-            }}>
-                <View style={{
-                    flex: 1,
-                    marginLeft: 18,
-                    marginRight: 25,
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                }}>
-                    <Text style={[defaultStyle.regular_text_14, {
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }]}>
-                        {item.player_name}
-                    </Text>
-                    <View style={{ backgroundColor: 'white', marginTop: 0 }}>
-                        <CheckBox style={{ height: 30, width: 30, alignItems: 'center', backgroundColor: 'red' }}
-                            activeOpacity={.8}
-                            checkedIcon={<Image style={{
-                                width: 18,
-                                height: 18
-                            }} resizeMode="contain"
-                                source={require('../../../images/ic_checkbox_on.png')} />}
-                            uncheckedIcon={<Image style={{
-                                width: 18,
-                                height: 18
-                            }} resizeMode="contain"
-                                source={require('../../../images/ic_checkbox_off.png')} />}
-                            containerStyle={{
-                                backgroundColor: 'white',
-                                borderWidth: 0,
-                                padding: 4,
-                                margin: 0,
-                                marginTop: 0,
-                            }}
-                            checked={item.is_present}
-                            onPress={() => {
-                                let compensatoryData = [...this.state.compensatory];
-                                compensatoryData[index].is_present = !compensatoryData[index].is_present
-                                this.setState({ compensatory: compensatoryData });
-                                console.log('compensatory', JSON.stringify(compensatoryData));
-                            }}
-                        />
+        return (
+            <View style={{ marginBottom: 10 }}>
+                <View style={{ backgroundColor: 'white' }}>
+                    <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={defaultStyle.bold_text_14}>Batch : {item.batch_name} </Text>
                     </View>
                 </View>
-            </View>          
-        </View>
-    )
+                <View style={{
+                    backgroundColor: '#F7F7F7',
+                    paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10,
+                    flexDirection: 'row', justifyContent: 'space-between'
+                }}>
+                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Player </Text>
+                    <Text style={{ fontFamily: 'Quicksand-Medium', color: '#A3A5AE', fontSize: 14 }}>Present </Text>
+                </View>
+                <View style={{
+                    backgroundColor: 'white',
+                    height: 50,
+                }}>
+                    <View style={{
+                        flex: 1,
+                        marginLeft: 18,
+                        marginRight: 25,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                    }}>
+                        <Text style={[defaultStyle.regular_text_14, {
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flex: 1,
+                        }]}>
+                            {item.player_name}
+                        </Text>
+
+                        {item.Due &&
+                            <Text style={[defaultStyle.regular_text_14, {
+                                color: item.Due.color,
+                                width: '50%',
+                            }]}>
+                                {item.Due.label}
+                            </Text>
+                        }
+                        <View style={{ marginTop: 0 }}>
+                            <CheckBox style={{ height: 30, width: 30, alignItems: 'right', backgroundColor: 'red' }}
+                                activeOpacity={.8}
+                                checkedIcon={<Image style={{
+                                    width: 18,
+                                    height: 18
+                                }} resizeMode="contain"
+                                    source={require('../../../images/ic_checkbox_on.png')} />}
+                                uncheckedIcon={<Image style={{
+                                    width: 18,
+                                    height: 18
+                                }} resizeMode="contain"
+                                    source={require('../../../images/ic_checkbox_off.png')} />}
+                                containerStyle={{
+                                    backgroundColor: 'white',
+                                    borderWidth: 0,
+                                    padding: 4,
+                                    margin: 0,
+                                    marginTop: 0,
+
+                                }}
+                                checked={item.is_present}
+                                onPress={() => {
+                                    let compensatoryData = [...this.state.compensatory];
+                                    let index = compensatoryData.findIndex(el => el.player_id === item.player_id);
+                                    compensatoryData[index].is_present = !compensatoryData[index].is_present
+                                    this.setState({ compensatory: compensatoryData });
+                                    console.log('compensatory', JSON.stringify(compensatoryData));
+                                }}
+                            />
+                        </View>
+
+                    </View>
+                </View>
+            </View>
+        );
+    }
+   
 
     render() {
        
@@ -412,16 +445,8 @@ class CoachAttendenceBook extends React.Component {
         // }
         // const { batch_name, batch_category, batch_id, session } = this.state.batchDetails
 
-        const {compensatory} = this.state
-        let newBatches = []
-        if(compensatory != null && compensatory.length > 0){
-            for (let i = 0; i < compensatory.length; i++) {
-                let item = compensatory[i]
-                newBatches.push(this.renderNewBatches(item, i))
-            }
-        }
 
-        console.log('comp data => ', newBatches)
+        console.log('comp data => ',  this.state.compensatory)
         console.log('batch_data => ', JSON.stringify(this.state.batch_data))
         console.log('player_list => ', JSON.stringify(this.state.playerList))
         if (this.state.batch_data) {
@@ -431,34 +456,6 @@ class CoachAttendenceBook extends React.Component {
             let batch_category = this.state.batch_data.batch_category
             let session = this.state.session//this.state.batch_data.session
             let batch_id = this.state.batch_data.batch_id
-
-            let player_list = []
-            
-            // if (this.state.playerList && this.state.playerList.length > 0) {
-
-            //     for (let i = 0; i < this.state.playerList.length; i++) {
-            //         let item = this.state.playerList[i]
-            //         this.renderPlayerItem(item)
-            //        // player_list.push(this.renderPlayerItem(item))
-            //     }
-            // }
-            console.log("Player List:", player_list);
-
-            let coaches_list = []
-            // if (this.state.coachesList && this.state.coachesList.length > 0) {
-
-            //     for (let i = 0; i < this.state.coachesList.length; i++) {
-            //         let item = this.state.coachesList[i]
-            //         console.log('obj=>', JSON.stringify(item))
-            //         coaches_list.push(this.renderCoachItem(item))
-
-            //     }
-            // }
-            console.log("Coach List:", coaches_list);
-            // this.attedenceMangement(attandence_batch)
-            //
-            // this.sessionMangement(operations)
-            // this.scoreMangement(tournaments)
 
             return <ScrollView><View style={{ flex: 1, marginTop: 0, backgroundColor: '#ffffff' }}>
  <InfoDialog
@@ -551,8 +548,7 @@ class CoachAttendenceBook extends React.Component {
                     <View style={
                         { backgroundColor: 'white', marginTop: -10, flex: 1 }}>
                         <View>
-                        <FlatList data={this.state.playerList} renderItem={this.renderPlayerItem }/>
-                           
+                            <FlatList data={this.state.playerList} renderItem={this.renderPlayerItem }/>
                         </View>
                         {this.state.coachesList.length > 0 ?
                             <View>
@@ -570,9 +566,10 @@ class CoachAttendenceBook extends React.Component {
                                     <FlatList data={this.state.coachesList} renderItem={this.renderCoachItem }/>
                                     </View>
                                 </View>
-                            </View> : null}
+                            </View> : null
+                        }
 
-                            <View>
+                        <View>
                             <View style={{
                                 marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 10,
                                 flexDirection: 'row', justifyContent: 'space-between'
@@ -587,8 +584,9 @@ class CoachAttendenceBook extends React.Component {
                                     Add
                                 </Text>
                             </View>
-                            { newBatches }
-                            {this.renderFooterItem()}
+                        
+                        <FlatList data={this.state.compensatory} renderItem={this.renderCompStudents }/>
+                        {this.renderFooterItem()}
                         </View>
                     </View>
                     :
