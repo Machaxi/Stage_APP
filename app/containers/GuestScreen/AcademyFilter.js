@@ -56,6 +56,12 @@ export default class AcademyFilter extends BaseComponent {
         super(props)
         const sports =  props.navigation.getParam("sports");
        // console.log("SPORTS",props.navigation.props.state.params);
+       let sportsMapped = [];
+       if(sports){
+        sportsMapped= sports.map(item=>{
+            return { pid: 1, name: item.name, id: item.id, is_selected: false, rating: false }
+        })
+       }
         this.state = {
             refresh: false,
             filterData: [
@@ -63,12 +69,7 @@ export default class AcademyFilter extends BaseComponent {
                     id: 1,
                     title: "Sports Categories",
                     expand: false,
-                    data: 
-                        sports.map(item=>{
-                            return { pid: 1, name: item.name, id: item.id, is_selected: false, rating: false }
-                        })
-                        
-                    ,
+                    data: sportsMapped
                 },
                 {
                     id: 2,

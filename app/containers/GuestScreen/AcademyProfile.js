@@ -593,7 +593,7 @@ class AcademyProfile extends BaseComponent {
                       style={{ flexDirection: "row", marginBottom: 16 }}
                     >
                       {coaching_enabled ? (
-                        <View style={{flexDirection:"row"}}>
+                        <View style={{flexDirection:"row", flex:1, }}>
                         <TouchableOpacity
                           activeOpacity={0.8}
                           style={[defaultStyle.rounded_button, {}]}
@@ -617,7 +617,7 @@ class AcademyProfile extends BaseComponent {
                         </TouchableOpacity>
                         <TouchableOpacity
                           activeOpacity={0.8}
-                          style={[defaultStyle.rounded_button, {}]}
+                          style={[defaultStyle.rounded_button, {display:'none'}]}
                           onPress={() => {
                             if (coaching_enabled) {
                               this.props.navigation.navigate(

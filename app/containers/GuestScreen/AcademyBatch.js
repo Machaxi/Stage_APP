@@ -82,10 +82,13 @@ class AcademyBatch extends BaseComponent {
   }
 
   convertSportsForDropDown(sports) {
-    let updatedSports = sports.map((item) => {
-      return { value: item["sport_id"], label: item["name"] }
-    });
-    updatedSports = [{ value: "", label: "All" }, ...updatedSports];
+    let updatedSports = [{ value: "", label: "All" }];
+    if(sports){
+      let updatedSportsMapped =sports.map((item) => {
+        return { value: item["sport_id"], label: item["name"] }
+      });
+      updatedSports = [{ value: "", label: "All" }, ...updatedSportsMapped];
+    }
     this.state.sports = updatedSports;
   }
 
@@ -284,7 +287,7 @@ class AcademyBatch extends BaseComponent {
             <Text style={{ color: "white" }}>Book Trial Session</Text>
 
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             activeOpacity={.8}
             style={[defaultStyle.rounded_button, {}]}
             onPress={() => {
@@ -293,7 +296,7 @@ class AcademyBatch extends BaseComponent {
             }}
           >
             <Text style={{ color: "white" }}>Buy Membership</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
         </View>
 
