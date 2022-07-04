@@ -25,6 +25,7 @@ import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
 import PaymentPage from '../containers/court_booking/PaymentPage'
 import Registration from "../containers/tournament/Registration";
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
+import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 
 const Switcher = createStackNavigator({
   SwitchPlayer1: {
@@ -454,6 +455,17 @@ const Switcher = createStackNavigator({
         backgroundColor: "#FFFFFF",
       },
     }),
+  },
+  SubscriptionPurchaseScreen: {
+    screen: PlanPurchaseView,
+    
+     navigationOptions: ({ navigation }) => ({
+      header:null,
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+     }),
   },
 });
 export default Switcher;

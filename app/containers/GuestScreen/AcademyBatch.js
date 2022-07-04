@@ -7,8 +7,7 @@ import { getAcademyBatchDetail } from '../../redux/reducers/AcademyReducer'
 import {submitPaymentConfirmation} from "../../redux/reducers/PaymentReducer"
 import BaseComponent, { defaultStyle, formattedName, getFormatTime, getPaymentKey,getRazorPayEmail } from '../BaseComponent';
 import RNPickerSelect from 'react-native-picker-select';
-import RBSheet from "react-native-raw-bottom-sheet";
-import PlanPurchaseView from '../../components/custom/PlanPurchaseView';
+
 import RazorpayCheckout from 'react-native-razorpay';
 import globalStyles from "../../mystyle"
 import { COPENSATORY_BATCH_FAIL } from '../../actions/actionTypes';

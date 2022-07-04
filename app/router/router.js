@@ -184,17 +184,6 @@ const GuestHomeModule = createStackNavigator({
         //header:null
     }
 },
-SubscriptionPurchaseScreen: {
-  screen: PlanPurchaseView,
-  
-   navigationOptions: ({ navigation }) => ({
-    header:null,
-    headerTitleStyle: style.headerStyle,
-    headerStyle: {
-      backgroundColor: "#FFFFFF",
-    },
-   }),
-},
   AcademyProfile: {
     screen: AcademyProfile,
     navigationOptions: ({ navigation }) => ({
@@ -549,6 +538,17 @@ SubscriptionPurchaseScreen: {
 
       headerTintColor: "#000",
     }),
+  },
+  SubscriptionPurchaseScreen: {
+    screen: PlanPurchaseView,
+    
+     navigationOptions: ({ navigation }) => ({
+      header:null,
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+     }),
   },
 });
 
@@ -1694,6 +1694,17 @@ const parentHomeModule = createStackNavigator({
       // header: null
     },
   },
+  SubscriptionPurchaseScreen: {
+    screen: PlanPurchaseView,
+    
+     navigationOptions: ({ navigation }) => ({
+      header:null,
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+     }),
+  },
   ViewPlayerPerformance: {
     screen: ViewPlayerPerformance,
     navigationOptions: ({ navigation }) => ({
@@ -2249,17 +2260,7 @@ const parentHomeModule = createStackNavigator({
       },
     }),
   },
-  SubscriptionPurchaseScreen: {
-    screen: PlanPurchaseView,
-    
-     navigationOptions: ({ navigation }) => ({
-      header:null,
-      headerTitleStyle: style.headerStyle,
-      headerStyle: {
-        backgroundColor: "#FFFFFF",
-      },
-     }),
-  },
+  
 });
 
 const tabBarControllerBookParent = createBottomTabNavigator(
