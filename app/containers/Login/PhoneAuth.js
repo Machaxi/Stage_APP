@@ -673,7 +673,7 @@ class PhoneAuth extends BaseComponent {
                     </TouchableOpacity>
                     : null}
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={{
                         height: 30,
                         width: 60,
@@ -690,7 +690,7 @@ class PhoneAuth extends BaseComponent {
                         fontFamily: 'Quicksand-Regular'
                     }}
                     >SKIP</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity
                     style={{

@@ -12,6 +12,7 @@ import PlanPurchaseView from '../../components/custom/PlanPurchaseView';
 import RazorpayCheckout from 'react-native-razorpay';
 import globalStyles from "../../mystyle"
 import { COPENSATORY_BATCH_FAIL } from '../../actions/actionTypes';
+import CallButton from '../../components/custom/CallButton';
 
 const placeholderProf = {
   label: 'Select Proficiency',
@@ -119,8 +120,22 @@ class AcademyBatch extends BaseComponent {
     
     <View style={styles.batchContainerOuter}>
       <Card style={styles.batchCardContainer}>
-        <Text style={styles.batchCardHeader}>{item.batch_name}</Text>
-
+        <View style={{ flex:1, flexDirection:'row',justifyContent:"space-between", paddingTop:5, paddingBottom:5}}>
+          <Text style={{...styles.batchCardHeader,maxWidth:'80%'}}>{item.batch_name}</Text>
+          
+          <CallButton onPress={() => {
+                if(this.state.academy && this.state.academy.contact_number){
+                  const phoneNumber = this.state.academy.contact_number;
+                  if (phoneNumber != undefined)
+                  {
+                    if (Platform.OS === 'ios')
+                      Linking.openURL(`telprompt:${phoneNumber}`);
+                    else
+                      Linking.openURL(`tel:${phoneNumber}`);
+                  }
+                }
+              }}/>
+        </View>
         <View style={styles.batchWeekTimeOuter}>
 
           <View style={{ width: '55%' }}>
@@ -170,43 +185,6 @@ class AcademyBatch extends BaseComponent {
             </View>
           </View>
 
-          
-
-          <View style={{ width: '45%', justifyContent:"flex-end" }}>
-          <TouchableOpacity
-             style={globalStyles.rounded_button_100_percent}
-              activeOpacity={.8}
-              onPress={() => {
-                if(this.state.academy && this.state.academy.contact_number){
-                  const phoneNumber = this.state.academy.contact_number;
-                  if (phoneNumber != undefined)
-                  {
-                    if (Platform.OS === 'ios')
-                      Linking.openURL(`telprompt:${phoneNumber}`);
-                    else
-                      Linking.openURL(`tel:${phoneNumber}`);
-                  }
-                }
-              }}
-            >
-
-                <Text
-                  style={[
-                    defaultStyle.bold_text_14,
-                    {
-                      textAlign: "center",
-                      justifyContent: "center",
-                      fontSize: 14,
-                      color: "white",
-                    },
-                  ]}
-                >
-                  Call
-                </Text>
-
-            </TouchableOpacity>
-          </View>
-
         </View>
 
         {item.coaches.length > 0 &&
@@ -214,8 +192,6 @@ class AcademyBatch extends BaseComponent {
             <Text style={styles.coachLabel}>Coach</Text>
           </View>
         }
-
-
 
         {item.coaches.map((item, index) => {
           return (
@@ -287,16 +263,19 @@ class AcademyBatch extends BaseComponent {
             <Text style={{ color: "white" }}>Book Trial Session</Text>
 
           </TouchableOpacity>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             activeOpacity={.8}
             style={[defaultStyle.rounded_button, {}]}
             onPress={() => {
-              this.setState({selectedBatchId: item.batch_id});
-              this.RBSheet.open()
+              this.props.navigation.navigate(
+                "SubscriptionPurchaseScreen",
+                { selectedBatchId: item.batch_id,
+                academy: this.state.academy,  batchDetails: item}
+              );
             }}
           >
             <Text style={{ color: "white" }}>Buy Membership</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
 
         </View>
 
@@ -314,7 +293,8 @@ class AcademyBatch extends BaseComponent {
     this.RBSheet.close()
   }
   handleOnStartPayment=(orderId, amount, userId, userName, mobileNumber)=>{
-      this.RBSheet.close()
+      console.log("I am at Payment");
+     // this.RBSheet.close()
       var options = {
         description: "Payment for Subscription",
         currency: 'INR',
@@ -541,28 +521,11 @@ class AcademyBatch extends BaseComponent {
           <FlatList
             data={data}
             renderItem={this._renderItem}
+            keyExtractor={item => item.batch_id}
           /> :
           this.state.batchDetails == null ? null : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text style={{ fontWeight: '500' }}>No data available</Text></View>
 
         }
-
-
-
-        <RBSheet
-          ref={ref => {
-            this.RBSheet = ref;
-          }}
-          height={300}
-          openDuration={250}
-          customStyles={{
-            container: {
-              justifyContent: "center",
-              alignItems: "center"
-            }
-          }}
-        >
-          <PlanPurchaseView batchId={this.state.selectedBatchId} onClosed={this.handleOnBottomSheetCloseRequired} onLoginRequired={this.handleOnLoginRequired} onStartPayment={this.handleOnStartPayment} />
-        </RBSheet>
       </View>
 
     );

@@ -40,6 +40,7 @@ import ImageGuidelines from '../containers/profile/ImageGuidelines'
 import ContactUs from '../containers/util/ContactUs'
 import FaqScreen from '../containers/util/FaqScreen';
 import EnrollmentForm from '../containers/profile/EnrollmentForm';
+import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 
 const userHomeModule = createStackNavigator({
   UserHome: {
@@ -698,6 +699,17 @@ const userHomeModule = createStackNavigator({
         backgroundColor: "#FFFFFF",
       },
     }),
+  },
+  SubscriptionPurchaseScreen: {
+    screen: PlanPurchaseView,
+    
+     navigationOptions: ({ navigation }) => ({
+      header:null,
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+     }),
   },
 });
 

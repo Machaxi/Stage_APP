@@ -89,6 +89,7 @@ import GuestTrialTerms from '../containers/GuestScreen/GuestTrialTerms'
 import SaveGuestTrial from '../containers/GuestScreen/SaveGuestTrial'
 import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
+import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -117,14 +118,14 @@ const loginModule = createStackNavigator({
     MyCalendar: {
         screen: MyCalendar
     },
-    IntroScreen: {
-        screen: IntroScreen,
-        navigationOptions: {
-            // title: "Sign In",
-            headerStyle,
-            header: null
-        }
-    },
+    // IntroScreen: {
+    //     screen: IntroScreen,
+    //     navigationOptions: {
+    //         // title: "Sign In",
+    //         headerStyle,
+    //         header: null
+    //     }
+    // },
     Login: {
         screen: phoneauth,
         navigationOptions: {
@@ -182,6 +183,17 @@ const GuestHomeModule = createStackNavigator({
         header: null
         //header:null
     }
+},
+SubscriptionPurchaseScreen: {
+  screen: PlanPurchaseView,
+  
+   navigationOptions: ({ navigation }) => ({
+    header:null,
+    headerTitleStyle: style.headerStyle,
+    headerStyle: {
+      backgroundColor: "#FFFFFF",
+    },
+   }),
 },
   AcademyProfile: {
     screen: AcademyProfile,
@@ -1633,6 +1645,7 @@ const tabBarControllerBookGuest = createBottomTabNavigator({
   //                 activeIcon={require('../images/ic_tab_booking.png')} />,
   //     }
   // },
+
 });
 
 const guestBookDrawer = createDrawerNavigator(
@@ -2235,6 +2248,17 @@ const parentHomeModule = createStackNavigator({
         backgroundColor: "#FFFFFF",
       },
     }),
+  },
+  SubscriptionPurchaseScreen: {
+    screen: PlanPurchaseView,
+    
+     navigationOptions: ({ navigation }) => ({
+      header:null,
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+     }),
   },
 });
 

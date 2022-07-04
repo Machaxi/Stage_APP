@@ -75,6 +75,7 @@ class PlayerSwitcher extends BaseComponent {
                 let user1 = JSON.parse(user)
 
                 if (user1.success == true) {
+                  storeData("childrenData", JSON.stringify(user1.data['players']))
                     this.setState({
                         itemList: user1.data['players']
                     })

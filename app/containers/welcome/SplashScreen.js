@@ -93,12 +93,13 @@ class Splash extends BaseComponent {
                     const { checkedSignIn, signedIn } = this.state;
                     console.log("signedIn", signedIn)
                     if (!checkedSignIn) {
-                        this.props.navigation.navigate('IntroScreen')
+                        //this.props.navigation.navigate('IntroScreen')
+                        this.props.navigation.navigate('Login')
                         return;
                     }
                     if (signedIn !== true) {
-
-                        this.props.navigation.navigate('IntroScreen')//'SignedOut')
+                       // this.props.navigation.navigate('IntroScreen')//'SignedOut')
+                        this.props.navigation.navigate('Login')//'SignedOut')
 
 
                     } else {

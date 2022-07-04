@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, TouchableOpacity, Platform, Image, FlatList, Text, TextInput, ImageBackground,Linking } from 'react-native';
 import { Card, } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,6 +15,7 @@ import { RateViewFill } from '../../components/Home/RateViewFill';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
 import ReadMoreText from "rn-read-more-text";
 import StarRating from 'react-native-star-rating';
+import CallButton from '../../components/custom/CallButton';
 
 class AcademyProfile extends BaseComponent {
 
@@ -524,18 +525,30 @@ class AcademyProfile extends BaseComponent {
                       marginTop: 1,
                     }}
                   >
-                    <Text
-                      style={{
-                        fontFamily: "Quicksand-Medium",
-                        paddingTop: 12,
-                        fontSize: 18,
-                        color: "gray",
-                      }}
-                    >
-                      {" "}
-                      {academy.name}
-                    </Text>
-
+                    <View style={{flex:1, flexDirection:'row', alignItems:"center", justifyContent:"space-between", paddingTop:10, paddingBottom:5, paddingRight:5, paddingLeft:5}}>
+                      <Text
+                        style={{
+                          
+                          maxWidth:'80%',
+                          fontFamily: "Quicksand-Medium",
+                          fontSize: 18,
+                          color: "gray",
+                        }}
+                      >
+                        {academy.name}
+                      </Text>
+                      <CallButton style={{flex:.2}} onPress={() => {
+                        if (this.state.academy && this.state.academy.contact_number) {
+                          const phoneNumber = this.state.academy.contact_number;
+                          if (phoneNumber != undefined) {
+                            if (Platform.OS === 'ios')
+                              Linking.openURL(`telprompt:${phoneNumber}`);
+                            else
+                              Linking.openURL(`tel:${phoneNumber}`);
+                          }
+                        }
+                      }} />
+                    </View>
                     <View
                       style={{
                         alignItems: "center",
@@ -617,7 +630,7 @@ class AcademyProfile extends BaseComponent {
                         </TouchableOpacity>
                         <TouchableOpacity
                           activeOpacity={0.8}
-                          style={[defaultStyle.rounded_button, {display:'none'}]}
+                          style={[defaultStyle.rounded_button]}
                           onPress={() => {
                             if (coaching_enabled) {
                               this.props.navigation.navigate(
