@@ -149,7 +149,8 @@ class PhoneAuth extends BaseComponent {
                 .then((user1) => {
                     this.progress(false)
                     console.log('user1----' + JSON.stringify(user1))
-                    this.state.user1 = user1
+                    this.setState(user1);
+                    //this.state.user1 = user1
                     this.setState({ message: 'Code Confirmed!' });
                     auth().currentUser.getIdToken(true).then((token) => {
                         console.log("token===", token)
@@ -157,7 +158,7 @@ class PhoneAuth extends BaseComponent {
                             token: token,
 
                         })
-                        this.signIn11(this.state.user1, token)
+                        this.signIn11(user1, token)
 
                         if (!token) {
                             //Helpers.logout(false);
@@ -218,7 +219,7 @@ class PhoneAuth extends BaseComponent {
             this.setState({
                 isCall: false
             }, () => {
-                console.log('phoneNumber=>', JSON.stringify(user1))
+               
                 let os = "IOS"
                 if (Platform.OS === 'android') {
                     os = "android";

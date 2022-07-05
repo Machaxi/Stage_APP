@@ -560,7 +560,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
         <TextDisplay label="Batch Name" value={batch.batch_name}/>
       </View>
       <View style={{flexDirection:'row'}}>
-        <TextDisplay width="100%" label="Batch Schedule" value={getBatchOperations()}/>
+        <TextDisplay width="100%" label="Batch Schedule" value={getBatchOperations()} isSmall={true}/>
       </View>
       <View style={{flexDirection:'row'}}>
         <TextDisplay label="Session Plan" value={selectedPlan.label}/>
@@ -621,12 +621,12 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
     if(operations.weekend){
         str = str + operations.weekend.start_time + " - " + operations.weekend.end_time;
         str = str + " :- "+getDaysFromOperations(operations.weekend.days);
-        str=str+"\n";
+        if(operations.weekday)
+          str=str+"\n";
     }
     if(operations.weekday){
       str = str + operations.weekday.start_time + " - " + operations.weekday.end_time;
       str = str + " :- "+getDaysFromOperations(operations.weekday.days);
-      str=str+"\n";
   }
     return str;
   }
