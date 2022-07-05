@@ -407,6 +407,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
       result = result.payload.data;
       if(result.success){
         alert(result.success_message);
+        props.navigation.navigate("Login");
       }else{
         alert(result.error_message);
       }

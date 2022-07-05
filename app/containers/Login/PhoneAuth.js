@@ -869,13 +869,6 @@ class PhoneAuth extends BaseComponent {
 
     render() {
         const { user1, confirmResult, token, isCall } = this.state;
-        //console.warn('confirmResult ' + confirmResult + " User " + user1)
-        console.log("User", JSON.stringify(user1))
-        console.log("isCall ", isCall)
-        console.log("ConfirmResult ", confirmResult)
-        console.log("Token ", this.state.token)
-        // this.state.phoneNumber = '8890633388';
-
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 

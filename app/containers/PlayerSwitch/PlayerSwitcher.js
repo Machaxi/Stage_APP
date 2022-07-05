@@ -334,7 +334,7 @@ class PlayerSwitcher extends BaseComponent {
                           ? this.renderItem
                           : this.renderItemAcedemic
                       }
-                      keyExtractor={(item, index) => item.id}
+                      keyExtractor={(item, index) => item.id+"_"+item.academy_id}
                     />
                   ) : (
                     <View
