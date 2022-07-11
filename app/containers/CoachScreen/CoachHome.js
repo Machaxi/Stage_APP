@@ -1041,7 +1041,7 @@ class CoachHome extends BaseComponent {
                               <Text
                                 style={defaultStyle.regular_text_14}
                               >
-                                My Society Coaching Batches
+                                Coaching Plans
                               </Text>
 
                               <Image

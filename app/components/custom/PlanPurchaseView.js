@@ -27,6 +27,7 @@ import AddNewPlayerSection from './AddNewPlayerSection';
 import {submitPaymentConfirmation} from "../../redux/reducers/PaymentReducer"
 import RazorpayCheckout from 'react-native-razorpay';
 import  { getPaymentKey,getRazorPayEmail } from '../../containers/BaseComponent';
+import Events from "../../router/events";
 const PlanPurchaseView = (props) => {
 
   const [selectedBatchId, setSelectedBatchId] = useState();
@@ -79,14 +80,7 @@ const PlanPurchaseView = (props) => {
     
     getUserInfo();
     const backAction = () => {
-      // Alert.alert("Hold on!", "Are you sure you want to go back?", [
-      //   {
-      //     text: "Cancel",
-      //     onPress: () => null,
-      //     style: "cancel"
-      //   },
-      //   { text: "YES", onPress: () => BackHandler.exitApp() }
-      // ]);
+      onBackClicked();
       return true;
     };
 
@@ -406,8 +400,8 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
     props.submitPaymentConfirmation(value,postData).then((result)=>{
       result = result.payload.data;
       if(result.success){
+        Events.publish('PROFILE_REFRESH');
         alert(result.success_message);
-        props.navigation.navigate("Login");
       }else{
         alert(result.error_message);
       }

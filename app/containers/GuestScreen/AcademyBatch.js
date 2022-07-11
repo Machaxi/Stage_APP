@@ -262,22 +262,27 @@ class AcademyBatch extends BaseComponent {
             <Text style={{ color: "white" }}>Book Trial Session</Text>
 
           </TouchableOpacity>
+          
           <TouchableOpacity
             activeOpacity={.8}
-            style={[defaultStyle.rounded_button, {}]}
+            style={[defaultStyle.rounded_button, {backgroundColor:(item.is_buying_allowed && item.is_buying_allowed==true)?"#67BAF5":"#CCCCCC"}]}
             onPress={() => {
-              this.props.navigation.navigate(
-                "SubscriptionPurchaseScreen",
-                { selectedBatchId: item.batch_id,
-                academy: this.state.academy,  batchDetails: item}
-              );
+              if((item.is_buying_allowed && item.is_buying_allowed==true)){
+                  this.props.navigation.navigate(
+                    "SubscriptionPurchaseScreen",
+                    { selectedBatchId: item.batch_id,
+                    academy: this.state.academy,  batchDetails: item}
+                  );
+                }
             }}
           >
             <Text style={{ color: "white" }}>Buy Membership</Text>
           </TouchableOpacity>
+        
 
         </View>
-
+        {(item.is_buying_allowed && item.is_buying_allowed==true)?null:<Text style={{textAlign:"center", color:item.buying_not_allowed_message.color, marginTop:5, fontSize:12}}>{item.buying_not_allowed_message.message}</Text>}
+        
 
       </Card>
     </View>

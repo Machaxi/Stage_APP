@@ -684,7 +684,7 @@ class CoachMenuDrawer extends BaseComponent {
 						<View style={styles.drawercell}>
 
 							<Text style={styles.menu_coach}>
-								My Society Coaching Batches
+								Coaching Plans
 								</Text>
 
 							<Image
@@ -1145,7 +1145,7 @@ class CoachMenuDrawer extends BaseComponent {
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							My Society Coaching Batches
+							Coaching Plans
 								</Text>
 
 						<Image

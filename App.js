@@ -25,7 +25,7 @@ import Events from './app/router/events';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import BaseComponent, {
     DEBUG_APP, getBaseUrl, ONE_SIGNAL_ID, REFRESH_SCREEN_CALLBACK, PUSH_TOKEN,
-    ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER
+    ONE_SIGNAL_USERID, EVENT_UPDATE_DIALOG, GO_TO_HOME, GO_TO_SWITCHER, refreshUserProfile
 } from './app/containers/BaseComponent';
 import { getData, storeData, } from "./app/components/auth";
 import branch, { BranchEvent } from 'react-native-branch'
@@ -35,8 +35,6 @@ import DeviceInfo from 'react-native-device-info';
 import codePush from "react-native-code-push";
 import crashlytics from '@react-native-firebase/crashlytics';
 import messaging from '@react-native-firebase/messaging';
-//export const BASE_URL = 'https://www.machaxi.com/api/'
-//export const BASE_URL = 'http://stage.dribblediary.com/api/'
 
 export const client = axios.create({
     baseURL: getBaseUrl(),
@@ -339,8 +337,23 @@ class App extends BaseComponent {
 
     onReceived(notification) {
         //alert('test===')
-        Events.publish('NOTIFICATION_CALL');
-        //console.log("Notification received: ", notification);
+        
+        console.log("Notification received: ", notification);
+        console.log("Notificatin for:" + notification.payload.additionalData.notification_for);
+        //notification type->player_added_to_batch
+        //user-> is a guest
+        try{
+            if(notification.payload.additionalData.notification_for=="player_added_to_batch"){
+                console.log("CALLING REFRESH EVENT");
+                Events.publish('PROFILE_REFRESH');
+
+            }else{
+                Events.publish('NOTIFICATION_CALL');
+                console.log(notification.payload.additionalData.notification_for);
+            }
+        }catch(ex){
+            console.log(ex);
+        }
     }
 
     onOpened(openResult) {
@@ -366,7 +379,6 @@ class App extends BaseComponent {
 
 
     onIds(device) {
-        //alert(JSON.stringify(device))
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
         global.FCM_DEVICE_ID = device.pushToken

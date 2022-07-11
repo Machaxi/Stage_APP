@@ -188,7 +188,7 @@ export default class GuestTrial extends BaseComponent {
 
   async getGlobalHeaders() {
     const resp = await fetch(
-      "http://stage.dribblediary.com/api/global/headers"
+      getBaseUrl() + "/global/headers"
     );
     const data = await resp.json();
     console.warn("data----->", data?.data?.data);

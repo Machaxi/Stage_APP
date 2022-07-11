@@ -448,7 +448,7 @@ class PlayerSwitcher extends BaseComponent {
                               }}
                             >
                               <Text style={defaultStyle.bold_text_14}>
-                                My Society Coaching Batches
+                                Coaching Plans
                               </Text>
 
                               <Image
