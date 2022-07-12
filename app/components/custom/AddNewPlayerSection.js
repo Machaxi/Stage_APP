@@ -83,7 +83,7 @@ const AddNewPlayerSection = (props) => {
             {isAdditionRequired ?
                 <View>
                     {props.isParentFieldRequired?<View style={{ width: "100%", marginBottom: 20 }}>
-                        <Text style={globalStyles.TextViewLabel}>Parent Name</Text>
+                        <Text style={globalStyles.TextViewLabel}>Parent Name (Mention NA if purchasing for Adult)</Text>
                         <TextInput
                             style={globalStyles.textinput}
                             label='Parent Name'

@@ -505,7 +505,7 @@ class GuestTrialTerms extends BaseComponent {
                 height: 40,
               }}
               onPress={() => {
-                this.props.navigation.navigate("SaveGuestTrial");
+                this.props.navigation.navigate("AcademyListing");
               }}
             >
               <Text

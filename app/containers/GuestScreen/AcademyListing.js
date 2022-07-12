@@ -165,6 +165,7 @@ class AcademyListing extends BaseComponent {
     this.secondTextInputRef = React.createRef();
     this.setNavigation(this.props.navigation);
     this.state = {
+      loading:false,
       academies: null,
       sports:null,
       query: "",
@@ -276,8 +277,10 @@ class AcademyListing extends BaseComponent {
   }
 
   fetchLocation() {
+    this.setState({loading:true})
     Geolocation.getCurrentPosition(
       (position) => {
+        this.setState({loading:false});
         console.log(position);
         var lats = parseFloat(position.coords.latitude);
         var lngs = parseFloat(position.coords.longitude);
@@ -292,6 +295,7 @@ class AcademyListing extends BaseComponent {
         );
       },
       (error) => {
+        this.setState({loading:false})
         // See error code charts below.
         console.log(error.code, error.message);
       },
@@ -966,6 +970,16 @@ class AcademyListing extends BaseComponent {
       this.props.data.loading &&
       !this.state.isAutoSuggest
     ) {
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator size="large" color="#67BAF5" />
+        </View>
+      );
+    }
+
+    if (this.state.loading) {
       return (
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}

@@ -91,6 +91,10 @@ xmlns:tools="http://schemas.android.com/tools"
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_biKzNtQRgB5ugoeSXDofHfegFwbSgKPd" />
         <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
 
+<meta-data
+    android:name="com.google.android.gms.version"
+    android:value="@integer/google_play_services_version" />
+    
         <!-- Branch install referrer tracking (optional) -->
         <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
             <intent-filter>

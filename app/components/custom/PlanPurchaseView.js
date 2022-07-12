@@ -41,7 +41,7 @@ const PlanPurchaseView = (props) => {
   const [dateOfJoining, setDateOfJoining] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [plans, setPlans] = useState();
-  const [terms, setTerms] = useState([{ label: "Monthly", value: 1 }, { label: "Quaterly", value: 2 }, { label: "Semi Annually", value: 3 }, { label: "Annually", value: 4 }]);
+  const [terms, setTerms] = useState([{ label: "Monthly", value: 1 }, { label: "Quarterly", value: 2 }, { label: "Semi Annually", value: 3 }, { label: "Annually", value: 4 }]);
   const [plansForPicker, setPlansForPicker] = useState([]);
   const [planValidity, setPlanValidity] = useState();
 
@@ -689,7 +689,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
 
         <Card style={{
           borderRadius: 1,
-          elevation: 1.5,
+          elevation: 2,
           shadowOpacity: 0.32,
           shadowOffset: { width: 0, height: 1, borderBottomRadius: 0 }, width: '100%', bottom: 0, padding: 10
         }}>

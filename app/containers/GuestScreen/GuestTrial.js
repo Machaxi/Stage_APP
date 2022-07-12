@@ -23,13 +23,9 @@ import { getGlobalHeadersData } from "../../redux/reducers/BrowseAcademyReducer"
 import { getData, storeData, isSignedIn } from "../../components/auth";
 
 var notification_count = 0;
-var arr = [
-  { heading: "Head1", subHead: "SubHead1" },
-  { heading: "Head2", subHead: "SubHead2" },
-  { heading: "Head3", subHead: "SubHead3" },
-  { heading: "Head4", subHead: "SubHead4" },
-];
+
 var intervalID = 0;
+var currentSliderIndex=0;
 export default class GuestTrial extends BaseComponent {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -169,10 +165,10 @@ export default class GuestTrial extends BaseComponent {
     this.setNavigation(this.props.navigation);
     this.state = {
       show_must_update_alert: false,
-      timerValue: 0,
       heading: "",
       subHeading: "",
       headersArray: [],
+
     };
 
     this.setNavigation(this.props.navigation);
@@ -188,26 +184,23 @@ export default class GuestTrial extends BaseComponent {
 
   async getGlobalHeaders() {
     const resp = await fetch(
-      getBaseUrl() + "/global/headers"
+      getBaseUrl() + "global/headers"
     );
     const data = await resp.json();
-    console.warn("data----->", data?.data?.data);
-    this.setState(
-      {
-        headersArray: data?.data?.data,
-      },
-      () => {
-        intervalID = setInterval(() => {
-          this.setState((prevState) => {
-            if (this.state.timerValue == this.state.headersArray.length - 1) {
-              return { timerValue: 0 };
-            } else {
-              return { timerValue: prevState.timerValue + 1 };
-            }
-          });
-        }, 3000);
-      }
-    );
+    let slidersData = data?.data?.data;
+
+    this.setState({headersArray: slidersData});
+    if(slidersData.length>0){
+      this.setState({heading:slidersData[0].heading, subHeading:slidersData[0].subHeading});
+
+      intervalID = setInterval(() => {
+        currentSliderIndex++;
+        if(currentSliderIndex==this.state.headersArray.length)
+          currentSliderIndex=0;
+        
+        this.setState({heading:slidersData[currentSliderIndex].heading, subHeading:slidersData[currentSliderIndex].subHeading})
+      },5000);
+    }
   }
 
   componentDidMount() {
@@ -340,30 +333,12 @@ export default class GuestTrial extends BaseComponent {
                     fontSize: 18,
                     fontFamily: "Nunito-SemiBold",
                     color: "#3E3E3E",
+                    minHeight:50
                   }}
                 >
-                  {this.state.headersArray[this.state.timerValue]?.heading}
+                  {this.state.heading}
                 </Text>
-                <Text>
-                {/* <Text
-                    style={{
-                      fontSize: 14,
-                      fontFamily: "Nunito-SemiBold",
-                      color: "#3E3E3E",
-                    }}
-                  >
-                    (Kids & Adults)
-                  </Text>  */}
-                  {/*  <Text
-                    style={{
-                      fontSize: 18,
-                      fontFamily: "Nunito-ExtraBold",
-                      color: "#000000",
-                    }}
-                  >
-                    {" The Fitminton Style!"}
-                  </Text>*/}
-                </Text>
+
               </View>
 
               <View
@@ -371,8 +346,8 @@ export default class GuestTrial extends BaseComponent {
                   width: "13%",
                   height: 2,
                   backgroundColor: "#67BAF5",
-                  marginTop: 5,
-                  marginBottom: 10,
+                  marginTop: 3,
+                  marginBottom: 8,
                 }}
               />
 
@@ -384,7 +359,7 @@ export default class GuestTrial extends BaseComponent {
                     color: "#3E3E3E",
                   }}
                 >
-                  {this.state.headersArray[this.state.timerValue]?.subHeading}
+                  {this.state.subHeading}
                 </Text>
 
               </View>
