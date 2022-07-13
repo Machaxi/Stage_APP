@@ -192,7 +192,6 @@ export default class GuestTrial extends BaseComponent {
     this.setState({headersArray: slidersData});
     if(slidersData.length>0){
       this.setState({heading:slidersData[0].heading, subHeading:slidersData[0].subHeading});
-
       intervalID = setInterval(() => {
         currentSliderIndex++;
         if(currentSliderIndex==this.state.headersArray.length)
@@ -209,6 +208,12 @@ export default class GuestTrial extends BaseComponent {
       () => {
         this.getNotifications();
         this.getGlobalHeaders();
+      }
+    );
+    this.willBlurSubscription = this.props.navigation.addListener(
+      "didBlur",
+      () => {
+        clearInterval(intervalID);
       }
     );
 
