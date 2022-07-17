@@ -208,6 +208,7 @@ export default class GuestTrial extends BaseComponent {
       () => {
         this.getNotifications();
         this.getGlobalHeaders();
+        Events.publish('PROFILE_REFRESH');
       }
     );
     this.willBlurSubscription = this.props.navigation.addListener(

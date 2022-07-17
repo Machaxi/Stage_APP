@@ -582,7 +582,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
         </TouchableOpacity>
       </View>
       { isTCExpanded?
-        <Text style={globalStyles.LabelSmall}>{termsAndConditions + termsAndConditions + termsAndConditions  + termsAndConditions + termsAndConditions + termsAndConditions+ termsAndConditions + termsAndConditions  + termsAndConditions + termsAndConditions + termsAndConditions}</Text>:null
+        <Text style={globalStyles.LabelSmall}>{termsAndConditions}</Text>:null
       }
 
     </View>

@@ -870,7 +870,7 @@ class CoachHome extends BaseComponent {
                             <Text
                               style={defaultStyle.regular_text_14}
                             >
-                              View Society Players
+                              View Other Players
                             </Text>
 
                             <Image

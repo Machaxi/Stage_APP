@@ -416,7 +416,7 @@ class ParentHome extends BaseComponent {
       }
     });
   }
-  getSwitchData() {
+  ç() {
     getData("header", (value) => {
       console.log("header", value);
       this.props
@@ -923,17 +923,45 @@ class ParentHome extends BaseComponent {
                       paddingRight: 12,
                       justifyContent: "space-between",
                       flexDirection: "row",
-                      paddingTop: 16,
-                      paddingBottom: 12,
+                      paddingTop: 8,
+                      paddingBottom: 8,
+                      alignItems:"center"
                     }}
                   >
-                    <Text style={defaultStyle.bold_text_10}>
-                      Next Session :{" "}
-                      {operations.next_sessions[0].routine_name}
-                    </Text>
-                    <Text style={defaultStyle.bold_text_10}>
-                      {operations.batch_name}
-                    </Text>
+                    <View>
+                        <Text style={defaultStyle.bold_text_10}>
+                          {operations.batch_name}
+                        </Text>
+                        <Text style={{...defaultStyle.bold_text_10, marginTop:18}}>
+                          Next Session :{" "}
+                          {operations.next_sessions[0].routine_name}
+                        </Text>
+                        
+                    </View>
+                    
+                    <View style={{flexDirection:"row", }}>
+                        {(operations.whats_app_url &&  operations.whats_app_url!="") ? 
+                        <View style={{alignItems:"center", flexDirection:"column"}}>
+                              <TouchableOpacity onPress={()=>{
+                                Linking.openURL(operations.whats_app_url);
+                              }}>
+                                
+                              <Image
+                                      resizeMode="contain"
+                                      style={{
+                                          width: 30,
+                                          height: 30, 
+                                      }}
+                                      source={require('../../images/whatsapp_logo.png')}
+                                  />
+                            </TouchableOpacity>
+                            <Text style={defaultStyle.bold_text_10}>
+                              Join Whatsapp Group
+                            </Text>
+                        </View>
+                          :null}
+                            
+                    </View>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
                     <View
@@ -1177,7 +1205,7 @@ class ParentHome extends BaseComponent {
                         }}
                       >
                         <Text style={defaultStyle.bold_text_14}>
-                          View Society Players
+                          View Other Players
                         </Text>
 
                         <Image

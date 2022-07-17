@@ -936,28 +936,39 @@ class UserHome extends BaseComponent {
                       alignItems:"center"
                     }}
                   >
-                    <Text style={defaultStyle.bold_text_10}>
-                      Next Session :{" "}
-                      {operations.next_sessions[0].routine_name}
-                    </Text>
-                   
-                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-                    {(operations.whats_app_url &&  operations.whats_app_url!="") ? <TouchableOpacity onPress={()=>{
-                      Linking.openURL(operations.whats_app_url);
-                    }}>
-                    <Image
-                            resizeMode="contain"
-                            style={{
-                                width: 30,
-                                height: 30,
-                                marginRight:30
-                            }}
-                            source={require('../../images/whatsapp_logo.png')}
-                        />
-                        </TouchableOpacity>:null}
-                    <Text style={defaultStyle.bold_text_10}>
-                      {operations.batch_name}
-                    </Text>
+                    <View>
+                        <Text style={defaultStyle.bold_text_10}>
+                          {operations.batch_name}
+                        </Text>
+                        <Text style={{...defaultStyle.bold_text_10, marginTop:18}}>
+                          Next Session :{" "}
+                          {operations.next_sessions[0].routine_name}
+                        </Text>
+                        
+                    </View>
+                    
+                    <View style={{flexDirection:"row", }}>
+                        {(operations.whats_app_url &&  operations.whats_app_url!="") ? 
+                        <View style={{alignItems:"center", flexDirection:"column"}}>
+                              <TouchableOpacity onPress={()=>{
+                                Linking.openURL(operations.whats_app_url);
+                              }}>
+                                
+                              <Image
+                                      resizeMode="contain"
+                                      style={{
+                                          width: 30,
+                                          height: 30, 
+                                      }}
+                                      source={require('../../images/whatsapp_logo.png')}
+                                  />
+                            </TouchableOpacity>
+                            <Text style={defaultStyle.bold_text_10}>
+                              Join Whatsapp Group
+                            </Text>
+                        </View>
+                          :null}
+                            
                     </View>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
@@ -1018,7 +1029,7 @@ class UserHome extends BaseComponent {
                         }}
                       >
                         <Text style={defaultStyle.bold_text_14}>
-                          View Society Players
+                          View Other Players
                         </Text>
 
                         <Image
