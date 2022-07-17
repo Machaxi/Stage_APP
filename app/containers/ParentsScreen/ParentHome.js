@@ -416,7 +416,7 @@ class ParentHome extends BaseComponent {
       }
     });
   }
-  ç() {
+  getSwitchData() {
     getData("header", (value) => {
       console.log("header", value);
       this.props
