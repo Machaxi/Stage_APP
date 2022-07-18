@@ -136,6 +136,14 @@ export default class BaseComponent extends React.Component {
 
     // StatusBar.setBackgroundColor("#ffffff")
     // StatusBar.setBarStyle('dark-content', true)
+    console.log("Profile refresh event",this.profileRefreshEvent);
+    if( this.profileRefreshEvent)
+    {
+      console.log("Removing profile refresh event");
+      this.profileRefreshEvent.remove();
+    }else
+    console.log("No Event");
+      
 
     this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
       this.goToHome(from_registration);
@@ -149,10 +157,12 @@ export default class BaseComponent extends React.Component {
       this.logout();
     });
 
-    this.refreshEvent = Events.subscribe("PROFILE_REFRESH", () => {
+    this.profileRefreshEvent = Events.subscribe("PROFILE_REFRESH", () => {
       console.log("GOT REFERESH EVENT");
       this.refreshUserProfile();
     });
+
+    console.log("REFRESH", this.refreshEvent);
   }
 
   getDefaultRazorPayEmail() {
@@ -554,13 +564,12 @@ export default class BaseComponent extends React.Component {
       if (success) {
         var userData = json['data'];
         var userInfoData = userData['user'];
-        console.log("User Data", userData);
         storeData("userInfo", JSON.stringify(userData))
-        console.log("Saved User Data");
         if (userInfoData.user_type == GUEST) {
           console.log("Navigation to Guest Home");
           this.navigateMe('GuestBookHome');
-      } else if (userInfoData.user_type == PLAYER) {
+      }
+      else if (userInfoData.user_type == PLAYER) {
           storeData('multiple', userData.has_multiple_acadmies)
           if (!userData.has_multiple_acadmies && userData.academy_id != null) {
               if (userData.can_book_court) {
@@ -569,25 +578,16 @@ export default class BaseComponent extends React.Component {
                 this.navigateMe('UserHome');
               }
           } else {
-            this.navigateMe('SwitchPlayer', {
+            this.navigateMe('SwitchPlayer1', {
                   userType: 'PLAYER'
               })
           }
 
       } else if (userInfoData.user_type == PARENT) {
           storeData('multiple', userData.has_multiple_acadmies)
-          if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-              if (userData.can_book_court) {
-                this.navigateMe('ParentBookHome');
-              } else {
-                this.navigateMe('ParentHome');
-              }
-
-          } else {
-            this.navigateMe('SwitchPlayer', {
-                  userType: PLAYER
-              })
-          }
+          this.navigateMe('SwitchPlayer1', {
+            userType: PLAYER
+        })
 
       }
       else if (userInfoData.user_type == COACH) {
@@ -599,7 +599,7 @@ export default class BaseComponent extends React.Component {
                 this.navigateMe('CoachHome');
               }
           } else {
-            this.navigateMe('SwitchPlayer', {
+            this.navigateMe('SwitchPlayer1', {
                   userType: COACH
               })
           }
@@ -622,7 +622,7 @@ export default class BaseComponent extends React.Component {
                 this.navigateMe('CoachHome');
               }
           } else {
-            this.navigateMe('SwitchPlayer', {
+            this.navigateMe('SwitchPlayer1', {
                   userType: COACH
               })
           }
@@ -631,7 +631,6 @@ export default class BaseComponent extends React.Component {
 }
 
   refreshUserProfile=()=> {
-    this.navigateMe('GuestBookHome');
      getData("header", (value) => {
      if (value == "") return;
      
