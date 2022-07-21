@@ -1,85 +1,493 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, FlatList, TextInput } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { coachDetail, getCoachFeedbackList } from '../../redux/reducers/AcademyReducer'
+import BaseComponent, { defaultStyle, checkProfilePic } from '../BaseComponent';
+import { getData } from "../../components/auth";
+import { RateViewFill, } from '../../components/Home/RateViewFill';
+import { RateViewBorder } from '../../components/Home/RateViewBorder'
+import { SkyFilledButton } from '../../components/Home/SkyFilledButton'
+import ReadMoreText from "rn-read-more-text";
+import FilterDialog from './FilterDialog'
+import StarRating from 'react-native-star-rating';
+import { COACH } from '../../components/Constants';
+import Events from '../../router/events'
 
-export default class CoachProfileDetail extends Component {
+class CoachProfileDetail extends BaseComponent {
 
     constructor(props) {
         super(props)
+
+        this.state = {
+            coachData: null,
+            academy_id: '',
+            coach_id: '',
+            showFeedback: false,
+            feedback: [],
+            filter_dialog: false,
+            sortType: 'createdAt,desc',
+            type: '',
+            is_feedback_loading: false,
+            user_id: '',
+            feedback_count: 0
+        }
+        this.state.academy_id = this.props.navigation.getParam('academy_id', '');
+        this.state.coach_id = this.props.navigation.getParam('coach_id', '')
+
+        // getData('userInfo', (value) => {
+        //     userData = JSON.parse(value)
+        //     if (userData.user['user_type'] == 'PLAYER' || userData.user['user_type'] == 'FAMILY') {
+        //         this.setState({
+        //             showFeedback: true
+        //         })
+        //     } else {
+        //         this.setState({
+        //             showFeedback: false
+        //         })
+        //     }
+        // });
+
+        this.refreshEvent = Events.subscribe('RefreshFeedback', () => {
+            this.state.page = 0
+            this.state.feedback = []
+            this.state.is_feedback_loading = true
+            let sortType = this.state.sortType
+            let type = this.state.type
+            this.getCoachFeedbacks(sortType, type, false)
+        });
+
+        
     }
+
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
+    }
+
+    getCoachFeedbacks(sortType, type, showLoading) {
+
+        this.setState({
+            sortType: sortType,
+            type: type
+
+        })
+        let sort = sortType
+        let coach_id = this.state.coach_id;
+        let academy_id = this.state.academy_id
+        let page = 0
+        let size = 10
+
+
+        this.props.getCoachFeedbackList('', academy_id, coach_id, page, size, sort, type).then(() => {
+            console.log('getCoachFeedbackList=> ' + JSON.stringify(this.props.data.res))
+            let status = this.props.data.res.success
+            if (status) {
+                let feedback = this.props.data.res.data.feedback
+                this.state.feedback_count = this.props.data.res.data.count
+
+                console.warn('Feedback => ' + JSON.stringify(feedback))
+                this.setState({
+                    feedback: feedback
+                })
+            }
+            this.setState({
+                is_feedback_loading: false
+            })
+
+        }).catch((response) => {
+            console.log(response);
+            this.setState({
+                is_feedback_loading: false
+            })
+        })
+    }
+
+
 
     componentDidMount() {
 
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                //alert('test'+)
+                this.state.coach_id = this.props.navigation.getParam('coach_id', '')
+                this.state.academy_id = this.props.navigation.getParam('academy_id', '');
+                let academy_id = this.state.academy_id
+                let coach_id = this.state.coach_id
+                getData('header', (value) => {
+        
+                    this.props.coachDetail(value, coach_id, academy_id).then(() => {
+                        console.log('coachDetail=> ' + JSON.stringify(this.props.data.res))
+                        let status = this.props.data.res.success
+                        if (status) {
+                            let coach = this.props.data.res.data.coach
+                            this.setState({
+                                coachData: coach
+                            })
+        
+                            let sortType = this.state.sortType
+                            let type = this.state.type
+                            this.setState({
+                                is_feedback_loading: true
+                            })
+                            this.getCoachFeedbacks(sortType, type, false)
+        
+                        }
+        
+                    }).catch((response) => {
+                        console.log(response);
+                    })
+                })
+                //this.getNotifications()
+            }
+        );
+        
+       
+
+
+
     }
 
-    render() {
+    sort(id, type) {
+
+        this.state.filter_dialog = false
+        this.setState({
+            filter_dialog: false
+        })
+
+
+        if (id == undefined || type == undefined) {
+            return
+        }
+        this.state.page = 0
+        this.state.clear_feedback_array = true
+
+        setTimeout(() => {
+            this.getCoachFeedbacks(id, type)
+        }, 100)
+
+        // 
+    }
+
+    //{item.source.name}
+    _renderRatingItem = ({ item }) => {
+
+        let name = ''
+        if (global.USER_TYPE == undefined || global.USER_TYPE == COACH || global.USER_TYPE == '') {
+            name = 'Anonymous'
+        } else {
+            name = item.source.name
+        }
         return (
-            <ScrollView style={styles.chartContainer}>
+
+            <View
+                style={{ margin: 12 }}
+            >
+
+                <View style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'space-between',
+
+                }}>
+
+                    <Text
+                        style={{
+                            color: '#707070',
+                            fontSize: 14, flex: 1,
+                            fontFamily: 'Quicksand-Medium',
+                        }}>{name}</Text>
+
+
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+
+                    }}>
+
+                        {/* <Rating
+                            type='custom'
+                            ratingColor='#F4FC9A'
+                            ratingBackgroundColor='#D7D7D7'
+                            ratingCount={5}
+                            imageSize={12}
+                            readonly={true}
+                            startingValue={item.rating}
+                            style={{ width: 80 }}
+                        /> */}
+                        <StarRating
+                            style={{
+                                //height: 24, 
+                                width: 70,
+                                marginRight: 6,
+                            }}
+                            containerStyle={{
+                                width: 70,
+                                marginRight: 6
+                            }}
+                            starSize={14}
+                            disabled={true}
+                            emptyStar={require('../../images/ic_empty_star.png')}
+                            fullStar={require('../../images/ic_star.png')}
+                            halfStar={require('../../images/ic_half_star.png')}
+                            iconSet={'Ionicons'}
+                            maxStars={5}
+                            rating={item.rating}
+                            ratingBackgroundColor={"#ff2200"}
+                            fullStarColor={'#F4FC9A'}
+                        />
+
+
+
+                        {/* <Text style={{
+                        backgroundColor: '#D6D6D6', height: 19,
+                        width: 30,
+                        textAlign: 'center',
+                        fontSize: 12,
+                        paddingTop: 2,
+                        color: '#707070',
+                        borderRadius: 12,
+                    }}>{item.rating}</Text> */}
+                        <RateViewFill>{item.rating}</RateViewFill>
+                    </View>
+
+                </View>
+
+                <ReadMoreText
+                    limitLines={2}
+                    renderFooter={this.renderFooter}
+                >
+                    <Text style={[defaultStyle.regular_text_12,
+                    {
+                        color: '#707070',
+                    }]}>{item.review}</Text>
+                </ReadMoreText>
+
+                {/* <Text style={[defaultStyle.regular_text_12, {
+                color: '#707070',
+            }]}>{item.review}</Text> */}
+
+            </View>
+
+
+
+        )
+    };
+
+    renderFooter = ({ isShowingAll, toggle }) => (
+        <View style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            alignItems: 'flex-end'
+        }}>
+            <Text
+                style={[defaultStyle.regular_text_10, {
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    marginTop: 0, color: '#667DDB'
+                }]}
+                onPress={() => toggle()}
+            >
+                {isShowingAll ? "Show less" : "Show more"}
+            </Text></View>
+    );
+
+    render() {
+
+        let filter_dialog = this.state.filter_dialog
+
+        let showFeedback = this.state.showFeedback
+        if (this.state.coachData == null) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#67BAF5" />
+                </View>
+            )
+        }
+
+        let feedback = this.state.feedback
+        let coachData = this.state.coachData
+        let user_id = coachData.user_id
+        let is_head = coachData.is_head
+        let isMyCoach = coachData.isMyCoach
+
+        let year = coachData.experience / 12
+        year = Math.floor(year)
+        let month = coachData.experience % 12
+        let rating = coachData.ratings == undefined ? 0 : coachData.ratings
+
+        let profile_pic = checkProfilePic(coachData.profile_pic)
+        const feedback_count = this.state.feedback_count
+
+
+        return (
+            <ScrollView
+                contentContainerStyle={{
+                    flexGrow: 1
+                }}
+                style={styles.chartContainer}>
 
                 <View>
+
+                    <FilterDialog
+                        touchOutside={(id, type) => {
+                            this.sort(id, type, true)
+                        }}
+                        visible={filter_dialog} />
 
                     <View style={{ padding: 16 }}>
 
                         <View style={{ flexDirection: 'row' }}>
 
-                            <Image style={{ height: 200, width: 150, borderRadius: 16 }}
-                                source={require('../../images/coach_photo.png')}
-                            >
+                            <Image style={{ height: 129, width: 129, borderRadius: 16 }}
+                                source={profile_pic}
+                            />
 
-                            </Image>
+                            <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-end' }}>
 
-                            <View style={{ paddingLeft: 10, paddingTop: 40 }}>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
 
-                                <Text style={{
-                                    width: 70,
-                                    padding: 4,
-                                    backgroundColor: '#667DDB',
-                                    color: 'white',
-                                    borderRadius: 4,
-                                    textAlign: 'center',
-                                    justifyContent: 'center',
-                                    alignItem: 'center',
-                                    fontSize: 12
-                                }}> My Coach</Text>
+                                    {is_head ?
+                                        <View style={{
+                                            width: 70,
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
+                                            borderRadius: 4,
+                                            alignItem: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: 6,
+                                            backgroundColor: '#CDB473',
+                                        }}>
 
-                                <Text style={{ paddingTop: 12, color: '#707070' }}>Sumar Kumar</Text>
+                                            <Text style={[defaultStyle.regular_text_10, {
+                                                color: 'white',
+                                                textAlign: 'center',
+                                            }]}>Head Coach</Text>
+                                        </View> : null}
 
-                                <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
+                                    {isMyCoach ?
+                                        <View style={{
+                                            width: 70,
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
+                                            borderRadius: 4,
+                                            alignItem: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: '#667DDB',
+                                        }}>
 
-                                    <Rating
+                                            <Text style={[defaultStyle.regular_text_10, {
+                                                color: 'white',
+                                                textAlign: 'center',
+                                            }]}>My Coach</Text>
+                                        </View> : null}
+                                </View>
+
+                                <Text style={[defaultStyle.bold_text_14, { paddingTop: 12, color: '#707070' }]}>
+                                    {this.state.coachData.name}</Text>
+
+                                <View style={{
+                                    paddingTop: 8, flex: 1,
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+
+                                    {/* <Rating
+                                        tintColor="#F7F7F7"
                                         type='custom'
                                         ratingColor='#F4FC9A'
                                         ratingBackgroundColor='#D7D7D7'
                                         ratingCount={5}
+                                        onStartRating={rating}
+                                        readonly={true}
                                         imageSize={14}
-                                        style={{ height: 30, width: 80 }}
+                                        style={{ height: 24, width: 80, marginTop: 7 }}
+                                    /> */}
+                                    <StarRating
+                                        style={{ height: 24, width: 70, marginTop: 7, marginRight: 12 }}
+                                        containerStyle={{
+                                            width: 70,
+                                        }}
+                                        starSize={14}
+                                        disabled={true}
+                                        emptyStar={require('../../images/ic_empty_star.png')}
+                                        fullStar={require('../../images/ic_star.png')}
+                                        halfStar={require('../../images/ic_half_star.png')}
+                                        iconSet={'Ionicons'}
+                                        maxStars={5}
+                                        rating={rating}
+                                        ratingBackgroundColor={"#ff2200"}
+                                        fullStarColor={'#F4FC9A'}
                                     />
 
-                                    <Text style={{
+                                    {/* <Text style={{
                                         backgroundColor: '#ddd', height: 20, width: 36, textAlign: 'center',
                                         fontSize: 14,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                         color: 'gray',
                                         borderRadius: 12,
-                                    }}>4.5</Text>
-
+                                    }}>5</Text> */}
+                                    <View
+                                        style={{
+                                            height: 19,
+                                            width: 30,
+                                            marginLeft: 8,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderColor: '#D8D8D8',
+                                            borderWidth: 1,
+                                            backgroundColor: '#F7f7f7',
+                                            borderRadius: 10
+                                        }}>
+                                        <Text style={{
+                                            marginBottom: 1,
+                                            color: '#707070',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontFamily: 'Quicksand-Medium',
+                                            fontSize: 12,
+                                        }}>{rating.toFixed(1)}
+                                        </Text>
+                                    </View>
+                                    {/* <RateViewBorder>{rating}</RateViewBorder> */}
                                 </View>
 
-                                <Text style={{ paddingTop: 12, fontSize: 12, color: '#A3A5AE' }}>Experience</Text>
-                                <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1, }}>
+                                <Text style={
+                                    [defaultStyle.bold_text_12, {
+                                        color: '#A3A5AE',
+                                        marginTop: 6
+                                    }]}>Experience</Text>
+
+                                <View style={{
+                                    paddingTop: 8,
+                                    flexDirection: 'row',
+                                    width: "70%",
+                                    flex: 1,
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
 
 
-                                    <Text style={{
-                                        color: '#404040', justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}>2 yr 4 m</Text>
+                                    <Text style={defaultStyle.regular_text_14}>{year} yr {month} m</Text>
 
+                                    <TouchableOpacity
+                                        style={{ marginLeft: 20, }}
+                                        onPress={() => {
+                                            this.props.navigation.navigate('CoachListing',
+                                                { academy_id: this.state.academy_id })
 
-                                    <Text style={{
-                                        color: '#667DDB', fontSize: 10, justifyContent: 'flex-end',
-                                        alignItems: 'center',
-                                    }}>View Other Coaches</Text>
+                                            //this.props.navigation.goBack(null);
+                                        }}>
+                                        <Text style={[defaultStyle.regular_text_10, {
+                                            color: '#667DDB',
+                                            textAlign: 'right',
+                                        }]}>View Other Coaches</Text>
+                                    </TouchableOpacity>
 
                                 </View>
 
@@ -89,40 +497,185 @@ export default class CoachProfileDetail extends Component {
 
                         <View style={{ paddingTop: 16 }}>
 
-                            <Text style={{ fontSize: 12, color: '#A3A5AE', paddingTop: 8 }}>Certifications</Text>
-                            <Text style={{ color: '#404040' }}>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </Text>
+                            <Text style={[defaultStyle.bold_text_10,
+                            {
+                                color: '#A3A5AE', paddingTop: 8,
+                                paddingBottom: 6
+                            }]}>Certification / About me</Text>
+
+                            <ReadMoreText
+                                limitLines={3}
+                                renderFooter={this.renderFooter}
+                            >
+                                <Text style={defaultStyle.regular_text_14}>
+                                    {coachData.about}</Text>
+
+                            </ReadMoreText>
+
                         </View>
 
-
                     </View>
+                    {isMyCoach ?
+                        // <TouchableOpacity
+                        //     activeOpacity={.8}
+                        //     onPress={() => {
+                        //         this.props.navigation.navigate('WriteAcademyFeedback',
+                        //             {
+                        //                 academy_id: this.state.academy_id,
+                        //                 target_id: this.state.coach_id,
+                        //                 is_coach: true
+                        //             })
+                        //     }}>
 
-                    <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
 
-                        <Text
-                            style={styles.filled_button}
+                        //     <View style={{ flexDirection: 'row', marginBottom: 16, justifyContent: 'center' }}>
+                        //         <Text
+                        //             style={styles.filled_button}>
+                        //             Give Feedback
+                        //          </Text>
+                        //     </View>
+
+                        // </TouchableOpacity>
+                        <View
+                            style={{ margin: 12 }}
                         >
-                            Give Feedback
-                    </Text>
 
-                    </View>
+                            <SkyFilledButton
+                                onPress={() => {
+                                    this.props.navigation.navigate('WriteAcademyFeedback',
+                                        {
+                                            academy_id: this.state.academy_id,
+                                            target_id: user_id,
+                                            is_coach: true
+                                        })
+                                }}>
+
+                                Give Feedback</SkyFilledButton></View>
+                        : null}
+
+                    {feedback != null && feedback.length > 0 || this.state.is_feedback_loading
+                        ?
+                        <Card
+                            style={{
+                                elevation: 2,
+                                backgroundColor: 'white',
+                                borderRadius: 10,
+                                marginTop: 10,
+                            }}
+                        >
+
+                            {
+                                this.state.is_feedback_loading == true ?
+                                    <View style={{
+                                        padding: 8
+                                    }}>
+                                        <ActivityIndicator size="small" color="#67BAF5" /></View>
+                                    :
+
+                                    <View>
+
+                                        <View
+                                            style={{ marginLeft: 12, marginRight: 12, marginTop: 12 }}
+                                        >
+
+                                            <View style={{
+
+                                                flexDirection: 'row',
+                                                flex: 1,
+                                                justifyContent: 'space-between',
+                                            }}>
+                                                <Text
+                                                    style={[defaultStyle.bold_text_14, {
+                                                        color: '#707070'
+                                                    }]}
+                                                >
+                                                    Reviews ({feedback_count})
+                            </Text>
+
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        this.setState({
+                                                            filter_dialog: true
+                                                        })
+                                                    }}
+                                                >
+
+
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text
+                                                            style={defaultStyle.regular_text_12}
+                                                        >Sort </Text>
+                                                        <Image
+                                                            resizeMode="contain"
+                                                            style={{ width: 24, height: 15, }}
+                                                            source={require('../../images/filter_rating.png')}
+                                                        ></Image>
+
+                                                    </View>
+                                                </TouchableOpacity>
+
+                                            </View>
+
+                                            <View
+                                                style={{ width: '100%', height: 1, backgroundColor: '#DFDFDF', marginTop: 8, marginBottom: 8 }}
+                                            ></View>
+
+
+                                        </View>
+
+
+                                        <FlatList
+                                            onEndReachedThreshold={0.5}
+                                            onEndReached={({ distanceFromEnd }) => {
+                                                console.log('on end reached ', distanceFromEnd);
+                                                let page = this.state.page
+                                                page = page + 1
+                                                this.state.page = page
+
+                                                console.log('page => ', this.state.page)
+                                                let sortType = this.state.sortType
+                                                let type = this.state.type
+                                                this.getCoachFeedbacks(sortType, type, false)
+                                            }}
+                                            extraData={feedback}
+                                            data={feedback}
+                                            renderItem={this._renderRatingItem}
+                                        /></View>}
+
+
+                        </Card> : null}
 
                 </View>
             </ScrollView>
 
         );
+
     }
 }
+
+
+const mapStateToProps = state => {
+    return {
+        data: state.AcademyReducer,
+    };
+};
+const mapDispatchToProps = {
+    coachDetail, getCoachFeedbackList
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CoachProfileDetail);
+
 
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        backgroundColor: '#F7F7F7'
+        backgroundColor: '#F7F7F7',
+        paddingTop: 8
     },
     rounded_button: {
         width: '48%',
         padding: 10,
         borderRadius: 20,
-        borderWidth: 1,
+        //borderWidth: 1,
         marginLeft: 4,
         marginRight: 4,
         borderColor: '#67BAF5',

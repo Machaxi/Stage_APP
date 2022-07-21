@@ -1,8 +1,9 @@
 import React from 'react'
 
 import {View,ImageBackground,Text} from 'react-native'
+import BaseComponent from '../BaseComponent';
 
-class  GuestDetails extends React.Component {
+class  GuestDetails extends BaseComponent {
 
     render() {
         return (

@@ -1,4 +1,5 @@
 import * as types from '../../actions/actionTypes';
+import {getData,storeData} from '../../components/auth'
 
 const initialState = {
     loading: false,
@@ -11,9 +12,14 @@ export default function loginReducer(state = initialState, action) {
             return { ...state, loading: true };
         case types.DO_LOGIN_SUCCESS:
             console.log("sucesss",action.payload.data);
+          //  console.log("sucesss Paly",action.payload.headers['x-authorization']);
+            if(action.payload.headers['x-authorization']) {
+                console.log("sucesss Paly")
+                storeData('header', action.payload.headers['x-authorization']);
+            }
             return { ...state, loading: false, user: action.payload.data };
         case types.DO_LOGIN_FAIL:
-           // console.log("fails",action.payload.data);
+            console.log("fails",action.payload.data);
             return {
                 ...state,
                 loading: false,
@@ -24,17 +30,53 @@ export default function loginReducer(state = initialState, action) {
     }
 }
 
-export function doLogin(email, password) {
+export function doLogin(postdata) {
+    console.log("doLogin postdata",postdata)
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
     return {
         type: types.DO_LOGIN,
         payload: {
             request: {
-                url: `/customer/login/${email}/${password}`
+                url: `login`,
+                method: 'POST',
+                data: postdata,
+                // headers: {
+                //     'x-authorization': header
+                //
+                // },
             }
         }
     };
 
 }
+
+export function doLoginTest(postdata) {
+    console.log("doLogin postdata",postdata)
+    console.log('data => ',JSON.stringify(postdata))
+    // var header =
+    //     getData('header', (value) => {
+    //         header  = value
+    //     });
+    return {
+        type: types.DO_LOGIN,
+        payload: {
+            request: {
+                url: `global/test-login`,
+                method: 'POST',
+                data: postdata,
+                // headers: {
+                //     'x-authorization': header
+                //
+                // },
+            }
+        }
+    };
+
+}
+
 export function resetPassword(email,code,newpassword) {
     console.log("email",email);
     return {
@@ -86,3 +128,4 @@ export function doFBLogin(name, email, quote_id,timeNow,gcmid) {
     };
 
 }
+
