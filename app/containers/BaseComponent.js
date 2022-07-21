@@ -57,6 +57,7 @@ export const RATING_UPDATE = "RATING_UPDATE";
 //setting GLOBAL VARIABLES
 global.USER_TYPE = "";
 global.SELECTED_PLAYER_ID = "";
+global.PROFILE_REFRESH = null;
 
 //
 
@@ -77,7 +78,7 @@ global.SELECTED_PLAYER_ID = "";
 
 //===============================================================================================
 
-export const DEBUG_APP = true;
+export const DEBUG_APP = false;
 export const PROD_DEBUG = false;
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b";
@@ -118,7 +119,7 @@ export function getRazorPayEmail() {
 export default class BaseComponent extends React.Component {
   static isUserLoggedIn = false;
   myNavigation = null;
-
+  profileRefreshEvent=null;
   constructor(props) {
     super(props);
 
@@ -134,16 +135,8 @@ export default class BaseComponent extends React.Component {
       }
     });
 
-    // StatusBar.setBackgroundColor("#ffffff")
-    // StatusBar.setBarStyle('dark-content', true)
-    console.log("Profile refresh event",this.profileRefreshEvent);
-    if( this.profileRefreshEvent)
-    {
-      console.log("Removing profile refresh event");
-      this.profileRefreshEvent.remove();
-    }else
-    console.log("No Event");
-      
+    if(global.PROFILE_REFRESH)
+      global.PROFILE_REFRESH.remove();
 
     this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
       this.goToHome(from_registration);
@@ -157,12 +150,10 @@ export default class BaseComponent extends React.Component {
       this.logout();
     });
 
-    this.profileRefreshEvent = Events.subscribe("PROFILE_REFRESH", () => {
-      console.log("GOT REFERESH EVENT");
+    global.PROFILE_REFRESH = Events.subscribe("PROFILE_REFRESH", () => {
       this.refreshUserProfile();
     });
 
-    console.log("REFRESH", this.refreshEvent);
   }
 
   getDefaultRazorPayEmail() {

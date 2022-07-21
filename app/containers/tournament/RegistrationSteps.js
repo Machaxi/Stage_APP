@@ -349,7 +349,7 @@ class RegistrationSteps extends BaseComponent {
                         //Treating guest as player so setting player object
                         let selected_player = {}
                         selected_player.name = name
-                        selected_player.genderType = userData.user['genderType']
+                        selected_player.gender = userData.user['genderType']
                         selected_player.user_id = userData.user['id']
                         selected_player.profile_pic = userData.user['profile_pic']
                         this.state.txtname = name
@@ -706,7 +706,7 @@ class RegistrationSteps extends BaseComponent {
                                     marginTop: 6,
                                     fontFamily: 'Quicksand-Regular',
                                 }}>
-                                    {selected_player.genderType == undefined ? "-" : selected_player.genderType}
+                                    {selected_player.gender == undefined ? "-" : selected_player.gender}
                                 </Text>
                             </View>
 
@@ -1403,7 +1403,7 @@ class RegistrationSteps extends BaseComponent {
 
         //if fees =0 then not taking to payment gateway, directly calling api
         let fees = this.getTotalAmount()
-        firebase.analytics().logEvent("onRegistrationLoad",
+        Analytics.logEvent("onRegistrationLoad",
         { 
             userid: this.userid, 
             username: this.username,

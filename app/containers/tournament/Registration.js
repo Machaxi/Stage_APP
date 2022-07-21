@@ -77,7 +77,7 @@ class Registration extends BaseComponent {
         };
 
         this.state = {
-            progress: true,
+            progress: false,
             birthdate: "",
             txtname: '',
             txtphone: '+91',
@@ -101,18 +101,23 @@ class Registration extends BaseComponent {
                 console.log('isSignedIn => ', res);
                 let signedIn = res
                 if (signedIn) {
-                    this.props.navigation.navigate('RegistrationSteps', {
-                        temp_user: false
-                    })
-                } else {
-                    this.setState({
-                        progress: false
-                    })
-                }
+                    getData('userInfo', (value) => {
+                        let userData = JSON.parse(value);
+                        if(userData){
+                            let user = userData.user;
+                            if(user){
+                                this.state.txtphone = user.mobile_number;
+                                if(user.user_type!="GUEST"){
+                                    this.props.navigation.navigate('RegistrationSteps', {
+                                        temp_user: false,
+                                    })
+                                }
+                            }
+                        }
+                    });
+                } 
             })
             .catch(err => alert("An error occurred"));
-
-
 
         const { navigation } = this.props
         navigation.setParams({
@@ -394,7 +399,7 @@ class Registration extends BaseComponent {
                     />
                 </View>
 
-                <View
+                {/* <View
                     style={{
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -410,7 +415,7 @@ class Registration extends BaseComponent {
                         value={this.state.txtphone}
                         onChangeText={(txtphone) => this.setState({ txtphone: txtphone })}
                     />
-                </View>
+                </View> */}
 
                 <Text style={[defaultStyle.regular_text_14,
                 {

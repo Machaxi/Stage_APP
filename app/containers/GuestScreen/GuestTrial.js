@@ -203,12 +203,12 @@ export default class GuestTrial extends BaseComponent {
   }
 
   componentDidMount() {
+    Events.publish('PROFILE_REFRESH');
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
         this.getNotifications();
         this.getGlobalHeaders();
-        Events.publish('PROFILE_REFRESH');
       }
     );
     this.willBlurSubscription = this.props.navigation.addListener(

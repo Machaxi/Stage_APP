@@ -134,8 +134,8 @@ class PhoneAuth extends BaseComponent {
                 console.log('Firebase ', this.state.message)
             })
             .catch(error => {
-                firebase.crashlytics().log('Firebase Login Error ' + error);
-                console.log('Firebase error ', error)
+                // firebase.crashlytics().log('Firebase Login Error ' + error);
+                // console.log('Firebase error ', error)
                 this.progress(false)
             });
     };
