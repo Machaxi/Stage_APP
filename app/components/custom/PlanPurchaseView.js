@@ -233,6 +233,7 @@ const PlanPurchaseView = (props) => {
       }
       )
       let json = await response.json();
+      console.log("JSon", json);
       setIsLoading(false);
 
       if (json.plans.length == 0) {
@@ -592,7 +593,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
       const sports = academy.sports;
       for(let i=0;i< sports.length;i++)
       {
-        if (sports[i].sport_id = batch.sport_id)
+        if (sports[i].sport_id == batch.sport_id)
           return sports[i].name;
       }
     
