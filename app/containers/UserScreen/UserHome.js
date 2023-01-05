@@ -466,6 +466,7 @@ class UserHome extends BaseComponent {
 
             this.setState({
               currentSportId,
+              currentSportName,
             });
             //  this.setState({
             //    currentSportId,
@@ -652,7 +653,7 @@ class UserHome extends BaseComponent {
       console.log("URL ", url);
       const shareOptions = {
         title: "Machaxi App",
-        message: "Click to see my detailed Badminton Stats " + url,
+        message: "Click to see my detailed "+ this.state.currentSportName+ " Stats " + url,
         url: "data:image/png;base64," + this.state.screenShot,
         subject: "Machaxi",
         //quote:'hello',

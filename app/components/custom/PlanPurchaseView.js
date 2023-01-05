@@ -28,6 +28,8 @@ import {submitPaymentConfirmation} from "../../redux/reducers/PaymentReducer"
 import RazorpayCheckout from 'react-native-razorpay';
 import  { getPaymentKey,getRazorPayEmail } from '../../containers/BaseComponent';
 import Events from "../../router/events";
+var timerId=""
+var isCalendarOpen=false
 const PlanPurchaseView = (props) => {
 
   const [selectedBatchId, setSelectedBatchId] = useState();
@@ -60,6 +62,7 @@ const PlanPurchaseView = (props) => {
 
   const [playerForSubscription, setPlayerForSubscription] = useState({});
 
+  
   const scrollViewRef = useRef();
   getPageTitle = () => {
     if (currentPage == 1)
@@ -100,7 +103,6 @@ const PlanPurchaseView = (props) => {
   useEffect(() => {
     if(!isAddingNewPlayer)
     {
-      console.log("EXISTING CHILD", selectedPlayer);
       setPlayerForSubscription({player_user_id:selectedPlayer.user_id, name:selectedPlayer.name, gender:selectedPlayer.gender, parentName:getParentName() })
     }
     }, [selectedPlayer])
@@ -129,19 +131,15 @@ const PlanPurchaseView = (props) => {
   },[isTCExpanded])
 
   useEffect(()=>{
-    console.log("Player Details:", playerForSubscription);
   }, [playerForSubscription])
 
   getUserInfo=()=>{
     getData('userInfo', (value) => {
         let userData = JSON.parse(value);
         setUserInfo(userData);
-        console.log("I AM", userData.user.user_type);
         if(isParent(userData)){
-          console.log("Fetching Childeren data");
           getData('childrenData', (value) => {
             let childrenData = JSON.parse(value);
-            console.log("Children data", value);
             let uniqueChildrenData = getUniqueChildrenData(childrenData);
             setChildrenData(uniqueChildrenData);
     
@@ -150,7 +148,6 @@ const PlanPurchaseView = (props) => {
         });
         }else{
           //User is a Player
-          console.log("EXISTING PLAYER")
           setPlayerForSubscription({user_id: userData.user.id, name:userData.user.name, gender: userData.user.genderType })
           
         }
@@ -195,11 +192,14 @@ const PlanPurchaseView = (props) => {
 
   const startTimer = (timerDuration) => {
     setIsTimerCompleted(false);
-    const id = setInterval(() => {
+    clearInterval(timerId);
+    timerId = setInterval(() => {
       timerDuration = timerDuration - 1
-      setDuration(getTimeInFormatString(timerDuration));
+      if(!isCalendarOpen){
+        setDuration(getTimeInFormatString(timerDuration));
+      }
       if (timerDuration <= 0) {
-        clearInterval(id);
+        clearInterval(timerId);
         setIsTimerCompleted(true);
       }
     }, 1000)
@@ -226,7 +226,6 @@ const PlanPurchaseView = (props) => {
   const getPlanData = async () => {
     if (selectedBatchId && dateOfJoining) {
       const requiredDateFormatted = moment(dateOfJoining,"DD-MMM-YYYY").format("YYYY-MM-DD");
-      console.log("Path:", getBaseUrl() + "global/batch/" + selectedBatchId + "/?join_date=" + requiredDateFormatted);
       setIsLoading(true);
       let response = await fetch(
         getBaseUrl() + "global/batch/" + selectedBatchId + "/?join_date=" + requiredDateFormatted, {
@@ -234,7 +233,7 @@ const PlanPurchaseView = (props) => {
       }
       )
       let json = await response.json();
-      console.log("Plan Data", json);
+      console.log("JSon", json);
       setIsLoading(false);
 
       if (json.plans.length == 0) {
@@ -316,7 +315,6 @@ const PlanPurchaseView = (props) => {
         postData["player_name"] = playerForSubscription.name;
         postData["gender"] = playerForSubscription.gender.toUpperCase();
       }
-      console.log("Final Pos Data", postData);
 
       getData('header', async (value) => {
         setIsLoading(true);
@@ -325,7 +323,6 @@ const PlanPurchaseView = (props) => {
 
           if (myData.payload.data.success) {
             const data = myData.payload.data.data;
-            console.log("DATA", data,props);
 
             handleOnStartPayment(data.order_id, data.amount, userId, userName, mobileNumber);
           } else {
@@ -342,11 +339,9 @@ const PlanPurchaseView = (props) => {
   }
 
   const onPlanSelected = (item) => {
-    console.log("Plan selected", item);
     setSelectedPlan(item);
   }
   const onTermSelected = (item) => {
-    console.log("Term selected", item);
     setSelectedTerm(item);
   }
   const onBackClicked = () => {
@@ -363,7 +358,6 @@ const PlanPurchaseView = (props) => {
   }
 
   const handleOnStartPayment=(orderId, amount, userId, userName, mobileNumber)=>{
-    console.log("I am at Payment");
    // this.RBSheet.close()
     var options = {
       description: "Payment for Subscription",
@@ -381,11 +375,9 @@ const PlanPurchaseView = (props) => {
 
     RazorpayCheckout.open(options).then((data) => {
       // handle success
-      console.log('Razor Rspo ', JSON.stringify(data))
       let payment_details = {
           razorpay_payment_id: data.razorpay_payment_id
       }
-      console.log("Payment Details", data);
       submitPaymentConfirmation(orderId, amount, payment_details)
   }).catch((error) => {
       console.log('Razor Rspo ', JSON.stringify(error))
@@ -396,7 +388,6 @@ const PlanPurchaseView = (props) => {
 const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
   getData('header', async (value) => {
     let postData = {data:{due_order_id:orderId, amount, payment_details:paymentDetails}}
-    console.log("FINALLy");
     props.submitPaymentConfirmation(value,postData).then((result)=>{
       result = result.payload.data;
       if(result.success){
@@ -412,14 +403,12 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
   const handleOnNewPlayerInfoChanged =(item)=>{
     if(isAddingNewPlayer){
       if(isParent(userInfo)){
-        console.log("PARENT WITH NEW PLAYER")
         setPlayerForSubscription({...item, parentName:getParentName()}); 
       }
     }
 
     if(!isParent(userInfo))
     {
-      console.log("GUEST USER")
       setPlayerForSubscription(item);
     }
   }
@@ -476,6 +465,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
 
       <View style={{ width: "100%", marginBottom: 20 }}>
         <Text style={globalStyles.TextViewLabel}>Date of Joining</Text>
+      
         <DatePicker
           textStyle={defaultStyle.regular_text_14}
           style={[defaultStyle.regular_text_14, { width: 120, borderWidth: 0 }]}
@@ -487,6 +477,8 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           showIcon={false}
+          onOpenModal={()=>{isCalendarOpen=true;}}
+          onCloseModal={()=>{isCalendarOpen=false;}}
           customStyles={{
 
             dateInput: {
@@ -601,7 +593,7 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
       const sports = academy.sports;
       for(let i=0;i< sports.length;i++)
       {
-        if (sports[i].sport_id = batch.sport_id)
+        if (sports[i].sport_id == batch.sport_id)
           return sports[i].name;
       }
     
@@ -735,7 +727,6 @@ const submitPaymentConfirmation=(orderId, amount, paymentDetails)=>{
                 activeOpacity={.8}
                 style={[defaultStyle.rounded_button, { width: "100%", marginTop: 30, marginBottom: 10 }]}
                 onPress={() => {
-                      console.log("FInal Dta", playerForSubscription);
                   startPayment();
                 }}
               >
