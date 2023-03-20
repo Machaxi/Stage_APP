@@ -90,6 +90,11 @@ import SaveGuestTrial from '../containers/GuestScreen/SaveGuestTrial'
 import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
 import PlanPurchaseView from '../components/custom/PlanPurchaseView';
+import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
+import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
+import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
+import CoachingTrial from '../containers/FirstTimeUser/CoachingTrial';
+import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2543,6 +2548,21 @@ const BaseNavigator = createSwitchNavigator({
     GuestBookHome: {
         screen: guestBookDrawer,
 
+    },
+    ShopScreen: {
+      screen: ShopScreen,
+    },
+    PlayScreen: {
+      screen: PlayScreen,
+    },
+    CoachScreen: {
+      screen: CoachScreen,
+    },
+    HomeScreen: {
+      screen: HomeScreen,
+    },
+    CoachingTrial: {
+      screen: CoachingTrial,
     },
     CoachBookHome: {
         screen: coachBookDrawer,

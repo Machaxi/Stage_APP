@@ -673,7 +673,12 @@ class PhoneAuth extends BaseComponent {
                             Login by name</Text>
                     </TouchableOpacity>
                     : null}
-
+                    <TouchableOpacity activeOpacity={.8}
+                        style={[defaultStyle.rounded_button,{ marginTop: 10, width: 150 }]}
+                        onPress={() => { this.props.navigation.navigate('HomeScreen'); }}>
+                        <Text style={{ color: 'white', textAlign: 'center', fontFamily: 'Quicksand-Medium'}}>
+                            Skip Sign In </Text>
+                    </TouchableOpacity>
                 {/* <TouchableOpacity
                     style={{
                         height: 30,
