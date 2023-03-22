@@ -22,6 +22,27 @@ const images = [
   { id: 5, url: require("../../images/playing/badminton_play.png") },
 ];
 
+const coachPass = [
+  {
+    id: 1,
+    title: "Monthly",
+    price: "3,600",
+    description: "Unlock the best Coaching experience in town",
+  },
+  {
+    id: 2,
+    title: "Quarterly",
+    price: "7,500",
+    description: "Save up to 25% as compared to monthly plan.",
+  },
+  {
+    id: 3,
+    title: "Annually",
+    price: "20,000",
+    description: "Save up to 35% as compared to monthly plan.",
+  },
+];
+
 class CoachScreen extends Component {
   constructor(props) {
     super(props);
@@ -109,15 +130,18 @@ class CoachScreen extends Component {
               contents={contents}
               colors={"#C773FF"}
             />
-            <TouchableOpacity activeOpacity={0.8}>
-              <CoachPass
-                title="Monthly"
-                subtitle="3,600"
-                description="Unlock the best Coaching experience in town"
-                image="1"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8}>
+            {coachPass.map((pass) => (
+              <TouchableOpacity activeOpacity={0.8}>
+                <CoachPass
+                  title={pass.title}
+                  subtitle={pass.price}
+                  description={pass.description}
+                  image={pass.id}
+                />
+              </TouchableOpacity>
+            ))}
+
+            {/* <TouchableOpacity activeOpacity={0.8}>
               <CoachPass
                 title="Quarterly"
                 subtitle="7,500"
@@ -132,7 +156,7 @@ class CoachScreen extends Component {
                 description="Save up to 35% as compared to monthly plan."
                 image="3"
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </LinearGradient>
         </ScrollView>
         <LinearGradient
@@ -169,10 +193,11 @@ const styles = StyleSheet.create({
   },
   bottomcontainer: {
     flex: 0.15,
-    paddingTop: 10,
+    paddingVertical: 5,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
+    paddingBottom: 10,
   },
 
   image: {

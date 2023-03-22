@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const data = [
   {
@@ -49,6 +50,12 @@ class SelectSports extends Component {
   }
 
   render() {
+    handlepress = () => {
+      const myArrayString = JSON.stringify(data[this.state.currentIndex - 1]);
+      AsyncStorage.setItem("sports", myArrayString);
+      this.props.onPress();
+    };
+
     return (
       <View
         style={{
@@ -97,7 +104,7 @@ class SelectSports extends Component {
           <CustomButton
             name="Next"
             available={this.state.proseednext}
-            onPress={this.props.onPress}
+            onPress={handlepress}
           />
         </View>
       </View>

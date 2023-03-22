@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "445376033321-jlkd7k4fh0jvlk3ov6gpj1r23p1otmck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dribble",
+            "certificate_hash": "51ba311082f4bcac6828c6dace4704f6c6f67732"
+          }
+        },
+        {
           "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -95,7 +103,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "445376033321-c12iqo4kjk6kt8p24imbqcucu5uimeeq.apps.googleusercontent.com",
+          "client_id": "445376033321-dqgjs0p51lffkl4954vbmg75vb3skrp0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi",
+            "certificate_hash": "4051982ef2160f5919613d6ef1abbcfe3bc8354a"
+          }
+        },
+        {
+          "client_id": "445376033321-fhuoajnk2psr7ghvevjpir6bkaq507vr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.machaxi",
@@ -103,11 +119,55 @@
           }
         },
         {
-          "client_id": "445376033321-4c7lb6qponqenrt8mv9e0qsc8c26fvib.apps.googleusercontent.com",
+          "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5xPrD2Bod747X6_55traTxGgU955w5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445376033321-9fsofml577vf7g85nau2ckqol9i24ddh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.machaxi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445376033321:android:c72b5128427251c04fa238",
+        "android_client_info": {
+          "package_name": "com.machaxi.checkin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445376033321-3rcr7kphbdp5laagna3872h3g7quv4k5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.machaxi",
-            "certificate_hash": "1bde83793268b5a9148b6253085b2b8e8df203a2"
+            "package_name": "com.machaxi.checkin",
+            "certificate_hash": "9681ec33d2d323c5234fd59ad92793be0842f4b5"
+          }
+        },
+        {
+          "client_id": "445376033321-talg1qiqeo33h3eqiiahh5mv4nnhcdhf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.checkin",
+            "certificate_hash": "0f28b85785bc831701628a56cad53fe409caf986"
           }
         },
         {
@@ -146,6 +206,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "445376033321-2vun0bglohn4a7j170l2c9s8ub91cudn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "1bde83793268b5a9148b6253085b2b8e8df203a2"
+          }
+        },
+        {
+          "client_id": "445376033321-7chkupkffqf7ts6frg8eet8dg1n18v1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "69931def1e41ec1d2667d842bc5e47cb739259f8"
+          }
+        },
+        {
+          "client_id": "445376033321-iegehoedndaqef147onqjdm1jfumg59h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "1edd9b44eb17fc787d1af31e1765ed265a2db9e2"
+          }
+        },
         {
           "client_id": "445376033321-95171ehchaspokjfmaj4q7b71d8iu8tv.apps.googleusercontent.com",
           "client_type": 3

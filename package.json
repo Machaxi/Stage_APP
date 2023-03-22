@@ -69,6 +69,7 @@
     "react-native-star-rating": "^1.1.0",
     "react-native-svg": "^9.9.3",
     "react-native-svg-animated-linear-gradient": "^0.3.3",
+    "react-native-svg-uri": "^1.2.3",
     "react-native-swipeable-rating": "^0.2.1",
     "react-native-swiper": "^1.5.14",
     "react-native-tab-view": "^2.5.0",

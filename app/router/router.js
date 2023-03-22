@@ -95,6 +95,7 @@ import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
 import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
 import CoachingTrial from '../containers/FirstTimeUser/CoachingTrial';
 import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
+import LoginSceen from '../containers/Login/LoginSceen';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -132,7 +133,8 @@ const loginModule = createStackNavigator({
     //     }
     // },
     Login: {
-        screen: phoneauth,
+        // screen: phoneauth,
+        screen: LoginSceen,
         navigationOptions: {
             header: null
             //header:null
@@ -2548,6 +2550,9 @@ const BaseNavigator = createSwitchNavigator({
     GuestBookHome: {
         screen: guestBookDrawer,
 
+    },
+    LoginSceen: {
+      screen: LoginSceen,
     },
     ShopScreen: {
       screen: ShopScreen,

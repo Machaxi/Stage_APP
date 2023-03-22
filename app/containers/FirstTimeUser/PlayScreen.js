@@ -85,9 +85,10 @@ const styles = StyleSheet.create({
   },
   bottomcontainer: {
     flex: 0.15,
-    paddingTop: 10,
+    paddingTop: 5,
     alignItems: "center",
     justifyContent: "center",
+    paddingBottom: 10,
   },
 });
 

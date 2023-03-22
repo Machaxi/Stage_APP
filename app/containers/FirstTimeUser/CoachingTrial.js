@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CoachProcess from "../../components/custom/CoachProcess";
 import SelectBatch from "./BookCoaching/SelectBatch";
+import SelectCenter from "./BookCoaching/SelectCenter";
 import SelectSports from "./BookCoaching/SelectSports";
 
 class CoachingTrial extends Component {
@@ -52,7 +53,20 @@ class CoachingTrial extends Component {
               }}
             />
           )}
-          {/* {this.state.currentPage === 2 && <SelectBatch />} */}
+          {this.state.currentPage === 2 && (
+            <SelectCenter
+              onPress={() => {
+                this.setState({ currentPage: 3 });
+              }}
+            />
+          )}
+          {this.state.currentPage === 3 && (
+            <SelectBatch
+              onPress={() => {
+                this.setState({ currentPage: 4 });
+              }}
+            />
+          )}
         </View>
       </LinearGradient>
     );
