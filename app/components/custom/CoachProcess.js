@@ -1,62 +1,94 @@
-import React from "react";
-import { Image, Text, StyleSheet, View } from "react-native";
+import React, { Component } from "react";
+import { Image, Text, StyleSheet, View, TouchableOpacity } from "react-native";
 
-const CoachProcess = ({ number }) => {
-  return (
-    <View style={styles.container}>
-      <View style={{ alignItems: "center" }}>
-        <Image
-          source={require("../../images/playing/sports_selected.png")}
-          style={styles.image}
+class CoachProcess extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{ alignItems: "center" }}
+          onPress={() => {
+            const { onPress, number } = this.props;
+            onPress(1, number);
+          }}
+        >
+          <Image
+            source={require("../../images/playing/sports_selected.png")}
+            style={styles.image}
+          />
+          <Text style={[styles.insideText, { color: "#FF9C33" }]}>Sport</Text>
+        </TouchableOpacity>
+        <View
+          style={[
+            styles.viewline,
+            this.props.number > 1 && { backgroundColor: "#00D78F" },
+          ]}
         />
-        <Text style={[styles.insideText, { color: "#FF9C33" }]}>Sport</Text>
-      </View>
-      <View
-        style={[styles.viewline, number > 1 && { backgroundColor: "#00D78F" }]}
-      />
-      <View style={{ alignItems: "center" }}>
-        <Image
-          source={
-            number > 1
-              ? require("../../images/playing/center_selected.png")
-              : require("../../images/playing/center_selected_black.png")
-          }
-          style={styles.image}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{ alignItems: "center" }}
+          onPress={() => {
+            const { onPress, number } = this.props;
+            onPress(2, number);
+          }}
+        >
+          <Image
+            source={
+              this.props.number > 1
+                ? require("../../images/playing/center_selected.png")
+                : require("../../images/playing/center_selected_black.png")
+            }
+            style={styles.image}
+          />
+          <Text style={styles.insideText}>Centre</Text>
+        </TouchableOpacity>
+        <View
+          style={[
+            styles.viewline,
+            this.props.number > 2 && { backgroundColor: "#00D78F" },
+          ]}
         />
-        <Text style={styles.insideText}>Centre</Text>
-      </View>
-      <View
-        style={[styles.viewline, number > 2 && { backgroundColor: "#00D78F" }]}
-      />
-      <View style={{ alignItems: "center" }}>
-        <Image
-          source={
-            number > 2
-              ? require("../../images/playing/date_selected.png")
-              : require("../../images/playing/date_selected_black.png")
-          }
-          style={styles.image}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{ alignItems: "center" }}
+          onPress={() => {
+            const { onPress, number } = this.props;
+            onPress(3, number);
+          }}
+        >
+          <Image
+            source={
+              this.props.number > 2
+                ? require("../../images/playing/date_selected.png")
+                : require("../../images/playing/date_selected_black.png")
+            }
+            style={styles.image}
+          />
+          <Text style={styles.insideText}>Batch</Text>
+        </TouchableOpacity>
+        <View
+          style={[
+            styles.viewline,
+            this.props.number > 3 && { backgroundColor: "#00D78F" },
+          ]}
         />
-        <Text style={styles.insideText}>Batch</Text>
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={
+              this.props.number > 3
+                ? require("../../images/playing/confirm_selected.png")
+                : require("../../images/playing/confirm_selected_black.png")
+            }
+            style={styles.image}
+          />
+          <Text style={styles.insideText}>Confirm</Text>
+        </View>
+        <View />
       </View>
-      <View
-        style={[styles.viewline, number > 3 && { backgroundColor: "#00D78F" }]}
-      />
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
-        <Image
-          source={
-            number > 3
-              ? require("../../images/playing/confirm_selected.png")
-              : require("../../images/playing/confirm_selected_black.png")
-          }
-          style={styles.image}
-        />
-        <Text style={styles.insideText}>Confirm</Text>
-      </View>
-      <View />
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -74,9 +106,8 @@ const styles = StyleSheet.create({
   },
   insideText: {
     fontSize: 12,
-    fontWeight: "700",
     color: "#C2C2C2",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-700",
   },
   viewline: {
     width: 87,

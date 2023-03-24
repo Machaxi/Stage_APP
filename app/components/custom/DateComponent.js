@@ -50,15 +50,13 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 18,
-    fontFamily: "Nunito-Regular",
-    fontWeight: "400",
+    fontFamily: "Nunito-400",
     color: "#CDCDCD",
   },
   dayText: {
     fontSize: 13,
     marginBottom: 3,
-    fontFamily: "Nunito-Regular",
-    fontWeight: "400",
+    fontFamily: "Nunito-400",
     color: "#CDCDCD",
   },
   imaged: {

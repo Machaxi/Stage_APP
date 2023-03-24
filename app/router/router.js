@@ -93,9 +93,11 @@ import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
 import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
 import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
-import CoachingTrial from '../containers/FirstTimeUser/CoachingTrial';
+import TrialBook from '../containers/FirstTimeUser/TrialBook';
 import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
 import LoginSceen from '../containers/Login/LoginSceen';
+import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/CongratulationScreen'
+import PlanBook from '../containers/FirstTimeUser/PlanBook';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2560,14 +2562,20 @@ const BaseNavigator = createSwitchNavigator({
     PlayScreen: {
       screen: PlayScreen,
     },
+    CongratulationScreen: {
+      screen: CongratulationScreen,
+    },
     CoachScreen: {
       screen: CoachScreen,
     },
     HomeScreen: {
       screen: HomeScreen,
     },
-    CoachingTrial: {
-      screen: CoachingTrial,
+    TrialBook: {
+      screen: TrialBook,
+    },
+    PlanBook: {
+      screen: PlanBook,
     },
     CoachBookHome: {
         screen: coachBookDrawer,

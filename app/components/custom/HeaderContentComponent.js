@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     color: "#DDDDDD",
-    fontWeight: "400",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-400",
   },
   items: {
     flexDirection: "row",

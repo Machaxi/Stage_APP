@@ -75,9 +75,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    fontWeight: "600",
     color: "#FFFFFF",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-600",
   },
   next: {
     width: 70,
@@ -87,16 +86,14 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 24,
-    fontWeight: "700",
     color: "#F2AE4D",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-700",
   },
   description: {
     fontSize: 10,
     width: 190,
-    fontWeight: "600",
     color: "#DDDDDD",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-600",
   },
   image: {
     width: 100,

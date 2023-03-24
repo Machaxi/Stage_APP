@@ -4,20 +4,29 @@ import { Text, StyleSheet, ImageBackground, Image } from "react-native";
 class PlayPass extends Component {
   render() {
     let imageval;
-    if (this.props.image == "2") {
+    if (this.props.image == "1") {
+      imageval = require("../../images/playing/star.png");
+    } else if (this.props.image == "2") {
       imageval = require("../../images/playing/leaf.png");
     } else if (this.props.image == "3") {
       imageval = require("../../images/playing/wind.png");
     } else {
-      imageval = require("../../images/playing/star.png");
+      imageval = require("../../images/playing/annually.png");
     }
 
     return (
       <ImageBackground
-        source={require("../../images/playing/buypass.png")}
-        style={{ width: 110, height: 240, marginHorizontal: 7, paddingTop: 10 }}
+        source={require("../../images/playing/playmembership.png")}
+        style={{ width: 180, height: 160, marginRight: 7, paddingTop: 10 }}
       >
-        <Image source={imageval} style={styles.image} />
+        <Image
+          source={imageval}
+          style={[
+            styles.image,
+            this.props.image == "1" && { width: 31 },
+            this.props.image == "3" && { width: 45 },
+          ]}
+        />
         <Text style={styles.insideText}>{this.props.name}</Text>
         <Text style={styles.priceText}>₹ {this.props.price}</Text>
       </ImageBackground>
@@ -28,23 +37,22 @@ class PlayPass extends Component {
 const styles = StyleSheet.create({
   insideText: {
     fontSize: 12,
-    fontWeight: "600",
     color: "#F3F2F5",
-    fontFamily: "Nunito-Regular",
-    paddingHorizontal: 10,
+    fontFamily: "Nunito-600",
+    marginLeft: 30,
   },
   priceText: {
     fontSize: 20,
-    fontWeight: "700",
     color: "#F2AE4D",
-    fontFamily: "Nunito-Regular",
-    paddingHorizontal: 10,
+    fontFamily: "Nunito-700",
+    marginLeft: 30,
   },
   image: {
+    marginLeft: 30,
     marginTop: 10,
     marginBottom: 10,
-    width: 50,
-    height: 50,
+    width: 38,
+    height: 30,
   },
 });
 

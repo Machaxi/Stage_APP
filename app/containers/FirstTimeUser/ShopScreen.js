@@ -91,8 +91,7 @@ const styles = StyleSheet.create({
   shop: {
     color: "transparent",
     fontSize: 94,
-    fontWeight: "400",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-400",
   },
   image: {
     marginLeft: 10,
@@ -111,9 +110,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
     fontSize: 14,
-    fontWeight: "600",
     color: "#F3F2F5",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-600",
   },
 });
 export default ShopScreen;

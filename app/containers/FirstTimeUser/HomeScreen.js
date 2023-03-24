@@ -4,6 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import CoachScreen from "./CoachScreen";
 import PlayScreen from "./PlayScreen";
 import ShopScreen from "./ShopScreen";
+import AsyncStorage from "@react-native-community/async-storage";
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -83,12 +84,24 @@ class HomeScreen extends Component {
         <View style={{ flex: 0.92 }}>
           {this.state.currentPage === 1 && (
             <CoachScreen
-              onPress={() => {
-                this.props.navigation.navigate("CoachingTrial");
+              onPressPlan={() => {
+                AsyncStorage.setItem("select_plan", "Coaching Plan");
+                this.props.navigation.navigate("PlanBook");
+              }}
+              onPressTrail={() => {
+                AsyncStorage.setItem("select_trial", "Coaching Trial");
+                this.props.navigation.navigate("TrialBook");
               }}
             />
           )}
-          {this.state.currentPage === 2 && <PlayScreen />}
+          {this.state.currentPage === 2 && (
+            <PlayScreen
+              onPress={() => {
+                AsyncStorage.setItem("select_trial", "Playing Trial");
+                this.props.navigation.navigate("TrialBook");
+              }}
+            />
+          )}
           {this.state.currentPage === 3 && <ShopScreen />}
         </View>
       </LinearGradient>
@@ -124,9 +137,8 @@ const styles = StyleSheet.create({
   toptext: {
     paddingTop: 7,
     fontSize: 14,
-    fontWeight: "600",
     color: "#ECECEC",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-600",
   },
   onscreen: {
     width: 38,

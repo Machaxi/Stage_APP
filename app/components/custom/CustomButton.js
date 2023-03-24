@@ -1,8 +1,8 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
-const CustomButton = ({ name, available, onPress, height }) => {
+const CustomButton = ({ name, available, onPress, height, image }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.6}
@@ -29,9 +29,11 @@ const CustomButton = ({ name, available, onPress, height }) => {
           height: height || 55,
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "row",
         }}
       >
         <Text style={styles.insideText}>{name}</Text>
+        <Image source={image} style={{ width: 14, height: 13 }} />
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -40,9 +42,8 @@ const CustomButton = ({ name, available, onPress, height }) => {
 const styles = StyleSheet.create({
   insideText: {
     fontSize: 16,
-    fontWeight: "800",
     color: "#F1E8FF",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-800",
   },
 });
 
