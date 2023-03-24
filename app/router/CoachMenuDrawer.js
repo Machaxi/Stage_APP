@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { isSignedIn, getData } from "../components/auth";
 import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
-
+import LinearGradient from 'react-native-linear-gradient';
 import { onSignOut, clearData } from "../components/auth";
 import BaseComponent, { defaultStyle, camelCase, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
 import { getRelationsDetails, logout } from "../redux/reducers/RelationReducer";
@@ -44,7 +44,9 @@ class CoachMenuDrawer extends BaseComponent {
 			related_players: [],
 			related_guardians: [],
 			profile_pic: '',
-			updated_profile_pic: ''
+			updated_profile_pic: '',
+			staticDataVisibility: false,
+			playDataVisibility:false,
 		};
 
 		isSignedIn()
@@ -89,7 +91,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 	}
-
+	
 	updateData() {
 		getData('userInfo', (value) => {
 			userData = (JSON.parse(value));
@@ -154,7 +156,7 @@ class CoachMenuDrawer extends BaseComponent {
 	}
 
 	getWithoutLoggedMenu() {
-
+		
 		return (
 			<View>
 
@@ -300,7 +302,7 @@ class CoachMenuDrawer extends BaseComponent {
 		if (profile_pic == '' || profile_pic == null) {
 			profile_pic = placeholder_img
 		}
-
+		
 		return (
 			<View>
 
@@ -410,7 +412,6 @@ class CoachMenuDrawer extends BaseComponent {
 							style={styles.arrow_img}
 							source={require('../images/ic_drawer_arrow.png')}
 						>
-
 						</Image>
 
 					</View>
@@ -835,10 +836,10 @@ class CoachMenuDrawer extends BaseComponent {
 		}}>
 			<Text
 				numberOfLines={1}
-				style={[defaultStyle.bold_text_14, { width: 90 }]}>{formattedName(obj.name)}</Text>
-			<Text style={defaultStyle.regular_text_12}>{obj.phone_number}</Text>
+				style={[defaultStyle.bold_text_14, { width: 90 ,color:'#CECECE'}]}>{formattedName(obj.name)}</Text>
+			<Text style={[defaultStyle.regular_text_12, { width: 90 ,color:'#CECECE'}]}>{obj.phone_number}</Text>
 
-			{show_edit ?
+			{/* {show_edit ?
 				<TouchableOpacity
 					onPress={() => {
 						this.props.navigation.navigate('EditOtherProfile', { data: JSON.stringify(obj) })
@@ -846,7 +847,7 @@ class CoachMenuDrawer extends BaseComponent {
 				>
 					<Text style={defaultStyle.regular_text_blue_10}>Edit</Text>
 				</TouchableOpacity>
-				: null}
+				: null} */}
 
 		</View>
 	}
@@ -881,7 +882,7 @@ class CoachMenuDrawer extends BaseComponent {
 		for (let i = 0; i < size; i++) {
 			let obj = related_players[i]
 			related_players_array.push(
-				this.parentCell(obj, show_edit)
+				this.parentCell(obj)
 			)
 		}
 
@@ -894,29 +895,37 @@ class CoachMenuDrawer extends BaseComponent {
 				this.parentCell(obj)
 			)
 		}
-
+		console.log('drawer  getPlayerMenu function');
 		return (
-			<View>
-
+			<View >
+				
 				<View
 					style={{
-						paddingLeft: 10, paddingRight: 10, paddingTop: 16,
+						paddingLeft: 10, paddingTop: 16,
 						paddingBottom: 16,
-						flexDirection: 'row', backgroundColor: 'white', marginBottom: 12
+						flexDirection: 'row', backgroundColor: '#262051', marginBottom: 12
 					}}
 				>
 					{/* <Image
 						style={{ width: 128, height: 128, borderRadius: 8 }}
 						source={{ uri: profile_pic }}
 					></Image> */}
-
+				{profile_pic?
 					<FastImage
 						//resizeMode={FastImage.resizeMode.contain}
 						style={{
-							width: 128, height: 128, borderRadius: 8
+							width: 93, height: 98, borderRadius: 8
 						}}
 						source={{ uri: profile_pic }}
 					/>
+					:
+					<View style={{borderColor:'black',borderRadius:8,borderWidth:1}}>
+					<Image
+					style={{ width: 93, height: 98, borderRadius: 8  }}
+					source={require('../images/profile_place_holder.png')}
+					></Image>
+					</View>
+					}
 
 					<View
 						style={{
@@ -925,8 +934,8 @@ class CoachMenuDrawer extends BaseComponent {
 
 						}}
 					>
-
-						<View style={{
+						{/*  app icon commented */}
+						{/* <View style={{
 							flexDirection: 'row',
 							flex: 1,
 							justifyContent: 'space-between'
@@ -938,13 +947,8 @@ class CoachMenuDrawer extends BaseComponent {
 								source={require('../images/dribble_logo.png')}
 							/>
 
-							{/* <Image
-										style={{
-											height: 30, width: 30,
-										}}
-										source={require('../images/ic_close.png')}
-									/> */}
-						</View>
+							
+						</View> */}
 
 						{!signedIn ?
 
@@ -969,36 +973,16 @@ class CoachMenuDrawer extends BaseComponent {
 
 							:
 							<View>
-
-								<Text
-									style={{
-										color: 'black',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 14,
-										marginTop: 8
-									}}>
-									{fullame}</Text>
-
-								<Text
-									style={{
-										color: 'black',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 10,
-										marginTop: 4
-									}}>
-									({user_type == PARENT ? 'Guardian' : camelCase(user_type)})</Text>
-
+								<View style={{flexDirection:'row'}}>
 								<Text
 									style={{
 										color: '#A3A5AE',
 										fontFamily: 'Quicksand-Medium',
-										fontSize: 14, marginTop: 8
+										fontSize: 14,
+										marginTop: 8
 									}}>
-									{mobileNumber}
-								</Text>
-
-
-								<TouchableOpacity activeOpacity={.8} onPress={() => {
+									Player</Text>
+								<TouchableOpacity style={{paddingLeft:8}} activeOpacity={.8} onPress={() => {
 									this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
 								}}>
 
@@ -1022,7 +1006,38 @@ class CoachMenuDrawer extends BaseComponent {
 											Edit
 								</Text>
 									</View>
-								</TouchableOpacity>
+								</TouchableOpacity></View>
+								
+								
+								
+								<Text
+									style={{
+										color: '#FFFFFF',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 20,
+										marginTop: 8
+									}}>
+									{fullame}</Text>
+
+								
+								<Text
+									style={{
+										color: '#A3A5AE',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 8
+									}}>
+									{mobileNumber}
+								</Text>
+								<Text
+									style={{
+										color: '#7B7C83',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 12,
+										marginTop: 4
+									}}>
+									({user_type == PARENT ? 'Guardian' : camelCase(user_type)})</Text>
+
+
 
 							</View>
 						}
@@ -1033,9 +1048,32 @@ class CoachMenuDrawer extends BaseComponent {
 				</View>
 
 
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					// this.props.navigation.navigate('WebViewScreen')
+					this.setState({
+						playDataVisibility: !this.state.playDataVisibility,
+					})
+					}>
+					
+					<View style={styles.drawercell}>
+						<View style={{flexDirection:'row',alignItems: 'center',}}>
+						<Image
+							style={{width:28,height:28, marginRight:8 }}
+							source={require('../images/play.png')}
+						/>
+						<Text style={styles.menuHeading}>
+							Play
+						</Text></View>
 
+						<Image
+							style={styles.orange_arrow_img}
+							source={require('../images/orange_arrow_down.png')}
+						/>
 
-				{this.state.related_guardians.length != 0
+					</View>
+				</TouchableOpacity>
+
+				{this.state.related_guardians.length != 0 && this.state.playDataVisibility
 					?
 					<View style={{
 						paddingLeft: 16,
@@ -1051,24 +1089,113 @@ class CoachMenuDrawer extends BaseComponent {
 					: null}
 
 
-				{this.state.related_players.length != 0
+				{this.state.related_players.length != 0 && this.state.playDataVisibility
 					?
 					<View style={{
-						paddingLeft: 16,
+						paddingLeft: 44,
 						paddingRight: 16,
 						paddingTop: 12,
 						paddingBottom: 12,
 					}}>
-						<Text style={defaultStyle.regular_text_10}>
-							Players
+						<View style={{flexDirection:'row'  }}>
+						<Text style={{fontSize: 10,color: "#A3A5AE",fontFamily: "Quicksand-Regular"}}>
+							Players details
 						</Text>
+						<TouchableOpacity activeOpacity={.8} onPress={() => {
+							this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
+						}}>
+
+							<View style={{ flexDirection: 'row', alignItems: 'center' ,marginLeft:15 }}>
+								<Image
+									resizeMode="contain"
+									style={{
+										width: 9,
+										height: 9, borderRadius: 8
+									}}
+									source={require('../images/edit_profile.png')}
+								></Image>
+
+								<Text
+									style={{
+										color: '#667DDB',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 10, marginLeft: 4
+									}}
+								>
+									Edit
+						</Text>
+							</View>
+						</TouchableOpacity>
+						</View>
 						{related_players_array}
 					</View>
 					: null}
 
+			
+			{this.state.playDataVisibility?
+			<View style={{paddingLeft: 42,paddingRight:16}}>
+			<View style={{height: 1, marginTop: 8, marginBottom: 8, backgroundColor:'#272733', }}></View>
 
-				{
-					this.state.related_players_array != 0 &&
+			<TouchableOpacity activeOpacity={0.8} onPress={() =>
+				this.props.navigation.navigate('AcademyListing')
+			}>
+
+				<View style={styles.drawercell}>
+
+					<Text style={styles.menu}>
+						Book Slot
+							</Text>
+
+					<Image
+						style={styles.arrow_img}
+						source={require('../images/ic_drawer_arrow.png')}
+					/>
+
+				</View>
+			</TouchableOpacity>
+
+			<TouchableOpacity activeOpacity={0.8} onPress={() =>
+				this.props.navigation.navigate('AcademyListing')
+			}>
+
+				<View style={styles.drawercell}>
+
+					<Text style={styles.menu}>
+						My Booking
+							</Text>
+
+					<Image
+						style={styles.arrow_img}
+						source={require('../images/ic_drawer_arrow.png')}
+					/>
+
+				</View>
+			</TouchableOpacity>
+
+			<TouchableOpacity activeOpacity={0.8} onPress={() =>
+				this.props.navigation.navigate('AcademyListing')
+			}>
+
+				<View style={styles.drawercell}>
+
+					<Text style={styles.menu}>
+						My Requests
+							</Text>
+
+					<Image
+						style={styles.arrow_img}
+						source={require('../images/ic_drawer_arrow.png')}
+					/>
+
+				</View>
+			</TouchableOpacity>
+			</View>
+			:null}
+			
+
+{/* conditions commented for parent and guardiaon and other not in ui */}
+				{/* {
+					this.state.related_players_array != 0  && this.state.playDataVisibility &&
 					<TouchableOpacity activeOpacity={0.8} onPress={() =>
 						this.props.navigation.navigate('EnrollmentForm')}>
 						<View style={styles.drawercell}>
@@ -1098,23 +1225,6 @@ class CoachMenuDrawer extends BaseComponent {
 						>
 
 						</Image>
-
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('PaymentDetail')}>
-
-					<View style={styles.drawercell}>
-
-						<Text style={styles.menu}>
-							Payment
-								</Text>
-
-						<Image
-							style={styles.arrow_img}
-							source={require('../images/ic_drawer_arrow.png')}
-						/>
 
 					</View>
 				</TouchableOpacity>
@@ -1154,7 +1264,7 @@ class CoachMenuDrawer extends BaseComponent {
 						/>
 
 					</View>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 				{/* <TouchableOpacity activeOpacity={0.8} onPress={() => this.props.navigation.navigate('ReturnPolicyScreen')}>
 
@@ -1186,7 +1296,9 @@ class CoachMenuDrawer extends BaseComponent {
 						Society Feedback
 					</Text> */}
 
-					<View style={{
+
+ {/* blue button section commented  */}
+					{/* <View style={{
 						flexDirection: 'row',
 						flex: 1,
 						marginTop: 8,
@@ -1237,7 +1349,7 @@ class CoachMenuDrawer extends BaseComponent {
 								this.props.navigation.navigate('WriteFeedback',
 									{ academy_id: this.state.academy_id, player_id: this.state.player_id })
 							}}>Society-Coach Feedback</SkyFilledButton>
-					</View>
+					</View> */}
 
 					{/* <TouchableOpacity
 						activeOpacity={.8}
@@ -1261,17 +1373,45 @@ class CoachMenuDrawer extends BaseComponent {
 
 				</View>
 
+				<View style={[defaultStyle.line_style, { marginLeft: 12 , backgroundColor:'#272733', marginRight: 12}]}></View>
 
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					this.props.navigation.navigate('PaymentDetail')
+				}}>
+
+					<View style={styles.drawercell}>
+						<View style={{flexDirection:'row' }}>
+						<Image
+							style={{width:28,height:28,resizeMode: 'contain', marginRight:4, alignItems:'center'}}
+							source={require('../images/wallet.png')}
+						/>
+						<Text style={styles.seperateFunction}>
+							Payment
+						</Text></View>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						/>
+
+					</View>
+				</TouchableOpacity>
+
+				<View style={[defaultStyle.line_style, { marginLeft: 12 , backgroundColor:'#272733', marginRight: 12}]}></View>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
 					this.shareApp()
 				}}>
 
 					<View style={styles.drawercell}>
-
-						<Text style={styles.menu}>
+						<View style={{flexDirection:'row' ,alignItems:'center'}}>
+						<Image
+							style={{width:28,height:28,resizeMode: 'contain',marginRight:4}}
+							source={require('../images/share_icon.png')}
+						/>
+						<Text style={styles.seperateFunction}>
 							Share App
-						</Text>
+						</Text></View>
 
 						<Image
 							style={styles.arrow_img}
@@ -1281,15 +1421,107 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<View style={[defaultStyle.line_style, { marginLeft: 12 }]}></View>
+				<View style={[defaultStyle.line_style, { marginLeft: 12 , backgroundColor:'#272733', marginRight: 12}]}></View>
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('WebViewScreen')}>
+					// this.props.navigation.navigate('WebViewScreen')
+					this.setState({
+						staticDataVisibility: !this.state.staticDataVisibility,
+					})
+					}>
+					
+					<View style={styles.drawercell}>
+						<View style={{flexDirection:'row',alignItems: 'center'}}>
+						<Image
+							style={{width:28,height:28, marginRight:8 }}
+							source={require('../images/info.png')}
+						/>
+						<Text style={styles.menuHeading}>
+							About Machaxi
+						</Text></View>
+
+						<Image
+							style={styles.orange_arrow_img}
+							source={require('../images/orange_arrow_down.png')}
+						/>
+
+					</View>
+				</TouchableOpacity>
+
+			{this.state.staticDataVisibility?(<>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('WebViewScreen')
+					
+					}>
+					
+					<View style={styles.drawercell}>
+						
+						<Text style={styles.menu}>
+							About us
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						/>
+
+					</View>
+				</TouchableOpacity>
+				
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('ContactUs')}>
 
 					<View style={styles.drawercell}>
 
 						<Text style={styles.menu}>
-							About Machaxi
+							Careers Page
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')} />
+
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('ContactUs')}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							Privacy Policy
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')} />
+
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('ContactUs')}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							Blog
+						</Text>
+
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')} />
+
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity activeOpacity={0.8} onPress={() => {
+					this.props.navigation.navigate('FaqScreen')
+				}}>
+
+					<View style={styles.drawercell}>
+
+						<Text style={styles.menu}>
+							FAQ
 						</Text>
 
 						<Image
@@ -1299,8 +1531,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 					</View>
 				</TouchableOpacity>
-
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+				{/* <TouchableOpacity activeOpacity={0.8} onPress={() =>
 					this.props.navigation.navigate('ContactUs')}>
 
 					<View style={styles.drawercell}>
@@ -1332,8 +1563,10 @@ class CoachMenuDrawer extends BaseComponent {
 						/>
 
 					</View>
-				</TouchableOpacity>
-
+				</TouchableOpacity> */}
+				</>):null}
+				<View style={[defaultStyle.line_style, { marginLeft: 12 , backgroundColor:'#272733', marginRight: 12}]}></View>
+				
 				<TouchableOpacity activeOpacity={0.8} onPress={() => {
 					// onSignOut()
 					// clearData()
@@ -1344,19 +1577,27 @@ class CoachMenuDrawer extends BaseComponent {
 				}>
 
 
-					<View style={styles.drawercell}>
-						<Text style={styles.menu}>
+					<View style={styles.signOut}>
+						<Image
+							style={styles.sign_out}
+							source={require('../images/sign_out.png')}
+						/>
+						<Text style={styles.seperateFunction}>
 							Sign Out
 								 </Text>
 
 					</View>
 				</TouchableOpacity>
-
-				<Text
+{/* app version commented as not in new ui  */}
+				{/* <Text
 					style={styles.version_style}>
-					App Version: {DeviceInfo.getVersion()}</Text>
+					App Version: {DeviceInfo.getVersion()}</Text> */}
 
 			</View>)
+			// return(
+			// <View style={{backgroundColor:"green", width:200, height:200,padding:50}}>
+			// 	<Text></Text>
+			// </View>)
 	}
 
 	shareApp() {
@@ -1424,8 +1665,23 @@ class CoachMenuDrawer extends BaseComponent {
 		//marginTop:Platform.OS === "ios" ? 24 :0
 		return (
 			<ScrollView style={styles.container}>
+				 <LinearGradient
+				  colors={['#051732', '#232031']}
+				//   style={{flex:1}}
+				  start={{ x: 0, y: 0 }}
+				  end={{ x: 1, y: 1 }}
+				 >
 
 				<View style={styles.container}>
+					<TouchableOpacity style={{position:'absolute', right:18 ,top:20 ,zIndex:2000}}>
+								<Image
+									resizeMode="contain"
+									style={{
+										width: 30,
+										height: 30,
+									}}
+									source={require('../images/cancel.png')}
+								></Image></TouchableOpacity>
 
 					<View
 						style={{
@@ -1436,7 +1692,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 						<View
 							style={{
-								paddingLeft: 0, paddingRight: 10,
+								paddingLeft: 0,
 								paddingBottom: 16
 							}}
 						>
@@ -1451,7 +1707,7 @@ class CoachMenuDrawer extends BaseComponent {
 						</View>
 					</View>
 
-				</View>
+				</View></LinearGradient>
 			</ScrollView>
 
 		)
@@ -1482,14 +1738,39 @@ const styles = StyleSheet.create({
 		width: 100,
 	},
 	menu: {
-		color: '#404040',
+		color: '#AFAFAF',
 		alignItems: 'flex-start',
 		fontSize: 14,
 		fontFamily: 'Quicksand-Medium',
 	},
+	menuHeading:{
+		color: '#FF9C33',
+		alignItems: 'flex-start',
+		fontSize: 16,
+		fontFamily: 'Quicksand-Medium',
+	},
+	seperateFunction:{
+		color: '#AFAFAF',
+		alignItems: 'center',
+		fontSize: 16,
+		paddingTop:-4,
+		fontFamily: 'Quicksand-Medium',
+		textAlign:'center',
+	},
 	arrow_img: {
 		height: 12,
 		width: 5,
+		resizeMode: 'contain'
+	},
+	orange_arrow_img: {
+		height: 5,
+		width: 12,
+		resizeMode: 'contain'
+	},
+	sign_out: {
+		height: 28,
+		width: 28,
+		marginRight:8,
 		resizeMode: 'contain'
 	},
 	filled_button: {
@@ -1517,6 +1798,17 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
+	signOut: {
+		//padding: 16,
+		paddingLeft: 16,
+		paddingRight: 16,
+		paddingTop: 12,
+		paddingBottom: 12,
+		alignItems: 'center',
+		textAlign:'center',
+		flexDirection: 'row',
+		
+	},
 	version_style: {
 		color: '#404040',
 		width: "100%",
@@ -1531,7 +1823,7 @@ const styles = StyleSheet.create({
 
 	container: {
 		flex: 1,
-		backgroundColor: '#F7F7F7'
+		backgroundColor: '#232031'
 	},
 })
 
