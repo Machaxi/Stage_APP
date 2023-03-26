@@ -1056,7 +1056,7 @@ class CoachMenuDrawer extends BaseComponent {
 					}>
 					
 					<View style={styles.drawercell}>
-						<View style={{flexDirection:'row',alignItems: 'center',}}>
+						<View style={{flexDirection:'row', }}>
 						<Image
 							style={{width:28,height:28, marginRight:8 }}
 							source={require('../images/play.png')}
@@ -1380,9 +1380,9 @@ class CoachMenuDrawer extends BaseComponent {
 				}}>
 
 					<View style={styles.drawercell}>
-						<View style={{flexDirection:'row' }}>
+						<View style={{flexDirection:'row', }}>
 						<Image
-							style={{width:28,height:28,resizeMode: 'contain', marginRight:4, alignItems:'center'}}
+							style={{width:28,height:28,resizeMode: 'contain', marginRight:4,}}
 							source={require('../images/wallet.png')}
 						/>
 						<Text style={styles.seperateFunction}>
@@ -1404,7 +1404,7 @@ class CoachMenuDrawer extends BaseComponent {
 				}}>
 
 					<View style={styles.drawercell}>
-						<View style={{flexDirection:'row' ,alignItems:'center'}}>
+						<View style={{flexDirection:'row' ,}}>
 						<Image
 							style={{width:28,height:28,resizeMode: 'contain',marginRight:4}}
 							source={require('../images/share_icon.png')}
@@ -1431,7 +1431,7 @@ class CoachMenuDrawer extends BaseComponent {
 					}>
 					
 					<View style={styles.drawercell}>
-						<View style={{flexDirection:'row',alignItems: 'center'}}>
+						<View style={{flexDirection:'row'}}>
 						<Image
 							style={{width:28,height:28, marginRight:8 }}
 							source={require('../images/info.png')}
@@ -1745,16 +1745,16 @@ const styles = StyleSheet.create({
 	},
 	menuHeading:{
 		color: '#FF9C33',
-		alignItems: 'flex-start',
 		fontSize: 16,
 		fontFamily: 'Quicksand-Medium',
+		marginTop:2,
+		textAlign:'center',
 	},
 	seperateFunction:{
 		color: '#AFAFAF',
-		alignItems: 'center',
 		fontSize: 16,
-		paddingTop:-4,
 		fontFamily: 'Quicksand-Medium',
+		marginTop:2,
 		textAlign:'center',
 	},
 	arrow_img: {
@@ -1789,6 +1789,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'Quicksand-Medium',
 	},
 	drawercell: {
+		// backgroundColor:'green',
 		//padding: 16,
 		paddingLeft: 16,
 		paddingRight: 16,
@@ -1804,8 +1805,8 @@ const styles = StyleSheet.create({
 		paddingRight: 16,
 		paddingTop: 12,
 		paddingBottom: 12,
-		alignItems: 'center',
-		textAlign:'center',
+		// alignItems: 'center',
+		// textAlign:'center',
 		flexDirection: 'row',
 		
 	},

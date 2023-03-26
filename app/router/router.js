@@ -2335,12 +2335,12 @@ const tabBarControllerParent = createBottomTabNavigator(
         Home: {
             screen: parentHomeModule,
             navigationOptions: {
-                tabBarLabel: 'Home',
+                tabBarLabel: 'Learn',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
-                        label='Home'
+                        label='Learn'
                         focused={focused}
-                        activeIcon={require('../images/ic_tab_home.png')} />,
+                        activeIcon={require('../images/learn.png')} />,
             },
 
 
@@ -2348,16 +2348,28 @@ const tabBarControllerParent = createBottomTabNavigator(
         Batch: {
             screen: userBatchModule,
             navigationOptions: {
-                tabBarLabel: 'Batch',
+                tabBarLabel: 'Play',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
-                        label='Batch'
+                        label='Play'
                         focused={focused}
-                        activeIcon={require('../images/ic_tab_batch.png')} />,
+                        activeIcon={require('../images/play_highlight.png')} />,
             }
 
         },
         Tournament: {
+            screen: TournamentModule,
+            navigationOptions: {
+                tabBarLabel: 'Shop',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Shop'
+                        focused={focused}
+                        activeIcon={require('../images/shop.png')} />,
+            }
+
+        },
+        Challenge: {
             screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
@@ -2365,22 +2377,23 @@ const tabBarControllerParent = createBottomTabNavigator(
                     <TabBarHighlightLabel
                         label='Tournament'
                         focused={focused}
-                        activeIcon={require('../images/ic_tab_tournament.png')} />,
+                        activeIcon={require('../images/tournament.png')} />,
             }
 
         },
-        Challenge: {
-            screen: userChallengeModule,
-            navigationOptions: {
-                tabBarLabel: 'Challenge',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Challenge'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_challenge.png')} />,
-            }
+        yellow: {
+          screen: TournamentModule,
+          navigationOptions: {
+              tabBarLabel: 'hiiiiiiiii',
+              tabBarLabel: ({ focused }) =>
+                  <TabBarHighlightLabel
+                      label='hiiii'
+                      focused={focused}
+                      activeIcon={require('../images/tournament.png')} />,
+          }
 
-        }
+      },
+        
 
     })
 
