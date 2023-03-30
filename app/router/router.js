@@ -39,7 +39,9 @@ import { isSignedIn } from "../components/auth";
 import BaseComponent from '../containers/BaseComponent';
 import TournamentModule from './TournamentRouter'
 import coachBatchModule from './CoachBatchRouter'
-import userBatchModule from './PlayerBatchRouter'
+import userBatchModule from './PlayerBatchRouter';
+import PlayRoute from './PlayRoute';
+import PlayScreen from '././../containers/play/PlayScreen';
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import coachPerfomenceModule from './CoachPerformenceRouter'
@@ -2346,7 +2348,7 @@ const tabBarControllerParent = createBottomTabNavigator(
 
         },
         Batch: {
-            screen: userBatchModule,
+            screen: PlayRoute,
             navigationOptions: {
                 tabBarLabel: 'Play',
                 tabBarLabel: ({ focused }) =>
@@ -2381,18 +2383,18 @@ const tabBarControllerParent = createBottomTabNavigator(
             }
 
         },
-        yellow: {
-          screen: TournamentModule,
-          navigationOptions: {
-              tabBarLabel: 'hiiiiiiiii',
-              tabBarLabel: ({ focused }) =>
-                  <TabBarHighlightLabel
-                      label='hiiii'
-                      focused={focused}
-                      activeIcon={require('../images/tournament.png')} />,
-          }
+      //   yellow: {
+      //     screen: TournamentModule,
+      //     navigationOptions: {
+      //         tabBarLabel: 'hiiiiiiiii',
+      //         tabBarLabel: ({ focused }) =>
+      //             <TabBarHighlightLabel
+      //                 label='hiiii'
+      //                 focused={focused}
+      //                 activeIcon={require('../images/tournament.png')} />,
+      //     }
 
-      },
+      // },
         
 
     })
