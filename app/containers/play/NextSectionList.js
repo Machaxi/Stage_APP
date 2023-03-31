@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
-    View,
-    Text,
-    Dimensions,
-    StyleSheet,
-    Pressable,
-    Image,
-    TouchableOpacity,
     FlatList
   } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { PeerRatingCard } from "./PeerRatingCard";
-import Intermediate from './../../images/intermediate.svg';
-import { GameNameBox } from "./GameNameBox";
-import { SelfRatingBox } from "./SelfRatingBox";
 import { NextSessionCard } from "./NextSessionCard";
 
   
-export const NextSessionList = (onPlayingLevelPress,onCancelPress) => {
+export const NextSessionList = () => {
 
-    const Data= [
+    const NextSessionData= [
         {
             // icon:require("./../../images/beginner.png"),
             title: "Next Session - Today",
             id:1,
             by:'4',
             titleColor:'#21D096',
-            sportsName:'erioubyft',
+            sportsName:'Swimming - Pool',
             sportsTime:'3pm',
             centreName:'Machaxi Play9 Sports Centre, Whitefield',
             centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
@@ -43,8 +31,8 @@ export const NextSessionList = (onPlayingLevelPress,onCancelPress) => {
             title: "Intermediate",
             by:'2',
             titleColor:'#FF9C33',
-            sportsName:'erioubyft',
-            sportsTime:'3pm',
+            sportsName:'Swimming - Pool',
+            sportsTime:'2-3pm',
             centreName:'Machaxi Play9 Sports Centre, Whitefield',
             centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
             numberOfGuests:'None'
@@ -54,7 +42,7 @@ export const NextSessionList = (onPlayingLevelPress,onCancelPress) => {
             title: "Advance",
             by:'8',
             titleColor:'#FE6E88',
-            sportsName:'erioubyft',
+            sportsName:'Swimming - Pool',
             sportsTime:'3pm',
             centreName:'Machaxi Play9 Sports Centre, Whitefield',
             centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
@@ -66,58 +54,41 @@ export const NextSessionList = (onPlayingLevelPress,onCancelPress) => {
             title: "Professional",
             by:'5',
             titleColor:'#DB64FF',
-            sportsName:'erioubyft',
+            sportsName:'Swimming - Pool',
             sportsTime:'3pm',
             centreName:'Machaxi Play9 Sports Centre, Whitefield',
             centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
             numberOfGuests:'5',
           },
       ];
-    //   useEffect(() => {       
-        
-    //   }, [])
+    const [showPlayingLevel,setShowPlayingLevel] =useState(false);
+
+
+      const onPlayingLevelPress=()=>{
+        setShowPlayingLevel(!showPlayingLevel)
+      }
+
+      const onCancelPress=()=>{
+        null
+      }
+      
     const renderNextScreenCard = ({item}) => {
         console.log('renderNextScreenCard')
         console.log({item})
         return (
         <NextSessionCard
-        onPlayingLevelPress={null}
-        onCancelPress={null}
+        showPlayingLevel={showPlayingLevel}
+        onPlayingLevelPress={onPlayingLevelPress}
+        onCancelPress={onCancelPress}
         item={item}
         />
         )
     };
   return(<>
     <FlatList
-                data={Data}
-                renderItem={renderNextScreenCard}
-            />
-           {/* <Text>eryuiyuhtrfdgyunhmi</Text> */}
+        data={NextSessionData}
+        renderItem={renderNextScreenCard}
+    />
         </>
     )
 }
-
-const styles = StyleSheet.create({
-
-    
-    menu: {
-      color: '#AFAFAF',
-      alignItems: 'flex-start',
-      fontSize: 14,
-      fontFamily: 'Quicksand-Medium',
-    },
-    heading:{
-      color: '#FF9C33',
-      fontSize: 16,
-      fontFamily: 'Quicksand-Medium',
-      marginTop:2,
-      textAlign:'center',
-    },
-    cancelText:{
-        color: '#FF7373',
-        fontSize: 16,
-        fontFamily: 'Quicksand-Medium',
-        marginTop:2,
-        textAlign:'center',
-      },
-    })

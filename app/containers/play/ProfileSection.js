@@ -1,23 +1,61 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     View,
     Text,
-    Image
+    Image, 
+    StyleSheet,
   } from "react-native";
 
   
 export const ProfileSction = ({ image , name}) => {
   return(
-    <View style={{marginHorizontal:20, alignItems:'center', paddingHorizontal:16, paddingVertical:16,paddingTop:37}}>
-        <View  style={{ height: 110, width: 110 ,borderRadius:55 ,borderColor:'yellow',borderWidth:1}} >
-        <Image style={{height: 110, width: 110 ,borderRadius:55 }} 
+    <View style={styles.container}>
+        <View  style={styles.imageContainer} >
+        <Image style={styles.image} 
         source={image} 
-        resizeMode='cover'
-        /></View>
-        <Text style={{color:'white',fontSize: 20,color:'white',paddingTop:11}}>
+        resizeMode='contain'
+        />
+        </View>
+        <Text style={styles.title}>
           {name}
         </Text>
 
     </View>
   )
 }
+
+
+const styles = StyleSheet.create({
+
+    container:{
+        marginHorizontal:20, 
+        alignItems:'center', 
+        paddingHorizontal:16, 
+        paddingVertical:16,
+        paddingTop:37
+    },
+    image:{
+        height: 110, 
+        width: 110 ,
+        borderRadius:55 ,
+        resizeMode:'cover'
+    },
+    imageContainer:{
+        height: 113, 
+        width: 113 ,
+        borderRadius:56 ,
+        borderWidth:3,
+        borderColor:'#FFCB6A',
+    },
+
+
+    title:{
+        color:'white',
+        fontSize: 20,
+        color:'white',
+        fontFamily:'Nunito-Regular',
+        paddingTop:11,
+        fontWeight:600
+    },
+}
+)

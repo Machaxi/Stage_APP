@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     View,
     Text,
@@ -13,7 +13,7 @@ import {
 export const PeerRatingCard = ({ item,  }) => {
   console.log({item})
   return(
-    <View style={{flexDirection:'row',marginHorizontal:20,paddingVertical:16}}>
+    <View style={styles.container}>
 
       <Image style={{ height: 50, width: 50 }} 
         source={item['icon']} 
@@ -29,10 +29,11 @@ export const PeerRatingCard = ({ item,  }) => {
         <Text style={{color:item['titleColor'],fontSize: 14,}}>
           {item['title']}
         </Text>
-        <View style={{flexDirection:'row', marginTop:10 }}>
-          <Text style={{color:'white',fontSize: 12,}}>Rated by </Text>
-          <Text style={{color:'white',fontSize: 12,}}>{item['by']}</Text>
-          <Text style={{color:'white',fontSize: 12,}}> players</Text>
+        <View style={styles.descBox}>
+
+          <Text style={styles.desc}>Rated by </Text>
+          <Text style={styles.desc}>{item['by']}</Text>
+          <Text style={styles.desc}> players</Text>
         </View>
 
       </View>
@@ -43,14 +44,17 @@ export const PeerRatingCard = ({ item,  }) => {
 
 
 
-const styles = {
+const styles = StyleSheet.create ({
+  container:{
+    flexDirection:'row',
+    marginHorizontal:20,
+    paddingVertical:16
+  },
   rounded_button: {
       alignItems: 'center',
       justifyContent:'center',
-      // borderRadius: 20,
       marginLeft: 5,
       marginRight: 5,
-      // backgroundColor: '#67BAF5',
       paddingHorizontal: 20,
       borderWidth: 1,
       borderColor: '#67BAF5',
@@ -58,6 +62,13 @@ const styles = {
       backgroundColor: 'red',
       height: 42,
       borderRadius: 20,
-
   },
-}
+  desc:{
+    color:'white',
+    fontSize: 12,
+  },
+  descBox:{
+    flexDirection:'row', 
+    marginTop:10 
+  },
+})
