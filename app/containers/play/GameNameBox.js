@@ -41,7 +41,7 @@ export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,bo
                   fontSize:fontSize?fontSize:14,
                   textAlign: 'center',
                   fontFamily: 'Nunito-Regular',
-                  fontWeight:400,
+                  fontWeight:'400',
               }}>
               {item['title']}
           </Text>

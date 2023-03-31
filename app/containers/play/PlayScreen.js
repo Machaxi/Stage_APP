@@ -264,6 +264,7 @@ menuHeading:{
   fontFamily: 'Nunito-Regular',
   marginTop:2,
   textAlign:'center',
+  
 },
 skyFilledButtonView:{
   position:'absolute',

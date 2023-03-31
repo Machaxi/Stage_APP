@@ -144,40 +144,41 @@ const styles = StyleSheet.create({
         alignItems:'center',
         marginRight:19,
         fontFamily:'Nunito-Regular',
+        fontWeight:'500'
     },
     heading:{
         color: '#FF9C33',
         fontSize: 16,
         fontFamily: 'Nunito-Regular',
         marginTop:2,
-        fontWeight:600
+        fontWeight:'600'
     },
     playingPartnerHeading:{
         color: 'white',
         fontSize: 12,
         fontFamily: 'Nunito-Regular',
         marginTop:2,
-        fontWeight:500
+        fontWeight:'500'
     },
     cancelText:{
         color: '#FF7373',
         fontSize: 16,
         fontFamily: 'Nunito-Regular',
         marginTop:2,
-        fontWeight:400
+        fontWeight:'400'
     },
     sports:{
         color: 'white',
         fontSize: 14,
         fontFamily: 'Nunito-Regular',
         alignSelf:"flex-start",
-        fontWeight:600
+        fontWeight:'600'
      },
     centerName:{
         color: 'white',
         fontSize: 12,
         fontFamily: 'Nunito-Regular',
-        fontWeight:400
+        fontWeight:'400'
         
     },
     centerAddress:{
@@ -185,14 +186,14 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontFamily: 'Nunito-Regular',
         marginTop:4,
-        fontWeight:400
+        fontWeight:'400'
     },
     numberOfGUests:{
         color: '#DFDFDF',
         fontSize: 12,
         fontFamily: 'Nunito-Regular',
         marginTop:14,
-        fontWeight:400
+        fontWeight:'400'
     },
     arrow_img: {
         height:12,

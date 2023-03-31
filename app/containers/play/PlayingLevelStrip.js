@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
       fontFamily: 'Quicksand-Medium',
       marginTop:2,
       textAlign:'center',
-      fontWeight:600
+      fontWeight:'600'
     },
     skyFilledButtonView:{
       position:'absolute',

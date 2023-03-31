@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         color:'white',
         fontFamily:'Nunito-Regular',
         paddingTop:11,
-        fontWeight:600
+        fontWeight:'600'
     },
 }
 )

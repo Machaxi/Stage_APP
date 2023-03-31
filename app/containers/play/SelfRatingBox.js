@@ -17,7 +17,7 @@ export const SelfRatingBox = ({ title,titleColor,icon,imageSize }) => {
             resizeMode='cover'
             />
         </View>
-        <Text style={{color:{titleColor},fontSize: 14,marginLeft:12 ,color:titleColor ,fontFamily:'Nunito-Regular' ,fontWeight:500}}>
+        <Text style={{color:{titleColor},fontSize: 14,marginLeft:12 ,color:titleColor ,fontFamily:'Nunito-Regular' ,fontWeight:'500'}}>
           {title}
         </Text>
 

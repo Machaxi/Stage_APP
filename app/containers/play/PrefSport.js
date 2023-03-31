@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         marginBottom:6 ,
         fontFamily: 'Nunito-Regular',
-        fontWeight:600,
+        fontWeight:'600',
     },
     sportTitle:{
         color: '#CDCDCD',
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         paddingLeft:10,
         fontSize:12,
         fontFamily: 'Nunito-Regular',
-        fontWeight:400
+        fontWeight:'400'
     },
     seperator:{
         backgroundColor:'#616161', 
@@ -89,13 +89,13 @@ const styles = StyleSheet.create({
         textAlign:'center',
         marginBottom:6,
         fontFamily: 'Nunito-Regular',
-        fontWeight:400
+        fontWeight:'400'
     },
     currentRatingDesc:{
         textAlign: 'center',
         fontSize:12,
         fontFamily: 'Nunito-Regular',
-        fontWeight:400
+        fontWeight:'400'
     },
     rounded_button: {
         alignItems: 'center',

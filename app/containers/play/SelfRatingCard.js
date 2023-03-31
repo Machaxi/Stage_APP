@@ -147,7 +147,7 @@ peersRating:{
     marginTop:21,
     marginLeft:20,
     fontFamily:'Nunito-Regular',
-    fontWeight:500
+    fontWeight:'500'
 },
 
 

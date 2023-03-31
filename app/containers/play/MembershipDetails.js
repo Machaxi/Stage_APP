@@ -47,7 +47,7 @@ export const MembershipDetails = ({ purchasedDate, expiryDate ,profilePrecentage
                                     return (<Text  style={{
                                             color: '#FFFFFF',
                                             marginTop:4,
-                                            fontWeight:500,
+                                            fontWeight:'500',
                                             fontFamily: 'Nunito-Regular'}}>
                                             {hoursLeft}</Text>);
                                         }}
@@ -106,27 +106,27 @@ const styles = StyleSheet.create({
         marginTop:12,
         marginBottom:14,
         fontFamily: 'Nunito-Regular',
-        fontWeight:600
+        fontWeight:'600'
     },
     dynamicDate:{
         color: '#FFFFFF',
         paddingLeft:2,
         fontSize:10,
         fontFamily: 'Nunito-Regular', 
-        fontWeight:400
+        fontWeight:'400'
     },
     staticDate:{
         color: '#FFFFFF',
         fontSize:10,
         fontFamily: 'Nunito-Regular',
-        fontWeight:400
+        fontWeight:'400'
     },
     monthlyMembershipText:{
         color: '#FFFFFF', 
         marginTop:4, 
         fontSize:14,
         fontFamily: 'Nunito-Regular',
-        fontWeight:500
+        fontWeight:'500'
     },
 
 })
