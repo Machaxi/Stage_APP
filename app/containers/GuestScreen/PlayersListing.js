@@ -123,8 +123,6 @@ class PlayersListing extends BaseComponent {
     }
     _renderItem = ({ item }) => (
 
-
-
         <View style={{ overflow: 'hidden', height: 180, width: "33.33%", paddingRight: 4, marginBottom: 16 }}>
             <TouchableOpacity
                 activeOpacity={.8}

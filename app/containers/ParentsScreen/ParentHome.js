@@ -126,6 +126,7 @@ class ParentHome extends BaseComponent {
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
+
       },
       //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
       // navigation={navigation} />,
@@ -251,6 +252,7 @@ class ParentHome extends BaseComponent {
       sportsOptionsVisible: false,
       currentSportName: "",
       isStatsLoading: false,
+      loading: false
     };
     const { navigation } = this.props.navigation.setParams({
       shareProfile: this.shareProfile,
@@ -635,6 +637,13 @@ class ParentHome extends BaseComponent {
     }, 1000);
   };
 
+  refreshPage(){
+      this.setState({ loading: true });
+      setTimeout(() => {
+        this.setState({ loading: false });
+      }, 1000);
+  }
+
   handleClick() {
     let link = "";
     if (Platform.OS == "ios") {
@@ -676,6 +685,7 @@ class ParentHome extends BaseComponent {
       sportsOptionsVisible: false,
     });
   };
+
   onStatItemClicked = (item) => {
     this.props.navigation.navigate("ViewPlayerPerformance", {
       performance_data: item,
@@ -688,7 +698,7 @@ class ParentHome extends BaseComponent {
     let show_must_update_alert = this.state.show_must_update_alert;
     const rewards_ui_array = [];
 
-    if (this.props.data.loading && !this.state.player_profile) {
+    if (this.props.data.loading && !this.state.player_profile || this.state.loading) {
       return (
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -697,6 +707,8 @@ class ParentHome extends BaseComponent {
         </View>
       );
     }
+
+
     if (this.state.player_profile) {
       const {
         name,
@@ -895,11 +907,13 @@ class ParentHome extends BaseComponent {
                 title="Pull to refresh"
               />
             }
-            style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}
+            style={styles.main_container}
           >
             <PlayerHeader
               player_profile={this.state.player_profile}
               is_tooblar={true}
+              is_parent={true}
+              refreshPage={() => this.refreshPage()}
             />
             <View style={{ margin: 10, marginTop: 20, zIndex: 2 }}>
               <SwitchButton onPress={() => this.switchPlayer()}>
@@ -926,42 +940,52 @@ class ParentHome extends BaseComponent {
                       flexDirection: "row",
                       paddingTop: 8,
                       paddingBottom: 8,
-                      alignItems:"center"
+                      alignItems: "center",
                     }}
                   >
                     <View>
-                        <Text style={defaultStyle.bold_text_10}>
-                          {operations.batch_name}
-                        </Text>
-                        <Text style={{...defaultStyle.bold_text_10, marginTop:18}}>
-                          Next Session :{" "}
-                          {operations.next_sessions[0].routine_name}
-                        </Text>
-                        
+                      <Text style={defaultStyle.bold_text_10}>
+                        {operations.batch_name}
+                      </Text>
+                      <Text
+                        style={{
+                          ...defaultStyle.bold_text_10,
+                          marginTop: 18,
+                        }}
+                      >
+                        Next Session :{" "}
+                        {operations.next_sessions[0].routine_name}
+                      </Text>
                     </View>
-                    
-                    <View style={{flexDirection:"row", }}>
-                        {(operations.whats_app_url &&  operations.whats_app_url!="") ? 
-                        <View style={{alignItems:"center", flexDirection:"column"}}>
-                              <TouchableOpacity onPress={()=>{
-                                Linking.openURL(operations.whats_app_url);
-                              }}>
-                                
-                              <Image
-                                      resizeMode="contain"
-                                      style={{
-                                          width: 30,
-                                          height: 30, 
-                                      }}
-                                      source={require('../../images/whatsapp_logo.png')}
-                                  />
-                            </TouchableOpacity>
-                            <Text style={defaultStyle.bold_text_10}>
-                              Join Whatsapp Group
-                            </Text>
+
+                    <View style={{ flexDirection: "row" }}>
+                      {operations.whats_app_url &&
+                      operations.whats_app_url != "" ? (
+                        <View
+                          style={{
+                            alignItems: "center",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => {
+                              Linking.openURL(operations.whats_app_url);
+                            }}
+                          >
+                            <Image
+                              resizeMode="contain"
+                              style={{
+                                width: 30,
+                                height: 30,
+                              }}
+                              source={require("../../images/whatsapp_logo.png")}
+                            />
+                          </TouchableOpacity>
+                          <Text style={defaultStyle.bold_text_10}>
+                            Join Whatsapp Group
+                          </Text>
                         </View>
-                          :null}
-                            
+                      ) : null}
                     </View>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
@@ -1933,5 +1957,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
+  },
+  main_container: {
+    flex: 1,
+    marginTop: 0,
+    backgroundColor: "#F7F7F7",
   },
 });
