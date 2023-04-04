@@ -34,6 +34,7 @@ export default TabBarHighlightLabel = ({
       width: '100%',
       alignItems: 'center',
       justifyContent: 'flex-end',
+      backgroundColor:'rgba(25, 15, 47, 0.8)'
     },
     labelText: {
       flex: 0,

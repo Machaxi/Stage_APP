@@ -32,7 +32,6 @@ allprojects {
             force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
         }
     }
-
     repositories {
         google()
         mavenCentral()
