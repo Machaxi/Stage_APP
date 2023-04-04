@@ -93,7 +93,7 @@ import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
 import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
-import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
+// import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
 import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
 import TrialBook from '../containers/FirstTimeUser/TrialBook';
 import HomeScreen from '../containers/FirstTimeUser/HomeScreen';

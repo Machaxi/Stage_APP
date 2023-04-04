@@ -915,11 +915,11 @@ class ParentHome extends BaseComponent {
               is_parent={true}
               refreshPage={() => this.refreshPage()}
             />
-            <View style={{ margin: 10, marginTop: 20, zIndex: 2 }}>
+            {/* <View style={{ margin: 10, marginTop: 20, zIndex: 2 }}>
               <SwitchButton onPress={() => this.switchPlayer()}>
                 Switch Child
               </SwitchButton>
-            </View>
+            </View> */}
 
             {sessionArray.length != 0 ? (
               <CustomeCard>

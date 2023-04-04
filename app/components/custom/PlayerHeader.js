@@ -71,6 +71,7 @@ export default class PlayerHeader extends BaseComponent {
             player_level,
             reward_point,
             profile_pic,
+            id,
             player_category, operations } =
             this.props.player_profile
 
@@ -121,7 +122,7 @@ export default class PlayerHeader extends BaseComponent {
                     isParent={true}
                     onSelected={this.onChildSelect.bind(this)}
                     values={null}
-                    isSelected={true}
+                    isSelected={typeof id == 'undefined' || id == null}
                   />
                   {this.props.is_parent &&
                     this.state.childrenData.map((val) => {
@@ -129,9 +130,11 @@ export default class PlayerHeader extends BaseComponent {
                         <PlayerNameBox
                           name={val?.name}
                           isParent={false}
-                          onSelected={this.onChildSelect.bind(this)}
+                          onSelected={this.onChildSelect.bind(
+                            this
+                          )}
                           values={val}
-                          isSelected={false}
+                          isSelected={id == val?.id}
                         />
                       );
                     })}
