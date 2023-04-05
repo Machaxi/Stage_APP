@@ -278,8 +278,6 @@ class AcademyBatch extends BaseComponent {
           >
             <Text style={{ color: "white" }}>Buy Membership</Text>
           </TouchableOpacity>
-        
-
         </View>
         {(item.is_buying_allowed && item.is_buying_allowed==true)?null:<Text style={{textAlign:"center", color:item.buying_not_allowed_message.color, marginTop:5, fontSize:12}}>{item.buying_not_allowed_message.message}</Text>}
         

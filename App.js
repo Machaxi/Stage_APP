@@ -448,12 +448,29 @@ class App extends BaseComponent {
                             if (Platform.OS == 'android') {
 
                                 if (prevScreen !== currentScreen) {
-                                    if (currentScreen == 'UserHome' || currentScreen == 'ParentHome') {
-                                        StatusBar.setBackgroundColor("#332B70")
-                                        StatusBar.setBarStyle('light-content', true)
+                                    if (
+                                      currentScreen ==
+                                        "UserHome" ||
+                                      currentScreen ==
+                                        "ParentHome" ||
+                                      currentScreen ==
+                                        "MyRequestsHome"
+                                    ) {
+                                      StatusBar.setBackgroundColor(
+                                        "#332B70"
+                                      );
+                                      StatusBar.setBarStyle(
+                                        "light-content",
+                                        true
+                                      );
                                     } else {
-                                        StatusBar.setBackgroundColor("#ffffff")
-                                        StatusBar.setBarStyle('dark-content', true)
+                                      StatusBar.setBackgroundColor(
+                                        "#ffffff"
+                                      );
+                                      StatusBar.setBarStyle(
+                                        "dark-content",
+                                        true
+                                      );
                                     }
 
                                     //this.refreshScreenCallback(currentScreen)
