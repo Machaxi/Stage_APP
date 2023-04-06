@@ -90,6 +90,14 @@ import SaveGuestTrial from '../containers/GuestScreen/SaveGuestTrial'
 import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
 import PlanPurchaseView from '../components/custom/PlanPurchaseView';
+import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
+import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
+import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
+import TrialBook from '../containers/FirstTimeUser/TrialBook';
+import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
+import LoginSceen from '../containers/Login/LoginSceen';
+import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/CongratulationScreen'
+import PlanBook from '../containers/FirstTimeUser/PlanBook';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -127,7 +135,8 @@ const loginModule = createStackNavigator({
     //     }
     // },
     Login: {
-        screen: phoneauth,
+        // screen: phoneauth,
+        screen: LoginSceen,
         navigationOptions: {
             header: null
             //header:null
@@ -2543,6 +2552,30 @@ const BaseNavigator = createSwitchNavigator({
     GuestBookHome: {
         screen: guestBookDrawer,
 
+    },
+    LoginSceen: {
+      screen: LoginSceen,
+    },
+    ShopScreen: {
+      screen: ShopScreen,
+    },
+    PlayScreen: {
+      screen: PlayScreen,
+    },
+    CongratulationScreen: {
+      screen: CongratulationScreen,
+    },
+    CoachScreen: {
+      screen: CoachScreen,
+    },
+    HomeScreen: {
+      screen: HomeScreen,
+    },
+    TrialBook: {
+      screen: TrialBook,
+    },
+    PlanBook: {
+      screen: PlanBook,
     },
     CoachBookHome: {
         screen: coachBookDrawer,

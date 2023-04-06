@@ -114,6 +114,14 @@
 		<string>Nunito-Bold.ttf</string>
 		<string>Nunito-SemiBold.ttf</string>
 		<string>Nunito-Regular.ttf</string>
+		<string>Nunito-300.ttf</string>
+		<string>Nunito-400.ttf</string>
+		<string>Nunito-500.ttf</string>
+		<string>Nunito-600.ttf</string>
+		<string>Nunito-700.ttf</string>
+		<string>Nunito-800.ttf</string>
+		<string>Nunito-900.ttf</string>
+		<string>Nunito-ExtraBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
