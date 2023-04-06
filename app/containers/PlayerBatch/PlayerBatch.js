@@ -15,6 +15,7 @@ import { PLAYER, FAMILY, PARENT } from '../../components/Constants';
 import Events from '../../router/events';
 import * as Analytics from "../../Analytics"
 import PTRView from 'react-native-pull-to-refresh';
+import NavigationDrawerWhite from '../../router/NavigationDrawerWhite';
 
 class PlayerBatch extends BaseComponent {
 
@@ -25,36 +26,13 @@ class PlayerBatch extends BaseComponent {
             headerTitle: 'My Batches',
             headerTitleStyle: defaultStyle.headerStyle,
 
-            headerLeft: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.toggleDrawer();
-                    }}
-                    style={{padding: 7}}
-                    activeOpacity={.8}>
-                    <Image
-                        source={require('../../images/hamburger.png')}
-                        style={{ width: 20, height: 16, marginLeft: 12 }}
-                    />
-                </TouchableOpacity>
+            headerLeft: (<NavigationDrawerWhite navigationProps={navigation}
+                showBackAction={true}
+                 />
             ),
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('SwitchPlayer')
-                    }}
-                    activeOpacity={.8}
-                >
-                    <Text
-                        style={{
-                            marginRight: 12,
-                            fontFamily: 'Quicksand-Regular',
-                            fontSize: 10,
-                            color: '#667DDB'
-                        }}>{navigation.getParam('switch_button','')}</Text>
-                </TouchableOpacity>
-
-            )
+            headerRight:( <RightMenuToolbar navigationProps={navigation}
+            navigation={navigation} showHome={false} />
+    )
         };
 
     };

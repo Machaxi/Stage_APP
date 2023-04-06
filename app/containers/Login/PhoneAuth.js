@@ -654,7 +654,7 @@ class PhoneAuth extends BaseComponent {
                         this.signInByName(null, null)
                     }}>Login by name</Text> */}
 
-                {getShowLoginByName() ?
+                {getShowLoginByName()  ?
                     <TouchableOpacity activeOpacity={.8}
                         style={[defaultStyle.rounded_button,
                         {
@@ -672,7 +672,7 @@ class PhoneAuth extends BaseComponent {
                             }}>
                             Login by name</Text>
                     </TouchableOpacity>
-                    : null}
+                     : null}
                     <TouchableOpacity activeOpacity={.8}
                         style={[defaultStyle.rounded_button,{ marginTop: 10, width: 150 }]}
                         onPress={() => { this.props.navigation.navigate('CoachingTrial'); }}>

@@ -1,20 +1,68 @@
 import React from "react";
-import { Header } from "react-navigation";
-import { View, Platform, Text, TouchableOpacity, Image, ImageBackground, Dimensions, StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { View, Text, ScrollView, ImageBackground, Dimensions, StyleSheet } from "react-native";
 import BaseComponent, {
     defaultStyle,
     getFormattedBadge,
-    bebas_text_blue_10, getFormattedCategory, getFormattedLevel, formattedName
+    getFormattedCategory, getFormattedLevel, formattedName
 } from "../../containers/BaseComponent";
 import FastImage from 'react-native-fast-image'
+import { getData, storeData } from "../auth";
+import PlayerNameBox from "../../atoms/playerNameBox";
+import events from "../../router/events";
+import SvgUri from "react-native-svg-uri";
 
-var deviceWidth = Dimensions.get('window').width - 20;
 
 export default class PlayerHeader extends BaseComponent {
 
     constructor(props) {
         super(props);
+        this.state = {
+            childrenData: [],
+            wholeData: null
+        }
+    }
+
+    componentDidMount(){
+        // if (isParent(userData)) {
+          getData("childrenData", (value) => {
+            let childData = JSON.parse(value);
+            if (childData?.length > 0) {
+              this.setState({
+                childrenData: childData,
+              });
+            }
+            
+          });
+
+          getData('userInfo', (value) => {
+            userData = JSON.parse(value);
+            this.setState({
+                wholeData: JSON.parse(value)
+            });
+          })
+        //}
+    }
+
+    onChildSelect(item){
+        var tempuserData = this.state.wholeData;
+        tempuserData["academy_id"] = item.academy_id;
+        tempuserData["player_id"] = item.id;
+        tempuserData["academy_name"] = item.academy_name;
+        tempuserData["academy_rating"] = item.academy_rating;
+
+        storeData("userInfo", JSON.stringify(tempuserData));
+
+        storeData("academy_name", item.academy_name);
+        storeData("academy_id", item.academy_id);
+        storeData("academy_rating", item.academy_rating);
+        storeData("player_id", item.id);
+        events.publish(
+            "REFRESH_DASHBOARD"
+        );
+        this.props.refreshPage();
+
+        this.setState({})
+
     }
 
     render() {
@@ -23,6 +71,7 @@ export default class PlayerHeader extends BaseComponent {
             player_level,
             reward_point,
             profile_pic,
+            id,
             player_category, operations } =
             this.props.player_profile
 
@@ -40,213 +89,249 @@ export default class PlayerHeader extends BaseComponent {
         let newName = formattedName(name)
 
         return (
-            <View style={{ width: '100%', height: 290, }}>
-                <ImageBackground
-                    source={bg_img}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                    }}>
-
-                    {/* <LinearGradient
+          <View
+            style={styles.main}
+          >
+            <ImageBackground
+              //resizeMode="cover"
+              source={bg_img}
+              style={styles.top_container}
+            >
+              {/* <LinearGradient
                     colors={['#332B70', '#24262A']}
                     style={{ flex: 1 }}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 2.5, y: 0 }}
                 > */}
-                    {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+              {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
                                 navigation={this.props.navigation} /> */}
-
-                    <View style={{ position: 'relative', marginTop: 8 }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            {/* <Image source={{ uri: profile_pic }}
-                                resizeMode="contain"
-                                style={{
-                                    width: 201,
-                                    height: 238, marginRight: 20, marginTop: 0, display: 'flex'
-                                }}> 
-                                </Image>*/}
-
-                            <FastImage
-                                resizeMode={FastImage.resizeMode.contain}
-                                style={{
-                                    width: '50%',
-                                    marginLeft:10,
-                                    height: 238, marginRight: 20, marginTop: 0, display: 'flex'
-                                }}
-                                source={{ uri: profile_pic }}
-                            />
-
-                            <View style={{ display: 'flex', flex: 1, marginBottom: 120 }}>
-                                <Text style={{
-                                    width: 120,
-                                    color: 'white',
-                                    marginRight: 0,
-                                    textAlign: 'center',
-                                    fontFamily: 'Quicksand-Bold',
-                                    fontSize: 28,
-                                }}
-                                    numberOfLines={1}
-                                >{newName}</Text>
-
-
-                                <ImageBackground
-                                    resizeMode="contain"
-                                    style={{
-                                        marginBottom: 20,
-                                        marginTop: 8,
-                                        height: 80,
-                                        width: 120
-                                    }}
-                                    source={require('../../images/single_shield.png')}
-
-
-                                >
-
-                                    <View style={{
-                                        alignItems: 'center',
-                                        marginTop: 33,
-                                    }}>
-
-                                        <Text style={
-                                            [defaultStyle.bebas_text_blue_10,
-                                            {
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                width: 60,
-                                                height: 20,
-                                                textAlign: 'center',
-                                            }]
-                                        }>{getFormattedBadge(badge)}</Text>
-
-
-                                    </View>
-                                </ImageBackground>
-
-
-                                <View style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    marginBottom: 10,
-                                    marginLeft: 10,
-                                }}>
-                                    <Text style={{
-                                        color: 'white',
-                                        marginRight: 10,
-                                        textAlign: 'center',
-                                        fontSize: 11,
-                                        fontFamily: 'Quicksand-Medium',
-
-                                    }}>{getFormattedLevel(player_level)}</Text>
-                                    <View
-                                        style={{
-                                            backgroundColor: 'red',
-                                            paddingLeft: 6,
-                                            paddingRight: 6,
-                                            height: 22,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginRight: 20,
-                                            borderRadius: 2
-
-                                        }}>
-                                        <Text style={{
-                                            color: 'white',
-                                            marginRight: 0,
-                                            textAlign: 'center',
-                                            fontSize: 11,
-                                            fontFamily: 'Quicksand-Bold',
-                                        }}>{getFormattedCategory(player_category)}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            position: 'absolute',
-                            bottom: 20,
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            selfAlign: 'center'
-                        }}>
-                            {console.log("width", deviceWidth / 3)}
-                            <View style={{
-                                width: deviceWidth / 3,
-                                height: 100, marginLeft: 10
-                            }}>
-
-                                <ImageBackground source={require('../../images/box.png')}
-                                    style={{
-                                        width: '100%',
-                                        height: 100,
-                                    }}>
-
-                                    <Text style={styles.box_label}>Rank</Text>
-                                    {rank ? <Text style={styles.scoreBox}>{rank}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-
-                                </ImageBackground>
-
-                            </View>
-                            <ImageBackground source={require('../../images/box.png')}
-                                style={{
-                                    width: deviceWidth / 3,
-                                    height: 100,
-                                }}>
-                                <Text style={styles.box_label}>Score</Text>
-                                {score ? <Text style={styles.scoreBox}>{score}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-                            </ImageBackground>
-
-
-                            <View style={{
-                                width: deviceWidth / 3,
-                                height: 100, marginRight: 0
-                            }}>
-                                <ImageBackground source={require('../../images/box.png')}
-                                    style={{
-                                        width: '100%',
-                                        height: 100,
-                                    }}>
-
-                                    <Text style={styles.box_label}>Reward</Text>
-                                    {reward_point ? <Text style={styles.scoreBox}>{reward_point}</Text> : <Text style={styles.scoreBox}>00</Text>}
-
-
-                                </ImageBackground>
-
-                            </View>
-
-
-                        </View>
-
-
+              <View
+                style={styles.profile_txt_view}
+              >
+                <Text
+                  style={styles.player_profile_txt}
+                >
+                  Players Profile
+                </Text>
+                <ScrollView
+                  style={{ flexDirection: "row" }}
+                  horizontal={true}
+                >
+                  <PlayerNameBox
+                    name={"Parent"}
+                    isParent={true}
+                    onSelected={this.onChildSelect.bind(this)}
+                    values={null}
+                    isSelected={typeof id == 'undefined' || id == null}
+                  />
+                  {this.props.is_parent &&
+                    this.state.childrenData.map((val) => {
+                      return (
+                        <PlayerNameBox
+                          name={val?.name}
+                          isParent={false}
+                          onSelected={this.onChildSelect.bind(
+                            this
+                          )}
+                          values={val}
+                          isSelected={id == val?.id}
+                        />
+                      );
+                    })}
+                </ScrollView>
+              </View>
+              <View style={{ marginTop: 36 }}>
+                <View
+                  style={{
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={styles.player_picture}
+                  >
+                    <FastImage
+                      resizeMode={FastImage.resizeMode.contain}
+                      style={styles.pic}
+                      source={{ uri: profile_pic }}
+                    />
+                  </View>
+                  <View
+                    style={styles.details_view}
+                  >
+                    {/* <View style={{ transform: [{ rotate: "180deg" }] }}> */}
+                    <SvgUri
+                      width="30"
+                      height="22"
+                      source={require("../../images/svg/spiked_banner.svg")}
+                      style={{ transform: [{ rotate: "180deg" }] }}
+                    />
+                    <View
+                      style={styles.badge_view}
+                    >
+                      <Text
+                        style={[
+                          defaultStyle.bebas_text_blue_10,
+                          styles.badge_text
+                        ]}
+                      >
+                        {getFormattedBadge(badge)}
+                      </Text>
                     </View>
-                </ImageBackground>
-
-            </View >
-        )
+                    {/* </View> */}
+                    <SvgUri
+                      width="30"
+                      height="22"
+                      source={require("../../images/svg/spiked_banner.svg")}
+                    />
+                  </View>
+                  <Text
+                    style={styles.player_name}
+                    numberOfLines={1}
+                  >
+                    {newName}
+                  </Text>
+                  
+                  <View
+                    style={styles.flex_row}
+                  >
+                    <Text
+                      style={styles.player_level}
+                    >
+                      {getFormattedLevel(player_level)}
+                    </Text>
+                    <View
+                      style={styles.category_view}
+                    >
+                      <Text
+                        style={styles.player_cat}
+                      >
+                        {getFormattedCategory(player_category)}
+                      </Text>
+                    </View>
+                  </View>
+                 
+                </View>
+              
+              </View>
+            </ImageBackground>
+          </View>
+        );
 
     }
 }
 const styles = StyleSheet.create({
-    scoreBox: {
-        color: 'white',
-        marginRight: 20,
-        marginTop: 16,
-        marginBottom: 20,
-        textAlign: 'right',
-        fontSize: 24,
-        fontFamily: 'Quicksand-Bold'
+  scoreBox: {
+    color: "white",
+    marginRight: 20,
+    marginTop: 16,
+    marginBottom: 20,
+    textAlign: "right",
+    fontSize: 24,
+    fontFamily: "Quicksand-Bold",
+  },
+  profile_txt_view: {
+    marginTop: 8,
+    marginLeft: 19,
+    marginRight: 19,
+  },
+  main: {
+    width: "100%",
+    height: 376,
+  },
+  player_picture: {
+      height: 113,
+      width: 113,
+      borderRadius: 113,
+      borderColor: "#FFCB6A",
+      borderWidth: 2,
+      alignItems: "center",
+      justifyContent: "center",
     },
-    box_label: {
-        fontFamily: 'Quicksand-Medium',
-        marginLeft: 18,
-        marginTop: 16,
-        color: '#F4F4F4',
-        fontSize: 12,
-    }
-
-
+  details_view: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
+    top: 97,
+  },
+  pic: {
+    height: 110,
+    width: 110,
+    borderRadius: 110,
+  },
+  player_profile_txt: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "400",
+    marginBottom: 5,
+  },
+  badge_view:{
+    backgroundColor: "#485FA0",
+    height: 32,
+    borderRadius: 2,
+    width: 85,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  top_container: {
+    width: "100%",
+    height: "100%",
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    overflow: "hidden",
+  },
+  player_name: {
+    width: 120,
+    color: "white",
+    marginRight: 0,
+    textAlign: "center",
+    fontFamily: "Quicksand-Bold",
+    fontWeight: "700",
+    fontSize: 28,
+    marginTop: 19,
+    marginBottom: 15,
+  },
+  badge_text: {
+    width: 60,
+    //height: 20,
+    fontSize: 10,
+    fontWeight: "400",
+    textAlign: "center",
+  },
+  flex_row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  player_level: {
+    color: "white",
+    marginRight: 10,
+    textAlign: "center",
+    fontWeight: "400",
+    fontSize: 12,
+    fontFamily: "Quicksand-Medium",
+  },
+  box_label: {
+    fontFamily: "Quicksand-Medium",
+    marginLeft: 18,
+    marginTop: 16,
+    color: "#F4F4F4",
+    fontSize: 12,
+  },
+  player_cat: {
+    color: "white",
+    marginRight: 0,
+    textAlign: "center",
+    fontSize: 12,
+    fontWeight: "700",
+    fontFamily: "Quicksand-Bold",
+  },
+  category_view: {
+    backgroundColor: "red",
+    paddingLeft: 6,
+    paddingRight: 6,
+    height: 22,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 20,
+    borderRadius: 2,
+  },
 });

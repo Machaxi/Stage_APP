@@ -39,7 +39,9 @@ import { isSignedIn } from "../components/auth";
 import BaseComponent from '../containers/BaseComponent';
 import TournamentModule from './TournamentRouter'
 import coachBatchModule from './CoachBatchRouter'
-import userBatchModule from './PlayerBatchRouter'
+import userBatchModule from './PlayerBatchRouter';
+import PlayRoute from './PlayRoute';
+import PlayScreen from '././../containers/play/PlayScreen';
 import NavigationDrawerStructure from './NavigationDrawerStructure'
 import RightMenuToolbar from "./RightMenuToolbar";
 import coachPerfomenceModule from './CoachPerformenceRouter'
@@ -91,7 +93,7 @@ import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
 import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
-import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
+// import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
 import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
 import TrialBook from '../containers/FirstTimeUser/TrialBook';
 import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
@@ -135,8 +137,8 @@ const loginModule = createStackNavigator({
     //     }
     // },
     Login: {
-        // screen: phoneauth,
-        screen: LoginSceen,
+        screen: phoneauth,
+        //screen: LoginSceen,
         navigationOptions: {
             header: null
             //header:null
@@ -2344,29 +2346,41 @@ const tabBarControllerParent = createBottomTabNavigator(
         Home: {
             screen: parentHomeModule,
             navigationOptions: {
-                tabBarLabel: 'Home',
+                tabBarLabel: 'Learn',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
-                        label='Home'
+                        label='Learn'
                         focused={focused}
-                        activeIcon={require('../images/ic_tab_home.png')} />,
+                        activeIcon={require('../images/learn.png')} />,
             },
 
 
         },
         Batch: {
-            screen: userBatchModule,
+            screen: PlayRoute,
             navigationOptions: {
-                tabBarLabel: 'Batch',
+                tabBarLabel: 'Play',
                 tabBarLabel: ({ focused }) =>
                     <TabBarHighlightLabel
-                        label='Batch'
+                        label='Play'
                         focused={focused}
-                        activeIcon={require('../images/ic_tab_batch.png')} />,
+                        activeIcon={require('../images/play_highlight.png')} />,
             }
 
         },
         Tournament: {
+            screen: TournamentModule,
+            navigationOptions: {
+                tabBarLabel: 'Shop',
+                tabBarLabel: ({ focused }) =>
+                    <TabBarHighlightLabel
+                        label='Shop'
+                        focused={focused}
+                        activeIcon={require('../images/shop.png')} />,
+            }
+
+        },
+        Challenge: {
             screen: TournamentModule,
             navigationOptions: {
                 tabBarLabel: 'Tournament',
@@ -2374,22 +2388,23 @@ const tabBarControllerParent = createBottomTabNavigator(
                     <TabBarHighlightLabel
                         label='Tournament'
                         focused={focused}
-                        activeIcon={require('../images/ic_tab_tournament.png')} />,
+                        activeIcon={require('../images/tournament.png')} />,
             }
 
         },
-        Challenge: {
-            screen: userChallengeModule,
-            navigationOptions: {
-                tabBarLabel: 'Challenge',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Challenge'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_challenge.png')} />,
-            }
+      //   yellow: {
+      //     screen: TournamentModule,
+      //     navigationOptions: {
+      //         tabBarLabel: 'hiiiiiiiii',
+      //         tabBarLabel: ({ focused }) =>
+      //             <TabBarHighlightLabel
+      //                 label='hiiii'
+      //                 focused={focused}
+      //                 activeIcon={require('../images/tournament.png')} />,
+      //     }
 
-        }
+      // },
+        
 
     })
 
