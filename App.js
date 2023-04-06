@@ -35,6 +35,8 @@ import DeviceInfo from 'react-native-device-info';
 import codePush from "react-native-code-push";
 import crashlytics from '@react-native-firebase/crashlytics';
 import messaging from '@react-native-firebase/messaging';
+import { darkBlueVariant } from './app/containers/util/colors';
+import { deviceHeight, deviceWidth } from './app/containers/util/dimens';
 
 export const client = axios.create({
     baseURL: getBaseUrl(),
@@ -316,6 +318,11 @@ class App extends BaseComponent {
 
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
+        if (Platform.OS === "android" && DeviceInfo.hasNotch()) {
+          SafeAreaView
+            .setStatusBarHeight
+            (57);
+        }
     }
 
     componentWillMount() {
@@ -452,9 +459,8 @@ class App extends BaseComponent {
                                       currentScreen ==
                                         "UserHome" ||
                                       currentScreen ==
-                                        "ParentHome" ||
-                                      currentScreen ==
-                                        "MyRequestsHome"
+                                        "ParentHome"
+                                      
                                     ) {
                                       StatusBar.setBackgroundColor(
                                         "#332B70"
@@ -463,15 +469,29 @@ class App extends BaseComponent {
                                         "light-content",
                                         true
                                       );
-                                    } else {
-                                      StatusBar.setBackgroundColor(
-                                        "#ffffff"
-                                      );
-                                      StatusBar.setBarStyle(
-                                        "dark-content",
-                                        true
-                                      );
-                                    }
+                                    } 
+                                    else if (
+                                           currentScreen ==
+                                             "MyRequestsHome" ||
+                                           currentScreen ==
+                                             "MyBookingsScreen"
+                                         ) {
+                                           StatusBar.setBackgroundColor(
+                                             darkBlueVariant
+                                           );
+                                           StatusBar.setBarStyle(
+                                             "light-content",
+                                             true
+                                           );
+                                         } else {
+                                           StatusBar.setBackgroundColor(
+                                             "#ffffff"
+                                           );
+                                           StatusBar.setBarStyle(
+                                             "dark-content",
+                                             true
+                                           );
+                                         }
 
                                     //this.refreshScreenCallback(currentScreen)
                                 }

@@ -101,6 +101,7 @@ import LoginSceen from '../containers/Login/LoginSceen';
 import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/CongratulationScreen'
 import PlanBook from '../containers/FirstTimeUser/PlanBook';
 import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
+import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2426,6 +2427,12 @@ const parentBookDrawer = createDrawerNavigator({
     }
 );
 
+const mybookingsModule = createStackNavigator({
+  MyBookingsScreen: {
+    screen: MyBookingsScreen,
+  },
+});
+
 
 const myRequestsModule = createStackNavigator({
 
@@ -2445,6 +2452,12 @@ const parentDrawer = createDrawerNavigator(
     },
     MyRequestsHome: {
       screen: myRequestsModule,
+      // navigationOptions: {
+      //     header: <CustomHeader title="Academy" />,
+      // }
+    },
+    MyBookingsScreen: {
+      screen: mybookingsModule,
       // navigationOptions: {
       //     header: <CustomHeader title="Academy" />,
       // }

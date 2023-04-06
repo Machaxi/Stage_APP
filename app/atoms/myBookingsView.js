@@ -1,55 +1,86 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
-import { borderGrey, darkBlue, goldenYellow, greyVariant1, lightBlue, redVariant, white, whiteGreyBorder } from "../containers/util/colors";
+import {
+  borderGrey,
+  darkBlue,
+  goldenYellow,
+  greyVariant1,
+  lightBlue,
+  redVariant,
+  redVariant2,
+  white,
+  whiteGreyBorder,
+} from "../containers/util/colors";
 import NamedRoundedContainer from "./namedRoundedContainer";
 import MyRequestPlayersList from "./myRequestPlayersList";
 import MainBookingDetails from "./mainBookingDetails";
 import MyRequestCentreDetails from "./myRequestCentreDetails";
 import LinearGradient from "react-native-linear-gradient";
-import { commonStyles } from "../containers/util/commonStyles";
 
-const MyRequestSentView = ({ val, cancelBooking }) => {
+const MyBookingsView = ({ val, cancelBooking }) => {
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
       style={styles.requestOuterView}
     >
-        <View style={styles.detailsTopRow}>
-          <NamedRoundedContainer name={"Request accepted"} />
-          <TouchableOpacity onPress={() => cancelBooking()}>
-            <Text style={commonStyles.cancelBooking}>Cancel Booking</Text>
-          </TouchableOpacity>
-        </View>
-        <MyRequestCentreDetails details={val} />
-        <View style={styles.rowSpaceBtw}>
-          {[
-            { name: "Sport", value: val?.sport_name },
-            { name: "Slot", value: val?.slot },
-            ,
-            { name: "Pool", value: val?.pool },
-          ].map((value) => (
-            <MainBookingDetails details={value} />
-          ))}
-        </View>
-        <Text
-          style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}
+      {val?.isBooked ? (
+        <View
+          style={[
+            val.is_canceled ? { flexDirection: "row" } : styles.detailsTopRow,
+          ]}
         >
-          Registered Players
+          <Text
+            style={[
+              val.is_canceled ? { marginRight: 14 } : {},
+              styles.bookingDetails,
+            ]}
+          >
+            Booked on {val.booking_date}
+          </Text>
+          {val.is_canceled ? (
+            <NamedRoundedContainer
+              name={"Canceled"}
+              bgColor={"rgba(79, 0, 25, 0.4)"}
+              txtColor={redVariant2}
+            />
+          ) : (
+            <TouchableOpacity onPress={() => cancelBooking()}>
+              <Text style={styles.cancelBooking}>Cancel Booking</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ) : (
+        <Text
+          style={[
+            val.is_canceled ? { marginRight: 14 } : {},
+            styles.bookingDetails,
+          ]}
+        >
+          Played on {val.played_date}
         </Text>
-        {val?.player_details.map((value) => (
-          <MyRequestPlayersList item={value} />
+      )}
+      <MyRequestCentreDetails details={val} />
+      <View style={styles.rowSpaceBtw}>
+        {[
+          { name: "Sport", value: val?.sport_name },
+          { name: "Slot", value: val?.slot },
+          ,
+          { name: "Pool", value: val?.pool },
+        ].map((value) => (
+          <MainBookingDetails details={value} />
         ))}
+      </View>
+      <Text style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}>
+        Registered Players
+      </Text>
+      {val?.player_details.map((value) => (
+        <MyRequestPlayersList item={value} />
+      ))}
     </LinearGradient>
   );
-  
 };
 
 const styles = StyleSheet.create({
-  detailsTxt: {
-    fontWeight: "400",
-    fontSize: 14,
-    color: white,
-  },
   detailsTopRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -71,11 +102,11 @@ const styles = StyleSheet.create({
     color: goldenYellow,
     fontWeight: "500",
     fontSize: 14,
+    fontFamily: "Nunito-500",
   },
   requestOuterView: {
     //width: "100%",
     marginTop: 20,
-    //backgroundColor: lightBlue,
     borderColor: whiteGreyBorder,
     borderWidth: 1,
     borderRadius: 10,
@@ -84,7 +115,12 @@ const styles = StyleSheet.create({
     paddingVertical: 17,
   },
 
-
+  cancelBooking: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: redVariant,
+    fontFamily: "Nunito-400",
+  },
   leftContainer: {
     flex: 1,
     flexDirection: "row",
@@ -133,5 +169,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyRequestSentView;
-
+export default MyBookingsView;

@@ -22,11 +22,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 10,
     color: greyVariant1,
+    fontFamily: "Nunito-400",
   },
   detailsTxt: {
     fontWeight: "400",
     fontSize: 14,
     color: white,
+    fontFamily: "Nunito-400",
   },
 });
 

@@ -23,7 +23,10 @@ import LinearGradient from "react-native-linear-gradient";
 
 const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBookingDetails, areDetailsShown }) => {
   return (
-    <View activeOpacity={0.8} style={styles.requestOuterView}>
+    <LinearGradient
+      colors={["#ffffff11", "#ffffff03"]}
+      style={styles.requestOuterView}
+    >
       {/* <View style={styles.detailsTopRow}> */}
       <Text style={[styles.centerName, { marginBottom: 22 }]}>
         Machaxi Play9 Sports Centre, Whitefield, San Fransisco, USA
@@ -50,7 +53,7 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
           justifyContent: "space-between",
         }}
       >
-        <TouchableOpacity onPress={()=> declineRequest()}>
+        <TouchableOpacity onPress={() => declineRequest()}>
           <Text style={[styles.declineReq, { marginRight: 18 }]}>
             Decline request
           </Text>
@@ -59,7 +62,7 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
         <LinearGradient
           start={{ x: 0, y: 0.75 }}
           end={{ x: 1, y: 0.25 }}
-          colors={["#0000ff80", "#0000ffb3"]}
+          colors={["#0000ff80", "#0000d7e6"]}
           style={{
             borderRadius: 40,
             alignItems: "center",
@@ -70,20 +73,14 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
             onPress={() => acceptRequest("")}
             style={styles.declineBtn}
           >
-            <Text
-              style={[
-                { color: lightBlueColor, fontSize: 16, fontWeight: "800" },
-              ]}
-            >
-              Accept Request
-            </Text>
+            <Text style={[styles.reqTxt]}>Accept Request</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
       <View
         style={{
           backgroundColor: borderWhite,
-          width: '100%',
+          width: "100%",
           height: 0.5,
           marginVertical: 12,
         }}
@@ -111,10 +108,7 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
       {areDetailsShown ? (
         <View>
           <MyRequestCentreDetails details={val} />
-          <View style={{ color: borderGrey, width: "100%", height: 1 }} />
-          <Text style={[styles.bookingDetails, { marginVertical: 14 }]}>
-            Booking Details
-          </Text>
+
           <View style={styles.rowSpaceBtw}>
             {[
               { name: "Sport", value: val?.sport_name },
@@ -136,7 +130,7 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
       ) : (
         <View />
       )}
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -145,12 +139,19 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
     color: white,
+    fontFamily: "Nunito-400",
+  },
+  reqTxt: {
+    color: lightBlueColor,
+    fontSize: 16,
+    fontWeight: "800",
+    fontFamily: "Nunito-800",
   },
   arrow_img: {
     height: 12,
     width: 5,
     resizeMode: "contain",
-    marginLeft: 5
+    marginLeft: 5,
   },
   declineBtn: {
     paddingHorizontal: 14,
@@ -160,11 +161,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 12,
     color: lightPurpleColor,
+    fontFamily: "Nunito-400",
   },
   declineReq: {
     fontWeight: "400",
     fontSize: 14,
     color: redVariant1,
+    fontFamily: "Nunito-400",
   },
   detailsTopRow: {
     flexDirection: "row",
@@ -174,6 +177,8 @@ const styles = StyleSheet.create({
   centerName: {
     fontSize: 14,
     fontWeight: "700",
+    fontFamily: "Nunito-700",
+
     //width: deviceWidth * 0.7,
     color: white,
   },
@@ -185,22 +190,24 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 10,
     color: greyVariant1,
+    fontFamily: "Nunito-400",
   },
 
   bookingDetails: {
     color: goldenYellow,
     fontWeight: "500",
     fontSize: 14,
+    fontFamily: "Nunito-500",
   },
   level: {
     color: greyVariant1,
     fontWeight: "400",
     fontSize: 14,
+    fontFamily: "Nunito-400",
   },
   requestOuterView: {
     //width: "100%",
     marginTop: 20,
-    backgroundColor: lightBlue,
     borderColor: whiteGreyBorder,
     borderWidth: 1,
     borderRadius: 10,
