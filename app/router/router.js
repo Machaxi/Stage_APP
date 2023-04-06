@@ -100,6 +100,7 @@ import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
 import LoginSceen from '../containers/Login/LoginSceen';
 import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/CongratulationScreen'
 import PlanBook from '../containers/FirstTimeUser/PlanBook';
+import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2353,8 +2354,6 @@ const tabBarControllerParent = createBottomTabNavigator(
                         focused={focused}
                         activeIcon={require('../images/learn.png')} />,
             },
-
-
         },
         Batch: {
             screen: PlayRoute,
@@ -2427,23 +2426,36 @@ const parentBookDrawer = createDrawerNavigator({
     }
 );
 
-const parentDrawer = createDrawerNavigator({
 
+const myRequestsModule = createStackNavigator({
 
+  MyRequestsScreen: {
+    screen: MyRequestsHome,
+    
+  },
+});
+
+const parentDrawer = createDrawerNavigator(
+  {
     Guestfirst: {
-        screen: tabBarControllerParent,
-        // navigationOptions: {
-        //     header: <CustomHeader title="Academy" />,
-        // }
+      screen: tabBarControllerParent,
+      // navigationOptions: {
+      //     header: <CustomHeader title="Academy" />,
+      // }
     },
-
-},
-    {
-        contentComponent: ({ navigation }) => {
-            return (<CoachMenuDrawer navigation={navigation} />)
-        },
-        drawerWidth: Dimensions.get('window').width * 0.86,
-    }
+    MyRequestsHome: {
+      screen: myRequestsModule,
+      // navigationOptions: {
+      //     header: <CustomHeader title="Academy" />,
+      // }
+    },
+  },
+  {
+    contentComponent: ({ navigation }) => {
+      return <CoachMenuDrawer navigation={navigation} />;
+    },
+    drawerWidth: Dimensions.get("window").width * 0.86,
+  }
 );
 
 const TournamentRegistration = createStackNavigator({
