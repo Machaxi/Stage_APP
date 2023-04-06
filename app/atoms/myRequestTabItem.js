@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: greyVariant2,
+    fontFamily: 'Nunito-600',
     textAlign: "center",
   },
 });
