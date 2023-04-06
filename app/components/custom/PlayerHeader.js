@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, ImageBackground, Dimensions, StyleSheet } from "react-native";
+import { View, Text, ScrollView, ImageBackground, Image, Dimensions, StyleSheet } from "react-native";
 import BaseComponent, {
     defaultStyle,
     getFormattedBadge,
@@ -89,9 +89,7 @@ export default class PlayerHeader extends BaseComponent {
         let newName = formattedName(name)
 
         return (
-          <View
-            style={styles.main}
-          >
+          <View style={styles.main}>
             <ImageBackground
               //resizeMode="cover"
               source={bg_img}
@@ -105,12 +103,8 @@ export default class PlayerHeader extends BaseComponent {
                 > */}
               {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
                                 navigation={this.props.navigation} /> */}
-              <View
-                style={styles.profile_txt_view}
-              >
-                <Text
-                  style={styles.player_profile_txt}
-                >
+              <View style={styles.profile_txt_view}>
+                <Text style={styles.player_profile_txt}>
                   Players Profile
                 </Text>
                 <ScrollView
@@ -122,7 +116,7 @@ export default class PlayerHeader extends BaseComponent {
                     isParent={true}
                     onSelected={this.onChildSelect.bind(this)}
                     values={null}
-                    isSelected={typeof id == 'undefined' || id == null}
+                    isSelected={typeof id == "undefined" || id == null}
                   />
                   {this.props.is_parent &&
                     this.state.childrenData.map((val) => {
@@ -130,9 +124,7 @@ export default class PlayerHeader extends BaseComponent {
                         <PlayerNameBox
                           name={val?.name}
                           isParent={false}
-                          onSelected={this.onChildSelect.bind(
-                            this
-                          )}
+                          onSelected={this.onChildSelect.bind(this)}
                           values={val}
                           isSelected={id == val?.id}
                         />
@@ -146,72 +138,54 @@ export default class PlayerHeader extends BaseComponent {
                     alignItems: "center",
                   }}
                 >
-                  <View
-                    style={styles.player_picture}
-                  >
+                  <View style={styles.player_picture}>
                     <FastImage
                       resizeMode={FastImage.resizeMode.contain}
                       style={styles.pic}
                       source={{ uri: profile_pic }}
                     />
                   </View>
-                  <View
-                    style={styles.details_view}
-                  >
+                  <View style={styles.details_view}>
                     {/* <View style={{ transform: [{ rotate: "180deg" }] }}> */}
-                    <SvgUri
-                      width="30"
-                      height="22"
-                      source={require("../../images/svg/spiked_banner.svg")}
-                      style={{ transform: [{ rotate: "180deg" }] }}
+                    <Image
+                      style={{
+                        height: 22,
+                        width: 30,
+                        transform: [{ rotate: "180deg" }],
+                      }}
+                      source={require("../../images/spiked_banner.png")}
                     />
-                    <View
-                      style={styles.badge_view}
-                    >
+                    <View style={styles.badge_view}>
                       <Text
                         style={[
                           defaultStyle.bebas_text_blue_10,
-                          styles.badge_text
+                          styles.badge_text,
                         ]}
                       >
                         {getFormattedBadge(badge)}
                       </Text>
                     </View>
                     {/* </View> */}
-                    <SvgUri
-                      width="30"
-                      height="22"
-                      source={require("../../images/svg/spiked_banner.svg")}
+                    <Image
+                      style={{ height: 22, width: 30 }}
+                      source={require("../../images/spiked_banner.png")}
                     />
                   </View>
-                  <Text
-                    style={styles.player_name}
-                    numberOfLines={1}
-                  >
+                  <Text style={styles.player_name} numberOfLines={1}>
                     {newName}
                   </Text>
-                  
-                  <View
-                    style={styles.flex_row}
-                  >
-                    <Text
-                      style={styles.player_level}
-                    >
+
+                  <View style={styles.flex_row}>
+                    <Text style={styles.player_level}>
                       {getFormattedLevel(player_level)}
                     </Text>
-                    <View
-                      style={styles.category_view}
-                    >
-                      <Text
-                        style={styles.player_cat}
-                      >
+                    <View style={styles.category_view}>
+                      <Text style={styles.player_cat}>
                         {getFormattedCategory(player_category)}
                       </Text>
                     </View>
                   </View>
-                 
                 </View>
-              
               </View>
             </ImageBackground>
           </View>
