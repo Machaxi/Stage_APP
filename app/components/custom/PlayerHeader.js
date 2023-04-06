@@ -111,13 +111,13 @@ export default class PlayerHeader extends BaseComponent {
                   style={{ flexDirection: "row" }}
                   horizontal={true}
                 >
-                  <PlayerNameBox
+                  {/* <PlayerNameBox
                     name={"Parent"}
                     isParent={true}
                     onSelected={this.onChildSelect.bind(this)}
                     values={null}
                     isSelected={typeof id == "undefined" || id == null}
-                  />
+                  /> */}
                   {this.props.is_parent &&
                     this.state.childrenData.map((val) => {
                       return (
