@@ -8,7 +8,7 @@ import {
   
 export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,borderRadius,fontSize,marginTop,onPress}) => {
    
-  const [isSelected,setIsSelected]=useState(false)
+  // const [isSelected,setIsSelected]=useState(false)
   console.log({item})
   console.log('in game box')
   console.log({isSelected:item['isSelected']})
@@ -22,7 +22,7 @@ export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,bo
           style={
             [styles.rounded_button ,
             {
-              borderColor:isSelected?'#F2AE4D':item['color'], 
+              borderColor:item['isSelected']?'#F2AE4D':item['color'], 
               marginTop:marginTop?marginTop:6,
               paddingHorizontal:paddingHorizontal?paddingHorizontal:20,
               paddingVertical:paddingVertical?paddingVertical:6,
@@ -31,13 +31,16 @@ export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,bo
             }
             ]
           }
-          onPress={()=>{ onPress?onPress:
-            setIsSelected(!isSelected)
-          }}
+          onPress={onPress
+            // console.log('isSelected ')
+            // setIsSelected(!isSelected)
+             
+            // item['isSelected']=!item['isSelected'];
+}
           >
           <Text
               style={{
-                  color:isSelected?'#F2AE4D':item['color'],
+                  color:item['isSelected']?'#F2AE4D':item['color'],
                   fontSize:fontSize?fontSize:14,
                   textAlign: 'center',
                   fontFamily: 'Nunito-Regular',
