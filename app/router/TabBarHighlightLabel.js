@@ -14,14 +14,16 @@ export default TabBarHighlightLabel = ({
   activeIndicatorColor,
   inactiveLabelColor,
   inactiveIndicatorColor,
-  activeIcon
+  activeIcon,
+  focusedIcon
 }) => {
   const config = {
-    activeIndicatorColor: '#667DDB',
-    inactiveIndicatorColor: 'transparent',
-    activeLabelColor: '#696969',
-    inactiveLabelColor: '#696969',//inactiveLabelColor || '#CCCCCC',
-    activeIcon: '../images/Home.png'
+    activeIndicatorColor: "#667DDB",
+    inactiveIndicatorColor: "transparent",
+    activeLabelColor: "#696969",
+    inactiveLabelColor: "#696969", //inactiveLabelColor || '#CCCCCC',
+    activeIcon: "../images/Home.png",
+    focusedIcon: "../images/Home.png",
   };
 
   const indicatorColor = focused ? config.activeIndicatorColor : config.inactiveIndicatorColor;
@@ -61,19 +63,19 @@ export default TabBarHighlightLabel = ({
   return (
     <View style={styles.labelContainer}>
       <Image
-      resizeMode="contain"
+        resizeMode="contain"
         style={{
           width: 22,
           height: 22,
-          marginBottom: 0
+          resizeMode: 'contain',
+          marginBottom: 0,
         }}
-        source={activeIcon}
+        source={focusedIcon ?? activeIcon}
         size={22}
       />
       {maybeRenderLabel}
 
       <View style={styles.labelIndicator} />
-
     </View>
   );
 }

@@ -103,6 +103,8 @@ import PlanBook from '../containers/FirstTimeUser/PlanBook';
 import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
 import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
 import ShopTabRoute from './ShopTabRoute';
+import TabbarItem from './TabbarItem';
+import { white } from '../containers/util/colors';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2350,9 +2352,14 @@ const tabBarControllerParent = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: "Learn",
       tabBarLabel: ({ focused }) => (
-        <TabBarHighlightLabel
+        <TabbarItem
           label="Learn"
           focused={focused}
+          gradientColors={["#221b33", "#595466"]}
+          activeIndicatorColor={white}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/learn_active.png") : null}
           activeIcon={require("../images/learn.png")}
         />
       ),
@@ -2363,10 +2370,15 @@ const tabBarControllerParent = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: "Play",
       tabBarLabel: ({ focused }) => (
-        <TabBarHighlightLabel
+        <TabbarItem
           label="Play"
           focused={focused}
-          activeIcon={require("../images/play_highlight.png")}
+          gradientColors={["#595466", "#9a97a2"]}
+          activeIndicatorColor={white}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/play_highlight.png") : null}
+          activeIcon={require("../images/play_inactive.png")}
         />
       ),
     },
@@ -2388,9 +2400,14 @@ const tabBarControllerParent = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: "Shop",
       tabBarLabel: ({ focused }) => (
-        <TabBarHighlightLabel
+        <TabbarItem
           label="Shop"
           focused={focused}
+          activeIndicatorColor={white}
+          gradientColors={["#9a97a2", "#595466"]}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/shop_active.png") : null}
           activeIcon={require("../images/shop.png")}
         />
       ),
@@ -2401,9 +2418,13 @@ const tabBarControllerParent = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: "Tournament",
       tabBarLabel: ({ focused }) => (
-        <TabBarHighlightLabel
+        <TabbarItem
           label="Tournament"
+          activeIndicatorColor={white}
+          gradientColors={["#595466", "#221b33"]}
+          inactiveIndicatorColor={white}
           focused={focused}
+          bottomBarColor={"transparent"}
           activeIcon={require("../images/tournament.png")}
         />
       ),

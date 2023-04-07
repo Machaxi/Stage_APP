@@ -25,7 +25,7 @@ const RewardHistoryItem = ({ data, isLast }) => {
             { color: data.earned ? yellowVariant2 : redVariant },
           ]}
         >
-          {data.earned ? "+ " : "- "} {data.points}
+          {data.earned ? "+ " : "- "} {data.points + ' pts'}
         </Text>
       </View>
       <Text style={styles.gameDetails}>
