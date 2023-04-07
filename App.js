@@ -472,7 +472,7 @@ class App extends BaseComponent {
                                     } 
                                     else if (
                                            currentScreen ==
-                                             "MyRequestsHome" ||
+                                             "MyRequestsScreen" ||
                                            currentScreen ==
                                              "MyBookingsScreen"
                                          ) {
