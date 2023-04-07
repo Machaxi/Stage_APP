@@ -326,7 +326,6 @@ class App extends BaseComponent {
     }
 
     componentWillMount() {
-
     }
 
     _handleAppStateChange = (nextAppState) => {
