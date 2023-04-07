@@ -2,14 +2,9 @@ import React from "react";
 
 import {
   View,
-  ImageBackground,
-  Text,
   StyleSheet,
   RefreshControl,
-  Image,
   SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
   ScrollView,
   Linking,
   ToastAndroid,
@@ -21,28 +16,30 @@ import {
 } from "../../redux/reducers/dashboardReducer";
 import { connect } from "react-redux";
 import BaseComponent, {
-  defaultStyle,
   EVENT_EDIT_PROFILE,
 } from "../BaseComponent";
 import Events from "../../router/events";
-import { darkBlue, darkBlueVariant, lightBlue } from "../util/colors";
+import { darkBlueVariant } from "../util/colors";
 import { myBookingsData } from "../util/dummyData/myBookingsData";
-import MyRequestTabItem from "../../atoms/myRequestTabItem";
-import MyBookingsView from "../../atoms/myBookingsView";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
+import ShopRewardsView from "../../components/molecules/shopRewardsView";
+import HowToRedeem from "../../components/molecules/howToRedeem";
+import RewardHistory from "../../components/molecules/rewardHistory";
+import ShopScreenPicker from "../../components/molecules/shopScreenPickers";
+import { deviceWidth } from "../util/dimens";
 
 var is_show_badge = false;
 var notification_count = 0;
 
-class ShopScreen extends BaseComponent {
+class ShopHomeScreen extends BaseComponent {
   acedemy_name = "";
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <RequestHeaderTitle title={"My Bookings"} />,
+      headerTitle: <RequestHeaderTitle title={"Shop"} />,
       headerTitleStyle: {
         color: "white",
       },
@@ -67,6 +64,8 @@ class ShopScreen extends BaseComponent {
       refreshing: false,
       userData: null,
       country: undefined,
+      month: "jan",
+      year: 2023,
       player_profile: null,
       strenthList: null,
       acedemy_name: "",
@@ -74,14 +73,10 @@ class ShopScreen extends BaseComponent {
       coach_feedback_data: null,
       academy_id: "",
       academy_user_id: "",
-      show_must_update_alert: false,
-      sportsOptionsVisible: false,
       currentSportName: "",
       isStatsLoading: false,
       loading: false,
       isUpcoming: true,
-      areDetailsShown: false,
-      bookingData: myBookingsData,
     };
     const { navigation } = this.props.navigation.setParams({
       shareProfile: this.shareProfile,
@@ -267,80 +262,18 @@ class ShopScreen extends BaseComponent {
       this.setState({ refreshing: false });
     }, 1000);
   };
-
-  refreshPage() {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 1000);
-  }
-
-  handleClick() {
-    let link = "";
-    if (Platform.OS == "ios") {
-      link = "itms-apps://itunes.apple.com/us/app/id${1484093762}?mt=8";
-    } else {
-      link = "market://details?id=com.machaxi";
-    }
-    Linking.canOpenURL(link).then(
-      (supported) => {
-        supported && Linking.openURL(link);
-      },
-      (err) => console.log(err)
-    );
-  }
-
-  onSportItemSelected = (item) => {
-    console.log("ON SPORTS", item);
-    this.setState({ isStatsLoading: true });
-    const currentSportId = item.value;
-    this.getPlayerDashboardData(
-      this.state.academy_id,
-      global.SELECTED_PLAYER_ID,
-      currentSportId
-    );
+ 
+  onMonthSelect = (value) => {
     this.setState({
-      currentSportId,
-      sportsOptionsVisible: false,
+      month: value,
     });
   };
 
-  onStatItemClicked = (item) => {
-    this.props.navigation.navigate("ViewPlayerPerformance", {
-      performance_data: item,
+  onYearSelect = (value) => {
+    this.setState({
+      year: value,
     });
   };
-
-  cancelBooking() {
-    ToastAndroid.show("Cancel booking called.", ToastAndroid.SHORT);
-  }
-
-  onTabPress(type) {
-    this.setState({
-      isUpcoming: type == "upcoming" ? true : false,
-    });
-  }
-
-  acceptRequest() {
-    ToastAndroid.show("Accept pressed.", ToastAndroid.SHORT);
-  }
-
-  declineRequest() {
-    ToastAndroid.show("Decline pressed.", ToastAndroid.SHORT);
-  }
-
-  showDetails(id) {
-    var previousData = this.state.bookingData;
-    this.state.bookingData.map((val, ind) => {
-      if ((id = val.id)) {
-        previousData[ind].expanded = !val.expanded;
-      }
-    });
-    this.setState((prevState) => ({
-      areDetailsShown: !prevState.areDetailsShown,
-      bookingData: previousData,
-    }));
-  }
 
   render() {
     const rewards_ui_array = [];
@@ -373,44 +306,46 @@ class ShopScreen extends BaseComponent {
             }
             style={styles.main_container}
           >
-            <View style={{ width: "100%", flexDirection: "row" }}>
-              <MyRequestTabItem
-                colors={
-                  this.state.isUpcoming
-                    ? ["#a975284d", "#a9752880"]
-                    : ["#ffffff54", "#ffffff33"]
-                }
-                name={"Upcoming"}
-                isLeft={true}
-                onTabPress={() => this.onTabPress("upcoming")}
-                isSelected={this.state.isUpcoming}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                marginRight: 16,
+              }}
+            >
+              <ShopScreenPicker
+                placeHolder={{ label: "Month", value: null }}
+                data={[
+                  { label: "January", value: "jan" },
+                  { label: "February", value: "feb" },
+                  { label: "March", value: "mar" },
+                  { label: "April", value: "apr" },
+                  { label: "May", value: "may" },
+                  { label: "June", value: "jun" },
+                  { label: "July", value: "jul" },
+                  { label: "August", value: "aug" },
+                  { label: "September", value: "sep" },
+                  { label: "October", value: "oct" },
+                  { label: "November", value: "nov" },
+                  { label: "December", value: "dec" },
+                ]}
+                value={this.state.month}
+                onSelect={(val) => this.onMonthSelect(val)}
               />
-              <MyRequestTabItem
-                colors={
-                  !this.state.isUpcoming
-                    ? ["#a975284d", "#a9752880"]
-                    : ["#ffffff54", "#ffffff33"]
-                }
-                name={"Past"}
-                isLeft={false}
-                onTabPress={() => this.onTabPress("")}
-                isSelected={!this.state.isUpcoming}
+              <View style={{ width: deviceWidth * 0.05, height: 1 }} />
+              <ShopScreenPicker
+                placeHolder={{ label: "Year", value: null }}
+                data={[
+                  { label: "2023", value: "2023" },
+                  { label: "2024", value: "2024" },
+                ]}
+                value={this.state.year}
+                onSelect={(val) => this.onYearSelect(val)}
               />
             </View>
-            <View style={{ height: 4, width: "100%" }} />
-            {this.state.isUpcoming
-              ? myBookingsData.map((val) => (
-                  <MyBookingsView
-                    val={val}
-                    cancelBooking={() => this.cancelBooking()}
-                  />
-                ))
-              : this.state.bookingData.map((val) => (
-                  <MyBookingsView
-                    val={val}
-                    cancelBooking={() => this.cancelBooking()}
-                  />
-                ))}
+            <ShopRewardsView />
+            <HowToRedeem />
+            <RewardHistory />
             <View style={{ height: 20, width: "100%" }} />
           </ScrollView>
         </SafeAreaView>
@@ -436,7 +371,7 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ShopScreen);
+)(ShopHomeScreen);
 
 const styles = StyleSheet.create({
   navBar: {
@@ -444,7 +379,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // backgroundColor: 'blue',
   },
   mainContainer: { flex: 1, marginTop: 0, backgroundColor: darkBlueVariant },
   main_container: {

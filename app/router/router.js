@@ -102,6 +102,7 @@ import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/Congratu
 import PlanBook from '../containers/FirstTimeUser/PlanBook';
 import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
 import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
+import ShopTabRoute from './ShopTabRoute';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2343,70 +2344,84 @@ const tabBarControllerBookParent = createBottomTabNavigator(
     })
 
 
-const tabBarControllerParent = createBottomTabNavigator(
-    {
-        Home: {
-            screen: parentHomeModule,
-            navigationOptions: {
-                tabBarLabel: 'Learn',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Learn'
-                        focused={focused}
-                        activeIcon={require('../images/learn.png')} />,
-            },
-        },
-        Batch: {
-            screen: PlayRoute,
-            navigationOptions: {
-                tabBarLabel: 'Play',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Play'
-                        focused={focused}
-                        activeIcon={require('../images/play_highlight.png')} />,
-            }
+const tabBarControllerParent = createBottomTabNavigator({
+  Home: {
+    screen: parentHomeModule,
+    navigationOptions: {
+      tabBarLabel: "Learn",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Learn"
+          focused={focused}
+          activeIcon={require("../images/learn.png")}
+        />
+      ),
+    },
+  },
+  Batch: {
+    screen: PlayRoute,
+    navigationOptions: {
+      tabBarLabel: "Play",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Play"
+          focused={focused}
+          activeIcon={require("../images/play_highlight.png")}
+        />
+      ),
+    },
+  },
+  // Tournament: {
+  //     screen: TournamentModule,
+  //     navigationOptions: {
+  //         tabBarLabel: 'Shop',
+  //         tabBarLabel: ({ focused }) =>
+  //             <TabBarHighlightLabel
+  //                 label='Shop'
+  //                 focused={focused}
+  //                 activeIcon={require('../images/shop.png')} />,
+  //     }
 
-        },
-        Tournament: {
-            screen: TournamentModule,
-            navigationOptions: {
-                tabBarLabel: 'Shop',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Shop'
-                        focused={focused}
-                        activeIcon={require('../images/shop.png')} />,
-            }
+  // },
+  Tournament: {
+    screen: ShopTabRoute,
+    navigationOptions: {
+      tabBarLabel: "Shop",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Shop"
+          focused={focused}
+          activeIcon={require("../images/shop.png")}
+        />
+      ),
+    },
+  },
+  Challenge: {
+    screen: TournamentModule,
+    navigationOptions: {
+      tabBarLabel: "Tournament",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Tournament"
+          focused={focused}
+          activeIcon={require("../images/tournament.png")}
+        />
+      ),
+    },
+  },
+  //   yellow: {
+  //     screen: TournamentModule,
+  //     navigationOptions: {
+  //         tabBarLabel: 'hiiiiiiiii',
+  //         tabBarLabel: ({ focused }) =>
+  //             <TabBarHighlightLabel
+  //                 label='hiiii'
+  //                 focused={focused}
+  //                 activeIcon={require('../images/tournament.png')} />,
+  //     }
 
-        },
-        Challenge: {
-            screen: TournamentModule,
-            navigationOptions: {
-                tabBarLabel: 'Tournament',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Tournament'
-                        focused={focused}
-                        activeIcon={require('../images/tournament.png')} />,
-            }
-
-        },
-      //   yellow: {
-      //     screen: TournamentModule,
-      //     navigationOptions: {
-      //         tabBarLabel: 'hiiiiiiiii',
-      //         tabBarLabel: ({ focused }) =>
-      //             <TabBarHighlightLabel
-      //                 label='hiiii'
-      //                 focused={focused}
-      //                 activeIcon={require('../images/tournament.png')} />,
-      //     }
-
-      // },
-        
-
-    })
+  // },
+});
 
 const parentBookDrawer = createDrawerNavigator({
 
