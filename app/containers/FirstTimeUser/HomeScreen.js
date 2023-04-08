@@ -5,13 +5,49 @@ import CoachScreen from "./CoachScreen";
 import PlayScreen from "./PlayScreen";
 import ShopScreen from "./ShopScreen";
 import AsyncStorage from "@react-native-community/async-storage";
+import axios from "axios";
+import { getBaseUrl } from '../BaseComponent';
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPage: 1,
+      header: '',
+      learnData: null,
+      playData: null,
     };
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    const header = await AsyncStorage.getItem("header");
+    console.log(header);
+    this.setState({header: header});
+    this.apiCall()
+  }
+
+  apiCall = () => {
+    console.log(this.state.header)
+    axios
+    .get(
+      getBaseUrl() + '/user/learn-play', {
+      headers: {
+        'x-authorization': this.state.header
+      },
+    })
+  .then((response) => {
+    let data = JSON.stringify(response)
+    let userResponce = JSON.parse(data)
+    let batchData = userResponce["data"]["data"];
+    this.setState({learnData: batchData["learn"], playData: batchData["play"]})
+  })
+  .catch((error) => {
+    console.log(error);
+  });
   }
 
   render() {
@@ -82,12 +118,13 @@ class HomeScreen extends Component {
           </View>
         </View>
         <View style={{ flex: 0.92 }}>
-          {this.state.currentPage === 1 && (
+          {this.state.learnData && this.state.currentPage === 1 && (
             <CoachScreen
               onPressPlan={() => {
                 AsyncStorage.setItem("select_plan", "Coaching Plan");
                 this.props.navigation.navigate("PlanBook");
               }}
+              learnData= {this.state.learnData}
               onPressTrail={() => {
                 AsyncStorage.setItem("select_trial", "Coaching Trial");
                 this.props.navigation.navigate("TrialBook");
@@ -100,6 +137,7 @@ class HomeScreen extends Component {
                 AsyncStorage.setItem("select_trial", "Playing Trial");
                 this.props.navigation.navigate("TrialBook");
               }}
+              playData= {this.state.playData}
             />
           )}
           {this.state.currentPage === 3 && <ShopScreen />}
@@ -149,4 +187,5 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
 });
+
 export default HomeScreen;

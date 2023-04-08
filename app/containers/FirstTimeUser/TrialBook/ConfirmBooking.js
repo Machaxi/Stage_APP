@@ -11,59 +11,13 @@ import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const data = [
-  {
-    id: 1,
-    image: require("../../../images/playing/beginner.png"),
-    name: "Beginner",
-  },
-  {
-    id: 2,
-    image: require("../../../images/playing/intermediate.png"),
-    name: "Intermediate",
-  },
-  {
-    id: 3,
-    image: require("../../../images/playing/advance.png"),
-    name: "Advance",
-  },
-  {
-    id: 4,
-    image: require("../../../images/playing/professional.png"),
-    name: "Professional",
-  },
-];
-
 class ConfirmBooking extends Component {
-  months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  weekdays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",];
+  weekdays = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
 
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 10,
-      proseednext: false,
       centerName: "",
       centerAddress: "",
       centerImage: "",
@@ -71,8 +25,7 @@ class ConfirmBooking extends Component {
       sportName: "",
       sportImage: "",
       time: "",
-      levelImage: "",
-      levelName: "",
+      levelData: null,
       date: new Date(),
     };
   }
@@ -81,46 +34,37 @@ class ConfirmBooking extends Component {
     this.handleopen();
   }
 
-  handleopen = async () => {
-    const myArray = await AsyncStorage.getItem("center");
-    const data = JSON.parse(myArray);
-
-    const sportArray = await AsyncStorage.getItem("sports");
-    const sportData = JSON.parse(sportArray);
-
-    const levelArray = await AsyncStorage.getItem("select_level");
-    const levelData = JSON.parse(levelArray);
-
-    const timeArray = await AsyncStorage.getItem("select_times");
-
-    const dateString = await AsyncStorage.getItem("select_date");
-    const date = new Date(dateString);
-    console.log(date);
+  handleopen = () => {
+    const selectCenter= this.props.selectCenter
+    const selectSport= this.props.selectSport
+    const selectDate= this.props.selectDate
+    const selectLevel= this.props.selectLevel
+    const selectTime= this.props.selectTime
+    const distance = this.props.distance;
 
     this.setState({
-      centerName: data.title,
-      centerImage: data.image,
-      centerAddress: data.address,
-      centerDistance: data.distance,
-      sportName: sportData.name,
-      sportImage: sportData.image,
-      time: timeArray,
-      levelImage: levelData.image,
-      levelName: levelData.name,
-      date: date,
+      centerName: selectCenter.name,
+      centerImage: selectCenter.cover_pic,
+      centerAddress: selectCenter.address,
+      centerDistance: distance,
+      sportName: selectSport.name,
+      sportImage: selectSport.image,
+      time: selectTime,
+      levelData: selectLevel,
+      date: selectDate,
     });
   };
 
-  render() {
-    handlepress = () => {
-      if (this.props.title === "Coaching") {
-        AsyncStorage.setItem("book_trial_coaching", "Coaching");
-      } else {
-        AsyncStorage.setItem("book_trial_playing", "Playing");
-      }
-      this.props.onPress();
-    };
+  handlepress = () => {
+    if (this.props.title === "Coaching") {
+      AsyncStorage.setItem("book_trial_coaching", "Coaching");
+    } else {
+      AsyncStorage.setItem("book_trial_playing", "Playing");
+    }
+    this.props.onPress();
+  };
 
+  render() {
     listdata = (image, name, width, height) => {
       return (
         <View style={{ alignItems: "center" }}>
@@ -155,7 +99,7 @@ class ConfirmBooking extends Component {
           <Text style={styles.subtitle}>Centre Detail</Text>
           <View style={styles.item}>
             <View style={{ flex: 0.3 }}>
-              <Image source={this.state.centerImage} style={styles.image} />
+              <Image source={{ uri: this.state.centerImage}} style={styles.image} />
               <Text style={styles.distance}>{this.state.centerDistance}</Text>
             </View>
             <View style={styles.textContainer}>
@@ -181,8 +125,20 @@ class ConfirmBooking extends Component {
                   35,
                   52
                 )}
-            {listdata(this.state.sportImage, this.state.sportName, 40, 40)}
-            {listdata(this.state.levelImage, this.state.levelName, 37, 48)}
+            <View style={{ alignItems: "center" }}>
+              <LinearGradient
+                colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+                locations={[0, 1]}
+                style={styles.sportsview}
+              >
+                <Image
+                  style={[styles.imaged, { width: 40, height: 40 }]}
+                  source={{uri: this.state.sportImage}}
+                />
+              </LinearGradient>
+              <Text style={[styles.sportText]}>{this.state.sportName}</Text>
+            </View>
+            {listdata(this.state.levelData.image, this.state.levelData.name, 37, 48)}
           </View>
           <View
             style={{
@@ -213,7 +169,7 @@ class ConfirmBooking extends Component {
             </View>
             {listdata(
               require("../../../images/playing/clock.png"),
-              this.state.sportName,
+              this.state.time,
               36,
               31
             )}

@@ -11,12 +11,14 @@ import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import DateComponent from "../../../components/custom/DateComponent";
 import AsyncStorage from "@react-native-community/async-storage";
+import axios from "axios";
+import { getBaseUrl } from '../../../containers/BaseComponent';
 
 const data = [
   {
     id: 1,
     image: require("../../../images/playing/beginner.png"),
-    name: "Beginner",
+    name: "Basic",
   },
   {
     id: 2,
@@ -51,94 +53,114 @@ const timedataEvening = [
   { id: 10, name: "9 - 10 PM", slot: true },
 ];
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const today = new Date();
+const date = today.getDate() + " " + months[today.getMonth()];
+const day = weekdays[today.getDay()];
+
+const oneDay = 24 * 60 * 60 * 1000;
+let nextDate = new Date(today.getTime() + oneDay);
+while (nextDate.getDay() === 0) {
+  nextDate = new Date(nextDate.getTime() + oneDay);
+}
+const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
+const nextday = weekdays[nextDate.getDay()];
+
 class SelectBatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentLevel: 10,
       currentDate: 3,
-      selectDate: 20,
+      selectTime: 20,
       proseedLevel: false,
       proseedDate: false,
       proseedTime: false,
       hideMorning: false,
       hideEvening: false,
+      batchData: null,
+      morningData: null,
+      eveningData: null,
     };
   }
 
-  render() {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const weekdays = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const today = new Date();
-    const date = today.getDate() + " " + months[today.getMonth()];
-    const day = weekdays[today.getDay()];
+  componentDidMount() {
+    const sport_id = this.props.selectSport.id
+    const academy_id = this.props.selectCenter.id
+    axios
+      .get(
+        getBaseUrl() + '/global/coaching/slots?sport_id=' + sport_id + '&academy_id=' + academy_id
+      )
+      .then((response) => {
+        let data = JSON.stringify(response)
+        let userResponce = JSON.parse(data)
+        let batchData = userResponce["data"]["data"]["batch_details"];
+        console.log(batchData);
+        this.setState({ batchData: batchData });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-    const oneDay = 24 * 60 * 60 * 1000;
-    let nextDate = new Date(today.getTime() + oneDay);
-    while (nextDate.getDay() === 0) {
-      nextDate = new Date(nextDate.getTime() + oneDay);
+  getTimeData = (level, dateSelect) => {
+    const greaterThan12 = [];
+    const lessThan12 = [];
+    var dates = null;
+    if (dateSelect == 2) {
+      dates = nextDate;
+    } else if (dateSelect == 1) {
+      dates = today
     }
-    const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
-    const nextday = weekdays[nextDate.getDay()];
+    for (let i = 0; i < this.state.batchData.length; i++) {
+      if (level < 5 && data[level].name.toLowerCase() == this.state.batchData[i].proficiency.toLowerCase() &&
+        dates && dates.getDay() in this.state.batchData[i].weekDetails) {
+        const startHour = parseInt(this.state.batchData[i].startTime.split(':')[0]);
+        if (startHour >= 12) {
+          greaterThan12.push(this.state.batchData[i]);
+        } else {
+          lessThan12.push(this.state.batchData[i]);
+        }
+      }
+      this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
+    }
+  }
 
+  render() {
     assigndate = (item) => {
       return (
         <TouchableOpacity
           activeOpacity={0.8}
-          key={item.id}
+          key={item.batch_id}
           style={[
             styles.subviewclock,
-            { marginRight: 20, marginVertical: 10 },
-            item.id === this.state.selectDate && { width: 100 },
+            { marginRight: 10, marginVertical: 10 },
           ]}
           onPress={() => {
-            item.slot &&
-              this.setState({ selectDate: item.id, proseedTime: true });
+            item.is_allowed &&
+              this.setState({ selectTime: item.batch_id, proseedTime: true });
           }}
         >
           <View>
             <LinearGradient
               colors={
-                item.id === this.state.selectDate
+                item.batch_id === this.state.selectTime
                   ? ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
                   : [
-                      "rgba(255, 255, 255, 0.15)",
-                      "rgba(118, 87, 136, 0)",
-                      "rgba(118, 87, 136, 0)",
-                      "rgba(118, 87, 136, 0.44)",
-                    ]
+                    "rgba(255, 255, 255, 0.15)",
+                    "rgba(118, 87, 136, 0)",
+                    "rgba(118, 87, 136, 0)",
+                    "rgba(118, 87, 136, 0.44)",
+                  ]
               }
               locations={
-                item.id === this.state.selectDate ? [0, 1] : [0, 0.3, 0.6, 1]
+                item.batch_id === this.state.selectTime ? [0, 1] : [0, 0.3, 0.6, 1]
               }
-              style={[
-                styles.sportsview,
-                { flexDirection: "row", height: 30 },
-                item.id === this.state.selectDate && { width: 110 },
-              ]}
+              style={styles.clockView}
             >
-              {item.id === this.state.selectDate && (
+              <Text>    </Text>
+              {item.batch_id === this.state.selectTime && (
                 <Image
                   style={styles.clockimage}
                   source={require("../../../images/playing/clock.png")}
@@ -147,15 +169,13 @@ class SelectBatch extends Component {
               <Text
                 style={[
                   styles.sportText,
-                  { marginTop: -3 },
-                  item.id === this.state.selectDate && { color: "#F2AE4D" },
+                  { marginTop: -3, fontSize: 13 },
+                  item.batch_id === this.state.selectTime && { color: "#F2AE4D" },
                   item.slot == false && { color: "#858585" },
                 ]}
-              >
-                {item.name}
-              </Text>
+              >{item.displayTime}    </Text>
             </LinearGradient>
-            {item.slot == false && (
+            {item.is_allowed == false && (
               <Image
                 style={{ width: 80, height: 28, marginTop: -28, marginLeft: 7 }}
                 source={require("../../../images/playing/cross.png")}
@@ -167,23 +187,14 @@ class SelectBatch extends Component {
     };
 
     handlepress = () => {
-      const levelString = JSON.stringify(data[this.state.currentLevel]);
-      if (this.state.selectDate > 5) {
-        const timeString = timedataEvening[this.state.selectDate - 6].name;
-        AsyncStorage.setItem("select_times", timeString);
-      } else {
-        const timeString = timedataMorning[this.state.selectDate - 1].name;
-        AsyncStorage.setItem("select_times", timeString);
-      }
-      var dates = today;
+      var selectDate = today;
       if (this.state.currentDate > 1) {
-        dates = nextDate;
+        selectDate = nextDate;
       }
-      const dateString = dates.toISOString();
-
-      AsyncStorage.setItem("select_date", dateString);
-      AsyncStorage.setItem("select_level", levelString);
-      this.props.onPress();
+      let selectLevel =  data[this.state.currentLevel]
+      let selectBatch = this.state.batchData.find(item => item.batch_id == this.state.selectTime) 
+      let selectTime = selectBatch.displayTime
+      this.props.onPress(selectDate, selectLevel, selectTime);
     };
 
     return (
@@ -203,20 +214,21 @@ class SelectBatch extends Component {
                 activeOpacity={0.8}
                 key={index}
                 style={[styles.subview]}
-                onPress={() =>
+                onPress={() => {
                   this.setState({ currentLevel: index, proseedLevel: true })
-                }
+                  this.getTimeData(index, this.state.currentDate)
+                }}
               >
                 <LinearGradient
                   colors={
                     index === this.state.currentLevel
                       ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
                       : [
-                          "rgba(255, 255, 255, 0.15)",
-                          "rgba(118, 87, 136, 0)",
-                          "rgba(118, 87, 136, 0)",
-                          "rgba(118, 87, 136, 0.44)",
-                        ]
+                        "rgba(255, 255, 255, 0.15)",
+                        "rgba(118, 87, 136, 0)",
+                        "rgba(118, 87, 136, 0)",
+                        "rgba(118, 87, 136, 0.44)",
+                      ]
                   }
                   locations={
                     index === this.state.currentLevel
@@ -244,9 +256,10 @@ class SelectBatch extends Component {
             <TouchableOpacity
               activeOpacity={0.8}
               style={[styles.subview]}
-              onPress={() =>
+              onPress={() => {
                 this.setState({ currentDate: 1, proseedDate: true })
-              }
+                this.getTimeData(this.state.currentLevel, 1)
+              }}
             >
               <DateComponent
                 currentDate={this.state.currentDate}
@@ -258,9 +271,10 @@ class SelectBatch extends Component {
             <TouchableOpacity
               activeOpacity={0.8}
               style={[styles.subview, { marginLeft: 20 }]}
-              onPress={() =>
+              onPress={() => {
                 this.setState({ currentDate: 2, proseedDate: true })
-              }
+                this.getTimeData(this.state.currentLevel, 2)
+              }}
             >
               <DateComponent
                 currentDate={this.state.currentDate}
@@ -307,7 +321,7 @@ class SelectBatch extends Component {
                 this.state.hideMorning && { height: 0, opacity: 0 },
               ]}
             >
-              {timedataMorning.map((item) => assigndate(item))}
+              {this.state.morningData && this.state.morningData.map((item) => assigndate(item))}
             </View>
 
             <View style={{ height: 2, backgroundColor: "gray", margin: 10 }} />
@@ -342,7 +356,7 @@ class SelectBatch extends Component {
                 this.state.hideEvening && { height: 0, opacity: 0 },
               ]}
             >
-              {timedataEvening.map((item) => assigndate(item))}
+              {this.state.eveningData && this.state.eveningData.map((item) => assigndate(item))}
             </View>
           </LinearGradient>
           <View style={{ width: "99%", paddingLeft: 10 }}>
@@ -395,13 +409,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   subviewclock: {
-    width: 90,
     height: 30,
   },
-
   sportsview: {
     width: 98,
     height: 92,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  clockView: {
+    flexDirection: "row",
+    height: 30,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",

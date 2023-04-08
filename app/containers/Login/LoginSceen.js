@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ToastAndroid,
+  Picker,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../components/custom/CustomButton";
@@ -15,6 +16,9 @@ import auth from "@react-native-firebase/auth";
 import Loader from "../../components/custom/Loader";
 import SvgUri from "react-native-svg-uri";
 import AsyncStorage from "@react-native-community/async-storage";
+import { getFirebaseCheck, PUSH_TOKEN, ONE_SIGNAL_USERID } from '../BaseComponent';
+import { doLogin, createUser } from '../../redux/reducers/loginReducer';
+import { connect } from 'react-redux';
 
 class LoginSceen extends Component {
   constructor(props) {
@@ -22,7 +26,8 @@ class LoginSceen extends Component {
     this.state = {
       phoneNumber: "",
       name: "",
-      gender: "",
+      userid: "",
+      gender: "Select Gender",
       confirm: null,
       prosedenext: false,
       timeRemaining: 120,
@@ -30,6 +35,10 @@ class LoginSceen extends Component {
       isLoading: false,
       loginsuccess: false,
       showscreen: false,
+      firebase_token: "",
+      ONE_SIGNAL_USERID: "",
+      userDetails: "",
+      header: "",
     };
     this.intervalIdRef = React.createRef();
   }
@@ -56,6 +65,9 @@ class LoginSceen extends Component {
 
   signcheck = async () => {
     const userlogin = await AsyncStorage.getItem("user_name");
+    let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
+    let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
+    this.setState({ ONE_SIGNAL_USERID: ONE_SIGNAL, firebase_token: fcm_token });
     if (userlogin != null && userlogin.length > 3) {
       this.props.navigation.navigate("HomeScreen");
     } else {
@@ -97,7 +109,10 @@ class LoginSceen extends Component {
     this.state.confirm
       .confirm(this.state.code)
       .then(() => {
-        this.setState({ loginsuccess: true });
+        auth().currentUser.getIdToken(true).then((token) => {
+          console.log("token   ", token)
+          this.signIn(token)
+        })
       })
       .catch(() => {
         ToastAndroid.show("Invalid Code", ToastAndroid.SHORT);
@@ -106,10 +121,84 @@ class LoginSceen extends Component {
   };
 
   confirmLogin = () => {
-    AsyncStorage.setItem("user_name", this.state.name);
-    AsyncStorage.setItem("user_gender", this.state.gender);
-    this.props.navigation.navigate("HomeScreen");
-  };
+    var dataDic = {};
+    var dict = {};
+    dict['id'] = this.state.userDetails["user"].id;
+    dict['name'] = this.state.name;
+    dict['genderType'] = this.state.gender;
+
+    dataDic['data'] = dict;
+    console.log(dataDic);
+
+    this.props.createUser(dataDic, this.state.header).then(() => {
+      console.log(' user response payload ' + JSON.stringify(this.props.data));
+      console.log(' user response payload ' + JSON.stringify(this.props.data.createUser));
+      let user = JSON.stringify(this.props.data.createUser);
+      console.log('doLogin-payload ' + JSON.stringify(user));
+      let userResponce = JSON.parse(user)
+      if (userResponce.success == true) {
+        AsyncStorage.setItem("user_name", this.state.name);
+        AsyncStorage.setItem("user_gender", this.state.gender);
+        // this.props.navigation.navigate("HomeScreen");
+      }
+    }).catch((response) => {
+      console.log(response);
+    })
+  }
+
+  signIn = (token) => {
+    let os = "IOS"
+    if (Platform.OS === 'android') {
+      os = "android";
+    }
+    let fcm_token = this.state.firebase_token
+    let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID
+    var dataDic = {};
+    var dict = {};
+    dict['phone_number'] = "+91" + this.state.phoneNumber;//"+919550042123"//
+    dict['login_type'] = "MOBILE";
+    dict['firebase_token'] = token;
+    dict['device_type'] = os;
+    dict['app_version'] = '1.1.0';
+    dict['fcm_token'] = fcm_token;
+    dict['ONE_SIGNAL_USERID'] = ONE_SIGNAL_USERID;
+    dict['one_signal_device_id'] = ONE_SIGNAL_USERID;
+    dict['has_firebase_check'] = getFirebaseCheck();
+
+    dataDic['data'] = dict;
+    console.log(dict);
+
+    this.props.doLogin(dataDic).then(() => {
+      console.log(' user response payload ' + JSON.stringify(this.props.data));
+      console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+      let user = JSON.stringify(this.props.data.user);
+      console.log('doLogin-payload ' + JSON.stringify(user));
+      let userResponce = JSON.parse(user)
+
+      if (userResponce.success == true) {
+        var userData = userResponce['data'];
+        this.setState({ userDetails: userData });
+        this.getHeader();
+        if (userData.is_existing_user == false) {
+        this.setState({ loginsuccess: true });
+        } else if (userData["user"].name == "NA") {
+          this.setState({ loginsuccess: true });
+        }else {
+          AsyncStorage.setItem("user_name", userData["user"].name);
+          console.log(userData["user"].name);
+          this.props.navigation.navigate("HomeScreen");
+        }
+      }
+    }).catch((response) => {
+      console.log(response);
+    })
+  }
+
+  getHeader = async () => {
+    const header = await AsyncStorage.getItem("header");
+    this.setState({ header: header });
+    console.log(header);
+  }
 
   PhoneScreen = () => {
     return (
@@ -129,7 +218,7 @@ class LoginSceen extends Component {
             style={{
               width: 300,
               height: 260,
-              marginLeft: -110,
+              marginLeft: -120,
               marginTop: -70,
             }}
           />
@@ -140,16 +229,17 @@ class LoginSceen extends Component {
           /> */}
         </View>
         <View>
-          <View
+          <LinearGradient
+            colors={["rgba(94, 94, 94, 0.6)", "rgba(94, 94, 94, 1)", "rgba(94, 94, 94, 0.6)"]}
+            locations={[0, 0.5, 1]}
             style={{
               marginLeft: 30,
-              width: 130,
-              backgroundColor: "transparent",
+              width: 120,
               zIndex: 1,
             }}
           >
-            <Text style={styles.subtext}>Mobile Number</Text>
-          </View>
+            <Text style={styles.subtext}>  Mobile Number</Text>
+          </LinearGradient>
           <View style={styles.inputview}>
             <TextInput
               style={styles.input}
@@ -205,7 +295,7 @@ class LoginSceen extends Component {
             </TouchableOpacity>
 
             <Text style={styles.otptitle}>Enter OTP</Text>
-            <Text style={styles.otpsubtext}>
+            <Text style={[styles.otpsubtext, { width: 200 }]}>
               Please enter the code we just sent to {this.state.phoneNumber} to
               proceed
             </Text>
@@ -255,7 +345,7 @@ class LoginSceen extends Component {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={styles.otpsubtext}>Didn’t receive OTP </Text>
+            <Text style={[styles.otpsubtext, { width: 200 }]}>Didn’t receive OTP </Text>
             <TouchableOpacity>
               <Text style={[styles.subtext, { color: "#426DEE" }]}>
                 Resend OTP
@@ -307,16 +397,17 @@ class LoginSceen extends Component {
           />
         </View>
         <View>
-          <View
+        <LinearGradient
+            colors={["rgba(94, 94, 94, 0.6)", "rgba(94, 94, 94, 1)", "rgba(94, 94, 94, 0.6)"]}
+            locations={[0, 0.5, 1]}
             style={{
               marginLeft: 30,
               width: 100,
-              backgroundColor: "transparent",
               zIndex: 1,
             }}
           >
             <Text style={styles.subtext}>Player Name</Text>
-          </View>
+          </LinearGradient>
           <View style={styles.inputview}>
             <TextInput
               style={styles.input}
@@ -329,18 +420,19 @@ class LoginSceen extends Component {
               }}
             />
           </View>
-          <View
+          <LinearGradient
+            colors={["rgba(94, 94, 94, 0.6)", "rgba(94, 94, 94, 1)", "rgba(94, 94, 94, 0.6)"]}
+            locations={[0, 0.5, 1]}
             style={{
               marginLeft: 30,
               width: 100,
-              backgroundColor: "transparent",
               zIndex: 1,
             }}
           >
             <Text style={styles.subtext}>Player Gender</Text>
-          </View>
+          </LinearGradient>
           <View style={styles.inputview}>
-            <TextInput
+            {/* <TextInput
               style={styles.input}
               value={this.state.gender}
               placeholder="Enter the Player Gender"
@@ -349,13 +441,22 @@ class LoginSceen extends Component {
               onChangeText={(value) => {
                 this.setState({ gender: value });
               }}
-            />
+            /> */}
+            <Picker
+              selectedValue={this.state.gender}
+              style={styles.dropdown}
+              onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}
+            >
+              <Picker.Item style={styles.dropdownitem} label="   Select Gender" value="Select Gender" />
+              <Picker.Item style={styles.dropdownitem} label="   Male" value="MALE" />
+              <Picker.Item style={styles.dropdownitem} label="   Female" value="FEMALE" />
+            </Picker>
           </View>
         </View>
         <CustomButton
           name={"Submit"}
           height={50}
-          available={this.state.name.length > 4 && this.state.gender.length > 3}
+          available={this.state.name.length > 4 && this.state.gender != "Select Gender"}
           onPress={this.confirmLogin}
         />
       </LinearGradient>
@@ -411,6 +512,18 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-400",
     color: "#BFBFBF",
   },
+  dropdown: {
+    height: 50,
+    width: '100%',
+    paddingHorizontal: 30,
+    fontFamily: "Nunito-400",
+    color: "#BFBFBF",
+  },
+  dropdownitem: {
+    fontSize: 16,
+    fontFamily: "Nunito-400",
+    color: "#BFBFBF",
+  },
   inputview: {
     marginTop: -9,
     borderColor: "#FCB550",
@@ -438,10 +551,18 @@ const styles = StyleSheet.create({
   },
   otpsubtext: {
     fontSize: 14,
-    width: 200,
     fontFamily: "Nunito-400",
     color: "#E2E2E2",
   },
 });
 
-export default LoginSceen;
+const mapStateToProps = state => {
+  return {
+    data: state.LoginReducer,
+  };
+};
+const mapDispatchToProps = {
+  doLogin, createUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginSceen);

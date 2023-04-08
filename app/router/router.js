@@ -101,6 +101,9 @@ import LoginSceen from '../containers/Login/LoginSceen';
 import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/CongratulationScreen'
 import PlanBook from '../containers/FirstTimeUser/PlanBook';
 import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
+import ShopPage from '../containers/ExsitingUser/ShopPage';
+import LearnPage from '../containers/ExsitingUser/LearnPage';
+import PlayPage from '../containers/ExsitingUser/PlayPage';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -138,8 +141,8 @@ const loginModule = createStackNavigator({
     //     }
     // },
     Login: {
-        screen: phoneauth,
-        //screen: LoginSceen,
+        // screen: phoneauth,
+        screen: LoginSceen,
         navigationOptions: {
             header: null
             //header:null
@@ -2407,6 +2410,52 @@ const tabBarControllerParent = createBottomTabNavigator(
 
     })
 
+const tabBarMainScreen = createBottomTabNavigator(
+  {
+    CoachScreen: {
+      screen: LearnPage,
+      navigationOptions: {
+        tabBarLabel: 'Learn',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Learn'
+            focused={focused}
+            activeIcon={focused ? require('../images/learn_highlight.png') : require('../images/learn.png')} />,
+      },
+    },
+    PlayScreen: {
+      screen: PlayPage,
+      navigationOptions: {
+        tabBarLabel: 'Play',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Play'
+            focused={focused}
+            activeIcon={focused ? require('../images/play_highlight.png') : require('../images/play.png')} />,
+      }
+
+    },
+    ShopScreen: {
+      screen: ShopPage,
+      navigationOptions: {
+        tabBarLabel: 'Shop',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Shop'
+            focused={focused}
+            activeIcon={require('../images/shop.png')} />,
+      }
+    },
+  }
+  // ,{
+  //   tabBarOptions: {
+  //     style: {
+  //       backgroundColor: 'rgba(25, 15, 47, 0.8)', // set the background color of the tab bar
+  //     },
+  //   },
+  // }
+  )
+
 const parentBookDrawer = createDrawerNavigator({
 
 
@@ -2586,6 +2635,15 @@ const BaseNavigator = createSwitchNavigator({
     ShopScreen: {
       screen: ShopScreen,
     },
+    ShopPage: {
+      screen: ShopPage,
+    },
+    LearnPage: {
+      screen: LearnPage,
+    },
+    PlayPage: {
+      screen: PlayPage,
+    },
     PlayScreen: {
       screen: PlayScreen,
     },
@@ -2597,6 +2655,9 @@ const BaseNavigator = createSwitchNavigator({
     },
     HomeScreen: {
       screen: HomeScreen,
+    },
+    tabBarMainScreen: {
+      screen: tabBarMainScreen,
     },
     TrialBook: {
       screen: TrialBook,

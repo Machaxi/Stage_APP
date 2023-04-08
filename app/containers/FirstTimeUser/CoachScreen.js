@@ -23,27 +23,6 @@ const images = [
   { id: 5, url: require("../../images/playing/badminton_play.png") },
 ];
 
-const coachPass = [
-  {
-    id: 1,
-    title: "Monthly",
-    price: "3,600",
-    description: "Unlock the best Coaching experience in town",
-  },
-  {
-    id: 2,
-    title: "Quarterly",
-    price: "7,500",
-    description: "Save up to 25% as compared to monthly plan.",
-  },
-  {
-    id: 3,
-    title: "Annually",
-    price: "20,000",
-    description: "Save up to 35% as compared to monthly plan.",
-  },
-];
-
 class CoachScreen extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +39,6 @@ class CoachScreen extends Component {
 
   handleopen = async () => {
     const bookingsuccess = await AsyncStorage.getItem("book_trial_coaching");
-    console.log(bookingsuccess);
     this.setState({ bookingSuccess: bookingsuccess });
   };
 
@@ -71,12 +49,6 @@ class CoachScreen extends Component {
   };
 
   render() {
-    const contents = [
-      "Certified Coaches",
-      "Curriculum designed by experts",
-      "Quarterly Tournaments and PTMs",
-      "Flexible timings",
-    ];
     return (
       <View style={styles.container}>
         <ScrollView style={{ flex: 0.85 }}>
@@ -145,17 +117,18 @@ class CoachScreen extends Component {
                 ))}
               </View>
               <HeaderContentComponent
-                header="Coaching Membership"
-                contents={contents}
+                header={this.props.learnData.header}
+                contents={this.props.learnData["benefits"]}
                 colors={"#C773FF"}
               />
-              {coachPass.map((pass) => (
+              {this.props.learnData["plans"].map((pass) => (
                 <TouchableOpacity activeOpacity={0.8}>
                   <CoachPass
-                    title={pass.title}
-                    subtitle={pass.price}
+                    title={pass.name}
+                    subtitle={pass.planPrice}
                     description={pass.description}
-                    image={pass.id}
+                    image={pass.porfilePic}
+                    sidevalue={pass.planPriceSubText}
                   />
                 </TouchableOpacity>
               ))}
@@ -167,15 +140,7 @@ class CoachScreen extends Component {
           locations={[0, 1]}
           style={styles.bottomcontainer}
         >
-          {this.state.bookingSuccess === "Coaching" ? (
-            <View style={{ width: "100%" }}>
-              <CustomButton
-                name="Buy Coaching Plan"
-                available={true}
-                onPress={this.props.onPressPlan}
-              />
-            </View>
-          ) : (
+          {this.props.learnData.is_trial_display_required ? (
             <View style={{ width: "100%", alignItems: "center" }}>
               <CustomButton
                 name="Book Free Trial"
@@ -188,6 +153,14 @@ class CoachScreen extends Component {
               >
                 <Text style={styles.insideText}>Or Buy Coaching plan</Text>
               </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{ width: "100%" }}>
+              <CustomButton
+                name="Buy Coaching Plan"
+                available={true}
+                onPress={this.props.onPressPlan}
+              />
             </View>
           )}
         </LinearGradient>

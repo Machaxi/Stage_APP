@@ -3,29 +3,14 @@ import { Text, StyleSheet, ImageBackground, Image } from "react-native";
 
 class PlayPass extends Component {
   render() {
-    let imageval;
-    if (this.props.image == "1") {
-      imageval = require("../../images/playing/star.png");
-    } else if (this.props.image == "2") {
-      imageval = require("../../images/playing/leaf.png");
-    } else if (this.props.image == "3") {
-      imageval = require("../../images/playing/wind.png");
-    } else {
-      imageval = require("../../images/playing/annually.png");
-    }
-
     return (
       <ImageBackground
         source={require("../../images/playing/playmembership.png")}
-        style={{ width: 180, height: 160, marginRight: 7, paddingTop: 10 }}
+        style={{ width: 180, height: 160, marginRight: 5, paddingTop: 10, marginBottom: 10 }}
       >
         <Image
-          source={imageval}
-          style={[
-            styles.image,
-            this.props.image == "1" && { width: 31 },
-            this.props.image == "3" && { width: 45 },
-          ]}
+          source={{ uri: this.props.image}}
+          style={styles.image}
         />
         <Text style={styles.insideText}>{this.props.name}</Text>
         <Text style={styles.priceText}>₹ {this.props.price}</Text>

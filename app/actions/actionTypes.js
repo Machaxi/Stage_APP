@@ -1,5 +1,7 @@
 export const DO_LOGIN = "user/LOAD";
 export const DO_ADD_TO_CART = "user/LOAD_START";
+export const CREATE_USER= "user/CREATE_USER";
+export const CREATE_USER_SUCCESS= "user/CREATE_USER_SUCCESS";
 
 export const GET_SWITCHING = "user/LOAD";
 export const DO_SWITCHING_SUCCESS = "user/LOAD_SUCCESS";

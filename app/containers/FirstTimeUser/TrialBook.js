@@ -7,6 +7,9 @@ import SelectBatch from "./TrialBook/SelectBatch";
 import SelectCenter from "./TrialBook/SelectCenter";
 import SelectSports from "./TrialBook/SelectSports";
 import AsyncStorage from "@react-native-community/async-storage";
+import axios from "axios";
+import { getBaseUrl } from '../../containers/BaseComponent';
+
 
 class TrialBook extends Component {
   constructor(props) {
@@ -14,6 +17,15 @@ class TrialBook extends Component {
     this.state = {
       currentPage: 1,
       title: "Coaching Trial",
+      sportsList: null,
+      academiesList: null,
+      selectSport: null,
+      selectCenter: null,
+      selectBatch: null,
+      selectDate: null,
+      selectLevel: null,
+      selectTime: null,
+      distance: 0
     };
   }
 
@@ -23,6 +35,19 @@ class TrialBook extends Component {
       this.setState({ title: select_trial });
     };
     getValue();
+    axios
+      .get(
+        getBaseUrl() + '/global/academy/all'
+      )
+      .then((response) => {
+        let data = JSON.stringify(response)
+        let userResponce = JSON.parse(data)
+        let academiesData = userResponce["data"]["data"];
+        this.setState({ sportsList: academiesData["Sports"], academiesList : academiesData["academies"]});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   onPress = (value, number) => {
@@ -30,6 +55,24 @@ class TrialBook extends Component {
       this.setState({ currentPage: value });
     }
   };
+
+  onPressSports = (selectSport) => {
+    this.setState({ currentPage: 2 });
+    this.setState({ selectSport: selectSport})
+  }
+
+  onPressCenter = (selectCenter) => {
+    this.setState({ currentPage: 3 });
+    this.setState({ selectCenter: selectCenter})
+  }
+
+  onPressBatch = (selectDate, selectLevel, selectTime) => {
+    console.log(selectDate);
+    console.log(selectLevel);
+    console.log(selectTime);
+    this.setState({ currentPage: 4 });
+    this.setState({selectDate: selectDate, selectLevel: selectLevel, selectTime: selectTime })
+  }
 
   render() {
     return (
@@ -66,25 +109,24 @@ class TrialBook extends Component {
           <View style={{ height: 2, backgroundColor: "gray", marginTop: 10 }} />
         </View>
         <View style={{ flex: 0.8 }}>
-          {this.state.currentPage === 1 && (
+          {this.state.sportsList != null && this.state.currentPage === 1 && (
             <SelectSports
-              onPress={() => {
-                this.setState({ currentPage: 2 });
-              }}
+              onPress={this.onPressSports}
+              sportList={this.state.sportsList}
             />
           )}
           {this.state.currentPage === 2 && (
             <SelectCenter
-              onPress={() => {
-                this.setState({ currentPage: 3 });
-              }}
+              onPress={this.onPressCenter}
+              academiesList={this.state.academiesList}
+              selectSport= {this.state.selectSport}
             />
           )}
           {this.state.currentPage === 3 && (
             <SelectBatch
-              onPress={() => {
-                this.setState({ currentPage: 4 });
-              }}
+              onPress={this.onPressBatch}
+              selectCenter={this.state.selectCenter}
+              selectSport= {this.state.selectSport}
             />
           )}
           {this.state.currentPage === 4 && (
@@ -92,6 +134,12 @@ class TrialBook extends Component {
               title={
                 this.state.title === "Coaching Trial" ? "Coaching" : "Playing"
               }
+              selectCenter={this.state.selectCenter}
+              selectSport= {this.state.selectSport}
+              selectDate={this.state.selectDate}
+              selectLevel= {this.state.selectLevel}
+              selectTime= {this.state.selectTime}
+              distance= {this.state.distance}
               onPress={() => {
                 this.props.navigation.navigate("CongratulationScreen");
               }}

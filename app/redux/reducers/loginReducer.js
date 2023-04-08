@@ -5,11 +5,15 @@ const initialState = {
     loading: false,
     user: '',
     error: null,
+    createUser: '',
 };
 export default function loginReducer(state = initialState, action) {
     switch (action.type) {
         case types.DO_LOGIN:
             return { ...state, loading: true };
+        case types.CREATE_USER_SUCCESS:
+            console.log("CREATE_USER_SUCCESS",action.payload.data);
+            return { ...state, createUser: action.payload.data };
         case types.DO_LOGIN_SUCCESS:
             console.log("sucesss",action.payload.data);
           //  console.log("sucesss Paly",action.payload.headers['x-authorization']);
@@ -47,6 +51,23 @@ export function doLogin(postdata) {
                 //     'x-authorization': header
                 //
                 // },
+            }
+        }
+    };
+
+}
+
+export function createUser(postdata, header) {
+    return {
+        type: types.CREATE_USER,
+        payload: {
+            request: {
+                url: `user/create`,
+                method: 'POST',
+                data: postdata,
+                headers: {
+                    'x-authorization': header   
+                },
             }
         }
     };

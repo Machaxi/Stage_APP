@@ -6,58 +6,60 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  ScrollView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const data = [
-  {
-    id: 1,
-    image: require("../../../images/playing/badminton.png"),
-    name: "Badminton",
-  },
-  {
-    id: 2,
-    image: require("../../../images/playing/swimming.png"),
-    name: "Swimming",
-  },
-  {
-    id: 3,
-    image: require("../../../images/playing/table_tennis.png"),
-    name: "Table Tennis",
-  },
-  {
-    id: 4,
-    image: require("../../../images/playing/football.png"),
-    name: "Football",
-  },
-  {
-    id: 5,
-    image: require("../../../images/playing/cricket.png"),
-    name: "Cricket",
-  },
-  { id: 6, image: require("../../../images/playing/zumba.png"), name: "Zumba" },
-];
+// const data = [
+//   {
+//     id: 1,
+//     image: require("../../../images/playing/badminton.png"),
+//     name: "Badminton",
+//   },
+//   {
+//     id: 2,
+//     image: require("../../../images/playing/swimming.png"),
+//     name: "Swimming",
+//   },
+//   {
+//     id: 3,
+//     image: require("../../../images/playing/table_tennis.png"),
+//     name: "Table Tennis",
+//   },
+//   {
+//     id: 4,
+//     image: require("../../../images/playing/football.png"),
+//     name: "Football",
+//   },
+//   {
+//     id: 5,
+//     image: require("../../../images/playing/cricket.png"),
+//     name: "Cricket",
+//   },
+//   { id: 6, image: require("../../../images/playing/zumba.png"), name: "Zumba" },
+// ];
 
 class SelectSports extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 10,
+      currentIndex: 100,
       proseednext: false,
     };
   }
 
   render() {
     handlepress = () => {
-      const myArrayString = JSON.stringify(data[this.state.currentIndex]);
-      AsyncStorage.setItem("sports", myArrayString);
-      this.props.onPress();
+      // const myArrayString = JSON.stringify(this.props.sportList.find(item => item.id === this.state.currentIndex));
+      // AsyncStorage.setItem("sports", myArrayString);
+      this.props.onPress(this.props.sportList.find(item => item.id === this.state.currentIndex));
     };
 
     return (
-      <View
+      <ScrollView>
+        <View
         style={{
           flexDirection: "column",
           justifyContent: "space-between",
@@ -66,13 +68,13 @@ class SelectSports extends Component {
       >
         <Text style={styles.mainText}>Select preferred sport</Text>
         <View style={styles.contained}>
-          {data.map((item, index) => (
+          {this.props.sportList.map((item) => (
             <TouchableOpacity
               activeOpacity={0.8}
-              key={index}
+              key={item.id}
               style={[styles.subview]}
               onPress={() =>
-                this.setState({ currentIndex: index, proseednext: true })
+                this.setState({ currentIndex: item.id, proseednext: true })
               }
             >
               <LinearGradient
@@ -87,20 +89,20 @@ class SelectSports extends Component {
               >
                 <ImageBackground
                   source={
-                    index === this.state.currentIndex
+                    item.id === this.state.currentIndex
                       ? require("../../../images/playing/select_sports.png")
                       : null
                   }
                   style={styles.imaged}
                 >
-                  <Image source={item.image} style={styles.imageitem} />
+                  <Image source={{ uri: item.image}} style={styles.imageitem} />
                 </ImageBackground>
               </LinearGradient>
               <Text style={styles.sportText}>{item.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
-        <View style={{ marginTop: 180 }}>
+        <View style={{ marginTop: 10 }}>
           <CustomButton
             name="Next "
             image={require("../../../images/playing/arrow_go.png")}
@@ -108,7 +110,8 @@ class SelectSports extends Component {
             onPress={handlepress}
           />
         </View>
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 }
