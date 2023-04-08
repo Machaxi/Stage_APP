@@ -93,7 +93,7 @@ import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
 import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
-// import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
+import PlayerScreen from '../containers/FirstTimeUser/PlayerScreen';
 import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
 import TrialBook from '../containers/FirstTimeUser/TrialBook';
 import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
@@ -105,6 +105,9 @@ import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
 import ShopTabRoute from './ShopTabRoute';
 import TabbarItem from './TabbarItem';
 import { white } from '../containers/util/colors';
+import ShopPage from '../containers/ExsitingUser/ShopPage';
+import LearnPage from '../containers/ExsitingUser/LearnPage';
+import PlayPage from '../containers/ExsitingUser/PlayPage';
 
 
 const headerStyle = {
@@ -2510,6 +2513,52 @@ const parentDrawer = createDrawerNavigator(
   }
 );
 
+const tabBarMainScreen = createBottomTabNavigator(
+  {
+    CoachScreen: {
+      screen: LearnPage,
+      navigationOptions: {
+        tabBarLabel: 'Learn',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Learn'
+            focused={focused}
+            activeIcon={focused ? require('../images/learn_highlight.png') : require('../images/learn.png')} />,
+      },
+    },
+    PlayScreen: {
+      screen: PlayPage,
+      navigationOptions: {
+        tabBarLabel: 'Play',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Play'
+            focused={focused}
+            activeIcon={focused ? require('../images/play_highlight.png') : require('../images/play.png')} />,
+      }
+
+    },
+    ShopScreen: {
+      screen: ShopPage,
+      navigationOptions: {
+        tabBarLabel: 'Shop',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Shop'
+            focused={focused}
+            activeIcon={require('../images/shop.png')} />,
+      }
+    },
+  }
+  // ,{
+  //   tabBarOptions: {
+  //     style: {
+  //       backgroundColor: 'rgba(25, 15, 47, 0.8)', // set the background color of the tab bar
+  //     },
+  //   },
+  // }
+  )
+
 const TournamentRegistration = createStackNavigator({
 
     Registration: {
@@ -2646,6 +2695,9 @@ const BaseNavigator = createSwitchNavigator({
     },
     PlayPage: {
       screen: PlayPage,
+    },
+    PlayerScreen: {
+      screen: PlayerScreen,
     },
     PlayScreen: {
       screen: PlayScreen,

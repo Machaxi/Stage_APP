@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CoachScreen from "./CoachScreen";
-import PlayScreen from "./PlayScreen";
+import PlayerScreen from "./PlayerScreen";
 import ShopScreen from "./ShopScreen";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
@@ -132,7 +132,7 @@ class HomeScreen extends Component {
             />
           )}
           {this.state.currentPage === 2 && (
-            <PlayScreen
+            <PlayerScreen
               onPress={() => {
                 AsyncStorage.setItem("select_trial", "Playing Trial");
                 this.props.navigation.navigate("TrialBook");

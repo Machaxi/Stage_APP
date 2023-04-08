@@ -3,7 +3,8 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from '../BaseComponent';
-import PlayScreen from "../FirstTimeUser/PlayScreen";
+import PlayerScreen from "../FirstTimeUser/PlayerScreen";
+import PlayScreen from "../play/PlayScreen";
 
 class PlayPage extends Component {
     constructor(props) {
@@ -52,15 +53,16 @@ class PlayPage extends Component {
                 locations={[0, 1]}
                 style={{ flex: 1 }}
             >
-                {this.state.playData && (
-                    <PlayScreen
+                {/* {this.state.playData && (
+                    <PlayerScreen
                         onPress={() => {
                             AsyncStorage.setItem("select_trial", "Playing Trial");
                             this.props.navigation.navigate("TrialBook");
                         }}
                         playData={this.state.playData}
                     />
-                )}
+                )} */}
+                <PlayScreen/>
             </LinearGradient>
         );
     }

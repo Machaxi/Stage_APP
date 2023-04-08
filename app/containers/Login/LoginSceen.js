@@ -69,7 +69,7 @@ class LoginSceen extends Component {
     let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
     this.setState({ ONE_SIGNAL_USERID: ONE_SIGNAL, firebase_token: fcm_token });
     if (userlogin != null && userlogin.length > 3) {
-      this.props.navigation.navigate("HomeScreen");
+      this.props.navigation.navigate("tabBarMainScreen");
     } else {
       this.setState({ showscreen: true });
     }
@@ -186,7 +186,7 @@ class LoginSceen extends Component {
         }else {
           AsyncStorage.setItem("user_name", userData["user"].name);
           console.log(userData["user"].name);
-          this.props.navigation.navigate("HomeScreen");
+          this.props.navigation.navigate("tabBarMainScreen");
         }
       }
     }).catch((response) => {

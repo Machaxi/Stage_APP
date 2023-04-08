@@ -13,7 +13,7 @@ import HeaderContentComponent from "../../components/custom/HeaderContentCompone
 import PlayPass from "../../components/custom/PlayPass";
 import AsyncStorage from "@react-native-community/async-storage";
 
-class PlayScreen extends Component {
+class PlayerScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayScreen;
+export default PlayerScreen;
