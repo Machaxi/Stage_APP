@@ -53,23 +53,19 @@ class NavigationDrawerWhite extends React.Component {
                             style={{ width: 20, height: 16 }}
                         />
                     </TouchableOpacity>
-                   
                     : null
                 }
 
-                {showDrawer ?  <TouchableOpacity
-                        style={{ marginRight: 8, padding: 7 }}
-                        onPress={() => {
-                        navigation.toggleDrawer();
-                        }}
-                        activeOpacity={0.8}
-                    >
-                        <Image
-                        resizeMode="contain"
-                        source={require("../images/hamburger_white.png")}
-                        style={{ width: 20, height: 16, marginLeft: 12 }}
-                        />
-                    </TouchableOpacity>
+                {showDrawer ? <TouchableOpacity 
+                    style={{ padding: 10 }}
+                    onPress={this.toggleDrawer.bind(this)}>
+                    {/*Donute Button Image */}
+                    <Image
+                    resizeMode="contain"
+                        source={require('../images/hamburger_white.png')}
+                        style={{ width: 24, height: 16 }}
+                    />
+                </TouchableOpacity>
                     : null}
 
                 {/* <TouchableOpacity onPress={this.toggleToHome.bind(this)}>

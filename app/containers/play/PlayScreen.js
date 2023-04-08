@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RNPickerSelect from "react-native-picker-select";
 import * as Progress from "react-native-progress";
 
@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Linking,
+  Alert,
 } from "react-native";
 import { PeerRatingCard } from "./PeerRatingCard";
 import { SelfRatingCard } from "./SelfRatingCard";
@@ -26,39 +27,40 @@ import { PrefSport } from "./PrefSport";
 import { ProfileSction } from "./ProfileSection";
 import { MembershipDetails } from "./MembershipDetails";
 import { NextSessionList } from "./NextSectionList";
-import PlayingLevelStrip from "./PlayingLevelStrip";
-// import { createMaterialTopTabNavigator } from "react-navigation";
+// import TabView from "./TopTabView";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
-export default PlayScreen =()=>{
+export default PlayScreen =({navigation})=>{
 
-  // const Tab = createMaterialTopTabNavigator();
 
   const gameNameData=[
     {
         title: "Swimming",
         color:'white',
-        isSelected:'true',
+        id:1,
+        isSelected:true,
         // bgColor:'yellow'
     },
     {
         title: "Badminton",
-        id:1,
-        color:'#F2AE4D',
-        isSelected:'false',
+        id:2,
+        color:'white',
+        isSelected:false,
         // bgColor:'yellow'
     },
     {
       title: "tennis",
-      id:1,
+      id:3,
       color:'white',
-      isSelected:'false',
+      isSelected:false,
       // bgColor:'yellow'
     },
     {
       title: "Swimming",
-      id:1,
-      color:'#F2AE4D',
-      isSelected:'false',
+      id:4,
+      // color:'#F2AE4D',
+      color:'white',
+      isSelected:false,
       // bgColor:'yellow'
     },
 ];
@@ -70,12 +72,12 @@ const NextSessionData= [
       id:1,
       by:'4',
       titleColor:'#21D096',
-      sportsName:'erioubyft',
+      sportsName:'Swimming - Pool',
       sportsTime:'3pm',
       centreName:'Machaxi Play9 Sports Centre, Whitefield',
       centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
       numberOfGuests:'None',
-      gameNameitem:{
+      gameNameData:{
           title: "Swimming",
           id:1,
           color:'green',
@@ -84,11 +86,11 @@ const NextSessionData= [
   },
   {
       // icon:require("./../../images/intermediate.png"),
-      title: "Intermediate",
+      title: "Next Session - Today",
       by:'2',
       titleColor:'#FF9C33',
-      sportsName:'erioubyft',
-      sportsTime:'3pm',
+      sportsName:'Swimming - Pool',
+      sportsTime:'2-3pm',
       centreName:'Machaxi Play9 Sports Centre, Whitefield',
       centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
       numberOfGuests:'None'
@@ -98,7 +100,7 @@ const NextSessionData= [
       title: "Advance",
       by:'8',
       titleColor:'#FE6E88',
-      sportsName:'erioubyft',
+      sportsName:'Swimming - Pool',
       sportsTime:'3pm',
       centreName:'Machaxi Play9 Sports Centre, Whitefield',
       centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
@@ -110,13 +112,21 @@ const NextSessionData= [
       title: "Professional",
       by:'5',
       titleColor:'#DB64FF',
-      sportsName:'erioubyft',
+      sportsName:'Swimming - Pool',
       sportsTime:'3pm',
       centreName:'Machaxi Play9 Sports Centre, Whitefield',
       centreAddress:'68/1, 1, near Parijatha Farm, Whitefield, Siddapura.',
       numberOfGuests:'5',
     },
 ];
+
+const PresSectionData={
+      currentRatingColor:'#FF9C33',
+      currentRating:'Intermediate',
+      icon:require("./../../images/badminton_icon.png"),
+      sportTitle:'badminton',
+}
+
 
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
 const [defaultTab, setDefaultTab] = useState("");
@@ -125,13 +135,84 @@ const [expiryDate,setExpiryDate] =useState('2nd march, 2023');
 const [purchasedDate,setPurchasedDate] =useState('2nd February 2023');
 const [hoursLeft,setHoursLeft] =useState('28/30');
 const [profilePrecentage,setProfilePrecentage] =useState('0.9');
+const [gameData,setGameData]=useState(gameNameData);
+const [nextSession,setNextSessionData]=useState(NextSessionData);
+const [userName,setUserName]=useState('vidushi');
+const [profilePic,setProfilePic]=useState(require("./../../images/profile_place_holder.png"));
+const [userPref,setUserPref]=useState(PresSectionData);
+const [cancelPressed,setCancelPressed]=useState(false);
+
+const [index, setIndex] = React.useState(0);
+const [routes] = React.useState([
+  { key: 'first', title: 'My Rating' },
+  { key: 'second', title: 'Rate Your Peers' },
+]);
 
 
-const renderGameNameBox = ({ item },) => {
-  console.log({item})
+useEffect(() => {
+  console.log("Game updated");
+}, [gameData]);
+
+const onGameSelected=(item)=>{
+  console.log('vidushi     ' +JSON.stringify(item))
+
+  let index = gameData.findIndex((game) => {
+    return game["id"] == item["id"];
+  });
+console.log('index '+ index)
+  if(index == -1) return;
+
+  let newData = gameData.map((game) => {
+    return {...game, isSelected: false}
+  });
+  newData[index]["isSelected"] = !newData[index]["isSelected"];
+  console.log('index '+ JSON.stringify(newData))
+  setGameData([...newData]);
+  
+}
+
+const renderGameNameBox = ({ item }) => {
+  console.log({hey: item})
   return (<GameNameBox
-  item={item} />)
+  item={item} 
+  onPress={()=>onGameSelected(item)}
+  />)
 };
+
+ const renderTabBar = props => (
+  <TabBar
+    {...props}
+    indicatorStyle={{ backgroundColor: '#667DDB' }}
+    style={{ width:'auto'  , backgroundColor:''}}
+    labelStyle={{color:'#FFFFFF' ,fontSize:13,fontWeight:'600',fontFamily:'Nunito-Regular'}}
+  />
+);
+const FirstRoute = () => (
+  <>
+            <View style={{marginTop:23}}> 
+              <FlatList
+                  data={gameData}
+                  horizontal={true}
+                  renderItem={renderGameNameBox}               
+              />
+            </View>
+            <SelfRatingCard
+              editSelfRating={null}
+            />
+            </>
+);
+
+const SecondRoute = () => (
+  <View style={{ flex: 1, backgroundColor: 'green' }} >
+    <Text style={{color:'white'}}>Rate your peers</Text>
+  </View>
+);
+
+const renderScene = SceneMap({
+  first: FirstRoute,
+  second: SecondRoute,
+});
+
 
 const bookSlotPressed=()=>{
   null
@@ -139,11 +220,14 @@ const bookSlotPressed=()=>{
 const onPlayingLevelPress=()=>{
   null
 };
-const onCancelBookingPress=()=>{
 
-}
+const onCancelBookingPress=(item)=>{
+  // navigation.navigate("NotificationList");
+  setCancelPressed(!cancelPressed);
+    // Alert.alert('on Cancel Clicked'+ "  " + item.title)
+  }
 
-
+console.log(userPref.currentRatingColor)
   return (
       <View   style={{flex:1}}>
           <LinearGradient
@@ -153,15 +237,15 @@ const onCancelBookingPress=()=>{
           <ScrollView style={{height:'100%'}}>
 
           <ProfileSction
-            name={'vidushi'}
-            image={require("./../../images/profile_place_holder.png")}
+            name={userName}
+            image={profilePic}
           />
-          
+         
           <PrefSport
-            currentRatingColor={'#FF9C33'}
-            currentRating={'Intermediate'}
-            icon={require("./../../images/badminton_icon.png")}
-            sportTitle={'badminton'}
+            currentRatingColor={userPref.currentRatingColor}
+            currentRating={userPref.currentRating}
+            icon={userPref.icon}
+            sportTitle={userPref.sportTitle}
           />
           <MembershipDetails
             profilePrecentage={profilePrecentage}
@@ -170,6 +254,7 @@ const onCancelBookingPress=()=>{
             purchasedDate={purchasedDate}
             />
           <NextSessionList
+           NextSessionData={nextSession}
            onPlayingLevelPress={onPlayingLevelPress}
            onCancelPress={onCancelBookingPress}
           
@@ -215,20 +300,20 @@ const onCancelBookingPress=()=>{
 
             
           {playDataVisibility ? <>
-            <View style={{marginTop:23}}> 
-              <FlatList
-                  data={gameNameData}
-                  horizontal={true}
-                  renderItem={renderGameNameBox}
-                  
-              />
-            </View>
-            <SelfRatingCard
-              editSelfRating={null}
+            <TabView
+              navigationState={{ index, routes }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              initialLayout={{ width: 500 }}
+              renderTabBar={renderTabBar}
             />
-            </>
+          </>
             :null
           }
+          {cancelPressed ?
+            Alert.alert('on Cancel Clicked'+ "  ")
+            
+            :null}
             
             </ScrollView>  
           </LinearGradient>
@@ -252,19 +337,13 @@ arrow_img: {
   width: 12,
   resizeMode: 'contain',
 },
-menu: {
-  color: '#AFAFAF',
-  alignItems: 'flex-start',
-  fontSize: 14,
-  fontFamily: 'Nunito-Regular',
-},
 menuHeading:{
   color: '#FF9C33',
   fontSize: 16,
   fontFamily: 'Nunito-Regular',
   marginTop:2,
   textAlign:'center',
-  
+
 },
 skyFilledButtonView:{
   position:'absolute',
@@ -278,6 +357,7 @@ playingLevelContainer:{
   alignItems:'center',
   marginLeft:13,
   marginRight:19,
-  marginTop:32
+  marginTop:32,
+  marginBottom:14,
 },
 })

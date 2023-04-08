@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
         marginHorizontal:12,
         borderRadius:10,
         marginTop:25,
-        // marginBottom:32,
+        borderColor:'#70765788',
+        borderWidth:1
     },
     gradient:{
         borderRadius:10,
@@ -111,13 +112,13 @@ const styles = StyleSheet.create({
     dynamicDate:{
         color: '#FFFFFF',
         paddingLeft:2,
-        fontSize:10,
+        fontSize:12,
         fontFamily: 'Nunito-Regular', 
         fontWeight:'400'
     },
     staticDate:{
         color: '#FFFFFF',
-        fontSize:10,
+        fontSize:12,
         fontFamily: 'Nunito-Regular',
         fontWeight:'400'
     },

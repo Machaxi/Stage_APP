@@ -102,6 +102,9 @@ import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/Congratu
 import PlanBook from '../containers/FirstTimeUser/PlanBook';
 import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
 import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
+import ShopTabRoute from './ShopTabRoute';
+import TabbarItem from './TabbarItem';
+import { white } from '../containers/util/colors';
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -2343,70 +2346,103 @@ const tabBarControllerBookParent = createBottomTabNavigator(
     })
 
 
-const tabBarControllerParent = createBottomTabNavigator(
-    {
-        Home: {
-            screen: parentHomeModule,
-            navigationOptions: {
-                tabBarLabel: 'Learn',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Learn'
-                        focused={focused}
-                        activeIcon={require('../images/learn.png')} />,
-            },
-        },
-        Batch: {
-            screen: PlayRoute,
-            navigationOptions: {
-                tabBarLabel: 'Play',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Play'
-                        focused={focused}
-                        activeIcon={require('../images/play_highlight.png')} />,
-            }
+const tabBarControllerParent = createBottomTabNavigator({
+  Home: {
+    screen: parentHomeModule,
+    navigationOptions: {
+      tabBarLabel: "Learn",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Learn"
+          focused={focused}
+          gradientColors={["#221b33", "#595466"]}
+          activeIndicatorColor={white}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/learn_active.png") : null}
+          activeIcon={require("../images/learn.png")}
+        />
+      ),
+    },
+  },
+  Batch: {
+    screen: PlayRoute,
+    navigationOptions: {
+      tabBarLabel: "Play",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Play"
+          focused={focused}
+          gradientColors={["#595466", "#9a97a2"]}
+          activeIndicatorColor={white}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/play_highlight.png") : null}
+          activeIcon={require("../images/play_inactive.png")}
+        />
+      ),
+    },
+  },
+  // Tournament: {
+  //     screen: TournamentModule,
+  //     navigationOptions: {
+  //         tabBarLabel: 'Shop',
+  //         tabBarLabel: ({ focused }) =>
+  //             <TabBarHighlightLabel
+  //                 label='Shop'
+  //                 focused={focused}
+  //                 activeIcon={require('../images/shop.png')} />,
+  //     }
 
-        },
-        Tournament: {
-            screen: TournamentModule,
-            navigationOptions: {
-                tabBarLabel: 'Shop',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Shop'
-                        focused={focused}
-                        activeIcon={require('../images/shop.png')} />,
-            }
+  // },
+  Tournament: {
+    screen: ShopTabRoute,
+    navigationOptions: {
+      tabBarLabel: "Shop",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Shop"
+          focused={focused}
+          activeIndicatorColor={white}
+          gradientColors={["#9a97a2", "#595466"]}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/shop_active.png") : null}
+          activeIcon={require("../images/shop.png")}
+        />
+      ),
+    },
+  },
+  Challenge: {
+    screen: TournamentModule,
+    navigationOptions: {
+      tabBarLabel: "Tournament",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Tournament"
+          activeIndicatorColor={white}
+          gradientColors={["#595466", "#221b33"]}
+          inactiveIndicatorColor={white}
+          focused={focused}
+          bottomBarColor={"transparent"}
+          activeIcon={require("../images/tournament.png")}
+        />
+      ),
+    },
+  },
+  //   yellow: {
+  //     screen: TournamentModule,
+  //     navigationOptions: {
+  //         tabBarLabel: 'hiiiiiiiii',
+  //         tabBarLabel: ({ focused }) =>
+  //             <TabBarHighlightLabel
+  //                 label='hiiii'
+  //                 focused={focused}
+  //                 activeIcon={require('../images/tournament.png')} />,
+  //     }
 
-        },
-        Challenge: {
-            screen: TournamentModule,
-            navigationOptions: {
-                tabBarLabel: 'Tournament',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Tournament'
-                        focused={focused}
-                        activeIcon={require('../images/tournament.png')} />,
-            }
-
-        },
-      //   yellow: {
-      //     screen: TournamentModule,
-      //     navigationOptions: {
-      //         tabBarLabel: 'hiiiiiiiii',
-      //         tabBarLabel: ({ focused }) =>
-      //             <TabBarHighlightLabel
-      //                 label='hiiii'
-      //                 focused={focused}
-      //                 activeIcon={require('../images/tournament.png')} />,
-      //     }
-
-      // },
-        
-
-    })
+  // },
+});
 
 const parentBookDrawer = createDrawerNavigator({
 

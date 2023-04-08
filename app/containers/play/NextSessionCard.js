@@ -5,20 +5,27 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
+    FlatList,
   } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { GameNameBox } from "./GameNameBox";
 import { SeperatingLine } from "./SeperatingLine";
 
   
-export const NextSessionCard = ({item},onCancelPress,onPlayingLevelPress) => {
+export const NextSessionCard = ({item,onCancelPress}) => {
     
-    console.log({titel:item.gameNameitem})
+    console.log({titel:item})
     console.log('NEXT SCREEN')
+ 
+    const [showPlayingPartner,setShowPlayingPartner] =useState(false);
 
-    if(item){
-        
-    const [showPlayingLevel,setShowPlayingLevel] =useState(false);
+    const renderPlayingPartnerList = ({item}) => {
+        console.log('renderPlayingPartnerList')
+        console.log({item})
+        return (
+        <Text>hiiiiiiiii</Text>
+        )
+    };
   return( 
         <View style={styles.container}>
             <LinearGradient
@@ -30,7 +37,7 @@ export const NextSessionCard = ({item},onCancelPress,onPlayingLevelPress) => {
                         {item.title}
                     </Text>
                     <TouchableOpacity activeOpacity={0.8} 
-                        onPress={() => {onCancelPress}}>
+                        onPress={onCancelPress}>
                         <Text style={styles.cancelText}>
                             Cancel Booking
                         </Text>
@@ -63,6 +70,11 @@ export const NextSessionCard = ({item},onCancelPress,onPlayingLevelPress) => {
                             id:1,
                             color:'#1DE490',
                         }}
+                        // item={{
+                        //     title:item.gameData.title,
+                        //     id:item.gameData.id,
+                        //     color:item.gameData.color,
+                        // }}
                     />
                 </View >
                 <View style={{marginTop:12}}>
@@ -91,8 +103,8 @@ export const NextSessionCard = ({item},onCancelPress,onPlayingLevelPress) => {
                 />
                 <TouchableOpacity activeOpacity={0.8} 
                 onPress={()=>{
-                    setShowPlayingLevel(!showPlayingLevel);
-                    onPlayingLevelPress
+                    setShowPlayingPartner(!showPlayingPartner);
+                    // onPlayingLevelPress
                     }}
                     >
 					<View style={styles.playingPartnerContainer}>
@@ -101,18 +113,23 @@ export const NextSessionCard = ({item},onCancelPress,onPlayingLevelPress) => {
 						</Text>
 
 						<Image
-							style={[styles.arrow_img, { transform: [{ rotate: showPlayingLevel?"90deg":"0deg" }]} ]}
+							style={[styles.arrow_img, { transform: [{ rotate: showPlayingPartner?"90deg":"0deg" }]} ]}
 							source={require('../../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
 				</TouchableOpacity>  
+
+                {showPlayingPartner?<>
+                    <Text style={{color:'white',fontSize:24}}>hiiiiiiii</Text>
+                    {/* <FlatList
+                            data={item}
+                            renderItem={renderPlayingPartnerList}
+                        /> */}
+                        </>:null}
             
                 </LinearGradient>
                 </View>)
-        }else{
-            return(<View><Text style={{fontSize:16,color:'white'}}>sorry</Text></View>)
-        } 
 }
 
 const styles = StyleSheet.create({
