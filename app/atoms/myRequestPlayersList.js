@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
     color: white,
+    fontFamily: "Nunito-400",
   },
 });
 

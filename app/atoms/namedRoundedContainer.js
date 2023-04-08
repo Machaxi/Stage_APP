@@ -3,20 +3,28 @@ import { Text,View, StyleSheet } from "react-native";
 import { greenVariant, lightGreenBg } from "../containers/util/colors";
 import { deviceWidth } from "../containers/util/dimens";
 
-const NamedRoundedContainer = ({ name }) => {
+const NamedRoundedContainer = ({ name, bgColor, txtColor }) => {
   return (
-    <View style={styles.requestContainer}>
-      <Text style={styles.requestType}>{name}</Text>
+    <View
+      style={[
+        styles.requestContainer,
+        {
+          backgroundColor: bgColor ?? lightGreenBg,
+          borderColor: txtColor ?? greenVariant,
+        },
+      ]}
+    >
+      <Text style={[styles.requestType, { color: txtColor ?? greenVariant }]}>
+        {name}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   requestContainer: {
-    borderColor: greenVariant,
     borderRadius: 15,
     borderWidth: 1,
-    backgroundColor: lightGreenBg,
     paddingHorizontal: 12,
     paddingVertical: 2,
     width: deviceWidth * 0.35,
@@ -24,8 +32,8 @@ const styles = StyleSheet.create({
   requestType: {
     fontSize: 12,
     fontWeight: "400",
-    color: greenVariant,
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Nunito-400'
   },
 });
 

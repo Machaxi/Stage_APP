@@ -15,10 +15,11 @@ import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformanc
 
 import PlayScreen from '././../containers/play/PlayScreen';
 import NavigationDrawerWhite from './NavigationDrawerWhite';
+import NotificationList from '../containers/notification/NotificationList';
 
 
 
-const playModule = createStackNavigator({
+const playModule= createStackNavigator({
     Play: {
         screen: PlayScreen,
         navigationOptions: ({ navigation }) => ({
@@ -26,8 +27,7 @@ const playModule = createStackNavigator({
             headerLeft: <NavigationDrawerWhite navigationProps={navigation}
             showBackAction={false} showDrawer={true}
         />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
+            headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true}/>,
             headerTitleStyle: style.headerStyle,
             headerStyle: {
                 backgroundColor: '#21202F',
@@ -35,45 +35,6 @@ const playModule = createStackNavigator({
 
         })
     },
-        // navigationOptions = ({ navigation }) => {
-        //     return {
-        //         headerTitle: 'Vidushi',
-        //         headerTitleStyle: defaultStyle.headerStyle,
-        
-        //         headerLeft: (
-        //             <TouchableOpacity
-        //                 onPress={() => {
-        //                     navigation.toggleDrawer();
-        //                 }}
-        //                 style={{padding: 7}}
-        //                 activeOpacity={.8}>
-        //                 <Image
-        //                     source={require('../../images/hamburger.png')}
-        //                     style={{ width: 20, height: 16, marginLeft: 12 }}
-        //                 />
-        //             </TouchableOpacity>
-        //         ),
-        //         headerRight: (
-        //             <TouchableOpacity
-        //                 onPress={() => {
-        //                     navigation.navigate('SwitchPlayer')
-        //                 }}
-        //                 activeOpacity={.8}
-        //             >
-        //                 <Text
-        //                     style={{
-        //                         marginRight: 12,
-        //                         fontFamily: 'Quicksand-Regular',
-        //                         fontSize: 10,
-        //                         color: '#667DDB'
-        //                     }}>{navigation.getParam('switch_button','')}</Text>
-        //             </TouchableOpacity>
-        
-        //         )
-        //     };
-        
-        // },
-
     CoachProfileDetail: {
         screen: CoachProfileDetail,
         navigationOptions: ({ navigation }) => ({

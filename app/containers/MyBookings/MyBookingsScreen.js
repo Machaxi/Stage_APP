@@ -26,28 +26,23 @@ import BaseComponent, {
 } from "../BaseComponent";
 import Events from "../../router/events";
 import { darkBlue, darkBlueVariant, lightBlue } from "../util/colors";
-import { myRequestData } from "../util/dummyData/myRequestData";
-import MyRequestSentView from "../../atoms/myRequestSentView";
+import { myBookingsData } from "../util/dummyData/myBookingsData";
 import MyRequestTabItem from "../../atoms/myRequestTabItem";
-import MyRequestReceivedView from "../../atoms/myRequestReceivedView";
+import MyBookingsView from "../../atoms/myBookingsView";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
-import LinearGradient from "react-native-linear-gradient";
-
 
 var is_show_badge = false;
 var notification_count = 0;
 
-class MyRequestsHome extends BaseComponent {
+class MyBookingsScreen extends BaseComponent {
   acedemy_name = "";
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: (
-          <RequestHeaderTitle title={'My Requests'} />
-      ),
+      headerTitle: <RequestHeaderTitle title={"My Bookings"} />,
       headerTitleStyle: {
         color: "white",
       },
@@ -56,15 +51,9 @@ class MyRequestsHome extends BaseComponent {
         shadowOpacity: 0,
         borderBottomWidth: 0,
       },
-      headerBackground: (
-        <RequestHeaderBg />
-      ),
-      headerLeft: (
-        <RequestHeaderLeft navigation={navigation} />
-      ),
-      headerRight: (
-        <RequestHeaderRight navigation={navigation} />
-      ),
+      headerBackground: <RequestHeaderBg />,
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
     };
   };
 
@@ -90,9 +79,9 @@ class MyRequestsHome extends BaseComponent {
       currentSportName: "",
       isStatsLoading: false,
       loading: false,
-      isSent: true,
+      isUpcoming: true,
       areDetailsShown: false,
-      requestReceiveData: myRequestData,
+      bookingData: myBookingsData,
     };
     const { navigation } = this.props.navigation.setParams({
       shareProfile: this.shareProfile,
@@ -100,22 +89,7 @@ class MyRequestsHome extends BaseComponent {
   }
 
   componentDidMount() {
-    // getData("userInfo", (value) => {
-    //   console.log("userInfo", value);
-    //   var userData = JSON.parse(value);
-    //   if (userData.user) {
-    //     var userid = userData.user["id"];
-    //     var username = userData.user["name"];
-    //     // Analytics.logEvent("ParentHome", {
-    //     //   userid: userid,
-    //     //   username: username,
-    //     // });
-    //   }
-    // });
-    // firebase.analytics().logEvent("ParentHome", {})
-
     this.selfComponentDidMount();
-
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
@@ -127,7 +101,6 @@ class MyRequestsHome extends BaseComponent {
       this.getNotifications();
     });
 
-    
     this.getNotifications();
 
     this.checkNotification();
@@ -135,31 +108,7 @@ class MyRequestsHome extends BaseComponent {
     this.refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
       this.checkNotification();
     });
-
-    // this.refreshEvent = Events.subscribe(EVENT_UPDATE_DIALOG, (must_update) => {
-    //   // must_update = true
-    //   this.setState({
-    //     show_must_update_alert: must_update,
-    //   });
-    // });
-
-    // setTimeout(() => {
-    //   console.log("component did mount");
-    //   if (this.viewShot) {
-    //     this.viewShot
-    //       .capture()
-    //       .then((uri) => {
-    //         this.onCapture(uri);
-    //       })
-    //       .catch((error) => {
-    //         console.log("error in capture call", error);
-    //       });
-    //   } else {
-    //     console.log("viewshot reference not fount");
-    //   }
-    // }, 5000);
   }
-
 
   checkNotification() {
     if (global.NOTIFICATION_DATA) {
@@ -195,7 +144,7 @@ class MyRequestsHome extends BaseComponent {
 
       let academy_name = userData.academy_name;
       if (academy_name == undefined) academy_name = "";
-    //   this.props.navigation.setParams({ Title: academy_name });
+      //   this.props.navigation.setParams({ Title: academy_name });
 
       this.setState({
         userData: JSON.parse(value),
@@ -212,12 +161,7 @@ class MyRequestsHome extends BaseComponent {
         );
       }
     });
-
-   
   }
-  
-
-
 
   getPlayerDashboardData(academy_id, player_id, sport_id) {
     getData("header", (value) => {
@@ -225,7 +169,6 @@ class MyRequestsHome extends BaseComponent {
       this.props
         .getPlayerDashboard(value, player_id, academy_id, sport_id)
         .then(() => {
-          
           let user = JSON.stringify(this.props.data.dashboardData);
           console.log(" getPlayerDashboard " + user);
           let user1 = JSON.parse(user);
@@ -368,41 +311,38 @@ class MyRequestsHome extends BaseComponent {
     });
   };
 
-  cancelBooking(){
+  cancelBooking() {
     ToastAndroid.show("Cancel booking called.", ToastAndroid.SHORT);
-    
   }
 
-  onTabPress(type){
+  onTabPress(type) {
     this.setState({
-      isSent: type == 'sent' ? true : false
-    })
+      isUpcoming: type == "upcoming" ? true : false,
+    });
   }
 
-  acceptRequest(){
+  acceptRequest() {
     ToastAndroid.show("Accept pressed.", ToastAndroid.SHORT);
   }
 
-  declineRequest(){
+  declineRequest() {
     ToastAndroid.show("Decline pressed.", ToastAndroid.SHORT);
   }
 
-  showDetails(passedId){
-    var previousData = this.state.requestReceiveData;
-    this.state.requestReceiveData.map((val, ind)=> {
-      if (passedId == val.id) {
+  showDetails(id) {
+    var previousData = this.state.bookingData;
+    this.state.bookingData.map((val, ind) => {
+      if ((id = val.id)) {
         previousData[ind].expanded = !val.expanded;
       }
-    })
+    });
     this.setState((prevState) => ({
       areDetailsShown: !prevState.areDetailsShown,
-      requestReceiveData: previousData,
+      bookingData: previousData,
     }));
-    
   }
 
   render() {
-   
     const rewards_ui_array = [];
 
     // if (
@@ -419,7 +359,6 @@ class MyRequestsHome extends BaseComponent {
     // }
 
     if (this.state.player_profile || true) {
-     
       sessionArray = [];
 
       return (
@@ -434,59 +373,45 @@ class MyRequestsHome extends BaseComponent {
             }
             style={styles.main_container}
           >
-            {/* <ViewShot
-              ref={(ref) => (this.viewShot = ref)}
-              style={{
-                opacity: 0,
-                position: "absolute",
-                width: "100%",
-                zIndex: -1,
-              }}
-            > */}
             <View style={{ width: "100%", flexDirection: "row" }}>
               <MyRequestTabItem
                 colors={
-                  this.state.isSent
+                  this.state.isUpcoming
                     ? ["#a975284d", "#a9752880"]
                     : ["#ffffff54", "#ffffff33"]
                 }
-                name={"Sent"}
+                name={"Upcoming"}
                 isLeft={true}
-                onTabPress={() => this.onTabPress("sent")}
-                isSelected={this.state.isSent}
+                onTabPress={() => this.onTabPress("upcoming")}
+                isSelected={this.state.isUpcoming}
               />
               <MyRequestTabItem
                 colors={
-                  !this.state.isSent
+                  !this.state.isUpcoming
                     ? ["#a975284d", "#a9752880"]
                     : ["#ffffff54", "#ffffff33"]
                 }
-                name={"Received"}
+                name={"Past"}
                 isLeft={false}
                 onTabPress={() => this.onTabPress("")}
-                isSelected={!this.state.isSent}
+                isSelected={!this.state.isUpcoming}
               />
             </View>
             <View style={{ height: 4, width: "100%" }} />
-            {this.state.isSent
-              ? myRequestData.map((val) => (
-                  <MyRequestSentView
+            {this.state.isUpcoming
+              ? myBookingsData.map((val) => (
+                  <MyBookingsView
                     val={val}
                     cancelBooking={() => this.cancelBooking()}
                   />
                 ))
-              : this.state.requestReceiveData.map((val) => (
-                  <MyRequestReceivedView
+              : this.state.bookingData.map((val) => (
+                  <MyBookingsView
                     val={val}
-                    acceptRequest={() => this.acceptRequest()}
-                    declineRequest={() => this.declineRequest()}
-                    areDetailsShown={val.expanded}
-                    showBookingDetails={() => this.showDetails(val?.id)}
+                    cancelBooking={() => this.cancelBooking()}
                   />
                 ))}
             <View style={{ height: 20, width: "100%" }} />
-
-            {/* </ViewShot> */}
           </ScrollView>
         </SafeAreaView>
       );
@@ -511,8 +436,7 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MyRequestsHome);
-
+)(MyBookingsScreen);
 
 const styles = StyleSheet.create({
   navBar: {
