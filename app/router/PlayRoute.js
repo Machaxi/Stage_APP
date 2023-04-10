@@ -16,121 +16,181 @@ import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformanc
 import PlayScreen from '././../containers/play/PlayScreen';
 import NavigationDrawerWhite from './NavigationDrawerWhite';
 import NotificationList from '../containers/notification/NotificationList';
+import CouponListScreen from '../containers/play/CouponListScreen';
 
 
 
-const playModule= createStackNavigator({
-    Play: {
-        screen: PlayScreen,
-        navigationOptions: ({ navigation }) => ({
-            title: "PLay",
-            headerLeft: <NavigationDrawerWhite navigationProps={navigation}
-            showBackAction={false} showDrawer={true}
-        />,
-            headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true}/>,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#21202F',
-            },
+const playModule = createStackNavigator({
+  Play: {
+    screen: PlayScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "PLay",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  CouponList: {
+    screen: CouponListScreen,
+    // navigationOptions: ({ navigation }) => ({
+    //   title: "PLay",
+    //   headerLeft: (
+    //     <NavigationDrawerWhite
+    //       navigationProps={navigation}
+    //       showBackAction={false}
+    //       showDrawer={true}
+    //     />
+    //   ),
+    //   headerRight: (
+    //     <RightMenuToolbar
+    //       navigationProps={navigation}
+    //       showNotification={true}
+    //     />
+    //   ),
+    //   headerTitleStyle: style.headerStyle,
+    //   headerStyle: {
+    //     backgroundColor: "#21202F",
+    //   },
+    // }),
+  },
+  CoachProfileDetail: {
+    screen: CoachProfileDetail,
+    navigationOptions: ({ navigation }) => ({
+      title: "Coach Profile",
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
 
-        })
-    },
-    CoachProfileDetail: {
-        screen: CoachProfileDetail,
-        navigationOptions: ({ navigation }) => ({
-            title: "Coach Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
+  PlayersListing: {
+    screen: PlayersListing,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Batchmates",
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
 
-        })
+  PlayerAttendance: {
+    screen: PlayerAttendance,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Attendance",
+      headerTitleStyle: style.headerStyle,
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showDrawer={true}
+          showBackAction={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
 
-    },
-
-    PlayersListing: {
-        screen: PlayersListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "My Batchmates",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-
-
-    PlayerAttendance: {
-        screen: PlayerAttendance,
-        navigationOptions: ({ navigation }) => ({
-            title: 'My Attendance',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={true}
-                showBackAction={true}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-
-    },
-    OtherPlayerDeatils: {
-        screen: otherplayerDetails,
-        navigationOptions: ({ navigation }) => ({
-            title: "Player Detail",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showDrawer={false} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-    CoachListing: {
-        screen: CoachListing,
-        navigationOptions: ({ navigation }) => ({
-            title: "Coach Listing",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={true} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-    ViewPlayerPerformance: {
-        screen: ViewPlayerPerformance,
-        navigationOptions: ({ navigation }) => ({
-            title: "My Stats",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-}
-);
+      headerTintColor: "#000",
+    }),
+  },
+  OtherPlayerDeatils: {
+    screen: otherplayerDetails,
+    navigationOptions: ({ navigation }) => ({
+      title: "Player Detail",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  CoachListing: {
+    screen: CoachListing,
+    navigationOptions: ({ navigation }) => ({
+      title: "Coach Listing",
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  ViewPlayerPerformance: {
+    screen: ViewPlayerPerformance,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Stats",
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+});
 export default playModule;
 
 
