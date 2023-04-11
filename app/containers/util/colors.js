@@ -31,3 +31,6 @@ export const greyVariant7 = "#ADADAD";
 export const yellowVariant4 = "#FF9C33";
 export const greyVariant8 = "#D1D1D1";
 export const darkGreyVariant = "#312E3E";
+export const yellowVariant6 = "#E8AC43";
+export const lightGreyVariant = "#CFCFCF";
+export const redColorVariant = "#FF6C6C";

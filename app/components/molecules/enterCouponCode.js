@@ -1,12 +1,17 @@
 import React from "react";
-import { Text, View, Image, TextInput, StyleSheet } from "react-native";
+import { Text, View, Image, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { greyVariant8, yellowVariant, yellowVariant2 } from "../../containers/util/colors";
 import { commonStyles } from "../../containers/util/commonStyles";
 import { deviceWidth } from "../../containers/util/dimens";
 
-const EnterCouponCode = ({ title, handleChange, value, handleKeyDown }) => {
+const EnterCouponCode = ({ title, handleChange, value, handleKeyDown, applyCouponPressed }) => {
   return (
-    <View style={[commonStyles.flexRowSpaceBtw, {marginTop: 20, marginBottom: 4, marginHorizontal: 12}]}>
+    <View
+      style={[
+        commonStyles.flexRowSpaceBtw,
+        { marginTop: 20, marginBottom: 4, marginHorizontal: 12 },
+      ]}
+    >
       <TextInput
         onChangeText={(text) => handleChange(text)}
         returnKeyType="search"
@@ -23,9 +28,9 @@ const EnterCouponCode = ({ title, handleChange, value, handleKeyDown }) => {
         }}
         placeholder="Enter Coupon Code"
       />
-      <Text style={styles.couponApply}>
-        {'Apply Coupon'}
-      </Text>
+      <TouchableOpacity onPress={()=> applyCouponPressed()}>
+        <Text style={styles.couponApply}>{"Apply Coupon"}</Text>
+      </TouchableOpacity>
     </View>
   );
 };

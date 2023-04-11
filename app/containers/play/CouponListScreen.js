@@ -9,7 +9,6 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { couponListData } from "../util/dummyData/couponListData";
 import CouponListItem from "../../components/molecules/couponListItem";
-import { commonStyles } from "../util/commonStyles";
 import GoBackHeader from "../../components/molecules/goBackHeader";
 import EnterCouponCode from "../../components/molecules/enterCouponCode";
 import { darkGreyVariant } from "../util/colors";
@@ -20,12 +19,15 @@ import Events from "../../router/events";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
-import { deviceWidth } from "../util/dimens";
+import PaymentModal from "../../components/molecules/paymentModal";
+import CouponAppliedModal from "../../components/molecules/couponAppliedModal";
+import CouponModal from "../../components/molecules/couponModal";
 
 const 
   CouponListScreen = ({ navigation }) => {
 
     const [code, setCode] = useState('')
+    const [modalVisible, setModalVisibility] = useState(false)
 
     const handleChange = (text) => {
         setCode(text)
@@ -60,14 +62,10 @@ const
 
 
   useEffect(() => {
-         
-
     navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,
     });
     getNotifications();
-
-
     var refreshEventCallNotif = Events.subscribe("NOTIFICATION_CALL", (msg) => {
       getNotifications();
     });
@@ -88,7 +86,12 @@ const
 
   }, []);
 
- 
+  const setModalVisibilityCb = (val) => {
+    setModalVisibility(val);
+  }
+
+  var isSuccess = false;
+
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
@@ -96,20 +99,41 @@ const
         style={{ flex: 1, paddingHorizontal: 12 }}
       >
         <ScrollView style={{ height: "100%" }}>
+          {modalVisible ? (
+            <CouponModal modalVisible={modalVisible} setModalVisibility={()=>setModalVisibilityCb()} />
+            // <PaymentModal
+            //   isSuccess={isSuccess}
+            //   onBtnPress={() => {}}
+            //   biggerImg={
+            //     isSuccess
+            //       ? require("../../images/payment_done.png")
+            //       : require("../../images/payment_fail.png")
+            //   }
+            //   modalVisible={modalVisible}
+            //   setModalVisibility={(val) => setModalVisibilityCb(val)}
+            // />
+          ) : 
+          null}
           <GoBackHeader title={"Apply Coupon"} />
-          <EnterCouponCode handleChange={(val)=>handleChange(val)} value={code} handleKeyDown={()=> handleKeyDown()} />
+          <EnterCouponCode
+            handleChange={(val) => handleChange(val)}
+            value={code}
+            handleKeyDown={() => handleKeyDown()}
+            applyCouponPressed={() => setModalVisibilityCb(true)}
+          />
           <View style={styles.bar} />
           <FlatList
             data={couponListData}
             extraData={code}
             renderItem={({ item, index }) => {
-                return(
-                  <CouponListItem
-                    coupon_code={item.coupon_code}
-                    discount={item.discount}
-                    couponApplied={code == item.coupon_code}
-                  />
-                );}}
+              return (
+                <CouponListItem
+                  coupon_code={item.coupon_code}
+                  discount={item.discount}
+                  couponApplied={code == item.coupon_code}
+                />
+              );
+            }}
             keyExtractor={(item) => item.id}
           />
         </ScrollView>
@@ -124,6 +148,7 @@ CouponListScreen.navigationOptions = ({ navigation }) => {
     headerTitleStyle: {
       color: "white",
     },
+   
     headerStyle: {
       elevation: 0,
       shadowOpacity: 0,
@@ -143,6 +168,13 @@ const styles = StyleSheet.create({
     width: 12,
     resizeMode: "contain",
   },
+  absolute: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
   menuHeading: {
     color: "#FF9C33",
     fontSize: 16,
@@ -156,7 +188,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     bottom: 12,
   },
-  bar: {backgroundColor:darkGreyVariant, width: '100%', marginBottom: 35},
+  bar: { backgroundColor: darkGreyVariant, width: "100%", marginBottom: 35 },
   playingLevelContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
