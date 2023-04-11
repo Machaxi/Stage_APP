@@ -91,10 +91,9 @@ const
  
   return (
     <View style={{ flex: 1 }}>
-       
       <LinearGradient
         colors={["#051732", "#232031"]}
-        style={{ flex: 1, paddingBottom: 63, paddingHorizontal: 12 }}
+        style={{ flex: 1, paddingHorizontal: 12 }}
       >
         <ScrollView style={{ height: "100%" }}>
           <GoBackHeader title={"Apply Coupon"} />
