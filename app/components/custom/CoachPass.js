@@ -4,33 +4,27 @@ import LinearGradient from "react-native-linear-gradient";
 
 class CoachPass extends Component {
   render() {
-    const { title, subtitle, description, image } = this.props;
-    let imageval;
-    if (image == "2") {
-      imageval = require("../../images/playing/hand.png");
-    } else if (image == "3") {
-      imageval = require("../../images/playing/arrow.png");
-    } else {
-      imageval = require("../../images/playing/rocket.png");
-    }
-
+    const { title, subtitle, description, image, sidevalue } = this.props;
     return (
       <LinearGradient
-        colors={[
-          "rgba(255, 255, 255, 0.15)",
-          "rgba(118, 87, 136, 0)",
-          "rgba(118, 87, 136, 0)",
-          "rgba(118, 87, 136, 0.10)",
-        ]}
-        locations={[0, 0.3, 0.6, 1]}
+        // colors={[
+        //   "rgba(255, 255, 255, 0.15)",
+        //   "rgba(118, 87, 136, 0)",
+        //   "rgba(118, 87, 136, 0)",
+        //   "rgba(118, 87, 136, 0.10)",
+        // ]}
+        // locations={[0, 0.3, 0.6, 1]}
+        colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
         style={styles.container}
       >
         <View style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>
-            ₹ {subtitle}
+            {subtitle}
             <Text style={[styles.subtitle, { fontSize: 12 }]}>
-              (Starting Price)
+              ({sidevalue})
             </Text>
           </Text>
           <Text style={styles.description}>{description}</Text>
@@ -40,7 +34,7 @@ class CoachPass extends Component {
           />
         </View>
         <Image
-          source={imageval}
+          source={{ uri: image }}
           style={[
             styles.image,
             image !== "1" && { width: 85, height: 75, marginRight: 10 },

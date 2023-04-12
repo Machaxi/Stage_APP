@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
+import { ScrollView } from "react-navigation";
 
 class CongratulationScreen extends Component {
   months = [
@@ -103,7 +104,7 @@ class CongratulationScreen extends Component {
         <LinearGradient
           colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
           locations={[0, 1]}
-          style={[styles.subcontainer, { height: 500, paddingVertical: 10 }]}
+          style={[styles.subcontainer]}
         >
           <Image
             source={require("../../../images/playing/Congratulations.png")}
@@ -167,7 +168,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column-reverse",
     alignItems: "center",
-    backgroundColor: "rgba(16, 16, 16, 0.7)",
   },
   item: {
     flexDirection: "row",
@@ -177,8 +177,8 @@ const styles = StyleSheet.create({
   },
 
   subcontainer: {
-    width: "90%",
-    height: 460,
+    width: "100%",
+    height: 500,
     marginBottom: 40,
     alignItems: "center",
     paddingHorizontal: 20,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     borderColor: "#443A59",
     borderWidth: 0.7,
     width: "100%",
-    marginVertical: 15,
+    marginVertical: 20,
   },
   subtitle: {
     fontSize: 18,

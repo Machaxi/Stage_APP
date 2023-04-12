@@ -1,32 +1,22 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, ImageBackground, Image } from "react-native";
+import { Text, StyleSheet, ImageBackground, Image, View } from "react-native";
 
 class PlayPass extends Component {
   render() {
-    let imageval;
-    if (this.props.image == "1") {
-      imageval = require("../../images/playing/star.png");
-    } else if (this.props.image == "2") {
-      imageval = require("../../images/playing/leaf.png");
-    } else if (this.props.image == "3") {
-      imageval = require("../../images/playing/wind.png");
-    } else {
-      imageval = require("../../images/playing/annually.png");
-    }
-
     return (
       <ImageBackground
         source={require("../../images/playing/playmembership.png")}
-        style={{ width: 180, height: 160, marginRight: 7, paddingTop: 10 }}
+        style={{
+          width: 195,
+          height: 160,
+          paddingTop: 10,
+          marginBottom: 10,
+          marginRight: -15,
+        }}
       >
-        <Image
-          source={imageval}
-          style={[
-            styles.image,
-            this.props.image == "1" && { width: 31 },
-            this.props.image == "3" && { width: 45 },
-          ]}
-        />
+        <View style={styles.imagebackground}>
+          <Image source={{ uri: this.props.image }} style={styles.image} />
+        </View>
         <Text style={styles.insideText}>{this.props.name}</Text>
         <Text style={styles.priceText}>₹ {this.props.price}</Text>
       </ImageBackground>
@@ -48,11 +38,18 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   image: {
+    marginLeft: 15,
+    width: 35,
+    height: 30,
+  },
+  imagebackground: {
     marginLeft: 30,
     marginTop: 10,
     marginBottom: 10,
-    width: 38,
-    height: 30,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: "#A8957875",
   },
 });
 

@@ -13,7 +13,7 @@ import HeaderContentComponent from "../../components/custom/HeaderContentCompone
 import PlayPass from "../../components/custom/PlayPass";
 import AsyncStorage from "@react-native-community/async-storage";
 
-class PlayScreen extends Component {
+class PlayerScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,22 +22,10 @@ class PlayScreen extends Component {
   }
 
   componentDidMount() {
-    this.handleopen();
+    console.log(this.props.playData.isTrialDisplayRequired);
   }
 
-  handleopen = async () => {
-    const bookingsuccess = await AsyncStorage.getItem("book_trial_playing");
-    this.setState({ bookingSuccess: bookingsuccess });
-  };
-
   render() {
-    const contents = [
-      "Multi sport access with a single membership",
-      "Guaranteed same level playing partner matched using algorithms",
-      "Access to all Machaxi centres with a single membership",
-      "Exclusive Tournaments for Machaxi playing members",
-      "Modern infra, parking, Sports Shop and Cafe",
-    ];
     return (
       <View style={styles.container}>
         <ScrollView style={{ flex: 0.85, paddingHorizontal: 20 }}>
@@ -50,38 +38,31 @@ class PlayScreen extends Component {
             style={{ width: "85%", height: 540, marginLeft: 25 }}
           />
           <HeaderContentComponent
-            header="Playing Membership"
-            contents={contents}
+            header={this.props.playData.header}
+            contents={this.props.playData["benefits"]}
             colors={"#ED6F53"}
           />
-          <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity activeOpacity={0.8}>
-              <PlayPass name="Gold Membership" price="2,000" image="1" />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8}>
-              <PlayPass name="Monthly" price="4,000" image="2" />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity activeOpacity={0.8}>
-              <PlayPass name="Quarterly" price="7,200" image="3" />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8}>
-              <PlayPass name="Annually" price="13,000" image="4" />
-            </TouchableOpacity>
+          <View style={styles.plancontained}>
+            {this.props.playData["plans"].map((item) => (
+              <TouchableOpacity activeOpacity={0.8}>
+                <PlayPass
+                  name={item.name}
+                  price={item.price}
+                  image={item.planIconUrl}
+                />
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
         <LinearGradient
-          colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
-          locations={[0, 1]}
+          colors={["rgba(255, 255, 255, 0.25)", "rgba(255, 255, 255, 0.06)"]}
+          // locations={[0, 1]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
           style={styles.bottomcontainer}
         >
-          {this.state.bookingSuccess === "Playing" ? (
-            <View style={{ width: "90%" }}>
-              <CustomButton name="Buy Coaching Plan" available={true} />
-            </View>
-          ) : (
-            <View style={{ width: "90%", alignItems: "center" }}>
+          {this.props.playData.isTrialDisplayRequired ? (
+            <View style={{ width: "100%", alignItems: "center" }}>
               <CustomButton
                 name="Book Free Trial"
                 available={true}
@@ -90,6 +71,10 @@ class PlayScreen extends Component {
               <TouchableOpacity activeOpacity={0.8}>
                 <Text style={styles.insideText}>Or Buy Playing plan</Text>
               </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{ width: "100%" }}>
+              <CustomButton name="Buy Coaching Plan" available={true} />
             </View>
           )}
         </LinearGradient>
@@ -101,8 +86,14 @@ class PlayScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
   },
+  plancontained: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
   insideText: {
     marginTop: 10,
     fontSize: 14,
@@ -114,7 +105,9 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 10,
   },
 });
 
-export default PlayScreen;
+export default PlayerScreen;

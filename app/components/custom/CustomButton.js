@@ -24,7 +24,6 @@ const CustomButton = ({ name, available, onPress, height, image }) => {
         style={{
           width: "100%",
           opacity: available ? 1 : 0.5,
-          marginEnd: 10,
           borderRadius: 28,
           height: height || 55,
           alignItems: "center",

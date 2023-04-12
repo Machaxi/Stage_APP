@@ -10,29 +10,10 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
-
-const data = [
-  {
-    id: 1,
-    image: require("../../../images/playing/beginner.png"),
-    name: "Beginner",
-  },
-  {
-    id: 2,
-    image: require("../../../images/playing/intermediate.png"),
-    name: "Intermediate",
-  },
-  {
-    id: 3,
-    image: require("../../../images/playing/advance.png"),
-    name: "Advance",
-  },
-  {
-    id: 4,
-    image: require("../../../images/playing/professional.png"),
-    name: "Professional",
-  },
-];
+import { ScrollView } from "react-navigation";
+import moment from "moment";
+import { getBaseUrl } from "../../../containers/BaseComponent";
+import axios from "axios";
 
 class ConfirmBooking extends Component {
   months = [
@@ -49,6 +30,7 @@ class ConfirmBooking extends Component {
     "Nov",
     "Dec",
   ];
+
   weekdays = [
     "Sunday",
     "Monday",
@@ -62,8 +44,6 @@ class ConfirmBooking extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 10,
-      proseednext: false,
       centerName: "",
       centerAddress: "",
       centerImage: "",
@@ -73,54 +53,92 @@ class ConfirmBooking extends Component {
       time: "",
       levelImage: "",
       levelName: "",
+      header: "",
+      selectBatch: "",
+      username: "",
+      gender: "",
       date: new Date(),
     };
   }
 
   componentDidMount() {
     this.handleopen();
+    this.getData();
   }
 
-  handleopen = async () => {
-    const myArray = await AsyncStorage.getItem("center");
-    const data = JSON.parse(myArray);
-
-    const sportArray = await AsyncStorage.getItem("sports");
-    const sportData = JSON.parse(sportArray);
-
-    const levelArray = await AsyncStorage.getItem("select_level");
-    const levelData = JSON.parse(levelArray);
-
-    const timeArray = await AsyncStorage.getItem("select_times");
-
-    const dateString = await AsyncStorage.getItem("select_date");
-    const date = new Date(dateString);
-    console.log(date);
+  handleopen = () => {
+    const selectCenter = this.props.selectCenter;
+    const selectSport = this.props.selectSport;
+    const selectDate = this.props.selectDate;
+    const selectLevel = this.props.selectLevel;
+    const selectBatch = this.props.selectBatch;
+    const distance = this.props.distance;
+    const selectTime = selectBatch.displayTime;
 
     this.setState({
-      centerName: data.title,
-      centerImage: data.image,
-      centerAddress: data.address,
-      centerDistance: data.distance,
-      sportName: sportData.name,
-      sportImage: sportData.image,
-      time: timeArray,
-      levelImage: levelData.image,
-      levelName: levelData.name,
-      date: date,
+      centerName: selectCenter.name,
+      centerImage: selectCenter.cover_pic,
+      centerAddress: selectCenter.address,
+      centerDistance: distance,
+      sportName: selectSport.name,
+      sportImage: selectSport.image,
+      time: selectTime,
+      selectBatch: selectBatch,
+      levelImage: selectLevel.image,
+      levelName: selectLevel.name,
+      date: selectDate,
     });
   };
 
-  render() {
-    handlepress = () => {
-      if (this.props.title === "Coaching") {
-        AsyncStorage.setItem("book_trial_coaching", "Coaching");
-      } else {
-        AsyncStorage.setItem("book_trial_playing", "Playing");
-      }
-      this.props.onPress();
-    };
+  getData = async () => {
+    const header = await AsyncStorage.getItem("header");
+    const username = await AsyncStorage.getItem("user_name");
+    const gender = await AsyncStorage.getItem("user_gender");
+    this.setState({ header: header, username: username, gender: gender });
+  };
 
+  booktrail = () => {
+    var dict = {};
+    const url = getBaseUrl() + "batch/book-coaching-trial";
+
+    if (this.props.title === "Playing") {
+      url = getBaseUrl() + "court/bookTrial";
+      const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
+      dict["date"] = formattedDate;
+      dict["courtTimingId"] = this.state.selectBatch.courtTimingIds;
+      dict["proficiency"] = this.state.selectLevel;
+    } else {
+      const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
+      dict["batch_id"] = "" + this.state.selectBatch.batch_id;
+      dict["trial_date"] = formattedDate;
+      dict["startTime"] = this.state.selectBatch.startTime;
+      dict["endTime"] = this.state.selectBatch.endTime;
+    }
+    // this.props.onPress();
+    axios
+      .post(
+        url,
+        { data: dict },
+        {
+          headers: {
+            "x-authorization": this.state.header,
+          },
+        }
+      )
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        console.log(userResponce);
+        if (userResponce.success == true) {
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.log("error");
+      });
+  };
+
+  render() {
     listdata = (image, name, width, height) => {
       return (
         <View style={{ alignItems: "center" }}>
@@ -140,7 +158,7 @@ class ConfirmBooking extends Component {
     };
 
     return (
-      <View style={{ marginVertical: 20 }}>
+      <ScrollView style={{ marginVertical: 20 }}>
         <Text style={styles.mainText}>Confirm Book free Trial</Text>
         <LinearGradient
           colors={[
@@ -152,11 +170,29 @@ class ConfirmBooking extends Component {
           locations={[0, 0.3, 0.6, 1]}
           style={styles.mainview}
         >
+          <Text style={styles.subtitle}>Player Detail</Text>
+          <Text style={[styles.subtitle, { color: "#D1CECE" }]}>
+            Player Name
+          </Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={[styles.subtitle, { color: "#F0F0F0", fontSize: 16 }]}>
+              {this.state.username} ·{" "}
+            </Text>
+            <Text style={[styles.subtitle, { color: "#FFC498" }]}>
+              {this.state.gender}
+            </Text>
+          </View>
+          <View style={styles.line} />
           <Text style={styles.subtitle}>Centre Detail</Text>
           <View style={styles.item}>
             <View style={{ flex: 0.3 }}>
-              <Image source={this.state.centerImage} style={styles.image} />
-              <Text style={styles.distance}>{this.state.centerDistance}</Text>
+              <Image
+                source={{ uri: this.state.centerImage }}
+                style={styles.image}
+              />
+              <Text style={styles.distance}>
+                {this.state.centerDistance} kms away
+              </Text>
             </View>
             <View style={styles.textContainer}>
               <Text style={[styles.title]}>{this.state.centerName}</Text>
@@ -181,7 +217,22 @@ class ConfirmBooking extends Component {
                   35,
                   52
                 )}
-            {listdata(this.state.sportImage, this.state.sportName, 40, 40)}
+            <View style={{ alignItems: "center" }}>
+              <LinearGradient
+                colors={[
+                  "rgba(255, 255, 255, 0.4)",
+                  "rgba(255, 255, 255, 0.06)",
+                ]}
+                locations={[0, 1]}
+                style={styles.sportsview}
+              >
+                <Image
+                  style={[styles.imaged, { width: 40, height: 40 }]}
+                  source={{ uri: this.state.sportImage }}
+                />
+              </LinearGradient>
+              <Text style={[styles.sportText]}>{this.state.sportName}</Text>
+            </View>
             {listdata(this.state.levelImage, this.state.levelName, 37, 48)}
           </View>
           <View
@@ -213,7 +264,7 @@ class ConfirmBooking extends Component {
             </View>
             {listdata(
               require("../../../images/playing/clock.png"),
-              this.state.sportName,
+              this.state.time,
               36,
               31
             )}
@@ -221,8 +272,12 @@ class ConfirmBooking extends Component {
             <View style={styles.sportsview} />
           </View>
         </LinearGradient>
-        <CustomButton name="Next" available={true} onPress={handlepress} />
-      </View>
+        <CustomButton
+          name="Book Free Trial"
+          available={true}
+          onPress={this.booktrail}
+        />
+      </ScrollView>
     );
   }
 }
@@ -241,7 +296,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 10,
-    margin: 10,
+    marginLeft: 10,
+    marginBottom: 10,
     fontFamily: "Nunito-500",
     color: "#FF9C33",
   },

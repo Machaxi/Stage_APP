@@ -7,6 +7,10 @@ import SelectBatch from "./TrialBook/SelectBatch";
 import SelectCenter from "./TrialBook/SelectCenter";
 import SelectSports from "./TrialBook/SelectSports";
 import AsyncStorage from "@react-native-community/async-storage";
+import axios from "axios";
+import { getBaseUrl } from "../../containers/BaseComponent";
+import { darkBlueVariant } from "../util/colors";
+import CongratulationScreen from "./TrialBook/CongratulationScreen";
 
 class TrialBook extends Component {
   constructor(props) {
@@ -14,6 +18,16 @@ class TrialBook extends Component {
     this.state = {
       currentPage: 1,
       title: "Coaching Trial",
+      sportsList: null,
+      academiesList: null,
+      selectSport: null,
+      selectCenter: null,
+      selectBatch: null,
+      selectDate: null,
+      selectLevel: null,
+      selectTime: null,
+      congratulationScreen: false,
+      distance: 0,
     };
   }
 
@@ -23,6 +37,20 @@ class TrialBook extends Component {
       this.setState({ title: select_trial });
     };
     getValue();
+    axios
+      .get(getBaseUrl() + "/global/academy/all")
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let academiesData = userResponce["data"]["data"];
+        this.setState({
+          sportsList: academiesData["Sports"],
+          academiesList: academiesData["academies"],
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   onPress = (value, number) => {
@@ -31,73 +59,116 @@ class TrialBook extends Component {
     }
   };
 
+  onPressSports = (selectSport) => {
+    this.setState({ currentPage: 2 });
+    this.setState({ selectSport: selectSport });
+  };
+
+  onPressCenter = (selectCenter) => {
+    this.setState({ currentPage: 3 });
+    this.setState({ selectCenter: selectCenter });
+  };
+
+  onPressBatch = (selectDate, selectLevel, selectBatch) => {
+    this.setState({ currentPage: 4 });
+    this.setState({
+      selectDate: selectDate,
+      selectLevel: selectLevel,
+      selectTime: selectBatch,
+    });
+  };
+
+  selectScreen = () => {
+    return (
+      <View>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            if (this.state.currentPage > 1) {
+              this.setState({ currentPage: this.state.currentPage - 1 });
+            } else {
+              this.props.navigation.goBack();
+            }
+          }}
+        >
+          <View style={styles.row}>
+            <Image
+              source={require("../../images/playing/back.png")}
+              style={{ width: 15, height: 13 }}
+            />
+            <Text style={styles.headerText}> {this.state.title}</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ height: 70, margin: 20 }}>
+          <CoachProcess
+            number={this.state.currentPage}
+            onPress={this.onPress}
+          />
+        </View>
+        <View style={{ height: 1, backgroundColor: "gray", marginTop: 10 }} />
+      </View>
+    );
+  };
+
   render() {
     return (
       <LinearGradient
-        colors={["#332B70", "#24262A"]}
+        colors={[darkBlueVariant, darkBlueVariant]}
         locations={[0, 1]}
         style={styles.container}
       >
-        <View style={{ flex: 0.2 }}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              if (this.state.currentPage > 1) {
-                this.setState({ currentPage: this.state.currentPage - 1 });
-              } else {
-                this.props.navigation.navigate("HomeScreen");
-              }
-            }}
-          >
-            <View style={styles.row}>
-              <Image
-                source={require("../../images/playing/back.png")}
-                style={{ width: 15, height: 13 }}
-              />
-              <Text style={styles.headerText}> {this.state.title}</Text>
+        {this.state.congratulationScreen ? (
+          <CongratulationScreen
+            title="Coaching Trail"
+            selectCenter={this.state.selectCenter}
+            selectSport={this.state.selectSport}
+            selectDate={this.state.selectDate}
+            selectLevel={this.state.selectLevel}
+            selectBatch={this.state.selectTime}
+            distance={this.state.distance}
+          />
+        ) : (
+          <View style={{ flex: 1 }}>
+            <View style={{ flex: 0.2 }}>{true && this.selectScreen()}</View>
+            <View style={{ flex: 0.8 }}>
+              {this.state.sportsList != null &&
+                this.state.currentPage === 1 && (
+                  <SelectSports
+                    onPress={this.onPressSports}
+                    sportList={this.state.sportsList}
+                  />
+                )}
+              {this.state.currentPage === 2 && (
+                <SelectCenter
+                  onPress={this.onPressCenter}
+                  academiesList={this.state.academiesList}
+                  selectSport={this.state.selectSport}
+                />
+              )}
+              {this.state.currentPage === 3 && (
+                <SelectBatch
+                  onPress={this.onPressBatch}
+                  selectCenter={this.state.selectCenter}
+                  selectSport={this.state.selectSport}
+                />
+              )}
+              {this.state.currentPage === 4 && (
+                <ConfirmBooking
+                  title="Coaching"
+                  selectCenter={this.state.selectCenter}
+                  selectSport={this.state.selectSport}
+                  selectDate={this.state.selectDate}
+                  selectLevel={this.state.selectLevel}
+                  selectBatch={this.state.selectTime}
+                  distance={this.state.distance}
+                  onPress={() => {
+                    this.props.navigation.navigate("CongratulationScreen");
+                  }}
+                />
+              )}
             </View>
-          </TouchableOpacity>
-          <View style={{ height: 70, margin: 20 }}>
-            <CoachProcess
-              number={this.state.currentPage}
-              onPress={this.onPress}
-            />
           </View>
-          <View style={{ height: 2, backgroundColor: "gray", marginTop: 10 }} />
-        </View>
-        <View style={{ flex: 0.8 }}>
-          {this.state.currentPage === 1 && (
-            <SelectSports
-              onPress={() => {
-                this.setState({ currentPage: 2 });
-              }}
-            />
-          )}
-          {this.state.currentPage === 2 && (
-            <SelectCenter
-              onPress={() => {
-                this.setState({ currentPage: 3 });
-              }}
-            />
-          )}
-          {this.state.currentPage === 3 && (
-            <SelectBatch
-              onPress={() => {
-                this.setState({ currentPage: 4 });
-              }}
-            />
-          )}
-          {this.state.currentPage === 4 && (
-            <ConfirmBooking
-              title={
-                this.state.title === "Coaching Trial" ? "Coaching" : "Playing"
-              }
-              onPress={() => {
-                this.props.navigation.navigate("CongratulationScreen");
-              }}
-            />
-          )}
-        </View>
+        )}
       </LinearGradient>
     );
   }

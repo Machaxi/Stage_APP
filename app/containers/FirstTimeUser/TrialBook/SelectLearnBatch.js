@@ -13,7 +13,6 @@ import DateComponent from "../../../components/custom/DateComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
-import { whiteGreyBorder } from "../../util/colors";
 
 const data = [
   {
@@ -89,7 +88,7 @@ while (nextDate.getDay() === 0) {
 const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
 const nextday = weekdays[nextDate.getDay()];
 
-class SelectBatch extends Component {
+class SelectLearnBatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -113,15 +112,15 @@ class SelectBatch extends Component {
     axios
       .get(
         getBaseUrl() +
-          "/global/coaching/slots?sport_id=" +
-          sport_id +
-          "&academy_id=" +
-          academy_id
+          "/global/coaching/slots?academyId=" +
+          academy_id +
+          "&sportId=" +
+          sport_id
       )
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
-        let batchData = userResponce["data"]["data"]["batch_details"];
+        let batchData = userResponce["data"]["data"]["courtAvailability"];
         console.log(batchData);
         this.setState({ batchData: batchData });
       })
@@ -140,24 +139,19 @@ class SelectBatch extends Component {
       dates = today;
     }
     for (let i = 0; i < this.state.batchData.length; i++) {
-      if (
-        level < 5 &&
-        data[level].name.toLowerCase() ==
-          this.state.batchData[i].proficiency.toLowerCase() &&
-        dates &&
-        dates.getDay() in this.state.batchData[i].weekDetails
-      ) {
-        const startHour = parseInt(
-          this.state.batchData[i].startTime.split(":")[0]
-        );
-        if (startHour >= 12) {
-          greaterThan12.push(this.state.batchData[i]);
-        } else {
-          lessThan12.push(this.state.batchData[i]);
-        }
+      //   if ( level < 5 && data[level].name.toLowerCase() ==
+      //this.state.batchData[i].proficiency.toLowerCase() && dates && dates.getDay() in this.state.batchData[i].weekDetails) {
+      const startHour = parseInt(
+        this.state.batchData[i].startTime.split(":")[0]
+      );
+      if (startHour >= 12) {
+        greaterThan12.push(this.state.batchData[i]);
+      } else {
+        lessThan12.push(this.state.batchData[i]);
       }
-      this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
+      //   }
     }
+    this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
   };
 
   render() {
@@ -176,19 +170,22 @@ class SelectBatch extends Component {
             <LinearGradient
               colors={
                 item.batch_id === this.state.selectTime
-                  ? ["rgba(167, 134, 95, 0.3)", "rgba(167, 134, 95, 0.1)"]
-                  : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
+                  ? ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
+                  : [
+                      "rgba(255, 255, 255, 0.15)",
+                      "rgba(118, 87, 136, 0)",
+                      "rgba(118, 87, 136, 0)",
+                      "rgba(118, 87, 136, 0.44)",
+                    ]
               }
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: 0.5 }}
-              style={[
-                styles.clockView,
-                item.batch_id === this.state.selectTime && {
-                  borderColor: "rgba(167, 134, 95, 0.6)",
-                },
-              ]}
+              locations={
+                item.batch_id === this.state.selectTime
+                  ? [0, 1]
+                  : [0, 0.3, 0.6, 1]
+              }
+              style={styles.clockView}
             >
-              <Text>{"    "}</Text>
+              <Text> </Text>
               {item.batch_id === this.state.selectTime && (
                 <Image
                   style={styles.clockimage}
@@ -205,8 +202,7 @@ class SelectBatch extends Component {
                   item.slot == false && { color: "#858585" },
                 ]}
               >
-                {item.displayTime}
-                {"    "}
+                {item.displayTime}{" "}
               </Text>
             </LinearGradient>
             {item.is_allowed == false && (
@@ -227,7 +223,7 @@ class SelectBatch extends Component {
       }
       let selectLevel = data[this.state.currentLevel];
       let selectBatch = this.state.batchData.find(
-        (item) => item.batch_id == this.state.selectTime
+        (item) => item.courtTimingId == this.state.selectTime
       );
       this.props.onPress(selectDate, selectLevel, selectBatch);
     };
@@ -257,17 +253,20 @@ class SelectBatch extends Component {
                 <LinearGradient
                   colors={
                     index === this.state.currentLevel
-                      ? ["rgba(255, 180, 1, 0.3))", "rgba(255, 212, 89, 0.1)"]
-                      : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
+                      ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
+                      : [
+                          "rgba(255, 255, 255, 0.15)",
+                          "rgba(118, 87, 136, 0)",
+                          "rgba(118, 87, 136, 0)",
+                          "rgba(118, 87, 136, 0.44)",
+                        ]
                   }
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
-                  style={[
-                    styles.sportsview,
-                    index === this.state.currentLevel && {
-                      borderColor: "rgba(255, 180, 1, 0.2))",
-                    },
-                  ]}
+                  locations={
+                    index === this.state.currentLevel
+                      ? [0, 1]
+                      : [0, 0.3, 0.6, 1]
+                  }
+                  style={styles.sportsview}
                 >
                   <View style={styles.imaged}>
                     <Image
@@ -319,9 +318,8 @@ class SelectBatch extends Component {
 
           <Text style={styles.select}>Select Preferred time</Text>
           <LinearGradient
-            colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.06)"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
+            colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+            locations={[0, 1]}
             style={styles.selecttime}
           >
             <TouchableOpacity
@@ -358,7 +356,7 @@ class SelectBatch extends Component {
                 this.state.morningData.map((item) => assigndate(item))}
             </View>
 
-            <View style={{ height: 1, backgroundColor: "gray", margin: 10 }} />
+            <View style={{ height: 2, backgroundColor: "gray", margin: 10 }} />
 
             <TouchableOpacity
               activeOpacity={0.8}
@@ -386,7 +384,7 @@ class SelectBatch extends Component {
             <View
               style={[
                 styles.timecontained,
-                { marginLeft: 5 },
+                { marginLeft: 10 },
                 this.state.hideEvening && { height: 0, opacity: 0 },
               ]}
             >
@@ -449,8 +447,6 @@ const styles = StyleSheet.create({
   sportsview: {
     width: 98,
     height: 92,
-    borderColor: whiteGreyBorder,
-    borderWidth: 1,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -458,9 +454,7 @@ const styles = StyleSheet.create({
   clockView: {
     flexDirection: "row",
     height: 30,
-    borderColor: whiteGreyBorder,
-    borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -508,4 +502,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectBatch;
+export default SelectLearnBatch;

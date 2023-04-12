@@ -13,63 +13,64 @@ import CustomButton from "../../../components/custom/CustomButton";
 import Geolocation from "react-native-geolocation-service";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
+import { whiteGreyBorder } from "../../util/colors";
 
-const data = [
-  {
-    id: "1",
-    title: "Machaxi Play9 Sports Centre, Whitefield",
-    address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    image: require("../../../images/playing/machaxicentre.png"),
-    distance: " 3.4 km away ",
-  },
-  {
-    id: "2",
-    title: "Machaxi Badminton Center Marathahalli",
-    address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    image: require("../../../images/playing/machaxicentre.png"),
-    distance: " 3.4 km away ",
-  },
-  {
-    id: "3",
-    title: "Machaxi J Sports, Hoodi circle",
-    address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    image: require("../../../images/playing/machaxicentre.png"),
-    distance: " 3.4 km away ",
-  },
-  {
-    id: "4",
-    title: "Machaxi Play9 Sports Centre, Whitefield",
-    address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    image: require("../../../images/playing/machaxicentre.png"),
-    distance: " 3.4 km away ",
-  },
-  {
-    id: "5",
-    title: "Machaxi Badminton Center Marathahalli",
-    address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    image: require("../../../images/playing/machaxicentre.png"),
-    distance: " 3.4 km away ",
-  },
-  {
-    id: "6",
-    title: "Machaxi J Sports, Hoodi circle",
-    address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    image: require("../../../images/playing/machaxicentre.png"),
-    distance: " 3.4 km away ",
-  },
-];
+// const data = [
+//   {
+//     id: "1",
+//     title: "Machaxi Play9 Sports Centre, Whitefield",
+//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
+//     image: require("../../../images/playing/machaxicentre.png"),
+//     distance: " 3.4 km away ",
+//   },
+//   {
+//     id: "2",
+//     title: "Machaxi Badminton Center Marathahalli",
+//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
+//     image: require("../../../images/playing/machaxicentre.png"),
+//     distance: " 3.4 km away ",
+//   },
+//   {
+//     id: "3",
+//     title: "Machaxi J Sports, Hoodi circle",
+//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
+//     image: require("../../../images/playing/machaxicentre.png"),
+//     distance: " 3.4 km away ",
+//   },
+//   {
+//     id: "4",
+//     title: "Machaxi Play9 Sports Centre, Whitefield",
+//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
+//     image: require("../../../images/playing/machaxicentre.png"),
+//     distance: " 3.4 km away ",
+//   },
+//   {
+//     id: "5",
+//     title: "Machaxi Badminton Center Marathahalli",
+//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
+//     image: require("../../../images/playing/machaxicentre.png"),
+//     distance: " 3.4 km away ",
+//   },
+//   {
+//     id: "6",
+//     title: "Machaxi J Sports, Hoodi circle",
+//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
+//     image: require("../../../images/playing/machaxicentre.png"),
+//     distance: " 3.4 km away ",
+//   },
+// ];
 const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
 class SelectCenter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 10,
+      currentIndex: 100,
       proseednext: false,
-      data: null,
       latitude: 0.0,
       longitude: 0.0,
       place: "             ",
+      centerData: null,
     };
   }
 
@@ -105,7 +106,11 @@ class SelectCenter extends Component {
         console.log(position);
         var lats = parseFloat(position.coords.latitude);
         var lngs = parseFloat(position.coords.longitude);
-        this.setState({ latitude: lats, longitude: lngs });
+        this.setState({
+          latitude: lats,
+          longitude: lngs,
+          centerData: this.props.academiesList,
+        });
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
         const address = "del";
@@ -131,82 +136,132 @@ class SelectCenter extends Component {
 
   componentDidMount() {
     this.requestPermissions();
+    this.setState({ centerData: this.props.academiesList });
+  }
+
+  hasSport(sportList) {
+    for (let i = 0; i < sportList.length; i++) {
+      if (sportList[i].name === this.props.selectSport.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  calculateDistance(lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - this.state.latitude);
+    const dLon = this.deg2rad(lon2 - this.state.longitude);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(this.state.latitude)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    if (this.state.latitude == 0) {
+      return "loading";
+    } else {
+      return " " + d.toFixed(1) + " km away";
+    }
+  }
+
+  deg2rad(deg) {
+    return deg * (Math.PI / 180);
   }
 
   render() {
     handlepress = async () => {
-      const myArrayString = JSON.stringify(data[this.state.currentIndex - 1]);
-      AsyncStorage.setItem("center", myArrayString);
-      this.props.onPress();
+      // const myArrayString = JSON.stringify(this.props.academiesList[this.state.currentIndex - 1]);
+      // AsyncStorage.setItem("center", myArrayString);
+      let centerValue = this.props.academiesList.find(
+        (item) => item.id === this.state.currentIndex
+      );
+      let distance = this.calculateDistance(
+        centerValue.latitude,
+        centerValue.longitude
+      );
+      this.props.onPress(
+        this.props.academiesList.find(
+          (item) => item.id === this.state.currentIndex
+        )
+      );
     };
 
-    const renderItem = ({ item }) => (
-      <TouchableOpacity
-        onPress={() =>
-          this.setState({ currentIndex: item.id, proseednext: true })
-        }
-      >
-        <LinearGradient
-          colors={
-            item.id === this.state.currentIndex
-              ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
-              : [
-                  "rgba(255, 255, 255, 0.15)",
-                  "rgba(118, 87, 136, 0)",
-                  "rgba(118, 87, 136, 0)",
-                  "rgba(118, 87, 136, 0.44)",
-                ]
-          }
-          locations={
-            item.id === this.state.currentIndex ? [0, 1] : [0, 0.3, 0.6, 1]
-          }
-          style={styles.item}
-        >
-          <View style={{ flex: 0.3 }}>
-            <Image source={item.image} style={styles.image} />
-            <Text style={styles.distance}>{item.distance}</Text>
-          </View>
-          <View style={styles.textContainer}>
-            <Text
-              style={[
-                styles.title,
-                item.id === this.state.currentIndex && { color: "#DFA35D" },
-              ]}
+    const renderItem = ({ item }) => {
+      if (this.hasSport(item.sports)) {
+        return (
+          <TouchableOpacity
+            onPress={() =>
+              this.setState({ currentIndex: item.id, proseednext: true })
+            }
+          >
+            <LinearGradient
+              colors={
+                item.id === this.state.currentIndex
+                  ? ["rgba(251, 172, 79, 0.81)", "rgba(118, 87, 136, 0)"]
+                  : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
+              }
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
+              style={styles.item}
             >
-              {item.title}
-            </Text>
-            <Text style={styles.address}>{item.address}</Text>
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    );
+              <View style={{ flex: 0.3 }}>
+                <Image source={{ uri: item.cover_pic }} style={styles.image} />
+                <Text style={styles.distance}>
+                  {this.calculateDistance(item.latitude, item.longitude)}
+                </Text>
+              </View>
+              <View style={styles.textContainer}>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={[
+                      styles.title,
+                      item.id === this.state.currentIndex && {
+                        color: "#DFA35D",
+                      },
+                    ]}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text style={styles.address}>{item.address}</Text>
+                </View>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        );
+      } else {
+        return null;
+      }
+    };
 
     return (
       <View style={styles.contained}>
-        <View style={{ flex: 0.9 }}>
+        <View style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred centre</Text>
           <TouchableOpacity activeOpacity={0.8}>
             <View style={styles.addressView}>
               <Image
                 source={require("../../../images/playing/my_location.png")}
-                style={{ width: 17, height: 17, marginLeft: 12 }}
+                style={{ width: 17, height: 17, marginLeft: 8 }}
               />
               <Text style={styles.addressText}>{this.state.place}</Text>
               <Image
                 source={require("../../../images/playing/arrow_back.png")}
-                style={{ width: 10, height: 14, marginLeft: 15 }}
+                style={{ width: 12, height: 7, marginLeft: 13, marginTop: 6 }}
               />
             </View>
           </TouchableOpacity>
           <View style={styles.line} />
           <FlatList
-            data={data}
+            data={this.state.centerData}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
-            extraData={this.state.currentIndex}
+            extraData={[this.state.currentIndex, this.state.centerData]}
           />
         </View>
-        <View style={{ flex: 0.1 }}>
+        <View style={{ flex: 0.07, paddingTop: 10 }}>
           <CustomButton
             name="Next "
             image={require("../../../images/playing/arrow_go.png")}
@@ -231,17 +286,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
+    paddingHorizontal: 5,
+    borderColor: whiteGreyBorder,
+    borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 10,
   },
   textContainer: {
     flex: 0.7,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   distance: {
-    width: "80%",
+    width: "88%",
     fontSize: 10,
     marginTop: -20,
+    marginBottom: 5,
     fontFamily: "Nunito-500",
     color: "#FFFFFF",
     backgroundColor: "rgba(35, 35, 35, 0.66)",
@@ -251,25 +310,27 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 90,
-    marginRight: 20,
+    marginRight: 10,
     marginVertical: 5,
     borderRadius: 6,
   },
   title: {
+    flex: 0.5,
     fontSize: 14,
     marginTop: 8,
     fontFamily: "Nunito-500",
     color: "#F0F0F0",
   },
   address: {
+    flex: 0.5,
     marginVertical: 5,
     fontSize: 11,
     fontFamily: "Nunito-400",
-    color: "#ADADAD",
+    color: "#DDDDDD",
   },
   line: {
-    height: 2,
-    backgroundColor: "gray",
+    height: 1,
+    backgroundColor: "#4D4D4D",
     marginBottom: 15,
     marginTop: 7,
     width: "40%",

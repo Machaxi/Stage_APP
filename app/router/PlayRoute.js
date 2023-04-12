@@ -1,28 +1,51 @@
-import React from 'react'
+import React from "react";
 
 import { createStackNavigator } from "react-navigation";
 import mybatch from "../containers/PlayerBatch/PlayerBatch";
 import PlayersListing from "../containers/GuestScreen/PlayersListing";
 import AppMain from "./router";
-import NavigationDrawerStructure from './NavigationDrawerStructure'
+import NavigationDrawerStructure from "./NavigationDrawerStructure";
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
-import PlayerAttendance from "../containers/PlayerBatch/MyCalendar"
-import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
-import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
-import CoachListing from '../containers/GuestScreen/CoachListing'
-import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
+import PlayerAttendance from "../containers/PlayerBatch/MyCalendar";
+import CoachProfileDetail from "../containers/GuestScreen/CoachProfileDetail";
+import otherplayerDetails from "../containers/OtherPlayerDetails/OtherPlayerDetails";
+import CoachListing from "../containers/GuestScreen/CoachListing";
+import ViewPlayerPerformance from "../containers/UserScreen/ViewPlayerPerformance";
 
-import PlayScreen from '././../containers/play/PlayScreen';
-import NavigationDrawerWhite from './NavigationDrawerWhite';
-import NotificationList from '../containers/notification/NotificationList';
-import CouponListScreen from '../containers/play/CouponListScreen';
-
-
+import PlayScreen from "././../containers/play/PlayScreen";
+import NavigationDrawerWhite from "./NavigationDrawerWhite";
+import NotificationList from "../containers/notification/NotificationList";
+import PlayPage from "../containers/ExsitingUser/PlayPage";
+import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
+import CouponListScreen from "../containers/play/CouponListScreen";
 
 const playModule = createStackNavigator({
   Play: {
-    screen: PlayScreen,
+    screen: PlayPage,
+    navigationOptions: ({ navigation }) => ({
+      title: "PLay",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  BookPlayTrail: {
+    screen: LearnBookTrial,
     navigationOptions: ({ navigation }) => ({
       title: "PLay",
       headerLeft: (
@@ -193,15 +216,14 @@ const playModule = createStackNavigator({
 });
 export default playModule;
 
-
 const style = StyleSheet.create({
-    headerStyle: {
-        color: '#F2F2F2',
-        fontFamily: 'Quicksand-Medium',
-        fontWeight: '400',
-        textAlign: 'center',
-        fontSize: 16,
-        flexGrow: 1,
-        alignSelf: 'center',
-    }
-})
+  headerStyle: {
+    color: "#F2F2F2",
+    fontFamily: "Quicksand-Medium",
+    fontWeight: "400",
+    textAlign: "center",
+    fontSize: 16,
+    flexGrow: 1,
+    alignSelf: "center",
+  },
+});

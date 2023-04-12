@@ -93,7 +93,7 @@ import PaymentDues from '../containers/payment/PaymentDues'
 import PaymentReport from '../containers/payment/PaymentReport'
 import PlanPurchaseView from '../components/custom/PlanPurchaseView';
 import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
-// import PlayScreen from '../containers/FirstTimeUser/PlayScreen';
+import PlayerScreen from '../containers/FirstTimeUser/PlayerScreen';
 import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
 import TrialBook from '../containers/FirstTimeUser/TrialBook';
 import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
@@ -105,6 +105,12 @@ import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
 import ShopTabRoute from './ShopTabRoute';
 import TabbarItem from './TabbarItem';
 import { white } from '../containers/util/colors';
+import ShopPage from '../containers/ExsitingUser/ShopPage';
+import LearnPage from '../containers/ExsitingUser/LearnPage';
+import PlayPage from '../containers/ExsitingUser/PlayPage';
+import NavigationDrawerWhite from './NavigationDrawerWhite';
+import LearnBookTrial from '../containers/FirstTimeUser/LearnBookTrial';
+
 
 const headerStyle = {
     marginTop: Platform.OS === "android" ? 0 : 0
@@ -142,8 +148,8 @@ const loginModule = createStackNavigator({
     //     }
     // },
     Login: {
-        screen: phoneauth,
-        //screen: LoginSceen,
+        // screen: phoneauth,
+        screen: LoginSceen,
         navigationOptions: {
             header: null
             //header:null
@@ -1699,6 +1705,14 @@ const style = StyleSheet.create({
     flexGrow: 1,
     alignSelf: "center",
   },
+  titlestyle: {
+    color: "#F2F2F2",
+    fontFamily: "Nunito-700",
+    textAlign: "center",
+    fontSize: 20,
+    flexGrow: 1,
+    alignSelf: "center",
+  }
 });
 
 const parentHomeModule = createStackNavigator({
@@ -2345,10 +2359,49 @@ const tabBarControllerBookParent = createBottomTabNavigator(
 
     })
 
+ const LearnStack = createStackNavigator({
+   Play: {
+     screen: LearnPage,
+     navigationOptions: ({ navigation }) => ({
+       title: "Learn",
+       headerLeft: (
+         <NavigationDrawerWhite navigationProps={navigation}
+           showBackAction={false} showDrawer={true} />
+       ),
+       headerRight: (
+         <RightMenuToolbar navigationProps={navigation}
+           showNotification={true} />
+       ),
+       headerTitleStyle: style.titlestyle,
+       headerStyle: {
+         backgroundColor: "#21202F",
+       },
+     }),
+   },
+   BookLearnTrail: {
+     screen: TrialBook,
+     navigationOptions: ({ navigation }) => ({
+       title: "Learn",
+       headerLeft: (
+         <NavigationDrawerWhite navigationProps={navigation}
+         showBackAction={false} showDrawer={true} />
+       ),
+       headerRight: (
+         <RightMenuToolbar navigationProps={navigation}
+           showNotification={true} />
+       ),
+       headerTitleStyle: style.titlestyle,
+       headerStyle: {
+         backgroundColor: "#21202F",
+       },
+     }),
+   },
+ });
 
 const tabBarControllerParent = createBottomTabNavigator({
   Home: {
-    screen: parentHomeModule,
+    // screen: parentHomeModule,
+    screen: LearnStack,
     navigationOptions: {
       tabBarLabel: "Learn",
       tabBarLabel: ({ focused }) => (
@@ -2441,8 +2494,10 @@ const tabBarControllerParent = createBottomTabNavigator({
   //                 activeIcon={require('../images/tournament.png')} />,
   //     }
 
-  // },
-});
+      // },
+        
+
+    })
 
 const parentBookDrawer = createDrawerNavigator({
 
@@ -2506,6 +2561,52 @@ const parentDrawer = createDrawerNavigator(
     drawerWidth: Dimensions.get("window").width * 0.86,
   }
 );
+
+const tabBarMainScreen = createBottomTabNavigator(
+  {
+    CoachScreen: {
+      screen: LearnPage,
+      navigationOptions: {
+        tabBarLabel: 'Learn',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Learn'
+            focused={focused}
+            activeIcon={focused ? require('../images/learn_highlight.png') : require('../images/learn.png')} />,
+      },
+    },
+    PlayScreen: {
+      screen: PlayPage,
+      navigationOptions: {
+        tabBarLabel: 'Play',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Play'
+            focused={focused}
+            activeIcon={focused ? require('../images/play_highlight.png') : require('../images/play.png')} />,
+      }
+
+    },
+    ShopScreen: {
+      screen: ShopPage,
+      navigationOptions: {
+        tabBarLabel: 'Shop',
+        tabBarLabel: ({ focused }) =>
+          <TabBarHighlightLabel
+            label='Shop'
+            focused={focused}
+            activeIcon={require('../images/shop.png')} />,
+      }
+    },
+  }
+  // ,{
+  //   tabBarOptions: {
+  //     style: {
+  //       backgroundColor: 'rgba(25, 15, 47, 0.8)', // set the background color of the tab bar
+  //     },
+  //   },
+  // }
+  )
 
 const TournamentRegistration = createStackNavigator({
 
@@ -2610,6 +2711,64 @@ const EmptyStack = createStackNavigator({
 
 })
 
+const HomeStack = createStackNavigator({
+
+  HomeScreen: {
+      screen: HomeScreen,
+      navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+        headerLeft: (
+          <NavigationDrawerWhite navigationProps={navigation}
+            showBackAction={false} showDrawer={true} />
+        ),
+        headerRight: (
+          <RightMenuToolbar navigationProps={navigation}
+            showNotification={true} />
+        ),
+        headerTitleStyle: style.titlestyle,
+        headerStyle: {
+          backgroundColor: "#21202F",
+        },
+      }), 
+  },
+  BookTrail: {
+    screen: TrialBook,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite navigationProps={navigation}
+        showBackAction={false} showDrawer={true} />
+      ),
+      headerRight: (
+        <RightMenuToolbar navigationProps={navigation}
+          showNotification={true} />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  LearnBookTrial: {
+    screen: LearnBookTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Play",
+      headerLeft: (
+        <NavigationDrawerWhite navigationProps={navigation}
+        showBackAction={false} showDrawer={true} />
+      ),
+      headerRight: (
+        <RightMenuToolbar navigationProps={navigation}
+          showNotification={true} />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+})
+
 const BaseNavigator = createSwitchNavigator({
 
     // Main: {
@@ -2635,6 +2794,18 @@ const BaseNavigator = createSwitchNavigator({
     ShopScreen: {
       screen: ShopScreen,
     },
+    ShopPage: {
+      screen: ShopPage,
+    },
+    LearnPage: {
+      screen: LearnPage,
+    },
+    PlayPage: {
+      screen: PlayPage,
+    },
+    PlayerScreen: {
+      screen: PlayerScreen,
+    },
     PlayScreen: {
       screen: PlayScreen,
     },
@@ -2644,8 +2815,14 @@ const BaseNavigator = createSwitchNavigator({
     CoachScreen: {
       screen: CoachScreen,
     },
-    HomeScreen: {
-      screen: HomeScreen,
+    HomeStack: {
+      screen: HomeStack,
+    },
+    LearnBookTrial: {
+      screen: LearnBookTrial,
+    },
+    tabBarMainScreen: {
+      screen: tabBarMainScreen,
     },
     TrialBook: {
       screen: TrialBook,

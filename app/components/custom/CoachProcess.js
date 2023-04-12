@@ -41,7 +41,14 @@ class CoachProcess extends Component {
             }
             style={styles.image}
           />
-          <Text style={styles.insideText}>Centre</Text>
+          <Text
+            style={[
+              styles.insideText,
+              this.props.number > 1 && { color: "#FF9C33" },
+            ]}
+          >
+            Centre
+          </Text>
         </TouchableOpacity>
         <View
           style={[
@@ -65,7 +72,14 @@ class CoachProcess extends Component {
             }
             style={styles.image}
           />
-          <Text style={styles.insideText}>Batch</Text>
+          <Text
+            style={[
+              styles.insideText,
+              this.props.number > 2 && { color: "#FF9C33" },
+            ]}
+          >
+            Batch
+          </Text>
         </TouchableOpacity>
         <View
           style={[
@@ -82,7 +96,14 @@ class CoachProcess extends Component {
             }
             style={styles.image}
           />
-          <Text style={styles.insideText}>Confirm</Text>
+          <Text
+            style={[
+              styles.insideText,
+              this.props.number > 3 && { color: "#FF9C33" },
+            ]}
+          >
+            Confirm
+          </Text>
         </View>
         <View />
       </View>
@@ -98,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    zIndex: 2,
+    zIndex: 10,
     marginTop: 20,
     width: 40,
     height: 40,
@@ -114,7 +135,7 @@ const styles = StyleSheet.create({
     height: 3,
     backgroundColor: "#474747",
     marginHorizontal: -12,
-    zIndex: 1,
+    zIndex: 0,
   },
 });
 

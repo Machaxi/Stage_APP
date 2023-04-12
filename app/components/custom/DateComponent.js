@@ -1,22 +1,22 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { whiteGreyBorder } from "../../containers/util/colors";
 
 const DateComponent = ({ currentDate, day, date, myDate }) => {
   return (
     <LinearGradient
       colors={
         currentDate == myDate
-          ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
-          : [
-              "rgba(255, 255, 255, 0.15)",
-              "rgba(118, 87, 136, 0)",
-              "rgba(118, 87, 136, 0)",
-              "rgba(118, 87, 136, 0.44)",
-            ]
+          ? ["rgba(255, 180, 1, 0.1))", "rgba(255, 212, 89, 0.1)"]
+          : ["rgba(255, 255, 255, 0.3)", "rgba(118, 87, 136, 0)"]
       }
-      locations={currentDate == myDate ? [0, 1] : [0, 0.3, 0.6, 1]}
-      style={styles.sportsview}
+      start={{ x: 0, y: 0.5 }}
+      end={{ x: 1, y: 0.5 }}
+      style={[
+        styles.sportsview,
+        currentDate == myDate && { borderColor: "rgba(255, 180, 1, 0.3))" },
+      ]}
     >
       <View style={styles.imaged}>
         <Text
@@ -44,9 +44,12 @@ const styles = StyleSheet.create({
   sportsview: {
     width: 100,
     height: 93,
+    borderColor: whiteGreyBorder,
+    borderWidth: 1,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    marginLeft: 20,
   },
   dateText: {
     fontSize: 18,
