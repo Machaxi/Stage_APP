@@ -96,32 +96,29 @@ class ConfirmBooking extends Component {
     const gender = await AsyncStorage.getItem("user_gender");
     this.setState({ header: header, username: username, gender: gender });
   };
-  booktrai = () => {};
-  booktrail = () => {
-    var dataDic = {};
-    var dict = {};
 
+  booktrail = () => {
+    var dict = {};
     const url = getBaseUrl() + "batch/book-coaching-trial";
+
     if (this.props.title === "Playing") {
       url = getBaseUrl() + "court/bookTrial";
       const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
       dict["date"] = formattedDate;
       dict["courtTimingId"] = this.state.selectBatch.courtTimingIds;
       dict["proficiency"] = this.state.selectLevel;
-      dataDic["data"] = dict;
     } else {
       const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
       dict["batch_id"] = "" + this.state.selectBatch.batch_id;
       dict["trial_date"] = formattedDate;
       dict["startTime"] = this.state.selectBatch.startTime;
       dict["endTime"] = this.state.selectBatch.endTime;
-      dataDic["data"] = dict;
     }
     // this.props.onPress();
     axios
       .post(
         url,
-        { data: dataDic },
+        { data: dict },
         {
           headers: {
             "x-authorization": this.state.header,
@@ -132,6 +129,9 @@ class ConfirmBooking extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         console.log(userResponce);
+        if (userResponce.success == true) {
+        } else {
+        }
       })
       .catch((error) => {
         console.log("error");
@@ -175,7 +175,7 @@ class ConfirmBooking extends Component {
             Player Name
           </Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={[styles.subtitle, { color: "#F0F0F0" }]}>
+            <Text style={[styles.subtitle, { color: "#F0F0F0", fontSize: 16 }]}>
               {this.state.username} ·{" "}
             </Text>
             <Text style={[styles.subtitle, { color: "#FFC498" }]}>
@@ -275,7 +275,7 @@ class ConfirmBooking extends Component {
         <CustomButton
           name="Book Free Trial"
           available={true}
-          onPress={this.booktrai}
+          onPress={this.booktrail}
         />
       </ScrollView>
     );
@@ -296,7 +296,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 10,
-    margin: 10,
+    marginLeft: 10,
+    marginBottom: 10,
     fontFamily: "Nunito-500",
     color: "#FF9C33",
   },

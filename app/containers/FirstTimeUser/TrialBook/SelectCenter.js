@@ -13,6 +13,7 @@ import CustomButton from "../../../components/custom/CustomButton";
 import Geolocation from "react-native-geolocation-service";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
+import { whiteGreyBorder } from "../../util/colors";
 
 // const data = [
 //   {
@@ -199,17 +200,11 @@ class SelectCenter extends Component {
             <LinearGradient
               colors={
                 item.id === this.state.currentIndex
-                  ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
-                  : [
-                      "rgba(255, 255, 255, 0.15)",
-                      "rgba(118, 87, 136, 0)",
-                      "rgba(118, 87, 136, 0)",
-                      "rgba(118, 87, 136, 0.44)",
-                    ]
+                  ? ["rgba(251, 172, 79, 0.81)", "rgba(118, 87, 136, 0)"]
+                  : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
               }
-              locations={
-                item.id === this.state.currentIndex ? [0, 1] : [0, 0.3, 0.6, 1]
-              }
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
               style={styles.item}
             >
               <View style={{ flex: 0.3 }}>
@@ -219,15 +214,19 @@ class SelectCenter extends Component {
                 </Text>
               </View>
               <View style={styles.textContainer}>
-                <Text
-                  style={[
-                    styles.title,
-                    item.id === this.state.currentIndex && { color: "#DFA35D" },
-                  ]}
-                >
-                  {item.name}
-                </Text>
-                <Text style={styles.address}>{item.address}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={[
+                      styles.title,
+                      item.id === this.state.currentIndex && {
+                        color: "#DFA35D",
+                      },
+                    ]}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text style={styles.address}>{item.address}</Text>
+                </View>
               </View>
             </LinearGradient>
           </TouchableOpacity>
@@ -239,18 +238,18 @@ class SelectCenter extends Component {
 
     return (
       <View style={styles.contained}>
-        <View style={{ flex: 0.9 }}>
+        <View style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred centre</Text>
           <TouchableOpacity activeOpacity={0.8}>
             <View style={styles.addressView}>
               <Image
                 source={require("../../../images/playing/my_location.png")}
-                style={{ width: 17, height: 17, marginLeft: 12 }}
+                style={{ width: 17, height: 17, marginLeft: 8 }}
               />
               <Text style={styles.addressText}>{this.state.place}</Text>
               <Image
                 source={require("../../../images/playing/arrow_back.png")}
-                style={{ width: 10, height: 14, marginLeft: 15 }}
+                style={{ width: 12, height: 7, marginLeft: 13, marginTop: 6 }}
               />
             </View>
           </TouchableOpacity>
@@ -262,7 +261,7 @@ class SelectCenter extends Component {
             extraData={[this.state.currentIndex, this.state.centerData]}
           />
         </View>
-        <View style={{ flex: 0.1 }}>
+        <View style={{ flex: 0.07, paddingTop: 10 }}>
           <CustomButton
             name="Next "
             image={require("../../../images/playing/arrow_go.png")}
@@ -287,17 +286,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
+    paddingHorizontal: 5,
+    borderColor: whiteGreyBorder,
+    borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 10,
   },
   textContainer: {
     flex: 0.7,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   distance: {
     width: "88%",
     fontSize: 10,
     marginTop: -20,
+    marginBottom: 5,
     fontFamily: "Nunito-500",
     color: "#FFFFFF",
     backgroundColor: "rgba(35, 35, 35, 0.66)",
@@ -307,25 +310,27 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 90,
-    marginRight: 20,
+    marginRight: 10,
     marginVertical: 5,
     borderRadius: 6,
   },
   title: {
+    flex: 0.5,
     fontSize: 14,
     marginTop: 8,
     fontFamily: "Nunito-500",
     color: "#F0F0F0",
   },
   address: {
+    flex: 0.5,
     marginVertical: 5,
     fontSize: 11,
     fontFamily: "Nunito-400",
-    color: "#ADADAD",
+    color: "#DDDDDD",
   },
   line: {
-    height: 2,
-    backgroundColor: "gray",
+    height: 1,
+    backgroundColor: "#4D4D4D",
     marginBottom: 15,
     marginTop: 7,
     width: "40%",

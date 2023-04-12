@@ -13,6 +13,7 @@ import DateComponent from "../../../components/custom/DateComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
+import { whiteGreyBorder } from "../../util/colors";
 
 const data = [
   {
@@ -175,22 +176,19 @@ class SelectBatch extends Component {
             <LinearGradient
               colors={
                 item.batch_id === this.state.selectTime
-                  ? ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
-                  : [
-                      "rgba(255, 255, 255, 0.15)",
-                      "rgba(118, 87, 136, 0)",
-                      "rgba(118, 87, 136, 0)",
-                      "rgba(118, 87, 136, 0.44)",
-                    ]
+                  ? ["rgba(167, 134, 95, 0.3)", "rgba(167, 134, 95, 0.1)"]
+                  : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
               }
-              locations={
-                item.batch_id === this.state.selectTime
-                  ? [0, 1]
-                  : [0, 0.3, 0.6, 1]
-              }
-              style={styles.clockView}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
+              style={[
+                styles.clockView,
+                item.batch_id === this.state.selectTime && {
+                  borderColor: "rgba(167, 134, 95, 0.6)",
+                },
+              ]}
             >
-              <Text> </Text>
+              <Text>{"    "}</Text>
               {item.batch_id === this.state.selectTime && (
                 <Image
                   style={styles.clockimage}
@@ -207,7 +205,8 @@ class SelectBatch extends Component {
                   item.slot == false && { color: "#858585" },
                 ]}
               >
-                {item.displayTime}{" "}
+                {item.displayTime}
+                {"    "}
               </Text>
             </LinearGradient>
             {item.is_allowed == false && (
@@ -258,20 +257,17 @@ class SelectBatch extends Component {
                 <LinearGradient
                   colors={
                     index === this.state.currentLevel
-                      ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
-                      : [
-                          "rgba(255, 255, 255, 0.15)",
-                          "rgba(118, 87, 136, 0)",
-                          "rgba(118, 87, 136, 0)",
-                          "rgba(118, 87, 136, 0.44)",
-                        ]
+                      ? ["rgba(255, 180, 1, 0.3))", "rgba(255, 212, 89, 0.1)"]
+                      : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
                   }
-                  locations={
-                    index === this.state.currentLevel
-                      ? [0, 1]
-                      : [0, 0.3, 0.6, 1]
-                  }
-                  style={styles.sportsview}
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1, y: 0.5 }}
+                  style={[
+                    styles.sportsview,
+                    index === this.state.currentLevel && {
+                      borderColor: "rgba(255, 180, 1, 0.2))",
+                    },
+                  ]}
                 >
                   <View style={styles.imaged}>
                     <Image
@@ -323,8 +319,9 @@ class SelectBatch extends Component {
 
           <Text style={styles.select}>Select Preferred time</Text>
           <LinearGradient
-            colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
-            locations={[0, 1]}
+            colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.06)"]}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
             style={styles.selecttime}
           >
             <TouchableOpacity
@@ -361,7 +358,7 @@ class SelectBatch extends Component {
                 this.state.morningData.map((item) => assigndate(item))}
             </View>
 
-            <View style={{ height: 2, backgroundColor: "gray", margin: 10 }} />
+            <View style={{ height: 1, backgroundColor: "gray", margin: 10 }} />
 
             <TouchableOpacity
               activeOpacity={0.8}
@@ -389,7 +386,7 @@ class SelectBatch extends Component {
             <View
               style={[
                 styles.timecontained,
-                { marginLeft: 10 },
+                { marginLeft: 5 },
                 this.state.hideEvening && { height: 0, opacity: 0 },
               ]}
             >
@@ -452,6 +449,8 @@ const styles = StyleSheet.create({
   sportsview: {
     width: 98,
     height: 92,
+    borderColor: whiteGreyBorder,
+    borderWidth: 1,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -459,7 +458,9 @@ const styles = StyleSheet.create({
   clockView: {
     flexDirection: "row",
     height: 30,
-    borderRadius: 10,
+    borderColor: whiteGreyBorder,
+    borderWidth: 1,
+    borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
   },
