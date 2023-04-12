@@ -17,6 +17,18 @@ export const commonStyles = StyleSheet.create({
            paddingHorizontal: 12,
            paddingVertical: 17,
          },
+         flexRowSpaceBtw: {
+           flexDirection: "row",
+           justifyContent: "space-between",
+           alignItems: "center",
+         },
+         flexRowNormal: {
+           flexDirection: "row",
+           alignItems: "center",
+         },
+         flexRowAlignStart: {
+           flexDirection: "row",
+         },
        });
 
   export const pickerSelectStylesShopScreen = StyleSheet.create({
