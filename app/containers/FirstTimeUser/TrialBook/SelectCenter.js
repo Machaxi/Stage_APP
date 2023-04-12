@@ -105,7 +105,11 @@ class SelectCenter extends Component {
         console.log(position);
         var lats = parseFloat(position.coords.latitude);
         var lngs = parseFloat(position.coords.longitude);
-        this.setState({ latitude: lats, longitude: lngs, centerData: this.props.academiesList });
+        this.setState({
+          latitude: lats,
+          longitude: lngs,
+          centerData: this.props.academiesList,
+        });
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
         const address = "del";
@@ -131,6 +135,7 @@ class SelectCenter extends Component {
 
   componentDidMount() {
     this.requestPermissions();
+    this.setState({ centerData: this.props.academiesList });
   }
 
   hasSport(sportList) {
@@ -149,12 +154,16 @@ class SelectCenter extends Component {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.deg2rad(this.state.latitude)) *
-      Math.cos(this.deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; // Distance in km
-    return " " + d.toFixed(1) + " km away";
+    if (this.state.latitude == 0) {
+      return "loading";
+    } else {
+      return " " + d.toFixed(1) + " km away";
+    }
   }
 
   deg2rad(deg) {
@@ -165,53 +174,65 @@ class SelectCenter extends Component {
     handlepress = async () => {
       // const myArrayString = JSON.stringify(this.props.academiesList[this.state.currentIndex - 1]);
       // AsyncStorage.setItem("center", myArrayString);
-      let centerValue = this.props.academiesList.find(item => item.id === this.state.currentIndex);
-      let distance = this.calculateDistance(centerValue.latitude, centerValue.longitude)
-      this.props.onPress(this.props.academiesList.find(item => item.id === this.state.currentIndex));
+      let centerValue = this.props.academiesList.find(
+        (item) => item.id === this.state.currentIndex
+      );
+      let distance = this.calculateDistance(
+        centerValue.latitude,
+        centerValue.longitude
+      );
+      this.props.onPress(
+        this.props.academiesList.find(
+          (item) => item.id === this.state.currentIndex
+        )
+      );
     };
 
     const renderItem = ({ item }) => {
       if (this.hasSport(item.sports)) {
         return (
-        <TouchableOpacity
-          onPress={() =>
-            this.setState({ currentIndex: item.id, proseednext: true })
-          }
-        >
-          <LinearGradient
-            colors={
-              item.id === this.state.currentIndex
-                ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
-                : [
-                  "rgba(255, 255, 255, 0.15)",
-                  "rgba(118, 87, 136, 0)",
-                  "rgba(118, 87, 136, 0)",
-                  "rgba(118, 87, 136, 0.44)",
-                ]
+          <TouchableOpacity
+            onPress={() =>
+              this.setState({ currentIndex: item.id, proseednext: true })
             }
-            locations={
-              item.id === this.state.currentIndex ? [0, 1] : [0, 0.3, 0.6, 1]
-            }
-            style={styles.item}
           >
-            <View style={{ flex: 0.3 }}>
-              <Image source={{ uri: item.cover_pic }} style={styles.image} />
-              <Text style={styles.distance}>{this.calculateDistance(item.latitude, item.longitude)}</Text>
-            </View>
-            <View style={styles.textContainer}>
-              <Text
-                style={[
-                  styles.title,
-                  item.id === this.state.currentIndex && { color: "#DFA35D" },
-                ]}
-              >
-                {item.name}
-              </Text>
-              <Text style={styles.address}>{item.address}</Text>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      )} else {
+            <LinearGradient
+              colors={
+                item.id === this.state.currentIndex
+                  ? ["rgba(243, 178, 118, 0.71)", "rgba(243, 223, 118, 0)"]
+                  : [
+                      "rgba(255, 255, 255, 0.15)",
+                      "rgba(118, 87, 136, 0)",
+                      "rgba(118, 87, 136, 0)",
+                      "rgba(118, 87, 136, 0.44)",
+                    ]
+              }
+              locations={
+                item.id === this.state.currentIndex ? [0, 1] : [0, 0.3, 0.6, 1]
+              }
+              style={styles.item}
+            >
+              <View style={{ flex: 0.3 }}>
+                <Image source={{ uri: item.cover_pic }} style={styles.image} />
+                <Text style={styles.distance}>
+                  {this.calculateDistance(item.latitude, item.longitude)}
+                </Text>
+              </View>
+              <View style={styles.textContainer}>
+                <Text
+                  style={[
+                    styles.title,
+                    item.id === this.state.currentIndex && { color: "#DFA35D" },
+                  ]}
+                >
+                  {item.name}
+                </Text>
+                <Text style={styles.address}>{item.address}</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        );
+      } else {
         return null;
       }
     };

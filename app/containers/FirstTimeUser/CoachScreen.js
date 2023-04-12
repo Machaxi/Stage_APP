@@ -29,18 +29,8 @@ class CoachScreen extends Component {
     this.state = {
       currentIndex: 0,
       currentImage: images[0],
-      bookingSuccess: "",
     };
   }
-
-  componentDidMount() {
-    this.handleopen();
-  }
-
-  handleopen = async () => {
-    const bookingsuccess = await AsyncStorage.getItem("book_trial_coaching");
-    this.setState({ bookingSuccess: bookingsuccess });
-  };
 
   handleSlide = (index) => {
     this.setState({ currentIndex: index });
@@ -136,8 +126,10 @@ class CoachScreen extends Component {
           </ImageBackground>
         </ScrollView>
         <LinearGradient
-          colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
-          locations={[0, 1]}
+          colors={["rgba(255, 255, 255, 0.25)", "rgba(255, 255, 255, 0.06)"]}
+          // locations={[0, 1]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
           style={styles.bottomcontainer}
         >
           {this.props.learnData.is_trial_display_required ? (

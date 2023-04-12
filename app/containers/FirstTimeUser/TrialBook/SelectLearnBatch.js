@@ -88,7 +88,7 @@ while (nextDate.getDay() === 0) {
 const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
 const nextday = weekdays[nextDate.getDay()];
 
-class SelectBatch extends Component {
+class SelectLearnBatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -112,15 +112,15 @@ class SelectBatch extends Component {
     axios
       .get(
         getBaseUrl() +
-          "/global/coaching/slots?sport_id=" +
-          sport_id +
-          "&academy_id=" +
-          academy_id
+          "/global/coaching/slots?academyId=" +
+          academy_id +
+          "&sportId=" +
+          sport_id
       )
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
-        let batchData = userResponce["data"]["data"]["batch_details"];
+        let batchData = userResponce["data"]["data"]["courtAvailability"];
         console.log(batchData);
         this.setState({ batchData: batchData });
       })
@@ -139,24 +139,19 @@ class SelectBatch extends Component {
       dates = today;
     }
     for (let i = 0; i < this.state.batchData.length; i++) {
-      if (
-        level < 5 &&
-        data[level].name.toLowerCase() ==
-          this.state.batchData[i].proficiency.toLowerCase() &&
-        dates &&
-        dates.getDay() in this.state.batchData[i].weekDetails
-      ) {
-        const startHour = parseInt(
-          this.state.batchData[i].startTime.split(":")[0]
-        );
-        if (startHour >= 12) {
-          greaterThan12.push(this.state.batchData[i]);
-        } else {
-          lessThan12.push(this.state.batchData[i]);
-        }
+      //   if ( level < 5 && data[level].name.toLowerCase() ==
+      //this.state.batchData[i].proficiency.toLowerCase() && dates && dates.getDay() in this.state.batchData[i].weekDetails) {
+      const startHour = parseInt(
+        this.state.batchData[i].startTime.split(":")[0]
+      );
+      if (startHour >= 12) {
+        greaterThan12.push(this.state.batchData[i]);
+      } else {
+        lessThan12.push(this.state.batchData[i]);
       }
-      this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
+      //   }
     }
+    this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
   };
 
   render() {
@@ -228,7 +223,7 @@ class SelectBatch extends Component {
       }
       let selectLevel = data[this.state.currentLevel];
       let selectBatch = this.state.batchData.find(
-        (item) => item.batch_id == this.state.selectTime
+        (item) => item.courtTimingId == this.state.selectTime
       );
       this.props.onPress(selectDate, selectLevel, selectBatch);
     };
@@ -507,4 +502,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectBatch;
+export default SelectLearnBatch;

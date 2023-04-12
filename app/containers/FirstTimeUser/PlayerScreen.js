@@ -22,14 +22,8 @@ class PlayerScreen extends Component {
   }
 
   componentDidMount() {
-    this.handleopen();
-    console.log(this.props.playData)
+    console.log(this.props.playData.isTrialDisplayRequired);
   }
-
-  handleopen = async () => {
-    const bookingsuccess = await AsyncStorage.getItem("book_trial_playing");
-    this.setState({ bookingSuccess: bookingsuccess });
-  };
 
   render() {
     return (
@@ -51,22 +45,24 @@ class PlayerScreen extends Component {
           <View style={styles.plancontained}>
             {this.props.playData["plans"].map((item) => (
               <TouchableOpacity activeOpacity={0.8}>
-                <PlayPass name={item.name} price={item.price} image={item.planIconUrl} />
+                <PlayPass
+                  name={item.name}
+                  price={item.price}
+                  image={item.planIconUrl}
+                />
               </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
         <LinearGradient
-          colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
-          locations={[0, 1]}
+          colors={["rgba(255, 255, 255, 0.25)", "rgba(255, 255, 255, 0.06)"]}
+          // locations={[0, 1]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
           style={styles.bottomcontainer}
         >
-          {this.state.bookingSuccess === "Playing" ? (
-            <View style={{ width: "90%" }}>
-              <CustomButton name="Buy Coaching Plan" available={true} />
-            </View>
-          ) : (
-            <View style={{ width: "90%", alignItems: "center" }}>
+          {this.props.playData.isTrialDisplayRequired ? (
+            <View style={{ width: "100%", alignItems: "center" }}>
               <CustomButton
                 name="Book Free Trial"
                 available={true}
@@ -75,6 +71,10 @@ class PlayerScreen extends Component {
               <TouchableOpacity activeOpacity={0.8}>
                 <Text style={styles.insideText}>Or Buy Playing plan</Text>
               </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{ width: "100%" }}>
+              <CustomButton name="Buy Coaching Plan" available={true} />
             </View>
           )}
         </LinearGradient>
@@ -86,7 +86,6 @@ class PlayerScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
   },
   plancontained: {
     flexDirection: "row",
@@ -106,6 +105,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 10,
   },
 });
 

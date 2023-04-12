@@ -7,13 +7,16 @@ class CoachPass extends Component {
     const { title, subtitle, description, image, sidevalue } = this.props;
     return (
       <LinearGradient
-        colors={[
-          "rgba(255, 255, 255, 0.15)",
-          "rgba(118, 87, 136, 0)",
-          "rgba(118, 87, 136, 0)",
-          "rgba(118, 87, 136, 0.10)",
-        ]}
-        locations={[0, 0.3, 0.6, 1]}
+        // colors={[
+        //   "rgba(255, 255, 255, 0.15)",
+        //   "rgba(118, 87, 136, 0)",
+        //   "rgba(118, 87, 136, 0)",
+        //   "rgba(118, 87, 136, 0.10)",
+        // ]}
+        // locations={[0, 0.3, 0.6, 1]}
+        colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
         style={styles.container}
       >
         <View style={styles.textContainer}>
@@ -31,7 +34,7 @@ class CoachPass extends Component {
           />
         </View>
         <Image
-          source={{ uri: image}}
+          source={{ uri: image }}
           style={[
             styles.image,
             image !== "1" && { width: 85, height: 75, marginRight: 10 },

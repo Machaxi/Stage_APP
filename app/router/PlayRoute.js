@@ -16,12 +16,12 @@ import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformanc
 import PlayScreen from '././../containers/play/PlayScreen';
 import NavigationDrawerWhite from './NavigationDrawerWhite';
 import NotificationList from '../containers/notification/NotificationList';
-
-
+import PlayPage from '../containers/ExsitingUser/PlayPage';
+import LearnBookTrial from '../containers/FirstTimeUser/LearnBookTrial';
 
 const playModule= createStackNavigator({
     Play: {
-        screen: PlayScreen,
+        screen: PlayPage,
         navigationOptions: ({ navigation }) => ({
             title: "PLay",
             headerLeft: <NavigationDrawerWhite navigationProps={navigation}
@@ -32,7 +32,20 @@ const playModule= createStackNavigator({
             headerStyle: {
                 backgroundColor: '#21202F',
             },
-
+        })
+    },
+    BookPlayTrail: {
+        screen: LearnBookTrial,
+        navigationOptions: ({ navigation }) => ({
+            title: "PLay",
+            headerLeft: <NavigationDrawerWhite navigationProps={navigation}
+            showBackAction={false} showDrawer={true}
+        />,
+            headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true}/>,
+            headerTitleStyle: style.headerStyle,
+            headerStyle: {
+                backgroundColor: '#21202F',
+            },
         })
     },
     CoachProfileDetail: {

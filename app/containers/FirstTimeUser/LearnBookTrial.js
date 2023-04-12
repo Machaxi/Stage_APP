@@ -3,19 +3,19 @@ import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CoachProcess from "../../components/custom/CoachProcess";
 import ConfirmBooking from "./TrialBook/ConfirmBooking";
-import SelectBatch from "./TrialBook/SelectBatch";
 import SelectCenter from "./TrialBook/SelectCenter";
 import SelectSports from "./TrialBook/SelectSports";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../../containers/BaseComponent";
+import SelectLearnBatch from "./TrialBook/SelectLearnBatch";
 
-class TrialBook extends Component {
+class LearnBookTrial extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPage: 1,
-      title: "Coaching Trial",
+      title: "Playing Trial",
       sportsList: null,
       academiesList: null,
       selectSport: null,
@@ -29,11 +29,6 @@ class TrialBook extends Component {
   }
 
   componentDidMount() {
-    getValue = async () => {
-      const select_trial = await AsyncStorage.getItem("select_trial");
-      this.setState({ title: select_trial });
-    };
-    getValue();
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
@@ -66,12 +61,12 @@ class TrialBook extends Component {
     this.setState({ selectCenter: selectCenter });
   };
 
-  onPressBatch = (selectDate, selectLevel, selectBatch) => {
+  onPressBatch = (selectDate, selectLevel, selectTime) => {
     this.setState({ currentPage: 4 });
     this.setState({
       selectDate: selectDate,
       selectLevel: selectLevel,
-      selectTime: selectBatch,
+      selectTime: selectTime,
     });
   };
 
@@ -89,7 +84,6 @@ class TrialBook extends Component {
               if (this.state.currentPage > 1) {
                 this.setState({ currentPage: this.state.currentPage - 1 });
               } else {
-                // this.props.navigation.navigate("HomeScreen");
                 this.props.navigation.goBack();
               }
             }}
@@ -125,7 +119,7 @@ class TrialBook extends Component {
             />
           )}
           {this.state.currentPage === 3 && (
-            <SelectBatch
+            <SelectLearnBatch
               onPress={this.onPressBatch}
               selectCenter={this.state.selectCenter}
               selectSport={this.state.selectSport}
@@ -133,7 +127,7 @@ class TrialBook extends Component {
           )}
           {this.state.currentPage === 4 && (
             <ConfirmBooking
-              title="Coaching"
+              title="Playing"
               selectCenter={this.state.selectCenter}
               selectSport={this.state.selectSport}
               selectDate={this.state.selectDate}
@@ -182,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrialBook;
+export default LearnBookTrial;

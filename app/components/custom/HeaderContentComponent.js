@@ -12,7 +12,7 @@ const HeaderContentComponent = ({ header, contents, colors }) => {
           <View style={styles.items}>
             <Image
               source={require("../../images/playing/dot.png")}
-              style={{ width: 6, height: 6, marginRight: 10 }}
+              style={{ width: 6, height: 6, marginRight: 10, marginTop: 8 }}
             />
             <Text style={styles.content}>{index}</Text>
           </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 10,
   },
   content: {
     fontSize: 16,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   items: {
     flexDirection: "row",
-    alignItems: "center",
+    paddingTop: 4,
   },
 });
 

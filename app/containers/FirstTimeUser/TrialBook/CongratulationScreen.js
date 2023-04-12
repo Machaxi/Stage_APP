@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
+import { ScrollView } from "react-navigation";
 
 class CongratulationScreen extends Component {
   months = [
@@ -99,7 +100,7 @@ class CongratulationScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <LinearGradient
           colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
           locations={[0, 1]}
@@ -157,7 +158,7 @@ class CongratulationScreen extends Component {
             </Text>
           </TouchableOpacity>
         </LinearGradient>
-      </View>
+      </ScrollView>
     );
   }
 }

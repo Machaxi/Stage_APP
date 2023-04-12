@@ -108,6 +108,8 @@ import { white } from '../containers/util/colors';
 import ShopPage from '../containers/ExsitingUser/ShopPage';
 import LearnPage from '../containers/ExsitingUser/LearnPage';
 import PlayPage from '../containers/ExsitingUser/PlayPage';
+import NavigationDrawerWhite from './NavigationDrawerWhite';
+import LearnBookTrial from '../containers/FirstTimeUser/LearnBookTrial';
 
 
 const headerStyle = {
@@ -1703,6 +1705,14 @@ const style = StyleSheet.create({
     flexGrow: 1,
     alignSelf: "center",
   },
+  titlestyle: {
+    color: "#F2F2F2",
+    fontFamily: "Nunito-700",
+    textAlign: "center",
+    fontSize: 20,
+    flexGrow: 1,
+    alignSelf: "center",
+  }
 });
 
 const parentHomeModule = createStackNavigator({
@@ -2349,10 +2359,49 @@ const tabBarControllerBookParent = createBottomTabNavigator(
 
     })
 
+ const LearnStack = createStackNavigator({
+   Play: {
+     screen: LearnPage,
+     navigationOptions: ({ navigation }) => ({
+       title: "Learn",
+       headerLeft: (
+         <NavigationDrawerWhite navigationProps={navigation}
+           showBackAction={false} showDrawer={true} />
+       ),
+       headerRight: (
+         <RightMenuToolbar navigationProps={navigation}
+           showNotification={true} />
+       ),
+       headerTitleStyle: style.titlestyle,
+       headerStyle: {
+         backgroundColor: "#21202F",
+       },
+     }),
+   },
+   BookLearnTrail: {
+     screen: TrialBook,
+     navigationOptions: ({ navigation }) => ({
+       title: "Learn",
+       headerLeft: (
+         <NavigationDrawerWhite navigationProps={navigation}
+         showBackAction={false} showDrawer={true} />
+       ),
+       headerRight: (
+         <RightMenuToolbar navigationProps={navigation}
+           showNotification={true} />
+       ),
+       headerTitleStyle: style.titlestyle,
+       headerStyle: {
+         backgroundColor: "#21202F",
+       },
+     }),
+   },
+ });
 
 const tabBarControllerParent = createBottomTabNavigator({
   Home: {
-    screen: parentHomeModule,
+    // screen: parentHomeModule,
+    screen: LearnStack,
     navigationOptions: {
       tabBarLabel: "Learn",
       tabBarLabel: ({ focused }) => (
@@ -2662,6 +2711,64 @@ const EmptyStack = createStackNavigator({
 
 })
 
+const HomeStack = createStackNavigator({
+
+  HomeScreen: {
+      screen: HomeScreen,
+      navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+        headerLeft: (
+          <NavigationDrawerWhite navigationProps={navigation}
+            showBackAction={false} showDrawer={true} />
+        ),
+        headerRight: (
+          <RightMenuToolbar navigationProps={navigation}
+            showNotification={true} />
+        ),
+        headerTitleStyle: style.titlestyle,
+        headerStyle: {
+          backgroundColor: "#21202F",
+        },
+      }), 
+  },
+  BookTrail: {
+    screen: TrialBook,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite navigationProps={navigation}
+        showBackAction={false} showDrawer={true} />
+      ),
+      headerRight: (
+        <RightMenuToolbar navigationProps={navigation}
+          showNotification={true} />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  LearnBookTrial: {
+    screen: LearnBookTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Play",
+      headerLeft: (
+        <NavigationDrawerWhite navigationProps={navigation}
+        showBackAction={false} showDrawer={true} />
+      ),
+      headerRight: (
+        <RightMenuToolbar navigationProps={navigation}
+          showNotification={true} />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+})
+
 const BaseNavigator = createSwitchNavigator({
 
     // Main: {
@@ -2708,8 +2815,11 @@ const BaseNavigator = createSwitchNavigator({
     CoachScreen: {
       screen: CoachScreen,
     },
-    HomeScreen: {
-      screen: HomeScreen,
+    HomeStack: {
+      screen: HomeStack,
+    },
+    LearnBookTrial: {
+      screen: LearnBookTrial,
     },
     tabBarMainScreen: {
       screen: tabBarMainScreen,
