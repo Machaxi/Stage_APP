@@ -38,3 +38,4 @@ export const goldenBgColor = "rgba(168, 107, 42, 0.16)";
 export const offWhiteVariant = "#D8D8D8";
 export const greyColorVariant = "#939393";
 export const greyVariant9 = "#D9D9D9";
+export const lightGreyVariant2 = 'rgba(92,81,111, 1)';

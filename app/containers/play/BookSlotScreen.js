@@ -18,9 +18,13 @@ import SlotRelatedNotes from "../../components/molecules/slotRelatedNotes";
 import { greyColorVariant, yellowVariant2 } from "../util/colors";
 import BookSlotNextBtn from "../../components/molecules/bookSlotNextBtn";
 import UserSelectionForSlot from "../../components/molecules/userSelectionForSlot";
+import SlotBookedModal from "../../components/molecules/slotBookedModal";
+import AddUserModal from "../../components/molecules/addGuestUserModal";
+import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
 
 const BookSlotScreen = ({ navigation }) => {
 
+ const [modalVisible, setModalVisibility] = useState(false);
  const [count, setCount] = useState(0);
  const [user, setUser] = useState('yourself');
 
@@ -66,6 +70,14 @@ const BookSlotScreen = ({ navigation }) => {
     };
   }, []);
 
+  const onNextPress = () => {
+    setModalVisibility(true)
+  }
+
+   const setModalVisibilityCb = (val) => {
+     setModalVisibility(val);
+   };
+
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
@@ -75,13 +87,28 @@ const BookSlotScreen = ({ navigation }) => {
         <ScrollView style={{ height: "100%" }}>
           <GoBackHeader title={"Book Slot"} />
           <View style={{ paddingHorizontal: 18 }}>
-            <UserSelectionForSlot user={user} setUserVal={(val)=> setUser(val)} />
+            <UserSelectionForSlot
+              user={user}
+              setUserVal={(val) => setUser(val)}
+            />
             <BookSlotAddUser
               count={count}
               setCount={(val) => setCount(val)}
             />
             <SlotRelatedNotes />
-           <BookSlotNextBtn />
+            {modalVisible ? (
+              // ? (
+              // <SlotBookedModal modalVisible={modalVisible} setModalVisibility={(val)=>setModalVisibilityCb(val)} />
+              // ):
+              // null}
+              <AddGuestUserModal
+                onBtnPress={() => {}}
+                biggerImg={require("../../images/add_guests_img.png")}
+                modalVisible={modalVisible}
+                setModalVisibility={(val) => setModalVisibilityCb(val)}
+              />
+            ) : null}
+            <BookSlotNextBtn onNextPress={() => onNextPress()} />
           </View>
         </ScrollView>
       </LinearGradient>

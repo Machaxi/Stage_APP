@@ -3,12 +3,12 @@ import { Text, View, StyleSheet } from "react-native";
 import { deviceWidth } from "../containers/util/dimens";
 import { greyVariant1, white } from "../containers/util/colors";
 
-const MainBookingDetails = ({ details }) => {
+const MainBookingDetails = ({ details, width }) => {
   return (
     <View
       style={{
         flexDirection: "column",
-        width: deviceWidth * 0.3,
+        width: width ?? deviceWidth * 0.3,
       }}
     >
       <Text style={styles.detailsTitle}>{details?.name}</Text>
