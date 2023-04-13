@@ -19,10 +19,11 @@ import NotificationList from "../containers/notification/NotificationList";
 import PlayPage from "../containers/ExsitingUser/PlayPage";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CouponListScreen from "../containers/play/CouponListScreen";
+import BookSlotScreen from "../containers/play/BookSlotScreen";
 
 const playModule = createStackNavigator({
   Play: {
-    screen: PlayPage,
+    screen: PlayScreen,
     navigationOptions: ({ navigation }) => ({
       title: "PLay",
       headerLeft: (
@@ -89,6 +90,9 @@ const playModule = createStackNavigator({
     //     backgroundColor: "#21202F",
     //   },
     // }),
+  },
+  BookSlotScreen: {
+    screen: BookSlotScreen,
   },
   CoachProfileDetail: {
     screen: CoachProfileDetail,

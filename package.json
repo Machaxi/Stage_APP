@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@cypchat/rn-parallax-swipe-gallery": "^1.0.0",
+    "@react-native-clipboard/clipboard": "^1.11.2",
     "@react-native-community/async-storage": "^1.6.1",
     "@react-native-community/netinfo": "^4.2.1",
     "@react-native-firebase/analytics": "^14.11.0",

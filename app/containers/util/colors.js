@@ -34,3 +34,7 @@ export const darkGreyVariant = "#312E3E";
 export const yellowVariant6 = "#E8AC43";
 export const lightGreyVariant = "#CFCFCF";
 export const redColorVariant = "#FF6C6C";
+export const goldenBgColor = "rgba(168, 107, 42, 0.16)";
+export const offWhiteVariant = "#D8D8D8";
+export const greyColorVariant = "#939393";
+export const greyVariant9 = "#D9D9D9";

@@ -1,4 +1,4 @@
-import { greyVariant5, offWhite, redVariant, whiteGreyBorder } from "./colors";
+import { greyVariant5, greyVariant9, offWhite, redVariant, whiteGreyBorder } from "./colors";
 import { StyleSheet } from "react-native";
 export const commonStyles = StyleSheet.create({
          cancelBooking: {
@@ -29,6 +29,11 @@ export const commonStyles = StyleSheet.create({
          flexRowAlignStart: {
            flexDirection: "row",
          },
+         flexRowSpaceBtwAlignStart: {
+           flexDirection: "row",
+           justifyContent: "space-between",
+           alignItems: "center",
+         },
        });
 
   export const pickerSelectStylesShopScreen = StyleSheet.create({
@@ -51,6 +56,32 @@ export const commonStyles = StyleSheet.create({
              fontSize: 14,
              fontFamily: "Nunito-500",
              borderColor: greyVariant5,
+             borderRadius: 8,
+             color: offWhite,
+             paddingRight: 10, // to ensure the text is never behind the icon
+           },
+         });
+
+  export const pickerSelectStylesSelectUser = StyleSheet.create({
+           inputIOS: {
+             fontSize: 16,
+             paddingVertical: 8,
+             //paddingHorizontal: 10,
+             borderColor: greyVariant5,
+             borderRadius: 8,
+             color: greyVariant9,
+             //marginBottom: 4,
+             //alignItems: 'center',
+             //textAlign: 'center',
+             fontFamily: "Nunito-600",
+
+             // to ensure the text is never behind the icon
+           },
+           inputAndroid: {
+             paddingVertical: 4,
+             fontSize: 16,
+             fontFamily: "Nunito-600",
+             borderColor: greyVariant9,
              borderRadius: 8,
              color: offWhite,
              paddingRight: 10, // to ensure the text is never behind the icon
