@@ -62,7 +62,9 @@ class PlayerScreen extends Component {
           style={styles.bottomcontainer}
         >
           {this.props.playData.isTrialDisplayRequired ? (
-            <View style={{ width: "100%", alignItems: "center" }}>
+            <View
+              style={{ width: "100%", alignItems: "center", paddingTop: 8 }}
+            >
               <CustomButton
                 name="Book Free Trial"
                 available={true}
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   insideText: {
-    marginTop: 10,
+    marginTop: 7,
     fontSize: 14,
     color: "#FFFFFF",
     fontFamily: "Nunito-600",

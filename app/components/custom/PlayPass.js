@@ -6,12 +6,12 @@ class PlayPass extends Component {
     return (
       <ImageBackground
         source={require("../../images/playing/playmembership.png")}
+        resizeMode="center"
         style={{
-          width: 195,
-          height: 160,
-          paddingTop: 10,
-          marginBottom: 10,
-          marginRight: -15,
+          width: 210,
+          height: 200,
+          marginHorizontal: -15,
+          marginTop: -10,
         }}
       >
         <View style={styles.imagebackground}>
@@ -29,22 +29,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#F3F2F5",
     fontFamily: "Nunito-600",
-    marginLeft: 30,
+    marginLeft: 35,
   },
   priceText: {
     fontSize: 20,
     color: "#F2AE4D",
     fontFamily: "Nunito-700",
-    marginLeft: 30,
+    marginLeft: 35,
   },
   image: {
-    marginLeft: 15,
+    marginLeft: 13,
     width: 35,
     height: 30,
   },
   imagebackground: {
-    marginLeft: 30,
-    marginTop: 10,
+    marginLeft: 35,
+    marginTop: 30,
     marginBottom: 10,
     width: 26,
     height: 26,

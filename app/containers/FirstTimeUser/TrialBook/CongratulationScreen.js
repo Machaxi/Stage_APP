@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
-import { ScrollView } from "react-navigation";
+import moment from "moment";
 
 class CongratulationScreen extends Component {
   months = [
@@ -31,21 +31,20 @@ class CongratulationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 10,
-      proseednext: false,
       userName: "",
       centerName: "",
       centerAddress: "",
       centerImage: "",
-      centerDistance: "",
+      centerDistance: 0,
       sportName: "",
       sportImage: "",
-      time: "",
       levelImage: "",
       levelName: "",
       date: new Date(),
       timeString: "",
       selectTrial: "",
+      latitude: 0.0,
+      longitude: 0.0,
     };
   }
 
@@ -55,46 +54,40 @@ class CongratulationScreen extends Component {
 
   handleopen = async () => {
     const username = await AsyncStorage.getItem("user_name");
+    const selectCenter = this.props.selectCenter;
+    const selectSport = this.props.selectSport;
+    const selectDate = this.props.selectDate;
+    const selectLevel = this.props.selectLevel;
+    const selectBatch = this.props.selectBatch;
+    const distance = this.props.distance;
+    const selectTime = selectBatch.startTime;
+    const title = this.props.title;
+    const formattedTime = moment(selectTime, "HH:mm:ss").format("HH:mm");
+    const longitude = selectCenter.longitude;
+    const latitude = selectCenter.latitude;
 
-    const myArray = await AsyncStorage.getItem("center");
-    const data = JSON.parse(myArray);
-
-    const sportArray = await AsyncStorage.getItem("sports");
-    const sportData = JSON.parse(sportArray);
-
-    const levelArray = await AsyncStorage.getItem("select_level");
-    const levelData = JSON.parse(levelArray);
-
-    const selecttrial = await AsyncStorage.getItem("select_trial");
-
-    const timeArray = await AsyncStorage.getItem("select_times");
-
-    const dateString = await AsyncStorage.getItem("select_date");
-    const date = new Date(dateString);
-    const startTime = timeArray.split(" ")[0];
-    const startTimeString =
-      startTime.split("-")[0] + ":00 " + timeArray.split(" ")[3];
     this.setState({
       userName: username,
-      centerName: data.title,
-      centerImage: data.image,
-      centerAddress: data.address,
-      centerDistance: data.distance,
-      sportName: sportData.name,
-      sportImage: sportData.image,
-      time: timeArray,
-      levelImage: levelData.image,
-      levelName: levelData.name,
-      date: date,
-      timeString: startTimeString,
-      selectTrial: selecttrial,
+      centerName: selectCenter.name,
+      centerImage: selectCenter.cover_pic,
+      centerAddress: selectCenter.address,
+      centerDistance: distance,
+      sportName: selectSport.name,
+      sportImage: selectSport.image,
+      levelImage: selectLevel.image,
+      levelName: selectLevel.name,
+      date: selectDate,
+      selectTrial: title,
+      timeString: formattedTime,
+      latitude: latitude,
+      longitude: longitude,
     });
   };
 
   openGoogleMaps = () => {
-    const latitude = 26.9124;
-    const longitude = 75.7873;
-    const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+    const url = `https://www.google.com/maps/search/?api=1&query=${
+      this.state.latitude
+    },${this.state.longitude}`;
     Linking.openURL(url);
   };
 
@@ -126,7 +119,10 @@ class CongratulationScreen extends Component {
                 source={require("../../../images/playing/sportsbackground.png")}
                 style={[styles.sportsview]}
               >
-                <Image source={this.state.sportImage} style={styles.image} />
+                <Image
+                  source={{ uri: this.state.sportImage }}
+                  style={styles.image}
+                />
               </ImageBackground>
             </View>
             <View style={styles.textContainer}>

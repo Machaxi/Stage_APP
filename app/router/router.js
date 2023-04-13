@@ -148,8 +148,8 @@ const loginModule = createStackNavigator({
     //     }
     // },
     Login: {
-        // screen: phoneauth,
-        screen: LoginSceen,
+        screen: phoneauth,
+        // screen: LoginSceen,
         navigationOptions: {
             header: null
             //header:null

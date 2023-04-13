@@ -8,14 +8,14 @@ const DateComponent = ({ currentDate, day, date, myDate }) => {
     <LinearGradient
       colors={
         currentDate == myDate
-          ? ["rgba(255, 180, 1, 0.1))", "rgba(255, 212, 89, 0.1)"]
+          ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
           : ["rgba(255, 255, 255, 0.3)", "rgba(118, 87, 136, 0)"]
       }
-      start={{ x: 0, y: 0.5 }}
-      end={{ x: 1, y: 0.5 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
       style={[
         styles.sportsview,
-        currentDate == myDate && { borderColor: "rgba(255, 180, 1, 0.3))" },
+        currentDate == myDate && { borderColor: "rgba(255, 180, 1, 0.25))" },
       ]}
     >
       <View style={styles.imaged}>

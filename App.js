@@ -109,6 +109,10 @@ client.interceptors.response.use(response => {
             //do nothing
             // in this case we will not show any popup
         }
+        else if (error_code == "1000") {
+            //do nothing
+            // in this case we will not show any popup
+        }
         else if (status != 401) {
 
 

@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
+import SelectSports from "../../../components/custom/SelectSports";
 
 const data = [
   {
@@ -166,9 +167,13 @@ class SelectBatch extends Component {
         <TouchableOpacity
           activeOpacity={0.8}
           key={item.batch_id}
-          style={[styles.subviewclock, { marginRight: 10, marginVertical: 10 }]}
+          style={{ marginRight: 10, marginVertical: 10, height: 30 }}
           onPress={() => {
-            item.is_allowed &&
+            !(
+              item.is_allowed == false ||
+              (this.state.currentDate == 1 &&
+                item.startTime.split(":")[0] < today.getHours())
+            ) &&
               this.setState({ selectTime: item.batch_id, proseedTime: true });
           }}
         >
@@ -176,11 +181,11 @@ class SelectBatch extends Component {
             <LinearGradient
               colors={
                 item.batch_id === this.state.selectTime
-                  ? ["rgba(167, 134, 95, 0.3)", "rgba(167, 134, 95, 0.1)"]
+                  ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
                   : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
               }
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: 0.5 }}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
               style={[
                 styles.clockView,
                 item.batch_id === this.state.selectTime && {
@@ -209,14 +214,30 @@ class SelectBatch extends Component {
                 {"    "}
               </Text>
             </LinearGradient>
-            {item.is_allowed == false && (
+            {(item.is_allowed == false ||
+              (this.state.currentDate == 1 &&
+                item.startTime.split(":")[0] < today.getHours())) && (
               <Image
-                style={{ width: 80, height: 28, marginTop: -28, marginLeft: 7 }}
+                style={{
+                  width: 80,
+                  height: 28,
+                  marginTop: -28,
+                  marginLeft: 7,
+                }}
                 source={require("../../../images/playing/cross.png")}
               />
             )}
           </View>
         </TouchableOpacity>
+        // <SelectSports
+        //   id={item.batch_id}
+        //   image={require("../../../images/playing/clock.png")}
+        //   selectItem={this.state.selectTime}
+        //   name={item.displayTime}
+        //   onPress={() => {
+        //     this.setState({ selectTime: item.batch_id, proseedTime: true });
+        //   }}
+        // />
       );
     };
 
@@ -233,14 +254,8 @@ class SelectBatch extends Component {
     };
 
     return (
-      <ScrollView>
-        <View
-          style={{
-            flexDirection: "column",
-            justifyContent: "space-between",
-            marginVertical: 20,
-          }}
-        >
+      <View style={styles.contain}>
+        <ScrollView style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred Batch</Text>
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>
@@ -257,15 +272,19 @@ class SelectBatch extends Component {
                 <LinearGradient
                   colors={
                     index === this.state.currentLevel
-                      ? ["rgba(255, 180, 1, 0.3))", "rgba(255, 212, 89, 0.1)"]
+                      ? [
+                          "rgba(255, 180, 1, 0.25))",
+                          "rgba(255, 212, 89, 0.2)",
+                          "rgba(255, 212, 89, 0.06)",
+                        ]
                       : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
                   }
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
                   style={[
                     styles.sportsview,
                     index === this.state.currentLevel && {
-                      borderColor: "rgba(255, 180, 1, 0.2))",
+                      borderColor: "rgba(255, 180, 1, 0.4))",
                     },
                   ]}
                 >
@@ -394,25 +413,31 @@ class SelectBatch extends Component {
                 this.state.eveningData.map((item) => assigndate(item))}
             </View>
           </LinearGradient>
-          <View style={{ width: "99%", paddingLeft: 10 }}>
-            <CustomButton
-              image={require("../../../images/playing/arrow_go.png")}
-              name="Next "
-              available={
-                this.state.proseedTime &&
-                this.state.proseedDate &&
-                this.state.proseedLevel
-              }
-              onPress={handlepress}
-            />
-          </View>
+        </ScrollView>
+        <View style={{ flex: 0.07, paddingTop: 20 }}>
+          <CustomButton
+            image={require("../../../images/playing/arrow_go.png")}
+            name="Next "
+            available={
+              this.state.proseedTime &&
+              this.state.proseedDate &&
+              this.state.proseedLevel
+            }
+            onPress={handlepress}
+          />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  contain: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    marginVertical: 20,
+  },
   contained: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -442,9 +467,6 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     justifyContent: "center",
     alignItems: "center",
-  },
-  subviewclock: {
-    height: 30,
   },
   sportsview: {
     width: 98,

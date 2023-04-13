@@ -14,6 +14,8 @@ import Geolocation from "react-native-geolocation-service";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 import { whiteGreyBorder } from "../../util/colors";
+import Loader from "../../../components/custom/Loader";
+import CenterDetails from "../../../components/custom/CenterDetails";
 
 // const data = [
 //   {
@@ -71,6 +73,7 @@ class SelectCenter extends Component {
       longitude: 0.0,
       place: "             ",
       centerData: null,
+      isLoading: false,
     };
   }
 
@@ -100,7 +103,7 @@ class SelectCenter extends Component {
   }
 
   fetchLocation() {
-    this.setState({ loading: true });
+    this.setState({ isLoading: true });
     Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);
@@ -110,6 +113,7 @@ class SelectCenter extends Component {
           latitude: lats,
           longitude: lngs,
           centerData: this.props.academiesList,
+          isLoading: false,
         });
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
@@ -127,7 +131,7 @@ class SelectCenter extends Component {
           });
       },
       (error) => {
-        this.setState({ loading: false });
+        this.setState({ isLoading: false });
         console.log(error.code, error.message);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
@@ -136,7 +140,6 @@ class SelectCenter extends Component {
 
   componentDidMount() {
     this.requestPermissions();
-    this.setState({ centerData: this.props.academiesList });
   }
 
   hasSport(sportList) {
@@ -173,8 +176,6 @@ class SelectCenter extends Component {
 
   render() {
     handlepress = async () => {
-      // const myArrayString = JSON.stringify(this.props.academiesList[this.state.currentIndex - 1]);
-      // AsyncStorage.setItem("center", myArrayString);
       let centerValue = this.props.academiesList.find(
         (item) => item.id === this.state.currentIndex
       );
@@ -182,54 +183,24 @@ class SelectCenter extends Component {
         centerValue.latitude,
         centerValue.longitude
       );
-      this.props.onPress(
-        this.props.academiesList.find(
-          (item) => item.id === this.state.currentIndex
-        )
+      const academiesList = this.props.academiesList.find(
+        (item) => item.id === this.state.currentIndex
       );
+      this.props.onPress(academiesList, distance);
     };
 
     const renderItem = ({ item }) => {
+      const distance = this.calculateDistance(item.latitude, item.longitude);
       if (this.hasSport(item.sports)) {
         return (
-          <TouchableOpacity
+          <CenterDetails
+            item={item}
+            distance={distance}
+            currentIndex={this.state.currentIndex}
             onPress={() =>
               this.setState({ currentIndex: item.id, proseednext: true })
             }
-          >
-            <LinearGradient
-              colors={
-                item.id === this.state.currentIndex
-                  ? ["rgba(251, 172, 79, 0.81)", "rgba(118, 87, 136, 0)"]
-                  : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
-              }
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: 0.5 }}
-              style={styles.item}
-            >
-              <View style={{ flex: 0.3 }}>
-                <Image source={{ uri: item.cover_pic }} style={styles.image} />
-                <Text style={styles.distance}>
-                  {this.calculateDistance(item.latitude, item.longitude)}
-                </Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={[
-                      styles.title,
-                      item.id === this.state.currentIndex && {
-                        color: "#DFA35D",
-                      },
-                    ]}
-                  >
-                    {item.name}
-                  </Text>
-                  <Text style={styles.address}>{item.address}</Text>
-                </View>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
+          />
         );
       } else {
         return null;
@@ -238,6 +209,7 @@ class SelectCenter extends Component {
 
     return (
       <View style={styles.contained}>
+        <Loader visible={this.state.isLoading} />
         <View style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred centre</Text>
           <TouchableOpacity activeOpacity={0.8}>

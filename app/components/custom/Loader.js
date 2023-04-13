@@ -12,7 +12,7 @@ class Loader extends Component {
       >
         <View style={styles.centeredView}>
           <LinearGradient
-            colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+            colors={["#141C32", "#141A2E"]}
             start={{ x: 0, y: 0.5 }}
             end={{ x: 1, y: 0.5 }}
             style={styles.modalView}
