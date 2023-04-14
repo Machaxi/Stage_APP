@@ -10,7 +10,6 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import DateComponent from "../../../components/custom/DateComponent";
-import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 
@@ -112,7 +111,7 @@ class SelectLearnBatch extends Component {
     axios
       .get(
         getBaseUrl() +
-          "/global/coaching/slots?academyId=" +
+          "global/play/slots?academyId=" +
           academy_id +
           "&sportId=" +
           sport_id
@@ -162,14 +161,16 @@ class SelectLearnBatch extends Component {
           key={item.batch_id}
           style={[styles.subviewclock, { marginRight: 10, marginVertical: 10 }]}
           onPress={() => {
-            item.is_allowed &&
-              this.setState({ selectTime: item.batch_id, proseedTime: true });
+            this.setState({
+              selectTime: item.courtTimingId,
+              proseedTime: true,
+            });
           }}
         >
           <View>
             <LinearGradient
               colors={
-                item.batch_id === this.state.selectTime
+                item.courtTimingId == this.state.selectTime
                   ? ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
                   : [
                       "rgba(255, 255, 255, 0.15)",
@@ -179,14 +180,14 @@ class SelectLearnBatch extends Component {
                     ]
               }
               locations={
-                item.batch_id === this.state.selectTime
+                item.courtTimingId === this.state.selectTime
                   ? [0, 1]
                   : [0, 0.3, 0.6, 1]
               }
               style={styles.clockView}
             >
-              <Text> </Text>
-              {item.batch_id === this.state.selectTime && (
+              <Text>{"   "}</Text>
+              {item.courtTimingId === this.state.selectTime && (
                 <Image
                   style={styles.clockimage}
                   source={require("../../../images/playing/clock.png")}
@@ -202,7 +203,8 @@ class SelectLearnBatch extends Component {
                   item.slot == false && { color: "#858585" },
                 ]}
               >
-                {item.displayTime}{" "}
+                {item.displayTime}
+                {"   "}
               </Text>
             </LinearGradient>
             {item.is_allowed == false && (

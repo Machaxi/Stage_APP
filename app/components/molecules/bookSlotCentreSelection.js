@@ -9,61 +9,17 @@ import {
   PermissionsAndroid,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import CustomButton from "../../../components/custom/CustomButton";
 import Geolocation from "react-native-geolocation-service";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
-import { whiteGreyBorder } from "../../util/colors";
-import Loader from "../../../components/custom/Loader";
-import CenterDetails from "../../../components/custom/CenterDetails";
+import CenterDetails from "../custom/CenterDetails";
+import Loader from "../custom/Loader";
+import CustomButton from "../custom/CustomButton";
+import { whiteGreyBorder } from "../../containers/util/colors";
 
-// const data = [
-//   {
-//     id: "1",
-//     title: "Machaxi Play9 Sports Centre, Whitefield",
-//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-//     image: require("../../../images/playing/machaxicentre.png"),
-//     distance: " 3.4 km away ",
-//   },
-//   {
-//     id: "2",
-//     title: "Machaxi Badminton Center Marathahalli",
-//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-//     image: require("../../../images/playing/machaxicentre.png"),
-//     distance: " 3.4 km away ",
-//   },
-//   {
-//     id: "3",
-//     title: "Machaxi J Sports, Hoodi circle",
-//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-//     image: require("../../../images/playing/machaxicentre.png"),
-//     distance: " 3.4 km away ",
-//   },
-//   {
-//     id: "4",
-//     title: "Machaxi Play9 Sports Centre, Whitefield",
-//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-//     image: require("../../../images/playing/machaxicentre.png"),
-//     distance: " 3.4 km away ",
-//   },
-//   {
-//     id: "5",
-//     title: "Machaxi Badminton Center Marathahalli",
-//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-//     image: require("../../../images/playing/machaxicentre.png"),
-//     distance: " 3.4 km away ",
-//   },
-//   {
-//     id: "6",
-//     title: "Machaxi J Sports, Hoodi circle",
-//     address: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-//     image: require("../../../images/playing/machaxicentre.png"),
-//     distance: " 3.4 km away ",
-//   },
-// ];
 const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
-class SelectCenter extends Component {
+class BookSlotCentreSelection extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,6 +30,7 @@ class SelectCenter extends Component {
       place: "             ",
       centerData: null,
       isLoading: false,
+      selectedTime: "Morning"
     };
   }
 
@@ -174,39 +131,55 @@ class SelectCenter extends Component {
     return deg * (Math.PI / 180);
   }
 
+  setSelectedTime(val) {
+    this.setState({
+      selectedTime: val,
+    });
+  }
+
+
+
+  renderItem = ({ item }) => {
+    const distance = this.calculateDistance(item.latitude, item.longitude);
+    if (this.hasSport(item.sports)) {
+      return (
+        <CenterDetails
+          item={item}
+          distance={distance}
+          morningTimeData={this.props.morningTime}
+          eveningTimeData={this.props.eveningTime}
+          selectedMorningTime={this.props.selectedMorningTime}
+          selectedEveningTime={this.props.selectedEveningTime}
+          setSelectedEveningTimeVal={(val)=>this.props.setSelectedEveningTimeVal(val)}
+          setSelectedMorningTimeVal={(val)=>this.props.setSelectedMorningTimeVal(val)}
+          currentIndex={this.state.currentIndex}
+          selectedTime={this.state.selectedTime}
+          setTime={(val) => this.setSelectedTime(val)}
+          onPress={() =>
+            this.setState({ currentIndex: item.id, proseednext: true })
+          }
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
+  handlepress = async () => {
+    let centerValue = this.props.academiesList.find(
+      (item) => item.id === this.state.currentIndex
+    );
+    let distance = this.calculateDistance(
+      centerValue.latitude,
+      centerValue.longitude
+    );
+    const academiesList = this.props.academiesList.find(
+      (item) => item.id === this.state.currentIndex
+    );
+    this.props.onPress(academiesList, distance);
+  };
+
   render() {
-    handlepress = async () => {
-      let centerValue = this.props.academiesList.find(
-        (item) => item.id === this.state.currentIndex
-      );
-      let distance = this.calculateDistance(
-        centerValue.latitude,
-        centerValue.longitude
-      );
-      const academiesList = this.props.academiesList.find(
-        (item) => item.id === this.state.currentIndex
-      );
-      this.props.onPress(academiesList, distance);
-    };
-
-    const renderItem = ({ item }) => {
-      const distance = this.calculateDistance(item.latitude, item.longitude);
-      if (this.hasSport(item.sports)) {
-        return (
-          <CenterDetails
-            item={item}
-            distance={distance}
-            currentIndex={this.state.currentIndex}
-            onPress={() =>
-              this.setState({ currentIndex: item.id, proseednext: true })
-            }
-          />
-        );
-      } else {
-        return null;
-      }
-    };
-
     return (
       <View style={styles.contained}>
         <Loader visible={this.state.isLoading} />
@@ -215,12 +188,12 @@ class SelectCenter extends Component {
           <TouchableOpacity activeOpacity={0.8}>
             <View style={styles.addressView}>
               <Image
-                source={require("../../../images/playing/my_location.png")}
+                source={require("../../images/playing/my_location.png")}
                 style={{ width: 17, height: 17, marginLeft: 8 }}
               />
               <Text style={styles.addressText}>{this.state.place}</Text>
               <Image
-                source={require("../../../images/playing/arrow_back.png")}
+                source={require("../../images/playing/arrow_back.png")}
                 style={{ width: 12, height: 7, marginLeft: 13, marginTop: 6 }}
               />
             </View>
@@ -229,16 +202,16 @@ class SelectCenter extends Component {
           <FlatList
             data={this.state.centerData}
             keyExtractor={(item) => item.id}
-            renderItem={renderItem}
+            renderItem={(item) => this.renderItem(item)}
             extraData={[this.state.currentIndex, this.state.centerData]}
           />
         </View>
         <View style={{ flex: 0.07, paddingTop: 10 }}>
           <CustomButton
             name="Next "
-            image={require("../../../images/playing/arrow_go.png")}
+            image={require("../../images/playing/arrow_go.png")}
             available={this.state.proseednext}
-            onPress={handlepress}
+            onPress={() => this.handlepress()}
           />
         </View>
       </View>
@@ -325,4 +298,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectCenter;
+export default BookSlotCentreSelection;

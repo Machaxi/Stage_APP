@@ -35,14 +35,6 @@ const UserPickerForSlot = ({ value, onSelect, data, placeHolder }) => {
         value={value}
         useNativeAndroidPickerStyle={false}
       />
-      <View
-        style={{
-          width: deviceWidth * 0.3,
-          backgroundColor: greyVariant5,
-          height: 1,
-          marginTop: 2,
-        }}
-      />
     </View>
   );
 };

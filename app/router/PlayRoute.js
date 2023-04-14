@@ -20,10 +20,12 @@ import PlayPage from "../containers/ExsitingUser/PlayPage";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CouponListScreen from "../containers/play/CouponListScreen";
 import BookSlotScreen from "../containers/play/BookSlotScreen";
+import BookSlotCentreSelectionScreen from "../containers/play/BookSlotCentreSelectionScreen";
 
 const playModule = createStackNavigator({
   Play: {
     screen: PlayScreen,
+    // screen: PlayPage,
     navigationOptions: ({ navigation }) => ({
       title: "PLay",
       headerLeft: (
@@ -93,6 +95,9 @@ const playModule = createStackNavigator({
   },
   BookSlotScreen: {
     screen: BookSlotScreen,
+  },
+  BookSlotCentreSelectionScreen: {
+    screen: BookSlotCentreSelectionScreen
   },
   CoachProfileDetail: {
     screen: CoachProfileDetail,

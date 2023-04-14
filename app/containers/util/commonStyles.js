@@ -69,7 +69,7 @@ export const commonStyles = StyleSheet.create({
              //paddingHorizontal: 10,
              borderColor: greyVariant5,
              borderRadius: 8,
-             color: greyVariant9,
+             color: "transparent",
              //marginBottom: 4,
              //alignItems: 'center',
              //textAlign: 'center',
@@ -81,7 +81,7 @@ export const commonStyles = StyleSheet.create({
              paddingVertical: 4,
              fontSize: 16,
              fontFamily: "Nunito-600",
-             borderColor: greyVariant9,
+             borderColor: "transparent",
              borderRadius: 8,
              color: offWhite,
              paddingRight: 10, // to ensure the text is never behind the icon

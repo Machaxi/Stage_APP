@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import { View, StyleSheet, FlatList, Text, Image, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  Image,
+  ScrollView,
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import GoBackHeader from "../../components/molecules/goBackHeader";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
@@ -27,17 +34,21 @@ import SelectSports from "../../components/custom/SelectSports";
 import SelectSportsBookSlot from "../../components/molecules/selectSportsBookSlot";
 import SelectDateBookSlot from "../../components/molecules/selectDateBookSlot";
 import moment from "moment";
+import SelectCenter from "../FirstTimeUser/TrialBook/SelectCenter";
+import BookSlotCentreSelection from "../../components/molecules/bookSlotCentreSelection";
 
-const BookSlotScreen = ({ navigation }) => {
+const BookSlotCentreSelectionScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisibility] = useState(false);
+  const [count, setCount] = useState(0);
+  const [selectedMorningTime, setSelectedMorningTime] = useState(null);
+  const [selectedEveningTime, setSelectedEveningTime] = useState(null);
+  const [selectedSportData, setSelectedSportData] = useState(null);
 
- const [modalVisible, setModalVisibility] = useState(false);
- const [count, setCount] = useState(0);
-
-const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
- const [sportsList, setSportsList] = useState([]);
- const [selectedSportsId, setSelectedSportsId] = useState(null);
- const [academiesList, setAcademiesList] = useState([]);
- const [user, setUser] = useState('yourself');
+  const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
+  const [sportsList, setSportsList] = useState([]);
+  const [selectedSportsId, setSelectedSportsId] = useState(null);
+  const [academiesList, setAcademiesList] = useState([]);
+  const [user, setUser] = useState("yourself");
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -59,23 +70,22 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
     }
   };
 
-  const getSportsData = async() => {
-    Axios
-      .get(getBaseUrl() + "/global/academy/all")
+  const getSportsData = async () => {
+    Axios.get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
-        console.log('sports api call')
-        console.log({response})
+        console.log("sports api call");
+        console.log({ response });
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];
         setSportsList(academiesData["Sports"] ?? []);
+        setSelectedSportData(academiesData["Sports"][0] ?? null);
         setAcademiesList(academiesData["academies"] ?? []);
       })
       .catch((error) => {
         console.log(error);
       });
-
-  }
+  };
 
   useEffect(() => {
     navigation.setParams({
@@ -92,7 +102,6 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
       checkNotification();
     });
 
-    
     getSportsData();
     return () => {
       refreshEvent.remove();
@@ -102,13 +111,29 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
   }, []);
 
   const onNextPress = () => {
-    //setModalVisibility(true)
-    navigation.navigate("BookSlotCentreSelectionScreen");
+    setModalVisibility(true);
+  };
+
+  const setModalVisibilityCb = (val) => {
+    setModalVisibility(val);
+  };
+
+  const onPressCenter = (val) => {
+
   }
 
-   const setModalVisibilityCb = (val) => {
-     setModalVisibility(val);
-   };
+   const morningTime = [
+    { time: "5 - 6 AM" },
+    { time: "6 - 7 AM" },
+    { time: "7 - 8 AM" },
+    { time: "9 - 10 AM" },
+  ];
+  const eveningTime = [
+    { time: "5 - 6 PM" },
+    { time: "6 - 7 PM" },
+    { time: "7 - 8 PM" },
+    { time: "9 - 10 PM" },
+  ];
 
   return (
     <View style={{ flex: 1 }}>
@@ -118,41 +143,20 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
       >
         <ScrollView style={{ height: "100%" }}>
           <GoBackHeader title={"Book Slot"} />
-          <View style={{ paddingHorizontal: 18, marginBottom: 20 }}>
-            {sportsList.length > 0 ? (
-              <SelectSportsBookSlot
-                selectedSportsId={selectedSportsId}
-                sportsList={sportsList}
-                setSelectedSportsIdVal={(id) => setSelectedSportsId(id)}
+          <View style={{ marginHorizontal: 18 }}>
+            {academiesList.length > 0 ? (
+              <BookSlotCentreSelection
+                morningTime={morningTime}
+                eveningTime={eveningTime}
+                selectedMorningTime={selectedMorningTime}
+                setSelectedMorningTimeVal={(val)=>setSelectedMorningTime(val)}
+                selectedEveningTime={selectedEveningTime}
+                setSelectedEveningTimeVal={(val) => setSelectedEveningTime(val)}
+                onPress={(val) => onPressCenter(val)}
+                academiesList={academiesList}
+                selectSport={selectedSportData}
               />
             ) : null}
-            <SelectDateBookSlot
-              date={date}
-              setDateVal={(val) => setDate(val)}
-            />
-            <UserSelectionForSlot
-              user={user}
-              setUserVal={(val) => setUser(val)}
-            />
-            {user == 'with_guest' &&
-            <BookSlotAddUser
-              count={count}
-              setCount={(val) => setCount(val)}
-            />}
-            <SlotRelatedNotes />
-            {modalVisible ? (
-              // ? (
-              // <SlotBookedModal modalVisible={modalVisible} setModalVisibility={(val)=>setModalVisibilityCb(val)} />
-              // ):
-              // null}
-              <AddGuestUserModal
-                onBtnPress={() => {}}
-                biggerImg={require("../../images/add_guests_img.png")}
-                modalVisible={modalVisible}
-                setModalVisibility={(val) => setModalVisibilityCb(val)}
-              />
-            ) : null}
-            <BookSlotNextBtn onNextPress={() => onNextPress()} />
           </View>
         </ScrollView>
       </LinearGradient>
@@ -160,7 +164,7 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
   );
 };
 
-BookSlotScreen.navigationOptions = ({ navigation }) => {
+BookSlotCentreSelectionScreen.navigationOptions = ({ navigation }) => {
   return {
     headerTitle: <RequestHeaderTitle title={"Play"} />,
     headerTitleStyle: {
@@ -178,8 +182,6 @@ BookSlotScreen.navigationOptions = ({ navigation }) => {
   };
 };
 
-export default BookSlotScreen;
+export default BookSlotCentreSelectionScreen;
 
-const styles = StyleSheet.create({
-  
-});
+const styles = StyleSheet.create({});
