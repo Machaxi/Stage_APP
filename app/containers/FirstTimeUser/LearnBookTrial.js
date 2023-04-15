@@ -11,6 +11,7 @@ import { getBaseUrl } from "../../containers/BaseComponent";
 import { darkBlueVariant } from "../util/colors";
 import CongratulationScreen from "./TrialBook/CongratulationScreen";
 import SorryScreen from "./TrialBook/SorryScreen";
+import GetBack from "../../components/custom/GetBack";
 
 class LearnBookTrial extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class LearnBookTrial extends Component {
       congratulationScreen: false,
       distance: 0,
       alreadyBook: false,
+      errorMessage: "We could not book your free trial, please try again.",
     };
   }
 
@@ -74,35 +76,30 @@ class LearnBookTrial extends Component {
     });
   };
 
-  onPressConfirm = (alreadyBook) => {
-    this.setState({ congratulationScreen: true, alreadyBook: alreadyBook });
+  onPressConfirm = (alreadyBook, errorMessage) => {
+    this.setState({
+      congratulationScreen: true,
+      alreadyBook: alreadyBook,
+      errorMessage: errorMessage,
+    });
   };
 
   onPressRetry = () => {
     this.setState({ congratulationScreen: false, currentPage: 1 });
   };
 
+  hadleBackPress = () => {
+    if (this.state.currentPage > 1) {
+      this.setState({ currentPage: this.state.currentPage - 1 });
+    } else {
+      this.props.navigation.goBack();
+    }
+  };
+
   selectScreen = () => {
     return (
       <View>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => {
-            if (this.state.currentPage > 1) {
-              this.setState({ currentPage: this.state.currentPage - 1 });
-            } else {
-              this.props.navigation.goBack();
-            }
-          }}
-        >
-          <View style={styles.row}>
-            <Image
-              source={require("../../images/playing/back.png")}
-              style={{ width: 15, height: 13 }}
-            />
-            <Text style={styles.headerText}> {this.state.title}</Text>
-          </View>
-        </TouchableOpacity>
+        <GetBack title={this.state.title} onPress={this.hadleBackPress} />
         <View style={{ height: 70, margin: 20 }}>
           <CoachProcess
             number={this.state.currentPage}
@@ -123,17 +120,21 @@ class LearnBookTrial extends Component {
       >
         {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratulationScreen
-            title="Playing Trail"
+            title="Playing Trial"
             selectCenter={this.state.selectCenter}
             selectSport={this.state.selectSport}
             selectDate={this.state.selectDate}
             selectLevel={this.state.selectLevel}
             selectBatch={this.state.selectTime}
             distance={this.state.distance}
+            courtName={this.state.errorMessage}
           />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (
-          <SorryScreen onPress={this.onPressRetry} />
+          <SorryScreen
+            onPress={this.onPressRetry}
+            errorMessage={this.state.errorMessage}
+          />
         )}
         {!this.state.congratulationScreen && (
           <View style={{ flex: 1 }}>

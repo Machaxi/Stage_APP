@@ -80,7 +80,7 @@ class LoginSceen extends Component {
       // this.props.navigation.navigate("tabBarMainScreen");
       this.props.navigation.navigate("ParentHome");
     } else if (userlogin != null && userlogin.length > 3) {
-      this.props.navigation.navigate("HomeStack");
+      this.props.navigation.navigate("HomeDrawer");
     } else {
       this.setState({ showscreen: true });
     }
@@ -160,7 +160,7 @@ class LoginSceen extends Component {
           AsyncStorage.setItem("user_gender", this.state.gender);
           AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
           AsyncStorage.setItem("play_enabled", "play_not_enabled");
-          this.props.navigation.navigate("HomeStack");
+          this.props.navigation.navigate("HomeDrawer");
         }
       })
       .catch((response) => {
@@ -221,7 +221,7 @@ class LoginSceen extends Component {
             if (userData.is_learn_enabled || userData.is_play_enabled) {
               this.props.navigation.navigate("ParentHome");
             } else {
-              this.props.navigation.navigate("HomeStack");
+              this.props.navigation.navigate("HomeDrawer");
             }
           }
         }

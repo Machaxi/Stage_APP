@@ -14,8 +14,12 @@ import { ScrollView } from "react-navigation";
 import moment from "moment";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import axios from "axios";
-import { confirmCoachTrail } from "../../../redux/reducers/PlayerReducer";
+import {
+  confirmCoachTrail,
+  confirmPlayingTrail,
+} from "../../../redux/reducers/PlayerReducer";
 import { connect } from "react-redux";
+import Loader from "../../../components/custom/Loader";
 
 class ConfirmBooking extends Component {
   months = [
@@ -59,7 +63,9 @@ class ConfirmBooking extends Component {
       selectBatch: "",
       username: "",
       gender: "",
+      selectLevel: null,
       date: new Date(),
+      isLoading: false,
     };
   }
 
@@ -76,6 +82,13 @@ class ConfirmBooking extends Component {
     const selectBatch = this.props.selectBatch;
     const distance = this.props.distance;
     const selectTime = selectBatch.displayTime;
+    var levelimage = selectLevel.image;
+    var levelname = selectLevel.name;
+
+    if (this.props.title == "Playing") {
+      levelname = selectLevel.displayText;
+      levelimage = selectLevel.url;
+    }
 
     this.setState({
       centerName: selectCenter.name,
@@ -86,9 +99,10 @@ class ConfirmBooking extends Component {
       sportImage: selectSport.image,
       time: selectTime,
       selectBatch: selectBatch,
-      levelImage: selectLevel.image,
-      levelName: selectLevel.name,
+      levelImage: levelimage,
+      levelName: levelname,
       date: selectDate,
+      selectLevel: selectLevel,
     });
   };
 
@@ -100,44 +114,74 @@ class ConfirmBooking extends Component {
   };
 
   booktrail = () => {
+    this.setState({ isLoading: true });
+    if (this.props.title == "Playing") {
+      this.confirmPlaying();
+    } else {
+      this.confirmCoaching();
+    }
+  };
+
+  confirmCoaching = () => {
     var dataDic = {};
     var dict = {};
 
     var url = "batch/book-coaching-trial";
-    if (this.props.title == "Playing") {
-      url = "court/bookTrial";
-      const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
-      dict["date"] = formattedDate;
-      dict["courtTimingId"] = this.state.selectBatch.courtTimingId;
-      dict["proficiency"] = this.state.levelName.toUpperCase();
-      dataDic["data"] = dict;
-    } else {
-      const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
-      dict["batch_id"] = "" + this.state.selectBatch.batch_id;
-      dict["trial_date"] = formattedDate;
-      dict["startTime"] = this.state.selectBatch.startTime;
-      dict["endTime"] = this.state.selectBatch.endTime;
-      dataDic["data"] = dict;
-    }
-
+    const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
+    dict["batch_id"] = "" + this.state.selectBatch.batch_id;
+    dict["trial_date"] = formattedDate;
+    dict["startTime"] = this.state.selectBatch.startTime;
+    dict["endTime"] = this.state.selectBatch.endTime;
+    dataDic["data"] = dict;
     this.props
       .confirmCoachTrail(dataDic, this.state.header, url)
       .then(() => {
-        let usersuccess = JSON.stringify(this.props.data.booktrail);
-        console.log(usersuccess);
-        if (usersuccess == null) {
-          this.props.onPress(false);
+        this.setState({ isLoading: false });
+        if (this.props.data.booktrail == null) {
+          let userFail = JSON.stringify(this.props.data.bookFail.data);
+          let userFailResponce = JSON.parse(userFail);
+          this.props.onPress(false, userFailResponce.error_message);
         } else {
           this.props.onPress(true);
         }
       })
       .catch((response) => {
+        this.setState({ isLoading: false });
+        console.log(response);
+      });
+  };
+
+  confirmPlaying = () => {
+    var dataDic = {};
+    var dict = {};
+    var url = "court/bookTrial";
+    const formattedDate = moment(this.state.date).format("YYYY-MM-DD");
+    dict["date"] = formattedDate;
+    dict["courtTimingId"] = this.state.selectBatch.courtTimingId;
+    dict["proficiency"] = this.state.selectLevel.name;
+    dataDic["data"] = dict;
+    this.props
+      .confirmPlayingTrail(dataDic, this.state.header, url)
+      .then(() => {
+        this.setState({ isLoading: false });
+        if (this.props.data.playdata == null) {
+          let userFail = JSON.stringify(this.props.data.bookFail.data);
+          let userFailResponce = JSON.parse(userFail);
+          this.props.onPress(false, userFailResponce.error_message);
+        } else {
+          let usersuccess = JSON.stringify(this.props.data.playdata.data);
+          let userSuccessResponce = JSON.parse(usersuccess);
+          this.props.onPress(true, userSuccessResponce.booking.courtName);
+        }
+      })
+      .catch((response) => {
+        this.setState({ isLoading: false });
         console.log(response);
       });
   };
 
   render() {
-    listdata = (image, name, width, height) => {
+    listdata = (image, name, width, height, url) => {
       return (
         <View style={{ alignItems: "center" }}>
           <LinearGradient
@@ -145,10 +189,17 @@ class ConfirmBooking extends Component {
             locations={[0, 1]}
             style={styles.sportsview}
           >
-            <Image
-              style={[styles.imaged, { width: width, height: height }]}
-              source={image}
-            />
+            {url ? (
+              <Image
+                style={[styles.imaged, { width: width, height: height }]}
+                source={{ uri: image }}
+              />
+            ) : (
+              <Image
+                style={[styles.imaged, { width: width, height: height }]}
+                source={image}
+              />
+            )}
           </LinearGradient>
           <Text style={[styles.sportText]}>{name}</Text>
         </View>
@@ -157,6 +208,7 @@ class ConfirmBooking extends Component {
 
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
+        <Loader visible={this.state.isLoading} />
         <ScrollView style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Confirm Book free Trial</Text>
           <LinearGradient
@@ -208,31 +260,30 @@ class ConfirmBooking extends Component {
                     require("../../../images/playing/coach.png"),
                     "Coaching",
                     35,
-                    52
+                    52,
+                    false
                   )
                 : listdata(
                     require("../../../images/playing/play.png"),
                     "Playing",
                     35,
-                    52
+                    52,
+                    false
                   )}
-              <View style={{ alignItems: "center" }}>
-                <LinearGradient
-                  colors={[
-                    "rgba(255, 255, 255, 0.4)",
-                    "rgba(255, 255, 255, 0.06)",
-                  ]}
-                  locations={[0, 1]}
-                  style={styles.sportsview}
-                >
-                  <Image
-                    style={[styles.imaged, { width: 40, height: 40 }]}
-                    source={{ uri: this.state.sportImage }}
-                  />
-                </LinearGradient>
-                <Text style={[styles.sportText]}>{this.state.sportName}</Text>
-              </View>
-              {listdata(this.state.levelImage, this.state.levelName, 35, 52)}
+              {listdata(
+                this.state.sportImage,
+                this.state.sportName,
+                40,
+                40,
+                true
+              )}
+              {listdata(
+                this.state.levelImage,
+                this.state.levelName,
+                35,
+                52,
+                this.props.title == "Playing"
+              )}
             </View>
             <View
               style={{
@@ -265,7 +316,8 @@ class ConfirmBooking extends Component {
                 require("../../../images/playing/clock.png"),
                 this.state.time,
                 36,
-                31
+                31,
+                false
               )}
 
               <View style={styles.sportsview} />
@@ -402,6 +454,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = {
   confirmCoachTrail,
+  confirmPlayingTrail,
 };
 
 export default connect(

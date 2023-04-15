@@ -111,7 +111,11 @@ class CongratulationScreen extends Component {
           <Text style={styles.title}>
             Congratulations {this.state.userName}!
           </Text>
-          <Text style={styles.subtext}>Your trial session is confirmed.</Text>
+          {this.props.title == "Playing Trial" ? (
+            <Text style={styles.subtext}>You slot has been book </Text>
+          ) : (
+            <Text style={styles.subtext}>Your trial session is confirmed.</Text>
+          )}
           <View style={styles.line} />
           <View style={styles.item}>
             <View style={{ flex: 0.25 }}>
@@ -133,9 +137,9 @@ class CongratulationScreen extends Component {
                   · {this.state.selectTrial}
                 </Text>
               </View>
-              {this.state.selectTrial === "Playing Trial" && (
+              {this.props.title == "Playing Trial" && (
                 <Text style={styles.court}>
-                  Court : {this.state.sportName} court 2
+                  Court : {this.state.sportName} {this.props.courtName}
                 </Text>
               )}
               <Text style={[styles.schedule]}>
@@ -174,7 +178,7 @@ const styles = StyleSheet.create({
 
   subcontainer: {
     width: "100%",
-    height: 500,
+    height: 520,
     marginBottom: 40,
     alignItems: "center",
     paddingHorizontal: 20,
@@ -198,7 +202,7 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 16,
-    fontFamily: "Nunito-400",
+    fontFamily: "Nunito-600",
     color: "#CFCFCF",
   },
   schedule: {
@@ -207,6 +211,7 @@ const styles = StyleSheet.create({
     color: "#FFC498",
   },
   court: {
+    marginVertical: 5,
     fontSize: 12,
     fontFamily: "Nunito-500",
     color: "#F3F2F5",

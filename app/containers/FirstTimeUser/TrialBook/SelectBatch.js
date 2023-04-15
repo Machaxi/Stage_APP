@@ -172,7 +172,7 @@ class SelectBatch extends Component {
             !(
               item.is_allowed == false ||
               (this.state.currentDate == 1 &&
-                item.startTime.split(":")[0] < today.getHours())
+                item.startTime.split(":")[0] <= today.getHours())
             ) &&
               this.setState({ selectTime: item.batch_id, proseedTime: true });
           }}
@@ -216,13 +216,13 @@ class SelectBatch extends Component {
             </LinearGradient>
             {(item.is_allowed == false ||
               (this.state.currentDate == 1 &&
-                item.startTime.split(":")[0] < today.getHours())) && (
+                item.startTime.split(":")[0] <= today.getHours())) && (
               <Image
                 style={{
-                  width: 80,
+                  width: 90,
                   height: 28,
                   marginTop: -28,
-                  marginLeft: 7,
+                  marginLeft: 8,
                 }}
                 source={require("../../../images/playing/cross.png")}
               />

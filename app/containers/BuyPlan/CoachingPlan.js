@@ -1,25 +1,27 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import CoachProcess from "../../components/custom/CoachProcess";
-import ConfirmBooking from "./TrialBook/ConfirmBooking";
-import SelectBatch from "./TrialBook/SelectBatch";
-import SelectCenter from "./TrialBook/SelectCenter";
-import SelectSports from "./TrialBook/SelectSports";
+import ConfirmBooking from "../FirstTimeUser/TrialBook/ConfirmBooking";
+import SelectBatch from "../FirstTimeUser/TrialBook/SelectBatch";
+import SelectCenter from "../FirstTimeUser/TrialBook/SelectCenter";
+import SelectSports from "../FirstTimeUser/TrialBook/SelectSports";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
-import { getBaseUrl } from "../../containers/BaseComponent";
-import { darkBlueVariant } from "../util/colors";
-import CongratulationScreen from "./TrialBook/CongratulationScreen";
-import SorryScreen from "./TrialBook/SorryScreen";
+import { getBaseUrl } from "../BaseComponent";
+import CongratulationScreen from "../FirstTimeUser/TrialBook/CongratulationScreen";
+import SorryScreen from "../FirstTimeUser/TrialBook/SorryScreen";
 import GetBack from "../../components/custom/GetBack";
+import BuyPlanProcess from "../../components/custom/BuyPlanProcess";
+import { darkBlueVariant } from "../util/colors";
+import SelectCoachBatch from "./components/SelectCoachBatch";
+import SelectCoachPlan from "./components/SelectCoachPlan";
 
-class TrialBook extends Component {
+class CoachingPlan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPage: 1,
-      title: "Coaching Trial",
+      title: "Coaching Plan",
       sportsList: null,
       academiesList: null,
       selectSport: null,
@@ -36,11 +38,6 @@ class TrialBook extends Component {
   }
 
   componentDidMount() {
-    getValue = async () => {
-      const select_trial = await AsyncStorage.getItem("select_trial");
-      this.setState({ title: select_trial });
-    };
-    getValue();
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
@@ -73,13 +70,17 @@ class TrialBook extends Component {
     this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
-  onPressBatch = (selectDate, selectLevel, selectBatch) => {
+  onPressBatch = (selectLevel, selectBatch) => {
+    console.log(selectBatch);
     this.setState({ currentPage: 4 });
     this.setState({
-      selectDate: selectDate,
       selectLevel: selectLevel,
       selectTime: selectBatch,
     });
+  };
+
+  onPressPlan = () => {
+    this.setState({ currentPage: 5 });
   };
 
   onPressConfirm = (alreadyBook, errorMessage) => {
@@ -107,7 +108,7 @@ class TrialBook extends Component {
       <View>
         <GetBack title={this.state.title} onPress={this.hadleBackPress} />
         <View style={{ height: 70, marginHorizontal: 20, marginVertical: 10 }}>
-          <CoachProcess
+          <BuyPlanProcess
             number={this.state.currentPage}
             onPress={this.onPress}
           />
@@ -126,7 +127,7 @@ class TrialBook extends Component {
       >
         {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratulationScreen
-            title="Coaching Trail"
+            title="Coaching Plan"
             selectCenter={this.state.selectCenter}
             selectSport={this.state.selectSport}
             selectDate={this.state.selectDate}
@@ -160,13 +161,19 @@ class TrialBook extends Component {
                 />
               )}
               {this.state.currentPage === 3 && (
-                <SelectBatch
+                <SelectCoachBatch
                   onPress={this.onPressBatch}
                   selectCenter={this.state.selectCenter}
                   selectSport={this.state.selectSport}
                 />
               )}
               {this.state.currentPage === 4 && (
+                <SelectCoachPlan
+                  onPress={this.onPressPlan}
+                  selectBatch={this.state.selectTime}
+                />
+              )}
+              {this.state.currentPage === 5 && (
                 <ConfirmBooking
                   title="Coaching"
                   selectCenter={this.state.selectCenter}
@@ -207,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrialBook;
+export default CoachingPlan;

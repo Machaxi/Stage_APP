@@ -108,9 +108,7 @@ class SorryScreen extends Component {
           />
 
           <Text style={styles.title}>Sorry !</Text>
-          <Text style={styles.subtext}>
-            We could not book your free trial, please try again.
-          </Text>
+          <Text style={styles.subtext}>{this.props.errorMessage}</Text>
           <CustomButton
             name="Try Again "
             available={true}
