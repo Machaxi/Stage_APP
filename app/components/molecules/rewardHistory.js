@@ -24,8 +24,9 @@ import { deviceWidth } from "../../containers/util/dimens";
 import RedeemInfo from "./redeemInfo";
 import RewardHistoryItem from "./rewardHistoryItem";
 import { rewardHistoryData } from "../../containers/util/dummyData/rewardHistoryData";
+import { MonthNames } from "../../containers/util/utilFunctions";
 
-const RewardHistory = ({ name, }) => {
+const RewardHistory = ({ selectedMonth, selectedYear, rewardHistoryData }) => {
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -38,13 +39,18 @@ const RewardHistory = ({ name, }) => {
         colors={["#dfc1886b", "#a975282b"]}
         style={[{ paddingVertical: 8, paddingHorizontal: 12 }]}
       >
-        <Text style={[styles.date]}>{"December 2023"}</Text>
+        <Text style={[styles.date]}>{MonthNames[selectedMonth - 1] + ` ${selectedYear}`}</Text>
       </LinearGradient>
-      <View style={{paddingHorizontal: 14, marginTop: 25}}>
+      <View style={{ paddingHorizontal: 14, marginTop: 25 }}>
         <FlatList
           data={rewardHistoryData}
-          renderItem={({ item, index }) => <RewardHistoryItem data={item} isLast={rewardHistoryData.length == (index + 1)} />}
-          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <RewardHistoryItem
+              data={item}
+              isLast={rewardHistoryData.length == index + 1}
+            />
+          )}
+          keyExtractor={(item, index) => index}
         />
       </View>
     </LinearGradient>

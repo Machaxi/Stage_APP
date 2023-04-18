@@ -140,23 +140,35 @@ class BookSlotCentreSelection extends Component {
 
 
   renderItem = ({ item }) => {
-    const distance = this.calculateDistance(item.latitude, item.longitude);
-    if (this.hasSport(item.sports)) {
+    const distance = this.calculateDistance(
+      item?.academy.latitude,
+      item?.academy.longitude
+    );
+    //TODO: verify whether bookings will be here
+    // if (this.hasSport(item.sports) || true) {
+      if(true){
       return (
         <CenterDetails
-          item={item}
+          item={item?.academy}
           distance={distance}
-          morningTimeData={this.props.morningTime}
-          eveningTimeData={this.props.eveningTime}
+          morningTimeData={item.courts}
+          eveningTimeData={item.courts}
           selectedMorningTime={this.props.selectedMorningTime}
           selectedEveningTime={this.props.selectedEveningTime}
-          setSelectedEveningTimeVal={(val)=>this.props.setSelectedEveningTimeVal(val)}
-          setSelectedMorningTimeVal={(val)=>this.props.setSelectedMorningTimeVal(val)}
+          setSelectedEveningTimeVal={(val) =>
+            this.props.setSelectedEveningTimeVal(val)
+          }
+          setSelectedMorningTimeVal={(val) =>
+            this.props.setSelectedMorningTimeVal(val)
+          }
           currentIndex={this.state.currentIndex}
           selectedTime={this.state.selectedTime}
           setTime={(val) => this.setSelectedTime(val)}
           onPress={() =>
-            this.setState({ currentIndex: item.id, proseednext: true })
+            this.setState({
+              currentIndex: item?.academy.id,
+              proseednext: true,
+            })
           }
         />
       );

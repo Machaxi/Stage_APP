@@ -16,6 +16,7 @@ import MyRequestPlayersList from "./myRequestPlayersList";
 import MainBookingDetails from "./mainBookingDetails";
 import MyRequestCentreDetails from "./myRequestCentreDetails";
 import LinearGradient from "react-native-linear-gradient";
+import moment from "moment";
 
 const MyBookingsView = ({ val, cancelBooking }) => {
   return (
@@ -26,18 +27,18 @@ const MyBookingsView = ({ val, cancelBooking }) => {
       {val?.isBooked ? (
         <View
           style={[
-            val.is_canceled ? { flexDirection: "row" } : styles.detailsTopRow,
+            val.isCancelled ? { flexDirection: "row" } : styles.detailsTopRow,
           ]}
         >
           <Text
             style={[
-              val.is_canceled ? { marginRight: 14 } : {},
+              val.isCancelled ? { marginRight: 14 } : {},
               styles.bookingDetails,
             ]}
           >
-            Booked on {val.booking_date}
+            Booked on {moment(val.date).format("DD/MM/YYYY")}
           </Text>
-          {val.is_canceled ? (
+          {val.isCancelled ? (
             <NamedRoundedContainer
               name={"Canceled"}
               bgColor={"rgba(79, 0, 25, 0.4)"}
@@ -52,20 +53,20 @@ const MyBookingsView = ({ val, cancelBooking }) => {
       ) : (
         <Text
           style={[
-            val.is_canceled ? { marginRight: 14 } : {},
+            val.isCancelled ? { marginRight: 14 } : {},
             styles.bookingDetails,
           ]}
         >
-          Played on {val.played_date}
+          Played on {moment(val.date).format("DD/MM/YYYY")}
         </Text>
       )}
-      <MyRequestCentreDetails details={val} />
+      <MyRequestCentreDetails details={val?.academy} />
       <View style={styles.rowSpaceBtw}>
         {[
-          { name: "Sport", value: val?.sport_name },
-          { name: "Slot", value: val?.slot },
+          { name: "Sport", value: val?.sport?.name },
+          { name: "Slot", value: `${val?.startTime} - ${val?.endTime}` },
           ,
-          { name: "Pool", value: val?.pool },
+          { name: "Pool", value: "NA" },
         ].map((value) => (
           <MainBookingDetails details={value} />
         ))}
@@ -73,7 +74,7 @@ const MyBookingsView = ({ val, cancelBooking }) => {
       <Text style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}>
         Registered Players
       </Text>
-      {val?.player_details.map((value) => (
+      {val?.players?.map((value) => (
         <MyRequestPlayersList item={value} />
       ))}
     </LinearGradient>

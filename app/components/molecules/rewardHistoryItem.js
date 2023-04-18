@@ -11,32 +11,31 @@ import {
   white,
   yellowVariant2,
 } from "../../containers/util/colors";
+import moment from "moment";
 
 const RewardHistoryItem = ({ data, isLast }) => {
   return (
-    <View style={[isLast ? {marginBottom: 20} : null]}>
-      <View
-        style={styles.outerMain}
-      >
-        <Text style={styles.redeemInfo}>{data.title}</Text>
+    <View style={[isLast ? { marginBottom: 20 } : null]}>
+      <View style={styles.outerMain}>
+        <Text style={styles.redeemInfo}>{data.remark ?? ''}</Text>
         <Text
           style={[
             styles.pts,
-            { color: data.earned ? yellowVariant2 : redVariant },
+            {
+              color:
+                data.transaction_type == "CREDIT"
+                  ? yellowVariant2
+                  : redVariant,
+            },
           ]}
         >
-          {data.earned ? "+ " : "- "} {data.points + ' pts'}
+          {data.transaction_type == "CREDIT" ? "+ " : "- "}{" "}
+           {typeof data.amount != undefined ? (data.amount  + " pts") : '0 pts'}
         </Text>
       </View>
-      <Text style={styles.gameDetails}>
-        {data.sport + " " + data.timings}
-      </Text>
-      <Text style={styles.timing}>{data.datetime}</Text>
-      {isLast == false ?
-      <View
-        style={styles.bar}
-      />
-      : null}
+      <Text style={styles.gameDetails}>{data.secondary_remark ?? ''}</Text>
+      <Text style={styles.timing}>{moment(data.date).isValid ? `${moment(data.date).format("DD MMM, h:mm A")}` : ''}</Text>
+      {isLast == false ? <View style={styles.bar} /> : null}
     </View>
   );
 };

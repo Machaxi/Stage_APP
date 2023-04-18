@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { lightBlueColor } from "../../containers/util/colors";
 import LinearGradient from "react-native-linear-gradient";
@@ -19,38 +20,26 @@ const SelectPlayingTime = ({
   selectedTime
 }) => {
   return (
-    <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-      <FlatList
-        data={timeData}
-        extraData={selectedTime}
-        contentContainerStyle={{
-          flex: 1,
-          flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-        }}
-        renderItem={({ item, index }) => {
+    <ScrollView style={{ flexDirection: "row", flexWrap: "wrap" }}>
+      {timeData.length > 0 ?
+        timeData.map((item) => {
           return (
             <SelectTimeItem
-              width={deviceWidth * 0.3}
-              isSelected={item.time == selectedTime}
+              // width={deviceWidth * 0.3}
+              isSelected={item?.courtTimingId == selectedTime}
               image={require("../../images/playing/clock.png")}
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                alignItems: "center",
-              }}
               selectItem={selectedTime}
-              name={item.time}
+              id={item?.courtTimingId}
+              name={`${item.startTime} - ${item.endTime}`}
               onPress={(val) => {
                 setSelectedTime(val);
               }}
             />
           );
-        }}
-        keyExtractor={(item, index) => index}
-      />
-    </View>
+        })
+      : null}
+      
+    </ScrollView>
   );
 };
 

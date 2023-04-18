@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { View, StyleSheet, FlatList, Text, Image, ScrollView } from "react-native";
+import { View, StyleSheet, ToastAndroid, FlatList, Text, Image, ScrollView, RefreshControl } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import GoBackHeader from "../../components/molecules/goBackHeader";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
@@ -27,21 +27,71 @@ import SelectSports from "../../components/custom/SelectSports";
 import SelectSportsBookSlot from "../../components/molecules/selectSportsBookSlot";
 import SelectDateBookSlot from "../../components/molecules/selectDateBookSlot";
 import moment from "moment";
+import LoadingIndicator from "../../components/molecules/loadingIndicator";
 
 const BookSlotScreen = ({ navigation }) => {
+ var slotApiError = null;
 
  const [modalVisible, setModalVisibility] = useState(false);
  const [count, setCount] = useState(0);
+ const [refreshing, setRefreshing] = useState(false);
 
-const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
+ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
  const [sportsList, setSportsList] = useState([]);
  const [selectedSportsId, setSelectedSportsId] = useState(null);
  const [academiesList, setAcademiesList] = useState([]);
  const [user, setUser] = useState('yourself');
+const [loading, setLoading] = useState(false);
+const [slotApiResponse, setSlotApiResponse] = useState(null);
+
+ const getSlotDataApi = async () => {
+   setLoading(true);
+   getData("header", (value) => {
+     if (value == "") return;
+     const headers = {
+       "Content-Type": "application/json",
+       //"x-authorization": value,
+       //TODO:remove this static logic
+       "x-authorization":
+         "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+     };
+     //client.call
+     client
+       .get("court/bookings", {
+         headers,
+         params: {},
+       })
+       .then(function(response) {
+         console.log({ response });
+         slotApiError = response;
+         console.log("requestData" + JSON.stringify(response.data));
+         let json = response.data;
+         let success = json.success;
+         console.log("---->" + success);
+         if (success) {
+           setSlotApiResponse(json.data);
+         } else {
+           if (json.code == "1020") {
+             Events.publish("LOGOUT");
+           }
+         }
+         setLoading(false);
+       })
+       .catch(function(error) {
+         setLoading(false);
+         ToastAndroid.show(
+           `${slotApiError?.response?.response?.data?.error_message ??
+             ""}`,
+           ToastAndroid.SHORT
+         );
+         console.log(error);
+       });
+   });
+ };
+ 
 
   const getNotifications = () => {
     getNotificationCount((count) => {
-      console.log("??? " + count);
       navigation.setParams({ notification_count: count });
       navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -59,11 +109,12 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
     }
   };
 
+
+
   const getSportsData = async() => {
     Axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
-        console.log('sports api call')
         console.log({response})
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -76,6 +127,16 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
       });
 
   }
+
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getBookingsData();
+    // In actual case set refreshing to false when whatever is being refreshed is done!
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     navigation.setParams({
@@ -92,7 +153,7 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
       checkNotification();
     });
 
-    
+    //getSlotDataApi();
     getSportsData();
     return () => {
       refreshEvent.remove();
@@ -110,13 +171,28 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
      setModalVisibility(val);
    };
 
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+  console.log({ slotApiResponse });
+
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
         colors={["#051732", "#232031"]}
         style={{ flex: 1, paddingHorizontal: 12 }}
       >
-        <ScrollView style={{ height: "100%" }}>
+        <ScrollView
+          style={{ height: "100%" }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => onRefresh()}
+              title="Pull to refresh"
+            />
+          }
+        >
           <GoBackHeader title={"Book Slot"} />
           <View style={{ paddingHorizontal: 18, marginBottom: 20 }}>
             {sportsList.length > 0 ? (
@@ -134,11 +210,12 @@ const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
               user={user}
               setUserVal={(val) => setUser(val)}
             />
-            {user == 'with_guest' &&
-            <BookSlotAddUser
-              count={count}
-              setCount={(val) => setCount(val)}
-            />}
+            {user == "with_guest" && (
+              <BookSlotAddUser
+                count={count}
+                setCount={(val) => setCount(val)}
+              />
+            )}
             <SlotRelatedNotes />
             {modalVisible ? (
               // ? (

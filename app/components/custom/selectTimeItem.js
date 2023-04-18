@@ -9,13 +9,13 @@ class SelectTimeItem extends Component {
   }
 
   render() {
-    const {  image, isSelected , name, width } = this.props;
+    const {  image, isSelected , id,  name, width } = this.props;
 
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         style={[{ marginRight: 10, marginBottom: 9, height: 30,  }, this.props.width ? {width: width}: {},]}
-        onPress={() => this.handlepress(name)}
+        onPress={() => this.handlepress(id)}
       >
         <View>
           <LinearGradient

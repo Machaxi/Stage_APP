@@ -28,6 +28,13 @@ class CenterDetails extends Component {
       this.props.onPress(item.id);
     };
 
+    var morningData = morningTimeData.filter((val) => {
+      return val.timeOfDay == "Morning"
+    });
+    var eveningData = eveningTimeData.filter((val) => {
+      return val.timeOfDay == "Evening";
+    });
+
     var isExpanded = item.id == currentIndex;
 
     return (
@@ -71,7 +78,7 @@ class CenterDetails extends Component {
             </View>
           </View>
           {isExpanded ? (
-            <View style={{ marginTop: 30, marginBottom: 15 }}>
+            <View style={{ marginTop: 30, marginBottom: 15, marginHorizontal: 7 }}>
               <Text style={styles.setTime}>
                 {"Select Preferred Time Slot"}
               </Text>
@@ -89,11 +96,18 @@ class CenterDetails extends Component {
                   isSelected={selectedTime == "Evening"}
                 />
               </View>
-              {morningTimeData.length > 0 ? (
+              {selectedTime == "Morning" && morningData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedMorningTime}
                   setSelectedTime={(val) => setSelectedMorningTimeVal(val)}
-                  timeData={morningTimeData}
+                  timeData={morningData}
+                />
+              ) : null}
+              {selectedTime != "Morning" && eveningData.length > 0 ? (
+                <SelectPlayingTime
+                  selectedTime={selectedEveningTime}
+                  setSelectedTime={(val) => setSelectedEveningTimeVal(val)}
+                  timeData={eveningData}
                 />
               ) : null}
             </View>

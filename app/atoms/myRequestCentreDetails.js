@@ -11,7 +11,7 @@ const MyRequestCentreDetails = ({ details }) => {
           <ImageBackground
             //resizeMode="cover"
             source={{
-              uri: details?.image,
+              uri: details?.cover_pic,
             }}
             style={[styles.centerImgView, styles.centerImg]}
           >
@@ -25,7 +25,7 @@ const MyRequestCentreDetails = ({ details }) => {
         <View style={{ flexDirection: "column", marginLeft: 12 }}>
           <Text style={[styles.centerName, { marginBottom: 4 }]}>
             {/* Machaxi Play9 Sports Centre, Whitefield */}
-            {details.name}
+            {details?.name}
           </Text>
           <Text style={styles.centerAddr}>
             {/* 68/1, 1, near Parijatha Farm, Whitefield, Siddapura. */}

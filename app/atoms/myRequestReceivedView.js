@@ -29,7 +29,7 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
     >
       {/* <View style={styles.detailsTopRow}> */}
       <Text style={[styles.centerName, { marginBottom: 22 }]}>
-        Machaxi Play9 Sports Centre, Whitefield, San Fransisco, USA
+        {"TODO: be received from api"}
       </Text>
       <Text style={[styles.bookingDetails, { marginBottom: 13 }]}>
         Player details
@@ -41,10 +41,14 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
           marginBottom: 8,
         }}
       >
-        <Text style={[styles.detailsTxt, { marginRight: 18 }]}>UserName</Text>
-        <Text style={[styles.level]}>Beginner | 22 Y</Text>
+        <Text style={[styles.detailsTxt, { marginRight: 18 }]}>
+          {val?.user?.name}
+        </Text>
+        <Text style={[styles.level]}>
+          {val?.user?.proficiency} | {val?.user?.age} Y
+        </Text>
       </View>
-      <Text style={[styles.detailsTxt]}>+1 Guest</Text>
+      <Text style={[styles.detailsTxt]}>{typeof val?.guestCount != undefined ? `+${val?.guestCount} Guest` : ''}</Text>
       <View
         style={{
           flexDirection: "row",
@@ -111,9 +115,9 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
 
           <View style={styles.rowSpaceBtw}>
             {[
-              { name: "Sport", value: val?.sport_name },
-              { name: "Slot", value: val?.slot },
-              { name: "Pool", value: val?.pool },
+              { name: "Sport", value: val?.sport?.name },
+              { name: "Slot", value: `${val?.startTime} - ${val?.endTime}` },
+              { name: "Pool", value: "NA" },
             ].map((value) => (
               <MainBookingDetails details={value} />
             ))}
@@ -123,9 +127,7 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
           >
             Registered Players
           </Text>
-          {val?.player_details.map((value) => (
-            <MyRequestPlayersList item={value} />
-          ))}
+          {val?.players.map((value) => <MyRequestPlayersList item={value} />)}
         </View>
       ) : (
         <View />
