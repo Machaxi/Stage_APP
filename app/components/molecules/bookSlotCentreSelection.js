@@ -16,6 +16,7 @@ import CenterDetails from "../custom/CenterDetails";
 import Loader from "../custom/Loader";
 import CustomButton from "../custom/CustomButton";
 import { whiteGreyBorder } from "../../containers/util/colors";
+import BookSlotNextBtn from "./bookSlotNextBtn";
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
@@ -155,21 +156,27 @@ class BookSlotCentreSelection extends Component {
           eveningTimeData={item.courts}
           selectedMorningTime={this.props.selectedMorningTime}
           selectedEveningTime={this.props.selectedEveningTime}
-          setSelectedEveningTimeVal={(val) =>
-            this.props.setSelectedEveningTimeVal(val)
-          }
-          setSelectedMorningTimeVal={(val) =>
-            this.props.setSelectedMorningTimeVal(val)
-          }
+          setSelectedEveningTimeVal={(val) => {
+            this.props.setSelectedEveningTimeVal(val);
+            this.props.setSelectedMorningTimeVal(null);
+          }}
+          setSelectedMorningTimeVal={(val) => {
+            this.props.setSelectedEveningTimeVal(null);
+            this.props.setSelectedMorningTimeVal(val);
+          }}
           currentIndex={this.state.currentIndex}
           selectedTime={this.state.selectedTime}
           setTime={(val) => this.setSelectedTime(val)}
-          onPress={() =>
+          selectedTimePeriod={(val) =>{ 
+            console.log('valval--->0')
+            console.log({val})
+            this.props.selectedTimePeriod(val)}}
+          onPress={() => {
             this.setState({
               currentIndex: item?.academy.id,
               proseednext: true,
-            })
-          }
+            });
+          }}
         />
       );
     } else {
@@ -178,6 +185,8 @@ class BookSlotCentreSelection extends Component {
   };
 
   handlepress = async () => {
+    this.props.onPress()
+    console.log('--')
     let centerValue = this.props.academiesList.find(
       (item) => item.id === this.state.currentIndex
     );
@@ -188,7 +197,7 @@ class BookSlotCentreSelection extends Component {
     const academiesList = this.props.academiesList.find(
       (item) => item.id === this.state.currentIndex
     );
-    this.props.onPress(academiesList, distance);
+    //this.props.onPress(academiesList, distance);
   };
 
   render() {
@@ -206,7 +215,12 @@ class BookSlotCentreSelection extends Component {
               <Text style={styles.addressText}>{this.state.place}</Text>
               <Image
                 source={require("../../images/playing/arrow_back.png")}
-                style={{ width: 12, height: 7, marginLeft: 13, marginTop: 6 }}
+                style={{
+                  width: 12,
+                  height: 7,
+                  marginLeft: 13,
+                  marginTop: 6,
+                }}
               />
             </View>
           </TouchableOpacity>
@@ -220,9 +234,18 @@ class BookSlotCentreSelection extends Component {
         </View>
         <View style={{ flex: 0.07, paddingTop: 10 }}>
           <CustomButton
-            name="Next "
+            name={
+              this.props.selectedMorningTime != null ||
+              this.props.selectedEveningTime != null
+                ? "Book Slot "
+                : "Book Slot"
+            }
+            hideImage={true}
             image={require("../../images/playing/arrow_go.png")}
-            available={this.state.proseednext}
+            available={
+              this.props.selectedMorningTime != null ||
+              this.props.selectedEveningTime != null
+            }
             onPress={() => this.handlepress()}
           />
         </View>

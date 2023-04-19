@@ -21,14 +21,14 @@ const SelectDateBookSlot = ({ date, setDateVal }) => {
           activeOpacity={0.8}
           style={[styles.subview]}
           onPress={() => {
-            setDateVal(`${moment(new Date()).format("DD MM")}`);
+            setDateVal(`${moment(new Date()).format("yyyy-MM-DD")}`);
           }}
         >
           <DateComponent
             currentDate={date}
-            day={'Today'}
+            day={"Today"}
             date={`${moment(new Date()).format("DD MMM")}`}
-            myDate={`${moment(new Date()).format("DD MM")}`}
+            myDate={`${moment(new Date()).format("yyyy-MM-DD")}`}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -38,15 +38,19 @@ const SelectDateBookSlot = ({ date, setDateVal }) => {
             setDateVal(
               `${moment(new Date())
                 .add(1, "days")
-                .format("DD MM")}`
+                .format("yyyy-MM-DD")}`
             );
           }}
         >
           <DateComponent
             currentDate={date}
-            day={'Tomorrow'}
-            date={`${moment(new Date()).add( 1, 'days').format("DD MMM")}`}
-            myDate={`${moment(new Date()).add(1, 'days').format("DD MM")}`}
+            day={"Tomorrow"}
+            date={`${moment(new Date())
+              .add(1, "days")
+              .format("DD MMM")}`}
+            myDate={`${moment(new Date())
+              .add(1, "days")
+              .format("yyyy-MM-DD")}`}
           />
         </TouchableOpacity>
       </View>

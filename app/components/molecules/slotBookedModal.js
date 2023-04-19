@@ -21,7 +21,7 @@ import { deviceWidth } from "../../containers/util/dimens";
 import CouponAppliedModal from "./couponAppliedModal";
 import SlotBookedModalInnerView from "./slotBookedModalInnerView";
 
-const SlotBookedModal = ({ modalVisible, setModalVisibility }) => {
+const SlotBookedModal = ({ slotInfo,  modalVisible, setModalVisibility }) => {
   return (
     <Modal
       animationType="slide"
@@ -38,6 +38,7 @@ const SlotBookedModal = ({ modalVisible, setModalVisibility }) => {
         }}
       >
         <SlotBookedModalInnerView
+          slotInfo={slotInfo}
           setModalVisibility={() => setModalVisibility(false)}
         />
       </TouchableOpacity>

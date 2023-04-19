@@ -3,18 +3,14 @@ import { Text, View, StyleSheet, Image } from "react-native";
 import { greyColorVariant, yellowVariant2 } from "../../containers/util/colors";
 import UserPickerForSlot from "./userPickerForSlot";
 
-const UserSelectionForSlot = ({ user, setUserVal }) => {
+const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
   return (
     <View
       style={styles.userSelectionBox}
     >
       <UserPickerForSlot
-        placeHolder={{ label: "Select user", value: null }}
-        data={[
-          { label: "Yourself", value: "yourself" },
-          { label: "Entire Court", value: "entire_court" },
-          { label: "Coming with Guest", value: "with_guest" },
-        ]}
+        placeHolder={{ label: label, value: null }}
+        data={data}
         value={user}
         onSelect={(val) => setUserVal(val)}
       />

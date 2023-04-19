@@ -29,6 +29,8 @@ const MyBookingsScreen = ({ navigation }) => {
  const [refreshing, setRefreshing] = useState(false);
  const [isUpcoming, setIsUpcoming] = useState(true);
  const [loading, setLoading] = useState(true);
+ const [allDataFetched, setAllDataFetched] = useState(false)
+ const [pageCount, setPageCount] = useState(0)
  const [bookingsApiRes, setBookingsApiResponse] = useState(null);
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -49,7 +51,7 @@ const MyBookingsScreen = ({ navigation }) => {
     }
   };
 
-  const getBookingsData = async () => {
+  const getBookingsData = async (pageCountVal) => {
     setLoading(true);
     getData("header", (value) => {
       if (value == "") return;
@@ -63,7 +65,12 @@ const MyBookingsScreen = ({ navigation }) => {
       client
         .get("court/bookings", {
           headers,
-          params: {},
+          params: {
+            upcoming: isUpcoming,
+            past: !isUpcoming,
+            size: 10,
+            page: pageCountVal,
+          },
         })
         .then(function(response) {
           console.log({ response });
@@ -74,7 +81,16 @@ const MyBookingsScreen = ({ navigation }) => {
           console.log("---->" + success);
           if (success) {
             setBookingsApiResponse(json.data);
-            
+            if(isUpcoming){
+              if(json?.data?.upcoming?.length == 0){
+                setAllDataFetched(true)
+              }
+            }
+            else {
+             if (json?.data?.past?.length == 0) {
+               setAllDataFetched(true);
+             }
+            }
           } else {
             if (json.code == "1020") {
               Events.publish("LOGOUT");
@@ -157,7 +173,7 @@ const MyBookingsScreen = ({ navigation }) => {
     });
 
     
-    getBookingsData();
+    getBookingsData(pageCount);
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -167,7 +183,9 @@ const MyBookingsScreen = ({ navigation }) => {
 
   const onRefresh = () => {
     setRefreshing(true)
-    getBookingsData();
+    setPageCount(0)
+    getBookingsData(0);
+    setAllDataFetched(false)
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false)
@@ -176,6 +194,14 @@ const MyBookingsScreen = ({ navigation }) => {
 
  const onTabPress = (val) => {
     setIsUpcoming(val == 'upcoming' ? true : false)
+    setPageCount(0);
+    setAllDataFetched(false);
+ }
+
+ const onHitPaginationCb = () => {
+  var pageCountVal = pageCount + 1;
+  setPageCount(pageCountVal);
+  getBookingsData(pageCount);
  }
 
 
@@ -183,33 +209,6 @@ const MyBookingsScreen = ({ navigation }) => {
  const cancelBooking = (id) => {
   cancelPresentBooking(id);
  }
-
-
-//  const showDetails = (passedId) => {
-//     var previousData = requestReceiveVal;
-//     requestReceiveVal.map((val, ind) => {
-//       if (passedId == val.id) {
-//         previousData[ind].expanded = !val.expanded;
-//       }
-//     });
-//     // this.setState((prevState) => ({
-//     //   // areDetailsShown: !prevState.areDetailsShown,
-//     //   requestReceiveVal: previousData,
-//     // }));
-//     setRequestReceiveVal([...previousData]);
-    
-//   }
-
-  // const showDetails = (id) => {
-  //   var previousData = bookingData;
-  //   bookingData.map((val, ind) => {
-  //     if (id == val.id) {
-  //       previousData[ind].expanded = !val.expanded;
-  //     }
-  //   });
-  //   setBookingData([...previousData]);
-
-  // }
 
   if(loading){
     return (
@@ -259,6 +258,13 @@ const MyBookingsScreen = ({ navigation }) => {
               bookingsApiRes?.upcoming?.length > 0 ? (
                 <FlatList
                   data={bookingsApiRes?.upcoming}
+                  onEndReachedThreshold={0.5}
+                  onEndReached={({ distanceFromEnd }) => {
+                    console.log("on end reached ", distanceFromEnd);
+                    if(allDataFetched == false)
+                    onHitPaginationCb()
+                    
+                  }}
                   renderItem={({ item }) => {
                     return (
                       <MyBookingsView
@@ -276,7 +282,7 @@ const MyBookingsScreen = ({ navigation }) => {
                   return (
                     <MyBookingsView
                       val={item}
-                      cancelBooking={() => console.log('')}
+                      cancelBooking={() => console.log("")}
                     />
                   );
                 }}

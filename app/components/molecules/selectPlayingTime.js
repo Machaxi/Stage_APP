@@ -17,28 +17,33 @@ import { deviceWidth } from "../../containers/util/dimens";
 const SelectPlayingTime = ({
   timeData,
   setSelectedTime,
-  selectedTime
+  selectedTime,
+  selectedTimePeriod,
 }) => {
   return (
     <ScrollView style={{ flexDirection: "row", flexWrap: "wrap" }}>
-      {timeData.length > 0 ?
-        timeData.map((item) => {
-          return (
-            <SelectTimeItem
-              // width={deviceWidth * 0.3}
-              isSelected={item?.courtTimingId == selectedTime}
-              image={require("../../images/playing/clock.png")}
-              selectItem={selectedTime}
-              id={item?.courtTimingId}
-              name={`${item.startTime} - ${item.endTime}`}
-              onPress={(val) => {
-                setSelectedTime(val);
-              }}
-            />
-          );
-        })
-      : null}
-      
+      {timeData.length > 0
+        ? timeData.map((item) => {
+            return (
+              <SelectTimeItem
+                // width={deviceWidth * 0.3}
+                isSelected={item?.courtTimingId == selectedTime}
+                image={require("../../images/playing/clock.png")}
+                selectItem={selectedTime}
+                id={item?.courtTimingId}
+                // name={`${item.startTime} - ${item.endTime}`}
+                name={`${item?.displayTime}`}
+                onPress={(val) => {
+                  selectedTimePeriod({
+                    startTime: item?.startTime,
+                    endTime: item.endTime
+                  });
+                  setSelectedTime(val);
+                }}
+              />
+            );
+          })
+        : null}
     </ScrollView>
   );
 };

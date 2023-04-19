@@ -21,7 +21,8 @@ class CenterDetails extends Component {
       setSelectedMorningTimeVal,
       setSelectedEveningTimeVal,
       morningTimeData,
-      eveningTimeData
+      eveningTimeData,
+      selectedTimePeriod,
     } = this.props;
 
     handlepress = () => {
@@ -38,7 +39,7 @@ class CenterDetails extends Component {
     var isExpanded = item.id == currentIndex;
 
     return (
-      <TouchableOpacity onPress={handlepress}>
+      <TouchableOpacity onPress={handlepress} activeOpacity={0.8}>
         <LinearGradient
           colors={
             item.id === currentIndex
@@ -78,7 +79,13 @@ class CenterDetails extends Component {
             </View>
           </View>
           {isExpanded ? (
-            <View style={{ marginTop: 30, marginBottom: 15, marginHorizontal: 7 }}>
+            <View
+              style={{
+                marginTop: 30,
+                marginBottom: 15,
+                marginHorizontal: 7,
+              }}
+            >
               <Text style={styles.setTime}>
                 {"Select Preferred Time Slot"}
               </Text>
@@ -99,6 +106,10 @@ class CenterDetails extends Component {
               {selectedTime == "Morning" && morningData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedMorningTime}
+                  selectedTimePeriod={(val) => {
+                    console.log({ val });
+                    selectedTimePeriod(val);
+                  }}
                   setSelectedTime={(val) => setSelectedMorningTimeVal(val)}
                   timeData={morningData}
                 />
@@ -106,6 +117,10 @@ class CenterDetails extends Component {
               {selectedTime != "Morning" && eveningData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedEveningTime}
+                  selectedTimePeriod={(val) => {
+                    console.log({ val });
+                    selectedTimePeriod(val);
+                  }}
                   setSelectedTime={(val) => setSelectedEveningTimeVal(val)}
                   timeData={eveningData}
                 />

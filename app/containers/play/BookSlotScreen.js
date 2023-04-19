@@ -28,23 +28,30 @@ import SelectSportsBookSlot from "../../components/molecules/selectSportsBookSlo
 import SelectDateBookSlot from "../../components/molecules/selectDateBookSlot";
 import moment from "moment";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import { getData } from "../../components/auth";
+import { client } from "../../../App";
+import CustomButton from "../../components/custom/CustomButton";
 
 const BookSlotScreen = ({ navigation }) => {
  var slotApiError = null;
-
+ var planAndSportsError = null;
  const [modalVisible, setModalVisibility] = useState(false);
  const [count, setCount] = useState(0);
  const [refreshing, setRefreshing] = useState(false);
 
- const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
- const [sportsList, setSportsList] = useState([]);
- const [selectedSportsId, setSelectedSportsId] = useState(null);
- const [academiesList, setAcademiesList] = useState([]);
- const [user, setUser] = useState('yourself');
-const [loading, setLoading] = useState(false);
-const [slotApiResponse, setSlotApiResponse] = useState(null);
+ const [date, setDate] = useState(
+   `${moment(new Date()).format("yyyy-MM-DD")}`
+ );
 
- const getSlotDataApi = async () => {
+ const [sportsList, setSportsList] = useState([]);
+ const [proficiency, setProficiency] = useState(null);
+ const [selectedSportsId, setSelectedSportsId] = useState(null);
+ const [user, setUser] = useState("yourself");
+ const [showProficiencyMenu, setProficiencyVisibility] = useState(false);
+const [loading, setLoading] = useState(true);
+const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
+
+ const getUserPlanAndSportsData = async () => {
    setLoading(true);
    getData("header", (value) => {
      if (value == "") return;
@@ -53,23 +60,24 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
        //"x-authorization": value,
        //TODO:remove this static logic
        "x-authorization":
-         "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+         "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
      };
      //client.call
      client
-       .get("court/bookings", {
+       .get("user/sport-rating", {
          headers,
          params: {},
        })
        .then(function(response) {
          console.log({ response });
-         slotApiError = response;
+         planAndSportsError = response;
          console.log("requestData" + JSON.stringify(response.data));
          let json = response.data;
          let success = json.success;
          console.log("---->" + success);
          if (success) {
-           setSlotApiResponse(json.data);
+           
+           setPlanAndSportsApiRes(json.data);
          } else {
            if (json.code == "1020") {
              Events.publish("LOGOUT");
@@ -80,8 +88,8 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
        .catch(function(error) {
          setLoading(false);
          ToastAndroid.show(
-           `${slotApiError?.response?.response?.data?.error_message ??
-             ""}`,
+           `${planAndSportsError?.response?.response?.data
+             ?.error_message ?? ""}`,
            ToastAndroid.SHORT
          );
          console.log(error);
@@ -110,28 +118,9 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
   };
 
 
-
-  const getSportsData = async() => {
-    Axios
-      .get(getBaseUrl() + "/global/academy/all")
-      .then((response) => {
-        console.log({response})
-        let data = JSON.stringify(response);
-        let userResponce = JSON.parse(data);
-        let academiesData = userResponce["data"]["data"];
-        setSportsList(academiesData["Sports"] ?? []);
-        setAcademiesList(academiesData["academies"] ?? []);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-  }
-
-
   const onRefresh = () => {
     setRefreshing(true);
-    getBookingsData();
+    getUserPlanAndSportsData();
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false);
@@ -154,7 +143,7 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
     });
 
     //getSlotDataApi();
-    getSportsData();
+    getUserPlanAndSportsData();
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -164,18 +153,36 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
 
   const onNextPress = () => {
     //setModalVisibility(true)
-    navigation.navigate("BookSlotCentreSelectionScreen");
+    navigation.navigate("BookSlotCentreSelectionScreen", {
+      date: date,
+      proficiency: proficiency,
+      guestCount: count,
+      sportId: selectedSportsId,
+      playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0
+    });
   }
 
    const setModalVisibilityCb = (val) => {
      setModalVisibility(val);
    };
 
+   const setSportsId = (id) => {
+      planAndSportsApiRes?.sports.map((val) => {
+        if (val.id == id) {
+          setProficiencyVisibility(
+            val.proficiency == null ? true : false
+          );
+          setSelectedSportsId(id)
+          setProficiency(val.proficiency);
+        }
+      });
+   }
+
 
   if (loading) {
     return <LoadingIndicator />;
   }
-  console.log({ slotApiResponse });
+  console.log({ showProficiencyMenu });
 
   return (
     <View style={{ flex: 1 }}>
@@ -193,13 +200,26 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
             />
           }
         >
-          <GoBackHeader title={"Book Slot"} />
+          <GoBackHeader navigation={navigation} title={"Book Slot"} />
           <View style={{ paddingHorizontal: 18, marginBottom: 20 }}>
-            {sportsList.length > 0 ? (
+            {planAndSportsApiRes?.sports?.length > 0 ? (
               <SelectSportsBookSlot
                 selectedSportsId={selectedSportsId}
-                sportsList={sportsList}
-                setSelectedSportsIdVal={(id) => setSelectedSportsId(id)}
+                sportsList={planAndSportsApiRes?.sports}
+                setSelectedSportsIdVal={(id) => setSportsId(id)}
+              />
+            ) : null}
+            {showProficiencyMenu == true && selectedSportsId != null ? (
+              <UserSelectionForSlot
+                user={proficiency}
+                data={[
+                  { label: "Basic", value: "BASIC" },
+                  { label: "Intermediate", value: "INTERMEDIATE" },
+                  { label: "Advanced", value: "ADVANCED" },
+                  { label: "Professional", value: "PROFESSIONAL" },
+                ]}
+                label={"Select proficiency"}
+                setUserVal={(val) => setProficiency(val)}
               />
             ) : null}
             <SelectDateBookSlot
@@ -208,6 +228,12 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
             />
             <UserSelectionForSlot
               user={user}
+              data={[
+                { label: "Yourself", value: "yourself" },
+                { label: "Entire Court", value: "entire_court" },
+                { label: "Coming with Guest", value: "with_guest" },
+              ]}
+              label={"Select user"}
               setUserVal={(val) => setUser(val)}
             />
             {user == "with_guest" && (
@@ -229,7 +255,13 @@ const [slotApiResponse, setSlotApiResponse] = useState(null);
                 setModalVisibility={(val) => setModalVisibilityCb(val)}
               />
             ) : null}
-            <BookSlotNextBtn onNextPress={() => onNextPress()} />
+            <View style={{height: 20, width: '100%'}} />
+            <CustomButton
+              name="Next "
+              image={require("../../images/playing/arrow_go.png")}
+              available={selectedSportsId != null && proficiency != null}
+              onPress={() => onNextPress()}
+            />
           </View>
         </ScrollView>
       </LinearGradient>

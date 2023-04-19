@@ -64,7 +64,9 @@ const MyBookingsView = ({ val, cancelBooking }) => {
       <View style={styles.rowSpaceBtw}>
         {[
           { name: "Sport", value: val?.sport?.name },
-          { name: "Slot", value: `${val?.startTime} - ${val?.endTime}` },
+          { name: "Slot", value: `${val?.displayTime}`
+          // `${val?.startTime} - ${val?.endTime}`
+         },
           ,
           { name: "Pool", value: "NA" },
         ].map((value) => (

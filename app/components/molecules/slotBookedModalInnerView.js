@@ -26,11 +26,15 @@ import LinearGradient from "react-native-linear-gradient";
 import MainBookingDetails from "../../atoms/mainBookingDetails";
 import RoundedGradientBtn from "./roundedGradientBtn";
 
+
+
 const SlotBookedModalInnerView = ({
   modalVisible,
   setModalVisibility,
   onBtnPress,
+  slotInfo
 }) => {
+
   return (
     <TouchableOpacity activeOpacity={1}>
       <LinearGradient
@@ -77,14 +81,20 @@ const SlotBookedModalInnerView = ({
             }}
           />
           <Text style={styles.centreName}>
-            {"Machaxi Play Sports Centre, Whitefield"}
+            {`${slotInfo?.academy?.name} \n ${slotInfo?.academy?.address}`}
           </Text>
           <View style={[commonStyles.flexRowSpaceBtw]}>
             {[
-              { name: "Sport", value: "Swimming" },
-              { name: "Slot", value: "4 - 5 AM" },
+              { name: "Sport", value: slotInfo?.booking?.sportName },
+              {
+                name: "Slot",
+                // value: `${slotInfo?.booking?.startTime} - ${
+                //   slotInfo?.booking?.endTime
+                // }`,
+                value:`${slotInfo?.booking?.displayTime}`
+              },
               ,
-              { name: "Pool", value: "None" },
+              { name: "Pool", value: "NA" },
             ].map((value) => (
               <MainBookingDetails
                 width={deviceWidth * 0.25}
@@ -95,7 +105,7 @@ const SlotBookedModalInnerView = ({
           <View style={{ width: 1, height: 20 }} />
           <MainBookingDetails
             width={deviceWidth * 0.4}
-            details={{ name: "Player", value: "Prithviraj +1 guest" }}
+            details={{ name: "Player", value: slotInfo?.user?.name + `${slotInfo?.booking?.guestCount > 0 ? '+' + slotInfo?.booking?.guestCount  : ''}` }}
           />
           <View style={{ width: 1, height: 34 }} />
           <RoundedGradientBtn

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
-  FlatList,
-  Text,
   ToastAndroid,
-  Image,
   ScrollView,
   RefreshControl,
 } from "react-native";
@@ -22,21 +19,10 @@ import Events from "../../router/events";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
-import BookSlotAddUser from "../../components/molecules/bookSlotAddUser";
-import SlotRelatedNotes from "../../components/molecules/slotRelatedNotes";
-import { greyColorVariant, yellowVariant2 } from "../util/colors";
-import BookSlotNextBtn from "../../components/molecules/bookSlotNextBtn";
-import UserSelectionForSlot from "../../components/molecules/userSelectionForSlot";
 import SlotBookedModal from "../../components/molecules/slotBookedModal";
-import AddUserModal from "../../components/molecules/addGuestUserModal";
-import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
 import Axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
-import SelectSports from "../../components/custom/SelectSports";
-import SelectSportsBookSlot from "../../components/molecules/selectSportsBookSlot";
-import SelectDateBookSlot from "../../components/molecules/selectDateBookSlot";
 import moment from "moment";
-import SelectCenter from "../FirstTimeUser/TrialBook/SelectCenter";
 import BookSlotCentreSelection from "../../components/molecules/bookSlotCentreSelection";
 import { getData } from "../../components/auth";
 import { client } from "../../../App";
@@ -53,15 +39,15 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
   const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
   const [sportsList, setSportsList] = useState([]);
-  const [selectedSportsId, setSelectedSportsId] = useState(null);
-  const [academiesList, setAcademiesList] = useState([]);
+  const [slotStartTime, setSlotStartTime] = useState(null);
+  const [slotEndTime, setSlotEndTime] = useState(null);
   const [user, setUser] = useState("yourself");
+  const [selectedTimePeriodVal, setSelectedTimePeriod] = useState(null);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [isUpcoming, setIsUpcoming] = useState(true);
   const [loading, setLoading] = useState(true);
   const [slotApiRes, setSlotApiResponse] = useState(null);
-  const [bookSlotRes, bookSlotResponse] = useState(null);
+  const [slotBookedRes, setSlotBookedRes] = useState(null);
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -83,24 +69,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     }
   };
 
-  const getSportsData = async () => {
-    Axios.get(getBaseUrl() + "/global/academy/all")
-      .then((response) => {
-        console.log("sports api call");
-        console.log({ response });
-        let data = JSON.stringify(response);
-        let userResponce = JSON.parse(data);
-        let academiesData = userResponce["data"]["data"];
-        //setSportsList(academiesData["Sports"] ?? []);
-        setSelectedSportData(academiesData["Sports"][0] ?? null);
-        //setAcademiesList(academiesData["academies"] ?? []);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
+    
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
     });
@@ -117,7 +87,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
     
     bookSlotFetchApi();
-    getSportsData();
+    //getSportsData();
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -139,6 +109,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
 
   const bookSlotFetchApi = async () => {
+    console.log('*******')
+    const { date, sportId } = navigation?.state?.params;
+
+    console.log('????')
     setLoading(true);
     getData("header", (value) => {
       if (value == "") return;
@@ -154,8 +128,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
         .get("global/play/academy/slots", {
           headers,
           params: {
-            sportId: 1,
-            date: '2023-04-14'
+            sportId: sportId,
+            // TODO:
+            // date: date,
+            date: "2023-04-20",
           },
         })
         .then(function(response) {
@@ -177,8 +153,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
         .catch(function(error) {
           setLoading(false);
           ToastAndroid.show(
-            `${fetchSlotError?.response?.response?.data
-              ?.error_message ?? ""}`,
+            `${fetchSlotError?.response?.response?.data?.error_message ??
+              ""}`,
             ToastAndroid.SHORT
           );
           console.log(error);
@@ -186,12 +162,41 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     });
   };
 
-  const bookChosenSlotApi = async (id, requestType) => {
+  const bookSlotPressed = async() => {
+    console.log("selectedTime" + slotStartTime);
+    console.log('endTime'+ slotEndTime)
+    console.log({ selectedTimePeriodVal });
+    var numericStartTime = 0;
+    var numericEndTime = 0;
+    if(slotStartTime != null && typeof slotStartTime != undefined){
+      var startTime = slotStartTime.slice(0, -3);
+       if(startTime.length > 0){
+        var hrs = '';
+        var mins = '';
+        for(var i = 0; i< startTime.length; i++){
+          if(startTime[i] == ':'){
+            
+          }
+        }
+       }
+    }
+     if (slotEndTime != null && typeof slotEndTime != undefined) {
+       var endTime = slotEndTime.slice(0, -3);
+       numericEndTime = parseFloat(endTime);
+     }
+     console.log()
+    //bookChosenSlotApi()
+  }
+
+  const bookChosenSlotApi = async () => {
+    const { date, proficiency, guestCount } = navigation?.state?.params;
     const data = {
-      date: "2023-03-30",
-      courtTimingId: "9",
-      proficiency: "BASIC",
-      guestCount: 1,
+      //TODO:
+      //date: date,
+      date: '2023-04-23',
+      courtTimingId: selectedEveningTime != null ? selectedEveningTime : selectedMorningTime,
+      proficiency: proficiency,
+      guestCount: guestCount,
     };
 
 
@@ -210,11 +215,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
         .post("court/book-court", { data: data }, { headers: headers })
         .then(function(response) {
           slotBookApiError = { response };
+          console.log({response})
 
           try {
             let json = response?.data;
             let success = json?.success;
             if (success) {
+              setSlotBookedRes(json)
+              setModalVisibilityCb(true)
               // setRewardsResponse(json["data"]["reward"]);
             } else {
               ToastAndroid.show(
@@ -256,24 +264,13 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       }, 1000);
     };
 
-   const morningTime = [
-    { time: "5 - 6 AM" },
-    { time: "6 - 7 AM" },
-    { time: "7 - 8 AM" },
-    { time: "9 - 10 AM" },
-  ];
-  const eveningTime = [
-    { time: "5 - 6 PM" },
-    { time: "6 - 7 PM" },
-    { time: "7 - 8 PM" },
-    { time: "9 - 10 PM" },
-  ];
-
 
   if (loading) {
     return <LoadingIndicator />;
   }
   console.log({ slotApiRes });
+  console.log({slotBookedRes})
+  
 
   return (
     <View style={{ flex: 1 }}>
@@ -291,12 +288,20 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             />
           }
         >
-          <GoBackHeader title={"Book Slot"} />
+          <GoBackHeader navigation={navigation} title={"Book Slot"} />
           <View style={{ marginHorizontal: 18 }}>
             {slotApiRes?.academyCourts?.length > 0 ? (
               <BookSlotCentreSelection
-                morningTime={morningTime}
-                eveningTime={eveningTime}
+                selectedTimePeriod={(val) =>{
+                  if(val?.startTime){
+                    setSlotStartTime(val?.startTime)
+                  }
+                  if(val?.endTime){
+                    setSlotEndTime(val?.endTime)
+                  }
+                  setSelectedTimePeriod(val)}}
+                morningTime={[]}
+                eveningTime={[]}
                 selectedMorningTime={selectedMorningTime}
                 setSelectedMorningTimeVal={(val) =>
                   setSelectedMorningTime(val)
@@ -305,12 +310,28 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 setSelectedEveningTimeVal={(val) =>
                   setSelectedEveningTime(val)
                 }
-                onPress={(val) => bookChosenSlotApi(val)}
+                onPress={(val) => bookSlotPressed()}
                 academiesList={slotApiRes?.academyCourts}
                 selectSport={selectedSportData}
               />
             ) : null}
           </View>
+          {modalVisible ? (
+            // ? (
+            <SlotBookedModal
+              slotInfo={slotBookedRes?.data}
+              modalVisible={modalVisible}
+              setModalVisibility={(val) => setModalVisibilityCb(val)}
+            />
+          ) : // ):
+          // null}
+          // <AddGuestUserModal
+          //   onBtnPress={() => {}}
+          //   biggerImg={require("../../images/add_guests_img.png")}
+          //   modalVisible={modalVisible}
+          //   setModalVisibility={(val) => setModalVisibilityCb(val)}
+          // />
+          null}
         </ScrollView>
       </LinearGradient>
     </View>

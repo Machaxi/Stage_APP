@@ -4,14 +4,14 @@ import {
   greyColorVariant,
 } from "../../containers/util/colors";
 
-const BookSlotNextBtn = ({ onNextPress }) => {
+const BookSlotNextBtn = ({ onNextPress, label, isActive }) => {
   return (
     <TouchableOpacity
       onPress={()=> onNextPress()}
       style={styles.btnContainer}
     >
       <Text style={[styles.nextBtn, { color: greyColorVariant }]}>
-        {"Next "}
+        {label ?? "Next "}
       </Text>
       <Image
         style={{ height: 24, width: 24 }}

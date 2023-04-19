@@ -322,6 +322,10 @@ console.log(userPref.currentRatingColor)
 					>
 						<SkyFilledButton
 							onPress={() => {
+                    // navigation.navigate(
+                    //   "BookSlotCentreSelectionScreen"
+                    // );
+
                 navigation.navigate('BookSlotScreen')
 								bookSlotPressed
 							}}
