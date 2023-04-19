@@ -28,10 +28,13 @@ const MyBookingsScreen = ({ navigation }) => {
  var getErrorResponse = null;
  const [refreshing, setRefreshing] = useState(false);
  const [isUpcoming, setIsUpcoming] = useState(true);
+ const [paginationLoading, setPaginationLoading] = useState(false);
  const [loading, setLoading] = useState(true);
  const [allDataFetched, setAllDataFetched] = useState(false)
  const [pageCount, setPageCount] = useState(0)
  const [bookingsApiRes, setBookingsApiResponse] = useState(null);
+ const [upcomingBookings, setUpcomingBookings] = useState([]);
+ const [pastBookings, setPastBookings] = useState([]);
   const getNotifications = () => {
     getNotificationCount((count) => {
       navigation.setParams({ notification_count: count });
@@ -57,9 +60,10 @@ const MyBookingsScreen = ({ navigation }) => {
       if (value == "") return;
       const headers = {
         "Content-Type": "application/json",
-        //"x-authorization": value,
+        "x-authorization": value,
         //TODO:remove this static logic
-        "x-authorization": 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg'
+        // "x-authorization":
+        //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
       };
       //client.call
       client
@@ -78,8 +82,14 @@ const MyBookingsScreen = ({ navigation }) => {
           console.log("requestData" + JSON.stringify(response.data));
           let json = response.data;
           let success = json.success;
-          console.log("---->" + success);
           if (success) {
+            if(json.data?.upcoming?.length > 0){
+              setUpcomingBookings([...json.data?.upcoming]);
+            }
+            if (json.data?.past?.length > 0) {
+              setPastBookings([...json.data?.past]);
+            }
+
             setBookingsApiResponse(json.data);
             if(isUpcoming){
               if(json?.data?.upcoming?.length == 0){
@@ -96,10 +106,12 @@ const MyBookingsScreen = ({ navigation }) => {
               Events.publish("LOGOUT");
             }
           }
+          setPaginationLoading(false);
           setLoading(false);
         })
         .catch(function(error) {
           setLoading(false);
+          setPaginationLoading(false);
           ToastAndroid.show(
             `${getErrorResponse?.response?.response?.data
               ?.error_message ?? ""}`,
@@ -116,10 +128,10 @@ const MyBookingsScreen = ({ navigation }) => {
       if (value == "") return;
       const headers = {
         "Content-Type": "application/json",
-        //"x-authorization": value,
+        "x-authorization": value,
         //TODO:remove this static logic
-        "x-authorization":
-          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+        // "x-authorization":
+        //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
       };
       //client.call
       client
@@ -172,8 +184,11 @@ const MyBookingsScreen = ({ navigation }) => {
       checkNotification();
     });
 
+    getBookingsData({
+      pageCountVal: pageCount,
+      isUpcomingRequest: isUpcoming,
+    });
     
-    getBookingsData(pageCount);
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -181,11 +196,22 @@ const MyBookingsScreen = ({ navigation }) => {
     };
   }, []);
 
+  const resetData = () => {
+    setPageCount(0);
+    setLoading(true);
+    setUpcomingBookings([]);
+    setPastBookings([]);
+    setAllDataFetched(false);
+  };
+
   const onRefresh = () => {
     setRefreshing(true)
-    setPageCount(0)
-    getBookingsData(0);
-    setAllDataFetched(false)
+    resetData();
+    getBookingsData({
+      pageCountVal: 0,
+      isUpcomingRequest: isUpcoming,
+    });
+
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false)
@@ -194,14 +220,22 @@ const MyBookingsScreen = ({ navigation }) => {
 
  const onTabPress = (val) => {
     setIsUpcoming(val == 'upcoming' ? true : false)
-    setPageCount(0);
-    setAllDataFetched(false);
+    resetData();
+    getBookingsData({
+      pageCountVal: 0,
+      isUpcomingRequest: val == "upcoming" ? true : false,
+    });
+
  }
 
  const onHitPaginationCb = () => {
   var pageCountVal = pageCount + 1;
   setPageCount(pageCountVal);
-  getBookingsData(pageCount);
+  setPaginationLoading(true);
+  getBookingsData({
+    pageCountVal: pageCount,
+    isUpcomingRequest: val == "upcoming" ? true : false,
+  });  
  }
 
 
@@ -210,12 +244,6 @@ const MyBookingsScreen = ({ navigation }) => {
   cancelPresentBooking(id);
  }
 
-  if(loading){
-    return (
-      <LoadingIndicator />
-    )
-  }
-  console.log({ bookingsApiRes });
 
       return (
         <SafeAreaView style={styles.mainContainer}>
@@ -255,15 +283,13 @@ const MyBookingsScreen = ({ navigation }) => {
             </View>
             <View style={{ height: 4, width: "100%" }} />
             {isUpcoming ? (
-              bookingsApiRes?.upcoming?.length > 0 ? (
+              upcomingBookings?.length > 0 ? (
                 <FlatList
-                  data={bookingsApiRes?.upcoming}
-                  onEndReachedThreshold={0.5}
+                  data={upcomingBookings}
+                  onEndReachedThreshold={0.3}
                   onEndReached={({ distanceFromEnd }) => {
                     console.log("on end reached ", distanceFromEnd);
-                    if(allDataFetched == false)
-                    onHitPaginationCb()
-                    
+                    if (allDataFetched == false) onHitPaginationCb();
                   }}
                   renderItem={({ item }) => {
                     return (
@@ -275,18 +301,28 @@ const MyBookingsScreen = ({ navigation }) => {
                   }}
                 />
               ) : null
-            ) : bookingsApiRes?.past?.length > 0 ? (
+            ) : pastBookings?.length > 0 ? (
               <FlatList
-                data={bookingsApiRes?.past}
+                data={pastBookings}
+                onEndReachedThreshold={0.3}
+                onEndReached={({ distanceFromEnd }) => {
+                  console.log("on end reached ", distanceFromEnd);
+                  if (allDataFetched == false) onHitPaginationCb();
+                }}
                 renderItem={({ item }) => {
                   return (
                     <MyBookingsView
                       val={item}
-                      cancelBooking={() => console.log("")}
+                      cancelBooking={() => cancelBooking(item.id)}
                     />
                   );
                 }}
               />
+            ) : null}
+            {loading || paginationLoading ? (
+              <View style={{marginVertical: 10}}>
+                <LoadingIndicator size={20} />
+              </View>
             ) : null}
             <View style={{ height: 20, width: "100%" }} />
           </ScrollView>

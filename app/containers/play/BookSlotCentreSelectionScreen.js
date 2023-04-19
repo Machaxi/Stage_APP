@@ -27,18 +27,23 @@ import BookSlotCentreSelection from "../../components/molecules/bookSlotCentreSe
 import { getData } from "../../components/auth";
 import { client } from "../../../App";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
+import BeginnerWarningModal from "../../components/molecules/beginnerWarningModal";
 
 const BookSlotCentreSelectionScreen = ({ navigation }) => {
   var fetchSlotError = null;
   var slotBookApiError = null;
-  const [modalVisible, setModalVisibility] = useState(false);
+  const [renewPlanModalVisible, setModalVisibilityRenewPlan] = useState(false);
+  const [showSlotBookedModal, setSlotBookedModalVisibility] = useState(false);
+  const [showBeginnerWarningModal, setBeginnerWarningModalVisibility] = useState(false);
+  const [showAdvancedWarningModal, setAdvancedWarningModalVisibility] = useState(false);
+  const [showSlotUnavailableModal, setSlotUnavailableModalVisibility] = useState(false);
   const [count, setCount] = useState(0);
   const [selectedMorningTime, setSelectedMorningTime] = useState(null);
   const [selectedEveningTime, setSelectedEveningTime] = useState(null);
   const [selectedSportData, setSelectedSportData] = useState(null);
 
   const [date, setDate] = useState(`${moment(new Date()).format("DD MM")}`);
-  const [sportsList, setSportsList] = useState([]);
   const [slotStartTime, setSlotStartTime] = useState(null);
   const [slotEndTime, setSlotEndTime] = useState(null);
   const [user, setUser] = useState("yourself");
@@ -51,7 +56,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
   const getNotifications = () => {
     getNotificationCount((count) => {
-      console.log("??? " + count);
       navigation.setParams({ notification_count: count });
       navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -163,28 +167,32 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   const bookSlotPressed = async() => {
-    console.log("selectedTime" + slotStartTime);
-    console.log('endTime'+ slotEndTime)
-    console.log({ selectedTimePeriodVal });
-    var numericStartTime = 0;
-    var numericEndTime = 0;
-    if(slotStartTime != null && typeof slotStartTime != undefined){
-      var startTime = slotStartTime.slice(0, -3);
-       if(startTime.length > 0){
-        var hrs = '';
-        var mins = '';
-        for(var i = 0; i< startTime.length; i++){
-          if(startTime[i] == ':'){
-            
-          }
-        }
-       }
+    const { playHoursRemaining } = navigation?.state?.params;
+   
+    
+    var finalDifference = 0;
+    if (slotStartTime != null && slotEndTime != null) {
+      var randomStartDateTime = "1970-01-01T" + slotStartTime;
+      var randomEndDateTime = "1970-01-01T" + slotEndTime;
+      const time1 = new Date(randomStartDateTime);
+      const time2 = new Date(randomEndDateTime);
+      const diffInMillisec = time1.getTime() - time2.getTime();
+
+      // convert milliseconds to hours, minutes
+      const diffInHours = diffInMillisec / (1000 * 60 * 60);
+      const diffInMinutes = (diffInHours - Math.floor(diffInHours)) * 60;
+
+      finalDifference =
+        Math.floor(diffInHours) + Math.floor(diffInMinutes / 60);
     }
-     if (slotEndTime != null && typeof slotEndTime != undefined) {
-       var endTime = slotEndTime.slice(0, -3);
-       numericEndTime = parseFloat(endTime);
-     }
-     console.log()
+    console.log('remainling hors ' + playHoursRemaining)
+    console.log('final diff' + finalDifference)
+    if(playHoursRemaining > finalDifference){
+      bookChosenSlotApi()
+    }
+    else {
+      setModalVisibilityRenewPlan(true)
+    }
     //bookChosenSlotApi()
   }
 
@@ -205,10 +213,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       if (value == "") return;
       const headers = {
         "Content-Type": "application/json",
-        //"x-authorization": value,
+        "x-authorization": value,
         //TODO:remove this static logic
-        "x-authorization":
-          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+        // "x-authorization":
+        //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
       };
       //client.call
       client
@@ -222,7 +230,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             let success = json?.success;
             if (success) {
               setSlotBookedRes(json)
-              setModalVisibilityCb(true)
+              setSlotBookedModalVisibility(true)
               // setRewardsResponse(json["data"]["reward"]);
             } else {
               ToastAndroid.show(
@@ -292,14 +300,15 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           <View style={{ marginHorizontal: 18 }}>
             {slotApiRes?.academyCourts?.length > 0 ? (
               <BookSlotCentreSelection
-                selectedTimePeriod={(val) =>{
-                  if(val?.startTime){
-                    setSlotStartTime(val?.startTime)
+                selectedTimePeriod={(val) => {
+                  if (val?.startTime) {
+                    setSlotStartTime(val?.startTime);
                   }
-                  if(val?.endTime){
-                    setSlotEndTime(val?.endTime)
+                  if (val?.endTime) {
+                    setSlotEndTime(val?.endTime);
                   }
-                  setSelectedTimePeriod(val)}}
+                  setSelectedTimePeriod(val);
+                }}
                 morningTime={[]}
                 eveningTime={[]}
                 selectedMorningTime={selectedMorningTime}
@@ -310,28 +319,57 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 setSelectedEveningTimeVal={(val) =>
                   setSelectedEveningTime(val)
                 }
-                onPress={(val) => bookSlotPressed()}
+                onPress={(val) => {
+                  //TODO: remove it
+                  //setAdvancedWarningModalVisibility(true);
+                  bookSlotPressed()
+                }}
                 academiesList={slotApiRes?.academyCourts}
                 selectSport={selectedSportData}
               />
             ) : null}
           </View>
-          {modalVisible ? (
+          {showSlotBookedModal ? (
             // ? (
             <SlotBookedModal
               slotInfo={slotBookedRes?.data}
               modalVisible={modalVisible}
-              setModalVisibility={(val) => setModalVisibilityCb(val)}
+              setModalVisibility={(val) => setSlotBookedModalVisibility(val)}
             />
-          ) : // ):
-          // null}
-          // <AddGuestUserModal
-          //   onBtnPress={() => {}}
-          //   biggerImg={require("../../images/add_guests_img.png")}
-          //   modalVisible={modalVisible}
-          //   setModalVisibility={(val) => setModalVisibilityCb(val)}
-          // />
-          null}
+          ) : null}
+          {renewPlanModalVisible ? (
+            <AddGuestUserModal
+              onBtnPress={() => {}}
+              onExploarePlans={()=>{}}
+              biggerImg={require("../../images/add_guests_img.png")}
+              modalVisible={modalVisible}
+              setModalVisibility={(val) => setModalVisibilityRenewPlan(val)}
+            />
+          ) : null}
+          {showBeginnerWarningModal ? (
+            <BeginnerWarningModal
+              onBtnPress={() => {}}
+              forBeginner={true}
+              onRequestBookSlot={() => {}}
+              biggerImg={require("../../images/add_guests_img.png")}
+              modalVisible={showBeginnerWarningModal}
+              setModalVisibility={(val) =>
+                setBeginnerWarningModalVisibility(val)
+              }
+            />
+          ) : null}
+          {showAdvancedWarningModal ? (
+            <BeginnerWarningModal
+              onBtnPress={() => {}}
+              forBeginner={false}
+              onRequestBookSlot={() => {}}
+              biggerImg={require("../../images/add_guests_img.png")}
+              modalVisible={showAdvancedWarningModal}
+              setModalVisibility={(val) =>
+                setAdvancedWarningModalVisibility(val)
+              }
+            />
+          ) : null}
         </ScrollView>
       </LinearGradient>
     </View>

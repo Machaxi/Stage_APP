@@ -2,31 +2,16 @@ import React, {useState, useEffect} from "react";
 
 import {
   View,
-  ImageBackground,
-  Text,
   StyleSheet,
   RefreshControl,
-  Image,
   SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
+  FlatList,
   ScrollView,
-  Linking,
   ToastAndroid,
 } from "react-native";
-import { getData, storeData } from "../../components/auth";
-import {
-  getPlayerDashboard,
-  getPlayerSWitcher,
-} from "../../redux/reducers/dashboardReducer";
-import { connect } from "react-redux";
-import BaseComponent, {
-  defaultStyle,
-  EVENT_EDIT_PROFILE,
-} from "../BaseComponent";
+import { getData } from "../../components/auth";
 import Events from "../../router/events";
-import { darkBlue, darkBlueVariant, lightBlue } from "../util/colors";
-import { myRequestData } from "../util/dummyData/myRequestData";
+import { darkBlueVariant } from "../util/colors";
 import MyRequestSentView from "../../atoms/myRequestSentView";
 import MyRequestTabItem from "../../atoms/myRequestTabItem";
 import MyRequestReceivedView from "../../atoms/myRequestReceivedView";
@@ -43,8 +28,12 @@ const MyRequestsHome = ({ navigation }) => {
  const [refreshing, setRefreshing] = useState(false);
  const [loading, setLoading] = useState(true);
  const [requestResponse, setRequestResponse] = useState(null);
- const [requestReceiveVal, setRequestReceiveVal] = useState([]);
  const [isSent, setSentVal] = useState(true);
+ const [allDataFetched, setAllDataFetched] = useState(false);
+ const [pageCount, setPageCount] = useState(0);
+ const [sentRequestsData, setSentRequestsData] = useState([]);
+ const [receivedRequestsData, setReceivedRequestsData] = useState([]);
+ 
   const getNotifications = () => {
     getNotificationCount((count) => {
       navigation.setParams({ notification_count: count });
@@ -64,35 +53,63 @@ const MyRequestsHome = ({ navigation }) => {
     }
   };
 
-  const getRequestsData = async () => {
+  const getRequestsData = async ({pageCountVal , isSentRequest}) => {
     setLoading(true);
+
     getData("header", (value) => {
       if (value == "") return;
       const headers = {
         "Content-Type": "application/json",
-        //"x-authorization": value,
+        "x-authorization": value,
         //TODO:remove this static logic
-        "x-authorization": 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg'
+       // "x-authorization": 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg'
       };
       //client.call
       client
         .get("court/booking-request", {
           headers,
-          params: {},
+          params: {
+            sent: isSentRequest,
+            received: !isSentRequest,
+            size: 10,
+            page: pageCountVal
+          },
         })
         .then(function(response) {
-          console.log({response})
+          console.log({ response });
           getErrorResponse = response;
-          
+
           let json = response.data;
           let success = json.success;
           if (success) {
+            //*** */
+            if (json.data?.received?.length > 0) {
+               var receiveData = json.data?.received;
+               json.data?.received?.map((val) => {
+                 val["expanded"] = false;
+               });
+              //setRequestReceiveVal(receiveData);
+              setReceivedRequestsData([...receiveData]);
+            }
+          
+            if (json.data?.sent?.length > 0) {
+    
+              setSentRequestsData([...json.data?.sent]);
+              
+            }
+
+            if (isSent) {
+              if (json?.data?.sent?.length == 0) {
+                setAllDataFetched(true);
+              }
+            } else {
+              if (json?.data?.received?.length == 0) {
+                setAllDataFetched(true);
+              }
+            }
+            //*** */
             setRequestResponse(json.data);
-            var receiveData = json.data?.received;
-            json.data?.received?.map((val)=>{
-              val['expanded'] = false;
-            })
-            setRequestReceiveVal(receiveData);
+           
           } else {
             if (json.code == "1020") {
               Events.publish("LOGOUT");
@@ -102,11 +119,11 @@ const MyRequestsHome = ({ navigation }) => {
         })
         .catch(function(error) {
           setLoading(false);
-           ToastAndroid.show(
-             `${getErrorResponse?.response?.response?.data?.error_message ??
-               ""}`,
-             ToastAndroid.SHORT
-           );
+          ToastAndroid.show(
+            `${getErrorResponse?.response?.response?.data
+              ?.error_message ?? ""}`,
+            ToastAndroid.SHORT
+          );
           console.log(error);
         });
     });
@@ -123,10 +140,10 @@ const MyRequestsHome = ({ navigation }) => {
         if (value == "") return;
         const headers = {
           "Content-Type": "application/json",
-          //"x-authorization": value,
+          "x-authorization": value,
           //TODO:remove this static logic
-          "x-authorization":
-            "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
+          // "x-authorization":
+          //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
         };
         //client.call
         client
@@ -192,7 +209,10 @@ const MyRequestsHome = ({ navigation }) => {
     });
 
     
-    getRequestsData();
+    getRequestsData({
+      pageCountVal: 0,
+      isSentRequest: isSent,
+    });
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -200,9 +220,21 @@ const MyRequestsHome = ({ navigation }) => {
     };
   }, []);
 
+  const resetData = () => {
+    setPageCount(0);
+    setLoading(true);
+    setSentRequestsData([]);
+    setReceivedRequestsData([]);
+    setAllDataFetched(false);
+  }
+
   const onRefresh = () => {
     setRefreshing(true)
-    getRequestsData();
+    resetData()
+    getRequestsData({
+      pageCountVal: 0,
+      isSentRequest: isSent,
+    });
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false)
@@ -210,9 +242,9 @@ const MyRequestsHome = ({ navigation }) => {
   };
  const onTabPress = (val) => {
     setSentVal(val == 'sent' ? true : false)
+    resetData()
+    getRequestsData({pageCountVal : 0, isSentRequest : val == "sent" ? true : false});
  }
-
-
 
  const cancelBooking = (id) => {
   updateRequestApi(id, 'CANCELLED');
@@ -227,24 +259,26 @@ const MyRequestsHome = ({ navigation }) => {
  }
 
  const showDetails = (passedId) => {
-    var previousData = requestReceiveVal;
-    requestReceiveVal.map((val, ind) => {
+    var previousData = receivedRequestsData;
+    receivedRequestsData.map((val, ind) => {
       if (passedId == val.id) {
         previousData[ind].expanded = !val.expanded;
       }
     });
     
-    setRequestReceiveVal([...previousData]);
+    setReceivedRequestsData([...previousData]);
     
   }
 
-  if(loading){
-    return (
-      <LoadingIndicator />
-    )
-  }
+   const onHitPaginationCb = () => {
+     var pageCountVal = pageCount + 1;
+     setPageCount(pageCountVal);
+    getRequestsData({
+      pageCountVal: pageCountVal,
+      isSentRequest: isSent,
+    });
+   };
 
-  console.log({requestReceiveVal})
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
@@ -280,29 +314,55 @@ const MyRequestsHome = ({ navigation }) => {
           />
         </View>
         <View style={{ height: 4, width: "100%" }} />
-        {isSent
-          ? requestResponse?.sent != null
-            ? requestResponse?.sent?.map((val) => (
-                <MyRequestSentView
-                  val={val}
-                  cancelBooking={() => cancelBooking(val?.id)}
-                />
-              ))
-            : null
-          : null}
-        {!isSent
-          ? requestReceiveVal?.length > 0
-            ? requestReceiveVal?.map((val) => (
-                <MyRequestReceivedView
-                  val={val}
-                  acceptRequest={() => acceptRequest(val?.id)}
-                  declineRequest={() => declineRequest(val?.id)}
-                  areDetailsShown={val.expanded}
-                  showBookingDetails={() => showDetails(val?.id)}
-                />
-              ))
-            : null
-          : null}
+        {isSent ? (
+          sentRequestsData?.length > 0 ? (
+            <FlatList
+              data={sentRequestsData}
+              onEndReachedThreshold={0.3}
+              onEndReached={({ distanceFromEnd }) => {
+                console.log("on end reached ", distanceFromEnd);
+                if (allDataFetched == false) onHitPaginationCb();
+              }}
+              renderItem={({ item }) => {
+                return (
+                  <MyRequestSentView
+                    val={item}
+                    cancelBooking={() => cancelBooking(item?.id)}
+                  />
+                );
+              }}
+            />
+          ) : null
+        ) : null}
+        {!isSent ? (
+          receivedRequestsData?.length > 0 ? (
+            <FlatList
+              data={receivedRequestsData}
+              onEndReachedThreshold={0.3}
+              onEndReached={({ distanceFromEnd }) => {
+                  console.log("res onendreached" + pageCount);
+
+                if (allDataFetched == false) onHitPaginationCb();
+              }}
+              renderItem={({ item }) => {
+                return (
+                  <MyRequestReceivedView
+                    val={item}
+                    acceptRequest={() => acceptRequest(item?.id)}
+                    declineRequest={() => declineRequest(item?.id)}
+                    areDetailsShown={item.expanded}
+                    showBookingDetails={() => showDetails(item?.id)}
+                  />
+                );
+              }}
+            />
+          ) : null
+        ) : null}
+        {loading ? (
+          <View style={{ marginVertical: 10 }}>
+            <LoadingIndicator size={20} />
+          </View>
+        ) : null}
         <View style={{ height: 20, width: "100%" }} />
 
         {/* </ViewShot> */}
