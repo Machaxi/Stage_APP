@@ -14,6 +14,8 @@ import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import SelectLevel from "../../../components/custom/SelectLevel";
 import SelectSession from "../../../components/custom/SelectSession";
+import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
+import SelectPlan from "../../../components/custom/SelectPlan";
 
 const months = [
   "Jan",
@@ -43,30 +45,28 @@ class SelectCoachPlan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLevel: 10,
+      currentSession: 0,
+      currentPlan: 10,
       selectTime: 20,
-      proseedLevel: false,
-      proseedTime: false,
-      hideMorning: false,
-      hideEvening: false,
+      proseedNext: false,
       batchData: null,
-      morningData: null,
-      eveningData: null,
+      planData: null,
     };
   }
 
   componentDidMount() {
-    this.setState({ batchData: this.props.batchData });
-    console.log(this.props.batchData);
+    this.setState({
+      batchData: this.props.selectBatch,
+      planData: this.props.selectBatch[0].batchPlansDto.plans[0].payable_amount,
+    });
   }
 
   render() {
     handlepress = () => {
-      let selectLevel = data[this.state.currentLevel];
-      let selectBatch = this.state.batchData.find(
-        (item) => item.batch_id == this.state.selectTime
-      );
-      this.props.onPress(selectLevel, selectBatch);
+      const selectPlan = this.props.selectBatch[this.state.currentSession]
+        .batchPlansDto.plans[0].payable_amount[this.state.currentPlan];
+      const selectBatch = this.props.selectBatch[this.state.currentSession];
+      this.props.onPress(selectPlan, selectBatch);
     };
 
     return (
@@ -74,27 +74,82 @@ class SelectCoachPlan extends Component {
         <ScrollView style={{ flex: 0.93 }}>
           <Text style={styles.select}>Select sessions Per week </Text>
           <View style={styles.contained}>
-            {this.state.selectBatch &&
-              this.state.selectBatch.map((item, index) => (
-                <SelectSession
-                  index={index}
-                  currentLevel={this.state.currentLevel}
-                  days={item.weekDetails.length}
-                  dayList={item.id}
-                  onPress={() => {
-                    this.setState({ currentLevel: index, proseedLevel: true });
-                    //   this.getTimeData(index);
-                  }}
-                />
+            {this.state.batchData &&
+              this.state.batchData.map((item, index) => (
+                <View
+                  key={index}
+                  style={[
+                    index < this.state.batchData.length - 1 && {
+                      marginRight: 25,
+                    },
+                  ]}
+                >
+                  <SelectSession
+                    index={index}
+                    currentLevel={this.state.currentSession}
+                    days={Object.keys(item.weekDetails).length}
+                    dayList={Object.keys(item.weekDetails)}
+                    onPress={() => {
+                      this.setState({
+                        currentSession: index,
+                        planData: this.props.selectBatch[index].batchPlansDto
+                          .plans[0].payable_amount,
+                      });
+                    }}
+                  />
+                </View>
               ))}
           </View>
           <Text style={styles.select}>Select Payment plan</Text>
+          {this.state.planData &&
+            this.state.planData.map((plan, index) => {
+              return (
+                plan.term_id != 3 && (
+                  <SelectPlan
+                    index={index}
+                    currentLevel={this.state.currentPlan}
+                    title={
+                      plan.term_id === 1
+                        ? "Monthly"
+                        : plan.term_id === 2
+                        ? "Quaterly"
+                        : "Yearly"
+                    }
+                    subtitle={plan.amount}
+                    description={
+                      plan.term_id === 1
+                        ? "Best coaches in town"
+                        : plan.term_id === 2
+                        ? "Progress tracking over Machaxi app."
+                        : "Admissible design by experts."
+                    }
+                    benefits={
+                      plan.term_id === 1
+                        ? ""
+                        : plan.term_id === 2
+                        ? "Earn reward points up-to 150 for every hour of coaching session"
+                        : "Earn reward points up-to 200 for every hour of coaching session"
+                    }
+                    image={
+                      plan.term_id === 1
+                        ? require("../../../images/playing/rocket.png")
+                        : plan.term_id === 2
+                        ? require("../../../images/playing/hand.png")
+                        : require("../../../images/playing/arrow.png")
+                    }
+                    onPress={() => {
+                      this.setState({ currentPlan: index, proseedNext: true });
+                    }}
+                  />
+                )
+              );
+            })}
         </ScrollView>
         <View style={{ flex: 0.07, paddingTop: 20 }}>
           <CustomButton
             image={require("../../../images/playing/arrow_go.png")}
             name="Next "
-            available={this.state.proseedTime && this.state.proseedLevel}
+            available={this.state.proseedNext}
             onPress={handlepress}
           />
         </View>
@@ -114,7 +169,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "space-between",
     marginHorizontal: 10,
   },
   timecontained: {
@@ -126,7 +180,7 @@ const styles = StyleSheet.create({
   timetext: {
     fontSize: 16,
     marginLeft: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#A7A7A7",
   },
   clockimage: {
@@ -157,19 +211,19 @@ const styles = StyleSheet.create({
   select: {
     fontSize: 14,
     marginVertical: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#CACACA",
   },
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
   mainText: {
     fontSize: 16,
     marginVertical: 8,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
 });

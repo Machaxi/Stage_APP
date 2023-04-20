@@ -9,6 +9,7 @@ import axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
 import NavigationDrawerWhite from "../../router/NavigationDrawerWhite";
 import RightMenuToolbar from "../../router/RightMenuToolbar";
+import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
 
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     fontSize: 14,
     color: "#ECECEC",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   onscreen: {
     width: 38,
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
   },
   titlestyle: {
     color: "#F2F2F2",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     textAlign: "center",
     fontSize: 20,
     flexGrow: 1,

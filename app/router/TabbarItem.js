@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import { white } from "../containers/util/colors";
 import LinearGradient from "react-native-linear-gradient";
 
@@ -14,7 +14,7 @@ export default (TabbarItem = ({
   activeIcon,
   gradientColors,
   focusedIcon,
-  bottomBarColor
+  bottomBarColor,
 }) => {
   const config = {
     activeIndicatorColor: "#667DDB",
@@ -35,10 +35,12 @@ export default (TabbarItem = ({
     : config.inactiveLabelColor;
   //const activeIcon1 = require(config.activeIcon)
 
+  const deviceWidth = Dimensions.get("window").width;
+
   const styles = StyleSheet.create({
     labelContainer: {
       flex: 0,
-      width: "100%",
+      width: deviceWidth * 0.25,
       height: 60,
       alignItems: "center",
       justifyContent: "center",
@@ -74,9 +76,7 @@ export default (TabbarItem = ({
         start={{ x: 0, y: 0.75 }}
         end={{ x: 1, y: 0.25 }}
         style={[{ height: 0.8, width: "100%" }]}
-      >
-        
-      </LinearGradient>
+      />
       <View style={styles.labelContainer}>
         <Image
           resizeMode="contain"

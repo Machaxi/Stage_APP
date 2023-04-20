@@ -13,6 +13,7 @@ import DateComponent from "../../../components/custom/DateComponent";
 import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
+import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 
 const timedataMorning = [
   { id: 1, name: "4 - 5 AM", slot: true },
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   timetext: {
     fontSize: 16,
     marginLeft: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#A7A7A7",
   },
   clockimage: {
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
   select: {
     fontSize: 14,
     marginVertical: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#CACACA",
   },
   imageitem: {
@@ -544,13 +545,13 @@ const styles = StyleSheet.create({
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
   mainText: {
     fontSize: 16,
     marginVertical: 8,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
   imaged: {

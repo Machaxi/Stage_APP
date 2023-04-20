@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, ActivityIndicator, StyleSheet, Modal, Text } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Regular } from "../../containers/util/fonts";
 
 class Loader extends Component {
   render() {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 14,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#E2E2E2",
     marginLeft: 10,
     marginTop: 5,

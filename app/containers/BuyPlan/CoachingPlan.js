@@ -15,6 +15,9 @@ import BuyPlanProcess from "../../components/custom/BuyPlanProcess";
 import { darkBlueVariant } from "../util/colors";
 import SelectCoachBatch from "./components/SelectCoachBatch";
 import SelectCoachPlan from "./components/SelectCoachPlan";
+import { Nunito_SemiBold } from "../util/fonts";
+import PlayerDetails from "./components/PlayerDetails";
+import SelectPay from "./components/SelectPay";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -34,6 +37,12 @@ class CoachingPlan extends Component {
       distance: 0,
       alreadyBook: false,
       errorMessage: "We could not book your free trial, please try again.",
+      firstPage: true,
+      selectPlan: null,
+      selectSlot: null,
+      username: "",
+      usergender: "",
+      parent: "",
     };
   }
 
@@ -70,17 +79,19 @@ class CoachingPlan extends Component {
     this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
-  onPressBatch = (selectLevel, selectBatch) => {
-    console.log(selectBatch);
+  onPressBatch = (selectLevel, selectBatchPlan) => {
     this.setState({ currentPage: 4 });
     this.setState({
       selectLevel: selectLevel,
-      selectTime: selectBatch,
+      selectTime: selectBatchPlan,
     });
   };
 
-  onPressPlan = () => {
+  onPressPlan = (selectPlan, selectSlot) => {
+    console.log(selectPlan);
+    console.log(selectSlot);
     this.setState({ currentPage: 5 });
+    this.setState({ selectPlan: selectPlan, selectSlot: selectSlot });
   };
 
   onPressConfirm = (alreadyBook, errorMessage) => {
@@ -118,6 +129,18 @@ class CoachingPlan extends Component {
     );
   };
 
+  onPressDetails = (username, usergender, parent) => {
+    console.log(parent);
+    console.log(username);
+    console.log(usergender);
+    this.setState({
+      firstPage: false,
+      currentPage: 1,
+      username: username,
+      usergender: usergender,
+      parent: parent,
+    });
+  };
   render() {
     return (
       <LinearGradient
@@ -125,6 +148,9 @@ class CoachingPlan extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
+        {this.state.firstPage && (
+          <PlayerDetails onPress={this.onPressDetails} />
+        )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratulationScreen
             title="Coaching Plan"
@@ -142,7 +168,7 @@ class CoachingPlan extends Component {
             errorMessage={this.state.errorMessage}
           />
         )}
-        {!this.state.congratulationScreen && (
+        {!this.state.firstPage && !this.state.congratulationScreen && (
           <View style={{ flex: 1 }}>
             <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
             <View style={{ flex: 0.83 }}>
@@ -174,14 +200,18 @@ class CoachingPlan extends Component {
                 />
               )}
               {this.state.currentPage === 5 && (
-                <ConfirmBooking
+                <SelectPay
                   title="Coaching"
                   selectCenter={this.state.selectCenter}
                   selectSport={this.state.selectSport}
                   selectDate={this.state.selectDate}
                   selectLevel={this.state.selectLevel}
-                  selectBatch={this.state.selectTime}
+                  selectBatch={this.state.selectSlot}
+                  selectPlan={this.state.selectPlan}
                   distance={this.state.distance}
+                  username={this.state.username}
+                  usergender={this.state.usergender}
+                  parent={this.state.parent}
                   onPress={this.onPressConfirm}
                 />
               )}
@@ -201,7 +231,7 @@ const styles = StyleSheet.create({
   select: {
     fontSize: 16,
     marginTop: 25,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
   box: {

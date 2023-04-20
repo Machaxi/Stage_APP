@@ -14,6 +14,7 @@ import CoachPass from "../../components/custom/CoachPass";
 import CustomButton from "../../components/custom/CustomButton";
 import HeaderContentComponent from "../../components/custom/HeaderContentComponent";
 import AsyncStorage from "@react-native-community/async-storage";
+import { Nunito_SemiBold } from "../util/fonts";
 
 const images = [
   { id: 1, url: require("../../images/playing/badminton_play.png") },
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     marginTop: 7,
     fontSize: 14,
     color: "#FFFFFF",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   bottomcontainer: {
     flex: 0.15,

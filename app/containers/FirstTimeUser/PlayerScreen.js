@@ -12,6 +12,7 @@ import CustomButton from "../../components/custom/CustomButton";
 import HeaderContentComponent from "../../components/custom/HeaderContentComponent";
 import PlayPass from "../../components/custom/PlayPass";
 import AsyncStorage from "@react-native-community/async-storage";
+import { Nunito_SemiBold } from "../util/fonts";
 
 class PlayerScreen extends Component {
   constructor(props) {
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     marginTop: 7,
     fontSize: 14,
     color: "#FFFFFF",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   bottomcontainer: {
     flex: 0.15,

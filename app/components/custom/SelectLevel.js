@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Medium } from "../../containers/util/fonts";
 
 const SelectLevel = (props) => {
   handlepress = () => {
@@ -37,11 +38,21 @@ const SelectLevel = (props) => {
         <View style={styles.imaged}>
           <Image
             source={props.image}
-            style={[styles.imageitem, props.id == "4" && { width: 45 }]}
+            style={[styles.imageitem]}
+            resizeMode="contain"
           />
         </View>
       </LinearGradient>
-      <Text style={styles.sportText}>{props.name}</Text>
+      <Text
+        style={[
+          styles.sportText,
+          props.index === props.currentLevel && {
+            color: "#F2AE4D",
+          },
+        ]}
+      >
+        {props.name}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -73,7 +84,7 @@ const styles = StyleSheet.create({
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
   imageitem: {

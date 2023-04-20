@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
+import { Nunito_SemiBold } from "../../containers/util/fonts";
 
 const GetBack = (props) => {
   handlePress = () => {
@@ -22,7 +23,7 @@ const GetBack = (props) => {
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     fontWeight: "600",
     color: "#FFCB6A",
   },

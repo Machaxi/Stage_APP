@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
+import { Nunito_Regular } from "../../containers/util/fonts";
 const HeaderContentComponent = ({ header, contents, colors }) => {
   useEffect(() => {
     console.log(contents);
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     color: "#DDDDDD",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   items: {
     flexDirection: "row",

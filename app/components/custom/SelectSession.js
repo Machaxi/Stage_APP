@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Regular } from "../../containers/util/fonts";
 
 const SelectSession = (props) => {
+  const days = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
   handlepress = () => {
     props.onPress();
   };
@@ -51,9 +54,18 @@ const SelectSession = (props) => {
           >
             Per week
           </Text>
-          <Text style={[styles.sportText, { marginTop: 8 }]}>
-            {props.dayList}
-          </Text>
+          {props.days == 5 ? (
+            <Text style={[styles.sportText, { marginTop: 8 }]}>Mon to Fri</Text>
+          ) : (
+            <View style={{ flexDirection: "row" }}>
+              {props.dayList.map((item, index) => (
+                <Text style={[styles.sportText, { marginTop: 8 }]}>
+                  {days[item]}
+                  {index < props.dayList.length - 1 && <Text>, </Text>}
+                </Text>
+              ))}
+            </View>
+          )}
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -68,8 +80,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   levelView: {
-    width: 98,
-    height: 92,
+    width: 102,
+    height: 95,
     borderColor: whiteGreyBorder,
     borderWidth: 1,
     borderRadius: 10,
@@ -87,12 +99,12 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 20,
     marginTop: 8,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#CACACA",
   },
   sportText: {
     fontSize: 12,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#CACACA",
   },
   imageitem: {

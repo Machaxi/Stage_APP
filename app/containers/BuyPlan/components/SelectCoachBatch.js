@@ -13,12 +13,13 @@ import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import SelectLevel from "../../../components/custom/SelectLevel";
+import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 
 const data = [
   {
     id: 1,
     image: require("../../../images/playing/beginner.png"),
-    name: "Basic",
+    name: "Beginner",
   },
   {
     id: 2,
@@ -68,13 +69,35 @@ class SelectCoachBatch extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"]["batch_details"];
-        console.log(batchData);
+        console.log(response);
         this.setState({ batchData: batchData });
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
+  removeDublicateValue = (data) => {
+    const uniqueData = [];
+    for (let i = 0; i < data.length; i++) {
+      const currentObject = data[i];
+      let isDuplicate = false;
+
+      for (let j = 0; j < uniqueData.length; j++) {
+        if (uniqueData[j].displayTime === currentObject.displayTime) {
+          if (currentObject.is_allowed) {
+            uniqueData[j] = currentObject;
+          }
+          isDuplicate = true;
+          break;
+        }
+      }
+      if (!isDuplicate) {
+        uniqueData.push(currentObject);
+      }
+    }
+    return uniqueData;
+  };
 
   getTimeData = (level) => {
     const greaterThan12 = [];
@@ -83,7 +106,7 @@ class SelectCoachBatch extends Component {
     for (let i = 0; i < this.state.batchData.length; i++) {
       if (
         data[level].name.toLowerCase() ==
-        this.state.batchData[i].proficiency.toLowerCase()
+        this.state.batchData[i].proficiency_display_text.toLowerCase()
       ) {
         const startHour = parseInt(
           this.state.batchData[i].startTime.split(":")[0]
@@ -94,7 +117,9 @@ class SelectCoachBatch extends Component {
           lessThan12.push(this.state.batchData[i]);
         }
       }
-      this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
+      const greaterThan = this.removeDublicateValue(greaterThan12);
+      const lessThan = this.removeDublicateValue(lessThan12);
+      this.setState({ eveningData: greaterThan, morningData: lessThan });
     }
   };
 
@@ -105,7 +130,11 @@ class SelectCoachBatch extends Component {
     );
     const selectBatch = [];
     this.state.batchData.forEach((PlanAvailability) => {
-      if (PlanAvailability.displayTime == selectTime.displayTime) {
+      if (
+        PlanAvailability.displayTime == selectTime.displayTime &&
+        selectLevel.name == PlanAvailability.proficiency_display_text &&
+        PlanAvailability.is_allowed
+      ) {
         selectBatch.push(PlanAvailability);
       }
     });
@@ -308,7 +337,7 @@ const styles = StyleSheet.create({
   timetext: {
     fontSize: 16,
     marginLeft: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#A7A7A7",
   },
   clockimage: {
@@ -339,19 +368,19 @@ const styles = StyleSheet.create({
   select: {
     fontSize: 14,
     marginVertical: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#CACACA",
   },
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
   mainText: {
     fontSize: 16,
     marginVertical: 8,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
 });

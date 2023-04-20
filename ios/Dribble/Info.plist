@@ -122,6 +122,8 @@
 		<string>Nunito-800.ttf</string>
 		<string>Nunito-900.ttf</string>
 		<string>Nunito-ExtraBold.ttf</string>
+		<string>Nunito-Light.ttf</string>
+		<string>Nunito-Medium.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

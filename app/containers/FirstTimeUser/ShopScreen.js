@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Regular, Nunito_SemiBold } from "../util/fonts";
 
 class ShopScreen extends Component {
   render() {
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
   shop: {
     color: "transparent",
     fontSize: 94,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   image: {
     marginLeft: 10,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     fontSize: 14,
     color: "#F3F2F5",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
 });
 export default ShopScreen;

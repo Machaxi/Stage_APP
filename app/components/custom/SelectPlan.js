@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Bold, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const SelectPlan = (props) => {
   handlepress = () => {
@@ -8,16 +9,25 @@ const SelectPlan = (props) => {
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={[styles.subview]}
-      onPress={handlepress}
-    >
+    <TouchableOpacity activeOpacity={0.8} onPress={handlepress}>
       <LinearGradient
-        colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+        colors={
+          props.index === props.currentLevel
+            ? [
+                "rgba(255, 180, 1, 0.25))",
+                "rgba(255, 212, 89, 0.2)",
+                "rgba(255, 212, 89, 0.06)",
+              ]
+            : ["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.06)"]
+        }
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.container}
+        style={[
+          styles.container,
+          props.index === props.currentLevel && {
+            borderColor: "rgba(255, 180, 1, 0.4))",
+          },
+        ]}
       >
         <View style={styles.planView}>
           <View style={styles.textContainer}>
@@ -30,19 +40,27 @@ const SelectPlan = (props) => {
             </Text>
             <Text style={styles.description}>{props.description}</Text>
           </View>
-          <Image source={{ uri: props.image }} style={styles.image} />
+          <Image
+            source={props.image}
+            style={[
+              styles.image,
+              props.index == 0 && { width: 110, height: 120 },
+              props.index == 3 && { marginLeft: -20 },
+            ]}
+            resizeMode="center"
+          />
         </View>
         {props.benefits.length > 1 && (
-          <View>
+          <View style={styles.textContainer}>
             <View style={styles.line} />
             <View>
               <Text style={styles.benefits}>Extra benefits</Text>
               <View style={{ flexDirection: "row" }}>
                 <Image
-                  source={require("../../images/playing/next.png")}
+                  source={require("../../images/playing/checklist.png")}
                   style={styles.next}
                 />
-                <Text>{props.benefits}</Text>
+                <Text style={styles.descriptionbenift}>{props.benefits}</Text>
               </View>
             </View>
           </View>
@@ -54,68 +72,61 @@ const SelectPlan = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
     borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 20,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    marginBottom: 15,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.10)",
   },
   line: {
     height: 1,
     backgroundColor: "#3F3750",
-    marginVertical: 10,
+    marginBottom: 10,
+    marginTop: 5,
   },
   planView: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   benefits: {
     fontSize: 12,
     color: "#F2AE4D",
-    fontFamily: "Nunito-600",
-  },
-  subview: {
-    width: 98,
-    height: 100,
-    marginVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
+    fontFamily: Nunito_SemiBold,
+    marginBottom: 10,
   },
   textContainer: {
-    flex: 1,
-    marginRight: 10,
+    marginHorizontal: 10,
   },
   title: {
     fontSize: 12,
     color: "#F3F2F5",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   next: {
     width: 15,
     height: 15,
+    marginRight: 10,
   },
   subtitle: {
     fontSize: 24,
     color: "#F2AE4D",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
   },
   description: {
     fontSize: 10,
     width: 190,
     color: "#E6E6E6",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
+  },
+  descriptionbenift: {
+    fontSize: 12,
+    color: "#E6E6E6",
+    fontFamily: Nunito_SemiBold,
   },
   image: {
-    width: 100,
+    width: 90,
     height: 100,
   },
 });

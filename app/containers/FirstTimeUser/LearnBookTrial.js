@@ -12,6 +12,7 @@ import { darkBlueVariant } from "../util/colors";
 import CongratulationScreen from "./TrialBook/CongratulationScreen";
 import SorryScreen from "./TrialBook/SorryScreen";
 import GetBack from "../../components/custom/GetBack";
+import { Nunito_SemiBold } from "../util/fonts";
 
 class LearnBookTrial extends Component {
   constructor(props) {
@@ -193,12 +194,12 @@ const styles = StyleSheet.create({
   select: {
     fontSize: 16,
     marginTop: 25,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
   headerText: {
     fontSize: 20,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     fontWeight: "600",
     color: "#FFCB6A",
   },

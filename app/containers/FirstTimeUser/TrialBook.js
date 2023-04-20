@@ -191,20 +191,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  select: {
-    fontSize: 16,
-    marginTop: 25,
-    fontFamily: "Nunito-600",
-    color: "#D1D1D1",
-  },
-  box: {
-    width: 50,
-    height: 50,
-    backgroundColor: "gray",
-    margin: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
 });
 
 export default TrialBook;

@@ -11,6 +11,13 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
 import moment from "moment";
+import {
+  Nunito_Bold,
+  Nunito_ExtraBold,
+  Nunito_Medium,
+  Nunito_Regular,
+  Nunito_SemiBold,
+} from "../../util/fonts";
 
 class CongratulationScreen extends Component {
   months = [
@@ -99,15 +106,6 @@ class CongratulationScreen extends Component {
           locations={[0, 1]}
           style={[styles.subcontainer]}
         >
-          <Image
-            source={require("../../../images/playing/Congratulations.png")}
-            style={{
-              width: 200,
-              height: 300,
-              marginTop: -160,
-            }}
-          />
-
           <Text style={styles.title}>
             Congratulations {this.state.userName}!
           </Text>
@@ -158,6 +156,14 @@ class CongratulationScreen extends Component {
             </Text>
           </TouchableOpacity>
         </LinearGradient>
+        <Image
+          source={require("../../../images/playing/Congratulations.png")}
+          style={{
+            width: 200,
+            height: 300,
+            marginBottom: -160,
+          }}
+        />
       </View>
     );
   }
@@ -178,8 +184,8 @@ const styles = StyleSheet.create({
 
   subcontainer: {
     width: "100%",
-    height: 520,
-    marginBottom: 40,
+    height: 510,
+    marginBottom: 30,
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 30,
@@ -196,24 +202,25 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
     color: "#E8AC43",
-    marginVertical: 10,
+    marginBottom: 10,
+    marginTop: 140,
   },
   subtext: {
     fontSize: 16,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#CFCFCF",
   },
   schedule: {
     fontSize: 14,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#FFC498",
   },
   court: {
     marginVertical: 5,
     fontSize: 12,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#F3F2F5",
   },
   line: {
@@ -225,17 +232,17 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     color: "#FF9C33",
   },
   address: {
     fontSize: 12,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#ABABAB",
   },
   center: {
     fontSize: 12,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#DDDDDD",
   },
   image: {
@@ -250,7 +257,7 @@ const styles = StyleSheet.create({
   subtext: {
     fontSize: 12,
     marginTop: 6,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#CACACA",
   },
   sportsview: {
