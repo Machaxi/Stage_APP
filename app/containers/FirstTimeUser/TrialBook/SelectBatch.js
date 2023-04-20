@@ -15,6 +15,7 @@ import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import SelectSports from "../../../components/custom/SelectSports";
+import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 
 const data = [
   {
@@ -172,7 +173,7 @@ class SelectBatch extends Component {
             !(
               item.is_allowed == false ||
               (this.state.currentDate == 1 &&
-                item.startTime.split(":")[0] < today.getHours())
+                item.startTime.split(":")[0] <= today.getHours())
             ) &&
               this.setState({ selectTime: item.batch_id, proseedTime: true });
           }}
@@ -216,13 +217,13 @@ class SelectBatch extends Component {
             </LinearGradient>
             {(item.is_allowed == false ||
               (this.state.currentDate == 1 &&
-                item.startTime.split(":")[0] < today.getHours())) && (
+                item.startTime.split(":")[0] <= today.getHours())) && (
               <Image
                 style={{
-                  width: 80,
+                  width: 90,
                   height: 28,
                   marginTop: -28,
-                  marginLeft: 7,
+                  marginLeft: 8,
                 }}
                 source={require("../../../images/playing/cross.png")}
               />
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   timetext: {
     fontSize: 16,
     marginLeft: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#A7A7A7",
   },
   clockimage: {
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
   select: {
     fontSize: 14,
     marginVertical: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#CACACA",
   },
   imageitem: {
@@ -511,13 +512,13 @@ const styles = StyleSheet.create({
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
   mainText: {
     fontSize: 16,
     marginVertical: 8,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
   imaged: {

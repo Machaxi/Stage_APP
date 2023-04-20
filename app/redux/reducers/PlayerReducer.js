@@ -5,6 +5,8 @@ const initialState = {
   res: "",
   error: null,
   booktrail: null,
+  bookFail: null,
+  playdata: null,
 };
 export default function PlayerReducer(state = initialState, action) {
   switch (action.type) {
@@ -14,8 +16,17 @@ export default function PlayerReducer(state = initialState, action) {
       console.log("sucesss", action.payload.data);
       return { ...state, loading: false, res: action.payload.data };
     case types.BOOK_COUCH_TRAIL_SUCCESS:
-      console.log("sucesss", action.payload.data);
-      return { ...state, booktrail: action.payload.data };
+      return {
+        ...state,
+        booktrail: action.payload.data,
+        bookFail: action.payload.response,
+      };
+    case types.BOOK_PLAY_TRAIL_SUCCESS:
+      return {
+        ...state,
+        playdata: action.payload.data,
+        bookFail: action.payload.response,
+      };
     case types.DO_PLAYER_LISTING_FAIL:
       console.log("fails", action.payload);
       return {
@@ -46,6 +57,22 @@ export function getAcademyPlayersList(id, header) {
 export function confirmCoachTrail(postdata, header, url) {
   return {
     type: types.BOOK_COUCH_TRAIL,
+    payload: {
+      request: {
+        url: url,
+        method: "POST",
+        data: postdata,
+        headers: {
+          "x-authorization": header,
+        },
+      },
+    },
+  };
+}
+
+export function confirmPlayingTrail(postdata, header, url) {
+  return {
+    type: types.BOOK_PLAY_TRAIL,
     payload: {
       request: {
         url: url,

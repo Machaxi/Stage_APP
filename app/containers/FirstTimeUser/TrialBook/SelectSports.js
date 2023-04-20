@@ -12,6 +12,7 @@ import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
 import { whiteGreyBorder } from "../../util/colors";
+import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 
 class SelectSports extends Component {
   constructor(props) {
@@ -120,13 +121,13 @@ const styles = StyleSheet.create({
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
   mainText: {
     fontSize: 16,
     marginVertical: 8,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
   imaged: {

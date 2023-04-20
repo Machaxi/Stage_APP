@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { whiteGreyBorder } from "../../containers/util/colors";
+import { Nunito_Medium } from "../../containers/util/fonts";
 
 class SelectTimeItem extends Component {
   handlepress(val) {
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   sportText: {
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#BBBBBB",
   },
 });

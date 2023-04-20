@@ -7,8 +7,29 @@ import ShopScreen from "./ShopScreen";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
+import NavigationDrawerWhite from "../../router/NavigationDrawerWhite";
+import RightMenuToolbar from "../../router/RightMenuToolbar";
+import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
 
 class HomeScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.getParam("title"),
+    headerTitleStyle: styles.titlestyle,
+    headerStyle: {
+      backgroundColor: "#21202F",
+    },
+    headerLeft: (
+      <NavigationDrawerWhite
+        navigationProps={navigation}
+        showBackAction={false}
+        showDrawer={true}
+      />
+    ),
+    headerRight: (
+      <RightMenuToolbar navigationProps={navigation} showNotification={true} />
+    ),
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +42,17 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.getData();
+    this.props.navigation.setParams({ title: "Learn" });
+    this.props.navigation.addListener("didFocus", this.onScreenFocus);
   }
+
+  componentWillUnmount() {
+    this.props.navigation.removeListener("didFocus", this.onScreenFocus);
+  }
+
+  onScreenFocus = () => {
+    this.apiCall();
+  };
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
@@ -42,7 +73,6 @@ class HomeScreen extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
-        console.log(response);
         this.setState({
           learnData: batchData["learn"],
           playData: batchData["play"],
@@ -68,6 +98,7 @@ class HomeScreen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({ currentPage: 1 });
+                this.props.navigation.setParams({ title: "Learn" });
               }}
             >
               <LinearGradient
@@ -104,6 +135,7 @@ class HomeScreen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({ currentPage: 2 });
+                this.props.navigation.setParams({ title: "Play" });
               }}
             >
               <LinearGradient
@@ -139,6 +171,7 @@ class HomeScreen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({ currentPage: 3 });
+                this.props.navigation.setParams({ title: "Shop" });
               }}
             >
               <LinearGradient
@@ -177,8 +210,8 @@ class HomeScreen extends Component {
           {this.state.learnData && this.state.currentPage === 1 && (
             <CoachScreen
               onPressPlan={() => {
-                // AsyncStorage.setItem("select_plan", "Coaching Plan");
-                // this.props.navigation.navigate("PlanBook");
+                AsyncStorage.setItem("select_plan", "Coaching Plan");
+                this.props.navigation.navigate("CoachingPlan");
               }}
               learnData={this.state.learnData}
               onPressTrail={() => {
@@ -232,7 +265,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     fontSize: 14,
     color: "#ECECEC",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   onscreen: {
     width: 38,
@@ -241,6 +274,23 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 3,
     borderTopLeftRadius: 3,
     marginTop: 7,
+  },
+  headerStyle: {
+    color: "#191919",
+    fontFamily: "Quicksand-Medium",
+    fontWeight: "400",
+    textAlign: "center",
+    fontSize: 16,
+    flexGrow: 1,
+    alignSelf: "center",
+  },
+  titlestyle: {
+    color: "#F2F2F2",
+    fontFamily: Nunito_Bold,
+    textAlign: "center",
+    fontSize: 20,
+    flexGrow: 1,
+    alignSelf: "center",
   },
 });
 

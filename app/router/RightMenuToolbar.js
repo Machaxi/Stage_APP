@@ -48,8 +48,8 @@ class RightMenuToolbar extends BaseComponent {
                     onPress={() => {  this.props.navigationProps.navigate("NotificationList") }}>
 
                     <Image
-                        source={require('../images/ic_notifications.png')}
-                        style={{ width: 20, height: 20, marginRight: 12 }}
+                        source={require("../images/notifications.png")}
+                        style={{ width: 25, height: 20, marginRight: 12 }}
                     />
                 </TouchableOpacity> : null}
 

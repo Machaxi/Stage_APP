@@ -6,6 +6,9 @@ export const CREATE_USER_SUCCESS = "user/CREATE_USER_SUCCESS";
 export const BOOK_COUCH_TRAIL = "user/BOOK_COUCH_TRAIL";
 export const BOOK_COUCH_TRAIL_SUCCESS = "user/BOOK_COUCH_TRAIL_SUCCESS";
 
+export const BOOK_PLAY_TRAIL = "user/BOOK_PLAY_TRAIL";
+export const BOOK_PLAY_TRAIL_SUCCESS = "user/BOOK_PLAY_TRAIL_SUCCESS";
+
 export const GET_SWITCHING = "user/LOAD";
 export const DO_SWITCHING_SUCCESS = "user/LOAD_SUCCESS";
 export const DO_SWITCHING_FAIL = "user/LOAD_FAIL";

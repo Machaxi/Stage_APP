@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Text, StyleSheet, ImageBackground, Image, View } from "react-native";
+import { Nunito_Bold, Nunito_SemiBold } from "../../containers/util/fonts";
 
 class PlayPass extends Component {
   render() {
@@ -28,13 +29,13 @@ const styles = StyleSheet.create({
   insideText: {
     fontSize: 12,
     color: "#F3F2F5",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     marginLeft: 35,
   },
   priceText: {
     fontSize: 20,
     color: "#F2AE4D",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     marginLeft: 35,
   },
   image: {

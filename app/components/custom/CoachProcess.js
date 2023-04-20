@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Image, Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Nunito_Bold } from "../../containers/util/fonts";
 
 class CoachProcess extends Component {
   render() {
@@ -7,7 +8,7 @@ class CoachProcess extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ alignItems: "center" }}
+          style={{ alignItems: "center", zIndex: 1 }}
           onPress={() => {
             const { onPress, number } = this.props;
             onPress(1, number);
@@ -27,7 +28,7 @@ class CoachProcess extends Component {
         />
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ alignItems: "center" }}
+          style={{ alignItems: "center", zIndex: 1 }}
           onPress={() => {
             const { onPress, number } = this.props;
             onPress(2, number);
@@ -58,7 +59,7 @@ class CoachProcess extends Component {
         />
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ alignItems: "center" }}
+          style={{ alignItems: "center", zIndex: 1 }}
           onPress={() => {
             const { onPress, number } = this.props;
             onPress(3, number);
@@ -87,7 +88,7 @@ class CoachProcess extends Component {
             this.props.number > 3 && { backgroundColor: "#00D78F" },
           ]}
         />
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", zIndex: 1 }}>
           <Image
             source={
               this.props.number > 3
@@ -118,8 +119,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  viewline: {
+    width: 87,
+    height: 3,
+    backgroundColor: "#474747",
+    marginHorizontal: -12,
+  },
   image: {
-    zIndex: 10,
     marginTop: 20,
     width: 40,
     height: 40,
@@ -128,14 +134,7 @@ const styles = StyleSheet.create({
   insideText: {
     fontSize: 12,
     color: "#C2C2C2",
-    fontFamily: "Nunito-700",
-  },
-  viewline: {
-    width: 87,
-    height: 3,
-    backgroundColor: "#474747",
-    marginHorizontal: -12,
-    zIndex: 0,
+    fontFamily: Nunito_Bold,
   },
 });
 

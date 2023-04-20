@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Bold, Nunito_SemiBold } from "../../containers/util/fonts";
 
 class CoachPass extends Component {
   render() {
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 12,
     color: "#FFFFFF",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   next: {
     width: 70,
@@ -81,13 +82,13 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 24,
     color: "#F2AE4D",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
   },
   description: {
     fontSize: 10,
     width: 190,
     color: "#DDDDDD",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   image: {
     width: 100,

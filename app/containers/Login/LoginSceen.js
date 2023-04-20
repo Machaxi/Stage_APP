@@ -8,14 +8,15 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Picker,
+  Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../components/custom/CustomButton";
-import CodeInput from "react-native-confirmation-code-input";
 import auth from "@react-native-firebase/auth";
 import Loader from "../../components/custom/Loader";
-import SvgUri from "react-native-svg-uri";
 import AsyncStorage from "@react-native-community/async-storage";
+import ModalDropdown from "react-native-modal-dropdown";
 import {
   getFirebaseCheck,
   PUSH_TOKEN,
@@ -23,8 +24,8 @@ import {
 } from "../BaseComponent";
 import { doLogin, createUser } from "../../redux/reducers/loginReducer";
 import { connect } from "react-redux";
-import OtpInputs from "react-native-otp-inputs";
-import RNPickerSelect from "react-native-picker-select";
+import { Nunito_ExtraBold } from "../util/fonts";
+import { CodeField, Cursor } from "react-native-confirmation-code-field";
 
 class LoginSceen extends Component {
   constructor(props) {
@@ -45,6 +46,8 @@ class LoginSceen extends Component {
       ONE_SIGNAL_USERID: "",
       userDetails: "",
       header: "",
+      displayImage: "",
+      displayTop: -220,
     };
     this.intervalIdRef = React.createRef();
   }
@@ -61,7 +64,10 @@ class LoginSceen extends Component {
         timeRemaining: prevState.timeRemaining - 1,
       }));
     }, 1000);
-    this.setState({ intervalIdRef: intervalId });
+    this.setState({
+      intervalIdRef: intervalId,
+      displayImage: require("../../images/login_user.png"),
+    });
     this.signcheck();
   }
 
@@ -80,7 +86,7 @@ class LoginSceen extends Component {
       // this.props.navigation.navigate("tabBarMainScreen");
       this.props.navigation.navigate("ParentHome");
     } else if (userlogin != null && userlogin.length > 3) {
-      this.props.navigation.navigate("HomeStack");
+      this.props.navigation.navigate("HomeDrawer");
     } else {
       this.setState({ showscreen: true });
     }
@@ -95,12 +101,15 @@ class LoginSceen extends Component {
           confirm: confirmResult,
           timeRemaining: 120,
           isLoading: false,
+          displayImage: require("../../images/otp_user.png"),
+          displayTop: -200,
         });
         ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
       })
       .catch((error) => {
         this.setState({ isLoading: false });
         console.log(error);
+        ToastAndroid.show("Invalid Phone Number", ToastAndroid.SHORT);
       });
   };
 
@@ -160,7 +169,7 @@ class LoginSceen extends Component {
           AsyncStorage.setItem("user_gender", this.state.gender);
           AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
           AsyncStorage.setItem("play_enabled", "play_not_enabled");
-          this.props.navigation.navigate("HomeStack");
+          this.props.navigation.navigate("HomeDrawer");
         }
       })
       .catch((response) => {
@@ -221,7 +230,7 @@ class LoginSceen extends Component {
             if (userData.is_learn_enabled || userData.is_play_enabled) {
               this.props.navigation.navigate("ParentHome");
             } else {
-              this.props.navigation.navigate("HomeStack");
+              this.props.navigation.navigate("HomeDrawer");
             }
           }
         }
@@ -242,7 +251,7 @@ class LoginSceen extends Component {
       <LinearGradient
         colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
         locations={[0, 1]}
-        style={styles.subcontainer}
+        style={[styles.subcontainer]}
       >
         <Loader visible={this.state.isLoading} />
         <View style={{ flexDirection: "row" }}>
@@ -250,20 +259,17 @@ class LoginSceen extends Component {
             <Text style={styles.title}>Welcome To Machaxi</Text>
             <Text style={styles.otpsubtext}>Premium Sports Centres</Text>
           </View>
-          <Image
-            source={require("../../images/login_user.png")}
-            style={{
-              width: 300,
-              height: 290,
-              marginLeft: -130,
-              marginTop: -85,
-            }}
-          />
-          {/* <SvgUri
-            width="200"
-            height="200"
-            source={require("../../images/svg/gift.svg")}
-          /> */}
+          {Platform.OS !== "ios" && (
+            <Image
+              source={require("../../images/login_user.png")}
+              style={{
+                width: 300,
+                height: 290,
+                marginLeft: -130,
+                marginTop: -85,
+              }}
+            />
+          )}
         </View>
         <View>
           <LinearGradient
@@ -322,7 +328,11 @@ class LoginSceen extends Component {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
-                this.setState({ confirm: null });
+                this.setState({
+                  confirm: null,
+                  displayImage: require("../../images/login_user.png"),
+                  displayTop: -220,
+                });
               }}
             >
               <Image
@@ -342,17 +352,19 @@ class LoginSceen extends Component {
               proceed
             </Text>
           </View>
-          <Image
-            source={require("../../images/otp_user.png")}
-            style={{
-              width: 300,
-              height: 280,
-              marginLeft: -130,
-              marginTop: -110,
-            }}
-          />
+          {Platform.OS !== "ios" && (
+            <Image
+              source={require("../../images/otp_user.png")}
+              style={{
+                width: 300,
+                height: 290,
+                marginLeft: -130,
+                marginTop: -85,
+              }}
+            />
+          )}
         </View>
-        <View style={{ marginTop: -40, marginHorizontal: 20 }}>
+        <View style={{ marginTop: -20 }}>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.subtext}>Enter OTP in </Text>
             {this.state.timeRemaining > 0 ? (
@@ -365,14 +377,22 @@ class LoginSceen extends Component {
               <Text style={[styles.subtext, { color: "#F2AE4D" }]}>00:00</Text>
             )}
           </View>
-          <OtpInputs
-            handleChange={(cod) => this.setState({ code: cod })}
-            numberOfInputs={6}
+          <CodeField
+            value={this.state.code}
+            onChangeText={(cod) => this.setState({ code: cod })}
+            cellCount={6}
+            rootStyle={styles.codeFieldRoot}
+            keyboardType="number-pad"
+            textContentType="oneTimeCode"
             secureTextEntry={true}
-            inputStyles={styles.otpInput}
-            inputContainerStyles={styles.otpInputContainer}
-            style={{ marginLeft: -5, flexDirection: "row" }}
-            focusedBorderColor={"red"}
+            renderCell={({ index, symbol, isFocused }) => (
+              <Text
+                key={index}
+                style={[styles.cell, isFocused && styles.focusCell]}
+              >
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </Text>
+            )}
           />
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -415,6 +435,10 @@ class LoginSceen extends Component {
     );
   };
 
+  handleDropdownPress = () => {
+    Keyboard.dismiss();
+  };
+
   NameScreen = () => {
     data = [
       { label: "Male", value: "MALE" },
@@ -433,15 +457,17 @@ class LoginSceen extends Component {
             <Text style={styles.title}>Hello NewBee!</Text>
             <Text style={styles.otpsubtext}>Welcome to Machaxi</Text>
           </View>
-          <Image
-            source={require("../../images/otp_user.png")}
-            style={{
-              width: 300,
-              height: 280,
-              marginTop: -110,
-              marginLeft: -130,
-            }}
-          />
+          {Platform.OS !== "ios" && (
+            <Image
+              source={require("../../images/otp_user.png")}
+              style={{
+                width: 300,
+                height: 290,
+                marginLeft: -130,
+                marginTop: -85,
+              }}
+            />
+          )}
         </View>
         <View>
           <LinearGradient
@@ -486,8 +512,8 @@ class LoginSceen extends Component {
           >
             <Text style={styles.subtext}> Player Gender</Text>
           </LinearGradient>
-          <View style={styles.inputview}>
-            <Picker
+          <View style={[styles.inputview, { flexDirection: "row" }]}>
+            {/* <Picker
               selectedValue={this.state.gender}
               style={styles.dropdown}
               itemStyle={styles.dropdownitem}
@@ -498,7 +524,48 @@ class LoginSceen extends Component {
               <Picker.Item label="Select Gender" value="Select Gender" />
               <Picker.Item label="Male" value="MALE" />
               <Picker.Item label="Female" value="FEMALE" />
-            </Picker>
+            </Picker> */}
+            <View
+              style={{ flex: 1, flexDirection: "row" }}
+              onTouchStart={this.handleDropdownPress}
+            >
+              <ModalDropdown
+                options={["Male", "Female"]}
+                defaultValue="Select an option"
+                style={{
+                  justifyContent: "center",
+                  flex: 1,
+                  marginHorizontal: 10,
+                }}
+                textStyle={{ padding: 10, fontSize: 16, color: "white" }}
+                dropdownStyle={{
+                  width: "75%",
+                  height: 85,
+                  borderRadius: 10,
+                  borderColor: "#FCB550",
+                  backgroundColor: "rgba(94, 94, 94, 0.6)",
+                }}
+                dropdownTextStyle={{
+                  padding: 10,
+                  fontSize: 16,
+                  color: "white",
+                  borderRadius: 10,
+                  backgroundColor: "rgba(94, 94, 94, 0)",
+                }}
+                onSelect={(value) =>
+                  this.setState({ gender: data[value].value })
+                }
+              />
+              <View style={{ flex: 0.1, justifyContent: "center" }}>
+                <Image
+                  source={require("../../images/playing/arrow_down.png")}
+                  style={{
+                    width: 9,
+                    height: 6,
+                  }}
+                />
+              </View>
+            </View>
           </View>
         </View>
         <CustomButton
@@ -515,7 +582,10 @@ class LoginSceen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         {this.state.showscreen && (
           <LinearGradient
             colors={["#141C32", "#141A2E"]}
@@ -543,8 +613,19 @@ class LoginSceen extends Component {
             this.PhoneScreen()}
           {this.state.confirm && !this.state.loginsuccess && this.OTPScreen()}
           {this.state.loginsuccess && this.NameScreen()}
+          {Platform.OS === "ios" && (
+            <Image
+              source={this.state.displayImage}
+              style={{
+                width: 300,
+                height: 290,
+                marginBottom: this.state.displayTop,
+                marginLeft: 150,
+              }}
+            />
+          )}
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -560,24 +641,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1,
-    paddingVertical: 5,
-  },
-  otpInput: {
-    height: 40,
-    width: 30,
-    borderWidth: 2,
-    borderRadius: 8,
-    borderColor: "#7C7C7C",
-    fontSize: 14,
-    textAlign: "center",
-    color: "#C09345",
-    marginHorizontal: 10,
-  },
-  otpInputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 10,
+    paddingTop: 7,
   },
   subcontainer: {
     width: "90%",
@@ -599,20 +663,20 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 20,
-    fontFamily: "Nunito-400",
+    fontFamily: "Nunito-Regular",
     color: "#BFBFBF",
   },
   dropdown: {
     height: 50,
     width: "90%",
     paddingHorizontal: 30,
-    fontFamily: "Nunito-400",
+    fontFamily: "Nunito-Regular",
     color: "#BFBFBF",
     marginLeft: 20,
   },
   dropdownitem: {
     fontSize: 16,
-    fontFamily: "Nunito-400",
+    fontFamily: "Nunito-Regular",
     color: "#BFBFBF",
   },
   inputview: {
@@ -622,33 +686,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 50,
     marginBottom: 20,
+    justifyContent: "center",
   },
   title: {
     width: 220,
     fontSize: 34,
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
     color: "#E8AC43",
     marginTop: 30,
   },
   heading: {
     fontSize: 22,
-    fontFamily: "Nunito-400",
+    fontFamily: "Nunito-Regular",
     color: "#FFFFFF",
   },
   subtext: {
     fontSize: 13,
-    fontFamily: "Nunito-700",
+    fontFamily: "Nunito-Bold",
     color: "#D9D9D9",
   },
   otptitle: {
     fontSize: 26,
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
     color: "#E8AC43",
   },
   otpsubtext: {
     fontSize: 14,
-    fontFamily: "Nunito-400",
+    fontFamily: "Nunito-Regular",
     color: "#E2E2E2",
+  },
+  codeFieldRoot: {
+    marginVertical: 10,
+  },
+  cell: {
+    height: 40,
+    width: 30,
+    borderWidth: 2,
+    borderRadius: 8,
+    borderColor: "#7C7C7C",
+    fontSize: 14,
+    textAlign: "center",
+    color: "#C09345",
+    marginHorizontal: 10,
+    lineHeight: 38,
+  },
+  focusCell: {
+    borderColor: "#E8AC43",
   },
 });
 

@@ -12,6 +12,7 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
 import { ScrollView } from "react-navigation";
 import CustomButton from "../../../components/custom/CustomButton";
+import { Nunito_Bold, Nunito_SemiBold } from "../../util/fonts";
 
 class SorryScreen extends Component {
   months = [
@@ -98,19 +99,8 @@ class SorryScreen extends Component {
           end={{ x: 1, y: 0.5 }}
           style={[styles.subcontainer]}
         >
-          <Image
-            source={require("../../../images/playing/sorry.png")}
-            style={{
-              width: 170,
-              height: 230,
-              marginTop: -130,
-            }}
-          />
-
           <Text style={styles.title}>Sorry !</Text>
-          <Text style={styles.subtext}>
-            We could not book your free trial, please try again.
-          </Text>
+          <Text style={styles.subtext}>{this.props.errorMessage}</Text>
           <CustomButton
             name="Try Again "
             available={true}
@@ -118,6 +108,14 @@ class SorryScreen extends Component {
             onPress={handlepress}
           />
         </LinearGradient>
+        <Image
+          source={require("../../../images/playing/sorry.png")}
+          style={{
+            width: 170,
+            height: 230,
+            marginBottom: -130,
+          }}
+        />
       </View>
     );
   }
@@ -149,13 +147,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     color: "#FF6C6C",
-    marginVertical: 30,
+    marginBottom: 20,
+    marginTop: 120,
   },
   subtext: {
     fontSize: 16,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#CFCFCF",
     marginBottom: 30,
     textAlign: "center",

@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_ExtraBold } from "../../containers/util/fonts";
 
 const CustomButton = ({
   name,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   insideText: {
     fontSize: 16,
     color: "#F1E8FF",
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
   },
 });
 

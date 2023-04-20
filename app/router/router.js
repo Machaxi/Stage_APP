@@ -1,192 +1,217 @@
-import React from 'react'
-import { Platform, StatusBar, Image, View, Dimensions, TouchableOpacity, Text, StyleSheet, ImageBackground } from "react-native";
+import React from "react";
 import {
-    createAppContainer,
-    createBottomTabNavigator,
-    createStackNavigator,
-    createSwitchNavigator,
-    createDrawerNavigator,
-    TabBarBottom
+  Platform,
+  StatusBar,
+  Image,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
+import {
+  createAppContainer,
+  createBottomTabNavigator,
+  createStackNavigator,
+  createSwitchNavigator,
+  createDrawerNavigator,
+  TabBarBottom,
 } from "react-navigation";
 // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
+import Icon from "react-native-vector-icons/FontAwesome";
+import LinearGradient from "react-native-linear-gradient";
 
-import welcome from '../containers/welcome/welcome'
-import coachhome from '../containers/CoachScreen/CoachHome'
-import guesthome from '../containers/GuestScreen/GuestHome'
-import guestdetails from '../containers/GuestScreen/GuestDetails'
-import parenthome from '../containers/ParentsScreen/ParentHome'
-import AcademyListing from '../containers/GuestScreen/AcademyListing'
-import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
-import CoachListing from '../containers/GuestScreen/CoachListing'
-import PlayersListing from '../containers/GuestScreen/PlayersListing'
-import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
-import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
-import CustomHeader from '../components/custom/CustomHeader'
-import spalsh from '../containers/welcome/SplashScreen'
-import IntroScreen from '../containers/welcome/IntroScreen'
+import welcome from "../containers/welcome/welcome";
+import coachhome from "../containers/CoachScreen/CoachHome";
+import guesthome from "../containers/GuestScreen/GuestHome";
+import guestdetails from "../containers/GuestScreen/GuestDetails";
+import parenthome from "../containers/ParentsScreen/ParentHome";
+import AcademyListing from "../containers/GuestScreen/AcademyListing";
+import AcademyProfile from "../containers/GuestScreen/AcademyProfile";
+import CoachListing from "../containers/GuestScreen/CoachListing";
+import PlayersListing from "../containers/GuestScreen/PlayersListing";
+import CoachProfileDetail from "../containers/GuestScreen/CoachProfileDetail";
+import AcademyBatch from "../containers/GuestScreen/AcademyBatch";
+import CustomHeader from "../components/custom/CustomHeader";
+import spalsh from "../containers/welcome/SplashScreen";
+import IntroScreen from "../containers/welcome/IntroScreen";
 
-import phoneauth from '../containers/Login/PhoneAuth'
-import CoachMenuDrawer from './CoachMenuDrawer'
-import EditProfile from '../containers/profile/EditProfile'
-import markAttendence from '../containers/CoachScreen/MarkAttendence'
-import AddCompensatoryBatch from '../containers/CoachScreen/AddCompensatoryBatch'
-import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
+import phoneauth from "../containers/Login/PhoneAuth";
+import CoachMenuDrawer from "./CoachMenuDrawer";
+import EditProfile from "../containers/profile/EditProfile";
+import markAttendence from "../containers/CoachScreen/MarkAttendence";
+import AddCompensatoryBatch from "../containers/CoachScreen/AddCompensatoryBatch";
+import otherplayerDetails from "../containers/OtherPlayerDetails/OtherPlayerDetails";
 
 import { isSignedIn } from "../components/auth";
-import BaseComponent from '../containers/BaseComponent';
-import TournamentModule from './TournamentRouter'
-import coachBatchModule from './CoachBatchRouter'
-import userBatchModule from './PlayerBatchRouter';
-import PlayRoute from './PlayRoute';
-import PlayScreen from '././../containers/play/PlayScreen';
-import NavigationDrawerStructure from './NavigationDrawerStructure'
+import BaseComponent from "../containers/BaseComponent";
+import TournamentModule from "./TournamentRouter";
+import coachBatchModule from "./CoachBatchRouter";
+import userBatchModule from "./PlayerBatchRouter";
+import PlayRoute from "./PlayRoute";
+import PlayScreen from "././../containers/play/PlayScreen";
+import NavigationDrawerStructure from "./NavigationDrawerStructure";
 import RightMenuToolbar from "./RightMenuToolbar";
-import coachPerfomenceModule from './CoachPerformenceRouter'
-import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
-import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
-import userChallengeModule from './ChallengeRouter'
-import Switcher from './Switcher'
-import userHomeModule from './UserHomeModule'
-import CoachRewardsPoints from '../containers/rewards/CoachRewardsPoints'
-import CoachGiveRewards from '../containers/rewards/CoachGiveRewards'
-import ParentRewards from '../containers/rewards/ParentRewards'
-import CoachMyFeedbackListing from '../containers/feedback/CoachMyFeedbackListing'
-import EditOtherProfile from '../containers/profile/EditOtherProfile'
-import ImageGuidelines from '../containers/profile/ImageGuidelines'
-import TabBarHighlightLabel from './TabBarHighlightLabel'
-import CancelSession from '../containers/CoachScreen/Batch/CancelSession'
+import coachPerfomenceModule from "./CoachPerformenceRouter";
+import WriteFeedback from "../containers/feedback/WriteFeedbackListing";
+import WriteAcademyFeedback from "../containers/feedback/WriteAcademyFeedback";
+import userChallengeModule from "./ChallengeRouter";
+import Switcher from "./Switcher";
+import userHomeModule from "./UserHomeModule";
+import CoachRewardsPoints from "../containers/rewards/CoachRewardsPoints";
+import CoachGiveRewards from "../containers/rewards/CoachGiveRewards";
+import ParentRewards from "../containers/rewards/ParentRewards";
+import CoachMyFeedbackListing from "../containers/feedback/CoachMyFeedbackListing";
+import EditOtherProfile from "../containers/profile/EditOtherProfile";
+import ImageGuidelines from "../containers/profile/ImageGuidelines";
+import TabBarHighlightLabel from "./TabBarHighlightLabel";
+import CancelSession from "../containers/CoachScreen/Batch/CancelSession";
 import Registration from "../containers/tournament/Registration";
 import RegistrationSteps from "../containers/tournament/RegistrationSteps";
 import RegistrationSuccessful from "../containers/tournament/RegistrationSuccessful";
 import AddPartner from "../containers/tournament/AddPartner";
 import AddPartnerWithPhone from "../containers/tournament/AddPartnerWithPhone";
-import MyCalendar from "../containers/PlayerBatch/MyCalendar"
-import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
-import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen"
+import MyCalendar from "../containers/PlayerBatch/MyCalendar";
+import AcademyFilter from "../containers/GuestScreen/AcademyFilter";
+import ChallengeDisputeScreen from "../containers/CoachScreen/Challenge/ChallengeDisputeScreen";
 import TournamentFixture from "../containers/tournament/TournamentFixture";
 import TournamentScorer from "../containers/tournament/TournamentScorer";
-import NotificationList from '../containers/notification/NotificationList'
-import JobVacancies from '../containers/util/JobVacancies';
-import TournamentGallerySliderZoom from '../containers/tournament/TournamentGallerySliderZoom'
-import TournamentGallerySlider from '../containers/tournament/TournamentGallerySlider'
-import AcademyFeedbackListing from '../containers/feedback/AcademyFeedbackListing'
-import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
-import WebViewScreen from '../containers/util/WebViewScreen'
-import DietPlan from '../containers/ParentsScreen/DietPlan'
-import EmptyScreen from '../containers/util/EmptyScreen'
-import BookTrial from '../containers/GuestScreen/BookTrial'
-import BookPlayModule from './CourtBookingRouter'
-import LeaderboardRoute from '../containers/challenge/LeaderBoardRoute'
-import PaymentDetail from '../containers/payment/PaymentDetail'
-import PaymentHistory from '../containers/payment/PaymentHistory'
-import Test from '../containers/welcome/Test'
-import ContactUs from '../containers/util/ContactUs'
-import FaqScreen from '../containers/util/FaqScreen'
-import EnrollmentForm from '../containers/profile/EnrollmentForm';
-import GuestTrial from '../containers/GuestScreen/GuestTrial'
-import GuestTrialTerms from '../containers/GuestScreen/GuestTrialTerms'
-import SaveGuestTrial from '../containers/GuestScreen/SaveGuestTrial'
-import PaymentDues from '../containers/payment/PaymentDues'
-import PaymentReport from '../containers/payment/PaymentReport'
-import PlanPurchaseView from '../components/custom/PlanPurchaseView';
-import ShopScreen from '../containers/FirstTimeUser/ShopScreen';
-import PlayerScreen from '../containers/FirstTimeUser/PlayerScreen';
-import CoachScreen from '../containers/FirstTimeUser/CoachScreen';
-import TrialBook from '../containers/FirstTimeUser/TrialBook';
-import HomeScreen from '../containers/FirstTimeUser/HomeScreen';
-import LoginSceen from '../containers/Login/LoginSceen';
-import CongratulationScreen from '../containers/FirstTimeUser/TrialBook/CongratulationScreen'
-import PlanBook from '../containers/FirstTimeUser/PlanBook';
-import MyRequestsHome from '../containers/MyRequests/MyRequestsHome';
-import MyBookingsScreen from '../containers/MyBookings/MyBookingsScreen';
-import ShopTabRoute from './ShopTabRoute';
-import TabbarItem from './TabbarItem';
-import { white } from '../containers/util/colors';
-import ShopPage from '../containers/ExsitingUser/ShopPage';
-import LearnPage from '../containers/ExsitingUser/LearnPage';
-import PlayPage from '../containers/ExsitingUser/PlayPage';
-import NavigationDrawerWhite from './NavigationDrawerWhite';
-import LearnBookTrial from '../containers/FirstTimeUser/LearnBookTrial';
-
+import NotificationList from "../containers/notification/NotificationList";
+import JobVacancies from "../containers/util/JobVacancies";
+import TournamentGallerySliderZoom from "../containers/tournament/TournamentGallerySliderZoom";
+import TournamentGallerySlider from "../containers/tournament/TournamentGallerySlider";
+import AcademyFeedbackListing from "../containers/feedback/AcademyFeedbackListing";
+import ViewPlayerPerformance from "../containers/UserScreen/ViewPlayerPerformance";
+import WebViewScreen from "../containers/util/WebViewScreen";
+import DietPlan from "../containers/ParentsScreen/DietPlan";
+import EmptyScreen from "../containers/util/EmptyScreen";
+import BookTrial from "../containers/GuestScreen/BookTrial";
+import BookPlayModule from "./CourtBookingRouter";
+import LeaderboardRoute from "../containers/challenge/LeaderBoardRoute";
+import PaymentDetail from "../containers/payment/PaymentDetail";
+import PaymentHistory from "../containers/payment/PaymentHistory";
+import Test from "../containers/welcome/Test";
+import ContactUs from "../containers/util/ContactUs";
+import FaqScreen from "../containers/util/FaqScreen";
+import EnrollmentForm from "../containers/profile/EnrollmentForm";
+import GuestTrial from "../containers/GuestScreen/GuestTrial";
+import GuestTrialTerms from "../containers/GuestScreen/GuestTrialTerms";
+import SaveGuestTrial from "../containers/GuestScreen/SaveGuestTrial";
+import PaymentDues from "../containers/payment/PaymentDues";
+import PaymentReport from "../containers/payment/PaymentReport";
+import PlanPurchaseView from "../components/custom/PlanPurchaseView";
+import ShopScreen from "../containers/FirstTimeUser/ShopScreen";
+import PlayerScreen from "../containers/FirstTimeUser/PlayerScreen";
+import CoachScreen from "../containers/FirstTimeUser/CoachScreen";
+import TrialBook from "../containers/FirstTimeUser/TrialBook";
+import HomeScreen from "../containers/FirstTimeUser/HomeScreen";
+import LoginSceen from "../containers/Login/LoginSceen";
+import CongratulationScreen from "../containers/FirstTimeUser/TrialBook/CongratulationScreen";
+import MyRequestsHome from "../containers/MyRequests/MyRequestsHome";
+import MyBookingsScreen from "../containers/MyBookings/MyBookingsScreen";
+import ShopTabRoute from "./ShopTabRoute";
+import TabbarItem from "./TabbarItem";
+import { white } from "../containers/util/colors";
+import ShopPage from "../containers/ExsitingUser/ShopPage";
+import LearnPage from "../containers/ExsitingUser/LearnPage";
+import PlayPage from "../containers/ExsitingUser/PlayPage";
+import NavigationDrawerWhite from "./NavigationDrawerWhite";
+import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
+import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
 
 const headerStyle = {
-    marginTop: Platform.OS === "android" ? 0 : 0
+  marginTop: Platform.OS === "android" ? 0 : 0,
 };
 const loginModule = createStackNavigator({
-
-    Splash: {
-        screen: spalsh,
-        navigationOptions: {
-            // title: "Sign In",
-            headerStyle,
-            header: null
-        }
+  Splash: {
+    screen: spalsh,
+    navigationOptions: {
+      // title: "Sign In",
+      headerStyle,
+      header: null,
     },
-    Welcome: {
-        screen: welcome,
-        navigationOptions: {
-            // title: "Sign In",
-            headerStyle,
-            header: null
-        }
+  },
+  Welcome: {
+    screen: welcome,
+    navigationOptions: {
+      // title: "Sign In",
+      headerStyle,
+      header: null,
     },
-    Test: {
-        screen: Test,
+  },
+  Test: {
+    screen: Test,
+  },
+  MyCalendar: {
+    screen: MyCalendar,
+  },
+  // IntroScreen: {
+  //     screen: IntroScreen,
+  //     navigationOptions: {
+  //         // title: "Sign In",
+  //         headerStyle,
+  //         header: null
+  //     }
+  // },
+  Login: {
+    // screen: phoneauth,
+    screen: LoginSceen,
+    navigationOptions: {
+      header: null,
+      //header:null
     },
-    MyCalendar: {
-        screen: MyCalendar
-    },
-    // IntroScreen: {
-    //     screen: IntroScreen,
-    //     navigationOptions: {
-    //         // title: "Sign In",
-    //         headerStyle,
-    //         header: null
-    //     }
-    // },
-    Login: {
-        screen: phoneauth,
-        //screen: LoginSceen,
-        navigationOptions: {
-            header: null
-            //header:null
-        }
-    },
-    EditProfile: {
-        screen: EditProfile,
-        navigationOptions: ({ navigation }) => ({
-            title: "Edit Profile",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} showMenuAction={false} showBackAction={false} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-    ImageGuidelines: {
-        screen: ImageGuidelines,
-        navigationOptions: ({ navigation }) => ({
-            title: "Image Guidelines",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showMenuAction={false}
-                showBackAction={true} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-        })
-    },
-
-})
+  },
+  EditProfile: {
+    screen: EditProfile,
+    navigationOptions: ({ navigation }) => ({
+      title: "Edit Profile",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showMenuAction={false}
+          showBackAction={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  ImageGuidelines: {
+    screen: ImageGuidelines,
+    navigationOptions: ({ navigation }) => ({
+      title: "Image Guidelines",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showMenuAction={false}
+          showBackAction={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+});
 
 const GuestHomeModule = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
@@ -202,10 +227,10 @@ const GuestHomeModule = createStackNavigator({
   Login: {
     screen: phoneauth,
     navigationOptions: {
-        header: null
-        //header:null
-    }
-},
+      header: null,
+      //header:null
+    },
+  },
   AcademyProfile: {
     screen: AcademyProfile,
     navigationOptions: ({ navigation }) => ({
@@ -563,14 +588,14 @@ const GuestHomeModule = createStackNavigator({
   },
   SubscriptionPurchaseScreen: {
     screen: PlanPurchaseView,
-    
-     navigationOptions: ({ navigation }) => ({
-      header:null,
+
+    navigationOptions: ({ navigation }) => ({
+      header: null,
       headerTitleStyle: style.headerStyle,
       headerStyle: {
         backgroundColor: "#FFFFFF",
       },
-     }),
+    }),
   },
 });
 
@@ -1667,7 +1692,6 @@ const tabBarControllerBookGuest = createBottomTabNavigator({
   //                 activeIcon={require('../images/ic_tab_booking.png')} />,
   //     }
   // },
-
 });
 
 const guestBookDrawer = createDrawerNavigator(
@@ -1712,7 +1736,7 @@ const style = StyleSheet.create({
     fontSize: 20,
     flexGrow: 1,
     alignSelf: "center",
-  }
+  },
 });
 
 const parentHomeModule = createStackNavigator({
@@ -1726,14 +1750,14 @@ const parentHomeModule = createStackNavigator({
   },
   SubscriptionPurchaseScreen: {
     screen: PlanPurchaseView,
-    
-     navigationOptions: ({ navigation }) => ({
-      header:null,
+
+    navigationOptions: ({ navigation }) => ({
+      header: null,
       headerTitleStyle: style.headerStyle,
       headerStyle: {
         backgroundColor: "#FFFFFF",
       },
-     }),
+    }),
   },
   ViewPlayerPerformance: {
     screen: ViewPlayerPerformance,
@@ -2290,113 +2314,124 @@ const parentHomeModule = createStackNavigator({
       },
     }),
   },
-  
 });
 
-const tabBarControllerBookParent = createBottomTabNavigator(
-    {
-        Home: {
-            screen: parentHomeModule,
-            navigationOptions: {
-                tabBarLabel: 'Home',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Home'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_home.png')} />,
-            },
+const tabBarControllerBookParent = createBottomTabNavigator({
+  Home: {
+    screen: parentHomeModule,
+    navigationOptions: {
+      tabBarLabel: "Home",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Home"
+          focused={focused}
+          activeIcon={require("../images/ic_tab_home.png")}
+        />
+      ),
+    },
+  },
+  Batch: {
+    screen: userBatchModule,
+    navigationOptions: {
+      tabBarLabel: "Batch",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Batch"
+          focused={focused}
+          activeIcon={require("../images/ic_tab_batch.png")}
+        />
+      ),
+    },
+  },
+  Tournament: {
+    screen: TournamentModule,
+    navigationOptions: {
+      tabBarLabel: "Tournament",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Tournament"
+          focused={focused}
+          activeIcon={require("../images/ic_tab_tournament.png")}
+        />
+      ),
+    },
+  },
+  Challenge: {
+    screen: userChallengeModule,
+    navigationOptions: {
+      tabBarLabel: "Challenge",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Challenge"
+          focused={focused}
+          activeIcon={require("../images/ic_tab_challenge.png")}
+        />
+      ),
+    },
+  },
+  BookandPlay: {
+    screen: BookPlayModule,
+    navigationOptions: {
+      tabBarLabel: "Book and Play",
+      tabBarLabel: ({ focused }) => (
+        <TabBarHighlightLabel
+          label="Book&Play"
+          focused={focused}
+          activeIcon={require("../images/ic_tab_booking.png")}
+        />
+      ),
+    },
+  },
+});
 
-
-        },
-        Batch: {
-            screen: userBatchModule,
-            navigationOptions: {
-                tabBarLabel: 'Batch',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Batch'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_batch.png')} />,
-            }
-
-        },
-        Tournament: {
-            screen: TournamentModule,
-            navigationOptions: {
-                tabBarLabel: 'Tournament',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Tournament'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_tournament.png')} />,
-            }
-
-        },
-        Challenge: {
-            screen: userChallengeModule,
-            navigationOptions: {
-                tabBarLabel: 'Challenge',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Challenge'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_challenge.png')} />,
-            }
-
-        },
-        BookandPlay: {
-            screen: BookPlayModule,
-            navigationOptions: {
-                tabBarLabel: 'Book and Play',
-                tabBarLabel: ({ focused }) =>
-                    <TabBarHighlightLabel
-                        label='Book&Play'
-                        focused={focused}
-                        activeIcon={require('../images/ic_tab_booking.png')} />,
-            }
-
-        },
-
-    })
-
- const LearnStack = createStackNavigator({
-   Play: {
-     screen: LearnPage,
-     navigationOptions: ({ navigation }) => ({
-       title: "Learn",
-       headerLeft: (
-         <NavigationDrawerWhite navigationProps={navigation}
-           showBackAction={false} showDrawer={true} />
-       ),
-       headerRight: (
-         <RightMenuToolbar navigationProps={navigation}
-           showNotification={true} />
-       ),
-       headerTitleStyle: style.titlestyle,
-       headerStyle: {
-         backgroundColor: "#21202F",
-       },
-     }),
-   },
-   BookLearnTrail: {
-     screen: TrialBook,
-     navigationOptions: ({ navigation }) => ({
-       title: "Learn",
-       headerLeft: (
-         <NavigationDrawerWhite navigationProps={navigation}
-         showBackAction={false} showDrawer={true} />
-       ),
-       headerRight: (
-         <RightMenuToolbar navigationProps={navigation}
-           showNotification={true} />
-       ),
-       headerTitleStyle: style.titlestyle,
-       headerStyle: {
-         backgroundColor: "#21202F",
-       },
-     }),
-   },
- });
+const LearnStack = createStackNavigator({
+  Play: {
+    screen: LearnPage,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  BookLearnTrail: {
+    screen: TrialBook,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+});
 
 const tabBarControllerParent = createBottomTabNavigator({
   Home: {
@@ -2494,28 +2529,24 @@ const tabBarControllerParent = createBottomTabNavigator({
   //                 activeIcon={require('../images/tournament.png')} />,
   //     }
 
-      // },
-        
+  // },
+});
 
-    })
-
-const parentBookDrawer = createDrawerNavigator({
-
-
+const parentBookDrawer = createDrawerNavigator(
+  {
     Guestfirst: {
-        screen: tabBarControllerBookParent,
-        // navigationOptions: {
-        //     header: <CustomHeader title="Academy" />,
-        // }
+      screen: tabBarControllerBookParent,
+      // navigationOptions: {
+      //     header: <CustomHeader title="Academy" />,
+      // }
     },
-
-},
-    {
-        contentComponent: ({ navigation }) => {
-            return (<CoachMenuDrawer navigation={navigation} />)
-        },
-        drawerWidth: Dimensions.get('window').width * 0.86,
-    }
+  },
+  {
+    contentComponent: ({ navigation }) => {
+      return <CoachMenuDrawer navigation={navigation} />;
+    },
+    drawerWidth: Dimensions.get("window").width * 0.86,
+  }
 );
 
 const mybookingsModule = createStackNavigator({
@@ -2524,12 +2555,84 @@ const mybookingsModule = createStackNavigator({
   },
 });
 
-
 const myRequestsModule = createStackNavigator({
-
   MyRequestsScreen: {
     screen: MyRequestsHome,
-    
+  },
+});
+
+const HomeStack = createStackNavigator({
+  HomeScreen: {
+    screen: HomeScreen,
+  },
+  BookTrail: {
+    screen: TrialBook,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  LearnBookTrial: {
+    screen: LearnBookTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Play",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  CoachingPlan: {
+    screen: CoachingPlan,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
   },
 });
 
@@ -2562,41 +2665,68 @@ const parentDrawer = createDrawerNavigator(
   }
 );
 
+const HomeDrawer = createDrawerNavigator(
+  {
+    HomeStack: {
+      screen: HomeStack,
+    },
+  },
+  {
+    contentComponent: ({ navigation }) => {
+      return <CoachMenuDrawer navigation={navigation} />;
+    },
+    drawerWidth: Dimensions.get("window").width * 0.66,
+  }
+);
+
 const tabBarMainScreen = createBottomTabNavigator(
   {
     CoachScreen: {
       screen: LearnPage,
       navigationOptions: {
-        tabBarLabel: 'Learn',
-        tabBarLabel: ({ focused }) =>
+        tabBarLabel: "Learn",
+        tabBarLabel: ({ focused }) => (
           <TabBarHighlightLabel
-            label='Learn'
+            label="Learn"
             focused={focused}
-            activeIcon={focused ? require('../images/learn_highlight.png') : require('../images/learn.png')} />,
+            activeIcon={
+              focused
+                ? require("../images/learn_highlight.png")
+                : require("../images/learn.png")
+            }
+          />
+        ),
       },
     },
     PlayScreen: {
       screen: PlayPage,
       navigationOptions: {
-        tabBarLabel: 'Play',
-        tabBarLabel: ({ focused }) =>
+        tabBarLabel: "Play",
+        tabBarLabel: ({ focused }) => (
           <TabBarHighlightLabel
-            label='Play'
+            label="Play"
             focused={focused}
-            activeIcon={focused ? require('../images/play_highlight.png') : require('../images/play.png')} />,
-      }
-
+            activeIcon={
+              focused
+                ? require("../images/play_highlight.png")
+                : require("../images/play.png")
+            }
+          />
+        ),
+      },
     },
     ShopScreen: {
       screen: ShopPage,
       navigationOptions: {
-        tabBarLabel: 'Shop',
-        tabBarLabel: ({ focused }) =>
+        tabBarLabel: "Shop",
+        tabBarLabel: ({ focused }) => (
           <TabBarHighlightLabel
-            label='Shop'
+            label="Shop"
             focused={focused}
-            activeIcon={require('../images/shop.png')} />,
-      }
+            activeIcon={require("../images/shop.png")}
+          />
+        ),
+      },
     },
   }
   // ,{
@@ -2606,269 +2736,227 @@ const tabBarMainScreen = createBottomTabNavigator(
   //     },
   //   },
   // }
-  )
+);
 
 const TournamentRegistration = createStackNavigator({
+  Registration: {
+    screen: Registration,
+    // navigationOptions: ({ navigation }) => ({
+    //     title: 'Tournament Registration',
+    //     headerTitleStyle: style.headerStyle,
+    //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+    //         showBackAction={false}
+    //         showDrawer={false}
+    //     />,
+    //     headerRight: <RightMenuToolbar navigationProps={navigation}
+    //         navigation={navigation} showNotification={false} />,
+    //     headerStyle: {
+    //         backgroundColor: '#FFFFFF',
+    //     },
 
-    Registration: {
-        screen: Registration,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: 'Tournament Registration',
-        //     headerTitleStyle: style.headerStyle,
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //         showBackAction={false}
-        //         showDrawer={false}
-        //     />,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //         navigation={navigation} showNotification={false} />,
-        //     headerStyle: {
-        //         backgroundColor: '#FFFFFF',
-        //     },
-
-        //     headerTintColor: '#000',
-        // }),
-    },
-    RegistrationSteps: {
-        screen: RegistrationSteps,
-        // navigationOptions: ({ navigation }) => ({
-        //     title: 'Tournament Registration',
-        //     headerTitleStyle: style.headerStyle,
-        //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-        //                                            showBackAction={true}
-        //                                            showDrawer={false}
-        //     />,
-        //     headerRight: <RightMenuToolbar navigationProps={navigation}
-        //                                    navigation={navigation} showNotification={true} />,
-        //     headerStyle: {
-        //         backgroundColor: '#FFFFFF',
-        //     },
-
-        //     headerTintColor: '#000',
-        // }),
-    },
-
-    AddPartner: {
-        screen: AddPartner,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Add Partner',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    AddPartnerWithPhone: {
-        screen: AddPartnerWithPhone,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Add Partner',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={true}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={true} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-    RegistrationSuccessful: {
-        screen: RegistrationSuccessful,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Tournament Registration',
-            headerTitleStyle: style.headerStyle,
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation}
-                showBackAction={false}
-                showDrawer={false}
-            />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showNotification={false} />,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
-            headerTintColor: '#000',
-        }),
-    },
-})
-
-const EmptyStack = createStackNavigator({
-
-    EmptyScreen: {
-        screen: EmptyScreen
-    },
-
-})
-
-const HomeStack = createStackNavigator({
-
-  HomeScreen: {
-      screen: HomeScreen,
-      navigationOptions: ({ navigation }) => ({
-      title: "Learn",
-        headerLeft: (
-          <NavigationDrawerWhite navigationProps={navigation}
-            showBackAction={false} showDrawer={true} />
-        ),
-        headerRight: (
-          <RightMenuToolbar navigationProps={navigation}
-            showNotification={true} />
-        ),
-        headerTitleStyle: style.titlestyle,
-        headerStyle: {
-          backgroundColor: "#21202F",
-        },
-      }), 
+    //     headerTintColor: '#000',
+    // }),
   },
-  BookTrail: {
-    screen: TrialBook,
+  RegistrationSteps: {
+    screen: RegistrationSteps,
+    // navigationOptions: ({ navigation }) => ({
+    //     title: 'Tournament Registration',
+    //     headerTitleStyle: style.headerStyle,
+    //     headerLeft: <NavigationDrawerStructure navigationProps={navigation}
+    //                                            showBackAction={true}
+    //                                            showDrawer={false}
+    //     />,
+    //     headerRight: <RightMenuToolbar navigationProps={navigation}
+    //                                    navigation={navigation} showNotification={true} />,
+    //     headerStyle: {
+    //         backgroundColor: '#FFFFFF',
+    //     },
+
+    //     headerTintColor: '#000',
+    // }),
+  },
+
+  AddPartner: {
+    screen: AddPartner,
     navigationOptions: ({ navigation }) => ({
-      title: "Learn",
+      title: "Add Partner",
+      headerTitleStyle: style.headerStyle,
       headerLeft: (
-        <NavigationDrawerWhite navigationProps={navigation}
-        showBackAction={false} showDrawer={true} />
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
       ),
       headerRight: (
-        <RightMenuToolbar navigationProps={navigation}
-          showNotification={true} />
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showNotification={false}
+        />
       ),
-      headerTitleStyle: style.titlestyle,
       headerStyle: {
-        backgroundColor: "#21202F",
+        backgroundColor: "#FFFFFF",
       },
+
+      headerTintColor: "#000",
     }),
+  },
+  AddPartnerWithPhone: {
+    screen: AddPartnerWithPhone,
+    navigationOptions: ({ navigation }) => ({
+      title: "Add Partner",
+      headerTitleStyle: style.headerStyle,
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showNotification={true}
+        />
+      ),
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+
+      headerTintColor: "#000",
+    }),
+  },
+  RegistrationSuccessful: {
+    screen: RegistrationSuccessful,
+    navigationOptions: ({ navigation }) => ({
+      title: "Tournament Registration",
+      headerTitleStyle: style.headerStyle,
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showNotification={false}
+        />
+      ),
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+
+      headerTintColor: "#000",
+    }),
+  },
+});
+
+const EmptyStack = createStackNavigator({
+  EmptyScreen: {
+    screen: EmptyScreen,
+  },
+});
+
+const BaseNavigator = createSwitchNavigator({
+  // Main: {
+  //     screen: InitialNavigator
+  // },
+  // DrawerNavigator: {
+  //     screen: DrawerNavigator
+  // },
+  Login: {
+    screen: loginModule,
+  },
+  /* navigation with book and play*/
+  ParentBookHome: {
+    screen: parentBookDrawer,
+  },
+  GuestBookHome: {
+    screen: guestBookDrawer,
+  },
+  LoginSceen: {
+    screen: LoginSceen,
+  },
+  ShopScreen: {
+    screen: ShopScreen,
+  },
+  ShopPage: {
+    screen: ShopPage,
+  },
+  LearnPage: {
+    screen: LearnPage,
+  },
+  PlayPage: {
+    screen: PlayPage,
+  },
+  PlayerScreen: {
+    screen: PlayerScreen,
+  },
+  PlayScreen: {
+    screen: PlayScreen,
+  },
+  CongratulationScreen: {
+    screen: CongratulationScreen,
+  },
+  CoachScreen: {
+    screen: CoachScreen,
+  },
+  HomeStack: {
+    screen: HomeStack,
+  },
+  HomeDrawer: {
+    screen: HomeDrawer,
   },
   LearnBookTrial: {
     screen: LearnBookTrial,
-    navigationOptions: ({ navigation }) => ({
-      title: "Play",
-      headerLeft: (
-        <NavigationDrawerWhite navigationProps={navigation}
-        showBackAction={false} showDrawer={true} />
-      ),
-      headerRight: (
-        <RightMenuToolbar navigationProps={navigation}
-          showNotification={true} />
-      ),
-      headerTitleStyle: style.titlestyle,
-      headerStyle: {
-        backgroundColor: "#21202F",
-      },
-    }),
   },
-})
+  tabBarMainScreen: {
+    screen: tabBarMainScreen,
+  },
+  TrialBook: {
+    screen: TrialBook,
+  },
+  CoachBookHome: {
+    screen: coachBookDrawer,
+  },
+  UserBookHome: {
+    screen: playerBookDrawer,
+  },
+  CoachingPlan: {
+    screen: CoachingPlan,
+  },
+  /* navigation without book and play*/
+  ParentHome: {
+    screen: parentDrawer,
+  },
+  CoachHome: {
+    screen: coachDrawer,
+  },
+  UserHome: {
+    screen: playerDrawer,
+  },
+  SwitchPlayer: {
+    screen: Switcher,
+  },
+  // Home:{
+  //     screen: HomeModule
+  // },
 
-const BaseNavigator = createSwitchNavigator({
-
-    // Main: {
-    //     screen: InitialNavigator
-    // },
-    // DrawerNavigator: {
-    //     screen: DrawerNavigator
-    // },
-    Login: {
-        screen: loginModule
-    },
-    /* navigation with book and play*/
-    ParentBookHome: {
-        screen: parentBookDrawer
-    },
-    GuestBookHome: {
-        screen: guestBookDrawer,
-
-    },
-    LoginSceen: {
-      screen: LoginSceen,
-    },
-    ShopScreen: {
-      screen: ShopScreen,
-    },
-    ShopPage: {
-      screen: ShopPage,
-    },
-    LearnPage: {
-      screen: LearnPage,
-    },
-    PlayPage: {
-      screen: PlayPage,
-    },
-    PlayerScreen: {
-      screen: PlayerScreen,
-    },
-    PlayScreen: {
-      screen: PlayScreen,
-    },
-    CongratulationScreen: {
-      screen: CongratulationScreen,
-    },
-    CoachScreen: {
-      screen: CoachScreen,
-    },
-    HomeStack: {
-      screen: HomeStack,
-    },
-    LearnBookTrial: {
-      screen: LearnBookTrial,
-    },
-    tabBarMainScreen: {
-      screen: tabBarMainScreen,
-    },
-    TrialBook: {
-      screen: TrialBook,
-    },
-    PlanBook: {
-      screen: PlanBook,
-    },
-    CoachBookHome: {
-        screen: coachBookDrawer,
-
-    },
-    UserBookHome: {
-        screen: playerBookDrawer,
-
-    },
-    /* navigation without book and play*/
-    ParentHome: {
-        screen: parentDrawer
-    },
-    CoachHome: {
-        screen: coachDrawer,
-
-    },
-    UserHome: {
-        screen: playerDrawer,
-
-    },
-    SwitchPlayer: {
-        screen: Switcher,
-    },
-    // Home:{
-    //     screen: HomeModule
-    // },
-
-    // SignedOut: {
-    //     screen: loginModule
-    // }
-    RegistrationSteps: {
-        screen: TournamentRegistration
-    },
-    EmptyScreen: {
-        screen: EmptyStack
-    }
+  // SignedOut: {
+  //     screen: loginModule
+  // }
+  RegistrationSteps: {
+    screen: TournamentRegistration,
+  },
+  EmptyScreen: {
+    screen: EmptyStack,
+  },
 });
-
-
 
 const AppMain = createAppContainer(BaseNavigator);
 export default AppMain;
