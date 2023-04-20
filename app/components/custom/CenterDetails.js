@@ -4,6 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { darkGrey, whiteGreyBorder, yellowVariant4, yellowVariant7 } from "../../containers/util/colors";
 import TimingsTab from "../molecules/timingsTab";
 import SelectPlayingTime from "../molecules/selectPlayingTime";
+import { Nunito_Medium, Nunito_Regular } from "../../containers/util/fonts";
 
 class CenterDetails extends Component {
 
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   },
   setTime: {
     fontSize: 11,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: darkGrey,
   },
 
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop: -20,
     marginBottom: 5,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#FFFFFF",
     backgroundColor: "rgba(35, 35, 35, 0.66)",
     borderTopRightRadius: 7,
@@ -179,14 +180,14 @@ const styles = StyleSheet.create({
     flex: 0.5,
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#F0F0F0",
   },
   address: {
     flex: 0.5,
     marginVertical: 5,
     fontSize: 11,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#DDDDDD",
   },
 });

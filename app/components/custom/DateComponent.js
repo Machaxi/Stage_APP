@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { whiteGreyBorder } from "../../containers/util/colors";
+import { Nunito_Regular } from "../../containers/util/fonts";
 
 const DateComponent = ({ currentDate, day, date, myDate }) => {
   return (
@@ -55,13 +56,13 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 18,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#CDCDCD",
   },
   dayText: {
     fontSize: 13,
     marginBottom: 3,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#CDCDCD",
   },
   imaged: {
