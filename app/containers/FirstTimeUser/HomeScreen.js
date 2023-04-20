@@ -42,6 +42,7 @@ class HomeScreen extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
+        console.log(response);
         this.setState({
           learnData: batchData["learn"],
           playData: batchData["play"],

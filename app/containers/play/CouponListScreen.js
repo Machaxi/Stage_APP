@@ -114,7 +114,7 @@ const
             // />
           ) : 
           null}
-          <GoBackHeader title={"Apply Coupon"} />
+          <GoBackHeader navigation={navigation} title={"Apply Coupon"} />
           <EnterCouponCode
             handleChange={(val) => handleChange(val)}
             value={code}

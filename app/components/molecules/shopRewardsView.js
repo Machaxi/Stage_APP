@@ -12,7 +12,7 @@ import { commonStyles } from "../../containers/util/commonStyles";
 import { greyVariant3, greyVariant4, white, whiteGreyBorder, yellowVariant2 } from "../../containers/util/colors";
 import Strings from "../../containers/util/strings";
 
-const ShopRewardsView = ({ name }) => {
+const ShopRewardsView = ({ balance, rewardPoints, rewardRedeemed }) => {
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -21,20 +21,20 @@ const ShopRewardsView = ({ name }) => {
       <View style={styles.rewardView}>
         <View>
           <Text style={[styles.balanceTxt]}>{Strings.rewardBalance}</Text>
-          <Text style={[styles.pts]}>{"2500 pts"}</Text>
+          <Text style={[styles.pts]}>{balance + " pts"}</Text>
           <View style={styles.rewardInfo}>
             <View>
               <Text style={[styles.rewardRedeem]}>
                 {Strings.rewardRedeemed}
               </Text>
-              <Text style={[styles.rewardPts]}>{"2500 pts"}</Text>
+              <Text style={[styles.rewardPts]}>{rewardPoints + " pts"}</Text>
             </View>
             <View style={styles.verticalBar} />
             <View>
               <Text style={[styles.rewardRedeem]}>
                 {Strings.rewardEarned}
               </Text>
-              <Text style={[styles.rewardPts]}>{"2500 pts"}</Text>
+              <Text style={[styles.rewardPts]}>{rewardRedeemed + " pts"}</Text>
             </View>
           </View>
         </View>

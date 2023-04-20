@@ -2,7 +2,14 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
-const CustomButton = ({ name, available, onPress, height, image }) => {
+const CustomButton = ({
+  name,
+  available,
+  onPress,
+  height,
+  image,
+  hideImage,
+}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.6}
@@ -32,7 +39,7 @@ const CustomButton = ({ name, available, onPress, height, image }) => {
         }}
       >
         <Text style={styles.insideText}>{name}</Text>
-        <Image source={image} style={{ width: 14, height: 13 }} />
+        {hideImage ? null : <Image source={image} style={{ width: 14, height: 13 }} />}
       </LinearGradient>
     </TouchableOpacity>
   );

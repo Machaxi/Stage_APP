@@ -11,6 +11,7 @@ import axios from "axios";
 import { getBaseUrl } from "../../containers/BaseComponent";
 import { darkBlueVariant } from "../util/colors";
 import CongratulationScreen from "./TrialBook/CongratulationScreen";
+import SorryScreen from "./TrialBook/SorryScreen";
 
 class TrialBook extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class TrialBook extends Component {
       selectTime: null,
       congratulationScreen: false,
       distance: 0,
+      alreadyBook: false,
     };
   }
 
@@ -64,9 +66,9 @@ class TrialBook extends Component {
     this.setState({ selectSport: selectSport });
   };
 
-  onPressCenter = (selectCenter) => {
+  onPressCenter = (selectCenter, distance) => {
     this.setState({ currentPage: 3 });
-    this.setState({ selectCenter: selectCenter });
+    this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
   onPressBatch = (selectDate, selectLevel, selectBatch) => {
@@ -76,6 +78,14 @@ class TrialBook extends Component {
       selectLevel: selectLevel,
       selectTime: selectBatch,
     });
+  };
+
+  onPressConfirm = (alreadyBook) => {
+    this.setState({ congratulationScreen: true, alreadyBook: alreadyBook });
+  };
+
+  onPressRetry = () => {
+    this.setState({ congratulationScreen: false, currentPage: 1 });
   };
 
   selectScreen = () => {
@@ -99,13 +109,13 @@ class TrialBook extends Component {
             <Text style={styles.headerText}> {this.state.title}</Text>
           </View>
         </TouchableOpacity>
-        <View style={{ height: 70, margin: 20 }}>
+        <View style={{ height: 70, marginHorizontal: 20, marginVertical: 10 }}>
           <CoachProcess
             number={this.state.currentPage}
             onPress={this.onPress}
           />
         </View>
-        <View style={{ height: 1, backgroundColor: "gray", marginTop: 10 }} />
+        <View style={{ height: 1, backgroundColor: "gray", marginTop: 15 }} />
       </View>
     );
   };
@@ -117,7 +127,7 @@ class TrialBook extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
-        {this.state.congratulationScreen ? (
+        {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratulationScreen
             title="Coaching Trail"
             selectCenter={this.state.selectCenter}
@@ -127,10 +137,14 @@ class TrialBook extends Component {
             selectBatch={this.state.selectTime}
             distance={this.state.distance}
           />
-        ) : (
+        )}
+        {this.state.congratulationScreen && !this.state.alreadyBook && (
+          <SorryScreen onPress={this.onPressRetry} />
+        )}
+        {!this.state.congratulationScreen && (
           <View style={{ flex: 1 }}>
-            <View style={{ flex: 0.2 }}>{true && this.selectScreen()}</View>
-            <View style={{ flex: 0.8 }}>
+            <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
+            <View style={{ flex: 0.83 }}>
               {this.state.sportsList != null &&
                 this.state.currentPage === 1 && (
                   <SelectSports
@@ -161,9 +175,7 @@ class TrialBook extends Component {
                   selectLevel={this.state.selectLevel}
                   selectBatch={this.state.selectTime}
                   distance={this.state.distance}
-                  onPress={() => {
-                    this.props.navigation.navigate("CongratulationScreen");
-                  }}
+                  onPress={this.onPressConfirm}
                 />
               )}
             </View>

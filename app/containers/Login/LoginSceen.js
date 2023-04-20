@@ -518,19 +518,16 @@ class LoginSceen extends Component {
       <View style={{ flex: 1 }}>
         {this.state.showscreen && (
           <LinearGradient
-            colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
+            colors={["#141C32", "#141A2E"]}
             // locations={[0, 1]}
             start={{ x: 0, y: 0.5 }}
             end={{ x: 1, y: 0.5 }}
             style={styles.headertab}
           >
-            <View style={{ flexDirection: "row" }}>
-              <Image
-                source={require("../../images/logo.png")}
-                style={{ width: 32, height: 26 }}
-              />
-              <Text style={styles.heading}> MACHAXI</Text>
-            </View>
+            <Image
+              source={require("../../images/Machaxi_logo.png")}
+              style={{ width: 170, height: 28 }}
+            />
           </LinearGradient>
         )}
         <View
@@ -635,7 +632,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 22,
-    fontFamily: "Nunito-600",
+    fontFamily: "Nunito-400",
     color: "#FFFFFF",
   },
   subtext: {
