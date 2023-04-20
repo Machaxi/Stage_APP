@@ -13,9 +13,9 @@ const MyRequestPlayersList = ({ item }) => {
       }}
     >
       <Text style={[styles.detailsTxt, { marginRight: 8 }]}>
-        {item?.player_name}
+        {item?.name}
       </Text>
-      <NamedRoundedContainer name={item.level} />
+      <NamedRoundedContainer name={item?.proficiency} />
     </View>
   );
 };

@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, {useEffect, useState} from "react";
 import {
   View,
   StyleSheet,
@@ -16,7 +15,7 @@ import {
 } from "../../redux/reducers/dashboardReducer";
 import { connect } from "react-redux";
 import BaseComponent, {
-  EVENT_EDIT_PROFILE,
+  EVENT_EDIT_PROFILE, getBaseUrl, getSettingData,
 } from "../BaseComponent";
 import Events from "../../router/events";
 import { darkBlueVariant } from "../util/colors";
@@ -30,348 +29,233 @@ import HowToRedeem from "../../components/molecules/howToRedeem";
 import RewardHistory from "../../components/molecules/rewardHistory";
 import ShopScreenPicker from "../../components/molecules/shopScreenPickers";
 import { deviceWidth } from "../util/dimens";
+import { getNotificationCount } from "../util/notificationCount";
+import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import Axios from "axios";
+import moment from "moment";
+import { client } from "../../../App";
+const ShopScreen = ({ navigation }) => {
 
-var is_show_badge = false;
-var notification_count = 0;
+  const currentYear = moment(new Date()).year();
+  const nextYear = currentYear + 1;
+  const currentMonth = moment(new Date()).month();
 
-class ShopHomeScreen extends BaseComponent {
-  acedemy_name = "";
+ const [refreshing, setRefreshing] = useState(false);
+ const [loading, setLoading] = useState(true);
+ const [rewardsResponse, setRewardsResponse] = useState(null);
+ const [month, setMonth] = useState(currentMonth);
+ const [year, setYear] = useState(currentYear);
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: <RequestHeaderTitle title={"Shop"} />,
-      headerTitleStyle: {
-        color: "white",
-      },
-      headerStyle: {
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      },
-      headerBackground: <RequestHeaderBg />,
-      headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
-    };
+  const getNotifications = () => {
+    getNotificationCount((count) => {
+      navigation.setParams({ notification_count: count });
+      navigation.setParams({
+        headerRight: <RequestHeaderRight navigation={navigation} />,
+      });
+    });
   };
 
-  constructor(props) {
-    super(props);
-    this.inputRefs = {
-      acedemic: null,
-    };
-    this.setNavigation(this.props.navigation);
-    this.state = {
-      refreshing: false,
-      userData: null,
-      country: undefined,
-      month: "jan",
-      year: 2023,
-      player_profile: null,
-      strenthList: null,
-      acedemy_name: "",
-      academy_feedback_data: null,
-      coach_feedback_data: null,
-      academy_id: "",
-      academy_user_id: "",
-      currentSportName: "",
-      isStatsLoading: false,
-      loading: false,
-      isUpcoming: true,
-    };
-    const { navigation } = this.props.navigation.setParams({
-      shareProfile: this.shareProfile,
-    });
-  }
-
-  componentDidMount() {
-    this.selfComponentDidMount();
-    this.willFocusSubscription = this.props.navigation.addListener(
-      "willFocus",
-      () => {
-        this.getNotifications();
-      }
-    );
-
-    this.refreshEvent = Events.subscribe("NOTIFICATION_CALL", (msg) => {
-      this.getNotifications();
-    });
-
-    this.getNotifications();
-
-    this.checkNotification();
-
-    this.refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
-      this.checkNotification();
-    });
-  }
-
-  checkNotification() {
+  const checkNotification = () => {
     if (global.NOTIFICATION_DATA) {
       try {
         let notification_for = global.NOTIFICATION_DATA.notification_for;
-        this.notificationOpenScreen(notification_for);
+        notificationOpenScreen(notification_for);
         global.NOTIFICATION_DATA = null;
       } catch (err) {}
     }
-  }
+  };
 
-  getNotifications() {
-    this.getNotificationCount((count) => {
-      this.props.navigation.setParams({ notification_count: count });
-      notification_count = count;
-    });
-  }
-
-  selfComponentDidMount() {
-    var userData;
+  const getRewardsData = async (monthVal, yearVal) => {
+    setLoading(true)
     getData("header", (value) => {
-      console.log("header", value);
-    });
-
-    console.log("PARENTDashboard");
-    getData("userInfo", (value) => {
-      console.warn(value);
-      userData = JSON.parse(value);
-      global.SELECTED_PLAYER_ID = userData["player_id"];
-      global.SELECTED_ACADEMY_ID = userData["academy_id"];
-
-      this.state.academy_id = userData["academy_id"];
-
-      let academy_name = userData.academy_name;
-      if (academy_name == undefined) academy_name = "";
-      //   this.props.navigation.setParams({ Title: academy_name });
-
-      this.setState({
-        userData: JSON.parse(value),
-      });
-      console.log("userData.user", userData.user["user_type"]);
-      if (
-        userData.user["user_type"] == "PLAYER" ||
-        userData.user["user_type"] == "FAMILY"
-      ) {
-        this.getPlayerDashboardData(
-          userData["academy_id"],
-          userData["player_id"],
-          this.state.currentSportId
-        );
-      }
-    });
-  }
-
-  getPlayerDashboardData(academy_id, player_id, sport_id) {
-    getData("header", (value) => {
-      console.log("header", value, academy_id, player_id);
-      this.props
-        .getPlayerDashboard(value, player_id, academy_id, sport_id)
-        .then(() => {
-          let user = JSON.stringify(this.props.data.dashboardData);
-          console.log(" getPlayerDashboard " + user);
-          let user1 = JSON.parse(user);
-
-          //Getting Sports Data
-          let sportsList, currentSportId, currentSportName;
-
-          if (user1.data["sports"] != null) {
-            sportsList = user1.data["sports"].map((item) => {
-              return { label: item.name, value: item.id };
-            });
-            this.setState({ sportsList });
-          }
-
-          //Getting current Sport Id
-          if (user1.data["player_profile"] != null) {
-            currentSportId = user1.data["player_profile"].sport_id;
-
-            currentSportName = sportsList.find((item) => {
-              return item.value == currentSportId;
-            }).label;
-
-            this.setState({
-              currentSportId,
-              currentSportName,
-            });
-          }
-          if (user1.success == true) {
-            let coach_feedback_data = null;
-            let academy_feedback_data = null;
-
-            this.state.academy_user_id =
-              user1.data["player_profile"].academy_user_id;
-
-            try {
-              if (
-                user1.data["coach_data"] != null &&
-                user1.data["coach_data"]
-              ) {
-                if (user1.data["coach_data"].coach_feedback != undefined)
-                  coach_feedback_data =
-                    user1.data["coach_data"].coach_feedback[0];
-              }
-            } catch (err) {}
-
-            try {
-              if (
-                user1.data["academy_data"] != null &&
-                user1.data["academy_data"].feedback
-              ) {
-                academy_feedback_data = user1.data["academy_data"].feedback[0];
-              }
-            } catch (err) {}
-            console.log("coach_feedback_data =>", coach_feedback_data);
-
-            global.SELECTED_PLAYER_NAME = user1.data["player_profile"].name;
-
-            this.setState({
-              player_profile: user1.data["player_profile"],
-              strenthList: user1.data.player_profile["stats"],
-              acedemy_name: user1.data["player_profile"].academy_name,
-              academy_feedback_data: academy_feedback_data,
-              coach_feedback_data: coach_feedback_data,
-            });
-
-            let acedemy_name = user1.data["player_profile"].academy_name;
-            // this.props.navigation.setParams({ Title: acedemy_name });
-
-            getData("userInfo", (value) => {
-              userData = JSON.parse(value);
-              userData["academy_name"] = acedemy_name;
-              userData["academy_user_id"] =
-                user1.data["player_profile"].academy_user_id;
-              userData["academy_rating"] =
-                user1.data["player_profile"].academy_rating;
-              userData["user_id"] = user1.data["player_profile"].user_id;
-              storeData("userInfo", JSON.stringify(userData));
-              Events.publish(EVENT_EDIT_PROFILE);
-            });
-          }
-          this.setState({ isStatsLoading: false });
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        //"x-authorization": value,
+        //TODO:remove this static logic
+        "x-authorization":
+          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NzQiLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODEyODAxNzQsImV4cCI6NTIyNTY0MDEyODAxNzR9.EpBzEY99WBY1B72GGru59zE3Y39Pa9ot9ELmANf1pOYpXqJlgrBajCmIiY5o37cXMOecQH49XQwjUhIB7drQsw",
+      };
+      //client.call
+      client
+        .get("rewards/shop", {
+          headers,
+          params: {
+            month: monthVal,
+            year: yearVal,
+          },
         })
-        .catch((response) => {
-          //handle form errors
-          this.setState({ isStatsLoading: false });
-          console.log(response);
+        .then(function(response) {
+          console.log("rewardhistorydata" + JSON.stringify(response.data));
+          let json = response.data;
+          let success = json.success;
+          console.log('---->'+ success)
+          if (success) {
+            setRewardsResponse(json["data"]["reward"])
+            //checking for app update
+            // let must_update = json.data.must_update;
+            // if (must_update == true) {
+            //   Events.publish(EVENT_UPDATE_DIALOG, true);
+            // } else {
+            //   Events.publish(EVENT_UPDATE_DIALOG, false);
+            // }
+            //checking sync data
+            // let is_sync = true; //json.data.is_sync
+            // if (is_sync == true) {
+            //   getSettingData(headers);
+            // }
+          } else {
+            if (json.code == "1020") {
+              Events.publish("LOGOUT");
+            }
+          }
+          setLoading(false);
+        })
+        .catch(function(error) {
+          setLoading(false);
+          console.log(error);
         });
-    });
-  }
 
-  onRefresh = () => {
-    this.setState({ refreshing: true });
-    this.selfComponentDidMount();
+    })
+  };
+
+  useEffect(() => {
+    navigation.setParams({
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+    });
+    getNotifications();
+    var refreshEventCallNotif = Events.subscribe("NOTIFICATION_CALL", (msg) => {
+      getNotifications();
+    });
+
+    checkNotification();
+
+    var refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
+      checkNotification();
+    });
+
+    
+    getRewardsData(month, year);
+    return () => {
+      refreshEvent.remove();
+      refreshEventCallNotif.remove();
+      // Anything in here is fired on component unmount.
+    };
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    getRewardsData(month, year);
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
-      this.setState({ refreshing: false });
+      setRefreshing(false)
     }, 1000);
   };
  
-  onMonthSelect = (value) => {
-    this.setState({
-      month: value,
-    });
+  const onMonthSelect = (value) => {
+    setMonth(value);
+    getRewardsData(value, year)
   };
 
-  onYearSelect = (value) => {
-    this.setState({
-      year: value,
-    });
+  const onYearSelect = (value) => {
+    setYear(value)
+    getRewardsData(month, value);
   };
 
-  render() {
-    const rewards_ui_array = [];
-
-    // if (
-    //   (this.props.data.loading && !this.state.player_profile) ||
-    //   this.state.loading
-    // ) {
-    //   return (
-    //     <View
-    //       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    //     >
-    //       <ActivityIndicator size="large" color="#67BAF5" />
-    //     </View>
-    //   );
-    // }
-
-    if (this.state.player_profile || true) {
-      sessionArray = [];
-
-      return (
-        <SafeAreaView style={styles.mainContainer}>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this.onRefresh}
-                title="Pull to refresh"
-              />
-            }
-            style={styles.main_container}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                marginRight: 16,
-              }}
-            >
-              <ShopScreenPicker
-                placeHolder={{ label: "Month", value: null }}
-                data={[
-                  { label: "January", value: "jan" },
-                  { label: "February", value: "feb" },
-                  { label: "March", value: "mar" },
-                  { label: "April", value: "apr" },
-                  { label: "May", value: "may" },
-                  { label: "June", value: "jun" },
-                  { label: "July", value: "jul" },
-                  { label: "August", value: "aug" },
-                  { label: "September", value: "sep" },
-                  { label: "October", value: "oct" },
-                  { label: "November", value: "nov" },
-                  { label: "December", value: "dec" },
-                ]}
-                value={this.state.month}
-                onSelect={(val) => this.onMonthSelect(val)}
-              />
-              <View style={{ width: deviceWidth * 0.05, height: 1 }} />
-              <ShopScreenPicker
-                placeHolder={{ label: "Year", value: null }}
-                data={[
-                  { label: "2023", value: "2023" },
-                  { label: "2024", value: "2024" },
-                ]}
-                value={this.state.year}
-                onSelect={(val) => this.onYearSelect(val)}
-              />
-            </View>
-            <ShopRewardsView />
-            <HowToRedeem />
-            <RewardHistory />
-            <View style={{ height: 20, width: "100%" }} />
-          </ScrollView>
-        </SafeAreaView>
-      );
-    } else {
-      return (
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        />
-      );
-    }
+  if(loading){
+    return (
+      <LoadingIndicator />
+    )
   }
-}
-const mapStateToProps = (state) => {
+  return (
+    <SafeAreaView style={styles.mainContainer}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefresh()}
+            title="Pull to refresh"
+          />
+        }
+        style={styles.main_container}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            marginRight: 16,
+          }}
+        >
+          <ShopScreenPicker
+            placeHolder={{ label: "Month", value: null }}
+            data={[
+              { label: "January", value: 1 },
+              { label: "February", value: 2 },
+              { label: "March", value: 3 },
+              { label: "April", value: 4 },
+              { label: "May", value: 5 },
+              { label: "June", value: 6 },
+              { label: "July", value: 7 },
+              { label: "August", value: 8 },
+              { label: "September", value: 9 },
+              { label: "October", value: 10 },
+              { label: "November", value: 11 },
+              { label: "December", value: 12 },
+            ]}
+            value={month}
+            onSelect={(val) => onMonthSelect(val)}
+          />
+          <View style={{ width: deviceWidth * 0.05, height: 1 }} />
+          <ShopScreenPicker
+            placeHolder={{ label: "Year", value: null }}
+            data={[
+              {
+                label: `${currentYear}`,
+                value: currentYear,
+              },
+              {
+                label: `${nextYear}`,
+                value: nextYear,
+              },
+            ]}
+            value={year}
+            onSelect={(val) => onYearSelect(val)}
+          />
+        </View>
+        <ShopRewardsView
+          balance={rewardsResponse["reward_balance"] ?? 0}
+          rewardPoints={rewardsResponse["credit_balance"] ?? 0}
+          rewardRedeemed={rewardsResponse["debit_balance"] ?? 0}
+        />
+        <HowToRedeem />
+        {rewardsResponse["history"].length > 0 ? (
+          <RewardHistory selectedMonth={month} selectedYear={year} rewardHistoryData={rewardsResponse["history"]} />
+        ) : null}
+        <View style={{ height: 20, width: "100%" }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+ShopScreen.navigationOptions = ({ navigation }) => {
   return {
-    data: state.DashboardReducer,
+    headerTitle: <RequestHeaderTitle title={"Shop"} />,
+    headerTitleStyle: {
+      color: "white",
+    },
+
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    },
+    headerBackground: <RequestHeaderBg />,
+    headerLeft: <RequestHeaderLeft navigation={navigation} />,
+    headerRight: <RequestHeaderRight navigation={navigation} />,
   };
 };
-const mapDispatchToProps = {
-  getPlayerDashboard,
-  getPlayerSWitcher,
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShopHomeScreen);
+
+export default ShopScreen;
 
 const styles = StyleSheet.create({
   navBar: {

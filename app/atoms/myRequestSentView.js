@@ -7,6 +7,7 @@ import MainBookingDetails from "./mainBookingDetails";
 import MyRequestCentreDetails from "./myRequestCentreDetails";
 import LinearGradient from "react-native-linear-gradient";
 import { commonStyles } from "../containers/util/commonStyles";
+import { requestStatus } from "../containers/util/utilFunctions";
 
 const MyRequestSentView = ({ val, cancelBooking }) => {
   return (
@@ -14,31 +15,33 @@ const MyRequestSentView = ({ val, cancelBooking }) => {
       colors={["#ffffff11", "#ffffff03"]}
       style={styles.requestOuterView}
     >
-        <View style={styles.detailsTopRow}>
-          <NamedRoundedContainer name={"Request accepted"} />
-          <TouchableOpacity onPress={() => cancelBooking()}>
-            <Text style={commonStyles.cancelBooking}>Cancel Booking</Text>
-          </TouchableOpacity>
-        </View>
-        <MyRequestCentreDetails details={val} />
-        <View style={styles.rowSpaceBtw}>
-          {[
-            { name: "Sport", value: val?.sport_name },
-            { name: "Slot", value: val?.slot },
-            ,
-            { name: "Pool", value: val?.pool },
-          ].map((value) => (
-            <MainBookingDetails details={value} />
-          ))}
-        </View>
-        <Text
-          style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}
-        >
-          Registered Players
-        </Text>
-        {val?.player_details.map((value) => (
-          <MyRequestPlayersList item={value} />
+      <View style={styles.detailsTopRow}>
+        <NamedRoundedContainer
+          name={"Request " + requestStatus(val?.status)}
+        />
+        <TouchableOpacity onPress={() => cancelBooking()}>
+          <Text style={commonStyles.cancelBooking}>Cancel Booking</Text>
+        </TouchableOpacity>
+      </View>
+      <MyRequestCentreDetails details={val?.academy} />
+      <View style={styles.rowSpaceBtw}>
+        {[
+          { name: "Sport", value: val?.sport?.name },
+          { name: "Slot", value: `${val?.displayTime}`
+          // `${val?.startTime} - ${val?.endTime}` 
+        },
+          ,
+          { name: "Pool", value: 'NA' },
+        ].map((value) => (
+          <MainBookingDetails details={value} />
         ))}
+      </View>
+      <Text style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}>
+        Registered Players
+      </Text>
+      {val?.players.map((value) => (
+        <MyRequestPlayersList item={value} />
+      ))}
     </LinearGradient>
   );
   

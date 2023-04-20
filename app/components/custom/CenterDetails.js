@@ -1,18 +1,45 @@
 import React, { Component } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { whiteGreyBorder } from "../../containers/util/colors";
+import { darkGrey, whiteGreyBorder, yellowVariant4, yellowVariant7 } from "../../containers/util/colors";
+import TimingsTab from "../molecules/timingsTab";
+import SelectPlayingTime from "../molecules/selectPlayingTime";
 
 class CenterDetails extends Component {
+
   render() {
-    const { item, currentIndex, distance } = this.props;
+    const {
+      item,
+      currentIndex,
+      distance,
+      selectedTime,
+      setTime,
+      selectedTimeVal,
+      timingsData,
+      selectedMorningTime,
+      selectedEveningTime,
+      setSelectedMorningTimeVal,
+      setSelectedEveningTimeVal,
+      morningTimeData,
+      eveningTimeData,
+      selectedTimePeriod,
+    } = this.props;
 
     handlepress = () => {
       this.props.onPress(item.id);
     };
 
+    var morningData = morningTimeData.filter((val) => {
+      return val.timeOfDay == "Morning"
+    });
+    var eveningData = eveningTimeData.filter((val) => {
+      return val.timeOfDay == "Evening";
+    });
+
+    var isExpanded = item.id == currentIndex;
+
     return (
-      <TouchableOpacity onPress={handlepress}>
+      <TouchableOpacity onPress={handlepress} activeOpacity={0.8}>
         <LinearGradient
           colors={
             item.id === currentIndex
@@ -25,27 +52,81 @@ class CenterDetails extends Component {
           }
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.item}
+          style={styles.outerContainer}
         >
-          <View style={{ flex: 0.3 }}>
-            <Image source={{ uri: item.cover_pic }} style={styles.image} />
-            <Text style={styles.distance}>{distance}</Text>
-          </View>
-          <View style={styles.textContainer}>
-            <View style={{ flex: 1 }}>
-              <Text
-                style={[
-                  styles.title,
-                  item.id === currentIndex && {
-                    color: "#DFA35D",
-                  },
-                ]}
-              >
-                {item.name}
-              </Text>
-              <Text style={styles.address}>{item.address}</Text>
+          <View style={styles.item}>
+            <View style={{ flex: 0.3 }}>
+              <Image
+                source={{ uri: item.cover_pic }}
+                style={styles.image}
+              />
+              <Text style={styles.distance}>{distance}</Text>
+            </View>
+            <View style={styles.textContainer}>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={[
+                    styles.title,
+                    item.id === currentIndex && {
+                      color: "#DFA35D",
+                    },
+                  ]}
+                >
+                  {item.name}
+                </Text>
+                <Text style={styles.address}>{item.address}</Text>
+              </View>
             </View>
           </View>
+          {isExpanded ? (
+            <View
+              style={{
+                marginTop: 30,
+                marginBottom: 15,
+                marginHorizontal: 7,
+              }}
+            >
+              <Text style={styles.setTime}>
+                {"Select Preferred Time Slot"}
+              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <TimingsTab
+                  image={require("../../images/morning.png")}
+                  name={"Morning"}
+                  onPress={(val) => setTime(val)}
+                  isSelected={selectedTime == "Morning"}
+                />
+                <TimingsTab
+                  image={require("../../images/evening.png")}
+                  name={"Evening"}
+                  onPress={(val) => setTime(val)}
+                  isSelected={selectedTime == "Evening"}
+                />
+              </View>
+              {selectedTime == "Morning" && morningData.length > 0 ? (
+                <SelectPlayingTime
+                  selectedTime={selectedMorningTime}
+                  selectedTimePeriod={(val) => {
+                    console.log({ val });
+                    selectedTimePeriod(val);
+                  }}
+                  setSelectedTime={(val) => setSelectedMorningTimeVal(val)}
+                  timeData={morningData}
+                />
+              ) : null}
+              {selectedTime != "Morning" && eveningData.length > 0 ? (
+                <SelectPlayingTime
+                  selectedTime={selectedEveningTime}
+                  selectedTimePeriod={(val) => {
+                    console.log({ val });
+                    selectedTimePeriod(val);
+                  }}
+                  setSelectedTime={(val) => setSelectedEveningTimeVal(val)}
+                  timeData={eveningData}
+                />
+              ) : null}
+            </View>
+          ) : null}
         </LinearGradient>
       </TouchableOpacity>
     );
@@ -57,11 +138,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
-    paddingHorizontal: 5,
+  },
+  outerContainer: {
     borderColor: whiteGreyBorder,
     borderWidth: 1,
     borderRadius: 10,
+    marginBottom: 10,
+    paddingHorizontal: 5,
   },
   image: {
     width: 100,
@@ -70,6 +153,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 6,
   },
+  setTime: {
+    fontSize: 11,
+    fontFamily: "Nunito-400",
+    color: darkGrey,
+  },
+
   distance: {
     width: "88%",
     fontSize: 10,

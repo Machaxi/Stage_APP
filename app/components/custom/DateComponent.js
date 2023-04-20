@@ -19,6 +19,7 @@ const DateComponent = ({ currentDate, day, date, myDate }) => {
       ]}
     >
       <View style={styles.imaged}>
+        {day &&
         <Text
           style={[
             styles.dayText,
@@ -27,6 +28,7 @@ const DateComponent = ({ currentDate, day, date, myDate }) => {
         >
           {day}
         </Text>
+        }
         <Text
           style={[
             styles.dateText,

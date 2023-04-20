@@ -3,25 +3,24 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { whiteGreyBorder } from "../../containers/util/colors";
 
-class SelectSports extends Component {
-
-  handlepress (id){
-    this.props.onPress(id);
-  };
+class SelectTimeItem extends Component {
+  handlepress(val) {
+    this.props.onPress(val);
+  }
 
   render() {
-    const { id, image, selectItem, name } = this.props;
+    const {  image, isSelected , id,  name, width } = this.props;
 
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        style={{ marginRight: 10, marginBottom: 9, height: 30 }}
-        onPress={()=> this.handlepress(id)}
+        style={[{ marginRight: 10, marginBottom: 9, height: 30,  }, this.props.width ? {width: width}: {},]}
+        onPress={() => this.handlepress(id)}
       >
         <View>
           <LinearGradient
             colors={
-              id == selectItem
+              isSelected
                 ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
                 : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
             }
@@ -29,20 +28,20 @@ class SelectSports extends Component {
             end={{ x: 1, y: 1 }}
             style={[
               styles.clockView,
-              id == selectItem && {
+             isSelected && {
                 borderColor: "rgba(167, 134, 95, 0.6)",
               },
             ]}
           >
             <Text>{"    "}</Text>
-            {id == selectItem && (
-              <Image style={styles.clockimage} source={{uri : image}} />
+            {isSelected && (
+              <Image style={styles.clockimage} source={image} />
             )}
             <Text
               style={[
                 styles.sportText,
                 { marginTop: -3, fontSize: 13 },
-                id == selectItem && {
+               isSelected && {
                   color: "#F2AE4D",
                 },
               ]}
@@ -80,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectSports;
+export default SelectTimeItem;
