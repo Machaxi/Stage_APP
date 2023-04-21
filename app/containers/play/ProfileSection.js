@@ -5,16 +5,18 @@ import {
     Image, 
     StyleSheet,
   } from "react-native";
+import { yellowVariant } from "../util/colors";
+import { Nunito_SemiBold } from "../util/fonts";
 
   
 export const ProfileSction = ({ image , name}) => {
   return(
     <View style={styles.container}>
         <View  style={styles.imageContainer} >
-        <Image style={styles.image} 
-        source={image} 
-        resizeMode='contain'
-        />
+          <Image style={styles.image} 
+            source={image} 
+            resizeMethod="auto"
+          />
         </View>
         <Text style={styles.title}>
           {name}
@@ -26,36 +28,35 @@ export const ProfileSction = ({ image , name}) => {
 
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 37,
+    alignItems: "center",
+    marginBottom: 23,
+    paddingHorizontal: 36,
+  },
+  image: {
+    height: 110,
+    width: 110,
+    borderRadius: 110,
+    resizeMode: 'cover',
+  },
+  imageContainer: {
+    flex:1,
+    height: 115,
+    width: 115,
+    borderRadius: 115,
+    justifyContent: 'center',
+    alignItems:'center',
+    borderWidth: 3,
+    borderColor: yellowVariant,
+    overflow:'hidden'
+  },
 
-    container:{
-        marginHorizontal:20, 
-        alignItems:'center', 
-        paddingHorizontal:16, 
-        paddingVertical:16,
-        paddingTop:37
-    },
-    image:{
-        height: 110, 
-        width: 110 ,
-        borderRadius:55 ,
-        resizeMode:'cover'
-    },
-    imageContainer:{
-        height: 113, 
-        width: 113 ,
-        borderRadius:56 ,
-        borderWidth:3,
-        borderColor:'#FFCB6A',
-    },
-
-
-    title:{
-        color:'white',
-        fontSize: 20,
-        color:'white',
-        fontFamily:'Nunito-Regular',
-        paddingTop:11,
-        fontWeight:'600'
-    },
-}
-)
+  title: {
+    color: "white",
+    fontSize: 20,
+    fontFamily: Nunito_SemiBold,
+    marginTop: 11,
+    fontWeight: "600",
+  },
+});

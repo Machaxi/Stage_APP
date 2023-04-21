@@ -6,8 +6,9 @@ import {
   } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import * as Progress from 'react-native-progress';
-import { SeperatingLine } from "./SeperatingLine";
-// import ProgressCircle from 'react-native-progress-circle';
+import { lightPurpleColor, white } from "../util/colors";
+import { Nunito_Regular } from "../util/fonts";
+import { GradientLine } from "../../components/molecules/gradientLine";
 
   
 export const MembershipDetails = ({ purchasedDate, expiryDate ,profilePrecentage,hoursLeft}) => {
@@ -18,116 +19,127 @@ export const MembershipDetails = ({ purchasedDate, expiryDate ,profilePrecentage
         setProfileComplelete(profilePrecentage);
       }, []);
 
-    return(<View style={styles.container}>
-                <LinearGradient
-                    colors={['rgba(255, 255, 255, 0.068)', ' rgba(255, 255, 255, 0.0102)']}
-                    style={styles.gradient}
-                >
-                    <View>
-                        <Text
-                        style={styles.title}>
-                            Membership Details 
-                        </Text>
-                        <View style={{flexDirection:'row',}}>
-                            <View style={{
-                                // flex: 1.5,
-                                marginLeft:14,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
+    return (
+      <View style={styles.container}>
+        <LinearGradient
+          colors={[
+            "rgba(255, 255, 255, 0.068)",
+            " rgba(255, 255, 255, 0.0102)",
+          ]}
+          style={styles.gradient}
+        >
+          <View>
+            <Text style={styles.title}>Membership Details</Text>
+            <View style={{ flexDirection: "row" }}>
+              <View
+                style={styles.progressView}
+              >
+                <Progress.Circle
+                  size={80}
+                  progress={profileComplelete}
+                  borderWidth={0}
+                  unfilledColor={"#404040"}
+                  showsText={true}
+                  textStyle={{ color: "white", fontSize: 12 }}
+                  color={"#70D9E6"}
+                  formatText={() => {
+                    return (
+                      <Text style={styles.hrsLeft}>
+                        {"Hours Left\n"}
+                        <Text style={styles.hrsLeftValue}>{hoursLeft}</Text>
+                      </Text>
+                    );
+                  }}
+                />
+              </View>
+              <View style={{marginLeft: 24}}>
+                <Text style={styles.monthlyMembershipText}>
+                  Monthly Membership
+                </Text>
 
-                                <Progress.Circle
-                                size={80}
-                                progress={profileComplelete}
-                                unfilledColor={'#262051'}
-                                showsText={true}
-                                textStyle={{ color: 'white',fontSize: 12 }}
-                                color={'#70D9E6'}
-                                formatText={() => {
-                                    return (<Text  style={{
-                                            color: '#FFFFFF',
-                                            marginTop:4,
-                                            fontWeight:'500',
-                                            fontFamily: 'Nunito-Regular'}}>
-                                            {hoursLeft}</Text>);
-                                        }}
-                                />
-                            
-                            </View>
-                            <View style={{marginLeft:28}}>
-                                <Text
-                                    style={styles.monthlyMembershipText}>
-                                        Monthly Membership 
-                                </Text>
+                <GradientLine
+                  marginBottom={12}
+                  marginTop={11}
+                  marginLeft={0}
+                  colors={["#6b6a76", "#2a273a"]}
+                />
 
-                                <SeperatingLine />
+                <View style={styles.subscriptionInfo}>
+                  <Text style={styles.staticDate}>Purchased on :</Text>
+                  <Text style={styles.dynamicDate}>{purchasedDate}</Text>
+                </View>
 
-                                <View style={{flexDirection:'row'}}>
-                                    <Text style={styles.staticDate}>
-                                        Purchased on : 
-                                    </Text>
-                                    <Text style={styles.dynamicDate}>
-                                        {purchasedDate}
-                                    </Text>
-                                </View>
-
-                                <View style={{flexDirection:'row' ,marginTop:5}}>
-                                    <Text style={styles.staticDate}>
-                                        Expires on :
-                                    </Text>
-                                    <Text style={styles.dynamicDate}>
-                                        {expiryDate}
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </LinearGradient>
-            </View> 
-    ) 
+                <View style={{ flexDirection: "row", marginTop: 5 }}>
+                  <Text style={styles.staticDate}>Expires on :</Text>
+                  <Text style={styles.dynamicDate}>{expiryDate}</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </View>
+    ); 
 }
 
 const styles = StyleSheet.create({
-    container:{
-        marginHorizontal:12,
-        borderRadius:10,
-        marginTop:25,
-        borderColor:'#70765788',
-        borderWidth:1
-    },
-    gradient:{
-        borderRadius:10,
-        paddingBottom:14,
-        paddingTop:12,
-        paddingHorizontal:11
-    },
-    title:{
-        color: '#E38D33',
-        paddingLeft:14,
-        marginTop:12,
-        marginBottom:14,
-        fontFamily: 'Nunito-Regular',
-        fontWeight:'600'
-    },
-    dynamicDate:{
-        color: '#FFFFFF',
-        paddingLeft:2,
-        fontSize:12,
-        fontFamily: 'Nunito-Regular', 
-        fontWeight:'400'
-    },
-    staticDate:{
-        color: '#FFFFFF',
-        fontSize:12,
-        fontFamily: 'Nunito-Regular',
-        fontWeight:'400'
-    },
-    monthlyMembershipText:{
-        color: '#FFFFFF', 
-        marginTop:4, 
-        fontSize:14,
-        fontFamily: 'Nunito-Regular',
-        fontWeight:'500'
-    },
-
-})
+  container: {
+    marginHorizontal: 12,
+    borderRadius: 10,
+    marginTop: 25,
+    borderColor: "#70765788",
+    borderWidth: 1,
+  },
+  progressView: {
+    // flex: 1.5,
+    marginLeft: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  subscriptionInfo: { flexDirection: "row", marginTop: 11 },
+  hrsLeft: {
+    color: lightPurpleColor,
+    fontWeight: "400",
+    fontFamily: Nunito_Regular,
+    textAlign: "center",
+  },
+  hrsLeftValue: {
+    color: "#FFFFFF",
+    marginTop: 4,
+    fontWeight: "500",
+    fontSize: 16,
+    fontFamily: Nunito_Regular,
+    textAlign: "center",
+  },
+  gradient: {
+    borderRadius: 10,
+    paddingBottom: 14,
+    paddingTop: 12,
+    paddingHorizontal: 11,
+  },
+  title: {
+    color: "#E38D33",
+    marginBottom: 20,
+    fontFamily: Nunito_Regular,
+    fontWeight: "600",
+  },
+  dynamicDate: {
+    color: "#FFFFFF",
+    paddingLeft: 2,
+    fontSize: 12,
+    fontFamily: Nunito_Regular,
+    fontWeight: "400",
+  },
+  staticDate: {
+    color: white,
+    fontSize: 12,
+    fontFamily: Nunito_Regular,
+    fontWeight: "400",
+  },
+  monthlyMembershipText: {
+    color: white,
+    marginTop: 4,
+    fontSize: 14,
+    fontFamily: Nunito_Regular,
+    fontWeight: "500",
+  },
+});
