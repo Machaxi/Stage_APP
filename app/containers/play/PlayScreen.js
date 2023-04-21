@@ -34,6 +34,7 @@ import { Nunito_Regular } from "../util/fonts";
 import { blueVariant, greyVariant1, greyVariant11, white } from "../util/colors";
 import RatingTabarHeader from "../../components/molecules/ratingTabbarHeader";
 import { RatePeersTabView } from "../../components/molecules/ratePeersTabView";
+import CancelSessionModal from "../../components/molecules/play_screen/cancelSessionModal";
 
 export default PlayScreen =({navigation})=>{
 
@@ -81,19 +82,14 @@ const NextSessionData = [
     sportsTime: "3pm",
     centreName: "Machaxi Play9 Sports Centre, Whitefield",
     centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: "None",
+    numberOfGuests: null,
     gameNameData: {
       title: "Swimming",
       id: 1,
       color: "green",
       // bgColor:'yellow'
     },
-    playing_partners: [
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: 1 },
-      { name: "User 1", proficiency: "Beginner", guestCount: 1 },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-    ],
+    playing_partners: null,
     isExpanded: false,
   },
   {
@@ -106,7 +102,7 @@ const NextSessionData = [
     sportsTime: "2-3pm",
     centreName: "Machaxi Play9 Sports Centre, Whitefield",
     centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: "None",
+    numberOfGuests: 4,
     playing_partners: [
       { name: "User 1", proficiency: "Beginner", guestCount: null },
       { name: "User 1", proficiency: "Beginner", guestCount: null },
@@ -125,13 +121,8 @@ const NextSessionData = [
     sportsTime: "3pm",
     centreName: "Machaxi Play9 Sports Centre, Whitefield",
     centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: "None",
-    playing_partners: [
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-    ],
+    numberOfGuests: 0,
+    playing_partners: [],
     isExpanded: false,
   },
   {
@@ -145,7 +136,7 @@ const NextSessionData = [
     sportsTime: "3pm",
     centreName: "Machaxi Play9 Sports Centre, Whitefield",
     centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: "5",
+    numberOfGuests: 4,
     playing_partners: [
       { name: "User 1", proficiency: "Beginner", guestCount: null },
       { name: "User 1", proficiency: "Beginner", guestCount: null },
@@ -165,7 +156,6 @@ const PresSectionData={
 
 
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
-const [defaultTab, setDefaultTab] = useState("");
 const [selfTabEnabled, setSelfTab] = useState(true);
 const [expiryDate,setExpiryDate] =useState('2nd march, 2023');
 const [purchasedDate,setPurchasedDate] =useState('2nd February 2023');
@@ -174,45 +164,33 @@ const [profilePrecentage,setProfilePrecentage] =useState('0.9');
 const [gameData,setGameData]=useState(gameNameData);
 const [nextSession,setNextSessionData]=useState(NextSessionData);
 const [userName,setUserName]=useState('vidushi');
-const [profilePic,setProfilePic]=useState(require("./../../images/profile_place_holder.png"));
 const [userPref,setUserPref]=useState(PresSectionData);
 const [cancelPressed,setCancelPressed]=useState(false);
+const [cancelModalVisible, setCancelModalVisibility] = useState(false);
 
-const [index, setIndex] = React.useState(0);
-const [routes] = React.useState([
-  { key: 'first', title: 'My Rating' },
-  { key: 'second', title: 'Rate Your Peers' },
-]);
-
-
-useEffect(() => {
-  console.log("Game updated");
-}, [gameData]);
 
 const onGameSelected=(item)=>{
-  console.log('vidushi     ' +JSON.stringify(item))
 
   let index = gameData.findIndex((game) => {
     return game["id"] == item["id"];
   });
-console.log('index '+ index)
   if(index == -1) return;
 
   let newData = gameData.map((game) => {
     return {...game, isSelected: false}
   });
   newData[index]["isSelected"] = !newData[index]["isSelected"];
-  console.log('index '+ JSON.stringify(newData))
   setGameData([...newData]);
   
 }
 
 const renderGameNameBox = ({ item }) => {
-  console.log({hey: item})
-  return (<GameNameBox
-  item={item} 
-  onPress={()=>onGameSelected(item)}
-  />)
+  return (
+    <GameNameBox
+      item={item} 
+      onPress={()=>onGameSelected(item)}
+    />
+  )
 };
 
 
@@ -225,9 +203,9 @@ const onPlayingLevelPress=()=>{
   null
 };
 
-const onCancelBookingPress=(item)=>{
-  setCancelPressed(!cancelPressed);
-  }
+const setCancelModalVisibilityCb = (val) => {
+  setCancelModalVisibility(val);
+};
 
   const expandList = (passedVal) => {
   
@@ -240,7 +218,6 @@ const onCancelBookingPress=(item)=>{
     setNextSessionData(sessionData);
   }
 
-console.log(userPref.currentRatingColor)
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
@@ -260,8 +237,13 @@ console.log(userPref.currentRatingColor)
             sportTitle={userPref.sportTitle}
           />
           <MembershipDetails
+            aboutToExpire={true}
             profilePrecentage={profilePrecentage}
             hoursLeft={hoursLeft}
+            slotsExhaused={false}
+            onMorePlansPress={()=>{}}
+            onRenewPress={()=>{}}
+            membershipExpired={false}
             expiryDate={expiryDate}
             purchasedDate={purchasedDate}
           />
@@ -269,7 +251,7 @@ console.log(userPref.currentRatingColor)
             NextSessionData={nextSession}
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
-            onCancelPress={onCancelBookingPress}
+            onCancelPress={()=> setCancelModalVisibilityCb(true)}
           />
 
           <TouchableOpacity
@@ -278,7 +260,6 @@ console.log(userPref.currentRatingColor)
           >
             <View style={styles.playingLevelContainer}>
               <Text style={styles.menuHeading}>Playing Level</Text>
-
               <Image
                 style={[
                   styles.arrow_img,
@@ -341,9 +322,15 @@ console.log(userPref.currentRatingColor)
              
             </>
           ) : null}
-          {cancelPressed ? Alert.alert("on Cancel Clicked" + "  ") : null}
         </ScrollView>
       </LinearGradient>
+      {cancelModalVisible 
+        ? 
+          (
+            <CancelSessionModal confirmType={true} onCancel={()=>{}} cancelModalVisible={cancelModalVisible} setModalVisibility={()=>setCancelModalVisibilityCb()} />
+          ) 
+        : null
+      }
       <View style={styles.skyFilledButtonView}>
         <SkyFilledButton
           onPress={() => {

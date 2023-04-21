@@ -10,10 +10,11 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { GameNameBox } from "./GameNameBox";
 import { SeperatingLine } from "./SeperatingLine";
-import { cyanVariant, greyVariant1, greyVariant11, redVariant, white, yellowVariant7 } from "../util/colors";
+import { cyanVariant, greyVariant1, greyVariant11, redVariant, redVariant3, white, yellowVariant2, yellowVariant7 } from "../util/colors";
 import { Nunito_Regular } from "../util/fonts";
 import { GradientLine } from "../../components/molecules/gradientLine";
 import NamedRoundedGradientContainer from "../../components/molecules/roundedNamedGradientContainer";
+import { commonStyles } from "../util/commonStyles";
 
   
 export const NextSessionCard = ({item,onCancelPress, expandList}) => {
@@ -87,7 +88,6 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
           activeOpacity={0.8}
           style={{ paddingVertical: 4 }}
           onPress={() => {
-            console.log("???");
             expandList();
           }}
         >
@@ -111,20 +111,52 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
         </TouchableOpacity>
 
         {item.isExpanded ? (
-          <View>
-            <Text
-              style={[
-                styles.centerAddress,
-                { marginTop: 16, color: greyVariant11 },
-              ]}
-            >
-              {"Number of players right now - 5/6"}
+          item?.playing_partners != null &&
+          item?.playing_partners?.length > 0 ? (
+            <View>
+              <Text
+                style={[
+                  styles.centerAddress,
+                  { marginTop: 16, color: greyVariant11 },
+                ]}
+              >
+                {"Number of players right now - 5/6"}
+              </Text>
+              <FlatList
+                data={item?.playing_partners}
+                renderItem={renderPlayingPartnerList}
+              />
+            </View>
+          ) : (
+            <Text style={styles.noPartners}>
+              {
+                "We apologise, but no one has scheduled sessions for this slot."
+              }
             </Text>
-            <FlatList
-              data={item?.playing_partners}
-              renderItem={renderPlayingPartnerList}
+          )
+        ) : null}
+        {item.isExpanded ? (
+          <>
+            <GradientLine
+              marginBottom={14}
+              marginTop={0}
+              marginLeft={0}
+              colors={["#6b6a76", "#2a273a"]}
             />
-          </View>
+            <View
+              style={[commonStyles.flexRowAlignStart, { marginVertical: 16 }]}
+            >
+              <Image
+                source={require("../../images/info_red.png")}
+                style={{ height: 18, width: 18, marginRight: 4 }}
+              />
+              <Text style={styles.noteTxt}>
+                {
+                  "To cancel a session player, you must do so at least three hours before the booking time."
+                }
+              </Text>
+            </View>
+          </>
         ) : null}
       </LinearGradient>
     </View>
@@ -139,6 +171,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     borderRadius: 20,
     marginTop: 32,
+  },
+  noteTxt: {
+    fontSize: 12,
+    marginRight: 10,
+    color: redVariant3,
+    fontFamily: Nunito_Regular,
+    fontWeight: '400'
   },
   headerContainer: {
     flexDirection: "row",
@@ -175,7 +214,14 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_Regular,
     fontWeight: "500",
     fontSize: 14,
-    marginBottom: 10
+    marginBottom: 10,
+  },
+  noPartners: {
+    color: yellowVariant2,
+    fontFamily: Nunito_Regular,
+    fontWeight: "400",
+    fontSize: 12,
+    marginBottom: 16,
   },
   heading: {
     color: yellowVariant7,
