@@ -31,10 +31,11 @@ import { NextSessionList } from "./NextSectionList";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { deviceWidth } from "../util/dimens";
 import { Nunito_Regular } from "../util/fonts";
-import { blueVariant, greyVariant1, greyVariant11, white } from "../util/colors";
+import { blueVariant, greyVariant1, greyVariant11, lightYellowVariant, white } from "../util/colors";
 import RatingTabarHeader from "../../components/molecules/ratingTabbarHeader";
 import { RatePeersTabView } from "../../components/molecules/ratePeersTabView";
 import CancelSessionModal from "../../components/molecules/play_screen/cancelSessionModal";
+import CustomButton from "../../components/custom/CustomButton";
 
 export default PlayScreen =({navigation})=>{
 
@@ -167,6 +168,7 @@ const [userName,setUserName]=useState('vidushi');
 const [userPref,setUserPref]=useState(PresSectionData);
 const [cancelPressed,setCancelPressed]=useState(false);
 const [cancelModalVisible, setCancelModalVisibility] = useState(false);
+const [limitReachedForToday, setLimitReachForToday] = useState(true)
 
 
 const onGameSelected=(item)=>{
@@ -219,7 +221,7 @@ const setCancelModalVisibilityCb = (val) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={[{ flex: 1 },]}>
       <LinearGradient
         colors={["#051732", "#232031"]}
         style={{ flex: 1, paddingBottom: 63 }}
@@ -241,8 +243,8 @@ const setCancelModalVisibilityCb = (val) => {
             profilePrecentage={profilePrecentage}
             hoursLeft={hoursLeft}
             slotsExhaused={false}
-            onMorePlansPress={()=>{}}
-            onRenewPress={()=>{}}
+            onMorePlansPress={() => {}}
+            onRenewPress={() => {}}
             membershipExpired={false}
             expiryDate={expiryDate}
             purchasedDate={purchasedDate}
@@ -251,7 +253,7 @@ const setCancelModalVisibilityCb = (val) => {
             NextSessionData={nextSession}
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
-            onCancelPress={()=> setCancelModalVisibilityCb(true)}
+            onCancelPress={() => setCancelModalVisibilityCb(true)}
           />
 
           <TouchableOpacity
@@ -294,10 +296,12 @@ const setCancelModalVisibilityCb = (val) => {
               </View>
               {!selfTabEnabled && (
                 <>
-
                   <FlatList
                     data={gameData}
-                    contentContainerStyle={{marginHorizontal: 12, marginTop: 23}}
+                    contentContainerStyle={{
+                      marginHorizontal: 12,
+                      marginTop: 23,
+                    }}
                     horizontal={true}
                     renderItem={renderGameNameBox}
                   />
@@ -319,29 +323,60 @@ const setCancelModalVisibilityCb = (val) => {
                   <SelfRatingCard editSelfRating={null} />
                 </>
               )}
-             
             </>
           ) : null}
         </ScrollView>
       </LinearGradient>
-      {cancelModalVisible 
-        ? 
-          (
-            <CancelSessionModal confirmType={true} onCancel={()=>{}} cancelModalVisible={cancelModalVisible} setModalVisibility={()=>setCancelModalVisibilityCb()} />
-          ) 
-        : null
-      }
-      <View style={styles.skyFilledButtonView}>
-        <SkyFilledButton
-          onPress={() => {
-        
-            navigation.navigate("BookSlotScreen");
-            bookSlotPressed;
+      {cancelModalVisible ? (
+        <CancelSessionModal
+          confirmType={true}
+          onCancel={() => {}}
+          cancelModalVisible={cancelModalVisible}
+          setModalVisibility={() => setCancelModalVisibilityCb()}
+        />
+      ) : null}
+       {limitReachedForToday ? <View style={styles.emptyView} /> : null}
+      {!limitReachedForToday ? (
+        <View style={styles.skyFilledButtonView}>
+          <SkyFilledButton
+            onPress={() => {
+              navigation.navigate("BookSlotScreen");
+              bookSlotPressed;
+            }}
+          >
+            Book Slot
+          </SkyFilledButton>
+        </View>
+      ) : (
+        <LinearGradient
+          colors={["rgba(87, 85, 98, 1)", "rgba(42, 40, 56, 1)"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            height: 126,
+            width: "100%",
+            padding: 12,
           }}
         >
-          Book Slot
-        </SkyFilledButton>
-      </View>
+          <Text style={styles.expiryDesc}>
+            {
+              "Sorry! You have reached the maximum limit of booking slots for today."
+            }
+          </Text>
+          <View style={{ zIndex: 4 }}>
+            <CustomButton
+              name={"Book Slot"}
+              textColor={"#939393"}
+              inactiveColors={["rgba(71, 71, 74, 1)", "rgba(71, 71, 74, 1)"]}
+              hideImage={true}
+              available={false}
+              onPress={() => {}}
+            />
+          </View>
+        </LinearGradient>
+      )}
     </View>
   );
 }
@@ -352,6 +387,13 @@ const styles = StyleSheet.create({
     width: 12,
     resizeMode: "contain",
   },
+  expiryDesc: {
+    fontSize: 12,
+    color: lightYellowVariant,
+    fontFamily: Nunito_Regular,
+    fontWeight: "600",
+    marginBottom:9
+  },
   menuHeading: {
     color: "#FF9C33",
     fontSize: 16,
@@ -359,7 +401,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     textAlign: "center",
   },
-
+  emptyView: {height: 62, width: '100%', backgroundColor:'transparent'},
   skyFilledButtonView: {
     position: "absolute",
     width: "80%",

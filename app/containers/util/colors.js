@@ -52,3 +52,4 @@ export const yellowVariant8 = "#FFDC64";
 export const redVariant3 = "#FF8383";
 export const redVariant4 = "#FF4D4D";
 export const blueVariant1 = '#8282FF'
+export const lightYellowVariant = "#F6C276";
