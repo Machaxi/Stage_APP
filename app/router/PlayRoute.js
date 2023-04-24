@@ -24,10 +24,10 @@ import BookSlotCentreSelectionScreen from "../containers/play/BookSlotCentreSele
 
 const playModule = createStackNavigator({
   Play: {
-    // screen: PlayScreen,
-    screen: PlayPage,
+    screen: PlayScreen,
+    //screen: PlayPage,
     navigationOptions: ({ navigation }) => ({
-      title: "PLay",
+      title: "Play",
       headerLeft: (
         <NavigationDrawerWhite
           navigationProps={navigation}

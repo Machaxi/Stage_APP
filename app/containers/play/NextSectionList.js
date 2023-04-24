@@ -6,24 +6,31 @@ import {
 import { NextSessionCard } from "./NextSessionCard";
 
   
-export const NextSessionList = ({NextSessionData ,onCancelPress}) => {
+export const NextSessionList = ({
+         NextSessionData,
+         onCancelPress,
+         expandList,
+       }) => {
+        const [refresh, setRefresh] = useState(false)
+         const renderNextScreenCard = ({ item }) => {
+           return (
+             <NextSessionCard
+               expandList={() => {
+                setRefresh(!refresh)
+                expandList(item)}}
+               onCancelPress={() => {
+                 onCancelPress(item);
+               }}
+               item={item}
+             />
+           );
+         };
 
-      
-    const renderNextScreenCard = ({item}) => {
-        console.log('renderNextScreenCard')
-        console.log({item})
-        return (
-        <NextSessionCard
-        onCancelPress={()=>{onCancelPress(item)}}
-        item={item}
-        />
-        )
-    };
-  return(<>
-    <FlatList
-        data={NextSessionData}
-        renderItem={renderNextScreenCard}
-    />
-        </>
-    )
-}
+         return (
+           <FlatList
+             extraData={refresh}
+             data={NextSessionData}
+             renderItem={renderNextScreenCard}
+           />
+         );
+       };

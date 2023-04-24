@@ -3,12 +3,14 @@ import { Text,View, StyleSheet } from "react-native";
 import { greenVariant, lightGreenBg } from "../containers/util/colors";
 import { deviceWidth } from "../containers/util/dimens";
 
-const NamedRoundedContainer = ({ name, bgColor, txtColor }) => {
+const NamedRoundedContainer = ({width , paddingVertical, name, bgColor, txtColor }) => {
   return (
     <View
       style={[
         styles.requestContainer,
         {
+          width: width ?? deviceWidth * 0.35,
+          paddingVertical: paddingVertical ?? 2,
           backgroundColor: bgColor ?? lightGreenBg,
           borderColor: txtColor ?? greenVariant,
         },
@@ -26,8 +28,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 1,
     paddingHorizontal: 12,
-    paddingVertical: 2,
-    width: deviceWidth * 0.35,
+    
+    
   },
   requestType: {
     fontSize: 12,

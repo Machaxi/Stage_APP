@@ -7,37 +7,27 @@ import {
     Pressable,
     Image
   } from "react-native";
-  // import SvgUri from "react-native-svg-uri";
+import { Nunito_Regular } from "../util/fonts";
+import { greyVariant1 } from "../util/colors";
 
   
 export const PeerRatingCard = ({ item,  }) => {
-  console.log({item})
   return(
     <View style={styles.container}>
-
       <Image style={{ height: 50, width: 50 }} 
         source={item['icon']} 
         resizeMode='cover'
       />
-      {/* <SvgUri
-          width="30"
-          height="22"
-          source={item['icon']}
-          style={{ transform: [{ rotate: "180deg" }] }}
-        /> */}
       <View style={{marginLeft:12,}}>
-        <Text style={{color:item['titleColor'],fontSize: 14,}}>
+        <Text style={[{color:item['titleColor'],}, styles.proficiencyTxt]}>
           {item['title']}
         </Text>
         <View style={styles.descBox}>
-
           <Text style={styles.desc}>Rated by </Text>
           <Text style={styles.desc}>{item['by']}</Text>
           <Text style={styles.desc}> players</Text>
         </View>
-
       </View>
-
     </View>
   )
 }
@@ -47,9 +37,11 @@ export const PeerRatingCard = ({ item,  }) => {
 const styles = StyleSheet.create ({
   container:{
     flexDirection:'row',
-    marginHorizontal:20,
-    paddingVertical:16
+    alignItems:'center',
+    marginBottom:18,
+
   },
+  proficiencyTxt: {fontSize: 14, fontFamily: Nunito_Regular, fontWeight: '500'},
   rounded_button: {
       alignItems: 'center',
       justifyContent:'center',
@@ -64,11 +56,11 @@ const styles = StyleSheet.create ({
       borderRadius: 20,
   },
   desc:{
-    color:'white',
+    color: greyVariant1,
     fontSize: 12,
   },
   descBox:{
     flexDirection:'row', 
-    marginTop:10 
+    marginTop:3
   },
 })
