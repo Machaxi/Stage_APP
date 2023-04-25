@@ -64,14 +64,13 @@ class BookSlotCentreSelection extends Component {
     this.setState({ isLoading: true });
     Geolocation.getCurrentPosition(
       (position) => {
-        console.log(position);
         var lats = parseFloat(position.coords.latitude);
         var lngs = parseFloat(position.coords.longitude);
         this.setState({
           latitude: lats,
           longitude: lngs,
           centerData: this.props.academiesList,
-          isLoading: false,
+          isLoading: false
         });
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
@@ -90,13 +89,18 @@ class BookSlotCentreSelection extends Component {
       },
       (error) => {
         this.setState({ isLoading: false });
-        console.log(error.code, error.message);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   }
 
   componentDidMount() {
+    if (this.props.preferredAcademyId != null){
+      this.setState({
+        currentIndex: this.props.preferredAcademyId,
+        proseednext: true,
+      });
+    }
     this.requestPermissions();
   }
 
@@ -172,6 +176,7 @@ class BookSlotCentreSelection extends Component {
             console.log({val})
             this.props.selectedTimePeriod(val)}}
           onPress={() => {
+            this.props.onAcademySelection(item);
             this.setState({
               currentIndex: item?.academy.id,
               proseednext: true,
@@ -201,6 +206,7 @@ class BookSlotCentreSelection extends Component {
   };
 
   render() {
+
     return (
       <View style={styles.contained}>
         <Loader visible={this.state.isLoading} />

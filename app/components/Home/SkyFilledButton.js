@@ -21,12 +21,12 @@ export const SkyFilledButton = ({ onPress, children }) => {
     );
 }
 
-export const SkyBorderButton = ({ onPress, children }) => {
+export const SkyBorderButton = ({ onPress, width, children }) => {
 
 
     return (
         <TouchableOpacity activeOpacity={.8}
-            style={styles.rounded_button1}
+            style={[styles.rounded_button1]}
             onPress={onPress}>
             <Text
                 style={{

@@ -41,6 +41,21 @@ export const MonthNames = [
 //     "code": 200
 // }
 
+export const getNumericProficiency = (input) => {
+  switch (input) {
+    case "BASIC":
+      return 1;
+    case "INTERMEDIATE":
+      return 2;
+    case "ADVANCED":
+      return 3;
+    case "PROFESSIONAL":
+      return 4;
+    default:
+      return null;
+  }
+}
+
 export const requestStatus = (input) => {
     var statusVal = '';
     if (input == "ACCEPTED") {

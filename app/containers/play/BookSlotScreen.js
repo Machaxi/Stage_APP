@@ -33,7 +33,6 @@ import { client } from "../../../App";
 import CustomButton from "../../components/custom/CustomButton";
 
 const BookSlotScreen = ({ navigation }) => {
- var slotApiError = null;
  var planAndSportsError = null;
  const [modalVisible, setModalVisibility] = useState(false);
  const [count, setCount] = useState(0);
@@ -43,7 +42,6 @@ const BookSlotScreen = ({ navigation }) => {
    `${moment(new Date()).format("yyyy-MM-DD")}`
  );
 
- const [sportsList, setSportsList] = useState([]);
  const [proficiency, setProficiency] = useState(null);
  const [selectedSportsId, setSelectedSportsId] = useState(null);
  const [user, setUser] = useState("yourself");
@@ -60,7 +58,7 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
        //"x-authorization": value,
        //TODO:remove this static logic
        "x-authorization":
-         "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+         "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
      };
      //client.call
      client
@@ -76,7 +74,9 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
          let success = json.success;
          console.log("---->" + success);
          if (success) {
-           
+           if (json?.data?.plan?.preferredSportId != null){
+             setSportsId(json?.data?.plan?.preferredSportId);
+           }
            setPlanAndSportsApiRes(json.data);
          } else {
            if (json.code == "1020") {
@@ -158,7 +158,9 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
       proficiency: proficiency,
       guestCount: count,
       sportId: selectedSportsId,
-      playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0
+      playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0,
+      preferredAcademyId: planAndSportsApiRes?.plan?.preferredAcademyId,
+      preferredSportId: planAndSportsApiRes?.plan?.preferredSportId
     });
   }
 
@@ -182,7 +184,6 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
   if (loading) {
     return <LoadingIndicator />;
   }
-  console.log({ showProficiencyMenu });
 
   return (
     <View style={{ flex: 1 }}>

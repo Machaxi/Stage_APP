@@ -29,6 +29,7 @@ import { client } from "../../../App";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
 import BeginnerWarningModal from "../../components/molecules/beginnerWarningModal";
+import { getNumericProficiency } from "../util/utilFunctions";
 
 const BookSlotCentreSelectionScreen = ({ navigation }) => {
   var fetchSlotError = null;
@@ -38,7 +39,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   const [showBeginnerWarningModal, setBeginnerWarningModalVisibility] = useState(false);
   const [showAdvancedWarningModal, setAdvancedWarningModalVisibility] = useState(false);
   const [showSlotUnavailableModal, setSlotUnavailableModalVisibility] = useState(false);
+  const [selectedAcademyData, setSelectedAcademyData] = useState(null);
   const [count, setCount] = useState(0);
+  const [preferredAcademyId, setPreferredAcademyId] = useState(null);
+  const [preferredSportId, setPreferredSportId] = useState(null);
   const [selectedMorningTime, setSelectedMorningTime] = useState(null);
   const [selectedEveningTime, setSelectedEveningTime] = useState(null);
   const [selectedSportData, setSelectedSportData] = useState(null);
@@ -74,7 +78,12 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    
+     const {
+      
+      preferredSportId,
+      preferredAcademyId,
+    } = navigation?.state?.params;
+
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
     });
@@ -89,7 +98,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       checkNotification();
     });
 
-    
+    setPreferredAcademyId(preferredAcademyId)
+    setPreferredSportId(preferredSportId)
     bookSlotFetchApi();
     //getSportsData();
     return () => {
@@ -99,24 +109,12 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     };
   }, []);
 
-  const onNextPress = () => {
-    setModalVisibility(true);
-  };
-
-  const setModalVisibilityCb = (val) => {
-    setModalVisibility(val);
-  };
-
-  const onPressCenter = (val) => {
-
-  }
-
-
   const bookSlotFetchApi = async () => {
-    console.log('*******')
-    const { date, sportId } = navigation?.state?.params;
+    const {
+      date,
+      sportId
+    } = navigation?.state?.params;
 
-    console.log('????')
     setLoading(true);
     getData("header", (value) => {
       if (value == "") return;
@@ -125,7 +123,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
         //"x-authorization": value,
         //TODO:remove this static logic
         "x-authorization":
-          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+          "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
       };
       //client.call
       client
@@ -134,8 +132,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           params: {
             sportId: sportId,
             // TODO:
-            // date: date,
-            date: "2023-04-20",
+            date: date,
+            //date: "2023-04-20",
           },
         })
         .then(function(response) {
@@ -167,9 +165,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   const bookSlotPressed = async() => {
-    const { playHoursRemaining } = navigation?.state?.params;
-   
-    
+    const { playHoursRemaining, guestCount } = navigation?.state?.params;
+    var guestCountVal = guestCount == null || typeof guestCount == undefined ? 0 : guestCount;
+    var totalPlayersCount = 1 + guestCount;
     var finalDifference = 0;
     if (slotStartTime != null && slotEndTime != null) {
       var randomStartDateTime = "1970-01-01T" + slotStartTime;
@@ -185,10 +183,100 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       finalDifference =
         Math.floor(diffInHours) + Math.floor(diffInMinutes / 60);
     }
-    console.log('remainling hors ' + playHoursRemaining)
-    console.log('final diff' + finalDifference)
+    
     if(playHoursRemaining > finalDifference){
-      bookChosenSlotApi()
+      //after verifying that player has sufficient hours to play proceed to check other contrainsts below
+      //bookChosenSlotApi()
+
+      if (selectedAcademyData != null) {
+        if (
+          selectedAcademyData?.bookings != null &&
+          selectedAcademyData?.bookings?.length > 0
+        ) {
+          //check if any other court is available for booking
+          var courtMatchFound = false;
+          selectedAcademyData?.courts?.map((val)=> {
+            var playerTimePeriod = startTime + endTime;
+            var courtTimePeriod = val.startTime + val.endTime;
+            if(playerTimePeriod == courtTimePeriod){
+              if(selectedTimePeriodVal != val.courtTimingId){
+                courtMatchFound = true;
+                bookChosenSlotApi(
+                  selectedEveningTime != null
+                    ? selectedEveningTime
+                    : selectedMorningTime
+                );
+              }
+            }
+
+          })
+
+          //court could not be found so now we need to check availability in already booked courts
+          if(!courtMatchFound){
+            var lowerProfFound = false;
+            var lowerProfData = null;
+            var playerSpaceAvailable = false;
+            selectedAcademyData?.bookings?.map((val)=>{
+              //TODO: api se max 0 and total 1 aa raha hai, backend issue for present data
+              var availablePlayerCount = val.maxPlayersAllowed - val.totalPlayers;
+              if(availablePlayerCount >= totalPlayersCount){
+                playerSpaceAvailable = true;
+                //there are no other courts available for same time slot in the selected academy
+                selectedAcademyData?.bookings?.map((VAL) => {
+                  var bookingTimePeriod = VAL.startTime + VAL.endTime;
+                  var playerTimePeriod = startTime + endTime;
+                  if (bookingTimePeriod == playerTimePeriod) {
+                    var bookedPlayerNumericProf = getNumericProficiency(
+                      VAL.proficiency[0]
+                    );
+                    var numericCurrentUserProf = getNumericProficiency(
+                      proficiency
+                    );
+                    if (bookedPlayerNumericProf <= numericCurrentUserProf) {
+                      lowerProfData = VAL;
+                      lowerProfFound = true;
+                    }
+                   
+                  }
+                });
+              }
+              else {
+                //TODO: need to verify whether to show toast only or hit bookslotapi
+              }
+            })
+            
+            if(lowerProfFound){
+              if (lowerProfData != null) {
+                //getValue of courtTimingId from bookings and pass here
+                setAdvancedWarningModalVisibility(true)
+                if (selectedEveningTime != null) {
+                  //TODO:
+                  setSelectedEveningTime(lowerProfData?.courtTimingId);
+                } else {
+                  //TODO:
+                  setSelectedMorningTime(lowerProfData?.courtTimingId);
+                }
+              }
+            }
+            else {
+              if(playerSpaceAvailable){
+                setBeginnerWarningModalVisibility(true)
+              }
+              else {
+                //TODO: need to verify whether to show toast only or hit bookslotapi
+              }
+            }
+          }
+
+          //
+        } else {
+          //here we've not got any bookings so can proceed for book slot
+          
+          bookChosenSlotApi(selectedEveningTime != null
+                    ? selectedEveningTime
+                    : selectedMorningTime);
+        }
+      }
     }
     else {
       setModalVisibilityRenewPlan(true)
@@ -196,13 +284,21 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     //bookChosenSlotApi()
   }
 
-  const bookChosenSlotApi = async () => {
+  const bookSlotCb = () => {
+    bookChosenSlotApi(
+      selectedEveningTime != null
+        ? selectedEveningTime
+        : selectedMorningTime
+    );
+  }
+
+  const bookChosenSlotApi = async (courtTimingID) => {
     const { date, proficiency, guestCount } = navigation?.state?.params;
     const data = {
       //TODO:
-      //date: date,
-      date: '2023-04-23',
-      courtTimingId: selectedEveningTime != null ? selectedEveningTime : selectedMorningTime,
+      date: date,
+      //date: '2023-04-23',
+      courtTimingId: courtTimingID,
       proficiency: proficiency,
       guestCount: guestCount,
     };
@@ -213,10 +309,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       if (value == "") return;
       const headers = {
         "Content-Type": "application/json",
-        "x-authorization": value,
+        //"x-authorization": value,
         //TODO:remove this static logic
-        // "x-authorization":
-        //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+        "x-authorization":
+          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
       };
       //client.call
       client
@@ -244,12 +340,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             }
             setLoading(false);
           } catch (e) {
+            const {proficiency} = navigation?.state?.params;
             setLoading(false);
             ToastAndroid.show(
               `${slotBookApiError?.response?.response?.data
                 ?.error_message ?? ""}`,
               ToastAndroid.SHORT
             );
+            
           }
         })
         .catch(function(error) {
@@ -262,6 +360,12 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
         });
     });
   };
+
+  const onAcademySelection = (value) => {
+    console.log('+++++++')
+    console.log({value})
+    setSelectedAcademyData(value)
+  }
 
     const onRefresh = () => {
       setRefreshing(true);
@@ -279,7 +383,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   console.log({ slotApiRes });
   console.log({slotBookedRes})
   
-
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
@@ -300,6 +403,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           <View style={{ marginHorizontal: 18 }}>
             {slotApiRes?.academyCourts?.length > 0 ? (
               <BookSlotCentreSelection
+                onAcademySelection={(value)=>{
+                  onAcademySelection(value)
+                }}
                 selectedTimePeriod={(val) => {
                   if (val?.startTime) {
                     setSlotStartTime(val?.startTime);
@@ -311,6 +417,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 }}
                 morningTime={[]}
                 eveningTime={[]}
+                preferredAcademyId={preferredAcademyId}
+                preferredSportId={preferredSportId}
                 selectedMorningTime={selectedMorningTime}
                 setSelectedMorningTimeVal={(val) =>
                   setSelectedMorningTime(val)
@@ -322,7 +430,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 onPress={(val) => {
                   //TODO: remove it
                   //setAdvancedWarningModalVisibility(true);
-                  bookSlotPressed()
+                  bookSlotPressed();
                 }}
                 academiesList={slotApiRes?.academyCourts}
                 selectSport={selectedSportData}
@@ -333,22 +441,26 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             // ? (
             <SlotBookedModal
               slotInfo={slotBookedRes?.data}
-              modalVisible={modalVisible}
+              modalVisible={showSlotBookedModal}
               setModalVisibility={(val) => setSlotBookedModalVisibility(val)}
             />
           ) : null}
           {renewPlanModalVisible ? (
             <AddGuestUserModal
-              onBtnPress={() => {}}
-              onExploarePlans={()=>{}}
+              onBtnPress={() => {
+                //TODO: add renew plan logic
+              }}
+              onExplorePlansPressed={() => {}}
               biggerImg={require("../../images/add_guests_img.png")}
-              modalVisible={modalVisible}
+              modalVisible={renewPlanModalVisible}
               setModalVisibility={(val) => setModalVisibilityRenewPlan(val)}
             />
           ) : null}
           {showBeginnerWarningModal ? (
             <BeginnerWarningModal
-              onBtnPress={() => {}}
+              onBtnPress={() => {
+                bookSlotCb();
+              }}
               forBeginner={true}
               onRequestBookSlot={() => {}}
               biggerImg={require("../../images/add_guests_img.png")}
@@ -360,7 +472,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           ) : null}
           {showAdvancedWarningModal ? (
             <BeginnerWarningModal
-              onBtnPress={() => {}}
+              onBtnPress={() => {
+                bookSlotCb();
+              }}
               forBeginner={false}
               onRequestBookSlot={() => {}}
               biggerImg={require("../../images/add_guests_img.png")}

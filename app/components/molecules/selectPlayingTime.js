@@ -22,27 +22,33 @@ const SelectPlayingTime = ({
 }) => {
   return (
     <ScrollView style={{ flexDirection: "row", flexWrap: "wrap" }}>
-      {timeData.length > 0
-        ? timeData.map((item) => {
-            return (
-              <SelectTimeItem
-                // width={deviceWidth * 0.3}
-                isSelected={item?.courtTimingId == selectedTime}
-                image={require("../../images/playing/clock.png")}
-                selectItem={selectedTime}
-                id={item?.courtTimingId}
-                // name={`${item.startTime} - ${item.endTime}`}
-                name={`${item?.displayTime}`}
-                onPress={(val) => {
-                  selectedTimePeriod({
-                    startTime: item?.startTime,
-                    endTime: item.endTime
-                  });
-                  setSelectedTime(val);
-                }}
-              />
-            );
-          })
+      {timeData.length > 0 ?
+       
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                numColumns={2}
+                data={timeData}
+                renderItem={({item})=>{
+                return(
+                  <SelectTimeItem
+                    // width={deviceWidth * 0.3}
+                    isSelected={item?.courtTimingId == selectedTime}
+                    image={require("../../images/playing/clock.png")}
+                    selectItem={selectedTime}
+                    id={item?.courtTimingId}
+                    // name={`${item.startTime} - ${item.endTime}`}
+                    name={`${item?.displayTime}`}
+                    onPress={(val) => {
+                      selectedTimePeriod({
+                        startTime: item?.startTime,
+                        endTime: item.endTime
+                      });
+                      setSelectedTime(val);
+                    }}
+                  />
+                );
+              }}
+          />
         : null}
     </ScrollView>
   );

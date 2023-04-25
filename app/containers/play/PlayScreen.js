@@ -251,6 +251,7 @@ const getPlayerDetailsApi = async () => {
         let success = json.success;
         if (success) {
           if (json.data?.peerRating?.length > 0) {
+            var todayLimitReached = false;
             var nextSessionVal = json.data?.peerRating;
             var peerData = json.data?.peerRating;
             var sportsData = json.data?.rating;
@@ -263,6 +264,16 @@ const getPlayerDetailsApi = async () => {
              for (var i = 0; i < peerData?.length; i++) {
                peerData["isSelected"] = false;
              }
+          
+            todayLimitReached =
+              json.data?.plan?.maxPlayingHourPerDay == 0 ||
+              json.data?.plan?.maxPlayingHourPerDay == 0.0 ||
+              json.data?.plan?.maxPlayingHourPerDay == null
+                ? true
+                : false;
+            setLimitReachForToday(
+              todayLimitReached
+            );
             setPeerSportsList(peerData);
             setNextSessionData(nextSessionVal);
             setSportsList(sportsData);
@@ -289,8 +300,7 @@ const getPlayerDetailsApi = async () => {
 };
 
 useEffect(() => {
-  console.log('useEffect')
-  console.log({playerDetailsResponse})
+ 
   if (playerDetailsResponse?.plan?.preferredSportId != null)
     if (playerDetailsResponse?.rating?.length > 0) {
       for(var i = 0; i < playerDetailsResponse?.rating?.length; i++){
@@ -341,8 +351,7 @@ const onGameSelected=(item)=>{
 }
 
 const renderGameNameBox = ({ item }) => {
-  console.log('***')
-  console.log({item})
+
   return (
     <GameNameBox
       isSelected={item?.isSelected}
@@ -472,10 +481,6 @@ const onSavePress = (val) => {
   setSelfRatingActiveness(false)
   console.log({val})
 }
-
-
-  console.log({playerDetailsResponse})
-  console.log({ preferredDetails });
 
     if (loading) {
       return <LoadingIndicator />;
@@ -716,10 +721,13 @@ const styles = StyleSheet.create({
   },
   emptyView: {height: 62, width: '100%', backgroundColor:'transparent'},
   skyFilledButtonView: {
+    flex:1,
     position: "absolute",
-    width: "80%",
+    width: "100%",
+    paddingHorizontal: 10,
     alignSelf: "center",
-    bottom: 12,
+    justifyContent:'center',
+    bottom: 15,
   },
 
   playingLevelContainer: {
