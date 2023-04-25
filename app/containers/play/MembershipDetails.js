@@ -15,13 +15,16 @@ import { deviceWidth } from "../util/dimens";
 import NamedRoundedContainer from "../../atoms/namedRoundedContainer";
 
   
-export const MembershipDetails = ({ aboutToExpire, onRenewPress, onMorePlansPress, slotsExhaused, membershipExpired, purchasedDate, expiryDate ,profilePrecentage,hoursLeft}) => {
+export const MembershipDetails = ({totalHrs, aboutToExpire, onRenewPress, onMorePlansPress, slotsExhaused, membershipExpired, purchasedDate, expiryDate ,profilePrecentage,hoursLeft}) => {
 
     const [profileComplelete, setProfileComplelete] = useState('');
 
     useEffect(() => {
         setProfileComplelete(profilePrecentage);
-      }, []);
+    }, []);
+
+    console.log('total' + totalHrs + '** '+hoursLeft)
+    console.log("val =>" + (hoursLeft * 100) / totalHrs);
 
     return (
       <View style={styles.container}>
@@ -106,7 +109,7 @@ export const MembershipDetails = ({ aboutToExpire, onRenewPress, onMorePlansPres
                 <View style={styles.progressView}>
                   <Progress.Circle
                     size={80}
-                    progress={profileComplelete}
+                    progress={hoursLeft / totalHrs}
                     borderWidth={0}
                     unfilledColor={"#404040"}
                     showsText={true}

@@ -53,3 +53,7 @@ export const redVariant3 = "#FF8383";
 export const redVariant4 = "#FF4D4D";
 export const blueVariant1 = '#8282FF'
 export const lightYellowVariant = "#F6C276";
+export const beginnerGradients = ["#24c6a042", "#8ef9ab59"];
+export const intermediateGradients = ["#fd750169", "#ffd0013d"];
+export const advancedGradients = ["#fd4f8659", "#ffa18d66"];
+export const professionalGradients = ["#ae3eff52", "#fb7dff75"];

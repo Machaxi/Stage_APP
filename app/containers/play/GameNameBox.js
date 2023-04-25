@@ -5,14 +5,15 @@ import {
     TouchableOpacity
   } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { white } from "../util/colors";
 
   
-export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,borderRadius,fontSize,marginTop,onPress}) => {
+export const GameNameBox = ({isSelected, item,paddingHorizontal, paddingVertical, height,borderRadius,fontSize,marginTop,onPress}) => {
 
   return (
     <LinearGradient
       colors={
-        item["isSelected"]
+        isSelected
           ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
           : ["rgba(255, 255, 255, 0.3)", "rgba(118, 87, 136, 0)"]
       }
@@ -21,7 +22,7 @@ export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,bo
       style={[
         styles.rounded_button,
         {
-          borderColor: item["isSelected"]
+          borderColor: isSelected
             ? "rgba(138, 112, 84, 1)"
             : "rgba(70, 56, 85, 1)",
         },
@@ -38,18 +39,18 @@ export const GameNameBox = ({ item,paddingHorizontal, paddingVertical, height,bo
             borderRadius: borderRadius ? borderRadius : 20,
           },
         ]}
-        onPress={()=>onPress()}
+        onPress={() => onPress()}
       >
         <Text
           style={{
-            color: item["isSelected"] ? "#F2AE4D" : item["color"],
+            color: isSelected ? "#F2AE4D" : white,
             fontSize: fontSize ? fontSize : 14,
             textAlign: "center",
             fontFamily: "Nunito-Regular",
             fontWeight: "400",
           }}
         >
-          {item["title"]}
+          {item?.name}
         </Text>
       </TouchableOpacity>
     </LinearGradient>

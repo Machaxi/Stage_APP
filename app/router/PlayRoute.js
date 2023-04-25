@@ -26,26 +26,7 @@ const playModule = createStackNavigator({
   Play: {
     screen: PlayScreen,
     //screen: PlayPage,
-    navigationOptions: ({ navigation }) => ({
-      title: "Play",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-        />
-      ),
-      headerTitleStyle: style.headerStyle,
-      headerStyle: {
-        backgroundColor: "#21202F",
-      },
-    }),
+   
   },
   BookPlayTrail: {
     screen: LearnBookTrial,

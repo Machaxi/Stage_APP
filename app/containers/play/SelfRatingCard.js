@@ -11,101 +11,163 @@ import LinearGradient from "react-native-linear-gradient";
 import { PeerRatingCard } from "./PeerRatingCard";
 import { SelfRatingBox } from "./SelfRatingBox";
 import { SeperatingLine } from "./SeperatingLine";
-import { advanceColor, beginnersColor, blueVariant, greyVariant11, intermediatesColor, professionalsColor } from "../util/colors";
+import { advanceColor, beginnersColor, blueVariant, greyVariant11, intermediatesColor, professionalsColor, white } from "../util/colors";
 import { Nunito_Regular } from "../util/fonts";
 import { commonStyles } from "../util/commonStyles";
 import { GradientLine } from "../../components/molecules/gradientLine";
+import { getProficiencyColor, getProficiencyEmoji, getProficiencyName } from "../util/utilFunctions";
+import NamedRoundedGradientContainer from "../../components/molecules/roundedNamedGradientContainer";
 
   
-export const SelfRatingCard = ({editSelfRating}) => {
+export const SelfRatingCard = ({
+         onRatingSelection, proficiencyData,
+         editSelfRating,
+         onEditPress,
+         onSavePress,
+         ratingData,
+         userId,
+       }) => {
+         var selectedSportRelatedRating = null;
+         ratingData.map((val) => {
+           if (val?.isSelected) {
+             selectedSportRelatedRating = val;
+           }
+         });
+         const data = [
+           {
+             icon: require("./../../images/beginner.png"),
+             title: "Beginner",
+             id: 1,
+             by: selectedSportRelatedRating?.peers?.BASIC,
+             titleColor: beginnersColor,
+           },
+           {
+             icon: require("./../../images/intermediate.png"),
+             title: "Intermediate",
+             by: selectedSportRelatedRating?.peers?.INTERMEDIATE,
+             titleColor: intermediatesColor,
+           },
+           {
+             icon: require("./../../images/advance.png"),
+             title: "Advance",
+             by: selectedSportRelatedRating?.peers?.ADVANCED,
+             titleColor: advanceColor,
+           },
+           {
+             // icon:<Intermediate height={50} width={50} />,
+             icon: require("./../../images/professional.png"),
+             title: "Professional",
+             by: selectedSportRelatedRating?.peers?.PROFESSIONAL,
+             titleColor: professionalsColor,
+           },
+         ];
+         useEffect(() => {}, []);
 
-    const data = [
-      {
-        icon: require("./../../images/beginner.png"),
-        title: "Beginner",
-        id: 1,
-        by: "4",
-        titleColor: beginnersColor,
-      },
-      {
-        icon: require("./../../images/intermediate.png"),
-        title: "Intermediate",
-        by: "2",
-        titleColor: intermediatesColor,
-      },
-      {
-        icon: require("./../../images/advance.png"),
-        title: "Advance",
-        by: "8",
-        titleColor: advanceColor,
-      },
-      {
-        // icon:<Intermediate height={50} width={50} />,
-        icon: require("./../../images/professional.png"),
-        title: "Professional",
-        by: "5",
-        titleColor: professionalsColor,
-      },
-    ];
-      useEffect(() => {       
-        
-      }, [])
+         const renderSocialFeedCard = ({ item }) => {
+           return <PeerRatingCard item={item} />;
+         };
 
-    const renderSocialFeedCard = ({ item }) => {
-        return (
-            <PeerRatingCard 
-                item={item} 
-            />
-        );
-    };
-  
-  return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={[
-          "rgba(255, 255, 255, 0.068)",
-          " rgba(255, 255, 255, 0.0102)",
-        ]}
-        style={styles.gradient}
-      >
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Self Rating </Text>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              {
-                editSelfRating();
-              }
-            }}
-          >
-            <View style={commonStyles.flexRowNormal}>
-              <Image
-                resizeMode="contain"
-                style={styles.image}
-                source={require("../../images/edit_profile.png")}
-              />
+         console.log("++");
+         console.log({ selectedSportRelatedRating });
+         console.log({ data });
 
-              <Text style={styles.edit}>Edit</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <SelfRatingBox
-          title={"Beginner"}
-          titleColor={"#21D096"}
-          imageSize={20}
-          icon={require("./../../images/beginner_emoji.png")}
-        />
-        <GradientLine
-          marginTop={22}
-          colors={["#6b6a76", "#2a273a"]}
-        />
-        <Text style={styles.peersRating}>Peers rating</Text>
+         return (
+           <View style={styles.container}>
+             <LinearGradient
+               colors={[
+                 "rgba(255, 255, 255, 0.068)",
+                 " rgba(255, 255, 255, 0.0102)",
+               ]}
+               style={styles.gradient}
+             >
+               <View style={styles.headerContainer}>
+                 <Text style={styles.header}>Self Rating </Text>
 
-        <FlatList data={data} renderItem={renderSocialFeedCard} />
-      </LinearGradient>
-    </View>
-  );
-}
+                 <TouchableOpacity
+                   activeOpacity={0.8}
+                   onPress={() => {
+                     {
+                       if (editSelfRating) {
+                         onSavePress(selectedSportRelatedRating);
+                       } else {
+                         onEditPress();
+                       }
+                     }
+                   }}
+                 >
+                   {editSelfRating ? (
+                     <Text style={[styles.edit, { marginLeft: 14 }]}>
+                       Save
+                     </Text>
+                   ) : (
+                     <View style={commonStyles.flexRowNormal}>
+                       <Image
+                         resizeMode="contain"
+                         style={styles.image}
+                         source={require("../../images/edit_profile.png")}
+                       />
+                       <Text style={styles.edit}>Edit</Text>
+                     </View>
+                   )}
+                 </TouchableOpacity>
+               </View>
+               {editSelfRating && (
+                 <FlatList
+                   data={proficiencyData}
+                   numColumns={2}
+                   contentContainerStyle={{}}
+                   renderItem={({ item }) => {
+                     return (
+                       <TouchableOpacity
+                         onPress={() => {
+                           onRatingSelection(item);
+                         }}
+                         style={{
+                           marginRight: 9,
+                           marginBottom: 10,
+                         }}
+                       >
+                         <NamedRoundedGradientContainer
+                           name={item?.level}
+                           txtColor={white}
+                           colors={
+                             item.isSelected == false
+                               ? ["#ffffff11", "#ffffff03"]
+                               : item?.colors
+                           }
+                           image={item?.img}
+                           isImg={true}
+                         />
+                       </TouchableOpacity>
+                     );
+                   }}
+                 />
+               )}
+               {!editSelfRating  &&
+               <SelfRatingBox
+                 title={getProficiencyName(
+                   selectedSportRelatedRating?.self
+                 )}
+                 titleColor={getProficiencyColor(
+                   selectedSportRelatedRating?.self
+                 )}
+                 imageSize={20}
+                 icon={getProficiencyEmoji(
+                   selectedSportRelatedRating?.self
+                 )}
+               />
+                 }
+               <GradientLine
+                 marginTop={22}
+                 colors={["#6b6a76", "#2a273a"]}
+               />
+               <Text style={styles.peersRating}>Peers rating</Text>
+
+               <FlatList data={data} renderItem={renderSocialFeedCard} />
+             </LinearGradient>
+           </View>
+         );
+       };
 
 const styles = StyleSheet.create({
   gradient: {

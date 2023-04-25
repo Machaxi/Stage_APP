@@ -8,49 +8,55 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { redVariant2, yellowVariant4 } from "../util/colors";
 import NamedRoundedGradientContainer from "../../components/molecules/roundedNamedGradientContainer";
+import { getProficiencyGradients, getProficiencyName } from "../util/utilFunctions";
 
   
-export const PrefSport = ({icon,sportTitle,currentRating,currentRatingColor}) => {
-    return (
-      <View style={styles.container}>
-        <LinearGradient
-          colors={[
-            "rgba(255, 255, 255, 0.24)",
-            "rgba(255, 255, 255, 0.036)",
-          ]}
-          style={styles.gradient}
-        >
-          <View>
-            <Text style={styles.preferredSport}>Preferred sport</Text>
-            <View
-              style={[
-                styles.rounded_button,
-                styles.sportTitleView
-              ]}
-            >
-              <Image
-                style={{ height: 16, width: 16 }}
-                source={icon}
-                resizeMode="cover"
-              />
-              <Text style={styles.sportTitle}>{sportTitle}</Text>
-            </View>
-          </View>
+export const PrefSport = ({
+         gradientColors, 
+         icon,
+         sportTitle,
+         currentRating,
+         currentRatingColor,
+       }) => {
+         return (
+           <View style={styles.container}>
+             <LinearGradient
+               colors={[
+                 "rgba(255, 255, 255, 0.24)",
+                 "rgba(255, 255, 255, 0.036)",
+               ]}
+               style={styles.gradient}
+             >
+               <View>
+                 <Text style={styles.preferredSport}>
+                   Preferred sport
+                 </Text>
+                 <View
+                   style={[styles.rounded_button, styles.sportTitleView]}
+                 >
+                   <Image
+                     style={{ height: 16, width: 16 }}
+                     source={icon}
+                     resizeMode="cover"
+                   />
+                   <Text style={styles.sportTitle}>{sportTitle}</Text>
+                 </View>
+               </View>
 
-          <View style={styles.seperator} />
+               <View style={styles.seperator} />
 
-          <View>
-            <Text style={styles.currentRating}>Current rating</Text>
-            <NamedRoundedGradientContainer
-              name={"Intermediate"}
-              colors={["#fd75012a", "#ffd00118"]}
-              txtColor={yellowVariant4}
-            />
-          </View>
-        </LinearGradient>
-      </View>
-    );
-}
+               <View>
+                 <Text style={styles.currentRating}>Current rating</Text>
+                 <NamedRoundedGradientContainer
+                   name={currentRating}
+                   colors={gradientColors}
+                   txtColor={currentRatingColor}
+                 />
+               </View>
+             </LinearGradient>
+           </View>
+         );
+       };
 
 
 const styles = StyleSheet.create({
