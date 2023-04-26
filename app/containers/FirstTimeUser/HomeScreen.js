@@ -37,6 +37,7 @@ class HomeScreen extends Component {
       header: "",
       learnData: null,
       playData: null,
+      playPlanData: null,
     };
   }
 
@@ -76,11 +77,17 @@ class HomeScreen extends Component {
         this.setState({
           learnData: batchData["learn"],
           playData: batchData["play"],
+          playPlanData: batchData["play"]["plans"],
         });
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  onPressPlan = () => {
+    const data = this.state.playPlanData;
+    this.props.navigation.navigate("PlayingPlan", { data });
   };
 
   render() {
@@ -222,6 +229,7 @@ class HomeScreen extends Component {
           )}
           {this.state.currentPage === 2 && (
             <PlayerScreen
+              onPressPlan={this.onPressPlan}
               onPress={() => {
                 AsyncStorage.setItem("select_trial", "Playing Trial");
                 this.props.navigation.navigate("LearnBookTrial");

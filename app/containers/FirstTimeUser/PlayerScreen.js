@@ -36,13 +36,10 @@ class PlayerScreen extends Component {
           />
           <Image
             source={require("../../images/playing/play_sports.png")}
-            style={{ width: "85%", height: 540, marginLeft: 25 }}
+            style={{ width: "75%", height: 330, marginLeft: 50 }}
+            resizeMode="cover"
           />
-          <HeaderContentComponent
-            header={this.props.playData.header}
-            contents={this.props.playData["benefits"]}
-            colors={"#ED6F53"}
-          />
+          <Text style={styles.header}>{this.props.playData.header}</Text>
           <View style={styles.plancontained}>
             {this.props.playData["plans"].map((item) => (
               <TouchableOpacity activeOpacity={0.8}>
@@ -54,6 +51,11 @@ class PlayerScreen extends Component {
               </TouchableOpacity>
             ))}
           </View>
+          <HeaderContentComponent
+            header={""}
+            contents={this.props.playData["benefits"]}
+            colors={"#ED6F53"}
+          />
         </ScrollView>
         <LinearGradient
           colors={["rgba(255, 255, 255, 0.25)", "rgba(255, 255, 255, 0.06)"]}
@@ -71,13 +73,20 @@ class PlayerScreen extends Component {
                 available={true}
                 onPress={this.props.onPress}
               />
-              <TouchableOpacity activeOpacity={0.8}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={this.props.onPressPlan}
+              >
                 <Text style={styles.insideText}>Or Buy Playing plan</Text>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={{ width: "100%" }}>
-              <CustomButton name="Buy Coaching Plan" available={true} />
+              <CustomButton
+                name="Buy Coaching Plan"
+                available={true}
+                onPress={this.props.onPressPlan}
+              />
             </View>
           )}
         </LinearGradient>
@@ -95,6 +104,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: -60,
   },
 
   insideText: {
@@ -110,6 +120,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
     paddingBottom: 10,
+  },
+  header: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 15,
+    color: "#ED6F53",
   },
 });
 
