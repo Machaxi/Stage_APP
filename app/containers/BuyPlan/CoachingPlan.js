@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import ConfirmBooking from "../FirstTimeUser/TrialBook/ConfirmBooking";
-import SelectBatch from "../FirstTimeUser/TrialBook/SelectBatch";
 import SelectCenter from "../FirstTimeUser/TrialBook/SelectCenter";
 import SelectSports from "../FirstTimeUser/TrialBook/SelectSports";
-import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
-import CongratulationScreen from "../FirstTimeUser/TrialBook/CongratulationScreen";
-import SorryScreen from "../FirstTimeUser/TrialBook/SorryScreen";
 import GetBack from "../../components/custom/GetBack";
 import BuyPlanProcess from "../../components/custom/BuyPlanProcess";
 import { darkBlueVariant } from "../util/colors";
@@ -18,6 +13,8 @@ import SelectCoachPlan from "./components/SelectCoachPlan";
 import { Nunito_SemiBold } from "../util/fonts";
 import PlayerDetails from "./components/PlayerDetails";
 import SelectPay from "./components/SelectPay";
+import CongratsScreen from "./components/CongratsScreen";
+import SorryPage from "./components/SorryPage";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -110,8 +107,12 @@ class CoachingPlan extends Component {
     if (this.state.currentPage > 1) {
       this.setState({ currentPage: this.state.currentPage - 1 });
     } else {
-      this.props.navigation.goBack();
+      this.setState({ firstPage: true });
     }
+  };
+
+  hadleBack = () => {
+    this.props.navigation.goBack();
   };
 
   selectScreen = () => {
@@ -130,9 +131,6 @@ class CoachingPlan extends Component {
   };
 
   onPressDetails = (username, usergender, parent) => {
-    console.log(parent);
-    console.log(username);
-    console.log(usergender);
     this.setState({
       firstPage: false,
       currentPage: 1,
@@ -141,6 +139,9 @@ class CoachingPlan extends Component {
       parent: parent,
     });
   };
+
+  onPressSuccess = () => {};
+
   render() {
     return (
       <LinearGradient
@@ -149,23 +150,22 @@ class CoachingPlan extends Component {
         style={styles.container}
       >
         {this.state.firstPage && (
-          <PlayerDetails onPress={this.onPressDetails} />
+          <View style={{ flex: 1 }}>
+            <GetBack title={this.state.title} onPress={this.hadleBack} />
+            <PlayerDetails onPress={this.onPressDetails} />
+          </View>
         )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
-          <CongratulationScreen
-            title="Coaching Plan"
-            selectCenter={this.state.selectCenter}
-            selectSport={this.state.selectSport}
-            selectDate={this.state.selectDate}
-            selectLevel={this.state.selectLevel}
-            selectBatch={this.state.selectTime}
-            distance={this.state.distance}
+          <CongratsScreen
+            onPress={this.onPressSuccess}
+            errorMessage={this.state.errorMessage}
           />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (
-          <SorryScreen
-            onPress={this.onPressRetry}
+          <SorryPage
+            onPressBack={this.hadleBack}
             errorMessage={this.state.errorMessage}
+            buttonName={"Pay"}
           />
         )}
         {!this.state.firstPage && !this.state.congratulationScreen && (

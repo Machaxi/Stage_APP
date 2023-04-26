@@ -120,6 +120,7 @@ import PlayPage from "../containers/ExsitingUser/PlayPage";
 import NavigationDrawerWhite from "./NavigationDrawerWhite";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
+import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2634,6 +2635,29 @@ const HomeStack = createStackNavigator({
       },
     }),
   },
+  PlayingPlan: {
+    screen: PlayingPlan,
+    navigationOptions: ({ navigation }) => ({
+      title: "Play",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
 });
 
 const parentDrawer = createDrawerNavigator(
@@ -2929,6 +2953,9 @@ const BaseNavigator = createSwitchNavigator({
   },
   CoachingPlan: {
     screen: CoachingPlan,
+  },
+  PlayingPlan: {
+    screen: PlayingPlan,
   },
   /* navigation without book and play*/
   ParentHome: {
