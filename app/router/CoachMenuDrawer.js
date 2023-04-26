@@ -3474,12 +3474,10 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 		else if (user_type != null) {
-
 			if (user_type == GUEST) {
 				menu = this.geLoggedInGuestMenu()
 
 			} else if (user_type == PLAYER) {
-
 				menu = this.getPlayerMenu()
 
 			} else if (user_type == COACH || user_type == ACADEMY) {

@@ -31,7 +31,7 @@ import {
 import { connect } from "react-redux";
 import { Nunito_ExtraBold } from "../util/fonts";
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
-import { storeData, getData } from "../../components/auth";
+import { storeData, getData, onSignIn } from "../../components/auth";
 import { COACH } from "../../components/Constants";
 
 class LoginSceen extends Component {
@@ -240,11 +240,12 @@ class LoginSceen extends Component {
     dataDic["data"] = dict;
     this.props
       .doLoginTest(dataDic)
-      .then(() => {
+      .then(async() => {
         let user = JSON.stringify(this.props.data.user);
         let user1 = JSON.parse(user);
         var userData = user1["data"];
         var userInfoData = userData["user"];
+        await onSignIn();
         storeData("userInfo", JSON.stringify(userData));
         if (userInfoData.user_type == COACH) {
           AsyncStorage.setItem("coach_enabled", "coach_enabled");
@@ -314,7 +315,7 @@ class LoginSceen extends Component {
 
     this.props
       .doLogin(dataDic)
-      .then(() => {
+      .then(async() => {
         let user = JSON.stringify(this.props.data.user);
         console.log("doLogin-payload" + JSON.stringify(user));
         let userResponce = JSON.parse(user);
@@ -322,6 +323,7 @@ class LoginSceen extends Component {
         if (userResponce.success == true) {
           var userData = userResponce["data"];
           var userInfoData = userData["user"];
+          await onSignIn();
           storeData("userInfo", JSON.stringify(userData));
           this.setState({ userDetails: userData });
           this.getHeader();
