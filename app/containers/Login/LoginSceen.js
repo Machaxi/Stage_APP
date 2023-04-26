@@ -21,11 +21,18 @@ import {
   getFirebaseCheck,
   PUSH_TOKEN,
   ONE_SIGNAL_USERID,
+  getShowLoginByName,
 } from "../BaseComponent";
-import { doLogin, createUser } from "../../redux/reducers/loginReducer";
+import {
+  doLogin,
+  createUser,
+  doLoginTest,
+} from "../../redux/reducers/loginReducer";
 import { connect } from "react-redux";
 import { Nunito_ExtraBold } from "../util/fonts";
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
+import { storeData, getData } from "../../components/auth";
+import { COACH } from "../../components/Constants";
 
 class LoginSceen extends Component {
   constructor(props) {
@@ -79,16 +86,41 @@ class LoginSceen extends Component {
     const userlogin = await AsyncStorage.getItem("user_name");
     const learn_enabled = await AsyncStorage.getItem("learn_enabled");
     const play_enabled = await AsyncStorage.getItem("play_enabled");
+    const coach_enabled = await AsyncStorage.getItem("coach_enabled");
     let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
     let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
     this.setState({ ONE_SIGNAL_USERID: ONE_SIGNAL, firebase_token: fcm_token });
-    if (play_enabled == "play_enabled" || learn_enabled == "learn_enabled") {
-      // this.props.navigation.navigate("tabBarMainScreen");
-      this.props.navigation.navigate("ParentHome");
-    } else if (userlogin != null && userlogin.length > 3) {
-      this.props.navigation.navigate("HomeDrawer");
+    if (coach_enabled == "coach_enabled") {
+      getData("userInfo", (value) => {
+        if (value != "") {
+          let userData = JSON.parse(value);
+          let userType = userData.user["user_type"];
+          if (userType == COACH) {
+            if (
+              userData.has_multiple_acadmies == false &&
+              userData.academy_id != null
+            ) {
+              if (userData.can_book_court) {
+                this.props.navigation.navigate("CoachBookHome");
+              } else {
+                this.props.navigation.navigate("CoachHome");
+              }
+            } else {
+              this.props.navigation.navigate("SwitchPlayer", {
+                userType: COACH,
+              });
+            }
+          }
+        }
+      });
     } else {
-      this.setState({ showscreen: true });
+      if (play_enabled == "play_enabled" || learn_enabled == "learn_enabled") {
+        this.props.navigation.navigate("ParentHome");
+      } else if (userlogin != null && userlogin.length > 3) {
+        this.props.navigation.navigate("HomeDrawer");
+      } else {
+        this.setState({ showscreen: true });
+      }
     }
   };
 
@@ -184,6 +216,67 @@ class LoginSceen extends Component {
       });
   };
 
+  signInByName = () => {
+    let os = "IOS";
+    if (Platform.OS === "android") {
+      os = "android";
+    }
+
+    let fcm_token = this.state.firebase_token;
+    let ONE_SIGNAL_USERID = this.state.ONE_SIGNAL_USERID;
+
+    var dataDic = {};
+    var dict = {};
+    dict["phone_number"] = this.state.phoneNumber; //user1.phoneNumber;//"+919214088636"//
+    dict["name"] = this.state.phoneNumber;
+    dict["firebase_token"] = "token";
+    dict["device_type"] = os;
+    dict["app_version"] = "1.1.0";
+    dict["fcm_token"] = fcm_token;
+    dict["ONE_SIGNAL_USERID"] = ONE_SIGNAL_USERID;
+    dict["one_signal_device_id"] = ONE_SIGNAL_USERID;
+    dict["has_firebase_check"] = false;
+
+    dataDic["data"] = dict;
+    this.props
+      .doLoginTest(dataDic)
+      .then(() => {
+        let user = JSON.stringify(this.props.data.user);
+        let user1 = JSON.parse(user);
+        var userData = user1["data"];
+        var userInfoData = userData["user"];
+        storeData("userInfo", JSON.stringify(userData));
+        if (userInfoData.user_type == COACH) {
+          AsyncStorage.setItem("coach_enabled", "coach_enabled");
+          storeData("multiple", userData.has_multiple_acadmies);
+          if (
+            userData.has_multiple_acadmies == false &&
+            userData.academy_id != null
+          ) {
+            if (userData.can_book_court) {
+              this.props.navigation.navigate("CoachBookHome");
+            } else {
+              this.props.navigation.navigate("CoachHome");
+            }
+          } else {
+            this.props.navigation.navigate("SwitchPlayer", {
+              userType: COACH,
+            });
+          }
+        } else {
+          if (userData.is_learn_enabled || userData.is_play_enabled) {
+            this.props.navigation.navigate("ParentHome");
+          } else {
+            this.props.navigation.navigate("HomeDrawer");
+          }
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+        this.progress(false);
+      });
+  };
+
   signIn = (token) => {
     let os = "IOS";
     if (Platform.OS === "android") {
@@ -215,6 +308,8 @@ class LoginSceen extends Component {
         this.setState({ isLoading: false });
         if (userResponce.success == true) {
           var userData = userResponce["data"];
+          var userInfoData = userData["user"];
+          storeData("userInfo", JSON.stringify(userData));
           this.setState({ userDetails: userData });
           this.getHeader();
           if (userData.is_existing_user == false) {
@@ -242,10 +337,29 @@ class LoginSceen extends Component {
             } else {
               AsyncStorage.setItem("play_enabled", "play_not_enabled");
             }
-            if (userData.is_learn_enabled || userData.is_play_enabled) {
-              this.props.navigation.navigate("ParentHome");
+            if (userInfoData.user_type == COACH) {
+              AsyncStorage.setItem("coach_enabled", "coach_enabled");
+              storeData("multiple", userData.has_multiple_acadmies);
+              if (
+                userData.has_multiple_acadmies == false &&
+                userData.academy_id != null
+              ) {
+                if (userData.can_book_court) {
+                  this.props.navigation.navigate("CoachBookHome");
+                } else {
+                  this.props.navigation.navigate("CoachHome");
+                }
+              } else {
+                this.props.navigation.navigate("SwitchPlayer", {
+                  userType: COACH,
+                });
+              }
             } else {
-              this.props.navigation.navigate("HomeDrawer");
+              if (userData.is_learn_enabled || userData.is_play_enabled) {
+                this.props.navigation.navigate("ParentHome");
+              } else {
+                this.props.navigation.navigate("HomeDrawer");
+              }
             }
           }
         }
@@ -306,7 +420,7 @@ class LoginSceen extends Component {
             <TextInput
               style={styles.input}
               value={this.state.phoneNumber}
-              keyboardType="number-pad"
+              keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
               placeholder="Enter the Mobile Number"
               placeholderTextColor="#BFBFBF"
               maxLength={10}
@@ -323,6 +437,24 @@ class LoginSceen extends Component {
           available={this.state.phoneNumber.length === 10}
           onPress={this.signInWithPhoneNumber}
         />
+        {getShowLoginByName() ? (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              this.signInByName();
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                fontFamily: "Quicksand-Medium",
+              }}
+            >
+              Login by name
+            </Text>
+          </TouchableOpacity>
+        ) : null}
       </LinearGradient>
     );
   };
@@ -758,6 +890,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   doLogin,
   createUser,
+  doLoginTest,
 };
 
 export default connect(
