@@ -233,10 +233,10 @@ const getPlayerDetailsApi = async () => {
     if (value == "") return;
     const headers = {
       "Content-Type": "application/json",
-      //"x-authorization": value,
+      "x-authorization": value,
       //TODO:remove this static logic
-      "x-authorization":
-        "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+      // "x-authorization":
+      //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
     };
     //client.call
     client
@@ -391,7 +391,6 @@ const setCancelModalVisibilityCb = (val) => {
   }
 
 const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
-   console.log("********");
    console.log({ playerInfo });
    console.log({ ratingInfo });
    console.log({selectedPeerRating})
@@ -421,10 +420,10 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
     if (value == "") return;
     const headers = {
       "Content-Type": "application/json",
-      //"x-authorization": value,
+      "x-authorization": value,
       //TODO:remove this static logic
-      "x-authorization":
-        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+      // "x-authorization":
+      //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
     };
     //client.call
     client

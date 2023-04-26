@@ -22,6 +22,7 @@ import { client } from "../../../App";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import { getNotificationCount } from "../util/notificationCount";
 import Events from "../../router/events";
+import EmptyDataContainer from "../../components/molecules/emptyDataContainer";
 
 const MyBookingsScreen = ({ navigation }) => {
  var cancelBookingError = null;
@@ -300,6 +301,8 @@ const MyBookingsScreen = ({ navigation }) => {
                     );
                   }}
                 />
+              ) : loading == false ? (
+                <EmptyDataContainer msg={"No upcoming bookings found."} />
               ) : null
             ) : pastBookings?.length > 0 ? (
               <FlatList
@@ -318,9 +321,11 @@ const MyBookingsScreen = ({ navigation }) => {
                   );
                 }}
               />
+            ) : loading == false ? (
+              <EmptyDataContainer msg={"No past bookings found."} />
             ) : null}
             {loading || paginationLoading ? (
-              <View style={{marginVertical: 10}}>
+              <View style={{ marginVertical: 10 }}>
                 <LoadingIndicator size={20} />
               </View>
             ) : null}

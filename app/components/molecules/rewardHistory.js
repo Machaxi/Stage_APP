@@ -26,7 +26,7 @@ import RewardHistoryItem from "./rewardHistoryItem";
 import { rewardHistoryData } from "../../containers/util/dummyData/rewardHistoryData";
 import { MonthNames } from "../../containers/util/utilFunctions";
 
-const RewardHistory = ({ selectedMonth, selectedYear, rewardHistoryData }) => {
+const RewardHistory = ({loading, selectedMonth, selectedYear, rewardHistoryData }) => {
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -39,20 +39,35 @@ const RewardHistory = ({ selectedMonth, selectedYear, rewardHistoryData }) => {
         colors={["#dfc1886b", "#a975282b"]}
         style={[{ paddingVertical: 8, paddingHorizontal: 12 }]}
       >
-        <Text style={[styles.date]}>{MonthNames[selectedMonth - 1] + ` ${selectedYear}`}</Text>
+        <Text style={[styles.date]}>
+          {MonthNames[selectedMonth - 1] + ` ${selectedYear}`}
+        </Text>
       </LinearGradient>
-      <View style={{ paddingHorizontal: 14, marginTop: 25 }}>
-        <FlatList
-          data={rewardHistoryData}
-          renderItem={({ item, index }) => (
-            <RewardHistoryItem
-              data={item}
-              isLast={rewardHistoryData.length == index + 1}
-            />
-          )}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
+      {rewardHistoryData?.length > 0 && rewardHistoryData != null ? (
+        <View style={{ paddingHorizontal: 14, marginTop: 25 }}>
+          <FlatList
+            data={rewardHistoryData}
+            renderItem={({ item, index }) => (
+              <RewardHistoryItem
+                data={item}
+                isLast={rewardHistoryData.length == index + 1}
+              />
+            )}
+            keyExtractor={(item, index) => index}
+          />
+        </View>
+      ) : null}
+      {
+      (!loading &&
+        (rewardHistoryData?.length == 0 ||
+          rewardHistoryData == null ||
+          typeof rewardHistoryData == undefined)) ? (
+        <View style={{ marginVertical: 50 }}>
+          <Text style={styles.noData}>
+            {"Reward history data not available."}
+          </Text>
+        </View>
+      ) : null}
     </LinearGradient>
   );
 };
@@ -65,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: "Nunito-600",
     color: white,
-    marginBottom: 25
+    marginBottom: 25,
   },
   date: {
     fontSize: 12,
@@ -73,9 +88,16 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-400",
     color: white,
   },
+  noData: {
+    fontSize: 14,
+    fontWeight: "400",
+    fontFamily: "Nunito-400",
+    color: white,
+    textAlign:'center'
+  },
   rewardContainer: {
     marginTop: 12,
-    
+
     marginHorizontal: 15,
     borderColor: whiteGreyBorder,
     borderWidth: 1,

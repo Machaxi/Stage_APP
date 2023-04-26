@@ -34,6 +34,7 @@ import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import Axios from "axios";
 import moment from "moment";
 import { client } from "../../../App";
+import Loader from "../../components/custom/Loader";
 const ShopScreen = ({ navigation }) => {
 
   const currentYear = moment(new Date()).year();
@@ -43,7 +44,7 @@ const ShopScreen = ({ navigation }) => {
  const [refreshing, setRefreshing] = useState(false);
  const [loading, setLoading] = useState(true);
  const [rewardsResponse, setRewardsResponse] = useState(null);
- const [month, setMonth] = useState(currentMonth);
+ const [month, setMonth] = useState(currentMonth + 1);
  const [year, setYear] = useState(currentYear);
 
   const getNotifications = () => {
@@ -162,11 +163,13 @@ const ShopScreen = ({ navigation }) => {
     getRewardsData(month, value);
   };
 
-  if(loading){
-    return (
-      <LoadingIndicator />
-    )
-  }
+  console.log("currentMonth" + currentMonth);
+
+  // if(loading){
+  //   return (
+  //     <LoadingIndicator />
+  //   )
+  // }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
@@ -179,6 +182,7 @@ const ShopScreen = ({ navigation }) => {
         }
         style={styles.main_container}
       >
+        <Loader visible={loading} />
         <View
           style={{
             flexDirection: "row",
@@ -187,9 +191,8 @@ const ShopScreen = ({ navigation }) => {
           }}
         >
           <ShopScreenPicker
-            placeHolder={{ label: "Month", value: null }}
+            placeHolder={{ label: "January", value: 1 }}
             data={[
-              { label: "January", value: 1 },
               { label: "February", value: 2 },
               { label: "March", value: 3 },
               { label: "April", value: 4 },
@@ -207,12 +210,11 @@ const ShopScreen = ({ navigation }) => {
           />
           <View style={{ width: deviceWidth * 0.05, height: 1 }} />
           <ShopScreenPicker
-            placeHolder={{ label: "Year", value: null }}
+            placeHolder={{
+              label: `${currentYear}`,
+              value: currentYear,
+            }}
             data={[
-              {
-                label: `${currentYear}`,
-                value: currentYear,
-              },
               {
                 label: `${nextYear}`,
                 value: nextYear,
@@ -222,15 +224,22 @@ const ShopScreen = ({ navigation }) => {
             onSelect={(val) => onYearSelect(val)}
           />
         </View>
-        <ShopRewardsView
-          balance={rewardsResponse["reward_balance"] ?? 0}
-          rewardPoints={rewardsResponse["credit_balance"] ?? 0}
-          rewardRedeemed={rewardsResponse["debit_balance"] ?? 0}
-        />
+        {rewardsResponse != null && (
+          <ShopRewardsView
+            balance={rewardsResponse["reward_balance"] ?? 0}
+            rewardPoints={rewardsResponse["credit_balance"] ?? 0}
+            rewardRedeemed={rewardsResponse["debit_balance"] ?? 0}
+          />
+        )}
         <HowToRedeem />
-        {rewardsResponse["history"].length > 0 ? (
-          <RewardHistory selectedMonth={month} selectedYear={year} rewardHistoryData={rewardsResponse["history"]} />
-        ) : null}
+        {/* {rewardsResponse["history"].length > 0 ? ( */}
+        <RewardHistory
+          selectedMonth={month}
+          loading={loading}
+          selectedYear={year}
+          rewardHistoryData={rewardsResponse != null ? rewardsResponse["history"] : null}
+        />
+        {/* ) : null} */}
         <View style={{ height: 20, width: "100%" }} />
       </ScrollView>
     </SafeAreaView>

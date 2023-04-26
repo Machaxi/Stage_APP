@@ -23,8 +23,8 @@ export const MembershipDetails = ({totalHrs, aboutToExpire, onRenewPress, onMore
         setProfileComplelete(profilePrecentage);
     }, []);
 
-    console.log('total' + totalHrs + '** '+hoursLeft)
-    console.log("val =>" + (hoursLeft * 100) / totalHrs);
+    var totalHoursVal = (typeof totalHrs == undefined || totalHrs == null || totalHrs == 0) ? 1 : totalHrs;
+    var hoursLeftVal = (typeof hoursLeft == undefined || hoursLeft == null) ? 0 : hoursLeft;
 
     return (
       <View style={styles.container}>
@@ -41,7 +41,9 @@ export const MembershipDetails = ({totalHrs, aboutToExpire, onRenewPress, onMore
           ]}
         >
           {aboutToExpire && (
-            <View style={[commonStyles.flexRowNormal, {marginBottom: 13}]}>
+            <View
+              style={[commonStyles.flexRowNormal, { marginBottom: 13 }]}
+            >
               <NamedRoundedContainer
                 width={deviceWidth * 0.3}
                 paddingVertical={6}
@@ -109,7 +111,7 @@ export const MembershipDetails = ({totalHrs, aboutToExpire, onRenewPress, onMore
                 <View style={styles.progressView}>
                   <Progress.Circle
                     size={80}
-                    progress={hoursLeft / totalHrs}
+                    progress={hoursLeftVal / totalHoursVal}
                     borderWidth={0}
                     unfilledColor={"#404040"}
                     showsText={true}
@@ -119,8 +121,10 @@ export const MembershipDetails = ({totalHrs, aboutToExpire, onRenewPress, onMore
                       return (
                         <Text style={styles.hrsLeft}>
                           {"Hours Left\n"}
-                          <Text style={styles.hrsLeftValue}>
-                            {hoursLeft}
+                          <Text
+                            style={styles.hrsLeftValue}
+                          >
+                            {hoursLeftVal}
                           </Text>
                         </Text>
                       );

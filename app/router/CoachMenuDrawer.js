@@ -3453,6 +3453,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 		let signedIn = this.state.signedIn
 		let user_type = this.state.user_type
+		console.log('+++++++++++++++++'+ user_type)
 		let fullame = this.state.fullName
 		let mobileNumber = this.state.mobileNumber
 		let menu;
@@ -3473,12 +3474,10 @@ class CoachMenuDrawer extends BaseComponent {
 
 
 		else if (user_type != null) {
-
 			if (user_type == GUEST) {
 				menu = this.geLoggedInGuestMenu()
 
 			} else if (user_type == PLAYER) {
-
 				menu = this.getPlayerMenu()
 
 			} else if (user_type == COACH || user_type == ACADEMY) {

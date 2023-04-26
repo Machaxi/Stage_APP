@@ -22,6 +22,7 @@ import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import { getNotificationCount } from "../util/notificationCount";
 import { client } from "../../../App";
+import EmptyDataContainer from "../../components/molecules/emptyDataContainer";
 const MyRequestsHome = ({ navigation }) => {
  var updateErrorResponse = null;
  var getErrorResponse = null;
@@ -332,6 +333,8 @@ const MyRequestsHome = ({ navigation }) => {
                 );
               }}
             />
+          ) : loading == false ? (
+            <EmptyDataContainer msg={"No sent requests found."} />
           ) : null
         ) : null}
         {!isSent ? (
@@ -340,7 +343,7 @@ const MyRequestsHome = ({ navigation }) => {
               data={receivedRequestsData}
               onEndReachedThreshold={0.3}
               onEndReached={({ distanceFromEnd }) => {
-                  console.log("res onendreached" + pageCount);
+                console.log("res onendreached" + pageCount);
 
                 if (allDataFetched == false) onHitPaginationCb();
               }}
@@ -356,6 +359,8 @@ const MyRequestsHome = ({ navigation }) => {
                 );
               }}
             />
+          ) : loading == false ? (
+            <EmptyDataContainer msg={"No received requests found."} />
           ) : null
         ) : null}
         {loading ? (
