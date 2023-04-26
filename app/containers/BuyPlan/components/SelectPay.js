@@ -163,23 +163,22 @@ class SelectPay extends Component {
       description: "Payment for Subscription",
       currency: "INR",
       key: getPaymentKey(),
-      amount: 600,
+      amount: amount * 100,
       name: "Machaxi",
       prefill: {
         email: getRazorPayEmail(),
-        contact: "9550042123",
-        name: "Siddu",
+        contact: this.state.phonenumber,
+        name: this.state.userDetails.userName,
       },
       theme: { color: "#67BAF5" },
     };
 
     RazorpayCheckout.open(options)
       .then((data) => {
-        // handle success
         let payment_details = {
           razorpay_payment_id: data.razorpay_payment_id,
         };
-        // submitPaymentConfirmation(orderId, amount, payment_details);
+        submitPaymentConfirmation(orderId, amount, payment_details);
         console.log(payment_details);
       })
       .catch((error) => {
@@ -189,23 +188,21 @@ class SelectPay extends Component {
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
-    getData("header", async (value) => {
-      let postData = {
-        data: {
-          due_order_id: orderId,
-          amount,
-          payment_details: paymentDetails,
-        },
-      };
-      props.paymentConfirmation(value, postData).then((result) => {
-        result = result.payload.data;
-        if (result.success) {
-          Events.publish("PROFILE_REFRESH");
-          alert(result.success_message);
-        } else {
-          alert(result.error_message);
-        }
-      });
+    let postData = {
+      data: {
+        due_order_id: orderId,
+        amount,
+        payment_details: paymentDetails,
+      },
+    };
+    props.paymentConfirmation(this.state.header, postData).then((result) => {
+      result = result.payload.data;
+      if (result.success) {
+        Events.publish("PROFILE_REFRESH");
+        alert(result.success_message);
+      } else {
+        alert(result.error_message);
+      }
     });
   };
 
@@ -253,8 +250,8 @@ class SelectPay extends Component {
     dict["plan_id"] = "" + this.props.selectPlan.id;
     dict["join_date"] = this.state.joinDate;
     dict["user_id"] = this.state.userDetails.id;
-    dict["parentName"] = "Siddu";
-    dict["player_name"] = "Siddu";
+    dict["parentName"] = this.state.userDetails.userName;
+    dict["player_name"] = this.state.userDetails.userName;
     dict["gender"] = this.state.userDetails.gender;
     dataDic["data"] = dict;
 
@@ -443,7 +440,7 @@ class SelectPay extends Component {
           <CustomButton
             name={"Pay " + this.state.amount}
             available={true}
-            // onPress={this.startPayment}
+            onPress={this.startPayment}
           />
         </View>
       </View>
