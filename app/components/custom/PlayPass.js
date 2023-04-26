@@ -15,9 +15,7 @@ class PlayPass extends Component {
           marginTop: -10,
         }}
       >
-        <View style={styles.imagebackground}>
-          <Image source={{ uri: this.props.image }} style={styles.image} />
-        </View>
+        <Image source={{ uri: this.props.image }} style={styles.image} />
         <Text style={styles.insideText}>{this.props.name}</Text>
         <Text style={styles.priceText}>₹ {this.props.price}</Text>
       </ImageBackground>
@@ -39,18 +37,11 @@ const styles = StyleSheet.create({
     marginLeft: 35,
   },
   image: {
-    marginLeft: 13,
-    width: 35,
-    height: 30,
-  },
-  imagebackground: {
     marginLeft: 35,
     marginTop: 30,
     marginBottom: 10,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: "#A8957875",
+    width: 35,
+    height: 30,
   },
 });
 

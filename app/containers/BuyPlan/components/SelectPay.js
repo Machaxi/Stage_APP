@@ -1,15 +1,31 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
-import moment from "moment";
 import Loader from "../../../components/custom/Loader";
+import { getBaseUrl } from "../../BaseComponent";
+import RazorpayCheckout from "react-native-razorpay";
 import {
   Nunito_Medium,
   Nunito_Regular,
   Nunito_SemiBold,
 } from "../../util/fonts";
+import { selectPlanDate } from "../../../redux/reducers/PlayerReducer";
+import { connect } from "react-redux";
+import PlanDetails from "../../../components/custom/PlanDetails";
+import PaymentDetails from "../../../components/custom/PaymentDetails";
+import CouponView from "../../../components/custom/CouponView";
+import axios from "axios";
+import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
+import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 
 class SelectPay extends Component {
   months = [
@@ -57,6 +73,13 @@ class SelectPay extends Component {
       selectLevel: null,
       date: new Date(),
       isLoading: false,
+      appliedCoupon: false,
+      displayStartDate: "",
+      displayEndDate: "",
+      userDetails: null,
+      amount: "",
+      joinDate: "",
+      phonenumber: "",
     };
   }
 
@@ -74,10 +97,10 @@ class SelectPay extends Component {
     const selectTime = selectBatch.displayTime;
     var levelimage = selectLevel.image;
     var levelname = selectLevel.name;
-    const username = this.props.selectCenter;
+    const username = this.props.username;
     const gender = this.props.gender;
     const parent = this.props.parent;
-
+    const joinDate = this.convertToDate(this.props.selectPlan.start_date);
     if (this.props.title == "Playing") {
       levelname = selectLevel.displayText;
       levelimage = selectLevel.url;
@@ -98,12 +121,156 @@ class SelectPay extends Component {
       username: username,
       gender: gender,
       parent: parent,
+      displayStartDate: this.props.selectPlan.start_date,
+      displayEndDate: this.props.selectPlan.end_date,
+      amount: this.props.selectPlan.amount,
+      joinDate: joinDate,
+    });
+  };
+
+  convertToDate = (dateString) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const [day, month] = dateString.split(" ");
+    const date = new Date(
+      `${currentYear}-${this.getMonthNumber(month)}-${day}`
+    );
+    return date;
+  };
+
+  getMonthNumber = (monthName) => {
+    // Map month names to their corresponding month numbers
+    const monthMap = {
+      Jan: "01",
+      Feb: "02",
+      Mar: "03",
+      Apr: "04",
+      May: "05",
+      Jun: "06",
+      Jul: "07",
+      Aug: "08",
+      Sep: "09",
+      Oct: "10",
+      Nov: "11",
+      Dec: "12",
+    };
+    return monthMap[monthName];
+  };
+
+  handleOnStartPayment = (orderId, amount) => {
+    // this.RBSheet.close()
+    var options = {
+      description: "Payment for Subscription",
+      currency: "INR",
+      key: getPaymentKey(),
+      amount: 600,
+      name: "Machaxi",
+      prefill: {
+        email: getRazorPayEmail(),
+        contact: "9550042123",
+        name: "Siddu",
+      },
+      theme: { color: "#67BAF5" },
+    };
+
+    RazorpayCheckout.open(options)
+      .then((data) => {
+        // handle success
+        let payment_details = {
+          razorpay_payment_id: data.razorpay_payment_id,
+        };
+        // submitPaymentConfirmation(orderId, amount, payment_details);
+        console.log(payment_details);
+      })
+      .catch((error) => {
+        console.log("Razor Rspo ", JSON.stringify(error));
+        alert("Payment could not succeed. Please try again.");
+      });
+  };
+
+  submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
+    getData("header", async (value) => {
+      let postData = {
+        data: {
+          due_order_id: orderId,
+          amount,
+          payment_details: paymentDetails,
+        },
+      };
+      props.paymentConfirmation(value, postData).then((result) => {
+        result = result.payload.data;
+        if (result.success) {
+          Events.publish("PROFILE_REFRESH");
+          alert(result.success_message);
+        } else {
+          alert(result.error_message);
+        }
+      });
     });
   };
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    this.setState({ header: header });
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const phonenumber = await AsyncStorage.getItem("phone_number");
+    const userDetails = JSON.parse(userDetailsJson);
+    this.setState({
+      userDetails: userDetails,
+      header: header,
+      phonenumber: phonenumber,
+    });
+  };
+
+  DataChange = (join_date) => {
+    this.setState({ joinDate: join_date });
+    const batch_id = this.state.selectBatch.batch_id;
+    axios
+      .get(
+        getBaseUrl() + "/global/batch/" + batch_id + "/?join_date=" + join_date
+      )
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let planData = userResponce["data"]["plans"][0]["payable_amount"];
+        console.log(response);
+        const term = this.props.selectPlan.term_id - 1;
+        console.log(planData[term]);
+        this.setState({
+          displayEndDate: planData[term].end_date,
+          displayStartDate: planData[term].start_date,
+          amount: planData[term].amount,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  startPayment = () => {
+    var dataDic = {};
+    var dict = {};
+
+    dict["plan_id"] = "" + this.props.selectPlan.id;
+    dict["join_date"] = this.state.joinDate;
+    dict["user_id"] = this.state.userDetails.id;
+    dict["parentName"] = "Siddu";
+    dict["player_name"] = "Siddu";
+    dict["gender"] = this.state.userDetails.gender;
+    dataDic["data"] = dict;
+
+    this.props
+      .selectPlanDate(dataDic, this.state.header)
+      .then(() => {
+        let jsondata = JSON.stringify(this.props.data.planData.data);
+        let responcedata = JSON.parse(jsondata);
+        console.log(responcedata.amount);
+        console.log(this.props.data.planData);
+        console.log(responcedata);
+        this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   };
 
   render() {
@@ -155,14 +322,30 @@ class SelectPay extends Component {
         <Loader visible={this.state.isLoading} />
         <ScrollView style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Review before Payment</Text>
+          <PlanDetails
+            title={
+              this.props.selectPlan.term_id === 1
+                ? "Monthly"
+                : this.props.selectPlan.term_id === 2
+                ? "Quaterly"
+                : "Yearly"
+            }
+            subtitle={this.props.selectPlan.amount}
+            startDate={this.props.selectPlan.start_date}
+            endDate={this.props.selectPlan.end_date}
+            image={
+              this.props.selectPlan.term_id === 1
+                ? require("../../../images/playing/rocket.png")
+                : this.props.selectPlan.term_id === 2
+                ? require("../../../images/playing/hand.png")
+                : require("../../../images/playing/arrow.png")
+            }
+            onPress={this.DataChange}
+          />
           <LinearGradient
-            colors={[
-              "rgba(255, 255, 255, 0.15)",
-              "rgba(118, 87, 136, 0)",
-              "rgba(118, 87, 136, 0)",
-              "rgba(118, 87, 136, 0.44)",
-            ]}
-            locations={[0, 0.3, 0.6, 1]}
+            colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.06)"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={styles.mainview}
           >
             <Text style={styles.subtitle}>Player Detail</Text>
@@ -235,9 +418,33 @@ class SelectPay extends Component {
               <View style={styles.sportsview} />
             </View>
           </LinearGradient>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              this.setState({ appliedCoupon: !this.state.appliedCoupon });
+            }}
+          >
+            <CouponView appliedCoupon={this.state.appliedCoupon} />
+          </TouchableOpacity>
+          <PaymentDetails
+            title={
+              "Payment for " +
+              this.state.displayStartDate +
+              " to " +
+              this.state.displayEndDate
+            }
+            appliedCoupon={this.state.appliedCoupon}
+            coupounPrice={100}
+            price={this.state.amount}
+            finalprice={this.state.amount}
+          />
         </ScrollView>
         <View style={{ flex: 0.06, paddingTop: 15 }}>
-          <CustomButton name="Pay" available={true} onPress={this.booktrail} />
+          <CustomButton
+            name={"Pay " + this.state.amount}
+            available={true}
+            // onPress={this.startPayment}
+          />
         </View>
       </View>
     );
@@ -284,6 +491,7 @@ const styles = StyleSheet.create({
   },
   mainview: {
     marginVertical: 20,
+    marginBottom: 15,
     marginHorizontal: 10,
     paddingHorizontal: 5,
     width: "95%",
@@ -355,4 +563,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectPay;
+const mapStateToProps = (state) => {
+  return {
+    data: state.PlayerReducer,
+  };
+};
+
+const mapDispatchToProps = { selectPlanDate, paymentConfirmation };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectPay);

@@ -22,7 +22,7 @@ import {
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
-class SelectCenter extends Component {
+class SelectPlayCenter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -101,15 +101,6 @@ class SelectCenter extends Component {
     this.requestPermissions();
   }
 
-  hasSport(sportList) {
-    for (let i = 0; i < sportList.length; i++) {
-      if (sportList[i].name === this.props.selectSport.name) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   calculateDistance(lat2, lon2) {
     const R = 6371; // Radius of the earth in km
     const dLat = this.deg2rad(lat2 - this.state.latitude);
@@ -150,21 +141,17 @@ class SelectCenter extends Component {
 
     const renderItem = ({ item }) => {
       const distance = this.calculateDistance(item.latitude, item.longitude);
-      if (this.hasSport(item.sports)) {
-        return (
-          <CenterDetails
-            item={item}
-            distance={distance}
-            currentIndex={this.state.currentIndex}
-            isExpanded={false}
-            onPress={() =>
-              this.setState({ currentIndex: item.id, proseednext: true })
-            }
-          />
-        );
-      } else {
-        return null;
-      }
+      return (
+        <CenterDetails
+          item={item}
+          distance={distance}
+          currentIndex={this.state.currentIndex}
+          isExpanded={false}
+          onPress={() =>
+            this.setState({ currentIndex: item.id, proseednext: true })
+          }
+        />
+      );
     };
 
     return (
@@ -285,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectCenter;
+export default SelectPlayCenter;

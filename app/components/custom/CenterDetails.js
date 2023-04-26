@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { darkGrey, whiteGreyBorder, yellowVariant4, yellowVariant7 } from "../../containers/util/colors";
+import { darkGrey, whiteGreyBorder } from "../../containers/util/colors";
 import TimingsTab from "../molecules/timingsTab";
 import SelectPlayingTime from "../molecules/selectPlayingTime";
 import { Nunito_Medium, Nunito_Regular } from "../../containers/util/fonts";
 
 class CenterDetails extends Component {
-
   render() {
     const {
       item,
@@ -30,12 +29,16 @@ class CenterDetails extends Component {
       this.props.onPress(item.id);
     };
 
-    var morningData = morningTimeData.filter((val) => {
-      return val.timeOfDay == "Morning"
-    });
-    var eveningData = eveningTimeData.filter((val) => {
-      return val.timeOfDay == "Evening";
-    });
+    var morningData =
+      morningTimeData &&
+      morningTimeData.filter((val) => {
+        return val.timeOfDay == "Morning";
+      });
+    var eveningData =
+      eveningTimeData &&
+      eveningTimeData.filter((val) => {
+        return val.timeOfDay == "Evening";
+      });
 
     var isExpanded = item.id == currentIndex;
 
@@ -57,10 +60,7 @@ class CenterDetails extends Component {
         >
           <View style={styles.item}>
             <View style={{ flex: 0.3 }}>
-              <Image
-                source={{ uri: item.cover_pic }}
-                style={styles.image}
-              />
+              <Image source={{ uri: item.cover_pic }} style={styles.image} />
               <Text style={styles.distance}>{distance}</Text>
             </View>
             <View style={styles.textContainer}>
@@ -79,7 +79,7 @@ class CenterDetails extends Component {
               </View>
             </View>
           </View>
-          {isExpanded ? (
+          {isExpanded && this.props.xpanded ? (
             <View
               style={{
                 marginTop: 30,
@@ -87,9 +87,7 @@ class CenterDetails extends Component {
                 marginHorizontal: 7,
               }}
             >
-              <Text style={styles.setTime}>
-                {"Select Preferred Time Slot"}
-              </Text>
+              <Text style={styles.setTime}>{"Select Preferred Time Slot"}</Text>
               <View style={{ flexDirection: "row" }}>
                 <TimingsTab
                   image={require("../../images/morning.png")}
@@ -104,7 +102,9 @@ class CenterDetails extends Component {
                   isSelected={selectedTime == "Evening"}
                 />
               </View>
-              {selectedTime == "Morning" && morningData.length > 0 ? (
+              {selectedTime == "Morning" &&
+              morningData &&
+              morningData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedMorningTime}
                   selectedTimePeriod={(val) => {
@@ -115,7 +115,9 @@ class CenterDetails extends Component {
                   timeData={morningData}
                 />
               ) : null}
-              {selectedTime != "Morning" && eveningData.length > 0 ? (
+              {selectedTime != "Morning" &&
+              eveningData &&
+              eveningData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedEveningTime}
                   selectedTimePeriod={(val) => {
