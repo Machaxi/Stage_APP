@@ -158,7 +158,6 @@ class SelectPay extends Component {
   };
 
   handleOnStartPayment = (orderId, amount) => {
-    // this.RBSheet.close()
     var options = {
       description: "Payment for Subscription",
       currency: "INR",
@@ -172,18 +171,18 @@ class SelectPay extends Component {
       },
       theme: { color: "#67BAF5" },
     };
-
+    console.log(options);
     RazorpayCheckout.open(options)
       .then((data) => {
         let payment_details = {
           razorpay_payment_id: data.razorpay_payment_id,
         };
-        submitPaymentConfirmation(orderId, amount, payment_details);
+        this.submitPaymentConfirmation(orderId, amount, payment_details);
         console.log(payment_details);
       })
       .catch((error) => {
-        console.log("Razor Rspo ", JSON.stringify(error));
-        alert("Payment could not succeed. Please try again.");
+        console.log("Razor Rspo ", error);
+        this.props.onPress(false, orderId, amount);
       });
   };
 
@@ -195,15 +194,16 @@ class SelectPay extends Component {
         payment_details: paymentDetails,
       },
     };
-    props.paymentConfirmation(this.state.header, postData).then((result) => {
-      result = result.payload.data;
-      if (result.success) {
-        Events.publish("PROFILE_REFRESH");
-        alert(result.success_message);
-      } else {
-        alert(result.error_message);
-      }
-    });
+    this.props
+      .paymentConfirmation(this.state.header, postData)
+      .then((result) => {
+        result = result.payload.data;
+        if (result.success) {
+          this.props.onPress(true);
+        } else {
+          alert(result.error_message);
+        }
+      });
   };
 
   getData = async () => {

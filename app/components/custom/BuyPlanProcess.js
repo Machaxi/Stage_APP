@@ -122,8 +122,8 @@ class BuyPlanProcess extends Component {
           <Image
             source={
               this.props.number > 4
-                ? require("../../images/playing/confirm_selected.png")
-                : require("../../images/playing/confirm_selected_black.png")
+                ? require("../../images/playing/pay.png")
+                : require("../../images/playing/pay_black.png")
             }
             style={styles.image}
           />
@@ -133,7 +133,7 @@ class BuyPlanProcess extends Component {
               this.props.number > 4 && { color: "#FF9C33" },
             ]}
           >
-            Confirm
+            Pay
           </Text>
         </View>
         <View />

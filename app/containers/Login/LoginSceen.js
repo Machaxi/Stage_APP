@@ -240,7 +240,7 @@ class LoginSceen extends Component {
     dataDic["data"] = dict;
     this.props
       .doLoginTest(dataDic)
-      .then(async() => {
+      .then(async () => {
         let user = JSON.stringify(this.props.data.user);
         let user1 = JSON.parse(user);
         var userData = user1["data"];
@@ -265,6 +265,16 @@ class LoginSceen extends Component {
             });
           }
         } else {
+          if (userData.is_learn_enabled) {
+            AsyncStorage.setItem("learn_enabled", "learn_enabled");
+          } else {
+            AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
+          }
+          if (userData.is_play_enabled) {
+            AsyncStorage.setItem("play_enabled", "play_enabled");
+          } else {
+            AsyncStorage.setItem("play_enabled", "play_not_enabled");
+          }
           const userDetails = {
             userName: userData["user"].name,
             gender: userData["user"].genderType,
@@ -315,7 +325,7 @@ class LoginSceen extends Component {
 
     this.props
       .doLogin(dataDic)
-      .then(async() => {
+      .then(async () => {
         let user = JSON.stringify(this.props.data.user);
         console.log("doLogin-payload" + JSON.stringify(user));
         let userResponce = JSON.parse(user);
@@ -675,18 +685,6 @@ class LoginSceen extends Component {
             <Text style={styles.subtext}> Player Gender</Text>
           </LinearGradient>
           <View style={[styles.inputview, { flexDirection: "row" }]}>
-            {/* <Picker
-              selectedValue={this.state.gender}
-              style={styles.dropdown}
-              itemStyle={styles.dropdownitem}
-              onValueChange={(itemValue) =>
-                this.setState({ gender: itemValue })
-              }
-            >
-              <Picker.Item label="Select Gender" value="Select Gender" />
-              <Picker.Item label="Male" value="MALE" />
-              <Picker.Item label="Female" value="FEMALE" />
-            </Picker> */}
             <View
               style={{ flex: 1, flexDirection: "row" }}
               onTouchStart={this.handleDropdownPress}
