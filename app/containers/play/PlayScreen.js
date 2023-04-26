@@ -17,6 +17,7 @@ import {
   BackHandler,
   Linking,
   Alert,
+  ToastAndroid,
 } from "react-native";
 import { PeerRatingCard } from "./PeerRatingCard";
 import { SelfRatingCard } from "./SelfRatingCard";
@@ -36,6 +37,17 @@ import RatingTabarHeader from "../../components/molecules/ratingTabbarHeader";
 import { RatePeersTabView } from "../../components/molecules/ratePeersTabView";
 import CancelSessionModal from "../../components/molecules/play_screen/cancelSessionModal";
 import CustomButton from "../../components/custom/CustomButton";
+import { getData } from "../../components/auth";
+import { client } from "../../../App";
+import Events from "../../router/events";
+import RequestHeaderRight from "../../atoms/requestHeaderRight";
+import { getNotificationCount, notificationOpenScreen } from "../util/notificationCount";
+import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
+import RequestHeaderBg from "../../atoms/requestHeaderBg";
+import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
+import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import { getProficiencyColor, getProficiencyGradients, getProficiencyName, proficiencyStaticData } from "../util/utilFunctions";
+import moment from "moment";
 
 export default PlayScreen =({navigation})=>{
 
@@ -148,48 +160,207 @@ const NextSessionData = [
   },
 ];
 
-const PresSectionData={
-      currentRatingColor:'#FF9C33',
-      currentRating:'Intermediate',
-      icon:require("./../../images/badminton_icon.png"),
-      sportTitle:'badminton',
-}
-
-
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
 const [selfTabEnabled, setSelfTab] = useState(true);
-const [expiryDate,setExpiryDate] =useState('2nd march, 2023');
-const [purchasedDate,setPurchasedDate] =useState('2nd February 2023');
-const [hoursLeft,setHoursLeft] =useState('28/30');
+
 const [profilePrecentage,setProfilePrecentage] =useState('0.9');
-const [gameData,setGameData]=useState(gameNameData);
-const [nextSession,setNextSessionData]=useState(NextSessionData);
-const [userName,setUserName]=useState('vidushi');
-const [userPref,setUserPref]=useState(PresSectionData);
-const [cancelPressed,setCancelPressed]=useState(false);
+const [sportsList, setSportsList] = useState([]);
+const [peerSportsList,setPeerSportsList]=useState([]);
+const [nextSession,setNextSessionData]=useState([]);
+const [cancelPressed, setCancelPressed] = useState(false);
+const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
+const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
+const [selectedSelfRating, setSelectedSelfRating] = useState(null)
+const [preferredDetails, setPreferredDetails] = useState(null);
 const [cancelModalVisible, setCancelModalVisibility] = useState(false);
 const [limitReachedForToday, setLimitReachForToday] = useState(true)
+const [loading, setLoading] = useState(true);
+const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
+const [refreshing, setRefreshing] = useState(false);
+
+var updateRatingError = null;
+var playerDetailsApiError = null;
+
+  const getNotifications = () => {
+    getNotificationCount((count) => {
+      navigation.setParams({ notification_count: count });
+      navigation.setParams({
+        headerRight: <RequestHeaderRight navigation={navigation} />,
+      });
+    });
+  };
+
+  const checkNotification = () => {
+    if (global.NOTIFICATION_DATA) {
+      try {
+        let notification_for = global.NOTIFICATION_DATA.notification_for;
+        notificationOpenScreen(notification_for);
+        global.NOTIFICATION_DATA = null;
+      } catch (err) {}
+    }
+  };
+
+  useEffect(() => {
+    navigation.setParams({
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+    });
+    getNotifications();
+    var refreshEventCallNotif = Events.subscribe(
+      "NOTIFICATION_CALL",
+      (msg) => {
+        getNotifications();
+      }
+    );
+
+    checkNotification();
+
+    var refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
+      checkNotification();
+    });
+
+    //getSlotDataApi();
+    getPlayerDetailsApi();
+    return () => {
+      refreshEvent.remove();
+      refreshEventCallNotif.remove();
+      // Anything in here is fired on component unmount.
+    };
+  }, []);
+
+const getPlayerDetailsApi = async () => {
+  setLoading(true);
+  getData("header", (value) => {
+    if (value == "") return;
+    const headers = {
+      "Content-Type": "application/json",
+      //"x-authorization": value,
+      //TODO:remove this static logic
+      "x-authorization":
+        "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+    };
+    //client.call
+    client
+      .get("user/playing-profile", {
+        headers,
+        params: {},
+      })
+      .then(function(response) {
+        console.log({ response });
+        playerDetailsApiError = response;
+        console.log("requestData" + JSON.stringify(response.data));
+        let json = response.data;
+        let success = json.success;
+        if (success) {
+          if (json.data?.peerRating?.length > 0) {
+            var todayLimitReached = false;
+            var nextSessionVal = json.data?.peerRating;
+            var peerData = json.data?.peerRating;
+            var sportsData = json.data?.rating;
+            for(var i=0; i< json.data?.peerRating?.length; i++){
+              nextSessionVal[i].isExpanded = false
+            }
+             for (var i = 0; i < sportsData?.length; i++) {
+               sportsData[i].isSelected = i == 0 ? true : false;
+             }
+             for (var i = 0; i < peerData?.length; i++) {
+                peerData[i].isSelected = i == 0 ? true : false
+                //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
+                //  peerData[i]?.peerRating != "" ? true : false;
+             }
+          
+            todayLimitReached =
+              json.data?.plan?.maxPlayingHourPerDay == 0 ||
+              json.data?.plan?.maxPlayingHourPerDay == 0.0 ||
+              json.data?.plan?.maxPlayingHourPerDay == null
+                ? true
+                : false;
+            setLimitReachForToday(
+              todayLimitReached
+            );
+            
+            setPeerSportsList(peerData);
+            setNextSessionData(nextSessionVal);
+            setSportsList(sportsData);
+          }
+          setPlayerDetailsResponse(json.data);
+
+        } else {
+          if (json.code == "1020") {
+            Events.publish("LOGOUT");
+          }
+        }
+        setLoading(false);
+      })
+      .catch(function(error) {
+        setLoading(false);
+        ToastAndroid.show(
+          `${playerDetailsApiError?.response?.response?.data
+            ?.error_message ?? ""}`,
+          ToastAndroid.SHORT
+        );
+        console.log(error);
+      });
+  });
+};
+
+useEffect(() => {
+ 
+  if (playerDetailsResponse?.plan?.preferredSportId != null)
+    if (playerDetailsResponse?.rating?.length > 0) {
+      for(var i = 0; i < playerDetailsResponse?.rating?.length; i++){
+        if(playerDetailsResponse?.plan?.preferredSportId == playerDetailsResponse?.rating[i]?.sport?.id){
+          setPreferredDetails(playerDetailsResponse?.rating[i]);
+        }
+      }
+      
+    }
+}, [playerDetailsResponse]);
+ 
+  const onRefresh = () => {
+    setRefreshing(true);
+    getPlayerDetailsApi();
+    setSelfRatingActiveness(true);
+    // In actual case set refreshing to false when whatever is being refreshed is done!
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
 
 
 const onGameSelected=(item)=>{
+  if(selfTabEnabled){
+    let index = sportsList.findIndex((game) => {
+      return game?.sport?.id == item?.sport?.id;
+    });
+    if(index == -1) return;
 
-  let index = gameData.findIndex((game) => {
-    return game["id"] == item["id"];
-  });
-  if(index == -1) return;
+    let newData = sportsList.map((game) => {
+      return {...game, isSelected: false}
+    });
+    newData[index]["isSelected"] = !newData[index]["isSelected"];
+    setSportsList([...newData]);
+  }
+  else {
+    let index1 = peerSportsList.findIndex((game) => {
+      return game?.sport?.id == item?.sport?.id;
+    });
+    if (index1 == -1) return;
 
-  let newData = gameData.map((game) => {
-    return {...game, isSelected: false}
-  });
-  newData[index]["isSelected"] = !newData[index]["isSelected"];
-  setGameData([...newData]);
+    let newData1 = peerSportsList.map((game) => {
+      return { ...game, isSelected: false };
+    });
+    newData1[index1]["isSelected"] = !newData1[index1]["isSelected"];
+    setPeerSportsList([...newData1]);
+  }
   
 }
 
 const renderGameNameBox = ({ item }) => {
+
   return (
     <GameNameBox
-      item={item} 
+      isSelected={item?.isSelected}
+      item={item?.sport}
       onPress={()=>onGameSelected(item)}
     />
   )
@@ -210,7 +381,6 @@ const setCancelModalVisibilityCb = (val) => {
 };
 
   const expandList = (passedVal) => {
-  
     var sessionData = nextSession;
     sessionData.map((val) => {
       if (val.id == passedVal.id) {
@@ -220,36 +390,177 @@ const setCancelModalVisibilityCb = (val) => {
     setNextSessionData(sessionData);
   }
 
+const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
+   console.log("********");
+   console.log({ playerInfo });
+   console.log({ ratingInfo });
+   console.log({selectedPeerRating})
+      console.log("********");
+
+  const data = isPeerTypeRequest
+    ? {
+        userId: playerInfo?.id,
+        sportId: selectedPeerRating?.sport?.id,
+        proficiency: ratingInfo?.proficiency,
+        date: `${moment(selectedPeerRating?.date).format("YYYY-MM-DD")}`,
+        //date: `${moment(Date()).format('YYYY-MM-DD')}`,
+        startTime: selectedPeerRating?.startTime,
+        endTime: selectedPeerRating?.endTime,
+      }
+    : {
+        userId: playerDetailsResponse?.user?.id,
+        sportId: selectedPeerRating?.sport?.id,
+        proficiency: selectedSelfRating?.proficiency,
+        date: `${moment(Date()).format("YYYY-MM-DD")}`,
+      };
+      console.log('?????')
+      console.log({ data });
+
+  setLoading(true);
+  getData("header", (value) => {
+    if (value == "") return;
+    const headers = {
+      "Content-Type": "application/json",
+      //"x-authorization": value,
+      //TODO:remove this static logic
+      "x-authorization":
+        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+    };
+    //client.call
+    client
+      .post(
+        "user/playing-level-rating",
+        { data: data },
+        { headers: headers }
+      )
+      .then(function(response) {
+        updateRatingError = { response };
+        console.log({ response });
+
+        try {
+          let json = response?.data;
+          let success = json?.success;
+          if (success) {
+            var previousProfData;
+            previousProfData = proficiencyData.map((val)=>{
+              if(val.level == ratingInfo.level){
+                val.isSelected = true;
+              }
+            })
+            getPlayerDetailsApi();
+            setProficiencyData(previousProfData)
+            if(isPeerTypeRequest){
+              setSelfRatingActiveness(false);
+            }
+            // setRewardsResponse(json["data"]["reward"]);
+          } else {
+            ToastAndroid.show(
+              `${updateRatingError?.response?.response?.data
+                ?.error_message ?? ""}`,
+              ToastAndroid.SHORT
+            );
+            if (json.code == "1020") {
+              Events.publish("LOGOUT");
+            }
+          }
+          setLoading(false);
+        } catch (e) {
+          setLoading(false);
+          ToastAndroid.show(
+            `${updateRatingError?.response?.response?.data?.error_message ??
+              ""}`,
+            ToastAndroid.SHORT
+          );
+        }
+      })
+      .catch(function(error) {
+        setLoading(false);
+        ToastAndroid.show(
+          `${updateRatingError?.response?.response?.data?.error_message ??
+            ""}`,
+          ToastAndroid.SHORT
+        );
+      });
+  });
+};
+
+const onRatingSelection = (passedVal) => {
+ 
+  var previousProfData = [];
+  for(var i=0; i< proficiencyStaticData.length; i++){
+    previousProfData[i] = proficiencyStaticData[i]
+    previousProfData[i].isSelected = proficiencyStaticData[i].level == passedVal.level ? true : false;
+    
+  }
+  
+  setSelectedSelfRating(passedVal)
+  setProficiencyData(previousProfData)
+}
+
+const onSavePress = (val) => {
+  console.log('===')
+  console.log({val})
+  console.log({ selectedSelfRating });
+  console.log({ playerDetailsResponse });
+  updateRating(null, null, val, false);
+  console.log({val})
+}
+
+    if (loading) {
+      return <LoadingIndicator />;
+    }
+
   return (
-    <View style={[{ flex: 1 },]}>
+    <View style={[{ flex: 1 }]}>
       <LinearGradient
         colors={["#051732", "#232031"]}
         style={{ flex: 1, paddingBottom: 63 }}
       >
-        <ScrollView style={{ height: "100%" }}>
+        <ScrollView
+          style={{ height: "100%" }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => onRefresh()}
+              title="Pull to refresh"
+            />
+          }
+        >
           <ProfileSction
-            name={userName}
-            image={{ uri: "https://picsum.photos/seed/picsum/200/300" }}
+            preferredDetails={preferredDetails}
+            name={playerDetailsResponse?.user?.name ?? ""}
+            image={{ uri: playerDetailsResponse?.user?.profile_pic ?? "" }}
           />
-
           <PrefSport
-            currentRatingColor={userPref.currentRatingColor}
-            currentRating={userPref.currentRating}
-            icon={userPref.icon}
-            sportTitle={userPref.sportTitle}
+            gradientColors={getProficiencyGradients(preferredDetails?.self)}
+            currentRatingColor={getProficiencyColor(preferredDetails?.self)}
+            currentRating={getProficiencyName(preferredDetails?.self)}
+            icon={{ uri: preferredDetails?.sport?.image }}
+            sportTitle={preferredDetails?.sport?.name}
           />
           <MembershipDetails
-            aboutToExpire={true}
+            aboutToExpire={false}
             profilePrecentage={profilePrecentage}
-            hoursLeft={hoursLeft}
+            totalHrs={
+              playerDetailsResponse?.plan?.hoursCredited +
+              (playerDetailsResponse?.plan?.hoursRemaining != null
+                ? playerDetailsResponse?.plan?.oldPlanRemainingHours
+                : 0)
+            }
+            hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
             slotsExhaused={false}
             onMorePlansPress={() => {}}
             onRenewPress={() => {}}
             membershipExpired={false}
-            expiryDate={expiryDate}
-            purchasedDate={purchasedDate}
+            expiryDate={moment(
+              playerDetailsResponse?.plan?.expiryDate
+            ).format("Mo MMMM YYYY")}
+            purchasedDate={moment(
+              playerDetailsResponse?.plan?.purchaseDate
+            ).format("Mo MMMM YYYY")}
           />
           <NextSessionList
+            userId={playerDetailsResponse?.user?.id}
             NextSessionData={nextSession}
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
@@ -261,7 +572,7 @@ const setCancelModalVisibilityCb = (val) => {
             onPress={() => setPlayDataVisibility(!playDataVisibility)}
           >
             <View style={styles.playingLevelContainer}>
-              <Text style={styles.menuHeading}>Playing Level</Text>
+              <Text style={styles.menuHeading}>Playing level</Text>
               <Image
                 style={[
                   styles.arrow_img,
@@ -284,6 +595,19 @@ const setCancelModalVisibilityCb = (val) => {
                   isSelected={selfTabEnabled}
                   onPressed={() => {
                     setSelfTab(true);
+                    var profData = 
+                    profData = proficiencyStaticData.map(
+                      (val) => {
+                        if (
+                          val.proficiency ==
+                          playerDetailsResponse?.user
+                            ?.proficiency
+                        ) {
+                          val.isSelected = true;
+                        }
+                      }
+                    );
+                    setProficiencyData(profData);
                   }}
                 />
                 <RatingTabarHeader
@@ -291,13 +615,14 @@ const setCancelModalVisibilityCb = (val) => {
                   isSelected={!selfTabEnabled}
                   onPressed={() => {
                     setSelfTab(false);
+                    setProficiencyData(proficiencyStaticData);
                   }}
                 />
               </View>
               {!selfTabEnabled && (
                 <>
                   <FlatList
-                    data={gameData}
+                    data={peerSportsList}
                     contentContainerStyle={{
                       marginHorizontal: 12,
                       marginTop: 23,
@@ -306,8 +631,12 @@ const setCancelModalVisibilityCb = (val) => {
                     renderItem={renderGameNameBox}
                   />
                   <RatePeersTabView
+                    proficiencyData={proficiencyData}
+                    updateRating={(val1, val2, val3) =>
+                      updateRating(val1, val2, val3, true)
+                    }
                     renderGameNameBox={renderGameNameBox}
-                    gameData={gameData}
+                    ratingData={peerSportsList}
                   />
                 </>
               )}
@@ -315,12 +644,19 @@ const setCancelModalVisibilityCb = (val) => {
                 <>
                   <View style={{ marginTop: 23, marginHorizontal: 13 }}>
                     <FlatList
-                      data={gameData}
+                      data={sportsList}
                       horizontal={true}
                       renderItem={renderGameNameBox}
                     />
                   </View>
-                  <SelfRatingCard editSelfRating={null} />
+                  <SelfRatingCard
+                    onRatingSelection={(val) => onRatingSelection(val)}
+                    proficiencyData={proficiencyData}
+                    ratingData={sportsList}
+                    editSelfRating={editSelfRatingActive}
+                    onEditPress={() => setSelfRatingActiveness(true)}
+                    onSavePress={(val1) => onSavePress(val1)}
+                  />
                 </>
               )}
             </>
@@ -335,7 +671,7 @@ const setCancelModalVisibilityCb = (val) => {
           setModalVisibility={() => setCancelModalVisibilityCb()}
         />
       ) : null}
-       {limitReachedForToday ? <View style={styles.emptyView} /> : null}
+      {limitReachedForToday ? <View style={styles.emptyView} /> : null}
       {!limitReachedForToday ? (
         <View style={styles.skyFilledButtonView}>
           <SkyFilledButton
@@ -381,6 +717,24 @@ const setCancelModalVisibilityCb = (val) => {
   );
 }
 
+PlayScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerTitle: <RequestHeaderTitle title={"Play"} />,
+    headerTitleStyle: {
+      color: "white",
+    },
+
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    },
+    headerBackground: <RequestHeaderBg />,
+    headerLeft: <RequestHeaderLeft navigation={navigation} />,
+    headerRight: <RequestHeaderRight navigation={navigation} />,
+  };
+};
+
 const styles = StyleSheet.create({
   arrow_img: {
     height: 5,
@@ -403,10 +757,13 @@ const styles = StyleSheet.create({
   },
   emptyView: {height: 62, width: '100%', backgroundColor:'transparent'},
   skyFilledButtonView: {
+    flex:1,
     position: "absolute",
-    width: "80%",
+    width: "100%",
+    paddingHorizontal: 10,
     alignSelf: "center",
-    bottom: 12,
+    justifyContent:'center',
+    bottom: 15,
   },
 
   playingLevelContainer: {

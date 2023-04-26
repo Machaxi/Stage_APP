@@ -15,23 +15,33 @@ import { Nunito_Regular } from "../util/fonts";
 import { GradientLine } from "../../components/molecules/gradientLine";
 import NamedRoundedGradientContainer from "../../components/molecules/roundedNamedGradientContainer";
 import { commonStyles } from "../util/commonStyles";
+import moment from "moment";
+import { getProficiencyColor, getProficiencyGradients, getProficiencyName } from "../util/utilFunctions";
 
   
-export const NextSessionCard = ({item,onCancelPress, expandList}) => {
-    
+export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
+  console.log('date=='+item?.date)
+  console.log("=>" + moment(item?.date).format("MM-DD-YY"));
+    var isToday = false;
+    if(item?.date != null){
+      if(moment(item?.date).format('MM-DD-YY') == moment(new Date()).format('MM-DD-YY')){
+        isToday = true;
+      }
+    }
     const renderPlayingPartnerList = ({item}) => {
        
         return (
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={styles.playerName}>
-              {item?.name} {item?.guestCount > 0
+              {item?.name + (userId == item?.id ? "(You)" : "")}{" "}
+              {item?.guestCount > 0
                 ? `+ ${item?.guestCount} Guest`
                 : ""}
             </Text>
             <NamedRoundedGradientContainer
-              name={item?.proficiency}
-              colors={["#24c6a01b", "#8ef9ab24"]}
-              txtColor={cyanVariant}
+              name={getProficiencyName(item?.proficiency)}
+              colors={getProficiencyGradients(item?.proficiency)}
+              txtColor={getProficiencyColor(item?.proficiency)}
             />
           </View>
         );
@@ -46,12 +56,14 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
         style={styles.containerInnerview}
       >
         <View style={styles.headerContainer}>
-          <Text style={styles.heading}>{item.title}</Text>
+          <Text style={styles.heading}>
+            {"Next Session - " +
+              (isToday ? "Today" : moment(item?.date).format("Mo MMMM YYYY"))}
+          </Text>
           <TouchableOpacity activeOpacity={0.8} onPress={onCancelPress}>
             <Text style={styles.cancelText}>Cancel Booking</Text>
           </TouchableOpacity>
         </View>
-
         <GradientLine
           marginBottom={14}
           marginTop={16}
@@ -59,23 +71,23 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
           colors={["#6b6a76", "#2a273a"]}
         />
         <View style={styles.sportsDetail}>
-          <Text style={styles.sports}>{item.sportsName}</Text>
+          <Text style={styles.sports}>{item?.sport?.name}</Text>
 
-          <Text style={styles.sports}>{item.sportsTime}</Text>
+          <Text style={styles.sports}>{item?.displayTime}</Text>
         </View>
         <View style={styles.gameContainer}>
           <NamedRoundedGradientContainer
-            name={"Beginner"}
-            colors={["#24c6a01b", "#8ef9ab24"]}
-            txtColor={cyanVariant}
+            name={getProficiencyName(item?.proficiency)}
+            colors={getProficiencyGradients(item?.proficiency)}
+            txtColor={getProficiencyColor(item?.proficiency)}
           />
         </View>
         <View style={{ marginTop: 12 }}>
-          <Text style={styles.centerName}>{item.centreName}</Text>
-          <Text style={styles.centerAddress}>{item.centreAddress}</Text>
+          <Text style={styles.centerName}>{item?.academy?.name}</Text>
+          <Text style={styles.centerAddress}>{item?.academy?.address}</Text>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.numberOfGUests}>Number of guests - </Text>
-            <Text style={styles.numberOfGUests}> {item.numberOfGuests}</Text>
+            <Text style={styles.numberOfGUests}> {item?.guestCount}</Text>
           </View>
         </View>
         <GradientLine
@@ -111,8 +123,7 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
         </TouchableOpacity>
 
         {item.isExpanded ? (
-          item?.playing_partners != null &&
-          item?.playing_partners?.length > 0 ? (
+          item?.players != null && item?.players?.length > 1 ? (
             <View>
               <Text
                 style={[
@@ -120,10 +131,11 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
                   { marginTop: 16, color: greyVariant11 },
                 ]}
               >
-                {"Number of players right now - 5/6"}
+                {/* TODO: */}
+                {`Number of players right now - NA/${item?.players?.length}`}
               </Text>
               <FlatList
-                data={item?.playing_partners}
+                data={item?.players}
                 renderItem={renderPlayingPartnerList}
               />
             </View>
@@ -152,6 +164,7 @@ export const NextSessionCard = ({item,onCancelPress, expandList}) => {
               />
               <Text style={styles.noteTxt}>
                 {
+                  // TODO: need to handle this
                   "To cancel a session player, you must do so at least three hours before the booking time."
                 }
               </Text>

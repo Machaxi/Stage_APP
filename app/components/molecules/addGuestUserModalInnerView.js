@@ -11,7 +11,7 @@ import { deviceWidth } from "../../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
 import RoundedGradientBtn from "./roundedGradientBtn";
 
-const AddGuestUserModalInnerView = ({ onBtnPress }) => {
+const AddGuestUserModalInnerView = ({ onBtnPress, onExplorePlansPressed }) => {
   return (
     <TouchableOpacity activeOpacity={1}>
       {/* <ImageBackground
@@ -46,22 +46,29 @@ const AddGuestUserModalInnerView = ({ onBtnPress }) => {
               "remaining in your current plan. Please renew or buy a new plan. Any remaining hours will get added in the new plan."
             }
           </Text>
-            <View
-              style={[commonStyles.flexRowSpaceBtw, { marginHorizontal: 19, width: deviceWidth * 0.7, marginBottom: 20 }]}
-            >
-              <RoundedGradientBtn
-                text={"Renew Plan"}
-                colors={["#48acf1", "#3e53d9"]}
-                onBtnPress={() => onBtnPress()}
-                width={140}
-              />
-              <RoundedGradientBtn
-                text={"Explore Plans"}
-                colors={["#575f61ed", "#2b293aed"]}
-                onBtnPress={() => onBtnPress()}
-                width={140}
-              />
-            </View>
+          <View
+            style={[
+              commonStyles.flexRowSpaceBtw,
+              {
+                marginHorizontal: 19,
+                width: deviceWidth * 0.7,
+                marginBottom: 20,
+              },
+            ]}
+          >
+            <RoundedGradientBtn
+              text={"Renew Plan"}
+              colors={["#48acf1", "#3e53d9"]}
+              onBtnPress={() => onBtnPress()}
+              width={140}
+            />
+            <RoundedGradientBtn
+              text={"Explore Plans"}
+              colors={["#575f61ed", "#2b293aed"]}
+              onBtnPress={() => onExplorePlansPressed()}
+              width={140}
+            />
+          </View>
         </View>
       </LinearGradient>
       {/* </ImageBackground> */}
