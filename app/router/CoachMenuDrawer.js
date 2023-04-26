@@ -3453,6 +3453,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 		let signedIn = this.state.signedIn
 		let user_type = this.state.user_type
+		console.log('+++++++++++++++++'+ user_type)
 		let fullame = this.state.fullName
 		let mobileNumber = this.state.mobileNumber
 		let menu;
