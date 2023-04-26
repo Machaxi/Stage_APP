@@ -391,7 +391,6 @@ const setCancelModalVisibilityCb = (val) => {
   }
 
 const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
-   console.log("********");
    console.log({ playerInfo });
    console.log({ ratingInfo });
    console.log({selectedPeerRating})

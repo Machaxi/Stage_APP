@@ -128,7 +128,8 @@ export const getProficiencyGradients = (proficiency) => {
     case "PROFESSIONAL":
       return professionalGradients;
     default: 
-      return white;
+      // return white;
+      return ["#ffffff11", "#ffffff03"];
   }
      
 }
