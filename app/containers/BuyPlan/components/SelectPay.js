@@ -260,9 +260,6 @@ class SelectPay extends Component {
       .then(() => {
         let jsondata = JSON.stringify(this.props.data.planData.data);
         let responcedata = JSON.parse(jsondata);
-        console.log(responcedata.amount);
-        console.log(this.props.data.planData);
-        console.log(responcedata);
         this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
       })
       .catch((response) => {
@@ -563,6 +560,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     data: state.PlayerReducer,
+    paymentData: state.PaymentReducer,
   };
 };
 
