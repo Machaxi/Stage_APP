@@ -165,8 +165,15 @@ class LoginSceen extends Component {
         console.log("doLogin-payload " + JSON.stringify(user));
         let userResponce = JSON.parse(user);
         if (userResponce.success == true) {
+          const userDetail = {
+            userName: this.state.name,
+            gender: this.state.gender,
+            id: this.state.userDetails["user"].id,
+          };
+          AsyncStorage.setItem("user_details", JSON.stringify(userDetail));
           AsyncStorage.setItem("user_name", this.state.name);
           AsyncStorage.setItem("user_gender", this.state.gender);
+          AsyncStorage.setItem("phone_number", this.state.phoneNumber);
           AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
           AsyncStorage.setItem("play_enabled", "play_not_enabled");
           this.props.navigation.navigate("HomeDrawer");
@@ -212,11 +219,19 @@ class LoginSceen extends Component {
           this.getHeader();
           if (userData.is_existing_user == false) {
             this.setState({ loginsuccess: true });
-          } else if (userData["user"].name == "NA") {
+          } else if (userData["user"].name == null) {
             this.setState({ loginsuccess: true });
           } else {
+            const userDetails = {
+              userName: userData["user"].name,
+              gender: userData["user"].genderType,
+              id: userData["user"].id,
+            };
+            AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
             AsyncStorage.setItem("user_name", userData["user"].name);
             AsyncStorage.setItem("user_gender", userData["user"].genderType);
+            AsyncStorage.setItem("user_child_name", userData["user"].childName);
+            AsyncStorage.setItem("phone_number", this.state.phoneNumber);
             if (userData.is_learn_enabled) {
               AsyncStorage.setItem("learn_enabled", "learn_enabled");
             } else {
