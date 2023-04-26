@@ -45,7 +45,9 @@ class RightMenuToolbar extends BaseComponent {
 
                 {showNotification ? <TouchableOpacity
                     activeOpacity={.8}
-                    onPress={() => {  this.props.navigationProps.navigate("NotificationList") }}>
+                    onPress={() => {  
+                        // this.props.navigationProps.navigate("NotificationList") 
+                    }}>
 
                     <Image
                         source={require("../images/notifications.png")}

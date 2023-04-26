@@ -49,6 +49,12 @@ const PlanDetails = (props) => {
     return monthMap[monthName];
   };
 
+  const options = {
+    day: "2-digit",
+    month: "short",
+    year: "2-digit",
+  };
+
   const formatDateToCustomDate = (dateString) => {
     const months = [
       "Jan",
@@ -123,7 +129,9 @@ const PlanDetails = (props) => {
                 flexDirection: "row",
               }}
             >
-              <Text style={styles.timetext}> selectDate</Text>
+              <Text style={styles.timetext}>
+                {selectDate.toLocaleString("en-GB", options)}
+              </Text>
               <DatePicker
                 style={{ borderWidth: 0, width: "100%" }}
                 date={selectDate}
@@ -236,6 +244,7 @@ const styles = StyleSheet.create({
     width: 190,
     color: "#E6E6E6",
     fontFamily: Nunito_SemiBold,
+    marginBottom: 10,
   },
   descriptionbenift: {
     fontSize: 12,

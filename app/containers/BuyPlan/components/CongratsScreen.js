@@ -36,7 +36,10 @@ class CongratsScreen extends Component {
           style={[styles.subcontainer]}
         >
           <Text style={styles.title}>Payment Done!</Text>
-          <Text style={styles.subtext}>{this.props.errorMessage}</Text>
+          <Text style={styles.subtext}>
+            To get Batch information and progress tracking, kindly go to home
+            page.
+          </Text>
           <CustomButton
             name="Home "
             image={require("../../../images/playing/arrow_go.png")}

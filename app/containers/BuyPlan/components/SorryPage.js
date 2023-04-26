@@ -11,22 +11,93 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
 import CustomButton from "../../../components/custom/CustomButton";
 import { Nunito_Bold, Nunito_SemiBold } from "../../util/fonts";
+import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
+import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
+import { connect } from "react-redux";
+import RazorpayCheckout from "react-native-razorpay";
 
 class SorryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: "",
+      userDetails: null,
+      header: null,
+      phonenumber: null,
     };
   }
 
+  componentDidMount() {
+    this.getData();
+  }
+
+  handleOnStartPayment = (orderId, amount) => {
+    // this.RBSheet.close()
+    var options = {
+      description: "Payment for Subscription",
+      currency: "INR",
+      key: getPaymentKey(),
+      amount: amount * 100,
+      name: "Machaxi",
+      prefill: {
+        email: getRazorPayEmail(),
+        contact: this.state.phonenumber,
+        name: this.state.userDetails.userName,
+      },
+      theme: { color: "#67BAF5" },
+    };
+    console.log(options);
+    RazorpayCheckout.open(options)
+      .then((data) => {
+        let payment_details = {
+          razorpay_payment_id: data.razorpay_payment_id,
+        };
+        this.submitPaymentConfirmation(orderId, amount, payment_details);
+      })
+      .catch((error) => {
+        console.log("Razor Rspo ", error);
+        alert("Payment could not succeed. Please try again.");
+      });
+  };
+
+  submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
+    let postData = {
+      data: {
+        due_order_id: orderId,
+        amount,
+        payment_details: paymentDetails,
+      },
+    };
+    this.props
+      .paymentConfirmation(this.state.header, postData)
+      .then((result) => {
+        result = result.payload.data;
+        if (result.success) {
+          this.props.onPress(true);
+        } else {
+          alert(result.error_message);
+        }
+      });
+  };
+
+  getData = async () => {
+    const header = await AsyncStorage.getItem("header");
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const phonenumber = await AsyncStorage.getItem("phone_number");
+    const userDetails = JSON.parse(userDetailsJson);
+    this.setState({
+      userDetails: userDetails,
+      header: header,
+      phonenumber: phonenumber,
+    });
+  };
+
   render() {
-    handlepress = () => {
+    handleCrosspress = () => {
       this.props.onPressBack();
     };
 
     handlePaypress = () => {
-      this.props.onPressBack();
+      this.handleOnStartPayment(this.props.orderId, this.props.amount);
     };
 
     return (
@@ -49,9 +120,12 @@ class SorryPage extends Component {
             </TouchableOpacity>
           </View>
           <Text style={styles.title}>Payment Failed !</Text>
-          <Text style={styles.subtext}>{this.props.errorMessage}</Text>
+          <Text style={styles.subtext}>
+            You can retry your pay for the Coaching Plan if it appears that your
+            payment was failed.
+          </Text>
           <CustomButton
-            name={this.props.buttonName}
+            name={"Pay ₹ " + this.props.amount}
             hideImage={true}
             available={true}
             onPress={handlePaypress}
@@ -78,7 +152,7 @@ const styles = StyleSheet.create({
   },
   subcontainer: {
     width: "100%",
-    height: 380,
+    height: 400,
     marginBottom: 40,
     alignItems: "center",
     paddingHorizontal: 20,
@@ -104,4 +178,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SorryPage;
+const mapStateToProps = (state) => {
+  return {
+    paymentData: state.PaymentReducer,
+  };
+};
+
+const mapDispatchToProps = { paymentConfirmation };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SorryPage);

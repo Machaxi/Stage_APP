@@ -15,6 +15,7 @@ import PlayerDetails from "./components/PlayerDetails";
 import SelectPay from "./components/SelectPay";
 import CongratsScreen from "./components/CongratsScreen";
 import SorryPage from "./components/SorryPage";
+import CouponListScreen from "../play/CouponListScreen";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -40,6 +41,8 @@ class CoachingPlan extends Component {
       username: "",
       usergender: "",
       parent: "",
+      amount: 0,
+      orderId: "",
     };
   }
 
@@ -85,17 +88,16 @@ class CoachingPlan extends Component {
   };
 
   onPressPlan = (selectPlan, selectSlot) => {
-    console.log(selectPlan);
-    console.log(selectSlot);
     this.setState({ currentPage: 5 });
     this.setState({ selectPlan: selectPlan, selectSlot: selectSlot });
   };
 
-  onPressConfirm = (alreadyBook, errorMessage) => {
+  onPressConfirm = (alreadyBook, orderId, amount) => {
     this.setState({
       congratulationScreen: true,
       alreadyBook: alreadyBook,
-      errorMessage: errorMessage,
+      amount: amount,
+      orderId: orderId,
     });
   };
 
@@ -152,20 +154,19 @@ class CoachingPlan extends Component {
         {this.state.firstPage && (
           <View style={{ flex: 1 }}>
             <GetBack title={this.state.title} onPress={this.hadleBack} />
-            <PlayerDetails onPress={this.onPressDetails} />
+            <CouponListScreen />
+            {/* <PlayerDetails onPress={this.onPressDetails} /> */}
           </View>
         )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
-          <CongratsScreen
-            onPress={this.onPressSuccess}
-            errorMessage={this.state.errorMessage}
-          />
+          <CongratsScreen onPress={this.onPressSuccess} />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (
           <SorryPage
             onPressBack={this.hadleBack}
-            errorMessage={this.state.errorMessage}
-            buttonName={"Pay"}
+            orderId={this.state.orderId}
+            amount={this.state.amount}
+            onPress={this.onPressConfirm}
           />
         )}
         {!this.state.firstPage && !this.state.congratulationScreen && (

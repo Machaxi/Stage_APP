@@ -13,7 +13,8 @@ import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
 
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.getParam("title"),
+    // title: navigation.getParam("title"),
+    title: "Machaxi",
     headerTitleStyle: styles.titlestyle,
     headerStyle: {
       backgroundColor: "#21202F",
@@ -43,12 +44,14 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.getData();
-    this.props.navigation.setParams({ title: "Learn" });
+    // this.props.navigation.setParams({ title: "Learn" });
     this.props.navigation.addListener("didFocus", this.onScreenFocus);
   }
 
   componentWillUnmount() {
-    this.props.navigation.removeListener("didFocus", this.onScreenFocus);
+    if (this.props.navigation.removeListener) {
+      this.props.navigation.removeListener("didFocus", this.onScreenFocus);
+    }
   }
 
   onScreenFocus = () => {
@@ -105,7 +108,6 @@ class HomeScreen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({ currentPage: 1 });
-                this.props.navigation.setParams({ title: "Learn" });
               }}
             >
               <LinearGradient
@@ -142,7 +144,6 @@ class HomeScreen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({ currentPage: 2 });
-                this.props.navigation.setParams({ title: "Play" });
               }}
             >
               <LinearGradient
@@ -178,7 +179,6 @@ class HomeScreen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({ currentPage: 3 });
-                this.props.navigation.setParams({ title: "Shop" });
               }}
             >
               <LinearGradient
