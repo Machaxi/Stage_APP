@@ -192,16 +192,16 @@ class BookSlotCentreSelection extends Component {
   handlepress = async () => {
     this.props.onPress()
     console.log('--')
-    let centerValue = this.props.academiesList.find(
-      (item) => item.id === this.state.currentIndex
-    );
-    let distance = this.calculateDistance(
-      centerValue.latitude,
-      centerValue.longitude
-    );
-    const academiesList = this.props.academiesList.find(
-      (item) => item.id === this.state.currentIndex
-    );
+    // let centerValue = this.props.academiesList.find(
+    //   (item) => item.id === this.state.currentIndex
+    // );
+    // let distance = this.calculateDistance(
+    //   centerValue.latitude,
+    //   centerValue.longitude
+    // );
+    // const academiesList = this.props.academiesList.find(
+    //   (item) => item.id === this.state.currentIndex
+    // );
     //this.props.onPress(academiesList, distance);
   };
 

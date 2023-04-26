@@ -170,6 +170,7 @@ const [nextSession,setNextSessionData]=useState([]);
 const [cancelPressed, setCancelPressed] = useState(false);
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
 const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
+const [selectedSelfRating, setSelectedSelfRating] = useState(null)
 const [preferredDetails, setPreferredDetails] = useState(null);
 const [cancelModalVisible, setCancelModalVisibility] = useState(false);
 const [limitReachedForToday, setLimitReachForToday] = useState(true)
@@ -256,13 +257,15 @@ const getPlayerDetailsApi = async () => {
             var peerData = json.data?.peerRating;
             var sportsData = json.data?.rating;
             for(var i=0; i< json.data?.peerRating?.length; i++){
-              nextSessionVal["isExpanded"] = false
+              nextSessionVal[i].isExpanded = false
             }
              for (var i = 0; i < sportsData?.length; i++) {
-               sportsData["isSelected"] = false;
+               sportsData[i].isSelected = i == 0 ? true : false;
              }
              for (var i = 0; i < peerData?.length; i++) {
-               peerData["isSelected"] = false;
+                peerData[i].isSelected = i == 0 ? true : false
+                //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
+                //  peerData[i]?.peerRating != "" ? true : false;
              }
           
             todayLimitReached =
@@ -274,6 +277,7 @@ const getPlayerDetailsApi = async () => {
             setLimitReachForToday(
               todayLimitReached
             );
+            
             setPeerSportsList(peerData);
             setNextSessionData(nextSessionVal);
             setSportsList(sportsData);
@@ -315,6 +319,7 @@ useEffect(() => {
   const onRefresh = () => {
     setRefreshing(true);
     getPlayerDetailsApi();
+    setSelfRatingActiveness(true);
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false);
@@ -385,21 +390,31 @@ const setCancelModalVisibilityCb = (val) => {
     setNextSessionData(sessionData);
   }
 
-const updateRating = (playerInfo, ratingInfo, selectedPeerRating) => {
+const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
    console.log("********");
    console.log({ playerInfo });
    console.log({ ratingInfo });
    console.log({selectedPeerRating})
       console.log("********");
 
-  const data = {
-    userId: playerInfo?.id,
-    sportId: selectedPeerRating?.sport?.id,
-    proficiency: ratingInfo?.proficiency,
-    date: `${moment(selectedPeerRating?.date).format('YYYY-MM-DD')}`,
-    startTime: selectedPeerRating?.startTime,
-    endTime: selectedPeerRating?.endTime
-  };
+  const data = isPeerTypeRequest
+    ? {
+        userId: playerInfo?.id,
+        sportId: selectedPeerRating?.sport?.id,
+        proficiency: ratingInfo?.proficiency,
+        date: `${moment(selectedPeerRating?.date).format("YYYY-MM-DD")}`,
+        //date: `${moment(Date()).format('YYYY-MM-DD')}`,
+        startTime: selectedPeerRating?.startTime,
+        endTime: selectedPeerRating?.endTime,
+      }
+    : {
+        userId: playerDetailsResponse?.user?.id,
+        sportId: selectedPeerRating?.sport?.id,
+        proficiency: selectedSelfRating?.proficiency,
+        date: `${moment(Date()).format("YYYY-MM-DD")}`,
+      };
+      console.log('?????')
+      console.log({ data });
 
   setLoading(true);
   getData("header", (value) => {
@@ -432,8 +447,11 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating) => {
                 val.isSelected = true;
               }
             })
-
+            getPlayerDetailsApi();
             setProficiencyData(previousProfData)
+            if(isPeerTypeRequest){
+              setSelfRatingActiveness(false);
+            }
             // setRewardsResponse(json["data"]["reward"]);
           } else {
             ToastAndroid.show(
@@ -467,18 +485,24 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating) => {
 };
 
 const onRatingSelection = (passedVal) => {
-  var previousProfData;
-  previousProfData = proficiencyData.map((val) => {
-    if (val.level == passedVal.level) {
-      val.isSelected = true;
-    }
-  });
+ 
+  var previousProfData = [];
+  for(var i=0; i< proficiencyStaticData.length; i++){
+    previousProfData[i] = proficiencyStaticData[i]
+    previousProfData[i].isSelected = proficiencyStaticData[i].level == passedVal.level ? true : false;
+    
+  }
+  
+  setSelectedSelfRating(passedVal)
   setProficiencyData(previousProfData)
 }
 
 const onSavePress = (val) => {
   console.log('===')
-  setSelfRatingActiveness(false)
+  console.log({val})
+  console.log({ selectedSelfRating });
+  console.log({ playerDetailsResponse });
+  updateRating(null, null, val, false);
   console.log({val})
 }
 
@@ -571,7 +595,19 @@ const onSavePress = (val) => {
                   isSelected={selfTabEnabled}
                   onPressed={() => {
                     setSelfTab(true);
-                    setProficiencyData(proficiencyStaticData);
+                    var profData = 
+                    profData = proficiencyStaticData.map(
+                      (val) => {
+                        if (
+                          val.proficiency ==
+                          playerDetailsResponse?.user
+                            ?.proficiency
+                        ) {
+                          val.isSelected = true;
+                        }
+                      }
+                    );
+                    setProficiencyData(profData);
                   }}
                 />
                 <RatingTabarHeader
@@ -597,7 +633,7 @@ const onSavePress = (val) => {
                   <RatePeersTabView
                     proficiencyData={proficiencyData}
                     updateRating={(val1, val2, val3) =>
-                      updateRating(val1, val2, val3)
+                      updateRating(val1, val2, val3, true)
                     }
                     renderGameNameBox={renderGameNameBox}
                     ratingData={peerSportsList}

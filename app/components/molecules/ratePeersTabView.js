@@ -22,49 +22,55 @@ export const RatePeersTabView = ({ ratingData, proficiencyData, updateRating }) 
          
 
          const renderItems = ({ item }) => {
+          
            var playerItem = item;
            return (
              <View>
                <View
                  style={{ flexDirection: "row", marginVertical: 11 }}
                >
-                 <Text style={styles.playerName}>{getProficiencyName(item?.name)}</Text>
+                 <Text style={styles.playerName}>
+                   {playerItem?.name}
+                 </Text>
                  <Text style={styles.proficiencyStyle}>
-                   {item?.proficiency}
+                   {getProficiencyName(playerItem?.proficiency)}
                  </Text>
                </View>
                <FlatList
                  data={proficiencyData}
                  numColumns={2}
                  contentContainerStyle={{}}
-                 renderItem={ ({ item }) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => {
-                          updateRating(
-                            playerItem,
-                            item,
-                            selectedSportRelatedRating
-                          );
-                        }}
-                        style={{
-                          marginRight: 9,
-                          marginBottom: 10,
-                        }}
-                      >
-                        <NamedRoundedGradientContainer
-                          name={item?.level}
-                          txtColor={white}
-                          colors={
-                            item.isSelected == false
-                              ? ["#ffffff11", "#ffffff03"]
-                              : item?.colors
-                          }
-                          image={item?.img}
-                          isImg={true}
-                        />
-                      </TouchableOpacity>
-                    );
+                 renderItem={({ item }) => {
+                   return (
+                     <TouchableOpacity
+                       onPress={() => {
+                         updateRating(
+                           playerItem,
+                           item,
+                           selectedSportRelatedRating
+                         );
+                       }}
+                       style={{
+                         marginRight: 9,
+                         marginBottom: 10,
+                       }}
+                     >
+                       <NamedRoundedGradientContainer
+                         name={item?.level}
+                         txtColor={white}
+                         colors={
+                           playerItem.peerRating != null &&
+                           playerItem.peerRating != "" && item?.proficiency == playerItem?.peerRating
+                             ? //item.isSelected == false
+                             item?.colors :  
+                              ["#ffffff11", "#ffffff03"]
+                             
+                         }
+                         image={item?.img}
+                         isImg={true}
+                       />
+                     </TouchableOpacity>
+                   );
                  }}
                />
              </View>

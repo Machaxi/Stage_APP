@@ -67,7 +67,7 @@ export const SelfRatingCard = ({
            return <PeerRatingCard item={item} />;
          };
 
-         console.log("++");
+         console.log("++"+editSelfRating);
          console.log({ selectedSportRelatedRating });
          console.log({ data });
 
@@ -86,13 +86,16 @@ export const SelfRatingCard = ({
                  <TouchableOpacity
                    activeOpacity={0.8}
                    onPress={() => {
-                     {
+                    console.log(
+                      "**********" + editSelfRating
+                    );
+                     
                        if (editSelfRating) {
                          onSavePress(selectedSportRelatedRating);
                        } else {
                          onEditPress();
                        }
-                     }
+                     
                    }}
                  >
                    {editSelfRating ? (
