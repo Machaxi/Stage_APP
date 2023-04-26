@@ -316,7 +316,7 @@ class LoginSceen extends Component {
       .doLogin(dataDic)
       .then(() => {
         let user = JSON.stringify(this.props.data.user);
-        console.log("doLogin-payload " + JSON.stringify(user));
+        console.log("doLogin-payload" + JSON.stringify(user));
         let userResponce = JSON.parse(user);
         this.setState({ isLoading: false });
         if (userResponce.success == true) {
