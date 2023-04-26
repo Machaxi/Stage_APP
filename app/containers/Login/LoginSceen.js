@@ -264,6 +264,19 @@ class LoginSceen extends Component {
             });
           }
         } else {
+          const userDetails = {
+            userName: userData["user"].name,
+            gender: userData["user"].genderType,
+            id: userData["user"].id,
+          };
+          console.log(userData["user"]);
+          AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
+          AsyncStorage.setItem("user_name", userData["user"].name);
+          AsyncStorage.setItem("user_gender", userData["user"].genderType);
+          AsyncStorage.setItem("user_child_name", userData["user"].childName);
+          const inputString = userData["user"].mobile_number;
+          const outputString = inputString.replace("+91", "");
+          AsyncStorage.setItem("phone_number", outputString);
           if (userData.is_learn_enabled || userData.is_play_enabled) {
             this.props.navigation.navigate("ParentHome");
           } else {
@@ -303,7 +316,7 @@ class LoginSceen extends Component {
       .doLogin(dataDic)
       .then(() => {
         let user = JSON.stringify(this.props.data.user);
-        console.log("doLogin-payload " + JSON.stringify(user));
+        console.log("doLogin-payload" + JSON.stringify(user));
         let userResponce = JSON.parse(user);
         this.setState({ isLoading: false });
         if (userResponce.success == true) {

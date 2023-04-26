@@ -7,6 +7,7 @@ const initialState = {
   booktrail: null,
   bookFail: null,
   playdata: null,
+  planData: null,
 };
 export default function PlayerReducer(state = initialState, action) {
   switch (action.type) {
@@ -27,6 +28,8 @@ export default function PlayerReducer(state = initialState, action) {
         playdata: action.payload.data,
         bookFail: action.payload.response,
       };
+    case types.SELECT_PLAN_SUCCESS:
+      return { ...state, planData: action.payload.data };
     case types.DO_PLAYER_LISTING_FAIL:
       console.log("fails", action.payload);
       return {
@@ -76,6 +79,22 @@ export function confirmPlayingTrail(postdata, header, url) {
     payload: {
       request: {
         url: url,
+        method: "POST",
+        data: postdata,
+        headers: {
+          "x-authorization": header,
+        },
+      },
+    },
+  };
+}
+
+export function selectPlanDate(postdata, header) {
+  return {
+    type: types.SELECT_PLAN,
+    payload: {
+      request: {
+        url: `batch/player/select-coaching-plan`,
         method: "POST",
         data: postdata,
         headers: {
