@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { borderGrey, borderWhite, greenVariant, greyVariant2, lightGreenBg, yellowVariant } from "../containers/util/colors";
 import { deviceWidth } from "../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_SemiBold } from "../containers/util/fonts";
 
 const MyRequestTabItem = ({ onTabPress, name, colors, isSelected, isLeft}) => {
   return (
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: greyVariant2,
-    fontFamily: 'Nunito-600',
+    fontFamily: Nunito_SemiBold,
     textAlign: "center",
   },
 });
