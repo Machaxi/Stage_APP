@@ -59,6 +59,7 @@ import Share from "react-native-share";
 import branch, { BranchEvent } from "react-native-branch";
 import MyStats from "../../components/custom/MyStats";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
+import RequestHeaderRight from "../../atoms/requestHeaderRight";
 
 var deviceWidth = Dimensions.get("window").width - 20;
 
@@ -148,71 +149,7 @@ class ParentHome extends BaseComponent {
       ),
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            style={{}}
-            onPress={() => {
-              navigation.navigate("NotificationList");
-            }}
-            activeOpacity={0.8}
-          >
-            <ImageBackground
-              resizeMode="contain"
-              source={require("../../images/ic_notifications.png")}
-              style={{
-                width: 22,
-                height: 22,
-                marginLeft: 12,
-                marginRight: 12,
-                alignItems: "flex-end",
-              }}
-            >
-              {navigation.getParam("notification_count", 0) > 0 ? (
-                <View
-                  style={{
-                    width: 16,
-                    height: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 30 / 2,
-                    backgroundColor: "#ED2638",
-                  }}
-                >
-                  <Text
-                    style={[
-                      defaultStyle.bold_text_10,
-                      { fontSize: 8, color: "white" },
-                    ]}
-                  >
-                    {navigation.getParam("notification_count", "") > 99
-                      ? "99+"
-                      : navigation.getParam("notification_count", "")}
-                  </Text>
-                </View>
-              ) : null}
-            </ImageBackground>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ marginRight: 8 }}
-            onPress={() => {
-              navigation.getParam("shareProfile")();
-            }}
-            activeOpacity={0.8}
-          >
-            <ImageBackground
-              resizeMode="contain"
-              source={require("../../images/share-profile.png")}
-              style={{
-                width: 22,
-                height: 22,
-                marginLeft: 0,
-                marginRight: 12,
-                alignItems: "flex-end",
-              }}
-            />
-          </TouchableOpacity>
-        </View>
+        <RequestHeaderRight navigation={navigation} />
       ),
     };
   };
@@ -531,8 +468,8 @@ class ParentHome extends BaseComponent {
           //Getting Sports Data
           let sportsList, currentSportId, currentSportName;
 
-          if (user1.data["sports"] != null) {
-            sportsList = user1.data["sports"].map((item) => {
+          if ( user1?.data["sports"] != null) {
+            sportsList = user1?.data["sports"].map((item) => {
               return { label: item.name, value: item.id };
             });
             this.setState({ sportsList });

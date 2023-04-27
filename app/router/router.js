@@ -123,6 +123,8 @@ import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
 import ParentHome from "../containers/ParentsScreen/ParentHome";
 import { Nunito_Bold } from "../containers/util/fonts";
 import RequestHeaderLeft from "../atoms/requestHeaderLeft";
+import NotificationsScreen from "../containers/notification/NotificationsScreen";
+import GoBackHeader from "../components/molecules/goBackHeader";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2406,6 +2408,7 @@ const PlayStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2423,6 +2426,7 @@ const PlayStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2440,6 +2444,7 @@ const PlayStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2460,6 +2465,7 @@ const LearnStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2477,6 +2483,7 @@ const LearnStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2494,6 +2501,7 @@ const LearnStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2706,6 +2714,26 @@ const myRequestsModule = createStackNavigator({
   },
 });
 
+const notificationsStack = createStackNavigator({
+  NotificationsScreen: NotificationsScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: "Notification",
+    headerTitleStyle: style.headerStyle,
+    // headerLeft: (
+    //   <GoBackHeader title={''} navigation={navigation} />
+    // ),
+    headerLeft: <NavigationDrawerStructure
+          navigationProps={navigation}
+          showDrawer={false}
+          showBackAction={true}
+        />,
+    headerStyle: {
+      backgroundColor: "#FFFFFF",
+    },
+    headerTintColor: "#000",
+  }),
+});
+
 const HomeStack = createStackNavigator({
   HomeScreen: {
     screen: HomeScreen,
@@ -2719,6 +2747,7 @@ const HomeStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2736,6 +2765,7 @@ const HomeStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2753,6 +2783,7 @@ const HomeStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2770,6 +2801,7 @@ const HomeStack = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2802,6 +2834,10 @@ const parentDrawer = createDrawerNavigator(
       // navigationOptions: {
       //     header: <CustomHeader title="Academy" />,
       // }
+    },
+    NotificationsScreen: {
+      screen: notificationsStack,
+      
     },
   },
   {
@@ -2940,6 +2976,7 @@ const TournamentRegistration = createStackNavigator({
           navigationProps={navigation}
           navigation={navigation}
           showNotification={false}
+          darkThemFlow={true}
         />
       ),
       headerStyle: {
@@ -2966,6 +3003,7 @@ const TournamentRegistration = createStackNavigator({
           navigationProps={navigation}
           navigation={navigation}
           showNotification={true}
+          darkThemFlow={true}
         />
       ),
       headerStyle: {

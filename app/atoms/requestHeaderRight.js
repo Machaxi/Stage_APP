@@ -8,7 +8,7 @@ const RequestHeaderRight = ({ navigation }) => {
       <TouchableOpacity
         style={{}}
         onPress={() => {
-          navigation.navigate("NotificationList");
+          navigation.navigate("NotificationsScreen");
         }}
         activeOpacity={0.8}
       >

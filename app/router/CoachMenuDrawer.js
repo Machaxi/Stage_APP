@@ -315,7 +315,7 @@ class CoachMenuDrawer extends BaseComponent {
 		
 		return (
       <View>
-        <View
+        {/* <View
           style={{
             paddingLeft: 10,
             paddingRight: 10,
@@ -325,91 +325,138 @@ class CoachMenuDrawer extends BaseComponent {
             backgroundColor: "white",
             marginBottom: 12,
           }}
-        >
-          <Image
-            resizeMode="contain"
-            style={{ width: 128, height: 128, borderRadius: 8 }}
-            source={{ uri: profile_pic }}
-          />
+        > */}
+			<View
+					style={{
+						paddingLeft: 10, paddingTop: 16,
+						paddingBottom: 16,
+						flexDirection: 'row', backgroundColor: '#262051', marginBottom: 12
+					}}
+				>
+					{/* <Image
+						style={{ width: 128, height: 128, borderRadius: 8 }}
+						source={{ uri: profile_pic }}
+					></Image> */}
+				{profile_pic?
+					<FastImage
+						//resizeMode={FastImage.resizeMode.contain}
+						style={{
+							width: 93, height: 98,
+						}}
+						source={{ uri: profile_pic }}
+					/>
+					:
+					<Image
+					style={{ width: 93, height: 100, resizeMode:'cover'  }}
+					source={require('../images/dummy_user.jpg')}
+					></Image>
+					}
 
-          <View
-            style={{
-              justifyContent: "center",
-              marginLeft: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                flex: 1,
-                justifyContent: "space-between",
-              }}
-            >
-              <Image
-                resizeMode="contain"
-                style={styles.drawer_logo}
-                source={require("../images/dribble_logo.png")}
-              />
-            </View>
+					<View
+						style={{
+							justifyContent: 'center',
+							marginLeft: 10,
 
-            <View>
-              <Text
-                style={{
-                  color: "black",
-                  fontFamily: "Quicksand-Medium",
-                  fontSize: 14,
-                  marginTop: 16,
-                }}
-              >
-                {fullame == null ? "-" : fullame}
-              </Text>
-              <View style={{ marginTop: 8 }}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    this.props.navigation.navigate("EditProfile", {
-                      relations: [],
-                    });
-                  }}
-                >
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#A3A5AE",
-                        fontFamily: "Quicksand-Medium",
-                        fontSize: 14,
-                      }}
-                    >
-                      {mobileNumber}
-                    </Text>
-                    <Text
-                      style={[
-                        defaultStyle.regular_text_14,
-                        {
-                          color: "#667DDB",
-                          marginLeft: 8,
-						  fontSize: 10
-                        },
-                      ]}
-                    >
-                      Edit
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
+						}}
+					>
+						{!signedIn ?
+
+							<View>
+
+								<Text
+									style={{
+										color: 'black',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 16,
+									}}>
+									Guest</Text>
+
+								<Text
+									style={{
+										color: '#667DDB',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 8,
+									}}>
+									Sign In</Text>
+							</View>
+
+							:
+							<View>
+								<View style={{flexDirection:'row', alignItems:'center'}}>
+								<Text
+									style={{
+										color: '#A3A5AE',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14,
+										marginTop: 8
+									}}>
+									Guest</Text>
+								<TouchableOpacity style={{paddingLeft:8}} activeOpacity={.8} onPress={() => {
+									this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
+								}}>
+
+									<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
+										<Image
+											resizeMode="contain"
+											style={{
+												width: 12,
+												height: 12, borderRadius: 8
+											}}
+											source={require('../images/edit_profile.png')}
+										></Image>
+
+										<Text
+											style={{
+												color: '#667DDB',
+												fontFamily: Nunito_Regular,
+												fontSize: 10, 
+												fontWeight:'400',
+												marginLeft: 4
+											}}
+										>
+											Edit
+								</Text>
+									</View>
+								</TouchableOpacity></View>
+								
+								
+								
+								<Text
+									style={{
+										color: '#FFFFFF',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 20,
+										marginTop: 8
+									}}>
+									{fullame}</Text>
+
+								
+								<Text
+									style={{
+										color: '#A3A5AE',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 14, marginTop: 8
+									}}>
+									{mobileNumber}
+								</Text>
+								<Text
+									style={{
+										color: '#7B7C83',
+										fontFamily: 'Quicksand-Medium',
+										fontSize: 12,
+										marginTop: 4
+									}}>
+									({user_type == PARENT ? 'Guardian' : camelCase(user_type)})</Text>
+							</View>
+						}
+					</View>
+				</View>
+				{/* new guest drawer top end */}
 
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => this.props.navigation.navigate("WebViewScreen")}
+		  //TODO:
+          //onPress={() => this.props.navigation.navigate("WebViewScreen")}
         >
           <View style={styles.drawercell}>
             <Text style={styles.menu}>About Machaxi</Text>
@@ -423,7 +470,10 @@ class CoachMenuDrawer extends BaseComponent {
 
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => this.props.navigation.navigate("ContactUs")}
+          onPress={() =>{ 
+			//TODO:
+			//this.props.navigation.navigate("ContactUs")
+		}}
         >
           <View style={styles.drawercell}>
             <Text style={styles.menu}>Contact Us</Text>
@@ -771,8 +821,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('ContactUs')}>
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>{
+					this.props.navigation.navigate('ContactUs')}}>
 					<View style={styles.drawercell}>
 						<Text style={styles.menu_coach}>Contact Us</Text>
 						<Image
@@ -840,7 +890,7 @@ class CoachMenuDrawer extends BaseComponent {
 
 		if (!signedIn) {
 			menu = this.getWithoutLoggedMenu()
-			fullName = "Guest"
+			fullame = "Guest"
 			mobileNumber = "-"
 		}
 
@@ -994,7 +1044,7 @@ class CoachMenuDrawer extends BaseComponent {
 				</View>
 				{/* start */}
 					{
-					this.state.isLearnPlanEnabled && 
+					!this.state.isLearnPlanEnabled && 
 					<ColourfulDrawerItem onPress={()=> {
 						this.setState({
 							learnDataVisibility: !this.state.learnDataVisibility,
@@ -1040,7 +1090,7 @@ class CoachMenuDrawer extends BaseComponent {
 						{related_players_array}
 					</View>
 					: null}
-				{this.state.isLearnPlanEnabled && <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 12}]}></View>}
+				{this.state.learnDataVisibility && <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 12}]}></View>}
 				{this.state.learnDataVisibility && <TouchableOpacity style={{
 						paddingLeft: 28,
 						paddingBottom: 12,
@@ -1052,8 +1102,7 @@ class CoachMenuDrawer extends BaseComponent {
 				<View style={styles.drawercell}>
 						<Text style={styles.menuTxt}>
 							Batch details
-								</Text>
-
+						</Text>
 						<Image
 							style={styles.arrow_img}
 							source={require('../images/ic_drawer_arrow.png')}
@@ -1062,10 +1111,10 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 				}
-				{this.state.isLearnPlanEnabled && <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 0}]}></View>}
+				 <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 0}]}></View>
 				{/* learn section end */}
 				{
-					this.state.isPlayPlanEnabled && 
+					!this.state.isPlayPlanEnabled && 
 					<ColourfulDrawerItem onPress={()=> {
 						this.setState({
 							playDataVisibility: !this.state.playDataVisibility,
@@ -1175,8 +1224,8 @@ class CoachMenuDrawer extends BaseComponent {
 				}}>
 				</View>
 
-				{this.state.isPlayPlanEnabled && <View style={[defaultStyle.line_style, styles.greyLine]}></View>}
-				{this.state.isPlayPlanEnabled && <DrawerItemBtn itemImage={require('../images/wallet.png')} onPress={()=>{
+				<View style={[defaultStyle.line_style, styles.greyLine]}></View>
+				{!this.state.isPlayPlanEnabled && <DrawerItemBtn itemImage={require('../images/wallet.png')} onPress={()=>{
 					this.props.navigation.navigate('PaymentDetail');
 					}}
 					title={'Payment'}
@@ -1190,9 +1239,9 @@ class CoachMenuDrawer extends BaseComponent {
 				<View style={[defaultStyle.line_style,  styles.greyLine]}></View>
 				<ColourfulDrawerItem
 					onPress={()=> {
-						this.setState({
-							staticDataVisibility: !this.state.staticDataVisibility,
-						});
+						// this.setState({
+						// 	staticDataVisibility: !this.state.staticDataVisibility,
+						// });
 						}
 					}
 					image={require('../images/info.png')}
@@ -1260,6 +1309,7 @@ class CoachMenuDrawer extends BaseComponent {
 	render() {
 		let signedIn = this.state.signedIn
 		let user_type = this.state.user_type
+		console.log('uuuuuu'+user_type)
 		let fullame = this.state.fullName
 		let mobileNumber = this.state.mobileNumber
 		let menu;

@@ -72,10 +72,7 @@ const ShopScreen = ({ navigation }) => {
       if (value == "") return;
       const headers = {
         "Content-Type": "application/json",
-        //"x-authorization": value,
-        //TODO:remove this static logic
-        "x-authorization":
-          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NzQiLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODEyODAxNzQsImV4cCI6NTIyNTY0MDEyODAxNzR9.EpBzEY99WBY1B72GGru59zE3Y39Pa9ot9ELmANf1pOYpXqJlgrBajCmIiY5o37cXMOecQH49XQwjUhIB7drQsw",
+        "x-authorization": value,       
       };
       //client.call
       client
