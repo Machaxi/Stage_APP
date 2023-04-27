@@ -449,8 +449,8 @@ class UserHome extends BaseComponent {
           //Getting Sports Data
           let sportsList, currentSportId, currentSportName;
 
-          if (user1.data["sports"] != null) {
-            sportsList = user1.data["sports"].map((item) => {
+          if (user1?.data["sports"] != null) {
+            sportsList = user1?.data["sports"].map((item) => {
               return { label: item.name, value: item.id };
             });
             this.setState({ sportsList });

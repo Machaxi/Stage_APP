@@ -39,7 +39,6 @@ const
 
   const getNotifications = () => {
     getNotificationCount((count) => {
-        console.log('??? ' + count)
       navigation.setParams({ notification_count: count });
       navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,

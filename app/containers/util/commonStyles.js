@@ -8,6 +8,15 @@ export const commonStyles = StyleSheet.create({
            color: redVariant,
            fontFamily: Nunito_Regular,
          },
+         headerStyle: {
+           color: "#191919",
+           fontFamily: "Quicksand-Medium",
+           fontWeight: "400",
+           textAlign: "center",
+           fontSize: 16,
+           flexGrow: 1,
+           alignSelf: "center",
+         },
          requestOuterView: {
            //width: "100%",
            marginTop: 20,

@@ -63,42 +63,51 @@ class RightMenuToolbar extends BaseComponent {
               //         style={{ width: 25, height: 20, marginRight: 12 }}
               //     />
               // </TouchableOpacity>
-              <ImageBackground
-                resizeMode="contain"
-                source={require("../images/ic_notifications.png")}
-                style={{
-                  width: 22,
-                  height: 22,
-                  marginLeft: 12,
-                  marginRight: 12,
-                  alignItems: "flex-end",
-                }}
+              <TouchableOpacity activeOpacity={0.8} onPress={()=>{
+                this.props.darkThemFlow ? this.props.navigationProps.navigate(
+                    "NotificationsScreen"
+                  ):
+                  this.props.navigationProps.navigate(
+                    "NotificationList"
+                  );
+                }} 
               >
-                {this.state.notificationCount > 0 ? (
-                  <View
-                    style={{
-                      width: 16,
-                      height: 16,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 30 / 2,
-                      backgroundColor: "#ED2638",
-                    }}
-                  >
-                    <Text
-                      style={[
-                        defaultStyle.bold_text_10,
-                        { fontSize: 8, color: "white" },
-                      ]}
+                <ImageBackground
+                  resizeMode="contain"
+                  source={require("../images/ic_notifications.png")}
+                  style={{
+                    width: 22,
+                    height: 22,
+                    marginLeft: 12,
+                    marginRight: 12,
+                    alignItems: "flex-end",
+                  }}
+                >
+                  {this.state.notificationCount > 0 ? (
+                    <View
+                      style={{
+                        width: 16,
+                        height: 16,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 30 / 2,
+                        backgroundColor: "#ED2638",
+                      }}
                     >
-                      {this.state.notificationCount >
-                      99
-                        ? "99+"
-                        : this.state.notificationCount}
-                    </Text>
-                  </View>
-                ) : null}
-              </ImageBackground>
+                      <Text
+                        style={[
+                          defaultStyle.bold_text_10,
+                          { fontSize: 8, color: "white" },
+                        ]}
+                      >
+                        {this.state.notificationCount > 99
+                          ? "99+"
+                          : this.state.notificationCount}
+                      </Text>
+                    </View>
+                  ) : null}
+                </ImageBackground>
+              </TouchableOpacity>
             ) : null}
 
             {showHome ? (

@@ -22,7 +22,11 @@ class HomeScreen extends Component {
     },
     headerLeft: <RequestHeaderLeft navigation={navigation} />,
     headerRight: (
-      <RightMenuToolbar navigationProps={navigation} showNotification={true} />
+      <RightMenuToolbar
+        darkThemFlow={true}
+        navigationProps={navigation}
+        showNotification={true}
+      />
     ),
   });
 
