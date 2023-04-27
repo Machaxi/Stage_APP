@@ -66,11 +66,10 @@ class SelectPlayPay extends Component {
       header: "",
       isLoading: false,
       appliedCoupon: false,
-      displayStartDate: "",
+      displayStartDate: null,
       displayEndDate: "",
       userDetails: null,
       amount: "",
-      joinDate: "",
       phonenumber: "",
       startdate: new Date(),
       enddate: new Date(),
@@ -102,6 +101,7 @@ class SelectPlayPay extends Component {
 
     const start_date = startDate.toLocaleString("en-GB", options);
     const end_date = endDate.toLocaleString("en-GB", options);
+    var userDetails = this.props.userDetails;
 
     this.setState({
       centerName: selectCenter.name,
@@ -114,7 +114,7 @@ class SelectPlayPay extends Component {
       appliedCoupon: this.props.applycoupon,
       startdate: startDate,
       enddate: endDate,
-      userDetails: this.props.userDetails,
+      userDetails: userDetails,
     });
   };
 
@@ -219,25 +219,35 @@ class SelectPlayPay extends Component {
     this.setState({ startdate: join_date, enddate: endDate });
   };
 
+  convertToDate = (dateString) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const [day, month] = dateString.split(" ");
+    const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
+    return date;
+  };
+
   startPayment = () => {
     var dataDic = {};
     var dict = {};
 
+    const joinDate = convertToDate(this.state.startdate);
     dict["planId"] = "" + this.props.selectPlan.id;
-    dict["preferredAcademyId"] = this.state.userDetails.id;
-    dict["dateOfJoining"] = this.state.joinDate;
+    dict["preferredAcademyId"] = this.props.selectCenter.id;
+    dict["dateOfJoining"] = joinDate;
     dataDic["data"] = dict;
 
-    this.props
-      .selectPlanDate(dataDic, this.state.header)
-      .then(() => {
-        let jsondata = JSON.stringify(this.props.data.planData.data);
-        let responcedata = JSON.parse(jsondata);
-        this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
-      })
-      .catch((response) => {
-        console.log(response);
-      });
+    console.log(dataDic);
+    // this.props
+    //   .selectPlanDate(dataDic, this.state.header)
+    //   .then(() => {
+    //     let jsondata = JSON.stringify(this.props.data.planData.data);
+    //     let responcedata = JSON.parse(jsondata);
+    //     this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
+    //   })
+    //   .catch((response) => {
+    //     console.log(response);
+    //   });
   };
 
   render() {
@@ -262,14 +272,17 @@ class SelectPlayPay extends Component {
         <Loader visible={this.state.isLoading} />
         <ScrollView style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Review before Payment</Text>
-          <PlanDetails
-            title={this.props.selectPlan.name}
-            subtitle={this.props.selectPlan.price}
-            startDate={this.state.displayStartDate}
-            endDate={this.state.displayEndDate}
-            image={this.props.selectPlan.planIconUrl}
-            onPress={this.DataChange}
-          />
+          {this.state.displayStartDate && (
+            <PlanDetails
+              title={this.props.selectPlan.name}
+              subtitle={this.props.selectPlan.price}
+              startDate={this.state.displayStartDate}
+              endDate={this.state.displayEndDate}
+              image={this.props.selectPlan.planIconUrl}
+              url={true}
+              onPress={this.DataChange}
+            />
+          )}
           <LinearGradient
             colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.06)"]}
             start={{ x: 0, y: 0 }}
@@ -281,14 +294,18 @@ class SelectPlayPay extends Component {
               Player Name
             </Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.name}>
-                {this.state.userDetails.userName} ·{" "}
-              </Text>
-              <Text
-                style={[styles.subtitle, { color: "#FFC498", marginLeft: 2 }]}
-              >
-                {this.state.userDetails.gender}
-              </Text>
+              {this.state.userDetails && (
+                <Text style={styles.name}>
+                  {this.state.userDetails.userName} ·{" "}
+                </Text>
+              )}
+              {this.state.userDetails && (
+                <Text
+                  style={[styles.subtitle, { color: "#FFC498", marginLeft: 2 }]}
+                >
+                  {this.state.userDetails.gender}
+                </Text>
+              )}
             </View>
             <View style={styles.line} />
             <Text style={styles.subtitle}>Centre Detail</Text>

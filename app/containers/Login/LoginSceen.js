@@ -48,7 +48,7 @@ class LoginSceen extends Component {
       code: "",
       isLoading: false,
       loginsuccess: false,
-      showscreen: false,
+      showscreen: true,
       firebase_token: "",
       ONE_SIGNAL_USERID: "",
       userDetails: "",
@@ -83,47 +83,9 @@ class LoginSceen extends Component {
   }
 
   signcheck = async () => {
-    const userlogin = await AsyncStorage.getItem("user_name");
-    const learn_enabled = await AsyncStorage.getItem("learn_enabled");
-    const play_enabled = await AsyncStorage.getItem("play_enabled");
-    const coach_enabled = await AsyncStorage.getItem("coach_enabled");
     let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
     let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
     this.setState({ ONE_SIGNAL_USERID: ONE_SIGNAL, firebase_token: fcm_token });
-    if (coach_enabled == "coach_enabled") {
-      getData("userInfo", (value) => {
-        if (value != "") {
-          let userData = JSON.parse(value);
-          let userType = userData.user["user_type"];
-          if (userType == COACH) {
-            if (
-              userData.has_multiple_acadmies == false &&
-              userData.academy_id != null
-            ) {
-              if (userData.can_book_court) {
-                this.props.navigation.navigate("CoachBookHome");
-              } else {
-                this.props.navigation.navigate("CoachHome");
-              }
-            } else {
-              this.props.navigation.navigate("SwitchPlayer", {
-                userType: COACH,
-              });
-            }
-          }
-        }
-      });
-    } else {
-      if (play_enabled == "play_enabled") {
-        this.props.navigation.navigate("Guestfirsted");
-      } else if (learn_enabled == "learn_enabled") {
-        this.props.navigation.navigate("LearnHomePage");
-      } else if (userlogin != null && userlogin.length > 3) {
-        this.props.navigation.navigate("HomeDrawer");
-      } else {
-        this.setState({ showscreen: true });
-      }
-    }
   };
 
   signInWithPhoneNumber = () => {
@@ -208,8 +170,6 @@ class LoginSceen extends Component {
           AsyncStorage.setItem("user_name", this.state.name);
           AsyncStorage.setItem("user_gender", this.state.gender);
           AsyncStorage.setItem("phone_number", this.state.phoneNumber);
-          AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
-          AsyncStorage.setItem("play_enabled", "play_not_enabled");
           this.props.navigation.navigate("HomeDrawer");
         }
       })
@@ -267,16 +227,6 @@ class LoginSceen extends Component {
             });
           }
         } else {
-          if (userData.is_learn_enabled) {
-            AsyncStorage.setItem("learn_enabled", "learn_enabled");
-          } else {
-            AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
-          }
-          if (userData.is_play_enabled) {
-            AsyncStorage.setItem("play_enabled", "play_enabled");
-          } else {
-            AsyncStorage.setItem("play_enabled", "play_not_enabled");
-          }
           const userDetails = {
             userName: userData["user"].name,
             gender: userData["user"].genderType,
@@ -286,13 +236,12 @@ class LoginSceen extends Component {
           AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
           AsyncStorage.setItem("user_name", userData["user"].name);
           AsyncStorage.setItem("user_gender", userData["user"].genderType);
-          AsyncStorage.setItem("user_child_name", userData["user"].childName);
           const inputString = userData["user"].mobile_number;
           const outputString = inputString.replace("+91", "");
           AsyncStorage.setItem("phone_number", outputString);
-          if (userData.is_learn_enabled) {
+          if (!userData.is_learn_enabled) {
             this.props.navigation.navigate("LearnHomePage");
-          } else if (userData.is_play_enabled) {
+          } else if (!userData.is_play_enabled) {
             this.props.navigation.navigate("Guestfirsted");
           } else {
             this.props.navigation.navigate("HomeDrawer");
@@ -354,18 +303,7 @@ class LoginSceen extends Component {
             AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
             AsyncStorage.setItem("user_name", userData["user"].name);
             AsyncStorage.setItem("user_gender", userData["user"].genderType);
-            AsyncStorage.setItem("user_child_name", userData["user"].childName);
             AsyncStorage.setItem("phone_number", this.state.phoneNumber);
-            if (userData.is_learn_enabled) {
-              AsyncStorage.setItem("learn_enabled", "learn_enabled");
-            } else {
-              AsyncStorage.setItem("learn_enabled", "learn_not_enabled");
-            }
-            if (userData.is_play_enabled) {
-              AsyncStorage.setItem("play_enabled", "play_enabled");
-            } else {
-              AsyncStorage.setItem("play_enabled", "play_not_enabled");
-            }
             if (userInfoData.user_type == COACH) {
               AsyncStorage.setItem("coach_enabled", "coach_enabled");
               storeData("multiple", userData.has_multiple_acadmies);
@@ -384,9 +322,9 @@ class LoginSceen extends Component {
                 });
               }
             } else {
-              if (userData.is_learn_enabled) {
+              if (!userData.is_learn_enabled) {
                 this.props.navigation.navigate("LearnHomePage");
-              } else if (userData.is_play_enabled) {
+              } else if (!userData.is_play_enabled) {
                 this.props.navigation.navigate("Guestfirsted");
               } else {
                 this.props.navigation.navigate("HomeDrawer");

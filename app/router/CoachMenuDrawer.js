@@ -394,7 +394,7 @@ class CoachMenuDrawer extends BaseComponent {
                         {
                           color: "#667DDB",
                           marginLeft: 8,
-						  font
+						  fontSize: 10
                         },
                       ]}
                     >

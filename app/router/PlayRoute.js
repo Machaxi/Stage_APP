@@ -16,7 +16,6 @@ import ViewPlayerPerformance from "../containers/UserScreen/ViewPlayerPerformanc
 import PlayScreen from "././../containers/play/PlayScreen";
 import NavigationDrawerWhite from "./NavigationDrawerWhite";
 import NotificationList from "../containers/notification/NotificationList";
-import PlayPage from "../containers/ExsitingUser/PlayPage";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CouponListScreen from "../containers/play/CouponListScreen";
 import BookSlotScreen from "../containers/play/BookSlotScreen";
