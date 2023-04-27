@@ -48,6 +48,7 @@ import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import { getProficiencyColor, getProficiencyGradients, getProficiencyName, proficiencyStaticData } from "../util/utilFunctions";
 import moment from "moment";
+import PlayerScreen from "../FirstTimeUser/PlayerScreen";
 
 export default PlayScreen =({navigation})=>{
 
@@ -177,6 +178,7 @@ const [limitReachedForToday, setLimitReachForToday] = useState(true)
 const [loading, setLoading] = useState(true);
 const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
 const [refreshing, setRefreshing] = useState(false);
+const [userDetails, setUserDetails] = useState(null);
 
 var updateRatingError = null;
 var playerDetailsApiError = null;
@@ -212,6 +214,7 @@ var playerDetailsApiError = null;
       }
     );
 
+    getuserdata();
     checkNotification();
 
     var refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
@@ -226,6 +229,13 @@ var playerDetailsApiError = null;
       // Anything in here is fired on component unmount.
     };
   }, []);
+
+const getuserdata = () => {
+  getData('userInfo', (value) => {
+    userData = (JSON.parse(value))
+    setUserDetails(userData);
+  })
+} 
 
 const getPlayerDetailsApi = async () => {
   setLoading(true);
@@ -507,6 +517,22 @@ const onSavePress = (val) => {
 
     if (loading) {
       return <LoadingIndicator />;
+    }
+
+    if (userDetails.is_play_enabled) {
+      return (
+        <LinearGradient
+          colors={["#332B70", "#24262A"]}
+          locations={[0, 1]}
+          style={{ flex: 1 }}
+        >
+            <PlayerScreen
+              onPress={() => {
+                navigation.navigate("BookPlayTrail");
+              }}
+            />
+        </LinearGradient>
+      );
     }
 
   return (

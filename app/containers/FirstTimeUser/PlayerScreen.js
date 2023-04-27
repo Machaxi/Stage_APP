@@ -13,20 +13,56 @@ import HeaderContentComponent from "../../components/custom/HeaderContentCompone
 import PlayPass from "../../components/custom/PlayPass";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Nunito_SemiBold } from "../util/fonts";
+import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import axios from "axios";
+import { getBaseUrl } from "../BaseComponent";
 
 class PlayerScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       bookingSuccess: "",
+      playData: null,
+      header: "",
     };
   }
 
   componentDidMount() {
-    console.log(this.props.playData.isTrialDisplayRequired);
+    this.getValue()
   }
+  
+  getValue = async () => {
+    const header = await AsyncStorage.getItem("header");
+    this.setState({ header: header });
+    this.apiCall();
+  };
+
+  apiCall = () => {    
+    axios
+      .get(getBaseUrl() + "/user/learn-play", {
+        headers: {
+          "x-authorization": this.state.header,
+        },
+      })
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        this.setState({
+          playData: batchData["play"],
+        });
+        console.log(batchData["play"])
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   render() {
+    if (this.state.playData == null) {
+      return <LoadingIndicator />;
+    }
+
     return (
       <View style={styles.container}>
         <ScrollView style={{ flex: 0.85, paddingHorizontal: 20 }}>
@@ -39,9 +75,9 @@ class PlayerScreen extends Component {
             style={{ width: "75%", height: 330, marginLeft: 50 }}
             resizeMode="cover"
           />
-          <Text style={styles.header}>{this.props.playData.header}</Text>
+          <Text style={styles.header}>{this.state.playData.header}</Text>
           <View style={styles.plancontained}>
-            {this.props.playData["plans"].map((item) => (
+            {this.state.playData["plans"].map((item) => (
               <TouchableOpacity activeOpacity={0.8}>
                 <PlayPass
                   name={item.name}
@@ -53,7 +89,7 @@ class PlayerScreen extends Component {
           </View>
           <HeaderContentComponent
             header={""}
-            contents={this.props.playData["benefits"]}
+            contents={this.state.playData["benefits"]}
             colors={"#ED6F53"}
           />
         </ScrollView>
@@ -64,7 +100,7 @@ class PlayerScreen extends Component {
           end={{ x: 1, y: 0.5 }}
           style={styles.bottomcontainer}
         >
-          {this.props.playData.isTrialDisplayRequired ? (
+          {this.state.playData.isTrialDisplayRequired ? (
             <View
               style={{ width: "100%", alignItems: "center", paddingTop: 8 }}
             >
@@ -83,7 +119,7 @@ class PlayerScreen extends Component {
           ) : (
             <View style={{ width: "100%" }}>
               <CustomButton
-                name="Buy Coaching Plan"
+                name="Buy Playing Plan"
                 available={true}
                 onPress={this.props.onPressPlan}
               />
