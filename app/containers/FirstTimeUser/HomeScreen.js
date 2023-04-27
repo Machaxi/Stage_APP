@@ -10,6 +10,7 @@ import { getBaseUrl } from "../BaseComponent";
 import NavigationDrawerWhite from "../../router/NavigationDrawerWhite";
 import RightMenuToolbar from "../../router/RightMenuToolbar";
 import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
+import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -19,13 +20,7 @@ class HomeScreen extends Component {
     headerStyle: {
       backgroundColor: "#21202F",
     },
-    headerLeft: (
-      <NavigationDrawerWhite
-        navigationProps={navigation}
-        showBackAction={false}
-        showDrawer={true}
-      />
-    ),
+    headerLeft: <RequestHeaderLeft navigation={navigation} />,
     headerRight: (
       <RightMenuToolbar navigationProps={navigation} showNotification={true} />
     ),

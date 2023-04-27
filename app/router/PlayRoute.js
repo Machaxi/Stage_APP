@@ -20,22 +20,18 @@ import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CouponListScreen from "../containers/play/CouponListScreen";
 import BookSlotScreen from "../containers/play/BookSlotScreen";
 import BookSlotCentreSelectionScreen from "../containers/play/BookSlotCentreSelectionScreen";
+import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 
 const playModule = createStackNavigator({
   Play: {
-    screen: PlayScreen,   
+    screen: PlayScreen,
+    //screen: PlayPage,
   },
   BookPlayTrail: {
     screen: LearnBookTrial,
     navigationOptions: ({ navigation }) => ({
       title: "PLay",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -75,7 +71,7 @@ const playModule = createStackNavigator({
     screen: BookSlotScreen,
   },
   BookSlotCentreSelectionScreen: {
-    screen: BookSlotCentreSelectionScreen
+    screen: BookSlotCentreSelectionScreen,
   },
   CoachProfileDetail: {
     screen: CoachProfileDetail,

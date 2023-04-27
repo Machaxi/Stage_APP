@@ -122,6 +122,7 @@ import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
 import ParentHome from "../containers/ParentsScreen/ParentHome";
 import { Nunito_Bold } from "../containers/util/fonts";
+import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2400,13 +2401,7 @@ const PlayStack = createStackNavigator({
     screen: LearnPage,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2423,13 +2418,7 @@ const PlayStack = createStackNavigator({
     screen: TrialBook,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2446,13 +2435,7 @@ const PlayStack = createStackNavigator({
     screen: CoachingPlan,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2472,13 +2455,7 @@ const LearnStack = createStackNavigator({
     screen: ParentHome,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2495,13 +2472,7 @@ const LearnStack = createStackNavigator({
     screen: TrialBook,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2518,13 +2489,7 @@ const LearnStack = createStackNavigator({
     screen: CoachingPlan,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2749,13 +2714,7 @@ const HomeStack = createStackNavigator({
     screen: TrialBook,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2772,13 +2731,7 @@ const HomeStack = createStackNavigator({
     screen: LearnBookTrial,
     navigationOptions: ({ navigation }) => ({
       title: "Play",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2795,13 +2748,7 @@ const HomeStack = createStackNavigator({
     screen: CoachingPlan,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2818,13 +2765,7 @@ const HomeStack = createStackNavigator({
     screen: PlayingPlan,
     navigationOptions: ({ navigation }) => ({
       title: "Play",
-      headerLeft: (
-        <NavigationDrawerWhite
-          navigationProps={navigation}
-          showBackAction={false}
-          showDrawer={true}
-        />
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
