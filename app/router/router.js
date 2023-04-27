@@ -2442,6 +2442,29 @@ const PlayStack = createStackNavigator({
       },
     }),
   },
+  CoachingPlan: {
+    screen: CoachingPlan,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
 });
 
 const LearnStack = createStackNavigator({
@@ -2470,6 +2493,29 @@ const LearnStack = createStackNavigator({
   },
   BookLearnTrail: {
     screen: TrialBook,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  CoachingPlan: {
+    screen: CoachingPlan,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: (

@@ -59,13 +59,11 @@ class LearnPage extends Component {
         {this.state.learnData && (
           <CoachScreen
             onPressPlan={() => {
-              // AsyncStorage.setItem("select_plan", "Coaching Plan");
-              // this.props.navigation.navigate("PlanBook");
+              this.props.navigation.navigate("CoachingPlan");
             }}
             learnData={this.state.learnData}
             onPressTrail={() => {
-              AsyncStorage.setItem("select_trial", "Coaching Trial");
-              this.props.navigation.navigate("BookLearnTrail");
+              this.props.navigation.navigate("BookTrail");
             }}
           />
         )}
