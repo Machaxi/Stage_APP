@@ -214,7 +214,7 @@ class ConfirmBooking extends Component {
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
-        <ScrollView style={{ flex: 0.94 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Confirm Book free Trial</Text>
           <LinearGradient
             colors={[

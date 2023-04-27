@@ -71,7 +71,7 @@ class SelectCoachPlan extends Component {
 
     return (
       <View style={styles.contain}>
-        <ScrollView style={{ flex: 0.93 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.select}>Select sessions Per week </Text>
           <View style={styles.contained}>
             {this.state.batchData &&

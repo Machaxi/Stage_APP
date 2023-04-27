@@ -233,13 +233,15 @@ class PlayerSwitcher extends BaseComponent {
                         if (item.can_book_court) {
                             this.props.navigation.navigate('UserBookHome')
                         } else {
-                            this.props.navigation.navigate('UserHome')
+                            // this.props.navigation.navigate('UserHome')
+                            this.props.navigation.navigate('LearnHomePage')
                         }
                     } else {
                         if (item.can_book_court) {
                             this.props.navigation.navigate('ParentBookHome')
                         } else {
-                            this.props.navigation.navigate('ParentHome')
+                            // this.props.navigation.navigate('ParentHome')
+                            this.props.navigation.navigate('LearnHomePage')
                         }
                     }
 

@@ -87,9 +87,9 @@ class HomeScreen extends Component {
       });
   };
 
-  onPressPlan = () => {
+  onPressPlan = (selectPlan) => {
     const data = this.state.playPlanData;
-    this.props.navigation.navigate("PlayingPlan", { data });
+    this.props.navigation.navigate("PlayingPlan", { data, selectPlan });
   };
 
   render() {
@@ -216,7 +216,6 @@ class HomeScreen extends Component {
           {this.state.learnData && this.state.currentPage === 1 && (
             <CoachScreen
               onPressPlan={() => {
-                AsyncStorage.setItem("select_plan", "Coaching Plan");
                 this.props.navigation.navigate("CoachingPlan");
               }}
               learnData={this.state.learnData}
@@ -230,7 +229,6 @@ class HomeScreen extends Component {
             <PlayerScreen
               onPressPlan={this.onPressPlan}
               onPress={() => {
-                AsyncStorage.setItem("select_trial", "Playing Trial");
                 this.props.navigation.navigate("LearnBookTrial");
               }}
               playData={this.state.playData}

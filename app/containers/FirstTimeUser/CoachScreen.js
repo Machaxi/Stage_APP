@@ -42,7 +42,7 @@ class CoachScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 0.85 }}>
+        <ScrollView style={{ flex: 0.83 }}>
           <ImageBackground
             source={require("../../images/playing/learnbackground.png")}
             style={{
@@ -113,7 +113,10 @@ class CoachScreen extends Component {
                 colors={"#C773FF"}
               />
               {this.props.learnData["plans"].map((pass) => (
-                <TouchableOpacity activeOpacity={0.8}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={this.props.onPressPlan}
+                >
                   <CoachPass
                     title={pass.name}
                     subtitle={pass.planPrice}
@@ -175,7 +178,7 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_SemiBold,
   },
   bottomcontainer: {
-    flex: 0.15,
+    flex: 0.17,
     paddingVertical: 5,
     alignItems: "center",
     justifyContent: "center",

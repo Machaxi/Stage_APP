@@ -220,11 +220,13 @@ class SelectBatch extends Component {
                 item.startTime.split(":")[0] <= today.getHours())) && (
               <Image
                 style={{
-                  width: 90,
-                  height: 28,
-                  marginTop: -28,
-                  marginLeft: 8,
+                  width: "80%",
+                  height: "100%",
+                  marginTop: -30,
+                  marginLeft: 10,
+                  tintColor: "#F2AE4D",
                 }}
+                resizeMode="stretch"
                 source={require("../../../images/playing/cross.png")}
               />
             )}
@@ -256,7 +258,7 @@ class SelectBatch extends Component {
 
     return (
       <View style={styles.contain}>
-        <ScrollView style={{ flex: 0.93 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred Batch</Text>
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>

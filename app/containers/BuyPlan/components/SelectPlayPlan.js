@@ -24,6 +24,11 @@ class SelectPlayPlan extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log(this.props.PlanNumber);
+    this.setState({ currentPlan: this.props.PlanNumber });
+  }
+
   render() {
     handlepress = () => {
       const id = this.state.currentPlan + 1;
@@ -32,7 +37,7 @@ class SelectPlayPlan extends Component {
 
     return (
       <View style={styles.contain}>
-        <ScrollView style={{ flex: 0.93 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select Playing plan</Text>
           <View style={styles.contained}>
             {this.props.planList.map((item, index) => (
