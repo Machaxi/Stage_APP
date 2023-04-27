@@ -40,12 +40,16 @@ class PlayingPlan extends Component {
       parent: "",
       moreScreen: false,
       userDetails: null,
+      PlanNumber: 100,
     };
   }
 
   componentDidMount() {
     this.getData();
-    this.setState({ planList: this.props.navigation.state.params.data });
+    this.setState({
+      planList: this.props.navigation.state.params.data,
+      PlanNumber: this.props.navigation.state.params.selectPlan,
+    });
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
@@ -161,6 +165,7 @@ class PlayingPlan extends Component {
                 <SelectPlayPlan
                   onPress={this.onPressPlan}
                   planList={this.state.planList}
+                  PlanNumber={this.state.PlanNumber}
                 />
               )}
               {this.state.currentPage === 2 && (

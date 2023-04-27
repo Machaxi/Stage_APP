@@ -189,6 +189,7 @@ class SelectPay extends Component {
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
+    this.setState({ isLoading: true });
     let postData = {
       data: {
         due_order_id: orderId,
@@ -316,7 +317,7 @@ class SelectPay extends Component {
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
-        <ScrollView style={{ flex: 0.94 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Review before Payment</Text>
           <PlanDetails
             title={

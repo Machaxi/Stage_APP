@@ -15,6 +15,7 @@ import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 import { connect } from "react-redux";
 import RazorpayCheckout from "react-native-razorpay";
+import Loader from "../../../components/custom/Loader";
 
 class SorryPage extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class SorryPage extends Component {
       userDetails: null,
       header: null,
       phonenumber: null,
+      isLoading: false,
     };
   }
 
@@ -31,6 +33,7 @@ class SorryPage extends Component {
   }
 
   handleOnStartPayment = (orderId, amount) => {
+    this.setState({isLoading: true})
     // this.RBSheet.close()
     var options = {
       description: "Payment for Subscription",
@@ -56,6 +59,7 @@ class SorryPage extends Component {
       .catch((error) => {
         console.log("Razor Rspo ", error);
         alert("Payment could not succeed. Please try again.");
+        this.setState({isLoading: false})
       });
   };
 
@@ -74,6 +78,7 @@ class SorryPage extends Component {
         if (result.success) {
           this.props.onPress(true);
         } else {
+          this.setState({isLoading: false})
           alert(result.error_message);
         }
       });
@@ -102,6 +107,7 @@ class SorryPage extends Component {
 
     return (
       <View style={styles.container}>
+        <Loader visible={this.state.isLoading} />
         <LinearGradient
           colors={["rgba(255, 255, 255, 0.25)", "rgba(255, 255, 255, 0.06)"]}
           start={{ x: 0, y: 0.5 }}

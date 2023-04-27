@@ -8,7 +8,9 @@ const initialState = {
   bookFail: null,
   playdata: null,
   planData: null,
+  playPlanData: null,
 };
+
 export default function PlayerReducer(state = initialState, action) {
   switch (action.type) {
     case types.GET_PLAYER_LISTING:
@@ -30,6 +32,8 @@ export default function PlayerReducer(state = initialState, action) {
       };
     case types.SELECT_PLAN_SUCCESS:
       return { ...state, planData: action.payload.data };
+    case types.SELECT_PLAY_PLAN_SUCCESS:
+      return { ...state, playPlanData: action.payload.data };
     case types.DO_PLAYER_LISTING_FAIL:
       console.log("fails", action.payload);
       return {
@@ -95,6 +99,22 @@ export function selectPlanDate(postdata, header) {
     payload: {
       request: {
         url: `batch/player/select-coaching-plan`,
+        method: "POST",
+        data: postdata,
+        headers: {
+          "x-authorization": header,
+        },
+      },
+    },
+  };
+}
+
+export function selectPlayPlanDate(postdata, header) {
+  return {
+    type: types.SELECT_PLAY_PLAN,
+    payload: {
+      request: {
+        url: `court/initiate-subscription-payment`,
         method: "POST",
         data: postdata,
         headers: {

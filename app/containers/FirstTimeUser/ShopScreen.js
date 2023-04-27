@@ -11,7 +11,7 @@ class ShopScreen extends Component {
           source={require("../../images/playing/shop.png")}
           style={{ marginBottom: 5, height: 128, width: 220 }}
         />
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8} disabled={true}>
           <LinearGradient
             colors={["#4E316A", "#774E92", "rgba(134, 92, 172, 0.89)"]}
             locations={[0, 0.46, 1]}
@@ -32,7 +32,7 @@ class ShopScreen extends Component {
             </Text>
           </LinearGradient>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8} disabled={true}>
           <LinearGradient
             colors={["#545B82", "#4D5E80", "#477996"]}
             locations={[0, 0.46, 1]}
@@ -53,7 +53,7 @@ class ShopScreen extends Component {
             </Text>
           </LinearGradient>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8} disabled={true}>
           <LinearGradient
             colors={["#768254", "#5E7A3A", "#529647"]}
             locations={[0, 0.46, 1]}
