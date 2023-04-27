@@ -11,7 +11,6 @@ import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
 import Loader from "../../../components/custom/Loader";
-import { getBaseUrl } from "../../BaseComponent";
 import RazorpayCheckout from "react-native-razorpay";
 import {
   Nunito_Medium,
@@ -23,11 +22,10 @@ import { connect } from "react-redux";
 import PlanDetails from "../../../components/custom/PlanDetails";
 import PaymentDetails from "../../../components/custom/PaymentDetails";
 import CouponView from "../../../components/custom/CouponView";
-import axios from "axios";
 import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 
-class SelectPay extends Component {
+class SelectPlayPay extends Component {
   months = [
     "Jan",
     "Feb",
@@ -53,6 +51,11 @@ class SelectPay extends Component {
     "Saturday",
   ];
 
+  monthoption = {
+    month: "short",
+    year: "2-digit",
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -60,18 +63,7 @@ class SelectPay extends Component {
       centerAddress: "",
       centerImage: "",
       centerDistance: "",
-      sportName: "",
-      sportImage: "",
-      time: "",
-      levelImage: "",
-      levelName: "",
       header: "",
-      selectBatch: "",
-      username: "",
-      gender: "",
-      parent: "",
-      selectLevel: null,
-      date: new Date(),
       isLoading: false,
       appliedCoupon: false,
       displayStartDate: "",
@@ -80,6 +72,8 @@ class SelectPay extends Component {
       amount: "",
       joinDate: "",
       phonenumber: "",
+      startdate: new Date(),
+      enddate: new Date(),
     };
   }
 
@@ -90,44 +84,45 @@ class SelectPay extends Component {
 
   handleopen = () => {
     const selectCenter = this.props.selectCenter;
-    const selectSport = this.props.selectSport;
-    const selectLevel = this.props.selectLevel;
-    const selectBatch = this.props.selectBatch;
     const distance = this.props.distance;
-    const selectTime = selectBatch.displayTime;
-    var levelimage = selectLevel.image;
-    var levelname = selectLevel.name;
-    const username = this.props.username;
-    const gender = this.props.usergender;
-    const parent = this.props.parent;
+    const selectPlan = this.props.selectPlan;
 
-    const joinDate = this.convertToDate(this.props.selectPlan.start_date);
-    if (this.props.title == "Playing") {
-      levelname = selectLevel.displayText;
-      levelimage = selectLevel.url;
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    if (startDate.getMonth() === 11) {
+      endDate.setMonth(0);
+      endDate.setFullYear(startDate.getFullYear() + 1);
+    } else {
+      endDate.setMonth(startDate.getMonth() + 1);
     }
+    const options = {
+      day: "2-digit",
+      month: "short",
+    };
+
+    const start_date = startDate.toLocaleString("en-GB", options);
+    const end_date = endDate.toLocaleString("en-GB", options);
 
     this.setState({
       centerName: selectCenter.name,
       centerImage: selectCenter.cover_pic,
       centerAddress: selectCenter.address,
       centerDistance: distance,
-      sportName: selectSport.name,
-      sportImage: selectSport.image,
-      time: selectTime,
-      selectBatch: selectBatch,
-      levelImage: levelimage,
-      levelName: levelname,
-      selectLevel: selectLevel,
-      username: username,
-      gender: gender,
-      parent: parent,
-      displayStartDate: this.props.selectPlan.start_date,
-      displayEndDate: this.props.selectPlan.end_date,
-      amount: this.props.selectPlan.amount,
-      joinDate: joinDate,
+      displayStartDate: start_date,
+      displayEndDate: end_date,
+      amount: selectPlan.price,
       appliedCoupon: this.props.applycoupon,
+      startdate: startDate,
+      enddate: endDate,
     });
+  };
+
+  formatDateToCustomDate = (dateString) => {
+    const [day, month, year] = dateString.split("-");
+    const monthIndex = this.months.findIndex((m) => m === month) + 1;
+    const formattedMonth = monthIndex < 10 ? `0${monthIndex}` : monthIndex;
+    const formattedDate = `${year}-${formattedMonth}-${day}`;
+    return formattedDate;
   };
 
   convertToDate = (dateString) => {
@@ -141,7 +136,6 @@ class SelectPay extends Component {
   };
 
   getMonthNumber = (monthName) => {
-    // Map month names to their corresponding month numbers
     const monthMap = {
       Jan: "01",
       Feb: "02",
@@ -173,7 +167,6 @@ class SelectPay extends Component {
       },
       theme: { color: "#67BAF5" },
     };
-    console.log(options);
     RazorpayCheckout.open(options)
       .then((data) => {
         let payment_details = {
@@ -221,28 +214,14 @@ class SelectPay extends Component {
   };
 
   DataChange = (join_date) => {
-    this.setState({ joinDate: join_date });
-    const batch_id = this.state.selectBatch.batch_id;
-    axios
-      .get(
-        getBaseUrl() + "/global/batch/" + batch_id + "/?join_date=" + join_date
-      )
-      .then((response) => {
-        let data = JSON.stringify(response);
-        let userResponce = JSON.parse(data);
-        let planData = userResponce["data"]["plans"][0]["payable_amount"];
-        console.log(response);
-        const term = this.props.selectPlan.term_id - 1;
-        console.log(planData[term]);
-        this.setState({
-          displayEndDate: planData[term].end_date,
-          displayStartDate: planData[term].start_date,
-          amount: planData[term].amount,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const endDate = new Date(startDate);
+    if (startDate.getMonth() === 11) {
+      endDate.setMonth(0);
+      endDate.setFullYear(startDate.getFullYear() + 1);
+    } else {
+      endDate.setMonth(startDate.getMonth() + 1);
+    }
+    this.setState({ startdate: join_date, enddate: endDate });
   };
 
   startPayment = () => {
@@ -270,33 +249,6 @@ class SelectPay extends Component {
   };
 
   render() {
-    listimage = (image, name, url) => {
-      return (
-        <View style={{ alignItems: "center" }}>
-          <LinearGradient
-            colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
-            locations={[0, 1]}
-            style={styles.sportsview}
-          >
-            {url ? (
-              <Image
-                style={styles.imaged}
-                source={{ uri: image }}
-                resizeMode="cover"
-              />
-            ) : (
-              <Image
-                style={styles.imaged}
-                source={image}
-                resizeMode="contain"
-              />
-            )}
-          </LinearGradient>
-          <Text style={[styles.sportText]}>{name}</Text>
-        </View>
-      );
-    };
-
     listText = (title, subtitle, heading) => {
       return (
         <View style={{ alignItems: "center" }}>
@@ -305,7 +257,7 @@ class SelectPay extends Component {
             locations={[0, 1]}
             style={[styles.sportsview]}
           >
-            <Text style={[styles.datetitle, { fontSize: 25 }]}>{title}</Text>
+            <Text style={[styles.datetitle, { fontSize: 20 }]}>{title}</Text>
             <Text style={[styles.datetitle]}>{subtitle}</Text>
           </LinearGradient>
           <Text style={[styles.sportText]}>{heading}</Text>
@@ -319,23 +271,11 @@ class SelectPay extends Component {
         <ScrollView style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Review before Payment</Text>
           <PlanDetails
-            title={
-              this.props.selectPlan.term_id === 1
-                ? "Monthly"
-                : this.props.selectPlan.term_id === 2
-                ? "Quaterly"
-                : "Yearly"
-            }
-            subtitle={this.props.selectPlan.amount}
-            startDate={this.props.selectPlan.start_date}
-            endDate={this.props.selectPlan.end_date}
-            image={
-              this.props.selectPlan.term_id === 1
-                ? require("../../../images/playing/rocket.png")
-                : this.props.selectPlan.term_id === 2
-                ? require("../../../images/playing/hand.png")
-                : require("../../../images/playing/arrow.png")
-            }
+            title={this.props.selectPlan.name}
+            subtitle={this.props.selectPlan.price}
+            startDate={this.state.displayStartDate}
+            endDate={this.state.displayEndDate}
+            image={this.props.selectPlan.planIconUrl}
             onPress={this.DataChange}
           />
           <LinearGradient
@@ -349,11 +289,13 @@ class SelectPay extends Component {
               Player Name
             </Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.name}>{this.state.username} · </Text>
+              <Text style={styles.name}>
+                {this.state.userDetails.userName} ·{" "}
+              </Text>
               <Text
                 style={[styles.subtitle, { color: "#FFC498", marginLeft: 2 }]}
               >
-                {this.state.parent} · {this.state.gender}
+                {this.state.userDetails.gender}
               </Text>
             </View>
             <View style={styles.line} />
@@ -376,42 +318,23 @@ class SelectPay extends Component {
             <View style={styles.line} />
             <Text style={styles.subtitle}>Batch Details</Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-around" }}
-            >
-              {listimage(this.state.sportImage, this.state.sportName, true)}
-              {listText(
-                this.state.session_per_Week == "WORKING_DAYS" ? "5" : "3",
-                "Days/Week",
-                this.state.session_per_Week == "WORKING_DAYS"
-                  ? "Mon to Fri"
-                  : this.state.session_per_Week == "WEEK_MWF"
-                  ? "Mon,Wed,Fri"
-                  : "Tue,Thu,Sat"
-              )}
-              {listimage(
-                this.state.levelImage,
-                this.state.levelName,
-                this.props.title == "Playing"
-              )}
-            </View>
-            <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-around",
-                marginVertical: 15,
+                marginVertical: 10,
+                marginLeft: 15,
               }}
             >
               {listText(
-                this.state.date.getDate(),
-                this.months[this.state.date.getMonth()],
-                "DOJ"
+                this.state.startdate.getDate(),
+                this.state.startdate.toLocaleString("en-GB", this.monthoption),
+                "Date of Purchase"
               )}
-              {listimage(
-                require("../../../images/playing/clock.png"),
-                this.state.time,
-                false
+              <View style={{ marginHorizontal: 20 }} />
+              {listText(
+                this.state.enddate.getDate(),
+                this.state.enddate.toLocaleString("en-GB", this.monthoption),
+                "Date of Membership Expiry"
               )}
-              <View style={styles.sportsview} />
             </View>
           </LinearGradient>
           <TouchableOpacity
@@ -575,4 +498,4 @@ const mapDispatchToProps = { selectPlanDate, paymentConfirmation };
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectPay);
+)(SelectPlayPay);

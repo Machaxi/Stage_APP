@@ -15,7 +15,8 @@ import PlayerDetails from "./components/PlayerDetails";
 import SelectPay from "./components/SelectPay";
 import CongratsScreen from "./components/CongratsScreen";
 import SorryPage from "./components/SorryPage";
-import CouponListScreen from "../play/CouponListScreen";
+import ApplyCouponCode from "./components/ApplyCouponCode";
+import AppliedCouponCode from "../../components/custom/AppliedCouponCode";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -38,11 +39,14 @@ class CoachingPlan extends Component {
       firstPage: true,
       selectPlan: null,
       selectSlot: null,
+      couponCode: false,
       username: "",
       usergender: "",
       parent: "",
       amount: 0,
       orderId: "",
+      applycoupon: false,
+      isLoading: true,
     };
   }
 
@@ -113,8 +117,24 @@ class CoachingPlan extends Component {
     }
   };
 
+  hadleBackCouponCode = () => {
+    this.setState({ couponCode: false });
+  };
+
+  hadleCouponCode = () => {
+    this.setState({ couponCode: true });
+  };
+
+  hadleCouponApply = () => {
+    this.setState({ couponCode: false, applycoupon: true, isLoading: true });
+  };
+
   hadleBack = () => {
     this.props.navigation.goBack();
+  };
+
+  onAppliedBack = () => {
+    this.setState({ isLoading: false });
   };
 
   selectScreen = () => {
@@ -154,8 +174,13 @@ class CoachingPlan extends Component {
         {this.state.firstPage && (
           <View style={{ flex: 1 }}>
             <GetBack title={this.state.title} onPress={this.hadleBack} />
-            <CouponListScreen />
-            {/* <PlayerDetails onPress={this.onPressDetails} /> */}
+            <PlayerDetails onPress={this.onPressDetails} />
+          </View>
+        )}
+        {this.state.couponCode && (
+          <View style={{ flex: 1 }}>
+            <GetBack title="Apply Coupon" onPress={this.hadleBackCouponCode} />
+            <ApplyCouponCode onPress={this.hadleCouponApply} />
           </View>
         )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
@@ -169,56 +194,66 @@ class CoachingPlan extends Component {
             onPress={this.onPressConfirm}
           />
         )}
-        {!this.state.firstPage && !this.state.congratulationScreen && (
-          <View style={{ flex: 1 }}>
-            <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
-            <View style={{ flex: 0.83 }}>
-              {this.state.sportsList != null &&
-                this.state.currentPage === 1 && (
-                  <SelectSports
-                    onPress={this.onPressSports}
-                    sportList={this.state.sportsList}
+        <AppliedCouponCode
+          visible={this.state.isLoading}
+          price="₹ 200"
+          onPressBack={this.onAppliedBack}
+        />
+
+        {!this.state.firstPage &&
+          !this.state.congratulationScreen &&
+          !this.state.couponCode && (
+            <View style={{ flex: 1 }}>
+              <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
+              <View style={{ flex: 0.83 }}>
+                {this.state.sportsList != null &&
+                  this.state.currentPage === 1 && (
+                    <SelectSports
+                      onPress={this.onPressSports}
+                      sportList={this.state.sportsList}
+                    />
+                  )}
+                {this.state.currentPage === 2 && (
+                  <SelectCenter
+                    onPress={this.onPressCenter}
+                    academiesList={this.state.academiesList}
+                    selectSport={this.state.selectSport}
                   />
                 )}
-              {this.state.currentPage === 2 && (
-                <SelectCenter
-                  onPress={this.onPressCenter}
-                  academiesList={this.state.academiesList}
-                  selectSport={this.state.selectSport}
-                />
-              )}
-              {this.state.currentPage === 3 && (
-                <SelectCoachBatch
-                  onPress={this.onPressBatch}
-                  selectCenter={this.state.selectCenter}
-                  selectSport={this.state.selectSport}
-                />
-              )}
-              {this.state.currentPage === 4 && (
-                <SelectCoachPlan
-                  onPress={this.onPressPlan}
-                  selectBatch={this.state.selectTime}
-                />
-              )}
-              {this.state.currentPage === 5 && (
-                <SelectPay
-                  title="Coaching"
-                  selectCenter={this.state.selectCenter}
-                  selectSport={this.state.selectSport}
-                  selectDate={this.state.selectDate}
-                  selectLevel={this.state.selectLevel}
-                  selectBatch={this.state.selectSlot}
-                  selectPlan={this.state.selectPlan}
-                  distance={this.state.distance}
-                  username={this.state.username}
-                  usergender={this.state.usergender}
-                  parent={this.state.parent}
-                  onPress={this.onPressConfirm}
-                />
-              )}
+                {this.state.currentPage === 3 && (
+                  <SelectCoachBatch
+                    onPress={this.onPressBatch}
+                    selectCenter={this.state.selectCenter}
+                    selectSport={this.state.selectSport}
+                  />
+                )}
+                {this.state.currentPage === 4 && (
+                  <SelectCoachPlan
+                    onPress={this.onPressPlan}
+                    selectBatch={this.state.selectTime}
+                  />
+                )}
+                {this.state.currentPage === 5 && (
+                  <SelectPay
+                    title="Coaching"
+                    selectCenter={this.state.selectCenter}
+                    selectSport={this.state.selectSport}
+                    selectDate={this.state.selectDate}
+                    selectLevel={this.state.selectLevel}
+                    selectBatch={this.state.selectSlot}
+                    selectPlan={this.state.selectPlan}
+                    distance={this.state.distance}
+                    username={this.state.username}
+                    usergender={this.state.usergender}
+                    parent={this.state.parent}
+                    applycoupon={this.state.applycoupon}
+                    onPress={this.onPressConfirm}
+                    onPresscoupon={this.hadleCouponCode}
+                  />
+                )}
+              </View>
             </View>
-          </View>
-        )}
+          )}
       </LinearGradient>
     );
   }

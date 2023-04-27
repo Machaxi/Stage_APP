@@ -55,32 +55,9 @@ const PlanDetails = (props) => {
     year: "2-digit",
   };
 
-  const formatDateToCustomDate = (dateString) => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const [day, month, year] = dateString.split("-");
-    const monthIndex = months.findIndex((m) => m === month) + 1;
-    const formattedMonth = monthIndex < 10 ? `0${monthIndex}` : monthIndex;
-    const formattedDate = `${year}-${formattedMonth}-${day}`;
-    return formattedDate;
-  };
-
   handlepress = (date) => {
     setSelectDate(date);
-    props.onPress(formatDateToCustomDate(date));
+    props.onPress(date);
   };
 
   return (

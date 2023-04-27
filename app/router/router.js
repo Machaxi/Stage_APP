@@ -121,6 +121,7 @@ import NavigationDrawerWhite from "./NavigationDrawerWhite";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
+import ParentHome from "../containers/ParentsScreen/ParentHome";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2394,9 +2395,58 @@ const tabBarControllerBookParent = createBottomTabNavigator({
   },
 });
 
-const LearnStack = createStackNavigator({
+const PlayStack = createStackNavigator({
   Play: {
     screen: LearnPage,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  BookLearnTrail: {
+    screen: TrialBook,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn",
+      headerLeft: (
+        <NavigationDrawerWhite
+          navigationProps={navigation}
+          showBackAction={false}
+          showDrawer={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+});
+
+const LearnStack = createStackNavigator({
+  Play: {
+    screen: ParentHome,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: (
@@ -2446,7 +2496,7 @@ const LearnStack = createStackNavigator({
 const tabBarControllerParent = createBottomTabNavigator({
   Home: {
     // screen: parentHomeModule,
-    screen: LearnStack,
+    screen: PlayStack,
     navigationOptions: {
       tabBarLabel: "Learn",
       tabBarLabel: ({ focused }) => (
@@ -2540,6 +2590,80 @@ const tabBarControllerParent = createBottomTabNavigator({
   //     }
 
   // },
+});
+
+const tabBarControllerLearn = createBottomTabNavigator({
+  Home: {
+    screen: LearnStack,
+    navigationOptions: {
+      tabBarLabel: "Learn",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Learn"
+          focused={focused}
+          gradientColors={["#595466", "#9a97a2"]}
+          activeIndicatorColor={white}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/learn_active.png") : null}
+          activeIcon={require("../images/learn.png")}
+        />
+      ),
+    },
+  },
+  Batch: {
+    screen: PlayRoute,
+    navigationOptions: {
+      tabBarLabel: "Play",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Play"
+          focused={focused}
+          gradientColors={["#595466", "#9a97a2"]}
+          activeIndicatorColor={white}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/play_highlight.png") : null}
+          activeIcon={require("../images/play_inactive.png")}
+        />
+      ),
+    },
+  },
+  Tournament: {
+    screen: ShopTabRoute,
+    navigationOptions: {
+      tabBarLabel: "Shop",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Shop"
+          focused={focused}
+          activeIndicatorColor={white}
+          gradientColors={["#9a97a2", "#595466"]}
+          inactiveIndicatorColor={white}
+          bottomBarColor={"transparent"}
+          focusedIcon={focused ? require("../images/shop_active.png") : null}
+          activeIcon={require("../images/shop.png")}
+        />
+      ),
+    },
+  },
+  Challenge: {
+    screen: TournamentModule,
+    navigationOptions: {
+      tabBarLabel: "Tournament",
+      tabBarLabel: ({ focused }) => (
+        <TabbarItem
+          label="Tournament"
+          activeIndicatorColor={white}
+          gradientColors={["#595466", "#221b33"]}
+          inactiveIndicatorColor={white}
+          focused={focused}
+          bottomBarColor={"transparent"}
+          activeIcon={require("../images/tournament.png")}
+        />
+      ),
+    },
+  },
 });
 
 const parentBookDrawer = createDrawerNavigator(
@@ -2671,11 +2795,14 @@ const HomeStack = createStackNavigator({
 
 const parentDrawer = createDrawerNavigator(
   {
-    Guestfirst: {
+    Guestfirsted: {
       screen: tabBarControllerParent,
       // navigationOptions: {
       //     header: <CustomHeader title="Academy" />,
       // }
+    },
+    LearnHomePage: {
+      screen: tabBarControllerLearn,
     },
     MyRequestsHome: {
       screen: myRequestsModule,

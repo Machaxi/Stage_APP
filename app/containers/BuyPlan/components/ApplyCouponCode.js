@@ -1,20 +1,9 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  ScrollView,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import CustomButton from "../../../components/custom/CustomButton";
-import AsyncStorage from "@react-native-community/async-storage";
-import { whiteGreyBorder } from "../../util/colors";
-import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { darkGreyVariant } from "../../util/colors";
 import EnterCouponCode from "../../../components/molecules/enterCouponCode";
 import CouponListItem from "../../../components/molecules/couponListItem";
+import { couponListData } from "../../util/dummyData/couponListData";
 
 class ApplyCouponCode extends Component {
   constructor(props) {
@@ -27,9 +16,8 @@ class ApplyCouponCode extends Component {
 
   render() {
     handlepress = () => {
-      this.props.onPress(
-        this.props.sportList.find((item) => item.id === this.state.currentIndex)
-      );
+      console.log("ollla");
+      this.props.onPress();
     };
 
     const handleChange = (text) => {
@@ -46,21 +34,23 @@ class ApplyCouponCode extends Component {
       <View style={styles.contain}>
         <EnterCouponCode
           handleChange={(val) => handleChange(val)}
-          value={code}
+          value={this.state.code}
           handleKeyDown={() => handleKeyDown()}
           applyCouponPressed={() => setModalVisibilityCb(true)}
         />
         <View style={styles.bar} />
         <FlatList
           data={couponListData}
-          extraData={code}
+          extraData={this.state.code}
           renderItem={({ item, index }) => {
             return (
-              <CouponListItem
-                coupon_code={item.coupon_code}
-                discount={item.discount}
-                couponApplied={code == item.coupon_code}
-              />
+              <TouchableOpacity activeOpacity={0.8} onPress={handlepress}>
+                <CouponListItem
+                  coupon_code={item.coupon_code}
+                  discount={item.discount}
+                  couponApplied={this.state.code == item.coupon_code}
+                />
+              </TouchableOpacity>
             );
           }}
           keyExtractor={(item) => item.id}
@@ -74,6 +64,11 @@ const styles = StyleSheet.create({
   contain: {
     flex: 1,
     marginVertical: 20,
+  },
+  bar: {
+    backgroundColor: darkGreyVariant,
+    width: "100%",
+    marginBottom: 35,
   },
 });
 

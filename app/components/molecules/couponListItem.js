@@ -33,10 +33,10 @@ const CouponListItem = ({ coupon_code, discount, couponApplied }) => {
         },
       ]}
     >
-      <TouchableOpacity
+      {/* <TouchableOpacity
         // onPress={() => onTabPress("")}
         style={[styles.touchable, commonStyles.flexRowAlignStart]}
-      >
+      > */}
         <Image
           source={require("../../images/coupon_icon.png")}
           style={styles.couponIcon}
@@ -63,7 +63,7 @@ const CouponListItem = ({ coupon_code, discount, couponApplied }) => {
             {" off on you current playing plan."}
           </Text>
         </View>
-      </TouchableOpacity>
+      {/* </TouchableOpacity> */}
     </LinearGradient>
   );
 };

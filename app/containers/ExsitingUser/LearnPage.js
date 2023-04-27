@@ -56,24 +56,19 @@ class LearnPage extends Component {
         locations={[0, 1]}
         style={{ flex: 1 }}
       >
-        {this.state.learnData &&
-          this.state.learn_enabled &&
-          this.state.learn_enabled != "learn_enabled" && (
-            <CoachScreen
-              onPressPlan={() => {
-                // AsyncStorage.setItem("select_plan", "Coaching Plan");
-                // this.props.navigation.navigate("PlanBook");
-              }}
-              learnData={this.state.learnData}
-              onPressTrail={() => {
-                AsyncStorage.setItem("select_trial", "Coaching Trial");
-                this.props.navigation.navigate("BookLearnTrail");
-              }}
-            />
-          )}
-        {this.state.learnData &&
-          this.state.learn_enabled &&
-          this.state.learn_enabled == "learn_enabled" && <PlayScreen />}
+        {this.state.learnData && (
+          <CoachScreen
+            onPressPlan={() => {
+              // AsyncStorage.setItem("select_plan", "Coaching Plan");
+              // this.props.navigation.navigate("PlanBook");
+            }}
+            learnData={this.state.learnData}
+            onPressTrail={() => {
+              AsyncStorage.setItem("select_trial", "Coaching Trial");
+              this.props.navigation.navigate("BookLearnTrail");
+            }}
+          />
+        )}
       </LinearGradient>
     );
   }

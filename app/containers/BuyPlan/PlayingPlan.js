@@ -12,6 +12,8 @@ import SorryPage from "./components/SorryPage";
 import BuyPlayProcess from "../../components/custom/BuyPlayProcess";
 import SelectPlayPlan from "./components/SelectPlayPlan";
 import SelectPlayCenter from "./components/SelectPlayCenter";
+import SelectPlayPay from "./components/SelectPlayPay";
+import MoreDetails from "./components/MoreDetails";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ class PlayingPlan extends Component {
       currentPage: 1,
       title: "Coaching Plan",
       planList: null,
+      sportsList: null,
       academiesList: null,
       selectPlan: null,
       selectCenter: null,
@@ -35,6 +38,7 @@ class PlayingPlan extends Component {
       username: "",
       usergender: "",
       parent: "",
+      moreScreen: true,
     };
   }
 
@@ -48,6 +52,7 @@ class PlayingPlan extends Component {
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];
         this.setState({
+          sportsList: academiesData["Sports"],
           academiesList: academiesData["academies"],
         });
       })
@@ -68,7 +73,7 @@ class PlayingPlan extends Component {
   };
 
   onPressCenter = (selectCenter, distance) => {
-    // this.setState({ currentPage: 3 });
+    this.setState({ currentPage: 3 });
     this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
@@ -120,6 +125,7 @@ class PlayingPlan extends Component {
     });
   };
 
+  onComplete = () => {};
   onPressSuccess = () => {};
 
   render() {
@@ -142,7 +148,13 @@ class PlayingPlan extends Component {
             buttonName={"Pay"}
           />
         )}
-        {!this.state.congratulationScreen && (
+        {this.state.sportsList != null && this.state.moreScreen && (
+          <MoreDetails
+            sportList={this.state.sportsList}
+            onPress={this.onComplete}
+          />
+        )}
+        {!this.state.congratulationScreen && !this.state.moreScreen && (
           <View style={{ flex: 1 }}>
             <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
             <View style={{ flex: 0.83 }}>
@@ -159,17 +171,13 @@ class PlayingPlan extends Component {
                 />
               )}
               {this.state.currentPage === 3 && (
-                <SelectPay
+                <SelectPlayPay
                   title="Coaching"
                   selectCenter={this.state.selectCenter}
                   selectPlan={this.state.selectPlan}
-                  selectDate={this.state.selectDate}
-                  selectLevel={this.state.selectLevel}
-                  selectBatch={this.state.selectSlot}
                   distance={this.state.distance}
                   username={this.state.username}
                   usergender={this.state.usergender}
-                  parent={this.state.parent}
                   onPress={this.onPressConfirm}
                 />
               )}

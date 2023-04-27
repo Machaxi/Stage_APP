@@ -114,8 +114,10 @@ class LoginSceen extends Component {
         }
       });
     } else {
-      if (play_enabled == "play_enabled" || learn_enabled == "learn_enabled") {
-        this.props.navigation.navigate("ParentHome");
+      if (play_enabled == "play_enabled") {
+        this.props.navigation.navigate("Guestfirsted");
+      } else if (learn_enabled == "learn_enabled") {
+        this.props.navigation.navigate("LearnHomePage");
       } else if (userlogin != null && userlogin.length > 3) {
         this.props.navigation.navigate("HomeDrawer");
       } else {
@@ -288,8 +290,10 @@ class LoginSceen extends Component {
           const inputString = userData["user"].mobile_number;
           const outputString = inputString.replace("+91", "");
           AsyncStorage.setItem("phone_number", outputString);
-          if (userData.is_learn_enabled || userData.is_play_enabled) {
-            this.props.navigation.navigate("ParentHome");
+          if (userData.is_learn_enabled) {
+            this.props.navigation.navigate("LearnHomePage");
+          } else if (userData.is_play_enabled) {
+            this.props.navigation.navigate("Guestfirsted");
           } else {
             this.props.navigation.navigate("HomeDrawer");
           }
@@ -380,8 +384,10 @@ class LoginSceen extends Component {
                 });
               }
             } else {
-              if (userData.is_learn_enabled || userData.is_play_enabled) {
-                this.props.navigation.navigate("ParentHome");
+              if (userData.is_learn_enabled) {
+                this.props.navigation.navigate("LearnHomePage");
+              } else if (userData.is_play_enabled) {
+                this.props.navigation.navigate("Guestfirsted");
               } else {
                 this.props.navigation.navigate("HomeDrawer");
               }
