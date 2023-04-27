@@ -57,3 +57,4 @@ export const beginnerGradients = ["#24c6a042", "#8ef9ab59"];
 export const intermediateGradients = ["#fd750169", "#ffd0013d"];
 export const advancedGradients = ["#fd4f8659", "#ffa18d66"];
 export const professionalGradients = ["#ae3eff52", "#fb7dff75"];
+export const greyVariant12 = "#AFAFAF";

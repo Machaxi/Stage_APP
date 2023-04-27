@@ -1505,6 +1505,7 @@ const tabBarControllerBookCoach = createBottomTabNavigator({
       tabBarLabel: ({ focused }) => (
         <TabBarHighlightLabel
           label="Home"
+          bgColor={white}
           focused={focused}
           activeIcon={require("../images/ic_tab_home.png")}
         />
@@ -1518,6 +1519,7 @@ const tabBarControllerBookCoach = createBottomTabNavigator({
       tabBarLabel: ({ focused }) => (
         <TabBarHighlightLabel
           label="Batch"
+          bgColor={white}
           focused={focused}
           activeIcon={require("../images/ic_tab_batch.png")}
         />
@@ -1532,6 +1534,7 @@ const tabBarControllerBookCoach = createBottomTabNavigator({
         <TabBarHighlightLabel
           label="Tournament"
           focused={focused}
+          bgColor={white}
           activeIcon={require("../images/ic_tab_tournament.png")}
         />
       ),
@@ -1544,6 +1547,7 @@ const tabBarControllerBookCoach = createBottomTabNavigator({
       tabBarLabel: ({ focused }) => (
         <TabBarHighlightLabel
           label="Performance"
+          bgColor={white}
           focused={focused}
           activeIcon={require("../images/ic_tab_performance.png")}
         />
@@ -1557,6 +1561,7 @@ const tabBarControllerBookCoach = createBottomTabNavigator({
       tabBarLabel: ({ focused }) => (
         <TabBarHighlightLabel
           label="Book&Play"
+          bgColor={white}
           focused={focused}
           activeIcon={require("../images/ic_tab_booking.png")}
         />
@@ -1590,6 +1595,7 @@ const tabBarControllerCoach = createBottomTabNavigator({
       tabBarLabel: ({ focused }) => (
         <TabBarHighlightLabel
           label="Home"
+          bgColor={white}
           focused={focused}
           activeIcon={require("../images/ic_tab_home.png")}
         />
@@ -1603,6 +1609,7 @@ const tabBarControllerCoach = createBottomTabNavigator({
       tabBarLabel: ({ focused }) => (
         <TabBarHighlightLabel
           label="Batch"
+          bgColor={white}
           focused={focused}
           activeIcon={require("../images/ic_tab_batch.png")}
         />
@@ -1617,6 +1624,7 @@ const tabBarControllerCoach = createBottomTabNavigator({
         <TabBarHighlightLabel
           label="Tournament"
           focused={focused}
+          bgColor={white}
           activeIcon={require("../images/ic_tab_tournament.png")}
         />
       ),
@@ -1630,6 +1638,7 @@ const tabBarControllerCoach = createBottomTabNavigator({
         <TabBarHighlightLabel
           label="Performance"
           focused={focused}
+          bgColor={white}
           activeIcon={require("../images/ic_tab_performance.png")}
         />
       ),
