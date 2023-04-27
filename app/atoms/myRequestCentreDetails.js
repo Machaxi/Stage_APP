@@ -1,7 +1,14 @@
 import React from "react";
 import { Text, StyleSheet, View, ImageBackground } from "react-native";
 import { deviceWidth } from "../containers/util/dimens";
-import { blackVariant, borderGrey, darkGrey, goldenYellow, white } from "../containers/util/colors";
+import {
+  blackVariant,
+  borderGrey,
+  darkGrey,
+  goldenYellow,
+  white,
+} from "../containers/util/colors";
+import { Nunito_Bold, Nunito_Medium, Nunito_Regular } from "../containers/util/fonts";
 
 const MyRequestCentreDetails = ({ details }) => {
   return (
@@ -44,7 +51,7 @@ const MyRequestCentreDetails = ({ details }) => {
 const styles = StyleSheet.create({
   bookingDetails: {
     color: goldenYellow,
-    fontFamily:'Nunito-500',
+    fontFamily: Nunito_Medium,
     fontWeight: "500",
     fontSize: 14,
   },
@@ -58,21 +65,21 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     width: deviceWidth * 0.6,
     color: darkGrey,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   centerName: {
     fontSize: 14,
     fontWeight: "700",
     width: deviceWidth * 0.6,
     color: white,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
   },
   distance: {
     fontSize: 10,
     fontWeight: "400",
     color: white,
     textAlign: "center",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   centerImg: {
     alignItems: "baseline",

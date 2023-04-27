@@ -6,7 +6,6 @@ import { getBaseUrl } from "../BaseComponent";
 import GetBack from "../../components/custom/GetBack";
 import { darkBlueVariant } from "../util/colors";
 import { Nunito_SemiBold } from "../util/fonts";
-import SelectPay from "./components/SelectPay";
 import CongratsScreen from "./components/CongratsScreen";
 import SorryPage from "./components/SorryPage";
 import BuyPlayProcess from "../../components/custom/BuyPlayProcess";
@@ -14,6 +13,7 @@ import SelectPlayPlan from "./components/SelectPlayPlan";
 import SelectPlayCenter from "./components/SelectPlayCenter";
 import SelectPlayPay from "./components/SelectPlayPay";
 import MoreDetails from "./components/MoreDetails";
+import AsyncStorage from "@react-native-community/async-storage";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -38,12 +38,13 @@ class PlayingPlan extends Component {
       username: "",
       usergender: "",
       parent: "",
-      moreScreen: true,
+      moreScreen: false,
+      userDetails: null,
     };
   }
 
   componentDidMount() {
-    console.log(this.props.navigation.state.params.data);
+    this.getData();
     this.setState({ planList: this.props.navigation.state.params.data });
     axios
       .get(getBaseUrl() + "/global/academy/all")
@@ -60,6 +61,13 @@ class PlayingPlan extends Component {
         console.log(error);
       });
   }
+
+  getData = async () => {
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+    this.setState({ userDetails: userDetails });
+    console.log(userDetails);
+  };
 
   onPress = (value, number) => {
     if (value < number) {
@@ -101,6 +109,9 @@ class PlayingPlan extends Component {
     this.props.navigation.goBack();
   };
 
+  onComplete = () => {};
+  onPressSuccess = () => {};
+
   selectScreen = () => {
     return (
       <View>
@@ -115,18 +126,6 @@ class PlayingPlan extends Component {
       </View>
     );
   };
-
-  onPressDetails = (username, usergender, parent) => {
-    this.setState({
-      currentPage: 1,
-      username: username,
-      usergender: usergender,
-      parent: parent,
-    });
-  };
-
-  onComplete = () => {};
-  onPressSuccess = () => {};
 
   render() {
     return (
@@ -173,6 +172,7 @@ class PlayingPlan extends Component {
               {this.state.currentPage === 3 && (
                 <SelectPlayPay
                   title="Coaching"
+                  userDetails={this.state.userDetails}
                   selectCenter={this.state.selectCenter}
                   selectPlan={this.state.selectPlan}
                   distance={this.state.distance}

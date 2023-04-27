@@ -9,8 +9,15 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { commonStyles } from "../../containers/util/commonStyles";
-import { greyVariant3, greyVariant4, white, whiteGreyBorder, yellowVariant2 } from "../../containers/util/colors";
+import {
+  greyVariant3,
+  greyVariant4,
+  white,
+  whiteGreyBorder,
+  yellowVariant2,
+} from "../../containers/util/colors";
 import Strings from "../../containers/util/strings";
+import { Nunito_Bold, Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const ShopRewardsView = ({ balance, rewardPoints, rewardRedeemed }) => {
   return (
@@ -31,9 +38,7 @@ const ShopRewardsView = ({ balance, rewardPoints, rewardRedeemed }) => {
             </View>
             <View style={styles.verticalBar} />
             <View>
-              <Text style={[styles.rewardRedeem]}>
-                {Strings.rewardEarned}
-              </Text>
+              <Text style={[styles.rewardRedeem]}>{Strings.rewardEarned}</Text>
               <Text style={[styles.rewardPts]}>{rewardRedeemed + " pts"}</Text>
             </View>
           </View>
@@ -44,9 +49,7 @@ const ShopRewardsView = ({ balance, rewardPoints, rewardRedeemed }) => {
             style={[styles.rocketImg, styles.fixedPosition]}
           />
           <View style={{}}>
-            <View
-              style={styles.purpleView}
-            />
+            <View style={styles.purpleView} />
           </View>
         </View>
       </View>
@@ -58,10 +61,10 @@ const styles = StyleSheet.create({
   balanceTxt: {
     fontSize: 12,
     fontWeight: "600",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: white,
   },
-  fixedPosition: { position: "absolute", right: 20, top:18, zIndex: 4 },
+  fixedPosition: { position: "absolute", right: 20, top: 18, zIndex: 4 },
   rewardInfo: { flexDirection: "row", alignItems: "center", marginTop: 16 },
   rewardView: {
     flexDirection: "row",
@@ -78,20 +81,20 @@ const styles = StyleSheet.create({
   rewardPts: {
     fontSize: 14,
     fontWeight: "700",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     color: yellowVariant2,
   },
   rewardRedeem: {
     fontSize: 8,
     fontWeight: "400",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: greyVariant4,
   },
   verticalBar: {
     backgroundColor: greyVariant3,
     height: 30,
     width: 1,
-    marginHorizontal: 13
+    marginHorizontal: 13,
   },
   rocketImg: {
     width: 86,
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
   pts: {
     fontSize: 28,
     fontWeight: "700",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     color: yellowVariant2,
   },
   rewardContainer: {

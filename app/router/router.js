@@ -122,6 +122,7 @@ import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
 import ParentHome from "../containers/ParentsScreen/ParentHome";
+import { Nunito_Bold } from "../containers/util/fonts";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -1742,7 +1743,7 @@ const style = StyleSheet.create({
   },
   titlestyle: {
     color: "#F2F2F2",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     textAlign: "center",
     fontSize: 20,
     flexGrow: 1,

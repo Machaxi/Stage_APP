@@ -2,6 +2,7 @@ import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { white } from "../containers/util/colors";
 import NamedRoundedContainer from "./namedRoundedContainer";
+import { Nunito_Regular } from "../containers/util/fonts";
 
 
 const MyRequestPlayersList = ({ item }) => {
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
     color: white,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
 });
 

@@ -1,11 +1,12 @@
 import { greyVariant5, greyVariant9, offWhite, redVariant, whiteGreyBorder } from "./colors";
 import { StyleSheet } from "react-native";
+import { Nunito_Medium, Nunito_Regular, Nunito_SemiBold } from "./fonts";
 export const commonStyles = StyleSheet.create({
          cancelBooking: {
            fontSize: 14,
            fontWeight: "400",
            color: redVariant,
-           fontFamily: "Nunito-400",
+           fontFamily: Nunito_Regular,
          },
          requestOuterView: {
            //width: "100%",
@@ -47,14 +48,14 @@ export const commonStyles = StyleSheet.create({
              //marginBottom: 4,
              //alignItems: 'center',
              //textAlign: 'center',
-             fontFamily: "Nunito-500",
+             fontFamily: Nunito_Medium,
 
              // to ensure the text is never behind the icon
            },
            inputAndroid: {
              paddingVertical: 4,
              fontSize: 14,
-             fontFamily: "Nunito-500",
+             fontFamily: Nunito_Medium,
              borderColor: greyVariant5,
              borderRadius: 8,
              color: offWhite,
@@ -73,14 +74,14 @@ export const commonStyles = StyleSheet.create({
              //marginBottom: 4,
              //alignItems: 'center',
              //textAlign: 'center',
-             fontFamily: "Nunito-600",
+             fontFamily: Nunito_SemiBold,
 
              // to ensure the text is never behind the icon
            },
            inputAndroid: {
              paddingVertical: 4,
              fontSize: 16,
-             fontFamily: "Nunito-600",
+             fontFamily: Nunito_SemiBold,
              borderColor: "transparent",
              borderRadius: 8,
              color: offWhite,

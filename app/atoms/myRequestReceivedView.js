@@ -20,8 +20,20 @@ import MainBookingDetails from "./mainBookingDetails";
 import MyRequestCentreDetails from "./myRequestCentreDetails";
 import { deviceWidth } from "../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
+import {
+  Nunito_Bold,
+  Nunito_ExtraBold,
+  Nunito_Medium,
+  Nunito_Regular,
+} from "../containers/util/fonts";
 
-const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBookingDetails, areDetailsShown }) => {
+const MyRequestReceivedView = ({
+  val,
+  acceptRequest,
+  declineRequest,
+  showBookingDetails,
+  areDetailsShown,
+}) => {
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -48,7 +60,9 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
           {val?.user?.proficiency} | {val?.user?.age} Y
         </Text>
       </View>
-      <Text style={[styles.detailsTxt]}>{typeof val?.guestCount != undefined ? `+${val?.guestCount} Guest` : ''}</Text>
+      <Text style={[styles.detailsTxt]}>
+        {typeof val?.guestCount != undefined ? `+${val?.guestCount} Guest` : ""}
+      </Text>
       <View
         style={{
           flexDirection: "row",
@@ -116,9 +130,11 @@ const MyRequestReceivedView = ({ val, acceptRequest, declineRequest, showBooking
           <View style={styles.rowSpaceBtw}>
             {[
               { name: "Sport", value: val?.sport?.name },
-              { name: "Slot", value: `${val?.displayTime}`
-              // `${val?.startTime} - ${val?.endTime}` 
-            },
+              {
+                name: "Slot",
+                value: `${val?.displayTime}`,
+                // `${val?.startTime} - ${val?.endTime}`
+              },
               { name: "Pool", value: "NA" },
             ].map((value) => (
               <MainBookingDetails details={value} />
@@ -143,13 +159,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
     color: white,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   reqTxt: {
     color: lightBlueColor,
     fontSize: 16,
     fontWeight: "800",
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
   },
   arrow_img: {
     height: 12,
@@ -165,13 +181,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 12,
     color: lightPurpleColor,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   declineReq: {
     fontWeight: "400",
     fontSize: 14,
     color: redVariant1,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   detailsTopRow: {
     flexDirection: "row",
@@ -181,7 +197,7 @@ const styles = StyleSheet.create({
   centerName: {
     fontSize: 14,
     fontWeight: "700",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
 
     //width: deviceWidth * 0.7,
     color: white,
@@ -194,20 +210,20 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 10,
     color: greyVariant1,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
 
   bookingDetails: {
     color: goldenYellow,
     fontWeight: "500",
     fontSize: 14,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
   },
   level: {
     color: greyVariant1,
     fontWeight: "400",
     fontSize: 14,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   requestOuterView: {
     //width: "100%",

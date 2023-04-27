@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet } from "react-native";
 import { yellowVariant } from "../../containers/util/colors";
 import { commonStyles } from "../../containers/util/commonStyles";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Nunito_SemiBold } from "../../containers/util/fonts";
 
 const GoBackHeader = ({ title, navigation }) => {
   return (
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     fontSize: 20,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: yellowVariant,
   },
 });

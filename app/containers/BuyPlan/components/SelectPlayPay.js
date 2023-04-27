@@ -114,6 +114,7 @@ class SelectPlayPay extends Component {
       appliedCoupon: this.props.applycoupon,
       startdate: startDate,
       enddate: endDate,
+      userDetails: this.props.userDetails,
     });
   };
 
@@ -203,14 +204,8 @@ class SelectPlayPay extends Component {
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
     const phonenumber = await AsyncStorage.getItem("phone_number");
-    const userDetails = JSON.parse(userDetailsJson);
-    this.setState({
-      userDetails: userDetails,
-      header: header,
-      phonenumber: phonenumber,
-    });
+    this.setState({ header: header, phonenumber: phonenumber });
   };
 
   DataChange = (join_date) => {
@@ -228,12 +223,9 @@ class SelectPlayPay extends Component {
     var dataDic = {};
     var dict = {};
 
-    dict["plan_id"] = "" + this.props.selectPlan.id;
-    dict["join_date"] = this.state.joinDate;
-    dict["user_id"] = this.state.userDetails.id;
-    dict["parentName"] = this.state.userDetails.userName;
-    dict["player_name"] = this.state.username;
-    dict["gender"] = this.state.gender.toUpperCase();
+    dict["planId"] = "" + this.props.selectPlan.id;
+    dict["preferredAcademyId"] = this.state.userDetails.id;
+    dict["dateOfJoining"] = this.state.joinDate;
     dataDic["data"] = dict;
 
     this.props

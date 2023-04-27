@@ -4,16 +4,13 @@ import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
 import CoachScreen from "../FirstTimeUser/CoachScreen";
-import PlayScreen from "../play/PlayScreen";
 
 class LearnPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 1,
       header: "",
       learnData: null,
-      learn_enabled: null,
     };
   }
 
@@ -23,8 +20,7 @@ class LearnPage extends Component {
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    const learn_enabled = await AsyncStorage.getItem("learn_enabled");
-    this.setState({ header: header, learn_enabled: learn_enabled });
+    this.setState({ header: header });
     this.apiCall();
   };
 

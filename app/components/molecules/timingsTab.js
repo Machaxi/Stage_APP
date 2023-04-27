@@ -3,6 +3,7 @@ import { Text, View, Image, TouchableOpacity, FlatList, StyleSheet } from "react
 import { greyVariant10, lightBlueColor, yellowVariant7, yellowVariant4 } from "../../containers/util/colors";
 import LinearGradient from "react-native-linear-gradient";
 import SelectSports from "../custom/SelectSports";
+import { Nunito_SemiBold } from "../../containers/util/fonts";
 
 const TimingsTab = ({ name, image, onPress, isSelected }) => {
   return (
@@ -49,7 +50,7 @@ const TimingsTab = ({ name, image, onPress, isSelected }) => {
 const styles = StyleSheet.create({
   timings: {
     fontSize: 16,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: yellowVariant7
   },
 });

@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import {
   greyColorVariant,
 } from "../../containers/util/colors";
+import { Nunito_ExtraBold } from "../../containers/util/fonts";
 
 const BookSlotNextBtn = ({ onNextPress, label, isActive }) => {
   return (
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   nextBtn: {
     fontSize: 16,
     color: greyColorVariant,
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
   },
   btnContainer: {
     flexDirection: "row",

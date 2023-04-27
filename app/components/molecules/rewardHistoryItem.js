@@ -12,6 +12,7 @@ import {
   yellowVariant2,
 } from "../../containers/util/colors";
 import moment from "moment";
+import { Nunito_Medium, Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const RewardHistoryItem = ({ data, isLast }) => {
   return (
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
   redeemInfo: {
     fontSize: 14,
     fontWeight: "500",
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: white,
   },
   outerMain: {
@@ -61,18 +62,18 @@ const styles = StyleSheet.create({
   timing: {
     fontSize: 10,
     fontWeight: "500",
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: yellowVariant2,
   },
   pts: {
     fontSize: 14,
     fontWeight: "600",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   gameDetails: {
     fontSize: 12,
     fontWeight: "400",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: greyVariant1,
     marginBottom: 11
   },

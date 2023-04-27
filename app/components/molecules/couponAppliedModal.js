@@ -19,6 +19,7 @@ import {
 import { commonStyles } from "../../containers/util/commonStyles";
 import { deviceWidth } from "../../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Bold, Nunito_Regular } from "../../containers/util/fonts";
 
 const CouponAppliedModal = ({ modalVisible, setModalVisibility }) => {
   return (
@@ -27,7 +28,7 @@ const CouponAppliedModal = ({ modalVisible, setModalVisibility }) => {
         start={{ x: 0, y: 0.75 }}
         end={{ x: 1, y: 0.25 }}
         colors={["#575f61ed", "#2b293aed"]}
-        style={[styles.modalBg,  styles.modalView ]}
+        style={[styles.modalBg, styles.modalView]}
       >
         {/* <ImageBackground
             resizeMode="cover"
@@ -88,18 +89,18 @@ const styles = StyleSheet.create({
   discount: {
     color: yellowVariant4,
     fontSize: 16,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
   },
   applyCoupon: {
     color: white,
     fontSize: 16,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     textAlign: "center",
   },
   couponApply: {
     fontSize: 22,
     color: yellowVariant6,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     marginTop: 16,
     marginBottom: 25,
     textAlign: "center",

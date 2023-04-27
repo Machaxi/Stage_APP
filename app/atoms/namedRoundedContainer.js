@@ -2,6 +2,7 @@ import React from "react";
 import { Text,View, StyleSheet } from "react-native";
 import { greenVariant, lightGreenBg } from "../containers/util/colors";
 import { deviceWidth } from "../containers/util/dimens";
+import { Nunito_Regular } from "../containers/util/fonts";
 
 const NamedRoundedContainer = ({width , paddingVertical, name, bgColor, txtColor }) => {
   return (
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "400",
     textAlign:'center',
-    fontFamily: 'Nunito-400'
+    fontFamily: Nunito_Regular
   },
 });
 

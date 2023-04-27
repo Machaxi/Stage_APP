@@ -14,6 +14,7 @@ import {
   greyColorVariant,
 } from "../../containers/util/colors";
 import { deviceWidth } from "../../containers/util/dimens";
+import { Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const SlotRelatedNotes = ({ count, setCount }) => {
   return (
@@ -126,29 +127,29 @@ const styles = StyleSheet.create({
   note: {
     fontSize: 12,
     color: offWhiteVariant,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   noteTxt: {
     fontSize: 12,
     color: yellowVariant2,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   
   userCount: {
     fontSize: 14,
     color: goldenYellow,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   addUsr: {
     fontSize: 14,
     color: white,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
   tabText: {
     fontSize: 16,
     fontWeight: "600",
     color: greyVariant2,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     textAlign: "center",
   },
 });

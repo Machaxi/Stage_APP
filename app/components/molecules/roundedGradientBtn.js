@@ -8,6 +8,7 @@ import {
   lightBlueColor,
 } from "../../containers/util/colors";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_ExtraBold } from "../../containers/util/fonts";
 
 const RoundedGradientBtn = ({ colors, text, onBtnPress, width }) => {
   return (
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: lightBlueColor,
     fontSize: 16,
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
     textAlign: "center",
   },
 });
