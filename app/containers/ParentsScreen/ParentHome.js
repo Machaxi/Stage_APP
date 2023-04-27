@@ -58,6 +58,7 @@ import ImgToBase64 from "react-native-image-base64";
 import Share from "react-native-share";
 import branch, { BranchEvent } from "react-native-branch";
 import MyStats from "../../components/custom/MyStats";
+import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 
 var deviceWidth = Dimensions.get("window").width - 20;
 
@@ -126,7 +127,6 @@ class ParentHome extends BaseComponent {
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
-
       },
       //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
       // navigation={navigation} />,
@@ -146,21 +146,7 @@ class ParentHome extends BaseComponent {
           source={require("../../images/toolbar_bg.png")}
         />
       ),
-      headerLeft: (
-        <TouchableOpacity
-          style={{ marginRight: 8, padding: 7 }}
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}
-          activeOpacity={0.8}
-        >
-          <Image
-            resizeMode="contain"
-            source={require("../../images/hamburger_white.png")}
-            style={{ width: 20, height: 16, marginLeft: 12 }}
-          />
-        </TouchableOpacity>
-      ),
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity

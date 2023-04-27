@@ -28,6 +28,8 @@ import { Nunito_Regular } from '../containers/util/fonts';
 import { SubPointsAboutMachaxi } from '../components/molecules/aboutMachaxiSubpoints';
 import { DrawerCloseBtn } from '../components/molecules/drawerCloseBtn';
 import { DrawerItemBtn } from '../components/molecules/drawerItemBtn';
+import { ColourfulDrawerItem } from '../components/molecules/colourfulDrawerItem';
+import { PlayerDetailsAndEdit } from '../components/molecules/playerDetailsAndEdit';
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png"
 
@@ -53,7 +55,8 @@ class CoachMenuDrawer extends BaseComponent {
 			staticDataVisibility: false,
 			playDataVisibility:false,
 			isLearnPlanEnabled: false,
-			isPlayPlanEnabled: false
+			isPlayPlanEnabled: false,
+			learnDataVisibility: false
 		};
 
 		isSignedIn()
@@ -989,32 +992,90 @@ class CoachMenuDrawer extends BaseComponent {
 						}
 					</View>
 				</View>
-				{this.state.isPlayPlanEnabled && <TouchableOpacity activeOpacity={0.8} onPress={() =>
-					// this.props.navigation.navigate('WebViewScreen')
-					this.setState({
-						playDataVisibility: !this.state.playDataVisibility,
-					})
-					}>
-					
-					<View style={styles.drawercell}>
-						<View style={{flexDirection:'row', }}>
-						<Image
-							style={{width:28,height:28, marginRight:8 }}
-							source={require('../images/play.png')}
-						/>
-						<Text style={styles.menuHeading}>
-							Play
-						</Text></View>
+				{/* start */}
+					{
+					this.state.isLearnPlanEnabled && 
+					<ColourfulDrawerItem onPress={()=> {
+						this.setState({
+							learnDataVisibility: !this.state.learnDataVisibility,
+						})
+						}}
+						image={require('../images/play.png')}
+						title={'Learn'}
+						isExpanded={this.state.learnDataVisibility}
+					/>
+				}
+				{this.state.related_guardians.length != 0 && this.state.learnDataVisibility
+					?
+					<View style={{
+						paddingLeft: 16,
+						paddingRight: 16,
+						paddingTop: 12,
+						paddingBottom: 12,
+					}}>
+						<Text style={defaultStyle.regular_text_10}>
+							Guardian
+						</Text>
+						{related_guardians_array}
+					</View>
+					: null}
+
+
+				{this.state.related_players.length != 0 && this.state.learnDataVisibility
+					?
+					<View style={{
+						paddingLeft: 44,
+						paddingRight: 16,
+						paddingTop: 12,
+						paddingBottom: 12,
+					}}>
+						<View style={{flexDirection:'row'  }}>
+						<Text style={{fontSize: 10,color: "#A3A5AE",fontFamily: "Quicksand-Regular"}}>
+							Players details
+						</Text>
+						<PlayerDetailsAndEdit onPress={() => {
+							this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
+						}} />
+						</View>
+						{related_players_array}
+					</View>
+					: null}
+				{this.state.isLearnPlanEnabled && <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 12}]}></View>}
+				{this.state.learnDataVisibility && <TouchableOpacity style={{
+						paddingLeft: 28,
+						paddingBottom: 12,
+					}} activeOpacity={0.8} onPress={() =>{
+					//TODO:
+					//this.props.navigation.navigate("BatchDetails");
+					}
+				}>
+				<View style={styles.drawercell}>
+						<Text style={styles.menuTxt}>
+							Batch details
+								</Text>
 
 						<Image
-							style={styles.orange_arrow_img}
-							source={require('../images/orange_arrow_down.png')}
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
 						/>
 
 					</View>
 				</TouchableOpacity>
 				}
-
+				{this.state.isLearnPlanEnabled && <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 0}]}></View>}
+				{/* learn section end */}
+				{
+					this.state.isPlayPlanEnabled && 
+					<ColourfulDrawerItem onPress={()=> {
+						this.setState({
+							playDataVisibility: !this.state.playDataVisibility,
+						})
+						}}
+						image={require('../images/play.png')}
+						title={'Play'}
+						isExpanded={this.state.playDataVisibility}
+					/>
+				}
 				{this.state.related_guardians.length != 0 && this.state.playDataVisibility
 					?
 					<View style={{
@@ -1040,48 +1101,23 @@ class CoachMenuDrawer extends BaseComponent {
 						paddingBottom: 12,
 					}}>
 						<View style={{flexDirection:'row'  }}>
-						<Text style={{fontSize: 10,color: "#A3A5AE",fontFamily: "Quicksand-Regular"}}>
-							Players details
-						</Text>
-						<TouchableOpacity activeOpacity={.8} onPress={() => {
-							this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
-						}}>
-
-							<View style={{ flexDirection: 'row', alignItems: 'center' ,marginLeft:15 }}>
-								<Image
-									resizeMode="contain"
-									style={{
-										width: 9,
-										height: 9, borderRadius: 8
-									}}
-									source={require('../images/edit_profile.png')}
-								></Image>
-
-								<Text
-									style={{
-										color: '#667DDB',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 10, marginLeft: 4
-									}}
-								>
-									Edit
-						</Text>
-							</View>
-						</TouchableOpacity>
+							<Text style={{fontSize: 10,color: "#A3A5AE",fontFamily: "Quicksand-Regular"}}>
+								Players details
+							</Text>
+							<PlayerDetailsAndEdit onPress={() => {
+								this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
+							}} />
 						</View>
 						{related_players_array}
 					</View>
 					: null}
+				{this.state.playDataVisibility?
+				<View style={{paddingLeft: 28}}>
+				{this.state.playDataVisibility && <View style={{height: 1, marginTop: 8, marginBottom: 8, backgroundColor:'#272733', }}></View>}
 
-			
-			{this.state.playDataVisibility?
-			<View style={{paddingLeft: 28}}>
-			<View style={{height: 1, marginTop: 8, marginBottom: 8, backgroundColor:'#272733', }}></View>
-
-			<TouchableOpacity activeOpacity={0.8} onPress={() =>
-				this.props.navigation.navigate('AcademyListing')
-			}>
-
+				<TouchableOpacity activeOpacity={0.8} onPress={() =>
+					this.props.navigation.navigate('AcademyListing')
+				}>
 				<View style={styles.drawercell}>
 
 					<Text style={styles.menuTxt}>
@@ -1102,19 +1138,15 @@ class CoachMenuDrawer extends BaseComponent {
 			}>
 
 				<View style={styles.drawercell}>
-
 					<Text style={styles.menuTxt}>
 						My Booking
-							</Text>
-
+					</Text>
 					<Image
 						style={styles.arrow_img}
 						source={require('../images/ic_drawer_arrow.png')}
 					/>
-
 				</View>
 			</TouchableOpacity>
-
 			<TouchableOpacity activeOpacity={0.8} onPress={() =>
 				//this.props.navigation.navigate('AcademyListing')
 				this.props.navigation.navigate('MyRequestsHome')
@@ -1156,31 +1188,18 @@ class CoachMenuDrawer extends BaseComponent {
 					title={'Share App'}
 				/>
 				<View style={[defaultStyle.line_style,  styles.greyLine]}></View>
-				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					// this.props.navigation.navigate('WebViewScreen')
-					this.setState({
-						staticDataVisibility: !this.state.staticDataVisibility,
-					})
-					}>
-					
-					<View style={styles.drawercell}>
-						<View style={{flexDirection:'row'}}>
-						<Image
-							style={{width:28,height:28, marginRight:8 }}
-							source={require('../images/info.png')}
-						/>
-						<Text style={styles.menuHeading}>
-							About Machaxi
-						</Text></View>
-
-						<Image
-							style={styles.orange_arrow_img}
-							source={require('../images/orange_arrow_down.png')}
-						/>
-
-					</View>
-				</TouchableOpacity>
-
+				<ColourfulDrawerItem
+					onPress={()=> {
+						this.setState({
+							staticDataVisibility: !this.state.staticDataVisibility,
+						});
+						}
+					}
+					image={require('../images/info.png')}
+					title={'About Machaxi'}
+					isExpanded={this.state.staticDataVisibility}
+				/>
+				
 			{this.state.staticDataVisibility?(<>
 				<SubPointsAboutMachaxi title={'About us'} onPress={()=>{
 					this.props.navigation.navigate("WebViewScreen");
@@ -1346,13 +1365,6 @@ const styles = StyleSheet.create({
 		fontFamily:Nunito_Regular,
 		fontWeight: '400',
 		fontSize: 14
-	},
-	menuHeading:{
-		color: '#FF9C33',
-		fontSize: 16,
-		fontFamily: 'Quicksand-Medium',
-		marginTop:2,
-		textAlign:'center',
 	},
 	seperateFunction:{
 		color: '#AFAFAF',
