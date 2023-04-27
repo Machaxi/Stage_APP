@@ -46,7 +46,7 @@ class CoachingPlan extends Component {
       amount: 0,
       orderId: "",
       applycoupon: false,
-      isLoading: true,
+      isLoading: false,
     };
   }
 
