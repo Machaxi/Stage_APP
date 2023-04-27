@@ -10,8 +10,8 @@ import {
   ImageBackground,
 } from "react-native";
 import {
-    borderGrey,
-    goldenYellow,
+  borderGrey,
+  goldenYellow,
   goldenYellowVariant,
   lightGreyVariant2,
   offWhite,
@@ -25,16 +25,14 @@ import { deviceWidth } from "../../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
 import MainBookingDetails from "../../atoms/mainBookingDetails";
 import RoundedGradientBtn from "./roundedGradientBtn";
-
-
+import { Nunito_Bold, Nunito_Medium, Nunito_Regular } from "../../containers/util/fonts";
 
 const SlotBookedModalInnerView = ({
   modalVisible,
   setModalVisibility,
   onBtnPress,
-  slotInfo
+  slotInfo,
 }) => {
-
   return (
     <TouchableOpacity activeOpacity={1}>
       <LinearGradient
@@ -91,21 +89,27 @@ const SlotBookedModalInnerView = ({
                 // value: `${slotInfo?.booking?.startTime} - ${
                 //   slotInfo?.booking?.endTime
                 // }`,
-                value:`${slotInfo?.booking?.displayTime}`
+                value: `${slotInfo?.booking?.displayTime}`,
               },
               ,
               { name: "Pool", value: "NA" },
             ].map((value) => (
-              <MainBookingDetails
-                width={deviceWidth * 0.25}
-                details={value}
-              />
+              <MainBookingDetails width={deviceWidth * 0.25} details={value} />
             ))}
           </View>
           <View style={{ width: 1, height: 20 }} />
           <MainBookingDetails
             width={deviceWidth * 0.4}
-            details={{ name: "Player", value: slotInfo?.user?.name + `${slotInfo?.booking?.guestCount > 0 ? '+' + slotInfo?.booking?.guestCount  : ''}` }}
+            details={{
+              name: "Player",
+              value:
+                slotInfo?.user?.name +
+                `${
+                  slotInfo?.booking?.guestCount > 0
+                    ? "+" + slotInfo?.booking?.guestCount
+                    : ""
+                }`,
+            }}
           />
           <View style={{ width: 1, height: 34 }} />
           <RoundedGradientBtn
@@ -130,10 +134,10 @@ const styles = StyleSheet.create({
   centreName: {
     color: white,
     fontSize: 16,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     textAlign: "center",
     marginTop: 30,
-    marginBottom: 28
+    marginBottom: 28,
   },
   crossBtn: {
     padding: 12,
@@ -146,25 +150,25 @@ const styles = StyleSheet.create({
   discount: {
     color: yellowVariant4,
     fontSize: 16,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
   },
   applyCoupon: {
     color: white,
     fontSize: 16,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     textAlign: "center",
   },
   slotBookedMsg: {
     color: white,
     fontSize: 14,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     textAlign: "center",
     marginBottom: 30,
   },
   slotBooked: {
     fontSize: 26,
     color: goldenYellow,
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     marginTop: 16,
     marginBottom: 7,
     textAlign: "center",

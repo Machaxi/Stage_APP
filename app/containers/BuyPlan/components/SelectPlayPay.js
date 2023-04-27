@@ -11,7 +11,6 @@ import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import AsyncStorage from "@react-native-community/async-storage";
 import Loader from "../../../components/custom/Loader";
-import { getBaseUrl } from "../../BaseComponent";
 import RazorpayCheckout from "react-native-razorpay";
 import {
   Nunito_Medium,
@@ -23,11 +22,10 @@ import { connect } from "react-redux";
 import PlanDetails from "../../../components/custom/PlanDetails";
 import PaymentDetails from "../../../components/custom/PaymentDetails";
 import CouponView from "../../../components/custom/CouponView";
-import axios from "axios";
 import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 
-class SelectPlanPay extends Component {
+class SelectPlayPay extends Component {
   months = [
     "Jan",
     "Feb",
@@ -53,6 +51,11 @@ class SelectPlanPay extends Component {
     "Saturday",
   ];
 
+  monthoption = {
+    month: "short",
+    year: "2-digit",
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -61,9 +64,6 @@ class SelectPlanPay extends Component {
       centerImage: "",
       centerDistance: "",
       header: "",
-      username: "",
-      gender: "",
-      date: new Date(),
       isLoading: false,
       appliedCoupon: false,
       displayStartDate: "",
@@ -72,6 +72,8 @@ class SelectPlanPay extends Component {
       amount: "",
       joinDate: "",
       phonenumber: "",
+      startdate: new Date(),
+      enddate: new Date(),
     };
   }
 
@@ -83,22 +85,45 @@ class SelectPlanPay extends Component {
   handleopen = () => {
     const selectCenter = this.props.selectCenter;
     const distance = this.props.distance;
-    const username = this.props.username;
-    const gender = this.props.gender;
-    const joinDate = this.convertToDate(this.props.selectPlan.start_date);
+    const selectPlan = this.props.selectPlan;
+
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    if (startDate.getMonth() === 11) {
+      endDate.setMonth(0);
+      endDate.setFullYear(startDate.getFullYear() + 1);
+    } else {
+      endDate.setMonth(startDate.getMonth() + 1);
+    }
+    const options = {
+      day: "2-digit",
+      month: "short",
+    };
+
+    const start_date = startDate.toLocaleString("en-GB", options);
+    const end_date = endDate.toLocaleString("en-GB", options);
 
     this.setState({
       centerName: selectCenter.name,
       centerImage: selectCenter.cover_pic,
       centerAddress: selectCenter.address,
       centerDistance: distance,
-      username: username,
-      gender: gender,
-      displayStartDate: this.props.selectPlan.start_date,
-      displayEndDate: this.props.selectPlan.end_date,
-      amount: this.props.selectPlan.amount,
-      joinDate: joinDate,
+      displayStartDate: start_date,
+      displayEndDate: end_date,
+      amount: selectPlan.price,
+      appliedCoupon: this.props.applycoupon,
+      startdate: startDate,
+      enddate: endDate,
+      userDetails: this.props.userDetails,
     });
+  };
+
+  formatDateToCustomDate = (dateString) => {
+    const [day, month, year] = dateString.split("-");
+    const monthIndex = this.months.findIndex((m) => m === month) + 1;
+    const formattedMonth = monthIndex < 10 ? `0${monthIndex}` : monthIndex;
+    const formattedDate = `${year}-${formattedMonth}-${day}`;
+    return formattedDate;
   };
 
   convertToDate = (dateString) => {
@@ -112,7 +137,6 @@ class SelectPlanPay extends Component {
   };
 
   getMonthNumber = (monthName) => {
-    // Map month names to their corresponding month numbers
     const monthMap = {
       Jan: "01",
       Feb: "02",
@@ -131,104 +155,77 @@ class SelectPlanPay extends Component {
   };
 
   handleOnStartPayment = (orderId, amount) => {
-    // this.RBSheet.close()
     var options = {
       description: "Payment for Subscription",
       currency: "INR",
       key: getPaymentKey(),
-      amount: 600,
+      amount: amount * 100,
       name: "Machaxi",
       prefill: {
         email: getRazorPayEmail(),
-        contact: "9550042123",
-        name: "Siddu",
+        contact: this.state.phonenumber,
+        name: this.state.userDetails.userName,
       },
       theme: { color: "#67BAF5" },
     };
-
     RazorpayCheckout.open(options)
       .then((data) => {
-        // handle success
         let payment_details = {
           razorpay_payment_id: data.razorpay_payment_id,
         };
-        // submitPaymentConfirmation(orderId, amount, payment_details);
+        this.submitPaymentConfirmation(orderId, amount, payment_details);
         console.log(payment_details);
       })
       .catch((error) => {
-        console.log("Razor Rspo ", JSON.stringify(error));
-        alert("Payment could not succeed. Please try again.");
+        console.log("Razor Rspo ", error);
+        this.props.onPress(false, orderId, amount);
       });
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
-    getData("header", async (value) => {
-      let postData = {
-        data: {
-          due_order_id: orderId,
-          amount,
-          payment_details: paymentDetails,
-        },
-      };
-      props.paymentConfirmation(value, postData).then((result) => {
+    let postData = {
+      data: {
+        due_order_id: orderId,
+        amount,
+        payment_details: paymentDetails,
+      },
+    };
+    this.props
+      .paymentConfirmation(this.state.header, postData)
+      .then((result) => {
         result = result.payload.data;
         if (result.success) {
-          Events.publish("PROFILE_REFRESH");
-          alert(result.success_message);
+          this.props.onPress(true);
         } else {
           alert(result.error_message);
         }
       });
-    });
   };
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
     const phonenumber = await AsyncStorage.getItem("phone_number");
-    const userDetails = JSON.parse(userDetailsJson);
-    this.setState({
-      userDetails: userDetails,
-      header: header,
-      phonenumber: phonenumber,
-    });
+    this.setState({ header: header, phonenumber: phonenumber });
   };
 
   DataChange = (join_date) => {
-    this.setState({ joinDate: join_date });
-    const batch_id = this.state.selectBatch.batch_id;
-    axios
-      .get(
-        getBaseUrl() + "/global/batch/" + batch_id + "/?join_date=" + join_date
-      )
-      .then((response) => {
-        let data = JSON.stringify(response);
-        let userResponce = JSON.parse(data);
-        let planData = userResponce["data"]["plans"][0]["payable_amount"];
-        console.log(response);
-        const term = this.props.selectPlan.term_id - 1;
-        console.log(planData[term]);
-        this.setState({
-          displayEndDate: planData[term].end_date,
-          displayStartDate: planData[term].start_date,
-          amount: planData[term].amount,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const endDate = new Date(startDate);
+    if (startDate.getMonth() === 11) {
+      endDate.setMonth(0);
+      endDate.setFullYear(startDate.getFullYear() + 1);
+    } else {
+      endDate.setMonth(startDate.getMonth() + 1);
+    }
+    this.setState({ startdate: join_date, enddate: endDate });
   };
 
   startPayment = () => {
     var dataDic = {};
     var dict = {};
 
-    dict["plan_id"] = "" + this.props.selectPlan.id;
-    dict["join_date"] = this.state.joinDate;
-    dict["user_id"] = this.state.userDetails.id;
-    dict["parentName"] = this.state.userDetails.userName;
-    dict["player_name"] = this.state.userDetails.userName;
-    dict["gender"] = this.state.userDetails.gender;
+    dict["planId"] = "" + this.props.selectPlan.id;
+    dict["preferredAcademyId"] = this.state.userDetails.id;
+    dict["dateOfJoining"] = this.state.joinDate;
     dataDic["data"] = dict;
 
     this.props
@@ -236,9 +233,6 @@ class SelectPlanPay extends Component {
       .then(() => {
         let jsondata = JSON.stringify(this.props.data.planData.data);
         let responcedata = JSON.parse(jsondata);
-        console.log(responcedata.amount);
-        console.log(this.props.data.planData);
-        console.log(responcedata);
         this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
       })
       .catch((response) => {
@@ -255,7 +249,7 @@ class SelectPlanPay extends Component {
             locations={[0, 1]}
             style={[styles.sportsview]}
           >
-            <Text style={[styles.datetitle, { fontSize: 25 }]}>{title}</Text>
+            <Text style={[styles.datetitle, { fontSize: 20 }]}>{title}</Text>
             <Text style={[styles.datetitle]}>{subtitle}</Text>
           </LinearGradient>
           <Text style={[styles.sportText]}>{heading}</Text>
@@ -271,8 +265,8 @@ class SelectPlanPay extends Component {
           <PlanDetails
             title={this.props.selectPlan.name}
             subtitle={this.props.selectPlan.price}
-            startDate={this.props.selectPlan.start_date}
-            endDate={this.props.selectPlan.end_date}
+            startDate={this.state.displayStartDate}
+            endDate={this.state.displayEndDate}
             image={this.props.selectPlan.planIconUrl}
             onPress={this.DataChange}
           />
@@ -287,11 +281,13 @@ class SelectPlanPay extends Component {
               Player Name
             </Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.name}>{this.state.username} · </Text>
+              <Text style={styles.name}>
+                {this.state.userDetails.userName} ·{" "}
+              </Text>
               <Text
                 style={[styles.subtitle, { color: "#FFC498", marginLeft: 2 }]}
               >
-                {this.state.gender}
+                {this.state.userDetails.gender}
               </Text>
             </View>
             <View style={styles.line} />
@@ -314,16 +310,21 @@ class SelectPlanPay extends Component {
             <View style={styles.line} />
             <Text style={styles.subtitle}>Batch Details</Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-around" }}
+              style={{
+                flexDirection: "row",
+                marginVertical: 10,
+                marginLeft: 15,
+              }}
             >
               {listText(
-                this.state.session_per_Week == "WORKING_DAYS" ? "5" : "3",
-                "Days/Week",
+                this.state.startdate.getDate(),
+                this.state.startdate.toLocaleString("en-GB", this.monthoption),
                 "Date of Purchase"
               )}
+              <View style={{ marginHorizontal: 20 }} />
               {listText(
-                this.state.session_per_Week == "WORKING_DAYS" ? "5" : "3",
-                "Days/Week",
+                this.state.enddate.getDate(),
+                this.state.enddate.toLocaleString("en-GB", this.monthoption),
                 "Date of Membership Expiry"
               )}
             </View>
@@ -331,7 +332,11 @@ class SelectPlanPay extends Component {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              this.setState({ appliedCoupon: !this.state.appliedCoupon });
+              if (this.state.appliedCoupon) {
+                this.setState({ appliedCoupon: !this.state.appliedCoupon });
+              } else {
+                this.props.onPresscoupon();
+              }
             }}
           >
             <CouponView appliedCoupon={this.state.appliedCoupon} />
@@ -476,6 +481,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     data: state.PlayerReducer,
+    paymentData: state.PaymentReducer,
   };
 };
 
@@ -484,4 +490,4 @@ const mapDispatchToProps = { selectPlanDate, paymentConfirmation };
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectPlanPay);
+)(SelectPlayPay);

@@ -117,12 +117,12 @@ class Splash extends BaseComponent {
                                 console.log(userData);
                                 if (userType == GUEST) {
                                     this.props.navigation.navigate('GuestBookHome')
-                                } else if (userType == PLAYER) {
-                                    if (userData.can_book_court) {
-                                        this.props.navigation.navigate('UserBookHome');
-                                    } else {
-                                        this.props.navigation.navigate('UserHome');
-                                    }
+                                // } else if (userType == PLAYER) {
+                                //     if (userData.can_book_court) {
+                                //         this.props.navigation.navigate('UserBookHome');
+                                //     } else {
+                                //         this.props.navigation.navigate('UserHome');
+                                //     }
 
                                 } else if (userType == COACH) {
                                     if (userData.can_book_court) {
@@ -144,17 +144,32 @@ class Splash extends BaseComponent {
                                             userType: COACH
                                         })
                                     }
-                                }
-                                else if (userType == PARENT) {
-                                    if (userData.can_book_court) {
-                                        this.props.navigation.navigate('ParentBookHome');
+                                }else {
+                                    if (userData.is_learn_enabled) {
+                                        this.props.navigation.navigate("LearnHomePage");
+                                    }else if (userData.is_play_enabled) {
+                                        this.props.navigation.navigate("Guestfirsted");
                                     } else {
-                                        this.props.navigation.navigate('ParentHome');
-                                    }
+                                        this.props.navigation.navigate("HomeDrawer");
+                                    }                                
                                 }
+                                // else if (userType == PARENT) {
+                                //     if (userData.can_book_court) {
+                                //         this.props.navigation.navigate('ParentBookHome');
+                                //     } else {
+                                //         this.props.navigation.navigate('ParentHome');
+                                //     }
+                                // }
 
                             } else {
-                                this.props.navigation.navigate('SwitchPlayer')
+                                if (userData.is_learn_enabled) {
+                                    this.props.navigation.navigate("LearnHomePage");
+                                }else if (userData.is_play_enabled) {
+                                    this.props.navigation.navigate("Guestfirsted");
+                                } else {
+                                    this.props.navigation.navigate("HomeDrawer");
+                                }                                
+                            // this.props.navigation.navigate('SwitchPlayer')
                             }
 
                         });

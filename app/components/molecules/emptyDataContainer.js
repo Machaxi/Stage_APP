@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { greyVariant2, white } from "../../containers/util/colors";
 import { deviceHeight } from "../../containers/util/dimens";
+import { Nunito_Regular } from "../../containers/util/fonts";
 
 const EmptyDataContainer = ({ msg }) => {
   return (
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
   msg: {
     fontSize: 14,
     fontWeight: "400",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: white,
   },
 });

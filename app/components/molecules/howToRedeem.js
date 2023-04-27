@@ -16,6 +16,7 @@ import {
 } from "../../containers/util/colors";
 import Strings from "../../containers/util/strings";
 import RedeemInfo from "./redeemInfo";
+import { Nunito_Medium, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const HowToRedeem = ({ name }) => {
   return (
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   balanceTxt: {
     fontSize: 12,
     fontWeight: "600",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: white,
   },
   howToRedeemView: {
@@ -76,21 +77,21 @@ const styles = StyleSheet.create({
   redeemInfo: {
     fontSize: 14,
     fontWeight: "500",
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: white,
   },
   howToRedeemTxt: {
     fontSize: 16,
     marginLeft: 11,
     fontWeight: "600",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: yellowVariant2,
   },
   interrogation: {
     color: yellowVariant5,
     fontSize: 16,
     fontWeight: "500",
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
   },
   rewardContainer: {
     marginTop: 12,

@@ -9,7 +9,7 @@ const CustomRadioButton = (props) => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handlepress}>
-      <View style={{ flexDirection: "row", paddingHorizontal: 10 }}>
+      <View style={{ flexDirection: "row", width: props.width }}>
         <View
           style={[
             styles.outerView,

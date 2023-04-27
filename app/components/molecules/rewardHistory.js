@@ -25,6 +25,7 @@ import RedeemInfo from "./redeemInfo";
 import RewardHistoryItem from "./rewardHistoryItem";
 import { rewardHistoryData } from "../../containers/util/dummyData/rewardHistoryData";
 import { MonthNames } from "../../containers/util/utilFunctions";
+import { Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const RewardHistory = ({loading, selectedMonth, selectedYear, rewardHistoryData }) => {
   return (
@@ -78,20 +79,20 @@ const styles = StyleSheet.create({
     marginTop: 14,
     marginLeft: 12,
     fontWeight: "600",
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: white,
     marginBottom: 25,
   },
   date: {
     fontSize: 12,
     fontWeight: "400",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: white,
   },
   noData: {
     fontSize: 14,
     fontWeight: "400",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: white,
     textAlign:'center'
   },

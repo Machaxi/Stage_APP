@@ -11,6 +11,7 @@ import LinearGradient from "react-native-linear-gradient";
 import SelectSports from "../custom/SelectSports";
 import DateComponent from "../custom/DateComponent";
 import moment from "moment";
+import { Nunito_SemiBold } from "../../containers/util/fonts";
 
 const SelectDateBookSlot = ({ date, setDateVal }) => {
   return (
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 14,
     fontSize: 16,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
   },
 });
 

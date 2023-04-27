@@ -10,6 +10,7 @@ import { commonStyles } from "../../containers/util/commonStyles";
 import { deviceWidth } from "../../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
 import RoundedGradientBtn from "./roundedGradientBtn";
+import { Nunito_Bold, Nunito_ExtraBold, Nunito_Regular } from "../../containers/util/fonts";
 
 const AddGuestUserModalInnerView = ({ onBtnPress, onExplorePlansPressed }) => {
   return (
@@ -94,14 +95,14 @@ const styles = StyleSheet.create({
     marginTop: 28,
     fontSize: 22,
     fontWeight: "700",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     marginBottom: 15,
   },
   reqTxt: {
     color: lightBlueColor,
     fontSize: 16,
     fontWeight: "800",
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
   },
   modalBg: {
     overflow: "hidden",
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   desc: {
     color: lightGreyVariant,
     fontSize: 16,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     textAlign: "center",
     marginBottom: 53,
   },

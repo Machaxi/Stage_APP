@@ -9,6 +9,7 @@ import {
   white,
 } from "../../containers/util/colors";
 import { deviceWidth } from "../../containers/util/dimens";
+import { Nunito_Medium } from "../../containers/util/fonts";
 
 const RedeemInfo = ({ info }) => {
   return (
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   redeemInfo: {
     fontSize: 14,
     fontWeight: "500",
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: white,
   },
   redeemInfoImage: {

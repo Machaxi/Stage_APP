@@ -17,6 +17,7 @@ import Loader from "../custom/Loader";
 import CustomButton from "../custom/CustomButton";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import BookSlotNextBtn from "./bookSlotNextBtn";
+import { Nunito_Medium, Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop: -20,
     marginBottom: 5,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#FFFFFF",
     backgroundColor: "rgba(35, 35, 35, 0.66)",
     borderTopRightRadius: 7,
@@ -304,14 +305,14 @@ const styles = StyleSheet.create({
     flex: 0.5,
     fontSize: 14,
     marginTop: 8,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#F0F0F0",
   },
   address: {
     flex: 0.5,
     marginVertical: 5,
     fontSize: 11,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
     color: "#DDDDDD",
   },
   line: {
@@ -328,13 +329,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: -2,
     marginHorizontal: 10,
-    fontFamily: "Nunito-500",
+    fontFamily: Nunito_Medium,
     color: "#E7E7E7",
   },
   mainText: {
     fontSize: 16,
     marginVertical: 10,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
 });

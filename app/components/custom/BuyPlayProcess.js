@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Image, Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Nunito_Bold } from "../../containers/util/fonts";
 
 class BuyPlayProcess extends Component {
   render() {
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   insideText: {
     fontSize: 12,
     color: "#C2C2C2",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
   },
   viewline: {
     width: 110,

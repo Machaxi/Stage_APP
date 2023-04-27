@@ -10,15 +10,39 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
-import AsyncStorage from "@react-native-community/async-storage";
 import { whiteGreyBorder } from "../../util/colors";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
+import SelectLevel from "../../../components/custom/SelectLevel";
 
-class SelectSports extends Component {
+const data = [
+  {
+    id: 1,
+    image: require("../../../images/playing/beginner.png"),
+    name: "Beginner",
+  },
+  {
+    id: 2,
+    image: require("../../../images/playing/intermediate.png"),
+    name: "Intermediate",
+  },
+  {
+    id: 3,
+    image: require("../../../images/playing/advance.png"),
+    name: "Advance",
+  },
+  {
+    id: 4,
+    image: require("../../../images/playing/professional.png"),
+    name: "Professional",
+  },
+];
+
+class MoreDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentIndex: 100,
+      currentLevel: 10,
       proseednext: false,
     };
   }
@@ -33,7 +57,13 @@ class SelectSports extends Component {
     return (
       <View style={styles.contain}>
         <ScrollView style={{ flex: 0.93 }}>
-          <Text style={styles.mainText}>Select preferred sport</Text>
+          <Text style={styles.heading}>More details</Text>
+          <Text style={styles.mainText}>
+            Select preferred sport{" "}
+            <Text style={[styles.mainText, { fontSize: 11 }]}>
+              (To personalize your experience)
+            </Text>
+          </Text>
           <View style={styles.contained}>
             {this.props.sportList.map((item) => (
               <TouchableOpacity
@@ -41,10 +71,7 @@ class SelectSports extends Component {
                 key={item.id}
                 style={[styles.subview]}
                 onPress={() =>
-                  this.setState({
-                    currentIndex: item.id,
-                    proseednext: true,
-                  })
+                  this.setState({ currentIndex: item.id, proseednext: true })
                 }
               >
                 <LinearGradient
@@ -72,12 +99,26 @@ class SelectSports extends Component {
               </TouchableOpacity>
             ))}
           </View>
+          <Text style={styles.mainText}>Select player Level</Text>
+          <View style={styles.contained}>
+            {data.map((item, index) => (
+              <SelectLevel
+                index={index}
+                currentLevel={this.state.currentLevel}
+                image={item.image}
+                id={item.id}
+                name={item.name}
+                onPress={() => {
+                  this.setState({ currentLevel: index, proseedLevel: true });
+                }}
+              />
+            ))}
+          </View>
         </ScrollView>
         <View style={{ flex: 0.07, paddingTop: 20 }}>
           <CustomButton
-            name="Next "
-            image={require("../../../images/playing/arrow_go.png")}
-            available={this.state.proseednext}
+            name="Submit"
+            available={this.state.proseednext && this.state.proseedLevel}
             onPress={handlepress}
           />
         </View>
@@ -97,6 +138,12 @@ const styles = StyleSheet.create({
   contain: {
     flex: 1,
     marginVertical: 20,
+  },
+  heading: {
+    fontSize: 20,
+    marginTop: 8,
+    fontFamily: Nunito_SemiBold,
+    color: "#FFCB6A",
   },
   subview: {
     width: 100,
@@ -141,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectSports;
+export default MoreDetails;

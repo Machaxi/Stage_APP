@@ -98,8 +98,9 @@ class SelectPay extends Component {
     var levelimage = selectLevel.image;
     var levelname = selectLevel.name;
     const username = this.props.username;
-    const gender = this.props.gender;
+    const gender = this.props.usergender;
     const parent = this.props.parent;
+
     const joinDate = this.convertToDate(this.props.selectPlan.start_date);
     if (this.props.title == "Playing") {
       levelname = selectLevel.displayText;
@@ -125,6 +126,7 @@ class SelectPay extends Component {
       displayEndDate: this.props.selectPlan.end_date,
       amount: this.props.selectPlan.amount,
       joinDate: joinDate,
+      appliedCoupon: this.props.applycoupon,
     });
   };
 
@@ -251,8 +253,8 @@ class SelectPay extends Component {
     dict["join_date"] = this.state.joinDate;
     dict["user_id"] = this.state.userDetails.id;
     dict["parentName"] = this.state.userDetails.userName;
-    dict["player_name"] = this.state.userDetails.userName;
-    dict["gender"] = this.state.userDetails.gender;
+    dict["player_name"] = this.state.username;
+    dict["gender"] = this.state.gender.toUpperCase();
     dataDic["data"] = dict;
 
     this.props
@@ -351,7 +353,7 @@ class SelectPay extends Component {
               <Text
                 style={[styles.subtitle, { color: "#FFC498", marginLeft: 2 }]}
               >
-                Parent · {this.state.gender}
+                {this.state.parent} · {this.state.gender}
               </Text>
             </View>
             <View style={styles.line} />
@@ -415,7 +417,11 @@ class SelectPay extends Component {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              this.setState({ appliedCoupon: !this.state.appliedCoupon });
+              if (this.state.appliedCoupon) {
+                this.setState({ appliedCoupon: !this.state.appliedCoupon });
+              } else {
+                this.props.onPresscoupon();
+              }
             }}
           >
             <CouponView appliedCoupon={this.state.appliedCoupon} />

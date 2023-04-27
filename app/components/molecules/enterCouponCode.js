@@ -3,6 +3,7 @@ import { Text, View, Image, TextInput, StyleSheet, TouchableOpacity } from "reac
 import { greyVariant8, yellowVariant, yellowVariant2 } from "../../containers/util/colors";
 import { commonStyles } from "../../containers/util/commonStyles";
 import { deviceWidth } from "../../containers/util/dimens";
+import { Nunito_Medium, Nunito_Regular } from "../../containers/util/fonts";
 
 const EnterCouponCode = ({ title, handleChange, value, handleKeyDown, applyCouponPressed }) => {
   return (
@@ -23,7 +24,7 @@ const EnterCouponCode = ({ title, handleChange, value, handleKeyDown, applyCoupo
           width: deviceWidth * 0.4,
           fontSize: 14,
           color: greyVariant8,
-          fontFamily: "Nunito-500",
+          fontFamily: Nunito_Medium,
           height: 45,
         }}
         placeholder="Enter Coupon Code"
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
  couponApply: {
     fontSize: 14,
     color: yellowVariant2,
-    fontFamily: 'Nunito-400'
+    fontFamily: Nunito_Regular
  }
 });
 

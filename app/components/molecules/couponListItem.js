@@ -12,6 +12,7 @@ import {
   yellowVariant4,
 } from "../../containers/util/colors";
 import { commonStyles } from "../../containers/util/commonStyles";
+import { Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const CouponListItem = ({ coupon_code, discount, couponApplied }) => {
   return (
@@ -33,10 +34,10 @@ const CouponListItem = ({ coupon_code, discount, couponApplied }) => {
         },
       ]}
     >
-      <TouchableOpacity
+      {/* <TouchableOpacity
         // onPress={() => onTabPress("")}
         style={[styles.touchable, commonStyles.flexRowAlignStart]}
-      >
+      > */}
         <Image
           source={require("../../images/coupon_icon.png")}
           style={styles.couponIcon}
@@ -63,7 +64,7 @@ const CouponListItem = ({ coupon_code, discount, couponApplied }) => {
             {" off on you current playing plan."}
           </Text>
         </View>
-      </TouchableOpacity>
+      {/* </TouchableOpacity> */}
     </LinearGradient>
   );
 };
@@ -74,23 +75,23 @@ const styles = StyleSheet.create({
     borderRadius: 6
   },
   couponCode: {
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     fontSize: 20,
   },
   discount: {
     color: yellowVariant4,
     fontSize: 12,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   desc: {
     color: greyVariant7,
     fontSize: 12,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   applyCoupon: {
     color: goldenYellowVariant,
     fontSize: 12,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   couponDetails: {flex: 1, alignSelf:'stretch'},
   couponIcon: {
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: greyVariant2,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     textAlign: "center",
   },
 });

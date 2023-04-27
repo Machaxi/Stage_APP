@@ -6,12 +6,14 @@ import { getBaseUrl } from "../BaseComponent";
 import GetBack from "../../components/custom/GetBack";
 import { darkBlueVariant } from "../util/colors";
 import { Nunito_SemiBold } from "../util/fonts";
-import SelectPay from "./components/SelectPay";
 import CongratsScreen from "./components/CongratsScreen";
 import SorryPage from "./components/SorryPage";
 import BuyPlayProcess from "../../components/custom/BuyPlayProcess";
 import SelectPlayPlan from "./components/SelectPlayPlan";
 import SelectPlayCenter from "./components/SelectPlayCenter";
+import SelectPlayPay from "./components/SelectPlayPay";
+import MoreDetails from "./components/MoreDetails";
+import AsyncStorage from "@react-native-community/async-storage";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ class PlayingPlan extends Component {
       currentPage: 1,
       title: "Coaching Plan",
       planList: null,
+      sportsList: null,
       academiesList: null,
       selectPlan: null,
       selectCenter: null,
@@ -35,11 +38,13 @@ class PlayingPlan extends Component {
       username: "",
       usergender: "",
       parent: "",
+      moreScreen: false,
+      userDetails: null,
     };
   }
 
   componentDidMount() {
-    console.log(this.props.navigation.state.params.data);
+    this.getData();
     this.setState({ planList: this.props.navigation.state.params.data });
     axios
       .get(getBaseUrl() + "/global/academy/all")
@@ -48,6 +53,7 @@ class PlayingPlan extends Component {
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];
         this.setState({
+          sportsList: academiesData["Sports"],
           academiesList: academiesData["academies"],
         });
       })
@@ -55,6 +61,13 @@ class PlayingPlan extends Component {
         console.log(error);
       });
   }
+
+  getData = async () => {
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+    this.setState({ userDetails: userDetails });
+    console.log(userDetails);
+  };
 
   onPress = (value, number) => {
     if (value < number) {
@@ -68,7 +81,7 @@ class PlayingPlan extends Component {
   };
 
   onPressCenter = (selectCenter, distance) => {
-    // this.setState({ currentPage: 3 });
+    this.setState({ currentPage: 3 });
     this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
@@ -96,6 +109,9 @@ class PlayingPlan extends Component {
     this.props.navigation.goBack();
   };
 
+  onComplete = () => {};
+  onPressSuccess = () => {};
+
   selectScreen = () => {
     return (
       <View>
@@ -110,17 +126,6 @@ class PlayingPlan extends Component {
       </View>
     );
   };
-
-  onPressDetails = (username, usergender, parent) => {
-    this.setState({
-      currentPage: 1,
-      username: username,
-      usergender: usergender,
-      parent: parent,
-    });
-  };
-
-  onPressSuccess = () => {};
 
   render() {
     return (
@@ -142,7 +147,13 @@ class PlayingPlan extends Component {
             buttonName={"Pay"}
           />
         )}
-        {!this.state.congratulationScreen && (
+        {this.state.sportsList != null && this.state.moreScreen && (
+          <MoreDetails
+            sportList={this.state.sportsList}
+            onPress={this.onComplete}
+          />
+        )}
+        {!this.state.congratulationScreen && !this.state.moreScreen && (
           <View style={{ flex: 1 }}>
             <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
             <View style={{ flex: 0.83 }}>
@@ -159,17 +170,14 @@ class PlayingPlan extends Component {
                 />
               )}
               {this.state.currentPage === 3 && (
-                <SelectPay
+                <SelectPlayPay
                   title="Coaching"
+                  userDetails={this.state.userDetails}
                   selectCenter={this.state.selectCenter}
                   selectPlan={this.state.selectPlan}
-                  selectDate={this.state.selectDate}
-                  selectLevel={this.state.selectLevel}
-                  selectBatch={this.state.selectSlot}
                   distance={this.state.distance}
                   username={this.state.username}
                   usergender={this.state.usergender}
-                  parent={this.state.parent}
                   onPress={this.onPressConfirm}
                 />
               )}

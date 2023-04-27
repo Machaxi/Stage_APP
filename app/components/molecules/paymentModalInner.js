@@ -9,12 +9,11 @@ import {
 import { commonStyles } from "../../containers/util/commonStyles";
 import { deviceWidth } from "../../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
+import { Nunito_Bold, Nunito_ExtraBold, Nunito_SemiBold } from "../../containers/util/fonts";
 
 const PaymentModalInnerView = ({ isSuccess, onBtnPress }) => {
   return (
-    <TouchableOpacity
-      activeOpacity={1}
-    >
+    <TouchableOpacity activeOpacity={1}>
       {/* <ImageBackground
             resizeMode="cover"
             source={require("../../images/blur_bg.png")}
@@ -26,9 +25,7 @@ const PaymentModalInnerView = ({ isSuccess, onBtnPress }) => {
         colors={["#575f61ed", "#2b293aed"]}
         style={styles.modalBg}
       >
-        <View
-          style={styles.container}
-        >
+        <View style={styles.container}>
           <Text
             style={[
               styles.paymentStatus,
@@ -55,22 +52,25 @@ const PaymentModalInnerView = ({ isSuccess, onBtnPress }) => {
               justifyContent: "center",
             }}
           >
-            <TouchableOpacity onPress={() => {onBtnPress()}} style={styles.modalBtn}>
-                {isSuccess ?
+            <TouchableOpacity
+              onPress={() => {
+                onBtnPress();
+              }}
+              style={styles.modalBtn}
+            >
+              {isSuccess ? (
                 <View style={commonStyles.flexRowNormal}>
-                  <Text style={[styles.reqTxt, { marginRight: 4 }]}>
-                    Next
-                  </Text>
+                  <Text style={[styles.reqTxt, { marginRight: 4 }]}>Next</Text>
                   <Image
                     style={styles.rightArrow}
                     source={require("../../images/right_pink_arrow.png")}
                   />
                 </View>
-                :
-              <Text style={[styles.reqTxt, { marginRight: 4 }]}>
-                {"Pay ₹ 7700"}
-              </Text>
-                }
+              ) : (
+                <Text style={[styles.reqTxt, { marginRight: 4 }]}>
+                  {"Pay ₹ 7700"}
+                </Text>
+              )}
             </TouchableOpacity>
           </LinearGradient>
         </View>
@@ -98,14 +98,14 @@ const styles = StyleSheet.create({
     marginTop: 28,
     fontSize: 22,
     fontWeight: "700",
-    fontFamily: "Nunito-700",
+    fontFamily: Nunito_Bold,
     marginBottom: 18,
   },
   reqTxt: {
     color: lightBlueColor,
     fontSize: 16,
     fontWeight: "800",
-    fontFamily: "Nunito-800",
+    fontFamily: Nunito_ExtraBold,
   },
   modalBg: {
     overflow: "hidden",
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   desc: {
     color: lightGreyVariant,
     fontSize: 16,
-    fontFamily: "Nunito-600",
+    fontFamily: Nunito_SemiBold,
     textAlign: "center",
     marginBottom: 53,
   },

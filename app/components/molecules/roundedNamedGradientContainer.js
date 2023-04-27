@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "400",
     textAlign: "center",
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
   requestTypeImg: {
     fontSize: 14,

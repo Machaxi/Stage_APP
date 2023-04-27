@@ -8,6 +8,7 @@ import MyRequestCentreDetails from "./myRequestCentreDetails";
 import LinearGradient from "react-native-linear-gradient";
 import { commonStyles } from "../containers/util/commonStyles";
 import { requestStatus } from "../containers/util/utilFunctions";
+import { Nunito_Regular } from "../containers/util/fonts";
 
 const MyRequestSentView = ({ val, cancelBooking }) => {
   return (
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 10,
     color: greyVariant1,
-    fontFamily: "Nunito-400",
+    fontFamily: Nunito_Regular,
   },
 
   bookingDetails: {

@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Nunito_SemiBold } from "../containers/util/fonts";
 
 const RequestHeaderTitle = ({ title }) => {
   return (
@@ -14,7 +15,7 @@ const RequestHeaderTitle = ({ title }) => {
     >
       <Text
         style={{
-          fontFamily: "Nunito-600",
+          fontFamily: Nunito_SemiBold,
           fontSize: 20,
           fontWeight: '600',
           color: "#F2F2F2",
