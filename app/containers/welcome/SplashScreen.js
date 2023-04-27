@@ -109,11 +109,12 @@ class Splash extends BaseComponent {
                             let userType = userData.user['user_type']
                             global.USER_TYPE = userType
                             console.log("SplashScreen=> ", JSON.stringify(userData));
-                            if (userType == GUEST) {
-                                console.warn(userType)
-                                this.props.navigation.navigate('GuestBookHome')
-                            }
-                            else if (userData.academy_id != null) {
+                            // if (userType == GUEST) {
+                            //     console.warn(userType)
+                            //     this.props.navigation.navigate('GuestBookHome')
+                            // }
+                            // else 
+                            if (userData.academy_id != null) {
                                 console.log(userData);
                                 if (userType == GUEST) {
                                     this.props.navigation.navigate('GuestBookHome')
@@ -145,9 +146,9 @@ class Splash extends BaseComponent {
                                         })
                                     }
                                 }else {
-                                    if (userData.is_learn_enabled) {
+                                    if (!userData.is_learn_enabled) {
                                         this.props.navigation.navigate("LearnHomePage");
-                                    }else if (userData.is_play_enabled) {
+                                    }else if (!userData.is_play_enabled) {
                                         this.props.navigation.navigate("Guestfirsted");
                                     } else {
                                         this.props.navigation.navigate("HomeDrawer");
@@ -162,9 +163,10 @@ class Splash extends BaseComponent {
                                 // }
 
                             } else {
-                                if (userData.is_learn_enabled) {
+                                console.log(userData);
+                                if (!userData.is_learn_enabled) {
                                     this.props.navigation.navigate("LearnHomePage");
-                                }else if (userData.is_play_enabled) {
+                                }else if (!userData.is_play_enabled) {
                                     this.props.navigation.navigate("Guestfirsted");
                                 } else {
                                     this.props.navigation.navigate("HomeDrawer");

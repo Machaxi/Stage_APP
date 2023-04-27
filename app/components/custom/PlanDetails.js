@@ -25,6 +25,7 @@ const PlanDetails = (props) => {
   useEffect(() => {
     const startdate = convertToDate(props.startDate);
     const endDate = convertToDate(props.endDate);
+    console.log(props.startDate);
     setSelectDate(startdate);
     setStartDate(startdate);
     setEndDate(endDate);
@@ -55,9 +56,32 @@ const PlanDetails = (props) => {
     year: "2-digit",
   };
 
+  const formatDateToCustomDate = (dateString) => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const [day, month, year] = dateString.split("-");
+    const monthIndex = months.findIndex((m) => m === month) + 1;
+    const formattedMonth = monthIndex < 10 ? `0${monthIndex}` : monthIndex;
+    const formattedDate = `${year}-${formattedMonth}-${day}`;
+    return formattedDate;
+  };
+
   handlepress = (date) => {
     setSelectDate(date);
-    props.onPress(date);
+    props.onPress(formatDateToCustomDate(date));
   };
 
   return (
@@ -77,11 +101,19 @@ const PlanDetails = (props) => {
             </Text>
           </Text>
         </View>
-        <Image
-          source={props.image}
-          style={[styles.image]}
-          resizeMode="center"
-        />
+        {props.url ? (
+          <Image
+            source={{ uri: props.image }}
+            style={[styles.image]}
+            resizeMode="contain"
+          />
+        ) : (
+          <Image
+            source={props.image}
+            style={[styles.image]}
+            resizeMode="center"
+          />
+        )}
       </View>
       <View style={styles.line} />
       <View style={{ marginHorizontal: 10 }}>
@@ -230,7 +262,9 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 90,
-    height: 100,
+    height: 70,
+    marginRight: 10,
+    marginTop: 10,
   },
   calanderimage: {
     width: 20,

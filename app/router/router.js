@@ -116,7 +116,6 @@ import TabbarItem from "./TabbarItem";
 import { white } from "../containers/util/colors";
 import ShopPage from "../containers/ExsitingUser/ShopPage";
 import LearnPage from "../containers/ExsitingUser/LearnPage";
-import PlayPage from "../containers/ExsitingUser/PlayPage";
 import NavigationDrawerWhite from "./NavigationDrawerWhite";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
@@ -2906,7 +2905,7 @@ const tabBarMainScreen = createBottomTabNavigator(
       },
     },
     PlayScreen: {
-      screen: PlayPage,
+      screen: PlayRoute,
       navigationOptions: {
         tabBarLabel: "Play",
         tabBarLabel: ({ focused }) => (
@@ -3097,9 +3096,6 @@ const BaseNavigator = createSwitchNavigator({
   },
   LearnPage: {
     screen: LearnPage,
-  },
-  PlayPage: {
-    screen: PlayPage,
   },
   PlayerScreen: {
     screen: PlayerScreen,
