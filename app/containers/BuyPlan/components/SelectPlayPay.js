@@ -17,7 +17,7 @@ import {
   Nunito_Regular,
   Nunito_SemiBold,
 } from "../../util/fonts";
-import { selectPlanDate } from "../../../redux/reducers/PlayerReducer";
+import { selectPlayPlanDate } from "../../../redux/reducers/PlayerReducer";
 import { connect } from "react-redux";
 import PlanDetails from "../../../components/custom/PlanDetails";
 import PaymentDetails from "../../../components/custom/PaymentDetails";
@@ -190,16 +190,16 @@ class SelectPlayPay extends Component {
         payment_details: paymentDetails,
       },
     };
-    this.props
-      .paymentConfirmation(this.state.header, postData)
-      .then((result) => {
-        result = result.payload.data;
-        if (result.success) {
-          this.props.onPress(true);
-        } else {
-          alert(result.error_message);
-        }
-      });
+    // this.props
+    //   .paymentConfirmation(this.state.header, postData)
+    //   .then((result) => {
+    //     result = result.payload.data;
+    //     if (result.success) {
+    //       this.props.onPress(true);
+    //     } else {
+    //       alert(result.error_message);
+    //     }
+    //   });
   };
 
   getData = async () => {
@@ -223,7 +223,7 @@ class SelectPlayPay extends Component {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const [day, month] = dateString.split(" ");
-    const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
+    const date = `${currentYear}-${this.getMonthNumber(month)}-${day}`;
     return date;
   };
 
@@ -231,23 +231,25 @@ class SelectPlayPay extends Component {
     var dataDic = {};
     var dict = {};
 
-    const joinDate = convertToDate(this.state.startdate);
+    const joinDate = this.convertToDate(this.state.displayStartDate);
     dict["planId"] = "" + this.props.selectPlan.id;
     dict["preferredAcademyId"] = this.props.selectCenter.id;
     dict["dateOfJoining"] = joinDate;
     dataDic["data"] = dict;
 
     console.log(dataDic);
-    // this.props
-    //   .selectPlanDate(dataDic, this.state.header)
-    //   .then(() => {
-    //     let jsondata = JSON.stringify(this.props.data.planData.data);
-    //     let responcedata = JSON.parse(jsondata);
-    //     this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
-    //   })
-    //   .catch((response) => {
-    //     console.log(response);
-    //   });
+    this.props
+      .selectPlayPlanDate(dataDic, this.state.header)
+      .then(() => {
+        let jsondata = JSON.stringify(this.props.data.playPlanData);
+        let responcedata = JSON.parse(jsondata);
+        if (responcedata.success) {
+          this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   };
 
   render() {
@@ -270,7 +272,7 @@ class SelectPlayPay extends Component {
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
-        <ScrollView style={{ flex: 0.94 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Review before Payment</Text>
           {this.state.displayStartDate && (
             <PlanDetails
@@ -502,7 +504,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { selectPlanDate, paymentConfirmation };
+const mapDispatchToProps = { selectPlayPlanDate, paymentConfirmation };
 
 export default connect(
   mapStateToProps,

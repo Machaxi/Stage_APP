@@ -32,7 +32,7 @@ import { connect } from "react-redux";
 import { Nunito_ExtraBold } from "../util/fonts";
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import { storeData, getData, onSignIn } from "../../components/auth";
-import { COACH } from "../../components/Constants";
+import { COACH, PLAYER } from "../../components/Constants";
 
 class LoginSceen extends Component {
   constructor(props) {
@@ -240,7 +240,16 @@ class LoginSceen extends Component {
           const outputString = inputString.replace("+91", "");
           AsyncStorage.setItem("phone_number", outputString);
           if (!userData.is_learn_enabled) {
-            this.props.navigation.navigate("LearnHomePage");
+            if (
+              userData.has_multiple_acadmies == false &&
+              userData.academy_id != null
+            ) {
+              this.props.navigation.navigate("LearnHomePage");
+            } else {
+              this.props.navigation.navigate("SwitchPlayer", {
+                userType: PLAYER,
+              });
+            }
           } else if (!userData.is_play_enabled) {
             this.props.navigation.navigate("Guestfirsted");
           } else {
@@ -323,7 +332,16 @@ class LoginSceen extends Component {
               }
             } else {
               if (!userData.is_learn_enabled) {
-                this.props.navigation.navigate("LearnHomePage");
+                if (
+                  userData.has_multiple_acadmies == false &&
+                  userData.academy_id != null
+                ) {
+                  this.props.navigation.navigate("LearnHomePage");
+                } else {
+                  this.props.navigation.navigate("SwitchPlayer", {
+                    userType: PLAYER,
+                  });
+                }
               } else if (!userData.is_play_enabled) {
                 this.props.navigation.navigate("Guestfirsted");
               } else {

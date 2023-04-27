@@ -28,16 +28,16 @@ class PlayerScreen extends Component {
   }
 
   componentDidMount() {
-    this.getValue()
+    this.getValue();
   }
-  
+
   getValue = async () => {
     const header = await AsyncStorage.getItem("header");
     this.setState({ header: header });
     this.apiCall();
   };
 
-  apiCall = () => {    
+  apiCall = () => {
     axios
       .get(getBaseUrl() + "/user/learn-play", {
         headers: {
@@ -51,11 +51,18 @@ class PlayerScreen extends Component {
         this.setState({
           playData: batchData["play"],
         });
-        console.log(batchData["play"])
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  onPressPlan = () => {
+    this.props.onPressPlan(100);
+  };
+
+  onPlan = (index) => {
+    this.props.onPressPlan(index);
   };
 
   render() {
@@ -65,7 +72,10 @@ class PlayerScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 0.85, paddingHorizontal: 20 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 0.83, paddingHorizontal: 20 }}
+        >
           <Image
             source={require("../../images/playing/playt.png")}
             style={{ marginBottom: 5, height: 140, width: 220 }}
@@ -77,8 +87,11 @@ class PlayerScreen extends Component {
           />
           <Text style={styles.header}>{this.state.playData.header}</Text>
           <View style={styles.plancontained}>
-            {this.state.playData["plans"].map((item) => (
-              <TouchableOpacity activeOpacity={0.8}>
+            {this.state.playData["plans"].map((item, index) => (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => this.onPlan(index)}
+              >
                 <PlayPass
                   name={item.name}
                   price={item.price}
@@ -109,10 +122,7 @@ class PlayerScreen extends Component {
                 available={true}
                 onPress={this.props.onPress}
               />
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={this.props.onPressPlan}
-              >
+              <TouchableOpacity activeOpacity={0.8} onPress={this.onPressPlan}>
                 <Text style={styles.insideText}>Or Buy Playing plan</Text>
               </TouchableOpacity>
             </View>
@@ -150,7 +160,7 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_SemiBold,
   },
   bottomcontainer: {
-    flex: 0.15,
+    flex: 0.17,
     paddingTop: 5,
     alignItems: "center",
     justifyContent: "center",

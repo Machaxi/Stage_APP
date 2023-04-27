@@ -32,7 +32,7 @@ class SelectSports extends Component {
 
     return (
       <View style={styles.contain}>
-        <ScrollView style={{ flex: 0.93 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred sport</Text>
           <View style={styles.contained}>
             {this.props.sportList.map((item) => (

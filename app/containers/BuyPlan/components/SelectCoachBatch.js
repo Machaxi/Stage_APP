@@ -208,7 +208,7 @@ class SelectCoachBatch extends Component {
   render() {
     return (
       <View style={styles.contain}>
-        <ScrollView style={{ flex: 0.93 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>
             {data.map((item, index) => (
