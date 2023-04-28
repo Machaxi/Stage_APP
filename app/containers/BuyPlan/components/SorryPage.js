@@ -33,7 +33,7 @@ class SorryPage extends Component {
   }
 
   handleOnStartPayment = (orderId, amount) => {
-    this.setState({isLoading: true})
+    this.setState({ isLoading: true });
     // this.RBSheet.close()
     var options = {
       description: "Payment for Subscription",
@@ -59,11 +59,29 @@ class SorryPage extends Component {
       .catch((error) => {
         console.log("Razor Rspo ", error);
         alert("Payment could not succeed. Please try again.");
-        this.setState({isLoading: false})
+        this.setState({ isLoading: false });
       });
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
+    if ((this.props.title = "Playing")) {
+      this.paymentProcess(
+        orderId,
+        amount,
+        paymentDetails,
+        `court/buy-subscription`
+      );
+    } else {
+      this.paymentProcess(
+        orderId,
+        amount,
+        paymentDetails,
+        `payment/due-subscription-plan-payment/v1`
+      );
+    }
+  };
+
+  paymentProcess = (orderId, amount, paymentDetails, url) => {
     let postData = {
       data: {
         due_order_id: orderId,
@@ -72,13 +90,13 @@ class SorryPage extends Component {
       },
     };
     this.props
-      .paymentConfirmation(this.state.header, postData)
+      .paymentConfirmation(this.state.header, postData, url)
       .then((result) => {
         result = result.payload.data;
         if (result.success) {
           this.props.onPress(true);
         } else {
-          this.setState({isLoading: false})
+          this.setState({ isLoading: false });
           alert(result.error_message);
         }
       });

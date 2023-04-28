@@ -47,6 +47,7 @@ class CoachingPlan extends Component {
       orderId: "",
       applycoupon: false,
       isLoading: false,
+      childDetails: null,
     };
   }
 
@@ -152,17 +153,20 @@ class CoachingPlan extends Component {
     );
   };
 
-  onPressDetails = (username, usergender, parent) => {
+  onPressDetails = (username, usergender, parent, childDetails) => {
     this.setState({
       firstPage: false,
       currentPage: 1,
       username: username,
       usergender: usergender,
       parent: parent,
+      childDetails: childDetails,
     });
   };
 
-  onPressSuccess = () => {};
+  onPressSuccess = () => {
+    this.props.navigation.navigate("LearnHomePage");
+  };
 
   render() {
     return (
@@ -184,13 +188,19 @@ class CoachingPlan extends Component {
           </View>
         )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
-          <CongratsScreen onPress={this.onPressSuccess} />
+          <CongratsScreen
+            onPress={this.onPressSuccess}
+            buttonName="Home "
+            description="To get Batch information and progress tracking, kindly go to home
+          page."
+          />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (
           <SorryPage
             onPressBack={this.hadleBack}
             orderId={this.state.orderId}
             amount={this.state.amount}
+            title="Coaching"
             onPress={this.onPressConfirm}
           />
         )}
@@ -247,6 +257,7 @@ class CoachingPlan extends Component {
                     usergender={this.state.usergender}
                     parent={this.state.parent}
                     applycoupon={this.state.applycoupon}
+                    childDetails={this.state.childDetails}
                     onPress={this.onPressConfirm}
                     onPresscoupon={this.hadleCouponCode}
                   />

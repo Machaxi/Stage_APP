@@ -105,7 +105,7 @@ class TrialBook extends Component {
   selectScreen = () => {
     return (
       <View>
-        <GetBack title={this.state.title} onPress={this.hadleBackPress} />
+        <GetBack title="Coaching Trial" onPress={this.hadleBackPress} />
         <View style={{ height: 70, marginHorizontal: 20, marginVertical: 10 }}>
           <CoachProcess
             number={this.state.currentPage}

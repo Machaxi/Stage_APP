@@ -80,6 +80,7 @@ class SelectPay extends Component {
       amount: "",
       joinDate: "",
       phonenumber: "",
+      childDetails: null,
     };
   }
 
@@ -127,6 +128,8 @@ class SelectPay extends Component {
       amount: this.props.selectPlan.amount,
       joinDate: joinDate,
       appliedCoupon: this.props.applycoupon,
+      userData: userData,
+      childDetails: this.props.childDetails,
     });
   };
 
@@ -134,9 +137,7 @@ class SelectPay extends Component {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const [day, month] = dateString.split(" ");
-    const date = new Date(
-      `${currentYear}-${this.getMonthNumber(month)}-${day}`
-    );
+    const date = `${currentYear}-${this.getMonthNumber(month)}-${day}`;
     return date;
   };
 
@@ -198,7 +199,11 @@ class SelectPay extends Component {
       },
     };
     this.props
-      .paymentConfirmation(this.state.header, postData)
+      .paymentConfirmation(
+        this.state.header,
+        postData,
+        `payment/due-subscription-plan-payment/v1`
+      )
       .then((result) => {
         result = result.payload.data;
         if (result.success) {
@@ -213,11 +218,14 @@ class SelectPay extends Component {
     const header = await AsyncStorage.getItem("header");
     const userDetailsJson = await AsyncStorage.getItem("user_details");
     const phonenumber = await AsyncStorage.getItem("phone_number");
+    const userDatas = await AsyncStorage.getItem("userInfo");
+    const userData = JSON.parse(userDatas);
     const userDetails = JSON.parse(userDetailsJson);
     this.setState({
       userDetails: userDetails,
       header: header,
       phonenumber: phonenumber,
+      userData: userData,
     });
   };
 
@@ -249,14 +257,38 @@ class SelectPay extends Component {
   startPayment = () => {
     var dataDic = {};
     var dict = {};
-
-    dict["plan_id"] = "" + this.props.selectPlan.id;
-    dict["join_date"] = this.state.joinDate;
-    dict["user_id"] = this.state.userDetails.id;
-    dict["parentName"] = this.state.userDetails.userName;
-    dict["player_name"] = this.state.username;
-    dict["gender"] = this.state.gender.toUpperCase();
-    dataDic["data"] = dict;
+    if (this.props.parent == "Parent") {
+      if (userData.user["user_type"] == "GUEST") {
+        dict["plan_id"] = "" + this.props.selectPlan.id;
+        dict["join_date"] = this.state.joinDate;
+        dict["user_id"] = this.state.userDetails.id;
+        dict["parent_name"] = this.state.userDetails.userName;
+        dict["player_name"] = this.state.userDetails.userName;
+        dict["gender"] = this.state.gender.toUpperCase();
+        dataDic["data"] = dict;
+      } else {
+        dict["plan_id"] = "" + this.props.selectPlan.id;
+        dict["join_date"] = this.state.joinDate;
+        dict["user_id"] = this.state.userDetails.id;
+        dataDic["data"] = dict;
+      }
+    } else {
+      if (childDetails != null) {
+        dict["plan_id"] = "" + this.props.selectPlan.id;
+        dict["join_date"] = this.state.joinDate;
+        dict["user_id"] = this.state.userDetails.id;
+        dict["player_user_id"] = this.state.childDetails.id;
+        dataDic["data"] = dict;
+      } else {
+        dict["plan_id"] = "" + this.props.selectPlan.id;
+        dict["join_date"] = this.state.joinDate;
+        dict["user_id"] = this.state.userDetails.id;
+        dict["parent_name"] = this.state.userDetails.userName;
+        dict["player_name"] = this.state.username;
+        dict["gender"] = this.state.gender.toUpperCase();
+        dataDic["data"] = dict;
+      }
+    }
 
     this.props
       .selectPlanDate(dataDic, this.state.header)

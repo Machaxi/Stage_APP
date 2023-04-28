@@ -155,7 +155,8 @@ class Splash extends BaseComponent {
                                        })
                                    }
                                    }else if (!userData.is_play_enabled) {
-                                        this.props.navigation.navigate("Guestfirsted");
+                                        // this.props.navigation.navigate("Guestfirsted");
+                                        this.props.navigation.navigate("LearnHomePage");
                                     } else {
                                         this.props.navigation.navigate("HomeDrawer");
                                     }                                
@@ -178,7 +179,8 @@ class Splash extends BaseComponent {
                                         })
                                     }
                                 }else if (!userData.is_play_enabled) {
-                                    this.props.navigation.navigate("Guestfirsted");
+                                    // this.props.navigation.navigate("Guestfirsted");
+                                    this.props.navigation.navigate("LearnHomePage");
                                 } else {
                                     this.props.navigation.navigate("HomeDrawer");
                                 }                                

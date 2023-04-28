@@ -1,30 +1,75 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  Linking,
-} from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import AsyncStorage from "@react-native-community/async-storage";
-import { ScrollView } from "react-navigation";
 import CustomButton from "../../../components/custom/CustomButton";
 import { Nunito_Bold, Nunito_SemiBold } from "../../util/fonts";
+import { doLoginTest } from "../../../redux/reducers/loginReducer";
+import { PUSH_TOKEN, ONE_SIGNAL_USERID } from "../../BaseComponent";
+import { connect } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
+import { storeData } from "../../../components/auth";
 
 class CongratsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: "",
+      ONE_SIGNAL_USERID: "",
+      firebase_token: "",
+      userData: null,
     };
   }
 
+  componentDidMount() {
+    this.signcheck();
+  }
+
+  signcheck = async () => {
+    let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
+    let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+    this.setState({
+      ONE_SIGNAL_USERID: ONE_SIGNAL,
+      firebase_token: fcm_token,
+      userData: userDetails,
+    });
+  };
+
+  signInByName = () => {
+    let os = "IOS";
+    if (Platform.OS === "android") {
+      os = "android";
+    }
+    var dataDic = {};
+    var dict = {};
+    dict["phone_number"] = this.state.userData.userName;
+    dict["name"] = this.state.userData.userName;
+    dict["firebase_token"] = "token";
+    dict["device_type"] = os;
+    dict["app_version"] = "1.1.0";
+    dict["fcm_token"] = this.state.firebase_token;
+    dict["ONE_SIGNAL_USERID"] = this.state.ONE_SIGNAL_USERID;
+    dict["one_signal_device_id"] = this.state.ONE_SIGNAL_USERID;
+    dict["has_firebase_check"] = false;
+
+    dataDic["data"] = dict;
+    this.props
+      .doLoginTest(dataDic)
+      .then(async () => {
+        let user = JSON.stringify(this.props.data.user);
+        let user1 = JSON.parse(user);
+        var userData = user1["data"];
+        storeData("userInfo", JSON.stringify(userData));
+        this.props.onPress();
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
+
   render() {
     handlepress = () => {
-      this.props.onPress();
+      this.signInByName();
     };
 
     return (
@@ -36,12 +81,9 @@ class CongratsScreen extends Component {
           style={[styles.subcontainer]}
         >
           <Text style={styles.title}>Payment Done!</Text>
-          <Text style={styles.subtext}>
-            To get Batch information and progress tracking, kindly go to home
-            page.
-          </Text>
+          <Text style={styles.subtext}>{this.props.description}</Text>
           <CustomButton
-            name="Home "
+            name={this.props.buttonName}
             image={require("../../../images/playing/arrow_go.png")}
             available={true}
             onPress={handlepress}
@@ -100,4 +142,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CongratsScreen;
+const mapStateToProps = (state) => {
+  return {
+    data: state.LoginReducer,
+  };
+};
+const mapDispatchToProps = {
+  doLoginTest,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CongratsScreen);

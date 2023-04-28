@@ -104,7 +104,7 @@ const PlanDetails = (props) => {
         {props.url ? (
           <Image
             source={{ uri: props.image }}
-            style={[styles.image]}
+            style={[styles.image, {marginBottom: 10}]}
             resizeMode="contain"
           />
         ) : (

@@ -23,6 +23,7 @@ import { getRelationsDetails } from "../../../redux/reducers/RelationReducer";
 import { connect } from "react-redux";
 import { getData } from "../../../components/auth";
 import { deviceWidth } from "../../util/dimens";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 class PlayerDetails extends Component {
   constructor(props) {
@@ -37,12 +38,26 @@ class PlayerDetails extends Component {
       related_players: null,
       displayname: true,
       procednext: false,
+      procedyourself: true,
+      childDetails: null,
+      userDetails: null,
     };
   }
 
   componentDidMount() {
+    this.signcheck();
     this.fetchParentDetails();
   }
+
+  signcheck = async () => {
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+    var gendernum = 1;
+    if (userDetails.gender == "MALE") {
+      gendernum = 0;
+    }
+    this.setState({ userDetails: userDetails, currentGender: gendernum });
+  };
 
   fetchParentDetails() {
     getData("header", (value) => {
@@ -75,8 +90,17 @@ class PlayerDetails extends Component {
       if (this.state.procednext) {
         name = this.state.related_players[this.state.currentChild].name;
       }
-      this.props.onPress(name, this.state.gender, parent);
+      this.props.onPress(
+        name,
+        this.state.gender,
+        parent,
+        this.state.childDetails
+      );
     };
+
+    if (this.state.userDetails == null) {
+      return <LoadingIndicator />;
+    }
 
     return (
       <View style={styles.contain}>
@@ -90,7 +114,16 @@ class PlayerDetails extends Component {
               id={1}
               name="Yourself"
               onPress={() => {
-                this.setState({ currentIndex: 1, proseedLevel: true });
+                var gendernum = 1;
+                if (this.state.userDetails.gender == "MALE") {
+                  gendernum = 0;
+                }
+                this.setState({
+                  currentIndex: 1,
+                  proseedLevel: true,
+                  currentGender: gendernum,
+                  procedyourself: true,
+                });
               }}
             />
             <View style={{ marginHorizontal: 20 }} />
@@ -101,7 +134,11 @@ class PlayerDetails extends Component {
               id={2}
               name="Child"
               onPress={() => {
-                this.setState({ currentIndex: 2, proseedLevel: true });
+                this.setState({
+                  currentIndex: 2,
+                  proseedLevel: true,
+                  procedyourself: false,
+                });
               }}
             />
           </View>
@@ -112,6 +149,7 @@ class PlayerDetails extends Component {
               <View style={styles.usercontained}>
                 {this.state.related_players.map((item, index) => (
                   <CustomRadioButton
+                    disabled={false}
                     index={index}
                     currentLevel={this.state.currentChild}
                     name={item.name}
@@ -121,11 +159,13 @@ class PlayerDetails extends Component {
                         currentChild: index,
                         displayname: false,
                         procednext: true,
+                        childDetails: this.state.related_players[index],
                       });
                     }}
                   />
                 ))}
                 <CustomRadioButton
+                  disabled={false}
                   index={this.state.related_players.length}
                   currentLevel={this.state.currentChild}
                   name="Add New Player"
@@ -146,15 +186,20 @@ class PlayerDetails extends Component {
               <View style={styles.inputview}>
                 <TextInput
                   style={styles.input}
-                  value={this.state.name}
+                  value={
+                    this.state.currentIndex == 2
+                      ? this.state.name
+                      : this.state.userDetails.userName
+                  }
                   placeholder="Enter Player Name"
                   placeholderTextColor="#7E7E7E"
+                  editable={this.state.currentIndex == 2}
                   maxLength={30}
                   onChangeText={(value) => {
                     this.setState({ name: value });
                   }}
                 />
-                {this.state.name.length > 0 && (
+                {this.state.name.length > 0 && this.state.currentIndex == 2 && (
                   <TouchableOpacity
                     style={{ flex: 0.1 }}
                     activeOpacity={0.8}
@@ -173,6 +218,7 @@ class PlayerDetails extends Component {
               <Text style={styles.subText}>Player Gender</Text>
               <View style={{ flexDirection: "row", marginVertical: 10 }}>
                 <CustomRadioButton
+                  disabled={this.state.currentIndex == 1}
                   index={0}
                   currentLevel={this.state.currentGender}
                   name="Male"
@@ -186,6 +232,7 @@ class PlayerDetails extends Component {
                 />
                 <View style={{ marginHorizontal: 20 }} />
                 <CustomRadioButton
+                  disabled={this.state.currentIndex == 1}
                   index={1}
                   currentLevel={this.state.currentGender}
                   name="Female"
@@ -199,6 +246,7 @@ class PlayerDetails extends Component {
                 />
                 <View style={{ marginHorizontal: 20 }} />
                 <CustomRadioButton
+                  disabled={this.state.currentIndex == 1}
                   index={2}
                   currentLevel={this.state.currentGender}
                   name="Other"
@@ -218,7 +266,11 @@ class PlayerDetails extends Component {
           <CustomButton
             name="Next "
             image={require("../../../images/playing/arrow_go.png")}
-            available={this.state.name.length > 4 || this.state.procednext}
+            available={
+              this.state.name.length > 4 ||
+              this.state.procednext ||
+              this.state.procedyourself
+            }
             onPress={handlepress}
           />
         </View>
