@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   ToastAndroid,
-  Picker,
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
@@ -167,8 +166,6 @@ class LoginSceen extends Component {
             id: this.state.userDetails["user"].id,
           };
           AsyncStorage.setItem("user_details", JSON.stringify(userDetail));
-          AsyncStorage.setItem("user_name", this.state.name);
-          AsyncStorage.setItem("user_gender", this.state.gender);
           AsyncStorage.setItem("phone_number", this.state.phoneNumber);
           this.props.navigation.navigate("HomeDrawer");
         }
@@ -210,7 +207,6 @@ class LoginSceen extends Component {
         await onSignIn();
         storeData("userInfo", JSON.stringify(userData));
         if (userInfoData.user_type == COACH) {
-          AsyncStorage.setItem("coach_enabled", "coach_enabled");
           storeData("multiple", userData.has_multiple_acadmies);
           if (
             userData.has_multiple_acadmies == false &&
@@ -234,8 +230,6 @@ class LoginSceen extends Component {
           };
           console.log(userData["user"]);
           AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
-          AsyncStorage.setItem("user_name", userData["user"].name);
-          AsyncStorage.setItem("user_gender", userData["user"].genderType);
           const inputString = userData["user"].mobile_number;
           const outputString = inputString.replace("+91", "");
           AsyncStorage.setItem("phone_number", outputString);
@@ -251,7 +245,8 @@ class LoginSceen extends Component {
               });
             }
           } else if (!userData.is_play_enabled) {
-            this.props.navigation.navigate("Guestfirsted");
+            // this.props.navigation.navigate("Guestfirsted");
+            this.props.navigation.navigate("LearnHomePage");
           } else {
             this.props.navigation.navigate("HomeDrawer");
           }
@@ -310,11 +305,8 @@ class LoginSceen extends Component {
               id: userData["user"].id,
             };
             AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
-            AsyncStorage.setItem("user_name", userData["user"].name);
-            AsyncStorage.setItem("user_gender", userData["user"].genderType);
             AsyncStorage.setItem("phone_number", this.state.phoneNumber);
             if (userInfoData.user_type == COACH) {
-              AsyncStorage.setItem("coach_enabled", "coach_enabled");
               storeData("multiple", userData.has_multiple_acadmies);
               if (
                 userData.has_multiple_acadmies == false &&
@@ -343,7 +335,8 @@ class LoginSceen extends Component {
                   });
                 }
               } else if (!userData.is_play_enabled) {
-                this.props.navigation.navigate("Guestfirsted");
+                // this.props.navigation.navigate("Guestfirsted");
+                this.props.navigation.navigate("LearnHomePage");
               } else {
                 this.props.navigation.navigate("HomeDrawer");
               }
@@ -662,17 +655,17 @@ class LoginSceen extends Component {
                 textStyle={{ padding: 10, fontSize: 16, color: "white" }}
                 dropdownStyle={{
                   width: "75%",
-                  height: 85,
+                  height: 90,
                   borderRadius: 10,
                   borderColor: "#FCB550",
-                  backgroundColor: "rgba(94, 94, 94, 0.6)",
+                  backgroundColor: "rgba(94, 94, 94, 1)",
                 }}
                 dropdownTextStyle={{
                   padding: 10,
                   fontSize: 16,
                   color: "white",
                   borderRadius: 10,
-                  backgroundColor: "rgba(94, 94, 94, 0)",
+                  backgroundColor: "rgba(94, 94, 94, 1)",
                 }}
                 onSelect={(value) =>
                   this.setState({ gender: data[value].value })

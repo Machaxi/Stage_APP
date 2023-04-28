@@ -53,7 +53,9 @@ class SorryScreen extends Component {
   }
 
   handleopen = async () => {
-    const username = await AsyncStorage.getItem("user_name");
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+    const username = userDetails.userName;
     const selectCenter = this.props.selectCenter;
     const selectSport = this.props.selectSport;
     const selectDate = this.props.selectDate;

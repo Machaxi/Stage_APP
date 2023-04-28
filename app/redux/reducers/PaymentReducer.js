@@ -194,13 +194,13 @@ export function submitPaymentConfirmation(header, postData) {
   };
 }
 
-export function paymentConfirmation(header, postData) {
+export function paymentConfirmation(header, postData,url) {
   console.log("Submit Payment Info=> ", JSON.stringify(postData));
   return {
     type: types.PAYMENT_CONFIRMATION,
     payload: {
       request: {
-        url: `payment/due-subscription-plan-payment/v1`,
+        url: url,
         method: "POST",
         data: postData,
         headers: {

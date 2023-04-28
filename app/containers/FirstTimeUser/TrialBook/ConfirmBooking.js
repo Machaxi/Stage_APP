@@ -113,9 +113,14 @@ class ConfirmBooking extends Component {
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    const username = await AsyncStorage.getItem("user_name");
-    const gender = await AsyncStorage.getItem("user_gender");
-    this.setState({ header: header, username: username, gender: gender });
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+
+    this.setState({
+      header: header,
+      username: userDetails.userName,
+      gender: userDetails.gender,
+    });
   };
 
   booktrail = () => {

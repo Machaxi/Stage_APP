@@ -60,6 +60,7 @@ import branch, { BranchEvent } from "react-native-branch";
 import MyStats from "../../components/custom/MyStats";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
+import CoachScreen from "../FirstTimeUser/CoachScreen";
 
 var deviceWidth = Dimensions.get("window").width - 20;
 
@@ -175,7 +176,8 @@ class ParentHome extends BaseComponent {
       sportsOptionsVisible: false,
       currentSportName: "",
       isStatsLoading: false,
-      loading: false
+      loading: false,
+      userDetails: null,
     };
     const { navigation } = this.props.navigation.setParams({
       shareProfile: this.shareProfile,
@@ -184,9 +186,11 @@ class ParentHome extends BaseComponent {
   }
 
   componentDidMount() {
+    this.setState({ loading: true });
     getData("userInfo", (value) => {
       console.log("userInfo", value);
       var userData = JSON.parse(value);
+      this.setState({userDetails: userData, loading: false });
       if (userData.user) {
         var userid = userData.user["id"];
         var username = userData.user["name"];
@@ -631,6 +635,25 @@ class ParentHome extends BaseComponent {
       );
     }
 
+    if (this.state.userDetails && this.state.userDetails.is_learn_enabled) {
+      return (
+        <LinearGradient
+        colors={["#332B70", "#24262A"]}
+        locations={[0, 1]}
+        style={{ flex: 1 }}
+        >
+          <CoachScreen
+            onPressPlan={() => {
+              this.props.navigation.navigate("CoachingPlan");
+            }}
+            learnData={this.state.learnData}
+            onPressTrail={() => {
+              this.props.navigation.navigate("BookLearnTrail");
+            }}
+          />
+        </LinearGradient>
+      );
+    }
 
     if (this.state.player_profile) {
       const {

@@ -8,7 +8,11 @@ const CustomRadioButton = (props) => {
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={handlepress}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={handlepress}
+      disabled={props.disabled}
+    >
       <View style={{ flexDirection: "row", width: props.width }}>
         <View
           style={[

@@ -14,6 +14,8 @@ import SelectPlayCenter from "./components/SelectPlayCenter";
 import SelectPlayPay from "./components/SelectPlayPay";
 import MoreDetails from "./components/MoreDetails";
 import AsyncStorage from "@react-native-community/async-storage";
+import ApplyCouponCode from "./components/ApplyCouponCode";
+import AppliedCouponCode from "../../components/custom/AppliedCouponCode";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -41,6 +43,11 @@ class PlayingPlan extends Component {
       moreScreen: false,
       userDetails: null,
       PlanNumber: 100,
+      couponCode: false,
+      applycoupon: false,
+      isLoading: false,
+      orderId: "",
+      amount: 0,
     };
   }
 
@@ -79,6 +86,22 @@ class PlayingPlan extends Component {
     }
   };
 
+  hadleBackCouponCode = () => {
+    this.setState({ couponCode: false });
+  };
+
+  hadleCouponCode = () => {
+    this.setState({ couponCode: true });
+  };
+
+  hadleCouponApply = () => {
+    this.setState({ couponCode: false, applycoupon: true, isLoading: true });
+  };
+
+  onAppliedBack = () => {
+    this.setState({ isLoading: false });
+  };
+
   onPressPlan = (selectPlan) => {
     this.setState({ currentPage: 2 });
     this.setState({ selectPlan: selectPlan });
@@ -89,11 +112,12 @@ class PlayingPlan extends Component {
     this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
-  onPressConfirm = (alreadyBook, errorMessage) => {
+  onPressConfirm = (alreadyBook, orderId, amount) => {
     this.setState({
       congratulationScreen: true,
       alreadyBook: alreadyBook,
-      errorMessage: errorMessage,
+      amount: amount,
+      orderId: orderId,
     });
   };
 
@@ -113,8 +137,13 @@ class PlayingPlan extends Component {
     this.props.navigation.goBack();
   };
 
-  onComplete = () => {};
-  onPressSuccess = () => {};
+  onComplete = () => {
+    this.props.navigation.navigate("LearnHomePage");
+  };
+
+  onPressSuccess = () => {
+    this.setState({ congratulationScreen: false, moreScreen: true });
+  };
 
   selectScreen = () => {
     return (
@@ -141,13 +170,16 @@ class PlayingPlan extends Component {
         {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratsScreen
             onPress={this.onPressSuccess}
-            errorMessage={this.state.errorMessage}
+            buttonName="Next "
+            description="To book playing slots, Kindly tell us your preferred sport and playing level."
           />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (
           <SorryPage
             onPressBack={this.hadleBack}
-            errorMessage={this.state.errorMessage}
+            orderId={this.state.orderId}
+            amount={this.state.amount}
+            title="Playing"
             buttonName={"Pay"}
           />
         )}
@@ -157,38 +189,54 @@ class PlayingPlan extends Component {
             onPress={this.onComplete}
           />
         )}
-        {!this.state.congratulationScreen && !this.state.moreScreen && (
+        {this.state.couponCode && (
           <View style={{ flex: 1 }}>
-            <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
-            <View style={{ flex: 0.83 }}>
-              {this.state.planList && this.state.currentPage === 1 && (
-                <SelectPlayPlan
-                  onPress={this.onPressPlan}
-                  planList={this.state.planList}
-                  PlanNumber={this.state.PlanNumber}
-                />
-              )}
-              {this.state.currentPage === 2 && (
-                <SelectPlayCenter
-                  onPress={this.onPressCenter}
-                  academiesList={this.state.academiesList}
-                />
-              )}
-              {this.state.currentPage === 3 && (
-                <SelectPlayPay
-                  title="Coaching"
-                  userDetails={this.state.userDetails}
-                  selectCenter={this.state.selectCenter}
-                  selectPlan={this.state.selectPlan}
-                  distance={this.state.distance}
-                  username={this.state.username}
-                  usergender={this.state.usergender}
-                  onPress={this.onPressConfirm}
-                />
-              )}
-            </View>
+            <GetBack title="Apply Coupon" onPress={this.hadleBackCouponCode} />
+            <ApplyCouponCode onPress={this.hadleCouponApply} />
           </View>
         )}
+        <AppliedCouponCode
+          visible={this.state.isLoading}
+          price="₹ 200"
+          onPressBack={this.onAppliedBack}
+        />
+
+        {!this.state.congratulationScreen &&
+          !this.state.moreScreen &&
+          !this.state.couponCode && (
+            <View style={{ flex: 1 }}>
+              <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
+              <View style={{ flex: 0.83 }}>
+                {this.state.planList && this.state.currentPage === 1 && (
+                  <SelectPlayPlan
+                    onPress={this.onPressPlan}
+                    planList={this.state.planList}
+                    PlanNumber={this.state.PlanNumber}
+                  />
+                )}
+                {this.state.currentPage === 2 && (
+                  <SelectPlayCenter
+                    onPress={this.onPressCenter}
+                    academiesList={this.state.academiesList}
+                  />
+                )}
+                {this.state.currentPage === 3 && (
+                  <SelectPlayPay
+                    title="Coaching"
+                    userDetails={this.state.userDetails}
+                    selectCenter={this.state.selectCenter}
+                    selectPlan={this.state.selectPlan}
+                    distance={this.state.distance}
+                    username={this.state.username}
+                    usergender={this.state.usergender}
+                    applycoupon={this.state.applycoupon}
+                    onPresscoupon={this.hadleCouponCode}
+                    onPress={this.onPressConfirm}
+                  />
+                )}
+              </View>
+            </View>
+          )}
       </LinearGradient>
     );
   }

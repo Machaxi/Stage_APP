@@ -7,7 +7,7 @@ import {
   Image,
   ScrollView,
   Dimensions,
-  ImageBackground,
+  ImageBackground, 
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CoachPass from "../../components/custom/CoachPass";
@@ -15,6 +15,9 @@ import CustomButton from "../../components/custom/CustomButton";
 import HeaderContentComponent from "../../components/custom/HeaderContentComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Nunito_SemiBold } from "../util/fonts";
+import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import axios from "axios";
+import { getBaseUrl } from "../BaseComponent";
 
 const images = [
   { id: 1, url: require("../../images/playing/badminton_play.png") },
@@ -30,8 +33,39 @@ class CoachScreen extends Component {
     this.state = {
       currentIndex: 0,
       currentImage: images[0],
+      learnData: null,
     };
   }
+
+  componentDidMount() {
+    this.getValue();
+  }
+
+  getValue = async () => {
+    const header = await AsyncStorage.getItem("header");
+    this.setState({ header: header });
+    this.apiCall();
+  };
+
+  apiCall = () => {
+    axios
+      .get(getBaseUrl() + "/user/learn-play", {
+        headers: {
+          "x-authorization": this.state.header,
+        },
+      })
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        this.setState({
+          learnData: batchData["learn"],
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   handleSlide = (index) => {
     this.setState({ currentIndex: index });
@@ -40,6 +74,11 @@ class CoachScreen extends Component {
   };
 
   render() {
+
+    if (this.state.learnData == null) {
+      return <LoadingIndicator />;
+    }
+
     return (
       <View style={styles.container}>
         <ScrollView style={{ flex: 0.83 }}>
@@ -108,11 +147,11 @@ class CoachScreen extends Component {
                 ))}
               </View>
               <HeaderContentComponent
-                header={this.props.learnData.header}
-                contents={this.props.learnData["benefits"]}
+                header={this.state.learnData.header}
+                contents={this.state.learnData["benefits"]}
                 colors={"#C773FF"}
               />
-              {this.props.learnData["plans"].map((pass) => (
+              {this.state.learnData["plans"].map((pass) => (
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={this.props.onPressPlan}
@@ -136,7 +175,7 @@ class CoachScreen extends Component {
           end={{ x: 1, y: 0.5 }}
           style={styles.bottomcontainer}
         >
-          {this.props.learnData.is_trial_display_required ? (
+          {this.state.learnData.is_trial_display_required ? (
             <View
               style={{ width: "100%", alignItems: "center", paddingTop: 8 }}
             >

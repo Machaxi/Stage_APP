@@ -2722,11 +2722,13 @@ const notificationsStack = createStackNavigator({
     // headerLeft: (
     //   <GoBackHeader title={''} navigation={navigation} />
     // ),
-    headerLeft: <NavigationDrawerStructure
-          navigationProps={navigation}
-          showDrawer={false}
-          showBackAction={true}
-        />,
+    headerLeft: (
+      <NavigationDrawerStructure
+        navigationProps={navigation}
+        showDrawer={false}
+        showBackAction={true}
+      />
+    ),
     headerStyle: {
       backgroundColor: "#FFFFFF",
     },
@@ -2837,7 +2839,6 @@ const parentDrawer = createDrawerNavigator(
     },
     NotificationsScreen: {
       screen: notificationsStack,
-      
     },
   },
   {

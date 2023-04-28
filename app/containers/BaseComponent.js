@@ -87,7 +87,7 @@ export const SESSION_DATE_FORMAT = "ddd, DD MMM'YY";
 export const REFRESH_SCREEN_CALLBACK = "REFRESH_SCREEN_CALLBACK";
 
 export function getBaseUrl() {
-  if (DEBUG_APP) return "http://stage.dribblediary.com/api/";
+  if (DEBUG_APP) return "https://admin.stage.machaxi.com/api/";
   else return "https://www.machaxi.com/api/";
 }
 

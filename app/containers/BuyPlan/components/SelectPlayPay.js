@@ -154,6 +154,35 @@ class SelectPlayPay extends Component {
     return monthMap[monthName];
   };
 
+  startPayment = () => {
+    var dataDic = {};
+    var dict = {};
+
+    const joinDate = this.convertToDate(this.state.displayStartDate);
+    dict["planId"] = "" + this.props.selectPlan.id;
+    dict["preferredAcademyId"] = this.props.selectCenter.id;
+    dict["dateOfJoining"] = joinDate;
+    dataDic["data"] = dict;
+
+    console.log(dataDic);
+    this.props
+      .selectPlayPlanDate(dataDic, this.state.header)
+      .then(() => {
+        let jsondata = JSON.stringify(this.props.data.playPlanData);
+        let responcedata = JSON.parse(jsondata);
+        console.log(responcedata.data);
+        if (responcedata.success) {
+          this.handleOnStartPayment(
+            responcedata.data.orderId,
+            responcedata.data.amount
+          );
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
+
   handleOnStartPayment = (orderId, amount) => {
     var options = {
       description: "Payment for Subscription",
@@ -174,7 +203,6 @@ class SelectPlayPay extends Component {
           razorpay_payment_id: data.razorpay_payment_id,
         };
         this.submitPaymentConfirmation(orderId, amount, payment_details);
-        console.log(payment_details);
       })
       .catch((error) => {
         console.log("Razor Rspo ", error);
@@ -185,21 +213,26 @@ class SelectPlayPay extends Component {
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
     let postData = {
       data: {
-        due_order_id: orderId,
+        orderId: orderId,
         amount,
         payment_details: paymentDetails,
       },
     };
-    // this.props
-    //   .paymentConfirmation(this.state.header, postData)
-    //   .then((result) => {
-    //     result = result.payload.data;
-    //     if (result.success) {
-    //       this.props.onPress(true);
-    //     } else {
-    //       alert(result.error_message);
-    //     }
-    //   });
+    console.log(postData);
+    this.props
+      .paymentConfirmation(
+        this.state.header,
+        postData,
+        "court/buy-subscription"
+      )
+      .then((result) => {
+        result = result.payload.data;
+        if (result.success) {
+          this.props.onPress(true);
+        } else {
+          this.props.onPress(false, orderId, amount);
+        }
+      });
   };
 
   getData = async () => {
@@ -209,14 +242,26 @@ class SelectPlayPay extends Component {
   };
 
   DataChange = (join_date) => {
-    const endDate = new Date(startDate);
-    if (startDate.getMonth() === 11) {
+    const date = new Date(join_date);
+    const endDate = new Date(date);
+    if (date.getMonth() === 11) {
       endDate.setMonth(0);
-      endDate.setFullYear(startDate.getFullYear() + 1);
+      endDate.setFullYear(date.getFullYear() + 1);
     } else {
-      endDate.setMonth(startDate.getMonth() + 1);
+      endDate.setMonth(date.getMonth() + 1);
     }
-    this.setState({ startdate: join_date, enddate: endDate });
+    const options = {
+      day: "2-digit",
+      month: "short",
+    };
+    const start_date = date.toLocaleString("en-GB", options);
+    const end_date = endDate.toLocaleString("en-GB", options);
+    this.setState({
+      startdate: date,
+      enddate: endDate,
+      displayStartDate: start_date,
+      displayEndDate: end_date,
+    });
   };
 
   convertToDate = (dateString) => {
@@ -225,31 +270,6 @@ class SelectPlayPay extends Component {
     const [day, month] = dateString.split(" ");
     const date = `${currentYear}-${this.getMonthNumber(month)}-${day}`;
     return date;
-  };
-
-  startPayment = () => {
-    var dataDic = {};
-    var dict = {};
-
-    const joinDate = this.convertToDate(this.state.displayStartDate);
-    dict["planId"] = "" + this.props.selectPlan.id;
-    dict["preferredAcademyId"] = this.props.selectCenter.id;
-    dict["dateOfJoining"] = joinDate;
-    dataDic["data"] = dict;
-
-    console.log(dataDic);
-    this.props
-      .selectPlayPlanDate(dataDic, this.state.header)
-      .then(() => {
-        let jsondata = JSON.stringify(this.props.data.playPlanData);
-        let responcedata = JSON.parse(jsondata);
-        if (responcedata.success) {
-          this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
-        }
-      })
-      .catch((response) => {
-        console.log(response);
-      });
   };
 
   render() {
