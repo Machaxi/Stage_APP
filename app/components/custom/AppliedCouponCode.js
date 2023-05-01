@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -16,6 +16,13 @@ import {
 } from "../../containers/util/fonts";
 
 const AppliedCouponCode = (props) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      props.onPressBack();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [props]);
+
   handleCrosspress = () => {
     props.onPressBack();
   };
@@ -85,20 +92,6 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_Bold,
     color: "#E8AC43",
     marginBottom: 10,
-  },
-  modalView: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 20,
-    paddingHorizontal: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   centerImgView: {
     width: 400,

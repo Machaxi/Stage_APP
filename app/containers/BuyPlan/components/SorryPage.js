@@ -144,10 +144,7 @@ class SorryPage extends Component {
             </TouchableOpacity>
           </View>
           <Text style={styles.title}>Payment Failed !</Text>
-          <Text style={styles.subtext}>
-            You can retry your pay for the Coaching Plan if it appears that your
-            payment was failed.
-          </Text>
+          <Text style={styles.subtext}>{this.props.error_message}</Text>
           <CustomButton
             name={"Pay ₹ " + this.props.amount}
             hideImage={true}
@@ -194,7 +191,7 @@ const styles = StyleSheet.create({
     marginTop: 120,
   },
   subtext: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: Nunito_SemiBold,
     color: "#CFCFCF",
     marginBottom: 30,

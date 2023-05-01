@@ -99,7 +99,7 @@ class ParentHome extends BaseComponent {
               }}
             >
               {navigation.getParam("Title", "") == ""
-                ? ""
+                ? "Learn"
                 : navigation.getParam("Title", "")}
             </Text>
 
@@ -646,6 +646,7 @@ class ParentHome extends BaseComponent {
             onPressPlan={() => {
               this.props.navigation.navigate("CoachingPlan");
             }}
+            navigation = {this.props.navigation}
             learnData={this.state.learnData}
             onPressTrail={() => {
               this.props.navigation.navigate("BookLearnTrail");

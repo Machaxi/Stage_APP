@@ -251,7 +251,11 @@ class ConfirmBooking extends Component {
                   source={{ uri: this.state.centerImage }}
                   style={styles.image}
                 />
-                <Text style={styles.distance}>{this.state.centerDistance}</Text>
+                {this.state.centerDistance != "0 Km away" && (
+                  <Text style={styles.distance}>
+                    {this.state.centerDistance}
+                  </Text>
+                )}
               </View>
               <View style={styles.textContainer}>
                 <View style={{ flex: 1 }}>

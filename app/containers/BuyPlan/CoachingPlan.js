@@ -35,7 +35,7 @@ class CoachingPlan extends Component {
       congratulationScreen: false,
       distance: 0,
       alreadyBook: false,
-      errorMessage: "We could not book your free trial, please try again.",
+      errorMessage: "",
       firstPage: true,
       selectPlan: null,
       selectSlot: null,
@@ -97,12 +97,13 @@ class CoachingPlan extends Component {
     this.setState({ selectPlan: selectPlan, selectSlot: selectSlot });
   };
 
-  onPressConfirm = (alreadyBook, orderId, amount) => {
+  onPressConfirm = (alreadyBook, orderId, amount, errorMessage) => {
     this.setState({
       congratulationScreen: true,
       alreadyBook: alreadyBook,
       amount: amount,
       orderId: orderId,
+      errorMessage: errorMessage,
     });
   };
 
@@ -184,7 +185,11 @@ class CoachingPlan extends Component {
         {this.state.couponCode && (
           <View style={{ flex: 1 }}>
             <GetBack title="Apply Coupon" onPress={this.hadleBackCouponCode} />
-            <ApplyCouponCode onPress={this.hadleCouponApply} />
+            <ApplyCouponCode
+              subscriptionType="COACHING_SUBSCRIPTION"
+              selectCenter={this.state.selectCenter}
+              onPress={this.hadleCouponApply}
+            />
           </View>
         )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
@@ -201,6 +206,7 @@ class CoachingPlan extends Component {
             orderId={this.state.orderId}
             amount={this.state.amount}
             title="Coaching"
+            error_message={this.state.errorMessage}
             onPress={this.onPressConfirm}
           />
         )}

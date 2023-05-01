@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { Nunito_Regular } from "../../containers/util/fonts";
 
 const SelectSession = (props) => {
-  const days = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const days = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   handlepress = () => {
     props.onPress();

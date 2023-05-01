@@ -22,12 +22,23 @@ class SelectPlayPlan extends Component {
       currentPlan: 100,
       proseednext: false,
     };
+    this.scrollViewRef = React.createRef();
   }
 
   componentDidMount() {
     console.log(this.props.PlanNumber);
-    this.setState({ currentPlan: this.props.PlanNumber });
+    var next = false;
+    if (this.props.PlanNumber < 100) {
+      next = true;
+    }
+    this.setState({ currentPlan: this.props.PlanNumber, proseednext: next });
   }
+
+  handleLayout = () => {
+    if (this.props.PlanNumber > 0 && this.props.PlanNumber < 90) {
+      this.scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  };
 
   render() {
     handlepress = () => {
@@ -37,7 +48,12 @@ class SelectPlayPlan extends Component {
 
     return (
       <View style={styles.contain}>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          ref={this.scrollViewRef}
+          onLayout={this.handleLayout}
+          style={{ flex: 0.93 }}
+        >
           <Text style={styles.mainText}>Select Playing plan</Text>
           <View style={styles.contained}>
             {this.props.planList.map((item, index) => (
