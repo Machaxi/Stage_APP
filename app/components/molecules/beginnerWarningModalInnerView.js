@@ -71,15 +71,15 @@ const BeginnerWarningModalInnerView = ({
               ]}
             >
               <RoundedGradientBtn
-                text={"Book Slot"}
+                text={"No"}
                 colors={["#575f61ed", "#2b293aed"]}
-                onBtnPress={() => onBtnPress()}
+                onBtnPress={() => setModalVisibility(false)}
                 width={140}
               />
               <RoundedGradientBtn
-                text={"No"}
+                text={"Book Slot"}
+                onBtnPress={() => onBtnPress()}
                 colors={["#48acf1", "#3e53d9"]}
-                onBtnPress={() => setModalVisibility(false)}
                 width={140}
               />
             </View>

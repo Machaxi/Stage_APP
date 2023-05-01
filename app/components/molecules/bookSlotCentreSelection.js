@@ -177,11 +177,11 @@ class BookSlotCentreSelection extends Component {
             console.log({val})
             this.props.selectedTimePeriod(val)}}
           onPress={() => {
-            this.props.onAcademySelection(item);
             this.setState({
               currentIndex: item?.academy.id,
               proseednext: true,
             });
+            this.props.onAcademySelection(item);
           }}
         />
       );

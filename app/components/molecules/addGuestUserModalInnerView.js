@@ -12,7 +12,11 @@ import LinearGradient from "react-native-linear-gradient";
 import RoundedGradientBtn from "./roundedGradientBtn";
 import { Nunito_Bold, Nunito_ExtraBold, Nunito_Regular } from "../../containers/util/fonts";
 
-const AddGuestUserModalInnerView = ({ onBtnPress, onExplorePlansPressed }) => {
+const AddGuestUserModalInnerView = ({
+  onBtnPress,
+  onExplorePlansPressed,
+  playHoursRemaining,
+}) => {
   return (
     <TouchableOpacity activeOpacity={1}>
       {/* <ImageBackground
@@ -41,7 +45,7 @@ const AddGuestUserModalInnerView = ({ onBtnPress, onExplorePlansPressed }) => {
           <Text style={styles.desc}>
             {"You have only "}{" "}
             <Text style={[styles.desc, { color: yellowVariant4 }]}>
-              {"2 hours "}
+              {playHoursRemaining + " hours "}
             </Text>
             {
               "remaining in your current plan. Please renew or buy a new plan. Any remaining hours will get added in the new plan."

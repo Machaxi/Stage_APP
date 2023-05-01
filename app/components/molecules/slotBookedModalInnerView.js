@@ -32,6 +32,7 @@ const SlotBookedModalInnerView = ({
   setModalVisibility,
   onBtnPress,
   slotInfo,
+  slotRequested,
 }) => {
   return (
     <TouchableOpacity activeOpacity={1}>
@@ -64,9 +65,13 @@ const SlotBookedModalInnerView = ({
           source={require("../../images/congrats_emoji.png")}
         />
         <View style={{ paddingHorizontal: 30 }}>
-          <Text style={styles.slotBooked}>{"Slot Booked"}</Text>
+          <Text style={styles.slotBooked}>
+            {slotRequested ? "Request Sent!" : "Slot Booked"}
+          </Text>
           <Text style={styles.slotBookedMsg}>
-            {"Thank you ! Your session is booked"}
+            {slotRequested
+              ? "We have requested a slot for you"
+              : "Thank you ! Your session is booked"}
           </Text>
           <LinearGradient
             start={{ x: 0, y: 0.75 }}
@@ -94,7 +99,10 @@ const SlotBookedModalInnerView = ({
               ,
               { name: "Pool", value: "NA" },
             ].map((value) => (
-              <MainBookingDetails width={deviceWidth * 0.25} details={value} />
+              <MainBookingDetails
+                width={deviceWidth * 0.25}
+                details={value}
+              />
             ))}
           </View>
           <View style={{ width: 1, height: 20 }} />

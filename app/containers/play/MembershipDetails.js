@@ -25,14 +25,8 @@ export const MembershipDetails = ({
          purchasedDate,
          expiryDate,
          showOffer,
-         profilePrecentage,
          hoursLeft,
        }) => {
-         const [profileComplelete, setProfileComplelete] = useState("");
-
-         useEffect(() => {
-           setProfileComplelete(profilePrecentage);
-         }, []);
 
          var totalHoursVal =
            typeof totalHrs == undefined ||

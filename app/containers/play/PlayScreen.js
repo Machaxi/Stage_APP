@@ -51,129 +51,19 @@ import moment from "moment";
 import PlayerScreen from "../FirstTimeUser/PlayerScreen";
 
 export default PlayScreen =({navigation})=>{
-
-
-  const gameNameData=[
-    {
-        title: "Swimming",
-        color:'white',
-        id:1,
-        isSelected:true,
-        // bgColor:'yellow'
-    },
-    {
-        title: "Badminton",
-        id:2,
-        color:'white',
-        isSelected:false,
-        // bgColor:'yellow'
-    },
-    {
-      title: "tennis",
-      id:3,
-      color:'white',
-      isSelected:false,
-      // bgColor:'yellow'
-    },
-    {
-      title: "Swimming",
-      id:4,
-      // color:'#F2AE4D',
-      color:'white',
-      isSelected:false,
-      // bgColor:'yellow'
-    },
-];
-
-const NextSessionData = [
-  {
-    // icon:require("./../../images/beginner.png"),
-    title: "Next Session - Today",
-    id: 1,
-    by: "4",
-    titleColor: "#21D096",
-    sportsName: "Swimming - Pool",
-    sportsTime: "3pm",
-    centreName: "Machaxi Play9 Sports Centre, Whitefield",
-    centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: null,
-    gameNameData: {
-      title: "Swimming",
-      id: 1,
-      color: "green",
-      // bgColor:'yellow'
-    },
-    playing_partners: null,
-    isExpanded: false,
-  },
-  {
-    // icon:require("./../../images/intermediate.png"),
-    title: "Next Session - Today",
-    by: "2",
-    id: 2,
-    titleColor: "#FF9C33",
-    sportsName: "Swimming - Pool",
-    sportsTime: "2-3pm",
-    centreName: "Machaxi Play9 Sports Centre, Whitefield",
-    centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: 4,
-    playing_partners: [
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-    ],
-    isExpanded: false,
-  },
-  {
-    // icon:require("./../../images/advance.png"),
-    title: "Advance",
-    by: "8",
-    id: 3,
-    titleColor: "#FE6E88",
-    sportsName: "Swimming - Pool",
-    sportsTime: "3pm",
-    centreName: "Machaxi Play9 Sports Centre, Whitefield",
-    centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: 0,
-    playing_partners: [],
-    isExpanded: false,
-  },
-  {
-    // icon:<Intermediate height={50} width={50} />,
-    // icon:'./../../images/intermediate.svg',
-    title: "Professional",
-    by: "5",
-    id: 4,
-    titleColor: "#DB64FF",
-    sportsName: "Swimming - Pool",
-    sportsTime: "3pm",
-    centreName: "Machaxi Play9 Sports Centre, Whitefield",
-    centreAddress: "68/1, 1, near Parijatha Farm, Whitefield, Siddapura.",
-    numberOfGuests: 4,
-    playing_partners: [
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-      { name: "User 1", proficiency: "Beginner", guestCount: null },
-    ],
-    isExpanded: false,
-  },
-];
-
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
 const [selfTabEnabled, setSelfTab] = useState(true);
 const [packageRemainingDays, setPackageRemainingDays] = useState(0)
 
-const [profilePrecentage,setProfilePrecentage] =useState('0.9');
 const [sportsList, setSportsList] = useState([]);
 const [peerSportsList,setPeerSportsList]=useState([]);
-const [nextSession,setNextSessionData]=useState([]);
+const [nextSession, setNextSessionData] = useState([]);
 const [cancelPressed, setCancelPressed] = useState(false);
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
 const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
 const [selectedSelfRating, setSelectedSelfRating] = useState(null)
 const [preferredDetails, setPreferredDetails] = useState(null);
+const [userProficiency, setUserProficiency] = useState(null);
 const [cancelModalVisible, setCancelModalVisibility] = useState(false);
 const [limitReachedForToday, setLimitReachForToday] = useState(true)
 const [loading, setLoading] = useState(true);
@@ -286,10 +176,10 @@ const getPlayerDetailsApi = async () => {
             setSportsList(sportsData);
           }
           if (json.data?.peerRating?.length > 0) {
-            var nextSessionVal = json.data?.peerRating;
+            var nextSessionVal = json.data?.bookings;
             var peerData = json.data?.peerRating;
-            for(var i=0; i< json.data?.peerRating?.length; i++){
-              nextSessionVal[i].isExpanded = false
+            for (var i = 0; i < json.data?.bookings?.length; i++) {
+              nextSessionVal[i].isExpanded = false;
             }
              for (var i = 0; i < peerData?.length; i++) {
                 peerData[i].isSelected = i == 0 ? true : false
@@ -328,6 +218,7 @@ useEffect(() => {
       for(var i = 0; i < playerDetailsResponse?.rating?.length; i++){
         if(playerDetailsResponse?.plan?.preferredSportId == playerDetailsResponse?.rating[i]?.sport?.id){
           setPreferredDetails(playerDetailsResponse?.rating[i]);
+          setUserProficiency(playerDetailsResponse?.rating[i]?.self);
         }
       }
       
@@ -469,6 +360,15 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
             if(isPeerTypeRequest){
               setSelfRatingActiveness(false);
             }
+            else if (
+                   playerDetailsResponse?.plan
+                     ?.preferredSportId ==
+                   selectedPeerRating?.sport?.id
+                 ) {
+                   setUserProficiency(
+                     selectedSelfRating?.proficiency
+                   );
+                 }
             // setRewardsResponse(json["data"]["reward"]);
           } else {
             ToastAndroid.show(
@@ -572,9 +472,9 @@ const onPressPlan = (selectPlan, playPlanData) => {
             image={{ uri: playerDetailsResponse?.user?.profile_pic ?? "" }}
           />
           <PrefSport
-            gradientColors={getProficiencyGradients(preferredDetails?.self)}
-            currentRatingColor={getProficiencyColor(preferredDetails?.self)}
-            currentRating={getProficiencyName(preferredDetails?.self)}
+            gradientColors={getProficiencyGradients(userProficiency)}
+            currentRatingColor={getProficiencyColor(userProficiency)}
+            currentRating={getProficiencyName(userProficiency)}
             icon={{ uri: preferredDetails?.sport?.image }}
             sportTitle={preferredDetails?.sport?.name}
           />
@@ -583,7 +483,6 @@ const onPressPlan = (selectPlan, playPlanData) => {
             packageRemainingDays={packageRemainingDays}
             aboutToExpire={packageRemainingDays > 5 ? true : false}
             showOffer={false}
-            profilePrecentage={profilePrecentage}
             totalHrs={
               playerDetailsResponse?.plan?.hoursCredited +
               (playerDetailsResponse?.plan?.hoursRemaining != null
@@ -671,6 +570,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
                     renderItem={renderGameNameBox}
                   />
                   <RatePeersTabView
+                    userId={playerDetailsResponse?.user?.id}
                     proficiencyData={proficiencyData}
                     updateRating={(val1, val2, val3) =>
                       updateRating(val1, val2, val3, true)
@@ -717,7 +617,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
           <SkyFilledButton
             onPress={() => {
               navigation.navigate("BookSlotScreen");
-              bookSlotPressed;
+              bookSlotPressed();
             }}
           >
             Book Slot

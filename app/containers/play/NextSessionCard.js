@@ -20,12 +20,20 @@ import { getProficiencyColor, getProficiencyGradients, getProficiencyName } from
 
   
 export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
-  console.log('date=='+item?.date)
-  console.log("=>" + moment(item?.date).format("MM-DD-YY"));
+  
     var isToday = false;
+    var gamePartners = []
     if(item?.date != null){
       if(moment(item?.date).format('MM-DD-YY') == moment(new Date()).format('MM-DD-YY')){
         isToday = true;
+      }
+    }
+    
+    if(item?.players?.length > 0){
+      for (var i = 0; i < item?.players?.length; i++) {
+        if (userId != item?.players[i]?.id) {
+          gamePartners.add(item?.players[i]);
+        }
       }
     }
     const renderPlayingPartnerList = ({item}) => {
@@ -123,7 +131,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
         </TouchableOpacity>
 
         {item.isExpanded ? (
-          item?.players != null && item?.players?.length > 1 ? (
+          gamePartners != null && gamePartners?.length > 0 ? (
             <View>
               <Text
                 style={[
@@ -133,11 +141,11 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
               >
                 {/* TODO: */}
                 {`Number of players right now - ${item?.maxPlayersAllowed}/${
-                  item?.players?.length
+                  gamePartners?.length
                 }`}
               </Text>
               <FlatList
-                data={item?.players}
+                data={gamePartners}
                 renderItem={renderPlayingPartnerList}
               />
             </View>
