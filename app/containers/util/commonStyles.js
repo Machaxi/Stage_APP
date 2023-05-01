@@ -44,6 +44,19 @@ export const commonStyles = StyleSheet.create({
            justifyContent: "space-between",
            alignItems: "center",
          },
+         dropdownTxt: {
+           width: "45%",
+           borderRadius: 10,
+           borderColor: "#FCB550",
+           backgroundColor: "rgba(94, 94, 94, 1)",
+         },
+         dropdownTxtStyle: {
+           padding: 10,
+           fontSize: 16,
+           color: "white",
+           borderRadius: 10,
+           backgroundColor: "rgba(94, 94, 94, 1)",
+         },
        });
 
   export const pickerSelectStylesShopScreen = StyleSheet.create({

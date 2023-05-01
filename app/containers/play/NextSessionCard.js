@@ -132,7 +132,9 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
                 ]}
               >
                 {/* TODO: */}
-                {`Number of players right now - NA/${item?.players?.length}`}
+                {`Number of players right now - ${item?.maxPlayersAllowed}/${
+                  item?.players?.length
+                }`}
               </Text>
               <FlatList
                 data={item?.players}
@@ -149,6 +151,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
         ) : null}
         {item.isExpanded ? (
           <>
+            <View style={{ height: 18, width: "100%" }} />
             <GradientLine
               marginBottom={14}
               marginTop={0}

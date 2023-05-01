@@ -125,6 +125,7 @@ import { Nunito_Bold } from "../containers/util/fonts";
 import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import NotificationsScreen from "../containers/notification/NotificationsScreen";
 import GoBackHeader from "../components/molecules/goBackHeader";
+import BookSlotScreen from "../containers/play/BookSlotScreen";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2708,6 +2709,12 @@ const mybookingsModule = createStackNavigator({
   },
 });
 
+const bookslotModule = createStackNavigator({
+  BookSlotScreen: {
+    screen: BookSlotScreen,
+  },
+});
+
 const myRequestsModule = createStackNavigator({
   MyRequestsScreen: {
     screen: MyRequestsHome,
@@ -2833,6 +2840,13 @@ const parentDrawer = createDrawerNavigator(
     },
     MyBookingsScreen: {
       screen: mybookingsModule,
+      // navigationOptions: {
+      //     header: <CustomHeader title="Academy" />,
+      // }
+    },
+    //TODO:
+    BookSlotScreen: {
+      screen: bookslotModule,
       // navigationOptions: {
       //     header: <CustomHeader title="Academy" />,
       // }

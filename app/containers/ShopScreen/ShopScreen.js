@@ -7,6 +7,7 @@ import {
   ScrollView,
   Linking,
   ToastAndroid,
+  Platform,
 } from "react-native";
 import { getData, storeData } from "../../components/auth";
 import {
@@ -18,7 +19,7 @@ import BaseComponent, {
   EVENT_EDIT_PROFILE, getBaseUrl, getSettingData,
 } from "../BaseComponent";
 import Events from "../../router/events";
-import { darkBlueVariant } from "../util/colors";
+import { darkBlueVariant, goldenYellow, greyVariant5 } from "../util/colors";
 import { myBookingsData } from "../util/dummyData/myBookingsData";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
@@ -28,23 +29,29 @@ import ShopRewardsView from "../../components/molecules/shopRewardsView";
 import HowToRedeem from "../../components/molecules/howToRedeem";
 import RewardHistory from "../../components/molecules/rewardHistory";
 import ShopScreenPicker from "../../components/molecules/shopScreenPickers";
-import { deviceWidth } from "../util/dimens";
+import { deviceHeight, deviceWidth } from "../util/dimens";
 import { getNotificationCount } from "../util/notificationCount";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import Axios from "axios";
 import moment from "moment";
 import { client } from "../../../App";
 import Loader from "../../components/custom/Loader";
+import ModalDropdown from "react-native-modal-dropdown";
+import { Image } from "react-native";
+import { MonthNames, getNumericMonth } from "../util/utilFunctions";
+import { commonStyles, pickerSelectStylesShopScreen } from "../util/commonStyles";
+import DropdownArrow from "../../components/molecules/dropdownArrow";
 const ShopScreen = ({ navigation }) => {
 
   const currentYear = moment(new Date()).year();
   const nextYear = currentYear + 1;
-  const currentMonth = moment(new Date()).month();
+  const currentMonth = moment(new Date()).format('MMMM');
 
  const [refreshing, setRefreshing] = useState(false);
  const [loading, setLoading] = useState(true);
  const [rewardsResponse, setRewardsResponse] = useState(null);
- const [month, setMonth] = useState(currentMonth + 1);
+ const [month, setMonth] = useState(currentMonth);
+ const [numericMonth, setNumericMonth] = useState(getNumericMonth(currentMonth));
  const [year, setYear] = useState(currentYear);
 
   const getNotifications = () => {
@@ -84,10 +91,9 @@ const ShopScreen = ({ navigation }) => {
           },
         })
         .then(function(response) {
-          console.log("rewardhistorydata" + JSON.stringify(response.data));
+          console.log({response})
           let json = response.data;
           let success = json.success;
-          console.log('---->'+ success)
           if (success) {
             setRewardsResponse(json["data"]["reward"])
             //checking for app update
@@ -133,7 +139,7 @@ const ShopScreen = ({ navigation }) => {
     });
 
     
-    getRewardsData(month, year);
+    getRewardsData(numericMonth, year);
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -143,7 +149,7 @@ const ShopScreen = ({ navigation }) => {
 
   const onRefresh = () => {
     setRefreshing(true)
-    getRewardsData(month, year);
+    getRewardsData(numericMonth, year);
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false)
@@ -151,22 +157,17 @@ const ShopScreen = ({ navigation }) => {
   };
  
   const onMonthSelect = (value) => {
-    setMonth(value);
-    getRewardsData(value, year)
+    setNumericMonth(
+      getNumericMonth(value)
+    );
+    getRewardsData(getNumericMonth(value), year);
   };
 
   const onYearSelect = (value) => {
     setYear(value)
-    getRewardsData(month, value);
+    getRewardsData(numericMonth, value);
   };
 
-  console.log("currentMonth" + currentMonth);
-
-  // if(loading){
-  //   return (
-  //     <LoadingIndicator />
-  //   )
-  // }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
@@ -180,6 +181,7 @@ const ShopScreen = ({ navigation }) => {
         style={styles.main_container}
       >
         <Loader visible={loading} />
+
         <View
           style={{
             flexDirection: "row",
@@ -187,40 +189,88 @@ const ShopScreen = ({ navigation }) => {
             marginRight: 16,
           }}
         >
-          <ShopScreenPicker
-            placeHolder={{ label: "January", value: 1 }}
-            data={[
-              { label: "February", value: 2 },
-              { label: "March", value: 3 },
-              { label: "April", value: 4 },
-              { label: "May", value: 5 },
-              { label: "June", value: 6 },
-              { label: "July", value: 7 },
-              { label: "August", value: 8 },
-              { label: "September", value: 9 },
-              { label: "October", value: 10 },
-              { label: "November", value: 11 },
-              { label: "December", value: 12 },
-            ]}
-            value={month}
-            onSelect={(val) => onMonthSelect(val)}
-          />
+          <View style={{ maxWidth: deviceWidth * 0.3 }}>
+            <ModalDropdown
+              options={MonthNames}
+              defaultValue={`${month}`}
+              style={{ minWidth: deviceWidth * 0.3 }}
+              textStyle={[
+                Platform.OS == "android"
+                  ? pickerSelectStylesShopScreen.inputAndroid
+                  : pickerSelectStylesShopScreen.inputIOS,
+                { width: deviceWidth * 0.27 },
+              ]}
+              dropdownStyle={[
+                commonStyles.dropdownTxt,
+                { height: deviceHeight * 0.45 },
+              ]}
+              dropdownTextStyle={commonStyles.dropdownTxtStyle}
+              dropdownTextHighlightStyle={[
+                commonStyles.dropdownTxtStyle,
+                { color: goldenYellow },
+              ]}
+              renderRightComponent={() => {
+                return <DropdownArrow />;
+              }}
+              onSelect={
+                (value) => {
+                  setMonth(value);
+                  onMonthSelect(value);
+                }
+                //this.setState({ gender: data[value].value })
+              }
+            />
+            <View
+              style={{
+                width: deviceWidth * 0.3,
+                backgroundColor: greyVariant5,
+                height: 1,
+                marginTop: 2,
+              }}
+            />
+          </View>
           <View style={{ width: deviceWidth * 0.05, height: 1 }} />
-          <ShopScreenPicker
-            placeHolder={{
-              label: `${currentYear}`,
-              value: currentYear,
-            }}
-            data={[
-              {
-                label: `${nextYear}`,
-                value: nextYear,
-              },
-            ]}
-            value={year}
-            onSelect={(val) => onYearSelect(val)}
-          />
+          <View style={{ maxWidth: deviceWidth * 0.3 }}>
+            <ModalDropdown
+              options={[`${currentYear}`, `${nextYear}`]}
+              defaultValue={`${currentYear}`}
+              style={{ minWidth: deviceWidth * 0.3 }}
+              dropdownTextHighlightStyle={[
+                commonStyles.dropdownTxtStyle,
+                { color: goldenYellow },
+              ]}
+              textStyle={[
+                Platform.OS == "android"
+                  ? pickerSelectStylesShopScreen.inputAndroid
+                  : pickerSelectStylesShopScreen.inputIOS,
+                { width: deviceWidth * 0.27 },
+              ]}
+              dropdownStyle={[
+                commonStyles.dropdownTxt,
+                { height: deviceHeight * 0.25 },
+              ]}
+              dropdownTextStyle={commonStyles.dropdownTxtStyle}
+              renderRightComponent={() => {
+                return <DropdownArrow />;
+              }}
+              onSelect={
+                (value) => {
+                  onYearSelect(value);
+                }
+                //this.setState({ gender: data[value].value })
+              }
+            />
+            <View
+              style={{
+                width: deviceWidth * 0.3,
+                backgroundColor: greyVariant5,
+                height: 1,
+                marginTop: 2,
+              }}
+            />
+          </View>
         </View>
+       
         {rewardsResponse != null && (
           <ShopRewardsView
             balance={rewardsResponse["reward_balance"] ?? 0}
@@ -234,7 +284,9 @@ const ShopScreen = ({ navigation }) => {
           selectedMonth={month}
           loading={loading}
           selectedYear={year}
-          rewardHistoryData={rewardsResponse != null ? rewardsResponse["history"] : null}
+          rewardHistoryData={
+            rewardsResponse != null ? rewardsResponse["history"] : null
+          }
         />
         {/* ) : null} */}
         <View style={{ height: 20, width: "100%" }} />

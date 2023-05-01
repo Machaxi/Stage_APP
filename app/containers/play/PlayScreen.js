@@ -163,6 +163,7 @@ const NextSessionData = [
 
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
 const [selfTabEnabled, setSelfTab] = useState(true);
+const [packageRemainingDays, setPackageRemainingDays] = useState(0)
 
 const [profilePrecentage,setProfilePrecentage] =useState('0.9');
 const [sportsList, setSportsList] = useState([]);
@@ -261,36 +262,43 @@ const getPlayerDetailsApi = async () => {
         let json = response.data;
         let success = json.success;
         if (success) {
+           var todayLimitReached = false;
+           if(json.data?.plan?.expiryDate != null){
+            var startDate = moment(Date());
+            var endDate = moment(json.data?.plan?.expiryDate);
+            var days = 0;
+            days = endDate.diff(startDate, "days");
+            setPackageRemainingDays(days);
+
+           }
+           todayLimitReached =
+             json.data?.plan?.maxPlayingHourPerDay == 0 ||
+             json.data?.plan?.maxPlayingHourPerDay == 0.0 ||
+             json.data?.plan?.maxPlayingHourPerDay == null
+               ? true
+               : false;
+           setLimitReachForToday(todayLimitReached);
+           if(json.data?.rating?.length > 0) {
+            var sportsData = json.data?.rating;
+              for (var i = 0; i < sportsData?.length; i++) {
+                sportsData[i].isSelected = i == 0 ? true : false;
+            }
+            setSportsList(sportsData);
+          }
           if (json.data?.peerRating?.length > 0) {
-            var todayLimitReached = false;
             var nextSessionVal = json.data?.peerRating;
             var peerData = json.data?.peerRating;
-            var sportsData = json.data?.rating;
             for(var i=0; i< json.data?.peerRating?.length; i++){
               nextSessionVal[i].isExpanded = false
             }
-             for (var i = 0; i < sportsData?.length; i++) {
-               sportsData[i].isSelected = i == 0 ? true : false;
-             }
              for (var i = 0; i < peerData?.length; i++) {
                 peerData[i].isSelected = i == 0 ? true : false
                 //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
                 //  peerData[i]?.peerRating != "" ? true : false;
              }
-          
-            todayLimitReached =
-              json.data?.plan?.maxPlayingHourPerDay == 0 ||
-              json.data?.plan?.maxPlayingHourPerDay == 0.0 ||
-              json.data?.plan?.maxPlayingHourPerDay == null
-                ? true
-                : false;
-            setLimitReachForToday(
-              todayLimitReached
-            );
             
             setPeerSportsList(peerData);
             setNextSessionData(nextSessionVal);
-            setSportsList(sportsData);
           }
           setPlayerDetailsResponse(json.data);
 
@@ -534,7 +542,6 @@ const onSavePress = (val) => {
         </LinearGradient>
       );
     }
-
   return (
     <View style={[{ flex: 1 }]}>
       <LinearGradient
@@ -564,7 +571,10 @@ const onSavePress = (val) => {
             sportTitle={preferredDetails?.sport?.name}
           />
           <MembershipDetails
-            aboutToExpire={false}
+            //TODO:
+            packageRemainingDays={packageRemainingDays}
+            aboutToExpire={packageRemainingDays > 5 ? true : false}
+            showOffer={false}
             profilePrecentage={profilePrecentage}
             totalHrs={
               playerDetailsResponse?.plan?.hoursCredited +
@@ -576,7 +586,6 @@ const onSavePress = (val) => {
             slotsExhaused={false}
             onMorePlansPress={() => {}}
             onRenewPress={() => {}}
-            membershipExpired={false}
             expiryDate={moment(
               playerDetailsResponse?.plan?.expiryDate
             ).format("Mo MMMM YYYY")}
@@ -620,18 +629,16 @@ const onSavePress = (val) => {
                   isSelected={selfTabEnabled}
                   onPressed={() => {
                     setSelfTab(true);
-                    var profData = 
-                    profData = proficiencyStaticData.map(
+                    var profData = (profData = proficiencyStaticData.map(
                       (val) => {
                         if (
                           val.proficiency ==
-                          playerDetailsResponse?.user
-                            ?.proficiency
+                          playerDetailsResponse?.user?.proficiency
                         ) {
                           val.isSelected = true;
                         }
                       }
-                    );
+                    ));
                     setProficiencyData(profData);
                   }}
                 />
