@@ -515,6 +515,12 @@ const onSavePress = (val) => {
   console.log({val})
 }
 
+const onPressPlan = (selectPlan, playPlanData) => {
+  console.log(selectPlan)
+  const data = playPlanData;
+  navigation.navigate("PlayingPlan", { data, selectPlan });
+};
+
     if (loading) {
       return <LoadingIndicator />;
     }
@@ -527,6 +533,8 @@ const onSavePress = (val) => {
           style={{ flex: 1 }}
         >
             <PlayerScreen
+              onPressPlan={onPressPlan}
+              navigation = {navigation}
               onPress={() => {
                 navigation.navigate("BookPlayTrail");
               }}

@@ -16,6 +16,7 @@ import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import SelectSports from "../../../components/custom/SelectSports";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 const data = [
   {
@@ -38,22 +39,6 @@ const data = [
     image: require("../../../images/playing/professional.png"),
     name: "Professional",
   },
-];
-
-const timedataMorning = [
-  { id: 1, name: "4 - 5 AM", slot: true },
-  { id: 2, name: "6 - 7 AM", slot: true },
-  { id: 3, name: "7 - 8 AM", slot: true },
-  { id: 4, name: "8 - 9 AM", slot: true },
-  { id: 5, name: "9 - 10 AM", slot: false },
-];
-
-const timedataEvening = [
-  { id: 6, name: "4 - 5 PM", slot: false },
-  { id: 7, name: "6 - 7 PM", slot: true },
-  { id: 8, name: "7 - 8 PM", slot: true },
-  { id: 9, name: "8 - 9 PM", slot: true },
-  { id: 10, name: "9 - 10 PM", slot: true },
 ];
 
 const months = [
@@ -85,9 +70,6 @@ const day = weekdays[today.getDay()];
 
 const oneDay = 24 * 60 * 60 * 1000;
 let nextDate = new Date(today.getTime() + oneDay);
-while (nextDate.getDay() === 0) {
-  nextDate = new Date(nextDate.getTime() + oneDay);
-}
 const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
 const nextday = weekdays[nextDate.getDay()];
 
@@ -232,15 +214,6 @@ class SelectBatch extends Component {
             )}
           </View>
         </TouchableOpacity>
-        // <SelectSports
-        //   id={item.batch_id}
-        //   image={require("../../../images/playing/clock.png")}
-        //   selectItem={this.state.selectTime}
-        //   name={item.displayTime}
-        //   onPress={() => {
-        //     this.setState({ selectTime: item.batch_id, proseedTime: true });
-        //   }}
-        // />
       );
     };
 
@@ -255,6 +228,10 @@ class SelectBatch extends Component {
       );
       this.props.onPress(selectDate, selectLevel, selectBatch);
     };
+
+    if (this.state.batchData == null) {
+      return <LoadingIndicator />;
+    }
 
     return (
       <View style={styles.contain}>

@@ -4,6 +4,10 @@ import { darkGreyVariant } from "../../util/colors";
 import EnterCouponCode from "../../../components/molecules/enterCouponCode";
 import CouponListItem from "../../../components/molecules/couponListItem";
 import { couponListData } from "../../util/dummyData/couponListData";
+import axios from "axios";
+import { getBaseUrl } from "../../BaseComponent";
+import AsyncStorage from "@react-native-community/async-storage";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 class ApplyCouponCode extends Component {
   constructor(props) {
@@ -11,12 +15,52 @@ class ApplyCouponCode extends Component {
     this.state = {
       code: "",
       modalVisible: false,
+      couponData: null,
+      header: null,
     };
   }
 
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    const header = await AsyncStorage.getItem("header");
+    this.setState({ header: header });
+    this.apiCall();
+  };
+
+  apiCall = () => {
+    const subscriptionType = this.props.subscriptionType;
+    const academy_id = this.props.selectCenter.id;
+    axios
+      .get(
+        getBaseUrl() +
+          "/coupons/list?academyId=" +
+          academy_id +
+          "&scope=" +
+          subscriptionType,
+        {
+          headers: {
+            "x-authorization": this.state.header,
+          },
+        }
+      )
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let academiesData = userResponce["data"]["data"];
+        this.setState({
+          couponData: academiesData["coupons"],
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   render() {
     handlepress = () => {
-      console.log("ollla");
       this.props.onPress();
     };
 
@@ -27,8 +71,16 @@ class ApplyCouponCode extends Component {
     const handleKeyDown = () => {};
 
     const setModalVisibilityCb = (val) => {
-      setModalVisibility(val);
+      this.setState({ modalVisible: val });
     };
+
+    if (this.state.couponData == null) {
+      return <LoadingIndicator />;
+    }
+
+    const filteredData = couponListData.filter((item) =>
+      item.coupon_code.toLowerCase().includes(this.state.code.toLowerCase())
+    );
 
     return (
       <View style={styles.contain}>
@@ -40,9 +92,10 @@ class ApplyCouponCode extends Component {
         />
         <View style={styles.bar} />
         <FlatList
-          data={couponListData}
-          extraData={this.state.code}
-          renderItem={({ item, index }) => {
+          data={filteredData}
+          keyExtractor={(item) => item.id}
+          extraData={filteredData}
+          renderItem={({ item }) => {
             return (
               <TouchableOpacity activeOpacity={0.8} onPress={handlepress}>
                 <CouponListItem
@@ -53,7 +106,6 @@ class ApplyCouponCode extends Component {
               </TouchableOpacity>
             );
           }}
-          keyExtractor={(item) => item.id}
         />
       </View>
     );

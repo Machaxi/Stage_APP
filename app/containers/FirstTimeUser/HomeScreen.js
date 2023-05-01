@@ -218,7 +218,7 @@ class HomeScreen extends Component {
               onPressPlan={() => {
                 this.props.navigation.navigate("CoachingPlan");
               }}
-              learnData={this.state.learnData}
+              navigation = {this.props.navigation}
               onPressTrail={() => {
                 AsyncStorage.setItem("select_trial", "Coaching Trial");
                 this.props.navigation.navigate("BookTrail");
@@ -228,6 +228,7 @@ class HomeScreen extends Component {
           {this.state.currentPage === 2 && (
             <PlayerScreen
               onPressPlan={this.onPressPlan}
+              navigation = {this.props.navigation}
               onPress={() => {
                 this.props.navigation.navigate("LearnBookTrial");
               }}

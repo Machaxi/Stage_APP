@@ -13,6 +13,9 @@ import CustomButton from "../../../components/custom/CustomButton";
 import { whiteGreyBorder } from "../../util/colors";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 import SelectLevel from "../../../components/custom/SelectLevel";
+import GetBack from "../../../components/custom/GetBack";
+import { selectPreferredSports } from "../../../redux/reducers/PlayerReducer";
+import { connect } from "react-redux";
 
 const data = [
   {
@@ -44,81 +47,139 @@ class MoreDetails extends Component {
       currentIndex: 100,
       currentLevel: 10,
       proseednext: false,
+      selectsports: true,
+      selectLevel: false,
     };
   }
 
+  componentDidMount() {
+    console.log(this.props.subscriptionId);
+  }
+
+  preferredSport = () => {
+    return (
+      <View>
+        <Text style={styles.mainText}>
+          Select preferred sport{" "}
+          <Text style={[styles.mainText, { fontSize: 11 }]}>
+            (To personalize your experience)
+          </Text>
+        </Text>
+        <View style={styles.contained}>
+          {this.props.sportList.map((item) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              key={item.id}
+              style={[styles.subview]}
+              onPress={() =>
+                this.setState({ currentIndex: item.id, proseednext: true })
+              }
+            >
+              <LinearGradient
+                colors={["rgba(255, 255, 255, 0.1)", "rgba(118, 87, 136, 0)"]}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.5 }}
+                style={styles.sportsview}
+              >
+                <ImageBackground
+                  source={
+                    item.id === this.state.currentIndex
+                      ? require("../../../images/playing/select_sports.png")
+                      : null
+                  }
+                  style={styles.imaged}
+                >
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.imageitem}
+                    resizeMode="center"
+                  />
+                </ImageBackground>
+              </LinearGradient>
+              <Text style={styles.sportText}>{item.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    );
+  };
+
+  hadleBackPress = () => {
+    this.setState({
+      selectLevel: false,
+      selectsports: true,
+      proseednext: true,
+    });
+  };
+
+  playerLevel = () => {
+    return (
+      <View>
+        <GetBack title="Back" onPress={this.hadleBackPress} />
+        <Text style={styles.mainText}>Select player Level</Text>
+        <View style={styles.contained}>
+          {data.map((item, index) => (
+            <SelectLevel
+              index={index}
+              currentLevel={this.state.currentLevel}
+              image={item.image}
+              id={item.id}
+              name={item.name}
+              onPress={() => {
+                this.setState({ currentLevel: index, proseednext: true });
+              }}
+            />
+          ))}
+        </View>
+      </View>
+    );
+  };
+
   render() {
     handlepress = () => {
-      this.props.onPress(
-        this.props.sportList.find((item) => item.id === this.state.currentIndex)
-      );
+      if (this.state.selectLevel == false) {
+        this.setState({
+          selectLevel: true,
+          selectsports: false,
+          proseednext: false,
+        });
+      } else {
+        const sportsId = this.state.currentIndex;
+        const level = data[this.state.currentLevel].name.toUpperCase();
+        const subId = this.props.subscriptionId;
+        var dataDic = {};
+        var dict = {};
+        dict["subscriptionId"] = subId;
+        dict["sportId"] = sportsId;
+        dict["proficiency"] = level;
+        dataDic["data"] = dict;
+
+        console.log(dataDic);
+        this.props
+          .selectPreferredSports(dataDic, this.state.header)
+          .then(() => {
+            let jsondata = JSON.stringify(this.props.data.playPlanData);
+            let responcedata = JSON.parse(jsondata);
+            console.log(responcedata.data);
+            this.props.onPress();
+          })
+          .catch((response) => {
+            console.log(response);
+            this.props.onPress();
+          });
+      }
     };
 
     return (
       <View style={styles.contain}>
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
-          <Text style={styles.heading}>More details</Text>
-          <Text style={styles.mainText}>
-            Select preferred sport{" "}
-            <Text style={[styles.mainText, { fontSize: 11 }]}>
-              (To personalize your experience)
-            </Text>
-          </Text>
-          <View style={styles.contained}>
-            {this.props.sportList.map((item) => (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                key={item.id}
-                style={[styles.subview]}
-                onPress={() =>
-                  this.setState({ currentIndex: item.id, proseednext: true })
-                }
-              >
-                <LinearGradient
-                  colors={["rgba(255, 255, 255, 0.1)", "rgba(118, 87, 136, 0)"]}
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
-                  style={styles.sportsview}
-                >
-                  <ImageBackground
-                    source={
-                      item.id === this.state.currentIndex
-                        ? require("../../../images/playing/select_sports.png")
-                        : null
-                    }
-                    style={styles.imaged}
-                  >
-                    <Image
-                      source={{ uri: item.image }}
-                      style={styles.imageitem}
-                      resizeMode="center"
-                    />
-                  </ImageBackground>
-                </LinearGradient>
-                <Text style={styles.sportText}>{item.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <Text style={styles.mainText}>Select player Level</Text>
-          <View style={styles.contained}>
-            {data.map((item, index) => (
-              <SelectLevel
-                index={index}
-                currentLevel={this.state.currentLevel}
-                image={item.image}
-                id={item.id}
-                name={item.name}
-                onPress={() => {
-                  this.setState({ currentLevel: index, proseedLevel: true });
-                }}
-              />
-            ))}
-          </View>
+          {this.state.selectsports && this.preferredSport()}
+          {this.state.selectLevel && this.playerLevel()}
         </ScrollView>
         <View style={{ flex: 0.07, paddingTop: 20 }}>
           <CustomButton
             name="Submit"
-            available={this.state.proseednext && this.state.proseedLevel}
+            available={this.state.proseednext}
             onPress={handlepress}
           />
         </View>
@@ -137,7 +198,7 @@ const styles = StyleSheet.create({
   },
   contain: {
     flex: 1,
-    marginVertical: 20,
+    marginVertical: 10,
   },
   heading: {
     fontSize: 20,
@@ -188,4 +249,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MoreDetails;
+const mapStateToProps = (state) => {
+  return { data: state.PlayerReducer };
+};
+
+const mapDispatchToProps = { selectPreferredSports };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MoreDetails);

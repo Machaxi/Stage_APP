@@ -48,6 +48,7 @@ class PlayingPlan extends Component {
       isLoading: false,
       orderId: "",
       amount: 0,
+      subscriptionId: 0,
     };
   }
 
@@ -112,12 +113,13 @@ class PlayingPlan extends Component {
     this.setState({ selectCenter: selectCenter, distance: distance });
   };
 
-  onPressConfirm = (alreadyBook, orderId, amount) => {
+  onPressConfirm = (alreadyBook, orderId, amount, subscriptionId) => {
     this.setState({
       congratulationScreen: true,
       alreadyBook: alreadyBook,
       amount: amount,
       orderId: orderId,
+      subscriptionId: subscriptionId,
     });
   };
 
@@ -148,7 +150,7 @@ class PlayingPlan extends Component {
   selectScreen = () => {
     return (
       <View>
-        <GetBack title={this.state.title} onPress={this.hadleBackPress} />
+        <GetBack title="Playing Plan" onPress={this.hadleBackPress} />
         <View style={{ height: 70, marginHorizontal: 20, marginVertical: 10 }}>
           <BuyPlayProcess
             number={this.state.currentPage}
@@ -179,6 +181,7 @@ class PlayingPlan extends Component {
             onPressBack={this.hadleBack}
             orderId={this.state.orderId}
             amount={this.state.amount}
+            error_message={this.state.subscriptionId}
             title="Playing"
             buttonName={"Pay"}
           />
@@ -186,13 +189,18 @@ class PlayingPlan extends Component {
         {this.state.sportsList != null && this.state.moreScreen && (
           <MoreDetails
             sportList={this.state.sportsList}
+            subscriptionId={this.state.subscriptionId}
             onPress={this.onComplete}
           />
         )}
         {this.state.couponCode && (
           <View style={{ flex: 1 }}>
             <GetBack title="Apply Coupon" onPress={this.hadleBackCouponCode} />
-            <ApplyCouponCode onPress={this.hadleCouponApply} />
+            <ApplyCouponCode
+              subscriptionType="PLAYING_SUBSCRIPTION"
+              selectCenter={this.state.selectCenter}
+              onPress={this.hadleCouponApply}
+            />
           </View>
         )}
         <AppliedCouponCode

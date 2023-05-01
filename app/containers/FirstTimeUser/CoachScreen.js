@@ -39,6 +39,15 @@ class CoachScreen extends Component {
 
   componentDidMount() {
     this.getValue();
+    this.didFocusListener = this.props.navigation.addListener("didFocus", this.onScreenFocus);
+  }
+
+  onScreenFocus = () => {
+    this.apiCall();
+  };
+
+  componentWillUnmount() {
+    this.didFocusListener.remove();
   }
 
   getValue = async () => {

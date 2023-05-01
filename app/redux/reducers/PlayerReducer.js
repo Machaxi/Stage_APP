@@ -9,6 +9,7 @@ const initialState = {
   playdata: null,
   planData: null,
   playPlanData: null,
+  sportsData: null,
 };
 
 export default function PlayerReducer(state = initialState, action) {
@@ -30,6 +31,8 @@ export default function PlayerReducer(state = initialState, action) {
         playdata: action.payload.data,
         bookFail: action.payload.response,
       };
+    case types.SELECT_PREFERRED_SPORT_SUCCESS:
+      return { ...state, sportsData: action.payload.data };
     case types.SELECT_PLAN_SUCCESS:
       return { ...state, planData: action.payload.data };
     case types.SELECT_PLAY_PLAN_SUCCESS:
@@ -115,6 +118,22 @@ export function selectPlayPlanDate(postdata, header) {
     payload: {
       request: {
         url: `court/initiate-subscription-payment`,
+        method: "POST",
+        data: postdata,
+        headers: {
+          "x-authorization": header,
+        },
+      },
+    },
+  };
+}
+
+export function selectPreferredSports(postdata, header) {
+  return {
+    type: types.SELECT_PREFERRED_SPORT,
+    payload: {
+      request: {
+        url: `court/subscription-preferred-sport`,
         method: "POST",
         data: postdata,
         headers: {

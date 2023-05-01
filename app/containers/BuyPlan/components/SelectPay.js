@@ -53,6 +53,8 @@ class SelectPay extends Component {
     "Saturday",
   ];
 
+  days = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
   constructor(props) {
     super(props);
     this.state = {
@@ -174,7 +176,6 @@ class SelectPay extends Component {
       },
       theme: { color: "#67BAF5" },
     };
-    console.log(options);
     RazorpayCheckout.open(options)
       .then((data) => {
         let payment_details = {
@@ -185,7 +186,12 @@ class SelectPay extends Component {
       })
       .catch((error) => {
         console.log("Razor Rspo ", error);
-        this.props.onPress(false, orderId, amount);
+        this.props.onPress(
+          false,
+          orderId,
+          amount,
+          "You can retry your pay for the Coaching Plan if it appears that your payment was failed."
+        );
       });
   };
 
@@ -205,11 +211,17 @@ class SelectPay extends Component {
         `payment/due-subscription-plan-payment/v1`
       )
       .then((result) => {
-        result = result.payload.data;
-        if (result.success) {
+        result = result.payload;
+        if (result.data) {
+          console.log(result.data);
           this.props.onPress(true);
         } else {
-          alert(result.error_message);
+          this.props.onPress(
+            false,
+            orderId,
+            amount,
+            result.response.data.error_message
+          );
         }
       });
   };
@@ -273,7 +285,7 @@ class SelectPay extends Component {
         dataDic["data"] = dict;
       }
     } else {
-      if (childDetails != null) {
+      if (this.state.childDetails != null) {
         dict["plan_id"] = "" + this.props.selectPlan.id;
         dict["join_date"] = this.state.joinDate;
         dict["user_id"] = this.state.userDetails.id;
@@ -346,6 +358,18 @@ class SelectPay extends Component {
       );
     };
 
+    const dayss = Object.keys(this.props.selectBatch.weekDetails).map(
+      (item, index) => (
+        <Text style={[styles.sportText, { marginTop: 8 }]}>
+          {this.days[item]}
+          {index <
+            Object.keys(this.props.selectBatch.weekDetails).length - 1 && (
+            <Text>, </Text>
+          )}
+        </Text>
+      )
+    );
+
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
@@ -359,7 +383,7 @@ class SelectPay extends Component {
                 ? "Quaterly"
                 : "Yearly"
             }
-            subtitle={this.props.selectPlan.amount}
+            subtitle={"Rs. " + this.props.selectPlan.planFees}
             startDate={this.props.selectPlan.start_date}
             endDate={this.props.selectPlan.end_date}
             image={
@@ -413,13 +437,9 @@ class SelectPay extends Component {
             >
               {listimage(this.state.sportImage, this.state.sportName, true)}
               {listText(
-                this.state.session_per_Week == "WORKING_DAYS" ? "5" : "3",
+                Object.keys(this.props.selectBatch.weekDetails).length,
                 "Days/Week",
-                this.state.session_per_Week == "WORKING_DAYS"
-                  ? "Mon to Fri"
-                  : this.state.session_per_Week == "WEEK_MWF"
-                  ? "Mon,Wed,Fri"
-                  : "Tue,Thu,Sat"
+                dayss
               )}
               {listimage(
                 this.state.levelImage,

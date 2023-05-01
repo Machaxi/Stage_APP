@@ -14,6 +14,7 @@ import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import SelectLevel from "../../../components/custom/SelectLevel";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 const data = [
   {
@@ -192,11 +193,13 @@ class SelectCoachBatch extends Component {
           {item.is_allowed == false && (
             <Image
               style={{
-                width: 90,
-                height: 28,
-                marginTop: -28,
-                marginLeft: 8,
+                width: "79%",
+                height: "100%",
+                marginTop: -30,
+                marginLeft: 10,
+                tintColor: "#F2AE4D",
               }}
+              resizeMode="stretch"
               source={require("../../../images/playing/cross.png")}
             />
           )}
@@ -206,6 +209,10 @@ class SelectCoachBatch extends Component {
   };
 
   render() {
+    if (this.state.batchData == null) {
+      return <LoadingIndicator />;
+    }
+
     return (
       <View style={styles.contain}>
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>

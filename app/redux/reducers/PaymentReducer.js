@@ -29,7 +29,11 @@ export default function PaymentReducer(state = initialState, action) {
       console.log("Inside", action.payload.data);
       return { ...state, loading: false, data: action.payload.data };
     case types.PAYMENT_CONFIRMATION_SUCCESS:
-      return { ...state, paymentData: action.payload.data };
+      if (action.payload.data) {
+        return { ...state, paymentData: action.payload.data };
+      } else {
+        return { ...state, paymentData: action.payload.response.data };
+      }
     default:
       return state;
   }
@@ -194,7 +198,7 @@ export function submitPaymentConfirmation(header, postData) {
   };
 }
 
-export function paymentConfirmation(header, postData,url) {
+export function paymentConfirmation(header, postData, url) {
   console.log("Submit Payment Info=> ", JSON.stringify(postData));
   return {
     type: types.PAYMENT_CONFIRMATION,
