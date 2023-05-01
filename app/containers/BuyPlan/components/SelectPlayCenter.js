@@ -33,6 +33,7 @@ class SelectPlayCenter extends Component {
       place: "             ",
       centerData: null,
       isLoading: false,
+      isPermissionGranted: false,
     };
   }
 
@@ -53,36 +54,59 @@ class SelectPlayCenter extends Component {
     }
 
     if (isPermissionGranted) {
+      this.setState({ isPermissionGranted: true });
       this.fetchLocation();
     } else {
-      alert(
-        "Please provide location permission to show distance of societies."
-      );
+      this.setState({
+        latitude: 12.9778,
+        longitude: 77.5729,
+        place: "Bangalore",
+      });
+      this.getsortedData();
     }
+  }
+
+  getsortedData() {
+    const sortedAcademies = this.props.academiesList.sort((a, b) => {
+      const distanceA = this.calculateDistance(a.latitude, a.longitude);
+      const distanceB = this.calculateDistance(b.latitude, b.longitude);
+      // return distanceB - distanceA;
+      console.log(distanceA);
+      console.log(distanceB);
+      if (distanceA < distanceB) {
+        console.log("efef");
+        return -1;
+      } else {
+        console.log("efefv");
+        return 1;
+      }
+    });
+    console.log(sortedAcademies);
+    console.log(this.props.academiesList);
+    this.setState({
+      centerData: sortedAcademies,
+    });
   }
 
   fetchLocation() {
     this.setState({ isLoading: true });
     Geolocation.getCurrentPosition(
       (position) => {
-        console.log(position);
         var lats = parseFloat(position.coords.latitude);
         var lngs = parseFloat(position.coords.longitude);
         this.setState({
           latitude: lats,
           longitude: lngs,
-          centerData: this.props.academiesList,
           isLoading: false,
         });
+        this.getsortedData();
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
-        const address = "del";
         axios
           .get(
             `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lats}&lon=${lngs}`
           )
           .then((response) => {
-            console.log(response);
             this.setState({ place: response.data.address.village });
           })
           .catch((error) => {
@@ -93,7 +117,7 @@ class SelectPlayCenter extends Component {
         this.setState({ isLoading: false });
         console.log(error.code, error.message);
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
     );
   }
 
@@ -116,7 +140,7 @@ class SelectPlayCenter extends Component {
     if (this.state.latitude == 0) {
       return "loading";
     } else {
-      return " " + d.toFixed(1) + " km away";
+      return parseInt(d);
     }
   }
 
@@ -126,21 +150,21 @@ class SelectPlayCenter extends Component {
 
   render() {
     handlepress = async () => {
-      let centerValue = this.props.academiesList.find(
+      let centerValue = this.state.centerData.find(
         (item) => item.id === this.state.currentIndex
       );
-      let distance = this.calculateDistance(
-        centerValue.latitude,
-        centerValue.longitude
-      );
-      const academiesList = this.props.academiesList.find(
-        (item) => item.id === this.state.currentIndex
-      );
-      this.props.onPress(academiesList, distance);
+      var distance =
+        this.calculateDistance(centerValue.latitude, centerValue.longitude) +
+        " Km away";
+      if (!this.state.isPermissionGranted) {
+        distance = "0 Km away";
+      }
+      this.props.onPress(centerValue, distance);
     };
 
     const renderItem = ({ item }) => {
-      const distance = this.calculateDistance(item.latitude, item.longitude);
+      const distance =
+        this.calculateDistance(item.latitude, item.longitude) + " Km away";
       return (
         <CenterDetails
           item={item}

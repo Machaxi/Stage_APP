@@ -14,6 +14,7 @@ import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 const timedataMorning = [
   { id: 1, name: "4 - 5 AM", slot: true },
@@ -60,9 +61,6 @@ const day = weekdays[today.getDay()];
 
 const oneDay = 24 * 60 * 60 * 1000;
 let nextDate = new Date(today.getTime() + oneDay);
-while (nextDate.getDay() === 0) {
-  nextDate = new Date(nextDate.getTime() + oneDay);
-}
 const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
 const nextday = weekdays[nextDate.getDay()];
 
@@ -255,11 +253,13 @@ class SelectLearnBatch extends Component {
               item.startTime.split(":")[0] <= today.getHours() && (
                 <Image
                   style={{
-                    width: 80,
-                    height: 28,
-                    marginTop: -28,
-                    marginLeft: 7,
+                    width: "79%",
+                    height: "100%",
+                    marginTop: -30,
+                    marginLeft: 10,
+                    tintColor: "#F2AE4D",
                   }}
+                  resizeMode="stretch"
                   source={require("../../../images/playing/cross.png")}
                 />
               )}
@@ -322,6 +322,10 @@ class SelectLearnBatch extends Component {
         </TouchableOpacity>
       );
     };
+
+    if (this.state.batchData == null) {
+      return <LoadingIndicator />;
+    }
 
     return (
       <View style={styles.contain}>

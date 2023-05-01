@@ -51,11 +51,6 @@ class SelectPlayPay extends Component {
     "Saturday",
   ];
 
-  monthoption = {
-    month: "short",
-    year: "2-digit",
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -94,14 +89,10 @@ class SelectPlayPay extends Component {
     } else {
       endDate.setMonth(startDate.getMonth() + 1);
     }
-    const options = {
-      day: "2-digit",
-      month: "short",
-    };
-
-    const start_date = startDate.toLocaleString("en-GB", options);
-    const end_date = endDate.toLocaleString("en-GB", options);
     var userDetails = this.props.userDetails;
+
+    const start_date = this.formatesmallDate(startDate);
+    const end_date = this.formatesmallDate(endDate);
 
     this.setState({
       centerName: selectCenter.name,
@@ -118,6 +109,13 @@ class SelectPlayPay extends Component {
     });
   };
 
+  formatesmallDate = (date) => {
+    var data = date.getDate();
+    var month = date.getMonth();
+    datastring = data + " " + this.months[month];
+    return datastring;
+  };
+
   formatDateToCustomDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
     const monthIndex = this.months.findIndex((m) => m === month) + 1;
@@ -126,15 +124,15 @@ class SelectPlayPay extends Component {
     return formattedDate;
   };
 
-  convertToDate = (dateString) => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const [day, month] = dateString.split(" ");
-    const date = new Date(
-      `${currentYear}-${this.getMonthNumber(month)}-${day}`
-    );
-    return date;
-  };
+  // convertToDate = (dateString) => {
+  //   const currentDate = new Date();
+  //   const currentYear = currentDate.getFullYear();
+  //   const [day, month] = dateString.split(" ");
+  //   const date = new Date(
+  //     `${currentYear}-${this.getMonthNumber(month)}-${day}`
+  //   );
+  //   return date;
+  // };
 
   getMonthNumber = (monthName) => {
     const monthMap = {
@@ -206,11 +204,17 @@ class SelectPlayPay extends Component {
       })
       .catch((error) => {
         console.log("Razor Rspo ", error);
-        this.props.onPress(false, orderId, amount);
+        this.props.onPress(
+          false,
+          orderId,
+          amount,
+          "You can retry your pay for the Playing Plan if it appears that your payment was failed."
+        );
       });
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
+    this.setState({ isLoading: true });
     let postData = {
       data: {
         orderId: orderId,
@@ -226,11 +230,17 @@ class SelectPlayPay extends Component {
         "court/buy-subscription"
       )
       .then((result) => {
-        result = result.payload.data;
-        if (result.success) {
-          this.props.onPress(true);
+        result = result.payload;
+        if (result.data) {
+          console.log(result.data);
+          this.props.onPress(true, "", "", result.data.data.subscriptionId);
         } else {
-          this.props.onPress(false, orderId, amount);
+          this.props.onPress(
+            false,
+            orderId,
+            amount,
+            result.response.data.error_message
+          );
         }
       });
   };
@@ -250,12 +260,8 @@ class SelectPlayPay extends Component {
     } else {
       endDate.setMonth(date.getMonth() + 1);
     }
-    const options = {
-      day: "2-digit",
-      month: "short",
-    };
-    const start_date = date.toLocaleString("en-GB", options);
-    const end_date = endDate.toLocaleString("en-GB", options);
+    const start_date = this.formatesmallDate(date);
+    const end_date = this.formatesmallDate(endDate);
     this.setState({
       startdate: date,
       enddate: endDate,
@@ -267,7 +273,10 @@ class SelectPlayPay extends Component {
   convertToDate = (dateString) => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const [day, month] = dateString.split(" ");
+    var [day, month] = dateString.split(" ");
+    if (parseInt(day) < 10) {
+      day = "0" + day;
+    }
     const date = `${currentYear}-${this.getMonthNumber(month)}-${day}`;
     return date;
   };
@@ -357,13 +366,13 @@ class SelectPlayPay extends Component {
             >
               {listText(
                 this.state.startdate.getDate(),
-                this.state.startdate.toLocaleString("en-GB", this.monthoption),
+                this.formatesmallDate(this.state.startdate),
                 "Date of Purchase"
               )}
               <View style={{ marginHorizontal: 20 }} />
               {listText(
                 this.state.enddate.getDate(),
-                this.state.enddate.toLocaleString("en-GB", this.monthoption),
+                this.formatesmallDate(this.state.enddate),
                 "Date of Membership Expiry"
               )}
             </View>

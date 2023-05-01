@@ -23,12 +23,27 @@ class PlayerScreen extends Component {
     this.state = {
       bookingSuccess: "",
       playData: null,
+      playPlanData: null,
       header: "",
     };
   }
 
   componentDidMount() {
     this.getValue();
+    if (this.props.navigation != null) {
+      this.didFocusListener = this.props.navigation.addListener("didFocus", this.onScreenFocus);
+    }
+  }
+
+  onScreenFocus = () => {
+    console.log("working");
+    this.apiCall();
+  };
+
+  componentWillUnmount() {
+    if (this.props.navigation != null) {
+      this.didFocusListener.remove();
+    }
   }
 
   getValue = async () => {
@@ -50,6 +65,7 @@ class PlayerScreen extends Component {
         let batchData = userResponce["data"]["data"];
         this.setState({
           playData: batchData["play"],
+          playPlanData: batchData["play"]["plans"],
         });
       })
       .catch((error) => {
@@ -58,11 +74,11 @@ class PlayerScreen extends Component {
   };
 
   onPressPlan = () => {
-    this.props.onPressPlan(100);
+    this.props.onPressPlan(100, this.state.playPlanData);
   };
 
   onPlan = (index) => {
-    this.props.onPressPlan(index);
+    this.props.onPressPlan(index, this.state.playPlanData);
   };
 
   render() {

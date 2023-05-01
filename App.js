@@ -415,7 +415,7 @@ class App extends BaseComponent {
         let info_msg = this.state.info_msg
         return (
 
-              <SafeAreaView forceInset={{ top: 'always', }} style={{ flex: 1, backgroundColor: "#141A2E", marginTop: 0, marginBottom: 0 }}>
+              <SafeAreaView forceInset={{ top: 'always'}} style={{ flex: 1, backgroundColor: "#141A2E", marginTop: 0, paddingBottom: Platform.OS == 'ios' ? 20: 0 }}>
 
 
             <PaperProvider theme={ModifiedDefaultTheme}>

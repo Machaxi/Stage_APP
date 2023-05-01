@@ -105,7 +105,7 @@ class PlayerDetails extends Component {
     return (
       <View style={styles.contain}>
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
-          <Text style={styles.mainText}>is this for yourself or child?</Text>
+          <Text style={styles.mainText}>Is this for yourself or child?</Text>
           <View style={styles.contained}>
             <SelectLevel
               index={1}
