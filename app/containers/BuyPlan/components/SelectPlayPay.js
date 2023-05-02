@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import Loader from "../../../components/custom/Loader";
 import RazorpayCheckout from "react-native-razorpay";
 import {
+  Nunito_Bold,
   Nunito_Medium,
   Nunito_Regular,
   Nunito_SemiBold,
@@ -24,6 +25,7 @@ import PaymentDetails from "../../../components/custom/PaymentDetails";
 import CouponView from "../../../components/custom/CouponView";
 import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
+import AppliedCouponCode from "../../../components/custom/AppliedCouponCode";
 
 class SelectPlayPay extends Component {
   months = [
@@ -68,6 +70,11 @@ class SelectPlayPay extends Component {
       phonenumber: "",
       startdate: new Date(),
       enddate: new Date(),
+      extraDates: 30,
+      discountAmount: 0,
+      couponAmount: 0,
+      coupon: null,
+      isApplied: false,
     };
   }
 
@@ -80,15 +87,19 @@ class SelectPlayPay extends Component {
     const selectCenter = this.props.selectCenter;
     const distance = this.props.distance;
     const selectPlan = this.props.selectPlan;
-
-    const startDate = new Date();
-    const endDate = new Date(startDate);
-    if (startDate.getMonth() === 11) {
-      endDate.setMonth(0);
-      endDate.setFullYear(startDate.getFullYear() + 1);
-    } else {
-      endDate.setMonth(startDate.getMonth() + 1);
+    const selectType = this.props.selectPlan.type;
+    var extraDates = 30;
+    if (selectType == "QUARTERLY") {
+      extraDates = 90;
+    } else if (selectType == "HALF_YEARLY") {
+      extraDates = 180;
+    } else if (selectType == "YEARLY") {
+      extraDates = 365;
     }
+    const startDate = new Date();
+    const endDate = new Date(
+      startDate.getTime() + extraDates * 24 * 60 * 60 * 1000
+    );
     var userDetails = this.props.userDetails;
 
     const start_date = this.formatesmallDate(startDate);
@@ -106,13 +117,55 @@ class SelectPlayPay extends Component {
       startdate: startDate,
       enddate: endDate,
       userDetails: userDetails,
+      extraDates: extraDates,
+      discountAmount: selectPlan.price,
+      coupon: this.props.coupon,
     });
   };
+
+  getdetails() {
+    if (this.props.applycoupon) {
+      var dataDic = {};
+      var dict = {};
+      const joinDate = this.convertToDate(this.state.displayStartDate);
+      dict["planId"] = "" + this.props.selectPlan.id;
+      dict["preferredAcademyId"] = this.props.selectCenter.id;
+      dict["dateOfJoining"] = joinDate;
+      dict["couponCode"] = this.props.coupon.couponCode;
+      dataDic["data"] = dict;
+
+      this.props
+        .selectPlayPlanDate(dataDic, this.state.header)
+        .then(() => {
+          let jsondata = JSON.stringify(this.props.data.playPlanData);
+          let responcedata = JSON.parse(jsondata);
+          const couponamt = this.state.amount - responcedata.data.amount;
+          this.setState({
+            discountAmount: responcedata.data.amount,
+            couponAmount: couponamt,
+            isApplied: true,
+          });
+        })
+        .catch((response) => {
+          console.log(response);
+        });
+    }
+  }
 
   formatesmallDate = (date) => {
     var data = date.getDate();
     var month = date.getMonth();
     datastring = data + " " + this.months[month];
+    return datastring;
+  };
+
+  formateDate = (date) => {
+    var month = date.getMonth();
+    const year = date
+      .getFullYear()
+      .toString()
+      .substr(-2);
+    datastring = this.months[month] + " " + year;
     return datastring;
   };
 
@@ -123,16 +176,6 @@ class SelectPlayPay extends Component {
     const formattedDate = `${year}-${formattedMonth}-${day}`;
     return formattedDate;
   };
-
-  // convertToDate = (dateString) => {
-  //   const currentDate = new Date();
-  //   const currentYear = currentDate.getFullYear();
-  //   const [day, month] = dateString.split(" ");
-  //   const date = new Date(
-  //     `${currentYear}-${this.getMonthNumber(month)}-${day}`
-  //   );
-  //   return date;
-  // };
 
   getMonthNumber = (monthName) => {
     const monthMap = {
@@ -161,19 +204,24 @@ class SelectPlayPay extends Component {
     dict["preferredAcademyId"] = this.props.selectCenter.id;
     dict["dateOfJoining"] = joinDate;
     dataDic["data"] = dict;
+    if (this.props.coupon) {
+      dict["couponCode"] = this.props.coupon.couponCode;
+    }
 
     console.log(dataDic);
     this.props
       .selectPlayPlanDate(dataDic, this.state.header)
-      .then(() => {
-        let jsondata = JSON.stringify(this.props.data.playPlanData);
-        let responcedata = JSON.parse(jsondata);
-        console.log(responcedata.data);
-        if (responcedata.success) {
+      .then((result) => {
+        result = result.payload;
+        if (result.data) {
+          let jsondata = JSON.stringify(this.props.data.playPlanData);
+          let responcedata = JSON.parse(jsondata);
           this.handleOnStartPayment(
             responcedata.data.orderId,
             responcedata.data.amount
           );
+        } else {
+          this.props.onPress(false, 0, 0, result.response.data.error_message);
         }
       })
       .catch((response) => {
@@ -222,7 +270,6 @@ class SelectPlayPay extends Component {
         payment_details: paymentDetails,
       },
     };
-    console.log(postData);
     this.props
       .paymentConfirmation(
         this.state.header,
@@ -232,7 +279,6 @@ class SelectPlayPay extends Component {
       .then((result) => {
         result = result.payload;
         if (result.data) {
-          console.log(result.data);
           this.props.onPress(true, "", "", result.data.data.subscriptionId);
         } else {
           this.props.onPress(
@@ -248,23 +294,22 @@ class SelectPlayPay extends Component {
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
     const phonenumber = await AsyncStorage.getItem("phone_number");
-    this.setState({ header: header, phonenumber: phonenumber });
+    this.setState({ header: header, phonenumber: phonenumber }, () => {
+      this.getdetails();
+    });
   };
 
   DataChange = (join_date) => {
-    const date = new Date(join_date);
-    const endDate = new Date(date);
-    if (date.getMonth() === 11) {
-      endDate.setMonth(0);
-      endDate.setFullYear(date.getFullYear() + 1);
-    } else {
-      endDate.setMonth(date.getMonth() + 1);
-    }
-    const start_date = this.formatesmallDate(date);
-    const end_date = this.formatesmallDate(endDate);
+    console.log(join_date);
+    const joinDate = new Date(join_date);
+    const endJoin = new Date(
+      joinDate.getTime() + this.state.extraDates * 24 * 60 * 60 * 1000
+    );
+    const start_date = this.formatesmallDate(joinDate);
+    const end_date = this.formatesmallDate(endJoin);
     this.setState({
-      startdate: date,
-      enddate: endDate,
+      startdate: joinDate,
+      enddate: endJoin,
       displayStartDate: start_date,
       displayEndDate: end_date,
     });
@@ -279,6 +324,14 @@ class SelectPlayPay extends Component {
     }
     const date = `${currentYear}-${this.getMonthNumber(month)}-${day}`;
     return date;
+  };
+
+  onPressExplore = () => {
+    this.props.onPressExplore();
+  };
+
+  onAppliedBack = () => {
+    this.setState({ isApplied: false });
   };
 
   render() {
@@ -301,8 +354,24 @@ class SelectPlayPay extends Component {
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
+        <AppliedCouponCode
+          visible={this.state.isApplied}
+          price={"₹ " + this.state.couponAmount}
+          onPressBack={this.onAppliedBack}
+        />
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.94 }}>
-          <Text style={styles.mainText}>Review before Payment</Text>
+          <View style={styles.smallView}>
+            <Text style={styles.mainText}>Review before Payment</Text>
+            {this.props.explore && (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={this.onPressExplore}
+                style={styles.smallButton}
+              >
+                <Text style={styles.insideText}>Explore Plans</Text>
+              </TouchableOpacity>
+            )}
+          </View>
           {this.state.displayStartDate && (
             <PlanDetails
               title={this.props.selectPlan.name}
@@ -366,13 +435,13 @@ class SelectPlayPay extends Component {
             >
               {listText(
                 this.state.startdate.getDate(),
-                this.formatesmallDate(this.state.startdate),
+                this.formateDate(this.state.startdate),
                 "Date of Purchase"
               )}
               <View style={{ marginHorizontal: 20 }} />
               {listText(
                 this.state.enddate.getDate(),
-                this.formatesmallDate(this.state.enddate),
+                this.formateDate(this.state.enddate),
                 "Date of Membership Expiry"
               )}
             </View>
@@ -381,13 +450,20 @@ class SelectPlayPay extends Component {
             activeOpacity={0.8}
             onPress={() => {
               if (this.state.appliedCoupon) {
-                this.setState({ appliedCoupon: !this.state.appliedCoupon });
+                this.setState({
+                  appliedCoupon: !this.state.appliedCoupon,
+                  discountAmount: this.state.amount,
+                });
               } else {
                 this.props.onPresscoupon();
               }
             }}
           >
-            <CouponView appliedCoupon={this.state.appliedCoupon} />
+            <CouponView
+              appliedCoupon={this.state.appliedCoupon}
+              coupon={this.state.coupon}
+              amount={this.state.couponAmount}
+            />
           </TouchableOpacity>
           <PaymentDetails
             title={
@@ -397,14 +473,14 @@ class SelectPlayPay extends Component {
               this.state.displayEndDate
             }
             appliedCoupon={this.state.appliedCoupon}
-            coupounPrice={100}
+            coupounPrice={this.state.couponAmount}
             price={this.state.amount}
-            finalprice={this.state.amount}
+            finalprice={this.state.discountAmount}
           />
         </ScrollView>
         <View style={{ flex: 0.06, paddingTop: 15 }}>
           <CustomButton
-            name={"Pay " + this.state.amount}
+            name={"Pay " + this.state.discountAmount}
             available={true}
             onPress={this.startPayment}
           />
@@ -432,6 +508,26 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontFamily: Nunito_Medium,
     color: "#FF9C33",
+  },
+  insideText: {
+    fontSize: 12,
+    fontFamily: Nunito_Bold,
+    color: "#F1E8FF",
+  },
+  smallButton: {
+    width: 150,
+    height: 38,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#47474A",
+    marginVertical: 15,
+    marginLeft: 10,
+    borderRadius: 19,
+  },
+  smallView: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
   },
   name: {
     marginLeft: 10,

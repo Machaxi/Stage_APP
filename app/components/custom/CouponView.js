@@ -37,12 +37,14 @@ const CouponView = (props) => {
                 resizeMode="contain"
               />
             </View>
-            <Text style={styles.subtitle}>NEW760</Text>
+            {props.coupon != null && (
+              <Text style={styles.subtitle}>{props.coupon.couponCode}</Text>
+            )}
             <Text style={[styles.subtitle, { color: "#A3A5AE" }]}>
               You saved
               <Text style={[styles.subtitle, { color: "#FF9C33" }]}>
                 {" "}
-                ₹ 760{" "}
+                ₹ {props.amount}{" "}
               </Text>
               with this offer on this plan.
             </Text>

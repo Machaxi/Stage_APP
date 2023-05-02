@@ -50,6 +50,21 @@ const PlanDetails = (props) => {
     return monthMap[monthName];
   };
 
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
   const options = {
     day: "2-digit",
     month: "short",
@@ -57,21 +72,6 @@ const PlanDetails = (props) => {
   };
 
   const formatDateToCustomDate = (dateString) => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
     const [day, month, year] = dateString.split("-");
     const monthIndex = months.findIndex((m) => m === month) + 1;
     const formattedMonth = monthIndex < 10 ? `0${monthIndex}` : monthIndex;
@@ -79,8 +79,24 @@ const PlanDetails = (props) => {
     return formattedDate;
   };
 
+  const formateDate = (date) => {
+    var day = date
+      .getDate()
+      .toString()
+      .padStart(2, "0");
+    var month = date.getMonth();
+    const year = date
+      .getFullYear()
+      .toString()
+      .substr(-2);
+    datastring = day + " " + months[month] + " " + year;
+    return datastring;
+  };
+
   handlepress = (date) => {
-    setSelectDate(date);
+    console.log(formatDateToCustomDate(date));
+    var presentDate = new Date(formatDateToCustomDate(date));
+    setSelectDate(presentDate);
     props.onPress(formatDateToCustomDate(date));
   };
 
@@ -104,7 +120,7 @@ const PlanDetails = (props) => {
         {props.url ? (
           <Image
             source={{ uri: props.image }}
-            style={[styles.image, {marginBottom: 10}]}
+            style={[styles.image, { marginBottom: 10 }]}
             resizeMode="contain"
           />
         ) : (
@@ -138,9 +154,7 @@ const PlanDetails = (props) => {
                 flexDirection: "row",
               }}
             >
-              <Text style={styles.timetext}>
-                {selectDate.toLocaleString("en-GB", options)}
-              </Text>
+              <Text style={styles.timetext}>{formateDate(selectDate)}</Text>
               <DatePicker
                 style={{ borderWidth: 0, width: "100%" }}
                 date={selectDate}
