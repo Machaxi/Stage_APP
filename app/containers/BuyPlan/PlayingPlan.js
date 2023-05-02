@@ -15,7 +15,6 @@ import SelectPlayPay from "./components/SelectPlayPay";
 import MoreDetails from "./components/MoreDetails";
 import AsyncStorage from "@react-native-community/async-storage";
 import ApplyCouponCode from "./components/ApplyCouponCode";
-import AppliedCouponCode from "../../components/custom/AppliedCouponCode";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -45,7 +44,7 @@ class PlayingPlan extends Component {
       PlanNumber: 100,
       couponCode: false,
       applycoupon: false,
-      isLoading: false,
+      coupon: null,
       orderId: "",
       amount: 0,
       subscriptionId: 0,
@@ -61,7 +60,6 @@ class PlayingPlan extends Component {
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
-      
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];
@@ -96,12 +94,8 @@ class PlayingPlan extends Component {
     this.setState({ couponCode: true });
   };
 
-  hadleCouponApply = () => {
-    this.setState({ couponCode: false, applycoupon: true, isLoading: true });
-  };
-
-  onAppliedBack = () => {
-    this.setState({ isLoading: false });
+  hadleCouponApply = (coupon) => {
+    this.setState({ couponCode: false, applycoupon: true, coupon: coupon });
   };
 
   onPressPlan = (selectPlan) => {
@@ -111,7 +105,12 @@ class PlayingPlan extends Component {
 
   onPressCenter = (selectCenter, distance) => {
     this.setState({ currentPage: 3 });
-    this.setState({ selectCenter: selectCenter, distance: distance });
+    this.setState({
+      selectCenter: selectCenter,
+      distance: distance,
+      applycoupon: false,
+      coupon: null,
+    });
   };
 
   onPressConfirm = (alreadyBook, orderId, amount, subscriptionId) => {
@@ -148,6 +147,10 @@ class PlayingPlan extends Component {
     this.setState({ congratulationScreen: false, moreScreen: true });
   };
 
+  confirm = () => {
+    this.setState({ congratulationScreen: false });
+  };
+
   selectScreen = () => {
     return (
       <View>
@@ -180,6 +183,7 @@ class PlayingPlan extends Component {
         {this.state.congratulationScreen && !this.state.alreadyBook && (
           <SorryPage
             onPressBack={this.hadleBack}
+            onPress={this.confirm}
             orderId={this.state.orderId}
             amount={this.state.amount}
             error_message={this.state.subscriptionId}
@@ -204,12 +208,6 @@ class PlayingPlan extends Component {
             />
           </View>
         )}
-        <AppliedCouponCode
-          visible={this.state.isLoading}
-          price="₹ 200"
-          onPressBack={this.onAppliedBack}
-        />
-
         {!this.state.congratulationScreen &&
           !this.state.moreScreen &&
           !this.state.couponCode && (
@@ -236,9 +234,9 @@ class PlayingPlan extends Component {
                     selectCenter={this.state.selectCenter}
                     selectPlan={this.state.selectPlan}
                     distance={this.state.distance}
-                    username={this.state.username}
-                    usergender={this.state.usergender}
                     applycoupon={this.state.applycoupon}
+                    coupon={this.state.coupon}
+                    explore={false}
                     onPresscoupon={this.hadleCouponCode}
                     onPress={this.onPressConfirm}
                   />

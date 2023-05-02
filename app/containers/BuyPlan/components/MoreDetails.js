@@ -16,27 +16,32 @@ import SelectLevel from "../../../components/custom/SelectLevel";
 import GetBack from "../../../components/custom/GetBack";
 import { selectPreferredSports } from "../../../redux/reducers/PlayerReducer";
 import { connect } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const data = [
   {
     id: 1,
     image: require("../../../images/playing/beginner.png"),
-    name: "Beginner",
+    displayText: "Beginner",
+    name:"BASIC"
   },
   {
     id: 2,
     image: require("../../../images/playing/intermediate.png"),
-    name: "Intermediate",
+    displayText: "Intermediate",
+    name:"INTERMEDIATE"
   },
   {
     id: 3,
     image: require("../../../images/playing/advance.png"),
-    name: "Advance",
+    displayText: "Advance",
+    name:"ADVANCED"
   },
   {
     id: 4,
     image: require("../../../images/playing/professional.png"),
-    name: "Professional",
+    displayText: "Professional",
+    name:"PROFESSIONAL"
   },
 ];
 
@@ -49,12 +54,19 @@ class MoreDetails extends Component {
       proseednext: false,
       selectsports: true,
       selectLevel: false,
+      header: null,
     };
   }
 
   componentDidMount() {
-    console.log(this.props.subscriptionId);
+    this.getData();
   }
+
+  getData = async () => {
+    const header = await AsyncStorage.getItem("header");
+    this.setState({ header: header});
+  };
+
 
   preferredSport = () => {
     return (
@@ -124,7 +136,7 @@ class MoreDetails extends Component {
               currentLevel={this.state.currentLevel}
               image={item.image}
               id={item.id}
-              name={item.name}
+              name={item.displayText}
               onPress={() => {
                 this.setState({ currentLevel: index, proseednext: true });
               }}
@@ -144,8 +156,9 @@ class MoreDetails extends Component {
           proseednext: false,
         });
       } else {
+        console.log(this.state.header)
         const sportsId = this.state.currentIndex;
-        const level = data[this.state.currentLevel].name.toUpperCase();
+        const level = data[this.state.currentLevel].name;
         const subId = this.props.subscriptionId;
         var dataDic = {};
         var dict = {};
@@ -154,18 +167,16 @@ class MoreDetails extends Component {
         dict["proficiency"] = level;
         dataDic["data"] = dict;
 
-        console.log(dataDic);
         this.props
           .selectPreferredSports(dataDic, this.state.header)
           .then(() => {
-            let jsondata = JSON.stringify(this.props.data.playPlanData);
+            let jsondata = JSON.stringify(this.props.data.sportsData);
             let responcedata = JSON.parse(jsondata);
             console.log(responcedata.data);
             this.props.onPress();
           })
           .catch((response) => {
             console.log(response);
-            this.props.onPress();
           });
       }
     };

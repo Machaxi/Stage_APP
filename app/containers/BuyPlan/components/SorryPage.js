@@ -120,7 +120,11 @@ class SorryPage extends Component {
     };
 
     handlePaypress = () => {
-      this.handleOnStartPayment(this.props.orderId, this.props.amount);
+      if (this.props.amount == 0) {
+        this.props.onPressBack();
+      } else {
+        this.props.onPress();
+      }
     };
 
     return (
@@ -146,7 +150,11 @@ class SorryPage extends Component {
           <Text style={styles.title}>Payment Failed !</Text>
           <Text style={styles.subtext}>{this.props.error_message}</Text>
           <CustomButton
-            name={"Pay ₹ " + this.props.amount}
+            name={
+              this.props.amount == 0
+                ? "Try Again"
+                : "Pay ₹ " + this.props.amount
+            }
             hideImage={true}
             available={true}
             onPress={handlePaypress}

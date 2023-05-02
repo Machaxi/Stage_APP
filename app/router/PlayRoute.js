@@ -22,6 +22,7 @@ import BookSlotScreen from "../containers/play/BookSlotScreen";
 import BookSlotCentreSelectionScreen from "../containers/play/BookSlotCentreSelectionScreen";
 import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
+import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
 
 const playModule = createStackNavigator({
   Play: {
@@ -47,6 +48,23 @@ const playModule = createStackNavigator({
   },
   PlayingPlan: {
     screen: PlayingPlan,
+    navigationOptions: ({ navigation }) => ({
+      title: "PLay",
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  RenewPlan: {
+    screen: RenewPlayPlan,
     navigationOptions: ({ navigation }) => ({
       title: "PLay",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,

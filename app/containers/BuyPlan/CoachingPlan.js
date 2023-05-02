@@ -46,8 +46,8 @@ class CoachingPlan extends Component {
       amount: 0,
       orderId: "",
       applycoupon: false,
-      isLoading: false,
       childDetails: null,
+      coupon: null,
     };
   }
 
@@ -94,7 +94,12 @@ class CoachingPlan extends Component {
 
   onPressPlan = (selectPlan, selectSlot) => {
     this.setState({ currentPage: 5 });
-    this.setState({ selectPlan: selectPlan, selectSlot: selectSlot });
+    this.setState({
+      selectPlan: selectPlan,
+      selectSlot: selectSlot,
+      applycoupon: false,
+      coupon: null,
+    });
   };
 
   onPressConfirm = (alreadyBook, orderId, amount, errorMessage) => {
@@ -127,16 +132,12 @@ class CoachingPlan extends Component {
     this.setState({ couponCode: true });
   };
 
-  hadleCouponApply = () => {
-    this.setState({ couponCode: false, applycoupon: true, isLoading: true });
+  hadleCouponApply = (coupon) => {
+    this.setState({ couponCode: false, applycoupon: true, coupon: coupon });
   };
 
   hadleBack = () => {
     this.props.navigation.goBack();
-  };
-
-  onAppliedBack = () => {
-    this.setState({ isLoading: false });
   };
 
   selectScreen = () => {
@@ -167,6 +168,10 @@ class CoachingPlan extends Component {
 
   onPressSuccess = () => {
     this.props.navigation.navigate("LearnHomePage");
+  };
+
+  confirm = () => {
+    this.setState({ congratulationScreen: false });
   };
 
   render() {
@@ -207,15 +212,9 @@ class CoachingPlan extends Component {
             amount={this.state.amount}
             title="Coaching"
             error_message={this.state.errorMessage}
-            onPress={this.onPressConfirm}
+            onPress={this.confirm}
           />
         )}
-        <AppliedCouponCode
-          visible={this.state.isLoading}
-          price="₹ 200"
-          onPressBack={this.onAppliedBack}
-        />
-
         {!this.state.firstPage &&
           !this.state.congratulationScreen &&
           !this.state.couponCode && (
@@ -263,6 +262,7 @@ class CoachingPlan extends Component {
                     usergender={this.state.usergender}
                     parent={this.state.parent}
                     applycoupon={this.state.applycoupon}
+                    coupon={this.state.coupon}
                     childDetails={this.state.childDetails}
                     onPress={this.onPressConfirm}
                     onPresscoupon={this.hadleCouponCode}
