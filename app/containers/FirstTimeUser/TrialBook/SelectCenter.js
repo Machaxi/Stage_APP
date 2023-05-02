@@ -55,7 +55,7 @@ class SelectCenter extends Component {
         isPermissionGranted = true;
     }
 
-    if (!isPermissionGranted) {
+    if (isPermissionGranted) {
       this.setState({ isPermissionGranted: true });
       this.fetchLocation();
     } else {

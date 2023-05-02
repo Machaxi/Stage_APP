@@ -126,6 +126,7 @@ import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import NotificationsScreen from "../containers/notification/NotificationsScreen";
 import GoBackHeader from "../components/molecules/goBackHeader";
 import BookSlotScreen from "../containers/play/BookSlotScreen";
+import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -3105,6 +3106,9 @@ const BaseNavigator = createSwitchNavigator({
   },
   HomeStack: {
     screen: HomeStack,
+  },
+  RenewPlayPlan: {
+    screen: RenewPlayPlan,
   },
   HomeDrawer: {
     screen: HomeDrawer,

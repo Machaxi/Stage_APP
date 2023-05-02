@@ -20,7 +20,7 @@ const PaymentDetails = (props) => {
       <Text style={styles.titled}>Payment Detail</Text>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.title}>{props.price}</Text>
+        <Text style={styles.title}> ₹ {props.price}</Text>
       </View>
       <Text style={styles.subtext}>Taxes + Machaxi Fee inclusive</Text>
       <View style={styles.line} />
@@ -28,7 +28,7 @@ const PaymentDetails = (props) => {
         <View>
           <View style={styles.textContainer}>
             <Text style={[styles.title]}>Grand Total : </Text>
-            <Text style={styles.title}>{props.price}</Text>
+            <Text style={styles.title}> ₹ {props.price}</Text>
           </View>
           <View style={styles.textContainer}>
             <View style={{ flexDirection: "row" }}>
@@ -44,7 +44,7 @@ const PaymentDetails = (props) => {
               />
             </View>
             <Text style={[styles.title, { color: "rgba(1, 227, 214, 0.77)" }]}>
-              - Rs. {props.coupounPrice}
+              - ₹ {props.coupounPrice}
             </Text>
           </View>
           <View style={styles.line} />
@@ -52,7 +52,7 @@ const PaymentDetails = (props) => {
       )}
       <View style={styles.textContainer}>
         <Text style={[styles.title, { fontSize: 16 }]}>Payable Amount : </Text>
-        <Text style={styles.pricetitle}>{props.finalprice}</Text>
+        <Text style={styles.pricetitle}> ₹ {props.finalprice}</Text>
       </View>
     </LinearGradient>
   );

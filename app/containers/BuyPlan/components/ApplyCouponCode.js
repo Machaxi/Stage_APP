@@ -3,7 +3,6 @@ import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { darkGreyVariant } from "../../util/colors";
 import EnterCouponCode from "../../../components/molecules/enterCouponCode";
 import CouponListItem from "../../../components/molecules/couponListItem";
-import { couponListData } from "../../util/dummyData/couponListData";
 import axios from "axios";
 import { getBaseUrl } from "../../BaseComponent";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -53,6 +52,7 @@ class ApplyCouponCode extends Component {
         this.setState({
           couponData: academiesData["coupons"],
         });
+        console.log(academiesData["coupons"]);
       })
       .catch((error) => {
         console.log(error);
@@ -60,8 +60,8 @@ class ApplyCouponCode extends Component {
   };
 
   render() {
-    handlepress = () => {
-      this.props.onPress();
+    handlepress = (item) => {
+      this.props.onPress(item);
     };
 
     const handleChange = (text) => {
@@ -78,9 +78,15 @@ class ApplyCouponCode extends Component {
       return <LoadingIndicator />;
     }
 
-    const filteredData = couponListData.filter((item) =>
-      item.coupon_code.toLowerCase().includes(this.state.code.toLowerCase())
-    );
+    const filteredData = this.state.couponData.filter((item) => {
+      let endDate = new Date(item.endTime);
+      let startDate = new Date(item.startTime);
+      if (new Date() <= endDate && new Date() >= startDate) {
+        return item.couponCode
+          .toLowerCase()
+          .includes(this.state.code.toLowerCase());
+      }
+    });
 
     return (
       <View style={styles.contain}>
@@ -97,10 +103,13 @@ class ApplyCouponCode extends Component {
           extraData={filteredData}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity activeOpacity={0.8} onPress={handlepress}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => handlepress(item)}
+              >
                 <CouponListItem
-                  coupon_code={item.coupon_code}
-                  discount={item.discount}
+                  coupon_code={item.title}
+                  discount={item.description}
                   couponApplied={this.state.code == item.coupon_code}
                 />
               </TouchableOpacity>

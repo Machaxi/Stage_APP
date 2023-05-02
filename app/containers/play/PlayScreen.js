@@ -532,7 +532,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
             currentRating={getProficiencyName(userProficiency)}
             icon={{ uri: preferredDetails?.sport?.image }}
             sportTitle={preferredDetails?.sport?.name}
-          />
+          /> 
           <MembershipDetails
             //TODO:
             packageRemainingDays={packageRemainingDays}
@@ -547,7 +547,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
             hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
             slotsExhaused={false}
             onMorePlansPress={() => {}}
-            onRenewPress={() => {}}
+            onRenewPress={() => {navigation.navigate("RenewPlan");}}
             expiryDate={moment(
               playerDetailsResponse?.plan?.expiryDate
             ).format("Mo MMMM YYYY")}

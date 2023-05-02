@@ -26,6 +26,7 @@ import CouponView from "../../../components/custom/CouponView";
 import axios from "axios";
 import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
+import AppliedCouponCode from "../../../components/custom/AppliedCouponCode";
 
 class SelectPay extends Component {
   months = [
@@ -83,6 +84,10 @@ class SelectPay extends Component {
       joinDate: "",
       phonenumber: "",
       childDetails: null,
+      discountAmount: 0,
+      couponAmount: 0,
+      coupon: null,
+      isApplied: false,
     };
   }
 
@@ -127,13 +132,60 @@ class SelectPay extends Component {
       parent: parent,
       displayStartDate: this.props.selectPlan.start_date,
       displayEndDate: this.props.selectPlan.end_date,
-      amount: this.props.selectPlan.amount,
+      amount: this.props.selectPlan.paybleAmount,
       joinDate: joinDate,
       appliedCoupon: this.props.applycoupon,
       userData: userData,
       childDetails: this.props.childDetails,
+      discountAmount: this.props.selectPlan.paybleAmount,
+      coupon: this.props.coupon,
     });
   };
+
+  getdetails(displayapply) {
+    if (this.props.applycoupon) {
+      var dataDic = {};
+      var dict = {};
+      dict["plan_id"] = "" + this.props.selectPlan.id;
+      dict["join_date"] = this.state.joinDate;
+      dict["user_id"] = this.state.userDetails.id;
+      if (this.props.parent == "Parent") {
+        if (userData.user["user_type"] == "GUEST") {
+          dict["parent_name"] = this.state.userDetails.userName;
+          dict["player_name"] = this.state.userDetails.userName;
+          dict["gender"] = this.state.gender.toUpperCase();
+        }
+      } else {
+        if (this.state.childDetails != null) {
+          dict["player_user_id"] = this.state.childDetails.id;
+        } else {
+          dict["parent_name"] = this.state.userDetails.userName;
+          dict["player_name"] = this.state.username;
+          dict["gender"] = this.state.gender.toUpperCase();
+        }
+      }
+      dict["couponCode"] = this.props.coupon.couponCode;
+      dataDic["data"] = dict;
+      this.props
+        .selectPlanDate(dataDic, this.state.header)
+        .then(() => {
+          let jsondata = JSON.stringify(this.props.data.planData.data);
+          let responcedata = JSON.parse(jsondata);
+          console.log(this.state.amount, responcedata.amount);
+          const couponamt = this.state.amount - responcedata.amount;
+          if (displayapply) {
+            this.setState({ isApplied: true });
+          }
+          this.setState({
+            discountAmount: responcedata.amount,
+            couponAmount: couponamt,
+          });
+        })
+        .catch((response) => {
+          console.log(response);
+        });
+    }
+  }
 
   convertToDate = (dateString) => {
     const currentDate = new Date();
@@ -233,12 +285,17 @@ class SelectPay extends Component {
     const userDatas = await AsyncStorage.getItem("userInfo");
     const userData = JSON.parse(userDatas);
     const userDetails = JSON.parse(userDetailsJson);
-    this.setState({
-      userDetails: userDetails,
-      header: header,
-      phonenumber: phonenumber,
-      userData: userData,
-    });
+    this.setState(
+      {
+        userDetails: userDetails,
+        header: header,
+        phonenumber: phonenumber,
+        userData: userData,
+      },
+      () => {
+        this.getdetails(true);
+      }
+    );
   };
 
   DataChange = (join_date) => {
@@ -258,8 +315,10 @@ class SelectPay extends Component {
         this.setState({
           displayEndDate: planData[term].end_date,
           displayStartDate: planData[term].start_date,
-          amount: planData[term].amount,
+          amount: planData[term].paybleAmount,
+          discountAmount: planData[term].paybleAmount,
         });
+        this.getdetails(false);
       })
       .catch((error) => {
         console.log(error);
@@ -277,12 +336,10 @@ class SelectPay extends Component {
         dict["parent_name"] = this.state.userDetails.userName;
         dict["player_name"] = this.state.userDetails.userName;
         dict["gender"] = this.state.gender.toUpperCase();
-        dataDic["data"] = dict;
       } else {
         dict["plan_id"] = "" + this.props.selectPlan.id;
         dict["join_date"] = this.state.joinDate;
         dict["user_id"] = this.state.userDetails.id;
-        dataDic["data"] = dict;
       }
     } else {
       if (this.state.childDetails != null) {
@@ -290,7 +347,6 @@ class SelectPay extends Component {
         dict["join_date"] = this.state.joinDate;
         dict["user_id"] = this.state.userDetails.id;
         dict["player_user_id"] = this.state.childDetails.id;
-        dataDic["data"] = dict;
       } else {
         dict["plan_id"] = "" + this.props.selectPlan.id;
         dict["join_date"] = this.state.joinDate;
@@ -298,9 +354,13 @@ class SelectPay extends Component {
         dict["parent_name"] = this.state.userDetails.userName;
         dict["player_name"] = this.state.username;
         dict["gender"] = this.state.gender.toUpperCase();
-        dataDic["data"] = dict;
       }
     }
+
+    if (this.props.coupon) {
+      dict["couponCode"] = this.props.coupon.couponCode;
+    }
+    dataDic["data"] = dict;
 
     this.props
       .selectPlanDate(dataDic, this.state.header)
@@ -312,6 +372,10 @@ class SelectPay extends Component {
       .catch((response) => {
         console.log(response);
       });
+  };
+
+  onAppliedBack = () => {
+    this.setState({ isApplied: false });
   };
 
   render() {
@@ -373,6 +437,11 @@ class SelectPay extends Component {
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
+        <AppliedCouponCode
+          visible={this.state.isApplied}
+          price={"₹ " + this.state.couponAmount}
+          onPressBack={this.onAppliedBack}
+        />
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.94 }}>
           <Text style={styles.mainText}>Review before Payment</Text>
           <PlanDetails
@@ -439,7 +508,9 @@ class SelectPay extends Component {
               {listText(
                 Object.keys(this.props.selectBatch.weekDetails).length,
                 "Days/Week",
-                dayss
+                Object.keys(this.props.selectBatch.weekDetails).length == 5
+                  ? "Mon to Fri"
+                  : dayss
               )}
               {listimage(
                 this.state.levelImage,
@@ -471,13 +542,20 @@ class SelectPay extends Component {
             activeOpacity={0.8}
             onPress={() => {
               if (this.state.appliedCoupon) {
-                this.setState({ appliedCoupon: !this.state.appliedCoupon });
+                this.setState({
+                  appliedCoupon: !this.state.appliedCoupon,
+                  discountAmount: this.state.amount,
+                });
               } else {
                 this.props.onPresscoupon();
               }
             }}
           >
-            <CouponView appliedCoupon={this.state.appliedCoupon} />
+            <CouponView
+              appliedCoupon={this.state.appliedCoupon}
+              coupon={this.state.coupon}
+              amount={this.state.couponAmount}
+            />
           </TouchableOpacity>
           <PaymentDetails
             title={
@@ -487,14 +565,14 @@ class SelectPay extends Component {
               this.state.displayEndDate
             }
             appliedCoupon={this.state.appliedCoupon}
-            coupounPrice={100}
+            coupounPrice={this.state.couponAmount}
             price={this.state.amount}
-            finalprice={this.state.amount}
+            finalprice={this.state.discountAmount}
           />
         </ScrollView>
         <View style={{ flex: 0.06, paddingTop: 15 }}>
           <CustomButton
-            name={"Pay " + this.state.amount}
+            name={"Pay ₹ " + this.state.discountAmount}
             available={true}
             onPress={this.startPayment}
           />

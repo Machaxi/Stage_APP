@@ -19,7 +19,7 @@ const AppliedCouponCode = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       props.onPressBack();
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [props]);
 
