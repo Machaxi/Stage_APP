@@ -144,13 +144,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           console.log("requestData" + JSON.stringify(response.data));
           let json = response.data;
           let success = json.success;
-          console.log("---->" + success);
           if (success) {
             if (json.data?.academyCourts?.length > 0){
               json.data?.academyCourts?.map((val)=> {
-                console.log('(((((')
                 if(val.academy?.id == preferredAcademyId){
-                  console.log('initialselected academy data'+ val)
                   onAcademySelection(val)
                 }
               })
@@ -200,18 +197,16 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     console.log("playHoursRemaining" + playHoursRemaining);
     console.log("finalDifference" + finalDifference);
     if(playHoursRemaining > finalDifference){
-      console.log('?????')
       //after verifying that player has sufficient hours to play proceed to check other contrainsts below
       //bookChosenSlotApi()
 
       if (selectedAcademyData != null) {
-        console.log("selectedAcademyData != null");
         if (
           selectedAcademyData?.bookings != null &&
           selectedAcademyData?.bookings?.length > 0
         ) {
           console.log({selectedAcademyData})
-          console.log("selectedAcademyData?.bookings not empty");
+          console.log("BOOKINGS PRESENT");
           //check if any other court is available for booking
           var courtMatchFound = false;
           selectedAcademyData?.courts?.map((val) =>  {
@@ -236,7 +231,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               if (selectedCourtTimingId != val.courtTimingId) {
                 courtMatchFound = true;
                 console.log(
-                  "other court available for play, hit api"
+                 "OTHER COURTS AVAILABLE, CALL API"
                 );
                 bookChosenSlotApi(
                   selectedEveningTime != null
@@ -250,9 +245,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
           //court could not be found so now we need to check availability in already booked courts
           if(!courtMatchFound){
-            console.log(
-              "court not available for booking, need to check already booked courts"
-            );
+            console.log('CHECK ALREADY BOOKED COURTS')
             var lowerProfFound = false;
             var equalProfFound = false;
             var lowerProfData = null;
@@ -266,7 +259,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   var availablePlayerCount = val.maxPlayersAllowed - val.totalPlayers;
                   if(availablePlayerCount >= totalPlayersCount){
                     sameTimeSlotFoundInBookings = true;
-                    console.log('player count is acceptable')
+                    console.log('PLAYER SPACE AVAILABLE')
                     playerSpaceAvailable = true;
                      console.log('BOOKED_PLAYER_PROF'+ val.proficiency[0])
                       console.log('CURRENT_PLAYER_PROF'+ proficiency)
@@ -296,7 +289,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   // });
                 }
                 else {
-                  console.log('player count is not acceptable, need to renew')
+                  console.log("COUNT NOT AVAILABLE, NEED TO RENEW")
                   ToastAndroid.show(
                     `Selected court is fully occupied.`,
                     ToastAndroid.SHORT

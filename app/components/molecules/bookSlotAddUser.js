@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Image, ToastAndroid } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { commonStyles } from "../../containers/util/commonStyles";
 import {
@@ -54,7 +54,15 @@ const BookSlotAddUser = ({ count, setCount }) => {
         <Text style={styles.userCount}>{count == 0 ? 'Add User' : count}</Text>
         <TouchableOpacity
           onPress={() => {
-              setCount(count + 1);
+              if(count < 4){
+                setCount(count + 1);
+              }
+              else {
+                ToastAndroid.show(
+                 'Maximum 3 guests are allowed per booking.',
+                  ToastAndroid.SHORT
+                );
+              }
           }}
         >
           <Image
