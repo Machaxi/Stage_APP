@@ -10,7 +10,7 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { GameNameBox } from "./GameNameBox";
 import { SeperatingLine } from "./SeperatingLine";
-import { cyanVariant, greyVariant1, greyVariant11, redVariant, redVariant3, white, yellowVariant2, yellowVariant7 } from "../util/colors";
+import { cyanVariant, greyVariant1, greyVariant11, redVariant, redVariant3, redVariant4, white, yellowVariant2, yellowVariant7 } from "../util/colors";
 import { Nunito_Regular } from "../util/fonts";
 import { GradientLine } from "../../components/molecules/gradientLine";
 import NamedRoundedGradientContainer from "../../components/molecules/roundedNamedGradientContainer";
@@ -32,7 +32,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
     if(item?.players?.length > 0){
       for (var i = 0; i < item?.players?.length; i++) {
         if (userId != item?.players[i]?.id) {
-          gamePartners.add(item?.players[i]);
+          gamePartners.push(item?.players[i]);
         }
       }
     }
@@ -55,20 +55,47 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
         );
     };
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        item?.isCancelled ? { borderColor: redVariant4 } : null,
+      ]}
+    >
       <LinearGradient
-        colors={[
-          "(126.53deg, rgba(97, 74, 57, 0.432)",
-          "rgba(91, 77, 67, 0.102)",
-        ]}
+        colors={
+          item?.isCancelled
+            ? ["#ff4d4d12", "#ff4d4d0c"]
+            : [
+                "(126.53deg, rgba(97, 74, 57, 0.432)",
+                "rgba(91, 77, 67, 0.102)",
+              ]
+        }
         style={styles.containerInnerview}
       >
         <View style={styles.headerContainer}>
-          <Text style={styles.heading}>
-            {"Next Session - " +
-              (isToday ? "Today" : moment(item?.date).format("Mo MMMM YYYY"))}
-          </Text>
-          <TouchableOpacity activeOpacity={0.8} onPress={onCancelPress}>
+          {item?.isCancelled ? (
+            <Text
+              style={[
+                styles.heading,
+                item?.isCancelled ? { color: redVariant4 } : null,
+              ]}
+            >
+              {"Cancelled"}
+            </Text>
+          ) : (
+            <Text style={styles.heading}>
+              {"Next Session - " +
+                (isToday
+                  ? "Today"
+                  : moment(item?.date).format("Mo MMMM YYYY"))}
+            </Text>
+          )}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              onCancelPress(item?.id);
+            }}
+          >
             <Text style={styles.cancelText}>Cancel Booking</Text>
           </TouchableOpacity>
         </View>
@@ -157,7 +184,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
             </Text>
           )
         ) : null}
-        {item.isExpanded ? (
+        {item.isExpanded && item?.isCancelled != true? (
           <>
             <View style={{ height: 18, width: "100%" }} />
             <GradientLine
@@ -201,7 +228,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: redVariant3,
     fontFamily: Nunito_Regular,
-    fontWeight: '400'
+    fontWeight: "400",
   },
   headerContainer: {
     flexDirection: "row",

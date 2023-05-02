@@ -59,6 +59,7 @@ const [sportsList, setSportsList] = useState([]);
 const [peerSportsList,setPeerSportsList]=useState([]);
 const [nextSession, setNextSessionData] = useState([]);
 const [cancelPressed, setCancelPressed] = useState(false);
+const [cancelBookingId, setCancelBookingId] = useState(null);
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
 const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
 const [selectedSelfRating, setSelectedSelfRating] = useState(null)
@@ -73,6 +74,7 @@ const [userDetails, setUserDetails] = useState(null);
 
 var updateRatingError = null;
 var playerDetailsApiError = null;
+var cancelBookingError = null;
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -175,12 +177,14 @@ const getPlayerDetailsApi = async () => {
             }
             setSportsList(sportsData);
           }
+          var nextSessionVal = json.data?.bookings;
+          for (var i = 0; i < json.data?.bookings?.length; i++) {
+            nextSessionVal[i].isExpanded = false;
+            setNextSessionData(nextSessionVal);
+          }
           if (json.data?.peerRating?.length > 0) {
-            var nextSessionVal = json.data?.bookings;
             var peerData = json.data?.peerRating;
-            for (var i = 0; i < json.data?.bookings?.length; i++) {
-              nextSessionVal[i].isExpanded = false;
-            }
+            
              for (var i = 0; i < peerData?.length; i++) {
                 peerData[i].isSelected = i == 0 ? true : false
                 //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
@@ -188,7 +192,6 @@ const getPlayerDetailsApi = async () => {
              }
             
             setPeerSportsList(peerData);
-            setNextSessionData(nextSessionVal);
           }
           setPlayerDetailsResponse(json.data);
 
@@ -204,6 +207,56 @@ const getPlayerDetailsApi = async () => {
         ToastAndroid.show(
           `${playerDetailsApiError?.response?.response?.data
             ?.error_message ?? ""}`,
+          ToastAndroid.SHORT
+        );
+        console.log(error);
+      });
+  });
+};
+
+
+const cancelBookingApi = async () => {
+  setLoading(true);
+  getData("header", (value) => {
+    if (value == "") return;
+    const headers = {
+      "Content-Type": "application/json",
+      "x-authorization": value,
+      //TODO:remove this static logic
+      // "x-authorization":
+      //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+    };
+    //client.call
+    client
+      .get("court/cancel-court-booking/" + cancelBookingId, {
+        headers,
+        params: {
+        },
+      })
+      .then(function(response) {
+        console.log({ response });
+        cancelBookingError = response;
+        console.log("requestData" + JSON.stringify(response.data));
+        let json = response.data;
+        let success = json.success;
+        if (success) {
+          getPlayerDetailsApi();
+           ToastAndroid.show(
+             `Booking cancelled`,
+             ToastAndroid.SHORT
+           );
+        } else {
+          if (json.code == "1020") {
+            Events.publish("LOGOUT");
+          }
+        }
+        setLoading(false);
+      })
+      .catch(function(error) {
+        setLoading(false);
+        ToastAndroid.show(
+          `${cancelBookingError?.response?.response?.data?.error_message ??
+            ""}`,
           ToastAndroid.SHORT
         );
         console.log(error);
@@ -349,6 +402,10 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
           let json = response?.data;
           let success = json?.success;
           if (success) {
+            ToastAndroid.show(
+              `Rating updated.`,
+              ToastAndroid.SHORT
+            );
             var previousProfData;
             previousProfData = proficiencyData.map((val)=>{
               if(val.level == ratingInfo.level){
@@ -357,10 +414,9 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
             })
             getPlayerDetailsApi();
             setProficiencyData(previousProfData)
-            if(isPeerTypeRequest){
-              setSelfRatingActiveness(false);
-            }
-            else if (
+            setSelfRatingActiveness(false);
+
+            if(!isPeerTypeRequest &&
                    playerDetailsResponse?.plan
                      ?.preferredSportId ==
                    selectedPeerRating?.sport?.id
@@ -403,11 +459,10 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
 
 const onRatingSelection = (passedVal) => {
  
-  var previousProfData = [];
-  for(var i=0; i< proficiencyStaticData.length; i++){
-    previousProfData[i] = proficiencyStaticData[i]
-    previousProfData[i].isSelected = proficiencyStaticData[i].level == passedVal.level ? true : false;
-    
+  var previousProfData = proficiencyData;
+  for (var i = 0; i < proficiencyData.length; i++) {
+    previousProfData[i].isSelected =
+      proficiencyData[i].level == passedVal.level ? true : false;
   }
   
   setSelectedSelfRating(passedVal)
@@ -505,7 +560,10 @@ const onPressPlan = (selectPlan, playPlanData) => {
             NextSessionData={nextSession}
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
-            onCancelPress={() => setCancelModalVisibilityCb(true)}
+            onCancelPress={(id) => {
+              setCancelBookingId(id)
+              setCancelModalVisibilityCb(true)
+            }}
           />
 
           <TouchableOpacity
@@ -606,9 +664,15 @@ const onPressPlan = (selectPlan, playPlanData) => {
       {cancelModalVisible ? (
         <CancelSessionModal
           confirmType={true}
-          onCancel={() => {}}
+          onCancel={() => {
+            cancelBookingApi()
+            setCancelModalVisibilityCb(false)
+          }}
           cancelModalVisible={cancelModalVisible}
-          setModalVisibility={() => setCancelModalVisibilityCb()}
+          setModalVisibility={() => { 
+            setCancelModalVisibilityCb(false)
+            setCancelBookingId(null)
+          }}
         />
       ) : null}
       {limitReachedForToday ? <View style={styles.emptyView} /> : null}
