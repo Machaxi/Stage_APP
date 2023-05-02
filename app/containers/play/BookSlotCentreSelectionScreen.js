@@ -41,6 +41,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   const [showSlotUnavailableModal, setSlotUnavailableModalVisibility] = useState(false);
   const [selectedAcademyData, setSelectedAcademyData] = useState(null);
   const [count, setCount] = useState(0);
+  const [slotRequested, setSlotRequested] = useState(false);
   const [preferredAcademyId, setPreferredAcademyId] = useState(null);
   const [preferredSportId, setPreferredSportId] = useState(null);
   const [selectedMorningTime, setSelectedMorningTime] = useState(null);
@@ -143,13 +144,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           console.log("requestData" + JSON.stringify(response.data));
           let json = response.data;
           let success = json.success;
-          console.log("---->" + success);
           if (success) {
             if (json.data?.academyCourts?.length > 0){
               json.data?.academyCourts?.map((val)=> {
-                console.log('(((((')
                 if(val.academy?.id == preferredAcademyId){
-                  console.log('initialselected academy data'+ val)
                   onAcademySelection(val)
                 }
               })
@@ -175,7 +173,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   const bookSlotPressed = async() => {
-    const { playHoursRemaining, guestCount } = navigation?.state?.params;
+    const { playHoursRemaining, guestCount, proficiency } = navigation?.state?.params;
     var guestCountVal = guestCount == null || typeof guestCount == undefined ? 0 : guestCount;
     var totalPlayersCount = 1 + guestCountVal;
     var finalDifference = 0;
@@ -193,24 +191,22 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       console.log('hrs diff'+diffInHours)
       
 
-      finalDifference =
-        Math.floor(diffInHours);
+      finalDifference = diffInHours;
+       // Math.floor(diffInHours);
     }
     console.log("playHoursRemaining" + playHoursRemaining);
     console.log("finalDifference" + finalDifference);
     if(playHoursRemaining > finalDifference){
-      console.log('?????')
       //after verifying that player has sufficient hours to play proceed to check other contrainsts below
       //bookChosenSlotApi()
 
       if (selectedAcademyData != null) {
-        console.log("selectedAcademyData != null");
         if (
           selectedAcademyData?.bookings != null &&
           selectedAcademyData?.bookings?.length > 0
         ) {
           console.log({selectedAcademyData})
-          console.log("selectedAcademyData?.bookings not empty");
+          console.log("BOOKINGS PRESENT");
           //check if any other court is available for booking
           var courtMatchFound = false;
           selectedAcademyData?.courts?.map((val) =>  {
@@ -235,7 +231,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               if (selectedCourtTimingId != val.courtTimingId) {
                 courtMatchFound = true;
                 console.log(
-                  "other court available for play, hit api"
+                 "OTHER COURTS AVAILABLE, CALL API"
                 );
                 bookChosenSlotApi(
                   selectedEveningTime != null
@@ -249,10 +245,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
           //court could not be found so now we need to check availability in already booked courts
           if(!courtMatchFound){
-            console.log(
-              "court not available for booking, need to check already booked courts"
-            );
+            console.log('CHECK ALREADY BOOKED COURTS')
             var lowerProfFound = false;
+            var equalProfFound = false;
             var lowerProfData = null;
             var playerSpaceAvailable = false;
             var sameTimeSlotFoundInBookings = false;
@@ -264,8 +259,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   var availablePlayerCount = val.maxPlayersAllowed - val.totalPlayers;
                   if(availablePlayerCount >= totalPlayersCount){
                     sameTimeSlotFoundInBookings = true;
-                    console.log('player count is acceptable')
+                    console.log('PLAYER SPACE AVAILABLE')
                     playerSpaceAvailable = true;
+                     console.log('BOOKED_PLAYER_PROF'+ val.proficiency[0])
+                      console.log('CURRENT_PLAYER_PROF'+ proficiency)
                     //there are no other courts available for same time slot in the selected academy
                   // selectedAcademyData?.bookings?.map((VAL) => {
                     // var bookingTimePeriod = VAL.startTime + VAL.endTime;
@@ -277,17 +274,26 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                       var numericCurrentUserProf = getNumericProficiency(
                         proficiency
                       );
-                      if (bookedPlayerNumericProf <= numericCurrentUserProf) {
+                      console.log('BOOKED_PLAYER_PROF'+ val.proficiency[0])
+                      console.log('CURRENT_PLAYER_PROF'+ proficiency)
+                      if (bookedPlayerNumericProf < numericCurrentUserProf) {
                         lowerProfData = val;
                         lowerProfFound = true;
+                      }
+                      if (bookedPlayerNumericProf == numericCurrentUserProf) {
+                        if (!lowerProfFound)
+                          equalProfFound = true;
                       }
                     
                     // }
                   // });
                 }
                 else {
-                  console.log('player count is not acceptable, need to renew')
-
+                  console.log("COUNT NOT AVAILABLE, NEED TO RENEW")
+                  ToastAndroid.show(
+                    `Selected court is fully occupied.`,
+                    ToastAndroid.SHORT
+                  );
                   //TODO: need to verify whether to show toast only or hit bookslotapi
                 }
             }
@@ -301,25 +307,36 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                     if (lowerProfData != null) {
                       setAdvancedWarningModalVisibility(true);
                     }
-                  } else {
-                    console.log(
-                      "lowerProfFound not found setBeginnerWarningModalVisibility called0" +
-                        lowerProfFound
-                    );
-
-                    //if (playerSpaceAvailable) {
-                      console.log(
-                        "playerSpaceAvailable lowerProfFound not found setBeginnerWarningModalVisibility called1" +
-                          lowerProfFound
-                      );
-                      setBeginnerWarningModalVisibility(true);
-                    // } else {
-                    //   console.log(
-                    //     "space unavailable and lower not found"
-                    //   );
-                      //TODO: need to verify whether to show toast only or hit bookslotapi
-                    //}
                   }
+                  else if (equalProfFound) {
+                    console.log('EQUAL PROF FOUND, calling API')
+                      bookChosenSlotApi(
+                        selectedEveningTime != null
+                          ? selectedEveningTime
+                          : selectedMorningTime,
+                        false
+                      );
+                       } else {
+                         console.log(
+                           "lowerProfFound not found setBeginnerWarningModalVisibility called0" +
+                             lowerProfFound
+                         );
+
+                         //if (playerSpaceAvailable) {
+                         console.log(
+                           "playerSpaceAvailable lowerProfFound not found setBeginnerWarningModalVisibility called1" +
+                             lowerProfFound
+                         );
+                         setBeginnerWarningModalVisibility(
+                           true
+                         );
+                         // } else {
+                         //   console.log(
+                         //     "space unavailable and lower not found"
+                         //   );
+                         //TODO: need to verify whether to show toast only or hit bookslotapi
+                         //}
+                       }
             }
             else {
               console.log('timeslot not matched in bookings array')
@@ -352,12 +369,12 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     //bookChosenSlotApi()
   }
 
-  const bookSlotCb = () => {
+  const bookSlotCb = (isRequestType) => {
     bookChosenSlotApi(
       selectedEveningTime != null
         ? selectedEveningTime
-        : selectedMorningTime, 
-        false
+        : selectedMorningTime,
+      isRequestType
     );
   }
 
@@ -401,9 +418,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             let success = json?.success;
             if (success) {
               setSlotBookedRes(json);
-              if(isBookingRequestType == false){
-                setSlotBookedModalVisibility(true);
+              if(isBookingRequestType){
+                setSlotRequested(true)
               }
+              setSlotBookedModalVisibility(true);
               bookSlotFetchApi();
               // setRewardsResponse(json["data"]["reward"]);
             } else {
@@ -439,7 +457,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   const onAcademySelection = (value) => {
-    console.log('+++++++')
     console.log({value})
     setSelectedAcademyData(value)
   }
@@ -480,9 +497,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           <View style={{ marginHorizontal: 18 }}>
             {slotApiRes?.academyCourts?.length > 0 ? (
               <BookSlotCentreSelection
-                onAcademySelection={(value)=>{
-                  
-                  onAcademySelection(value)
+                onAcademySelection={(value) => {
+                  onAcademySelection(value);
                 }}
                 selectedTimePeriod={(val) => {
                   if (val?.startTime) {
@@ -518,9 +534,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           {showSlotBookedModal ? (
             // ? (
             <SlotBookedModal
+              slotRequested={slotRequested}
               slotInfo={slotBookedRes?.data}
               modalVisible={showSlotBookedModal}
-              setModalVisibility={(val) => setSlotBookedModalVisibility(val)}
+              setModalVisibility={(val) => { 
+                if(slotRequested){
+                  setSlotRequested(false)
+                }
+                setSlotBookedModalVisibility(val)}}
             />
           ) : null}
           {renewPlanModalVisible ? (
@@ -528,6 +549,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               onBtnPress={() => {
                 //TODO: add renew plan logic
               }}
+              remainingHours={playHoursRemaining}
               onExplorePlansPressed={() => {}}
               biggerImg={require("../../images/add_guests_img.png")}
               modalVisible={renewPlanModalVisible}
@@ -541,7 +563,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               }}
               forBeginner={true}
               onRequestBookSlot={() => {
-                setBeginnerWarningModalVisibility(false)
+                setBeginnerWarningModalVisibility(false);
                 bookChosenSlotApi(
                   selectedEveningTime != null
                     ? selectedEveningTime
@@ -560,7 +582,12 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             <BeginnerWarningModal
               onBtnPress={() => {
                 setAdvancedWarningModalVisibility(false);
-                bookSlotCb();
+                bookChosenSlotApi(
+                  selectedEveningTime != null
+                    ? selectedEveningTime
+                    : selectedMorningTime,
+                  false
+                );
               }}
               forBeginner={false}
               onRequestBookSlot={() => {}}

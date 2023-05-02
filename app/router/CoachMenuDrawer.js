@@ -1165,10 +1165,9 @@ class CoachMenuDrawer extends BaseComponent {
 				{this.state.playDataVisibility && <View style={{height: 1, marginTop: 8, marginBottom: 8, backgroundColor:'#272733', }}></View>}
 
 				<TouchableOpacity activeOpacity={0.8} onPress={() =>
-					this.props.navigation.navigate('AcademyListing')
+					this.props.navigation.navigate('BookSlotScreen')
 				}>
 				<View style={styles.drawercell}>
-
 					<Text style={styles.menuTxt}>
 						Book Slot
 							</Text>

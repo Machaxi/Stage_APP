@@ -9,17 +9,24 @@ import moment from "moment";
 import { getProficiencyName } from "../../containers/util/utilFunctions";
 // import ProgressCircle from 'react-native-progress-circle';
 
-export const RatePeersTabView = ({ ratingData, proficiencyData, updateRating }) => {
+export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRating }) => {
 
 
 
          var selectedSportRelatedRating = null;
+         var selectedPeers = []
          ratingData.map((val) => {
            if (val?.isSelected) {
              selectedSportRelatedRating = val;
+             for(var i = 0; i < val?.players?.length; i++){
+              if(userId != val?.players[i]?.id){
+                selectedPeers.add(val?.players[i]);
+              }
+             }
            }
          });
-         
+         console.log(' peers -')
+         console.log({selectedPeers})
 
          const renderItems = ({ item }) => {
           
@@ -94,12 +101,20 @@ export const RatePeersTabView = ({ ratingData, proficiencyData, updateRating }) 
                    "Mo MMMM YYYY"
                  )} | ${selectedSportRelatedRating?.displayTime}`}
                </Text>
-               <FlatList
-                 data={selectedSportRelatedRating?.players}
-                 contentContainerStyle={{}}
-                 horizontal={false}
-                 renderItem={renderItems}
-               />
+               {selectedPeers?.length > 0 ? (
+                 <FlatList
+                   data={selectedPeers}
+                   contentContainerStyle={{}}
+                   horizontal={false}
+                   renderItem={renderItems}
+                 />
+               ) : (
+                 <Text
+                   style={[styles.ratePartners, { marginVertical: 14, textAlign:'center' }]}
+                 >
+                   {'No peers found.'}
+                 </Text>
+               )}
                <GradientLine
                  marginBottom={14}
                  marginTop={16}

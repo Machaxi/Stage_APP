@@ -61,6 +61,7 @@ class PlayingPlan extends Component {
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
+      
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];

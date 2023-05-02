@@ -187,7 +187,6 @@ class SelectCenter extends Component {
             item={item}
             distance={distance}
             currentIndex={this.state.currentIndex}
-            isExpanded={false}
             onPress={() =>
               this.setState({ currentIndex: item.id, proseednext: true })
             }

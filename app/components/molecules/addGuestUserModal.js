@@ -8,7 +8,8 @@ const AddGuestUserModal = ({
   setModalVisibility,
   biggerImg,
   onBtnPress,
-  onExplorePlansPressed
+  onExplorePlansPressed,
+  playHoursRemaining,
 }) => {
   return (
     <Modal
@@ -26,7 +27,11 @@ const AddGuestUserModal = ({
         }}
       >
         <Image style={styles.girlImg} source={biggerImg} />
-        <AddGuestUserModalInnerView onBtnPress={() => onBtnPress()} onExplorePlansPressed={()=> onExplorePlansPressed} />
+        <AddGuestUserModalInnerView
+          playHoursRemaining={playHoursRemaining}
+          onBtnPress={() => onBtnPress()}
+          onExplorePlansPressed={() => onExplorePlansPressed}
+        />
       </TouchableOpacity>
     </Modal>
   );

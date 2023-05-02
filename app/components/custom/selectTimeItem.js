@@ -3,19 +3,41 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import { Nunito_Medium } from "../../containers/util/fonts";
+import moment from "moment";
 
 class SelectTimeItem extends Component {
   handlepress(val) {
     this.props.onPress(val);
   }
 
+  checkIfSlotActive () {
+     var randomStartDateTime = `${moment().format('YYYY-MM-DD')}T` + this.props.startTime;
+
+     const time1 = new Date();
+     const time2 = new Date(randomStartDateTime);
+     const diffInMillisec = time2.getTime() - time1.getTime();
+
+     // convert milliseconds to hours, minutes
+     const diffInHours = diffInMillisec / (1000 * 60 * 60);
+
+     if(diffInHours > 0){
+      return true
+     }
+     else {
+      return false;
+     }
+  }
+
   render() {
-    const {  image, isSelected , id,  name, width } = this.props;
+    const {  image, isSelected , id,  name, width, startTime } = this.props;
 
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        style={[{ marginRight: 10, marginBottom: 9, height: 30,  }, this.props.width ? {width: width}: {},]}
+        style={[
+          { marginRight: 10, marginBottom: 9, height: 30 },
+          this.props.width ? { width: width } : {},
+        ]}
         onPress={() => this.handlepress(id)}
       >
         <View>
@@ -29,7 +51,7 @@ class SelectTimeItem extends Component {
             end={{ x: 1, y: 1 }}
             style={[
               styles.clockView,
-             isSelected && {
+              isSelected && {
                 borderColor: "rgba(167, 134, 95, 0.6)",
               },
             ]}
@@ -42,7 +64,7 @@ class SelectTimeItem extends Component {
               style={[
                 styles.sportText,
                 { marginTop: -3, fontSize: 13 },
-               isSelected && {
+                isSelected && {
                   color: "#F2AE4D",
                 },
               ]}
@@ -51,6 +73,22 @@ class SelectTimeItem extends Component {
               {"    "}
             </Text>
           </LinearGradient>
+          {
+            !this.checkIfSlotActive() &&
+              <Image
+                style={[
+                  {
+                    width: this.props.width,
+                    height: "100%",
+                    marginTop: -30,
+                    tintColor: "#F2AE4D",
+                  },
+                  this.props.width ? { width: width } : {},
+                ]}
+                resizeMode="stretch"
+                source={require("../../images/playing/cross.png")}
+              />
+          }
         </View>
       </TouchableOpacity>
     );

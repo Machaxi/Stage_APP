@@ -160,7 +160,8 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
       sportId: selectedSportsId,
       playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0,
       preferredAcademyId: planAndSportsApiRes?.plan?.preferredAcademyId,
-      preferredSportId: planAndSportsApiRes?.plan?.preferredSportId
+      preferredSportId: planAndSportsApiRes?.plan?.preferredSportId,
+      userType: user
     });
   }
 

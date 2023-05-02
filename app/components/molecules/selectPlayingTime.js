@@ -29,19 +29,22 @@ const SelectPlayingTime = ({
                 numColumns={2}
                 data={timeData}
                 renderItem={({item})=>{
-                return(
+                return (
                   <SelectTimeItem
                     // width={deviceWidth * 0.3}
-                    isSelected={item?.courtTimingId == selectedTime}
+                    isSelected={
+                      item?.courtTimingId == selectedTime
+                    }
                     image={require("../../images/playing/clock.png")}
                     selectItem={selectedTime}
+                    startTime={item?.startTime}
                     id={item?.courtTimingId}
                     // name={`${item.startTime} - ${item.endTime}`}
                     name={`${item?.displayTime}`}
                     onPress={(val) => {
                       selectedTimePeriod({
                         startTime: item?.startTime,
-                        endTime: item.endTime
+                        endTime: item.endTime,
                       });
                       setSelectedTime(val);
                     }}

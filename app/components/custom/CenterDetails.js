@@ -79,7 +79,7 @@ class CenterDetails extends Component {
               </View>
             </View>
           </View>
-          {isExpanded && this.props.xpanded ? (
+          {isExpanded ? (
             <View
               style={{
                 marginTop: 30,
