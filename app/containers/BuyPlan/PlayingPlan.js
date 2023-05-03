@@ -19,6 +19,8 @@ import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
+import { StackActions } from "react-navigation";
+import { KeyboardAvoidingView } from "react-native";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -52,6 +54,8 @@ class PlayingPlan extends Component {
       orderId: "",
       amount: 0,
       subscriptionId: 0,
+      joinBool: false,
+      joinTime: null,
     };
   }
 
@@ -94,8 +98,8 @@ class PlayingPlan extends Component {
     this.setState({ couponCode: false });
   };
 
-  hadleCouponCode = () => {
-    this.setState({ couponCode: true });
+  hadleCouponCode = (joinBool, joinTime) => {
+    this.setState({ couponCode: true, joinBool: joinBool, joinTime: joinTime });
   };
 
   hadleCouponApply = (coupon) => {
@@ -114,6 +118,10 @@ class PlayingPlan extends Component {
       distance: distance,
       applycoupon: false,
       coupon: null,
+      joinBool: false,
+      joinTime: null,
+      playData: true,
+      learnData: true,
     });
   };
 
@@ -144,11 +152,21 @@ class PlayingPlan extends Component {
   };
 
   onComplete = () => {
-    this.props.navigation.navigate("LearnHomePage");
+    if (this.state.playData && this.state.learnData) {
+      this.props.navigation.navigate("LearnHomePage");
+    } else {
+      const popAction = StackActions.popToTop();
+      this.props.navigation.dispatch(popAction);
+    }
   };
 
-  onPressSuccess = () => {
-    this.setState({ congratulationScreen: false, moreScreen: true });
+  onPressSuccess = (playData, learnData) => {
+    this.setState({
+      congratulationScreen: false,
+      moreScreen: true,
+      playData: playData,
+      learnData: learnData,
+    });
   };
 
   confirm = () => {
@@ -215,7 +233,10 @@ class PlayingPlan extends Component {
         {!this.state.congratulationScreen &&
           !this.state.moreScreen &&
           !this.state.couponCode && (
-            <View style={{ flex: 1 }}>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
               <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
               <View style={{ flex: 0.83 }}>
                 {this.state.planList && this.state.currentPage === 1 && (
@@ -240,19 +261,20 @@ class PlayingPlan extends Component {
                     distance={this.state.distance}
                     applycoupon={this.state.applycoupon}
                     coupon={this.state.coupon}
+                    joinTime={this.state.joinTime}
+                    joinBool={this.state.joinBool}
                     explore={false}
                     onPresscoupon={this.hadleCouponCode}
                     onPress={this.onPressConfirm}
                   />
                 )}
               </View>
-            </View>
+            </KeyboardAvoidingView>
           )}
       </LinearGradient>
     );
   }
 }
-
 
 PlayingPlan.navigationOptions = ({ navigation }) => {
   return {

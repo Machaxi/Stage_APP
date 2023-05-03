@@ -275,7 +275,6 @@ class SelectPay extends Component {
       .then((result) => {
         result = result.payload;
         if (result.data) {
-          console.log(result.data);
           this.props.onPress(true);
         } else {
           this.props.onPress(
@@ -375,10 +374,15 @@ class SelectPay extends Component {
 
     this.props
       .selectPlanDate(dataDic, this.state.header)
-      .then(() => {
-        let jsondata = JSON.stringify(this.props.data.planData.data);
-        let responcedata = JSON.parse(jsondata);
-        this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
+      .then((result) => {
+        result = result.payload;
+        if (result.data) {
+          let jsondata = JSON.stringify(this.props.data.planData.data);
+          let responcedata = JSON.parse(jsondata);
+          this.handleOnStartPayment(responcedata.order_id, responcedata.amount);
+        } else {
+          this.props.onPress(false, 0, 0, result.response.data.error_message);
+        }
       })
       .catch((response) => {
         console.log(response);

@@ -361,6 +361,7 @@ class ParentHome extends BaseComponent {
 
   componentWillUnmount() {
     this.didFocusListener.remove();
+    this.willFocusSubscription.remove();
   }
 
   // componentWillReceiveProps(nextProps, nextState){

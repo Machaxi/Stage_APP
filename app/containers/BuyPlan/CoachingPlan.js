@@ -17,6 +17,8 @@ import CongratsScreen from "./components/CongratsScreen";
 import SorryPage from "./components/SorryPage";
 import ApplyCouponCode from "./components/ApplyCouponCode";
 import AppliedCouponCode from "../../components/custom/AppliedCouponCode";
+import { StackActions } from "react-navigation";
+import { KeyboardAvoidingView } from "react-native";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -170,8 +172,15 @@ class CoachingPlan extends Component {
     });
   };
 
-  onPressSuccess = () => {
-    this.props.navigation.navigate("LearnHomePage");
+  onPressSuccess = (playData, learnData) => {
+    console.log(playData);
+    console.log(learnData);
+    if (playData && learnData) {
+      this.props.navigation.navigate("LearnHomePage");
+    } else {
+      const popAction = StackActions.popToTop();
+      this.props.navigation.dispatch(popAction);
+    }
   };
 
   confirm = () => {
@@ -222,7 +231,10 @@ class CoachingPlan extends Component {
         {!this.state.firstPage &&
           !this.state.congratulationScreen &&
           !this.state.couponCode && (
-            <View style={{ flex: 1 }}>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
               <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
               <View style={{ flex: 0.83 }}>
                 {this.state.sportsList != null &&
@@ -275,7 +287,7 @@ class CoachingPlan extends Component {
                   />
                 )}
               </View>
-            </View>
+            </KeyboardAvoidingView>
           )}
       </LinearGradient>
     );
