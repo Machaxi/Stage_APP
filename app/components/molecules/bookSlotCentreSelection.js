@@ -192,21 +192,21 @@ class BookSlotCentreSelection extends Component {
     }
   };
 
-  handlepress = async () => {
-    this.props.onPress()
-    console.log('--')
-    // let centerValue = this.props.academiesList.find(
-    //   (item) => item.id === this.state.currentIndex
-    // );
-    // let distance = this.calculateDistance(
-    //   centerValue.latitude,
-    //   centerValue.longitude
-    // );
-    // const academiesList = this.props.academiesList.find(
-    //   (item) => item.id === this.state.currentIndex
-    // );
-    //this.props.onPress(academiesList, distance);
-  };
+  // handlepress = async () => {
+  //   this.props.onPress()
+  //   console.log('--')
+  //   // let centerValue = this.props.academiesList.find(
+  //   //   (item) => item.id === this.state.currentIndex
+  //   // );
+  //   // let distance = this.calculateDistance(
+  //   //   centerValue.latitude,
+  //   //   centerValue.longitude
+  //   // );
+  //   // const academiesList = this.props.academiesList.find(
+  //   //   (item) => item.id === this.state.currentIndex
+  //   // );
+  //   //this.props.onPress(academiesList, distance);
+  // };
 
   render() {
 
@@ -239,23 +239,6 @@ class BookSlotCentreSelection extends Component {
             keyExtractor={(item) => item.id}
             renderItem={(item) => this.renderItem(item)}
             extraData={[this.state.currentIndex, this.state.centerData]}
-          />
-        </View>
-        <View style={{ flex: 0.07, paddingTop: 10 }}>
-          <CustomButton
-            name={
-              this.props.selectedMorningTime != null ||
-              this.props.selectedEveningTime != null
-                ? "Book Slot "
-                : "Book Slot"
-            }
-            hideImage={true}
-            image={require("../../images/playing/arrow_go.png")}
-            available={
-              this.props.selectedMorningTime != null ||
-              this.props.selectedEveningTime != null
-            }
-            onPress={() => this.handlepress()}
           />
         </View>
       </View>

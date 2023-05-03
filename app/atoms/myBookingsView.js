@@ -19,13 +19,13 @@ import LinearGradient from "react-native-linear-gradient";
 import moment from "moment";
 import { Nunito_Medium, Nunito_Regular } from "../containers/util/fonts";
 
-const MyBookingsView = ({ val, cancelBooking }) => {
+const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
       style={styles.requestOuterView}
     >
-      {val?.isBooked ? (
+      {isUpcoming ? (
         <View
           style={[
             val.isCancelled ? { flexDirection: "row" } : styles.detailsTopRow,
@@ -65,9 +65,11 @@ const MyBookingsView = ({ val, cancelBooking }) => {
       <View style={styles.rowSpaceBtw}>
         {[
           { name: "Sport", value: val?.sport?.name },
-          { name: "Slot", value: `${val?.displayTime}`
-          // `${val?.startTime} - ${val?.endTime}`
-         },
+          {
+            name: "Slot",
+            value: `${val?.displayTime}`,
+            // `${val?.startTime} - ${val?.endTime}`
+          },
           ,
           { name: "Pool", value: "NA" },
         ].map((value) => (
@@ -77,9 +79,7 @@ const MyBookingsView = ({ val, cancelBooking }) => {
       <Text style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}>
         Registered Players
       </Text>
-      {val?.players?.map((value) => (
-        <MyRequestPlayersList item={value} />
-      ))}
+      {val?.players?.map((value) => <MyRequestPlayersList item={value} />)}
     </LinearGradient>
   );
 };

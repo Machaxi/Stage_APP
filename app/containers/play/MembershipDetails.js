@@ -150,13 +150,13 @@ export const MembershipDetails = ({
                          borderWidth={0}
                          unfilledColor={"#404040"}
                          showsText={true}
-                         textStyle={{ color: "white", fontSize: 12 }}
+                         textStyle={{ color: "white", fontSize: 10, textAlign:'center' }}
                          color={"#70D9E6"}
                          formatText={() => {
                            return (
-                             <Text style={styles.hrsLeft}>
+                             <Text style={[styles.hrsLeft, {fontSize: 10}]}>
                                {"Hours Left\n"}
-                               <Text style={styles.hrsLeftValue}>
+                               <Text style={[styles.hrsLeftValue,{fontSize:12}]}>
                                  {`${hoursLeftVal} / ${totalHoursVal}`}
                                </Text>
                              </Text>

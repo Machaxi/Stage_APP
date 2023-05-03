@@ -55,7 +55,7 @@ const MyBookingsScreen = ({ navigation }) => {
     }
   };
 
-  const getBookingsData = async (pageCountVal) => {
+  const getBookingsData = async ({pageCountVal, isUpcomingRequest}) => {
     setLoading(true);
     getData("header", (value) => {
       if (value == "") return;
@@ -71,8 +71,8 @@ const MyBookingsScreen = ({ navigation }) => {
         .get("court/bookings", {
           headers,
           params: {
-            upcoming: isUpcoming,
-            past: !isUpcoming,
+            upcoming: isUpcomingRequest,
+            past: !isUpcomingRequest,
             size: 10,
             page: pageCountVal,
           },
@@ -84,7 +84,7 @@ const MyBookingsScreen = ({ navigation }) => {
           let json = response.data;
           let success = json.success;
           if (success) {
-            if(json.data?.upcoming?.length > 0){
+            if (json.data?.upcoming?.length > 0) {
               setUpcomingBookings([...json.data?.upcoming]);
             }
             if (json.data?.past?.length > 0) {
@@ -92,15 +92,14 @@ const MyBookingsScreen = ({ navigation }) => {
             }
 
             setBookingsApiResponse(json.data);
-            if(isUpcoming){
-              if(json?.data?.upcoming?.length == 0){
-                setAllDataFetched(true)
+            if (isUpcoming) {
+              if (json?.data?.upcoming?.length == 0) {
+                setAllDataFetched(true);
               }
-            }
-            else {
-             if (json?.data?.past?.length == 0) {
-               setAllDataFetched(true);
-             }
+            } else {
+              if (json?.data?.past?.length == 0) {
+                setAllDataFetched(true);
+              }
             }
           } else {
             if (json.code == "1020") {
@@ -136,10 +135,9 @@ const MyBookingsScreen = ({ navigation }) => {
       };
       //client.call
       client
-        .get("court/cancel-court-booking/", {
+        .get("court/cancel-court-booking/" + id, {
           headers,
           params: {
-            bookingId: id
           },
         })
         .then(function(response) {
@@ -148,8 +146,29 @@ const MyBookingsScreen = ({ navigation }) => {
           console.log("requestData" + JSON.stringify(response.data));
           let json = response.data;
           let success = json.success;
-          console.log("---->" + success);
           if (success) {
+            if(isUpcoming){
+              var data = upcomingBookings;
+              if(data?.length > 0){
+              for(var i=0; i< data?.length; i++){
+                if(data[i].id == id){
+                  data[i].isCancelled = true;
+                }
+              }
+            }
+              setUpcomingBookings(data)
+            }
+            else {
+              var data = pastBookings;
+              if (data?.length > 0) {
+                for (var i = 0; i < data?.length; i++) {
+                  if (data[i].id == id) {
+                    data[i].isCancelled = true;
+                  }
+                }
+              }
+              setPastBookings(data);
+            }
             // setBookingsApiResponse(json.data);
           } else {
             if (json.code == "1020") {
@@ -160,8 +179,9 @@ const MyBookingsScreen = ({ navigation }) => {
         })
         .catch(function(error) {
           setLoading(false);
+        
           ToastAndroid.show(
-            `${cancelBookingError?.response?.response?.data
+            `${cancelBookingError?.response?.data
               ?.error_message ?? ""}`,
             ToastAndroid.SHORT
           );
@@ -234,8 +254,8 @@ const MyBookingsScreen = ({ navigation }) => {
   setPageCount(pageCountVal);
   setPaginationLoading(true);
   getBookingsData({
-    pageCountVal: pageCount,
-    isUpcomingRequest: val == "upcoming" ? true : false,
+    pageCountVal: pageCountVal,
+    isUpcomingRequest: isUpcoming ? true : false,
   });  
  }
 
@@ -296,6 +316,7 @@ const MyBookingsScreen = ({ navigation }) => {
                     return (
                       <MyBookingsView
                         val={item}
+                        isUpcoming={isUpcoming}
                         cancelBooking={() => cancelBooking(item.id)}
                       />
                     );
@@ -316,7 +337,10 @@ const MyBookingsScreen = ({ navigation }) => {
                   return (
                     <MyBookingsView
                       val={item}
-                      cancelBooking={() => cancelBooking(item.id)}
+                      isUpcoming={isUpcoming}
+                      cancelBooking={() =>
+                        cancelBooking(item.id)
+                      }
                     />
                   );
                 }}

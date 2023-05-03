@@ -30,6 +30,8 @@ import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
 import BeginnerWarningModal from "../../components/molecules/beginnerWarningModal";
 import { getNumericProficiency } from "../util/utilFunctions";
+import CustomButton from "../../components/custom/CustomButton";
+import { deviceWidth } from "../util/dimens";
 
 const BookSlotCentreSelectionScreen = ({ navigation }) => {
   var fetchSlotError = null;
@@ -483,126 +485,142 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   
   return (
     <View style={{ flex: 1 }}>
-      <LinearGradient
-        colors={["#051732", "#232031"]}
-        style={{ flex: 1, paddingHorizontal: 12 }}
-      >
-        <ScrollView
-          style={{ height: "100%" }}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => onRefresh()}
-              title="Pull to refresh"
-            />
-          }
-        >
-          <GoBackHeader navigation={navigation} title={"Book Slot"} />
-          <View style={{ marginHorizontal: 18 }}>
-            {slotApiRes?.academyCourts?.length > 0 ? (
-              <BookSlotCentreSelection
-                onAcademySelection={(value) => {
-                  onAcademySelection(value);
-                }}
-                selectedTimePeriod={(val) => {
-                  if (val?.startTime) {
-                    setSlotStartTime(val?.startTime);
+      <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
+        <View style={{ paddingHorizontal: 12 }}>
+          <ScrollView
+            style={{ height: "100%" }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => onRefresh()}
+                title="Pull to refresh"
+              />
+            }
+          >
+            <GoBackHeader navigation={navigation} title={"Book Slot"} />
+            <View style={{ marginHorizontal: 18 }}>
+              {slotApiRes?.academyCourts?.length > 0 ? (
+                <BookSlotCentreSelection
+                  onAcademySelection={(value) => {
+                    onAcademySelection(value);
+                  }}
+                  selectedTimePeriod={(val) => {
+                    if (val?.startTime) {
+                      setSlotStartTime(val?.startTime);
+                    }
+                    if (val?.endTime) {
+                      setSlotEndTime(val?.endTime);
+                    }
+                    setSelectedTimePeriod(val);
+                  }}
+                  morningTime={[]}
+                  eveningTime={[]}
+                  preferredAcademyId={preferredAcademyId}
+                  preferredSportId={preferredSportId}
+                  selectedMorningTime={selectedMorningTime}
+                  setSelectedMorningTimeVal={(val) =>
+                    setSelectedMorningTime(val)
                   }
-                  if (val?.endTime) {
-                    setSlotEndTime(val?.endTime);
+                  selectedEveningTime={selectedEveningTime}
+                  setSelectedEveningTimeVal={(val) =>
+                    setSelectedEveningTime(val)
                   }
-                  setSelectedTimePeriod(val);
+                  onPress={(val) => {
+                    //TODO: remove it
+                    //setAdvancedWarningModalVisibility(true);
+                    bookSlotPressed();
+                  }}
+                  academiesList={slotApiRes?.academyCourts}
+                  selectSport={selectedSportData}
+                />
+              ) : null}
+            </View>
+            {showSlotBookedModal ? (
+              // ? (
+              <SlotBookedModal
+                slotRequested={slotRequested}
+                slotInfo={slotBookedRes?.data}
+                modalVisible={showSlotBookedModal}
+                setModalVisibility={(val) => {
+                  if (slotRequested) {
+                    setSlotRequested(false);
+                  }
+                  setSlotBookedModalVisibility(val);
                 }}
-                morningTime={[]}
-                eveningTime={[]}
-                preferredAcademyId={preferredAcademyId}
-                preferredSportId={preferredSportId}
-                selectedMorningTime={selectedMorningTime}
-                setSelectedMorningTimeVal={(val) =>
-                  setSelectedMorningTime(val)
-                }
-                selectedEveningTime={selectedEveningTime}
-                setSelectedEveningTimeVal={(val) =>
-                  setSelectedEveningTime(val)
-                }
-                onPress={(val) => {
-                  //TODO: remove it
-                  //setAdvancedWarningModalVisibility(true);
-                  bookSlotPressed();
-                }}
-                academiesList={slotApiRes?.academyCourts}
-                selectSport={selectedSportData}
               />
             ) : null}
-          </View>
-          {showSlotBookedModal ? (
-            // ? (
-            <SlotBookedModal
-              slotRequested={slotRequested}
-              slotInfo={slotBookedRes?.data}
-              modalVisible={showSlotBookedModal}
-              setModalVisibility={(val) => { 
-                if(slotRequested){
-                  setSlotRequested(false)
+            {renewPlanModalVisible ? (
+              <AddGuestUserModal
+                onBtnPress={() => {
+                  //TODO: add renew plan logic
+                }}
+                remainingHours={playHoursRemaining}
+                onExplorePlansPressed={() => {}}
+                biggerImg={require("../../images/add_guests_img.png")}
+                modalVisible={renewPlanModalVisible}
+                setModalVisibility={(val) => setModalVisibilityRenewPlan(val)}
+              />
+            ) : null}
+            {showBeginnerWarningModal ? (
+              <BeginnerWarningModal
+                onBtnPress={() => {
+                  //bookSlotCb();
+                }}
+                forBeginner={true}
+                onRequestBookSlot={() => {
+                  setBeginnerWarningModalVisibility(false);
+                  bookChosenSlotApi(
+                    selectedEveningTime != null
+                      ? selectedEveningTime
+                      : selectedMorningTime,
+                    true
+                  );
+                }}
+                biggerImg={require("../../images/add_guests_img.png")}
+                modalVisible={showBeginnerWarningModal}
+                setModalVisibility={(val) =>
+                  setBeginnerWarningModalVisibility(val)
                 }
-                setSlotBookedModalVisibility(val)}}
-            />
-          ) : null}
-          {renewPlanModalVisible ? (
-            <AddGuestUserModal
-              onBtnPress={() => {
-                //TODO: add renew plan logic
-              }}
-              remainingHours={playHoursRemaining}
-              onExplorePlansPressed={() => {}}
-              biggerImg={require("../../images/add_guests_img.png")}
-              modalVisible={renewPlanModalVisible}
-              setModalVisibility={(val) => setModalVisibilityRenewPlan(val)}
-            />
-          ) : null}
-          {showBeginnerWarningModal ? (
-            <BeginnerWarningModal
-              onBtnPress={() => {
-                //bookSlotCb();
-              }}
-              forBeginner={true}
-              onRequestBookSlot={() => {
-                setBeginnerWarningModalVisibility(false);
-                bookChosenSlotApi(
-                  selectedEveningTime != null
-                    ? selectedEveningTime
-                    : selectedMorningTime,
-                  true
-                );
-              }}
-              biggerImg={require("../../images/add_guests_img.png")}
-              modalVisible={showBeginnerWarningModal}
-              setModalVisibility={(val) =>
-                setBeginnerWarningModalVisibility(val)
-              }
-            />
-          ) : null}
-          {showAdvancedWarningModal ? (
-            <BeginnerWarningModal
-              onBtnPress={() => {
-                setAdvancedWarningModalVisibility(false);
-                bookChosenSlotApi(
-                  selectedEveningTime != null
-                    ? selectedEveningTime
-                    : selectedMorningTime,
-                  false
-                );
-              }}
-              forBeginner={false}
-              onRequestBookSlot={() => {}}
-              biggerImg={require("../../images/add_guests_img.png")}
-              modalVisible={showAdvancedWarningModal}
-              setModalVisibility={(val) =>
-                setAdvancedWarningModalVisibility(val)
-              }
-            />
-          ) : null}
-        </ScrollView>
+              />
+            ) : null}
+            {showAdvancedWarningModal ? (
+              <BeginnerWarningModal
+                onBtnPress={() => {
+                  setAdvancedWarningModalVisibility(false);
+                  bookChosenSlotApi(
+                    selectedEveningTime != null
+                      ? selectedEveningTime
+                      : selectedMorningTime,
+                    false
+                  );
+                }}
+                forBeginner={false}
+                onRequestBookSlot={() => {}}
+                biggerImg={require("../../images/add_guests_img.png")}
+                modalVisible={showAdvancedWarningModal}
+                setModalVisibility={(val) =>
+                  setAdvancedWarningModalVisibility(val)
+                }
+              />
+            ) : null}
+            <View style={{ height: 100, width: "100%" }} />
+          </ScrollView>
+        </View>
+        <View style={styles.bottomContainer}>
+          <CustomButton
+            name={
+              selectedMorningTime != null || selectedEveningTime != null
+                ? "Book Slot "
+                : "Book Slot"
+            }
+            hideImage={true}
+            image={require("../../images/playing/arrow_go.png")}
+            available={
+              selectedMorningTime != null || selectedEveningTime != null
+            }
+            onPress={() => bookSlotPressed()}
+          />
+        </View>
       </LinearGradient>
     </View>
   );
@@ -628,4 +646,14 @@ BookSlotCentreSelectionScreen.navigationOptions = ({ navigation }) => {
 
 export default BookSlotCentreSelectionScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  bottomContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: deviceWidth,
+    height: 85,
+    width: "100%",
+    padding: 12,
+    backgroundColor: "rgba(32, 29, 45, 1)",
+  },
+});
