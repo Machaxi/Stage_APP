@@ -67,6 +67,9 @@ class SelectPlayPlan extends Component {
                 benefits={item.benefits}
                 onPress={() => {
                   this.setState({ currentPlan: index, proseednext: true });
+                  if (index > 1) {
+                    this.scrollViewRef.current.scrollToEnd({ animated: true });
+                  }
                 }}
               />
             ))}

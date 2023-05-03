@@ -54,6 +54,8 @@ class LoginSceen extends Component {
       header: "",
       displayImage: "",
       displayTop: -220,
+      token: null,
+      isKeyboardOpen: false,
     };
     this.intervalIdRef = React.createRef();
   }
@@ -75,9 +77,26 @@ class LoginSceen extends Component {
       displayImage: require("../../images/login_user.png"),
     });
     this.signcheck();
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this.keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this.keyboardDidHide
+    );
   }
 
+  keyboardDidShow = () => {
+    this.setState({ isKeyboardOpen: true });
+  };
+
+  keyboardDidHide = () => {
+    this.setState({ isKeyboardOpen: false });
+  };
   componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
     clearInterval(this.intervalIdRef.current);
   }
 
@@ -110,11 +129,10 @@ class LoginSceen extends Component {
 
   handleResendOTP = async () => {
     try {
-      await auth().verifyPhoneNumber("+91" + phoneNumber);
+      await auth().verifyPhoneNumber("+91" + this.state.phoneNumber, true);
       console.log("OTP resent successfully");
       ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
-      setTimeRemaining(15);
-      startTimer();
+      this.setState({ timeRemaining: 120 });
     } catch (error) {
       console.log(error);
     }
@@ -129,11 +147,12 @@ class LoginSceen extends Component {
           .currentUser.getIdToken(true)
           .then((token) => {
             this.signIn(token);
+            this.setState({ token: token });
           });
       })
       .catch(() => {
         this.setState({ isLoading: false });
-        ToastAndroid.show("Invalid Code", ToastAndroid.SHORT);
+        ToastAndroid.show("Invalid OTP", ToastAndroid.SHORT);
         console.log("Invalid code.");
       });
   };
@@ -145,7 +164,6 @@ class LoginSceen extends Component {
     dict["name"] = this.state.name;
     dict["genderType"] = this.state.gender;
     dataDic["data"] = dict;
-    console.log(dataDic);
 
     this.props
       .createUser(dataDic, this.state.header)
@@ -167,7 +185,7 @@ class LoginSceen extends Component {
           };
           AsyncStorage.setItem("user_details", JSON.stringify(userDetail));
           AsyncStorage.setItem("phone_number", this.state.phoneNumber);
-          this.props.navigation.navigate("HomeDrawer");
+          this.signIn(this.state.token);
         }
       })
       .catch((response) => {
@@ -528,7 +546,7 @@ class LoginSceen extends Component {
               Didn’t receive OTP{" "}
             </Text>
             <TouchableOpacity
-              disabled={this.state.timeRemaining < 0}
+              disabled={this.state.timeRemaining > 0}
               onPress={this.handleResendOTP}
             >
               <Text
@@ -647,6 +665,7 @@ class LoginSceen extends Component {
               <ModalDropdown
                 options={["Male", "Female"]}
                 defaultValue="Select an option"
+                disabled={this.state.isKeyboardOpen}
                 style={{
                   justifyContent: "center",
                   flex: 1,

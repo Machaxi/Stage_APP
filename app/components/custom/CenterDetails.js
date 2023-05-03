@@ -61,7 +61,9 @@ class CenterDetails extends Component {
           <View style={styles.item}>
             <View style={{ flex: 0.3 }}>
               <Image source={{ uri: item.cover_pic }} style={styles.image} />
-              <Text style={styles.distance}>{distance}</Text>
+              {this.props.isDistance && (
+                <Text style={styles.distance}>{distance}</Text>
+              )}
             </View>
             <View style={styles.textContainer}>
               <View style={{ flex: 1 }}>
@@ -79,7 +81,7 @@ class CenterDetails extends Component {
               </View>
             </View>
           </View>
-          {isExpanded ? (
+          {isExpanded && this.props.isExpanded ? (
             <View
               style={{
                 marginTop: 30,

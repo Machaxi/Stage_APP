@@ -65,8 +65,6 @@ class PlayerDetails extends Component {
         .getRelationsDetails(value)
         .then(() => {
           let data = this.props.data.profileData;
-          console.log("olla");
-          console.log(data);
           if (data.success) {
             this.setState({
               related_players: data.data.players,
@@ -82,20 +80,19 @@ class PlayerDetails extends Component {
 
   render() {
     handlepress = () => {
-      var parent = "Parent";
-      if (this.state.currentIndex == 2) {
-        parent = "Child";
-      }
       var name = this.state.name;
+      var parent = "Parent";
+      var gend = this.state.gender;
       if (this.state.procednext) {
         name = this.state.related_players[this.state.currentChild].name;
       }
-      this.props.onPress(
-        name,
-        this.state.gender,
-        parent,
-        this.state.childDetails
-      );
+      if (this.state.currentIndex == 2) {
+        parent = "Child";
+      } else {
+        name = this.state.userDetails.userName;
+        gend = this.state.userDetails.gender;
+      }
+      this.props.onPress(name, gend, parent, this.state.childDetails);
     };
 
     if (this.state.userDetails == null) {
@@ -267,7 +264,7 @@ class PlayerDetails extends Component {
             name="Next "
             image={require("../../../images/playing/arrow_go.png")}
             available={
-              this.state.name.length > 4 ||
+              this.state.name.length > 1 ||
               this.state.procednext ||
               this.state.procedyourself
             }
