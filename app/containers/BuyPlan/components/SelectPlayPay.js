@@ -26,6 +26,7 @@ import CouponView from "../../../components/custom/CouponView";
 import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 import AppliedCouponCode from "../../../components/custom/AppliedCouponCode";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 class SelectPlayPay extends Component {
   months = [
@@ -75,6 +76,7 @@ class SelectPlayPay extends Component {
       couponAmount: 0,
       coupon: null,
       isApplied: false,
+      selectCenter: null,
     };
   }
 
@@ -120,8 +122,18 @@ class SelectPlayPay extends Component {
       extraDates: extraDates,
       discountAmount: selectPlan.price,
       coupon: this.props.coupon,
-    });
-  };
+    },
+    () => {
+      if (this.props.joinBool) {
+        console.log("ollla")
+        console.log(this.props.joinTime)
+        this.DataChange(this.props.joinTime);
+      } else {
+        this.setState({ selectCenter: this.props.selectCenter });
+      }
+    }
+  );
+};
 
   getdetails() {
     if (this.props.applycoupon) {
@@ -312,6 +324,7 @@ class SelectPlayPay extends Component {
       enddate: endJoin,
       displayStartDate: start_date,
       displayEndDate: end_date,
+      selectCenter: this.props.selectCenter
     });
   };
 
@@ -334,6 +347,11 @@ class SelectPlayPay extends Component {
     this.setState({ isApplied: false });
   };
 
+  onCouponPress = () => {
+    const joinDate = this.convertToDate(this.state.displayStartDate);
+    this.props.onPresscoupon(true, joinDate);
+  };
+
   render() {
     listText = (title, subtitle, heading) => {
       return (
@@ -350,6 +368,10 @@ class SelectPlayPay extends Component {
         </View>
       );
     };
+
+    if (this.state.selectCenter == null) {
+      return <LoadingIndicator />;
+    }
 
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
@@ -455,7 +477,7 @@ class SelectPlayPay extends Component {
                   discountAmount: this.state.amount,
                 });
               } else {
-                this.props.onPresscoupon();
+                this.onCouponPress();
               }
             }}
           >

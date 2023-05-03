@@ -140,8 +140,33 @@ class SelectBatch extends Component {
           lessThan12.push(this.state.batchData[i]);
         }
       }
-      this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
+      const greaterThan = this.removeDublicateValue(greaterThan12);
+      const lessThan = this.removeDublicateValue(lessThan12);
+      this.setState({ eveningData: greaterThan, morningData: lessThan });
+      // this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
     }
+  };
+
+  removeDublicateValue = (data) => {
+    const uniqueData = [];
+    for (let i = 0; i < data.length; i++) {
+      const currentObject = data[i];
+      let isDuplicate = false;
+
+      for (let j = 0; j < uniqueData.length; j++) {
+        if (uniqueData[j].displayTime === currentObject.displayTime) {
+          if (currentObject.is_allowed) {
+            uniqueData[j] = currentObject;
+          }
+          isDuplicate = true;
+          break;
+        }
+      }
+      if (!isDuplicate) {
+        uniqueData.push(currentObject);
+      }
+    }
+    return uniqueData;
   };
 
   render() {
