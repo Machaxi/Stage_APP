@@ -26,17 +26,13 @@ class CongratsScreen extends Component {
   }
 
   signcheck = async () => {
-    console.log("done");
     let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
     let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
     const userDetailsJson = await AsyncStorage.getItem("user_details");
     const header = await AsyncStorage.getItem("header");
     const userDetails = JSON.parse(userDetailsJson);
-    console.log("done");
     const userInfoJson = await AsyncStorage.getItem("userInfo");
     const userInfo = JSON.parse(userInfoJson);
-    console.log("done");
-    console.log(userInfo);
     this.setState({
       ONE_SIGNAL_USERID: ONE_SIGNAL,
       firebase_token: fcm_token,
@@ -58,7 +54,10 @@ class CongratsScreen extends Component {
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
         storeData("userInfo", JSON.stringify(batchData));
-        this.props.onPress();
+        this.props.onPress(
+          this.state.userInfo.is_play_enabled,
+          this.state.userInfo.is_learn_enabled
+        );
       })
       .catch((error) => {
         console.log(error);

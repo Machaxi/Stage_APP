@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CoachProcess from "../../components/custom/CoachProcess";
 import ConfirmBooking from "./TrialBook/ConfirmBooking";
@@ -142,7 +142,10 @@ class TrialBook extends Component {
           />
         )}
         {!this.state.congratulationScreen && (
-          <View style={{ flex: 1 }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
             <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
             <View style={{ flex: 0.83 }}>
               {this.state.sportsList != null &&
@@ -179,7 +182,7 @@ class TrialBook extends Component {
                 />
               )}
             </View>
-          </View>
+          </KeyboardAvoidingView>
         )}
       </LinearGradient>
     );

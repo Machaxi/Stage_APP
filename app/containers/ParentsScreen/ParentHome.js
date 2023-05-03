@@ -183,7 +183,21 @@ class ParentHome extends BaseComponent {
     this.props.navigation.setParams({ switchPlayer: this.switchPlayer });
   }
 
-  updateUserData () {
+  onScreenFocus = () => {
+      this.updateUserData();
+  };
+  
+
+  componentDidMount() {
+    this.didFocusListener = this.props.navigation.addListener(
+      "didFocus",
+      this.onScreenFocus
+    );
+    this.updateUserData();
+  }
+  
+    updateUserData () {
+    this.setState({ loading: true });
     getData("userInfo", (value) => {
       console.log("userInfo", value);
       var userData = JSON.parse(value);
@@ -197,21 +211,6 @@ class ParentHome extends BaseComponent {
         });
       }
     });
-  }
-
-  onScreenFocus = () => {
-      this.updateUserData();
-  };
-  
-
-  componentDidMount() {
-    this.didFocusListener = this.props.navigation.addListener(
-      "didFocus",
-      this.onScreenFocus
-    );
-
-    this.setState({ loading: true });
-    this.updateUserData();
     // firebase.analytics().logEvent("ParentHome", {})
 
     this.selfComponentDidMount();
@@ -291,6 +290,7 @@ class ParentHome extends BaseComponent {
 
   componentWillUnmount() {
     this.didFocusListener.remove();
+    this.willFocusSubscription.remove();
   }
 
   // componentWillReceiveProps(nextProps, nextState){

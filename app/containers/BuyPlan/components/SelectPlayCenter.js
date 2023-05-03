@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     marginVertical: 10,
-    marginTop: 20,
+    marginTop: 25,
     fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },

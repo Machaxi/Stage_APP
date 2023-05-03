@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   PermissionsAndroid,
+  KeyboardAvoidingView,
 } from "react-native";
 import CustomButton from "../../../components/custom/CustomButton";
 import Geolocation from "react-native-geolocation-service";
@@ -210,7 +211,10 @@ class SelectCenter extends Component {
     };
 
     return (
-      <View style={styles.contained}>
+      <KeyboardAvoidingView
+        style={styles.contained}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <Loader visible={this.state.isLoading} />
         <View style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred centre</Text>
@@ -268,7 +272,7 @@ class SelectCenter extends Component {
             onPress={handlepress}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -348,7 +352,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     marginVertical: 10,
-    marginTop: 20,
+    marginTop: 25,
     fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
