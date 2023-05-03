@@ -158,9 +158,9 @@ const ShopScreen = ({ navigation }) => {
  
   const onMonthSelect = (value) => {
     setNumericMonth(
-      getNumericMonth(value)
+      value
     );
-    getRewardsData(getNumericMonth(value), year);
+    getRewardsData(value, year);
   };
 
   const onYearSelect = (value) => {
@@ -214,8 +214,8 @@ const ShopScreen = ({ navigation }) => {
               }}
               onSelect={
                 (value) => {
-                  setMonth(value);
-                  onMonthSelect(value);
+                  setMonth(MonthNames[value]);
+                  onMonthSelect(value + 1);
                 }
                 //this.setState({ gender: data[value].value })
               }
@@ -235,6 +235,7 @@ const ShopScreen = ({ navigation }) => {
               options={[`${currentYear}`, `${nextYear}`]}
               defaultValue={`${currentYear}`}
               style={{ minWidth: deviceWidth * 0.3 }}
+              showsVerticalScrollIndicator={false}
               dropdownTextHighlightStyle={[
                 commonStyles.dropdownTxtStyle,
                 { color: goldenYellow },
@@ -255,7 +256,7 @@ const ShopScreen = ({ navigation }) => {
               }}
               onSelect={
                 (value) => {
-                  onYearSelect(value);
+                  onYearSelect(value == 0 ? currentYear : nextYear);
                 }
                 //this.setState({ gender: data[value].value })
               }
@@ -270,7 +271,7 @@ const ShopScreen = ({ navigation }) => {
             />
           </View>
         </View>
-       
+
         {rewardsResponse != null && (
           <ShopRewardsView
             balance={rewardsResponse["reward_balance"] ?? 0}

@@ -41,7 +41,7 @@ const RewardHistory = ({loading, selectedMonth, selectedYear, rewardHistoryData 
         style={[{ paddingVertical: 8, paddingHorizontal: 12 }]}
       >
         <Text style={[styles.date]}>
-          {MonthNames[selectedMonth - 1] + ` ${selectedYear}`}
+          {selectedMonth + ` ${selectedYear}`}
         </Text>
       </LinearGradient>
       {rewardHistoryData?.length > 0 && rewardHistoryData != null ? (

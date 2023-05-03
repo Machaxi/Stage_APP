@@ -31,7 +31,6 @@ export const SelfRatingCard = ({
          ratingData.map((val) => {
            if (val?.isSelected) {
              selectedSportRelatedRating = val;
-
            }
          });
          if(selectedSportRelatedRating != null){
@@ -106,6 +105,7 @@ export const SelfRatingCard = ({
                  <Text style={styles.header}>Self Rating </Text>
 
                  <TouchableOpacity
+                   style={{paddingVertical: 10}}
                    activeOpacity={0.8}
                    onPress={() => {
                       if (editSelfRating) {

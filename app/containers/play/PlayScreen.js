@@ -53,12 +53,13 @@ import PlayerScreen from "../FirstTimeUser/PlayerScreen";
 export default PlayScreen =({navigation})=>{
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
 const [selfTabEnabled, setSelfTab] = useState(true);
-const [packageRemainingDays, setPackageRemainingDays] = useState(0)
+const [packageRemainingDays, setPackageRemainingDays] = useState(0);
+const [expiringToday, setExpiringToday] = useState(false);
 
 const [sportsList, setSportsList] = useState([]);
 const [peerSportsList,setPeerSportsList]=useState([]);
 const [nextSession, setNextSessionData] = useState([]);
-const [cancelPressed, setCancelPressed] = useState(false);
+const [totalAvailableHours, setTotalAvailableHours] = useState(0);
 const [cancelBookingId, setCancelBookingId] = useState(null);
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
 const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
@@ -69,6 +70,7 @@ const [cancelModalVisible, setCancelModalVisibility] = useState(false);
 const [limitReachedForToday, setLimitReachForToday] = useState(true)
 const [loading, setLoading] = useState(true);
 const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
+const [plansResponse, setPlansResponse] = useState(null);
 const [refreshing, setRefreshing] = useState(false);
 const [userDetails, setUserDetails] = useState(null);
 
@@ -155,12 +157,22 @@ const getPlayerDetailsApi = async () => {
         let success = json.success;
         if (success) {
            var todayLimitReached = false;
+           var hoursLeft =
+             json.data?.plan?.hoursRemaining ?? 0;
+          var oldRemainingHours =
+            json.data?.plan?.oldPlanRemainingHours ?? 0;
+           var totalHoursRemaining = hoursLeft + oldRemainingHours;
+            
+            setTotalAvailableHours(totalHoursRemaining)
            if(json.data?.plan?.expiryDate != null){
             var startDate = moment(Date());
             var endDate = moment(json.data?.plan?.expiryDate);
             var days = 0;
             days = endDate.diff(startDate, "days");
             setPackageRemainingDays(days);
+            if (startDate.format("yyyy-dd-mm") == endDate.format('yyyy-dd-mm')){
+              setExpiringToday(true)
+            }
 
            }
            todayLimitReached =
@@ -172,8 +184,31 @@ const getPlayerDetailsApi = async () => {
            setLimitReachForToday(todayLimitReached);
            if(json.data?.rating?.length > 0) {
             var sportsData = json.data?.rating;
-              for (var i = 0; i < sportsData?.length; i++) {
-                sportsData[i].isSelected = i == 0 ? true : false;
+            var selectedIndex = null;
+            if (
+              sportsList?.length > 0 &&
+              sportsData.length == sportsList.length
+            ) {
+              for (var i = 0; i < sportsList.length; i++) {
+                if (sportsList[i].isSelected) {
+                  selectedIndex = i;
+                }
+              }
+            }
+            
+            //   for (var i = 0; i < sportsData?.length; i++) {
+            //     sportsData[i].isSelected = i == 0 ? true : false;
+            // }
+            for (var i = 0; i < sportsData?.length; i++) {
+              if (selectedIndex != null) {
+                sportsData[i].isSelected =
+                  i == selectedIndex ? true : false;
+              } else {
+                sportsData[i].isSelected =
+                  i == 0 ? true : false;
+              }
+              //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
+              //  peerData[i]?.peerRating != "" ? true : false;
             }
             setSportsList(sportsData);
           }
@@ -184,16 +219,40 @@ const getPlayerDetailsApi = async () => {
           }
           if (json.data?.peerRating?.length > 0) {
             var peerData = json.data?.peerRating;
-            
-             for (var i = 0; i < peerData?.length; i++) {
-                peerData[i].isSelected = i == 0 ? true : false
+            var peerSelectedIndex = null;
+            if (
+              peerSportsList?.length > 0 &&
+              (peerData.length == peerSportsList.length)
+            ) {
+              for (var i = 0; i < peerSportsList.length; i++) {
+                if (peerSportsList[i].isSelected) {
+                  peerSelectedIndex = i;
+                }
+              }
+            }
+              for (var i = 0; i < peerData?.length; i++) {
+                if (peerSelectedIndex != null) {
+                  peerData[i].isSelected =
+                    i == peerSelectedIndex ? true : false;
+                } else {
+                  peerData[i].isSelected =
+                    i == 0 ? true : false;
+                }
                 //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
                 //  peerData[i]?.peerRating != "" ? true : false;
-             }
+              }
             
             setPeerSportsList(peerData);
           }
+         
           setPlayerDetailsResponse(json.data);
+          if (json.data?.plan?.planId != null) {
+          getPlansDataApi(
+            json.data?.plan?.planId,
+            json.data?.plan
+              ?.preferredAcademyId
+          );
+          }
 
         } else {
           if (json.code == "1020") {
@@ -213,6 +272,50 @@ const getPlayerDetailsApi = async () => {
       });
   });
 };
+
+
+const getPlansDataApi = async (planId, preferredAcademyId) => {
+  setLoading(true);
+  getData("header", (value) => {
+    if (value == "") return;
+    const headers = {
+      "Content-Type": "application/json",
+      "x-authorization": value,
+      //TODO:remove this static logic
+      // "x-authorization":
+      //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+    };
+    //client.call
+    client
+      .get("global/play/plan-info", {
+        headers,
+        params: {
+          planId: planId,
+          preferredAcademyId: preferredAcademyId
+        },
+      })
+      .then(function(response) {
+        console.log({ response });
+        console.log("requestData" + JSON.stringify(response.data));
+        let json = response.data;
+        let success = json.success;
+        if (success) {
+          setPlansResponse(json.data);
+        } else {
+          if (json.code == "1020") {
+            Events.publish("LOGOUT");
+          }
+        }
+        setLoading(false);
+      })
+      .catch(function(error) {
+        setLoading(false);
+       
+        console.log(error);
+      });
+  });
+};
+
 
 
 const cancelBookingApi = async () => {
@@ -374,8 +477,6 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
         proficiency: selectedSelfRating?.proficiency,
         date: `${moment(Date()).format("YYYY-MM-DD")}`,
       };
-      console.log('?????')
-      console.log({ data });
 
   setLoading(true);
   getData("header", (value) => {
@@ -397,7 +498,7 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
       .then(function(response) {
         updateRatingError = { response };
         console.log({ response });
-
+        setSelfRatingActiveness(false);
         try {
           let json = response?.data;
           let success = json?.success;
@@ -406,15 +507,23 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
               `Rating updated.`,
               ToastAndroid.SHORT
             );
-            var previousProfData;
-            previousProfData = proficiencyData.map((val)=>{
-              if(val.level == ratingInfo.level){
-                val.isSelected = true;
-              }
-            })
             getPlayerDetailsApi();
-            setProficiencyData(previousProfData)
-            setSelfRatingActiveness(false);
+            if(isPeerTypeRequest){
+            var previousProfData;
+            for(var i= 0; i< proficiencyData?.length; i++){
+              if(proficiencyData[i].level == ratingInfo.level){
+                previousProfData[i] = proficiencyData[i];
+                previousProfData[i].isSelected = true;
+              }
+            }
+            // previousProfData = proficiencyData.map((val)=>{
+            //   if(val.level == ratingInfo.level){
+            //     val?.isSelected = true;
+            //   }
+            // })
+              setProficiencyData(previousProfData)
+            
+          }
 
             if(!isPeerTypeRequest &&
                    playerDetailsResponse?.plan
@@ -425,6 +534,10 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
                      selectedSelfRating?.proficiency
                    );
                  }
+            if(!isPeerTypeRequest){
+                setProficiencyData(proficiencyStaticData);
+            }
+            getPlayerDetailsApi();
             // setRewardsResponse(json["data"]["reward"]);
           } else {
             ToastAndroid.show(
@@ -470,12 +583,7 @@ const onRatingSelection = (passedVal) => {
 }
 
 const onSavePress = (val) => {
-  console.log('===')
-  console.log({val})
-  console.log({ selectedSelfRating });
-  console.log({ playerDetailsResponse });
   updateRating(null, null, val, false);
-  console.log({val})
 }
 
 const onPressPlan = (selectPlan, playPlanData) => {
@@ -487,6 +595,9 @@ const onPressPlan = (selectPlan, playPlanData) => {
     if (loading) {
       return <LoadingIndicator />;
     }
+
+    console.log('plans data')
+    console.log({ plansResponse });
 
     if (userDetails.is_play_enabled) {
       return (
@@ -505,6 +616,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
         </LinearGradient>
       );
     }
+    
   return (
     <View style={[{ flex: 1 }]}>
       <LinearGradient
@@ -532,22 +644,36 @@ const onPressPlan = (selectPlan, playPlanData) => {
             currentRating={getProficiencyName(userProficiency)}
             icon={{ uri: preferredDetails?.sport?.image }}
             sportTitle={preferredDetails?.sport?.name}
-          /> 
+          />
           <MembershipDetails
             //TODO:
             packageRemainingDays={packageRemainingDays}
-            aboutToExpire={packageRemainingDays > 5 ? true : false}
-            showOffer={false}
-            totalHrs={
-              playerDetailsResponse?.plan?.hoursCredited +
-              (playerDetailsResponse?.plan?.hoursRemaining != null
-                ? playerDetailsResponse?.plan?.oldPlanRemainingHours
-                : 0)
+            aboutToExpire={
+              packageRemainingDays < 6 && packageRemainingDays > 1
+                ? true
+                : false
             }
+            //aboutToExpire={true}
+            showOffer={false}
+            planExpired={
+              packageRemainingDays <= 0 && expiringToday == false
+                ? true
+                : false
+            }
+            currentPlanPrice={plansResponse?.plan?.price ?? 'N/A'}
+            //planExpired={true}
+            totalHrs={totalAvailableHours}
             hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
-            slotsExhaused={false}
+            slotsExhaused={
+              !(packageRemainingDays <= 0 && expiringToday == false) &&
+               totalAvailableHours == 0
+                ? true
+                : false
+            }
             onMorePlansPress={() => {}}
-            onRenewPress={() => {navigation.navigate("RenewPlan");}}
+            onRenewPress={() => {
+              navigation.navigate("RenewPlan");
+            }}
             expiryDate={moment(
               playerDetailsResponse?.plan?.expiryDate
             ).format("Mo MMMM YYYY")}
@@ -561,8 +687,8 @@ const onPressPlan = (selectPlan, playPlanData) => {
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
             onCancelPress={(id) => {
-              setCancelBookingId(id)
-              setCancelModalVisibilityCb(true)
+              setCancelBookingId(id);
+              setCancelModalVisibilityCb(true);
             }}
           />
 
@@ -593,26 +719,31 @@ const onPressPlan = (selectPlan, playPlanData) => {
                   name={"My Rating"}
                   isSelected={selfTabEnabled}
                   onPressed={() => {
+                    if(selfTabEnabled == false){
                     setSelfTab(true);
-                    var profData = (profData = proficiencyStaticData.map(
-                      (val) => {
-                        if (
-                          val.proficiency ==
-                          playerDetailsResponse?.user?.proficiency
-                        ) {
-                          val.isSelected = true;
-                        }
-                      }
-                    ));
-                    setProficiencyData(profData);
-                  }}
+                    // var profData = (profData = proficiencyStaticData.map(
+                    //   (val) => {
+                    //     if (
+                    //       val.proficiency ==
+                    //       playerDetailsResponse?.user?.proficiency
+                    //     ) {
+                    //       val.isSelected = true;
+                    //     }
+                    //   }
+                    // ));
+                    setProficiencyData(proficiencyStaticData);
+                  //
+                    }}
+                }
                 />
                 <RatingTabarHeader
                   name={"Rate Your Peers"}
                   isSelected={!selfTabEnabled}
                   onPressed={() => {
-                    setSelfTab(false);
-                    setProficiencyData(proficiencyStaticData);
+                    if(selfTabEnabled){
+                      setSelfTab(false);
+                      setProficiencyData(proficiencyStaticData);
+                    }
                   }}
                 />
               </View>
@@ -652,7 +783,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
                     proficiencyData={proficiencyData}
                     ratingData={sportsList}
                     editSelfRating={editSelfRatingActive}
-                    onEditPress={() => setSelfRatingActiveness(true)}
+                    onEditPress={() => {setSelfRatingActiveness(true)}}
                     onSavePress={(val1) => onSavePress(val1)}
                   />
                 </>
@@ -665,13 +796,13 @@ const onPressPlan = (selectPlan, playPlanData) => {
         <CancelSessionModal
           confirmType={true}
           onCancel={() => {
-            cancelBookingApi()
-            setCancelModalVisibilityCb(false)
+            cancelBookingApi();
+            setCancelModalVisibilityCb(false);
           }}
           cancelModalVisible={cancelModalVisible}
-          setModalVisibility={() => { 
-            setCancelModalVisibilityCb(false)
-            setCancelBookingId(null)
+          setModalVisibility={() => {
+            setCancelModalVisibilityCb(false);
+            setCancelBookingId(null);
           }}
         />
       ) : null}

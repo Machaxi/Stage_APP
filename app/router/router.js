@@ -2758,6 +2758,7 @@ const HomeStack = createStackNavigator({
           navigationProps={navigation}
           showNotification={true}
           darkThemFlow={true}
+          homeStack={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2776,6 +2777,7 @@ const HomeStack = createStackNavigator({
           navigationProps={navigation}
           showNotification={true}
           darkThemFlow={true}
+          homeStack={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2794,6 +2796,7 @@ const HomeStack = createStackNavigator({
           navigationProps={navigation}
           showNotification={true}
           darkThemFlow={true}
+          homeStack={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2812,6 +2815,7 @@ const HomeStack = createStackNavigator({
           navigationProps={navigation}
           showNotification={true}
           darkThemFlow={true}
+          homeStack={true}
         />
       ),
       headerTitleStyle: style.titlestyle,
@@ -2819,6 +2823,12 @@ const HomeStack = createStackNavigator({
         backgroundColor: "#21202F",
       },
     }),
+  },
+  NotificationsScreenHomeStack: {
+    screen: NotificationsScreen,
+    // navigationOptions: ({ navigation }) => ({
+    //   headerShown: false,
+    // }),
   },
 });
 

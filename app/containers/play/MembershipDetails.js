@@ -13,10 +13,11 @@ import RoundedGradientBtn from "../../components/molecules/roundedGradientBtn";
 import { commonStyles } from "../util/commonStyles";
 import { deviceWidth } from "../util/dimens";
 import NamedRoundedContainer from "../../atoms/namedRoundedContainer";
+import moment from "moment";
 
   
 export const MembershipDetails = ({
-         packageRemainingDays, 
+         packageRemainingDays,
          totalHrs,
          aboutToExpire,
          onRenewPress,
@@ -24,10 +25,10 @@ export const MembershipDetails = ({
          slotsExhaused,
          purchasedDate,
          expiryDate,
-         showOffer,
          hoursLeft,
+         planExpired,
+         currentPlanPrice,
        }) => {
-
          var totalHoursVal =
            typeof totalHrs == undefined ||
            totalHrs == null ||
@@ -39,8 +40,8 @@ export const MembershipDetails = ({
              ? 0
              : hoursLeft;
 
-         console.log("hrs total" + totalHoursVal);
-         console.log("left" + hoursLeftVal);
+       
+
          return (
            <View style={styles.container}>
              <LinearGradient
@@ -50,12 +51,12 @@ export const MembershipDetails = ({
                ]}
                style={[
                  styles.gradient,
-                 hoursLeft == 0 || slotsExhaused
+                 planExpired || slotsExhaused
                    ? { borderColor: redVariant4 }
                    : null,
                ]}
              >
-               {aboutToExpire && (
+               {aboutToExpire && planExpired == false && (
                  <View
                    style={[
                      commonStyles.flexRowNormal,
@@ -65,14 +66,19 @@ export const MembershipDetails = ({
                    <NamedRoundedContainer
                      width={deviceWidth * 0.3}
                      paddingVertical={6}
-                     name={`Expire in ${packageRemainingDays} days`}
+                     name={
+                       moment(expiryDate).format("Mo MMMM YYYY") ==
+                       moment(Date()).format("Mo MMMM YYYY")
+                         ? "Expiring today"
+                         : `Expire in ${packageRemainingDays} days`
+                     }
                      bgColor={"rgba(79, 0, 25, 0.4)"}
                      txtColor={redVariant2}
                    />
                    <Text style={styles.renew}>Renew Plan</Text>
                  </View>
                )}
-               {showOffer && hoursLeft == 0 && (
+               {(planExpired || slotsExhaused) && !aboutToExpire && (
                  <View>
                    <Text
                      style={[
@@ -82,19 +88,30 @@ export const MembershipDetails = ({
                    >
                      Membership Details
                    </Text>
-                   <Text style={styles.expiryDesc}>
-                     {
-                       "Your membership plan has expired. Do you want to renew the same plan at "
-                     }
-                     <Text
-                       style={[
-                         styles.expiryDesc,
-                         { color: yellowVariant4, fontWeight: "700" },
-                       ]}
-                     >
-                       {"₹ 4,000"}
+                   {planExpired ? (
+                     <Text style={styles.expiryDesc}>
+                       {
+                         "Your membership plan has expired. Do you want to renew the same plan at "
+                       }
+                       <Text
+                         style={[
+                           styles.expiryDesc,
+                           {
+                             color: yellowVariant4,
+                             fontWeight: "700",
+                           },
+                         ]}
+                       >
+                         {"₹ " + currentPlanPrice}
+                       </Text>
                      </Text>
-                   </Text>
+                   ) : (
+                     <Text style={styles.expiryDesc}>
+                       {
+                         "All of your slots for this package have been used. To keep playing, please renew your plan."
+                       }
+                     </Text>
+                   )}
                    <View
                      style={[
                        commonStyles.flexRowSpaceBtw,
@@ -122,7 +139,7 @@ export const MembershipDetails = ({
                    </View>
                  </View>
                )}
-               {aboutToExpire && slotsExhaused == false && (
+               {((aboutToExpire && slotsExhaused == false) || (aboutToExpire == false && slotsExhaused == false && planExpired == false)) && (
                  <View>
                    <Text style={styles.title}>Membership Details</Text>
                    <View style={{ flexDirection: "row" }}>

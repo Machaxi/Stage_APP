@@ -4,6 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import { Nunito_Medium } from "../../containers/util/fonts";
 import moment from "moment";
+import { deviceWidth } from "../../containers/util/dimens";
 
 class SelectTimeItem extends Component {
   handlepress(val) {
@@ -73,22 +74,21 @@ class SelectTimeItem extends Component {
               {"    "}
             </Text>
           </LinearGradient>
-          {
-            !this.checkIfSlotActive() &&
-              <Image
-                style={[
-                  {
-                    width: this.props.width,
-                    height: "100%",
-                    marginTop: -30,
-                    tintColor: "#F2AE4D",
-                  },
-                  this.props.width ? { width: width } : {},
-                ]}
-                resizeMode="stretch"
-                source={require("../../images/playing/cross.png")}
-              />
-          }
+          {!this.checkIfSlotActive() && (
+            <Image
+              style={[
+                {
+                  height: "95%",
+                  marginTop: -30,
+                  tintColor: "#F2AE4D",
+                  marginLeft: 6
+                },
+                width ? { width: width * 0.9 } : {width: deviceWidth * 0.28 },
+              ]}
+              resizeMode="stretch"
+              source={require("../../images/playing/cross.png")}
+            />
+          )}
         </View>
       </TouchableOpacity>
     );

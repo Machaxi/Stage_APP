@@ -149,9 +149,7 @@ class ParentHome extends BaseComponent {
         />
       ),
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RequestHeaderRight navigation={navigation} />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
     };
   };
 
@@ -185,18 +183,35 @@ class ParentHome extends BaseComponent {
     this.props.navigation.setParams({ switchPlayer: this.switchPlayer });
   }
 
-  componentDidMount() {
-    this.setState({ loading: true });
+  updateUserData () {
     getData("userInfo", (value) => {
       console.log("userInfo", value);
       var userData = JSON.parse(value);
-      this.setState({userDetails: userData, loading: false });
+      this.setState({ userDetails: userData, loading: false });
       if (userData.user) {
         var userid = userData.user["id"];
         var username = userData.user["name"];
-        Analytics.logEvent("ParentHome", { userid: userid, username: username });
+        Analytics.logEvent("ParentHome", {
+          userid: userid,
+          username: username,
+        });
       }
     });
+  }
+
+  onScreenFocus = () => {
+      this.updateUserData();
+  };
+  
+
+  componentDidMount() {
+    this.didFocusListener = this.props.navigation.addListener(
+      "didFocus",
+      this.onScreenFocus
+    );
+
+    this.setState({ loading: true });
+    this.updateUserData();
     // firebase.analytics().logEvent("ParentHome", {})
 
     this.selfComponentDidMount();
@@ -272,6 +287,10 @@ class ParentHome extends BaseComponent {
         console.log("viewshot reference not fount");
       }
     }, 5000);
+  }
+
+  componentWillUnmount() {
+    this.didFocusListener.remove();
   }
 
   // componentWillReceiveProps(nextProps, nextState){
@@ -432,7 +451,11 @@ class ParentHome extends BaseComponent {
       console.log("URL ", url);
       const shareOptions = {
         title: "Machaxi App",
-        message: "Click to see my detailed "+  this.state.currentSportName+" Stats " + url,
+        message:
+          "Click to see my detailed " +
+          this.state.currentSportName +
+          " Stats " +
+          url,
         url: "data:image/png;base64," + this.state.screenShot,
         subject: "Machaxi",
         //quote:'hello',
@@ -472,7 +495,7 @@ class ParentHome extends BaseComponent {
           //Getting Sports Data
           let sportsList, currentSportId, currentSportName;
 
-          if ( user1?.data["sports"] != null) {
+          if (user1?.data["sports"] != null) {
             sportsList = user1?.data["sports"].map((item) => {
               return { label: item.name, value: item.id };
             });
@@ -489,7 +512,7 @@ class ParentHome extends BaseComponent {
 
             this.setState({
               currentSportId,
-              currentSportName
+              currentSportName,
             });
           }
           if (user1.success == true) {
@@ -564,11 +587,11 @@ class ParentHome extends BaseComponent {
     }, 1000);
   };
 
-  refreshPage(){
-      this.setState({ loading: true });
-      setTimeout(() => {
-        this.setState({ loading: false });
-      }, 1000);
+  refreshPage() {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
   }
 
   handleClick() {
@@ -625,7 +648,10 @@ class ParentHome extends BaseComponent {
     let show_must_update_alert = this.state.show_must_update_alert;
     const rewards_ui_array = [];
 
-    if (this.props.data.loading && !this.state.player_profile || this.state.loading) {
+    if (
+      (this.props.data.loading && !this.state.player_profile) ||
+      this.state.loading
+    ) {
       return (
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -638,15 +664,15 @@ class ParentHome extends BaseComponent {
     if (this.state.userDetails && this.state.userDetails.is_learn_enabled) {
       return (
         <LinearGradient
-        colors={["#332B70", "#24262A"]}
-        locations={[0, 1]}
-        style={{ flex: 1 }}
+          colors={["#332B70", "#24262A"]}
+          locations={[0, 1]}
+          style={{ flex: 1 }}
         >
           <CoachScreen
             onPressPlan={() => {
               this.props.navigation.navigate("CoachingPlan");
             }}
-            navigation = {this.props.navigation}
+            navigation={this.props.navigation}
             learnData={this.state.learnData}
             onPressTrail={() => {
               this.props.navigation.navigate("BookLearnTrail");
@@ -843,9 +869,7 @@ class ParentHome extends BaseComponent {
         }
       }
       return (
-        <View
-          style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}
-        >
+        <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}>
           <ScrollView
             refreshControl={
               <RefreshControl
@@ -936,9 +960,7 @@ class ParentHome extends BaseComponent {
                     </View>
                   </View>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
-                    <View
-                      style={[defaultStyle.line_style, { marginTop: 0 }]}
-                    />
+                    <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
 
                     {sessionArray}
                   </View>
@@ -968,9 +990,7 @@ class ParentHome extends BaseComponent {
                         alignItems: "center",
                       }}
                     >
-                      <Text style={defaultStyle.bold_text_10}>
-                        Payment
-                      </Text>
+                      <Text style={defaultStyle.bold_text_10}>Payment</Text>
                       <View style={{ marginLeft: 10 }}>
                         <DueView />
                       </View>
@@ -1003,10 +1023,7 @@ class ParentHome extends BaseComponent {
                   />
 
                   <Text
-                    style={[
-                      defaultStyle.bold_text_14,
-                      { marginRight: 16 },
-                    ]}
+                    style={[defaultStyle.bold_text_14, { marginRight: 16 }]}
                   >
                     {name}
                   </Text>
@@ -1036,10 +1053,7 @@ class ParentHome extends BaseComponent {
                           Amount
                         </Text>
                         <Text
-                          style={[
-                            defaultStyle.bold_text_14,
-                            { marginTop: 10 },
-                          ]}
+                          style={[defaultStyle.bold_text_14, { marginTop: 10 }]}
                         >
                           {payment_detail_academy.totalAmount}
                         </Text>
@@ -1115,10 +1129,7 @@ class ParentHome extends BaseComponent {
                   />
 
                   <Text
-                    style={[
-                      defaultStyle.bold_text_14,
-                      { marginRight: 16 },
-                    ]}
+                    style={[defaultStyle.bold_text_14, { marginRight: 16 }]}
                   >
                     {name}
                   </Text>
@@ -1292,10 +1303,7 @@ class ParentHome extends BaseComponent {
                     }}
                   >
                     <Text
-                      style={[
-                        defaultStyle.bold_text_14,
-                        { color: "#707070" },
-                      ]}
+                      style={[defaultStyle.bold_text_14, { color: "#707070" }]}
                     >
                       {academy_feedback_data.target.name}
                     </Text>
@@ -1335,8 +1343,7 @@ class ParentHome extends BaseComponent {
                         iconSet={"Ionicons"}
                         maxStars={5}
                         rating={
-                          academy_feedback_data.target
-                            .avgFeedbackEntities[0]
+                          academy_feedback_data.target.avgFeedbackEntities[0]
                             ? academy_feedback_data.target
                                 .avgFeedbackEntities[0].avgRating
                             : 0
@@ -1356,10 +1363,9 @@ class ParentHome extends BaseComponent {
                                             fontFamily: 'Quicksand-Medium'
                                         }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
                       <RateViewBorder>
-                        {academy_feedback_data.target
-                          .avgFeedbackEntities[0]
-                          ? academy_feedback_data.target
-                              .avgFeedbackEntities[0].avgRating
+                        {academy_feedback_data.target.avgFeedbackEntities[0]
+                          ? academy_feedback_data.target.avgFeedbackEntities[0]
+                              .avgRating
                           : 0}
                       </RateViewBorder>
                     </View>
@@ -1586,8 +1592,8 @@ class ParentHome extends BaseComponent {
                           iconSet={"Ionicons"}
                           maxStars={5}
                           rating={
-                            coach_feedback_data.target
-                              .avgFeedbackEntities[0].avgRating
+                            coach_feedback_data.target.avgFeedbackEntities[0]
+                              .avgRating
                           }
                           ratingBackgroundColor={"#ff2200"}
                           fullStarColor={"#F4FC9A"}
@@ -1605,8 +1611,8 @@ class ParentHome extends BaseComponent {
                                             }}>{coach_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
                         <RateViewBorder>
                           {
-                            coach_feedback_data.target
-                              .avgFeedbackEntities[0].avgRating
+                            coach_feedback_data.target.avgFeedbackEntities[0]
+                              .avgRating
                           }
                         </RateViewBorder>
                       </View>
@@ -1718,14 +1724,10 @@ class ParentHome extends BaseComponent {
                   >
                     <TouchableOpacity
                       onPress={() => {
-                        this.props.navigation.navigate(
-                          "CoachProfileDetail",
-                          {
-                            academy_id: coach_feedback_data.academyId,
-                            coach_id:
-                              coach_feedback_data.target.entity_id,
-                          }
-                        );
+                        this.props.navigation.navigate("CoachProfileDetail", {
+                          academy_id: coach_feedback_data.academyId,
+                          coach_id: coach_feedback_data.target.entity_id,
+                        });
                       }}
                     >
                       <Text

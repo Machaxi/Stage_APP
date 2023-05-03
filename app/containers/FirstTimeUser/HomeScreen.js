@@ -26,6 +26,7 @@ class HomeScreen extends Component {
         darkThemFlow={true}
         navigationProps={navigation}
         showNotification={true}
+        homeStack={true}
       />
     ),
   });
