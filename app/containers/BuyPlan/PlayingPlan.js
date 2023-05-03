@@ -15,6 +15,10 @@ import SelectPlayPay from "./components/SelectPlayPay";
 import MoreDetails from "./components/MoreDetails";
 import AsyncStorage from "@react-native-community/async-storage";
 import ApplyCouponCode from "./components/ApplyCouponCode";
+import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
+import RequestHeaderBg from "../../atoms/requestHeaderBg";
+import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
+import RequestHeaderRight from "../../atoms/requestHeaderRight";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -248,6 +252,25 @@ class PlayingPlan extends Component {
     );
   }
 }
+
+
+PlayingPlan.navigationOptions = ({ navigation }) => {
+  return {
+    headerTitle: <RequestHeaderTitle title={"Play"} />,
+    headerTitleStyle: {
+      color: "white",
+    },
+
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    },
+    headerBackground: <RequestHeaderBg />,
+    headerLeft: <RequestHeaderLeft navigation={navigation} />,
+    headerRight: <RequestHeaderRight navigation={navigation} />,
+  };
+};
 
 const styles = StyleSheet.create({
   container: {

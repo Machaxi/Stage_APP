@@ -31,7 +31,7 @@ const SelectPlayingTime = ({
                 renderItem={({item})=>{
                 return (
                   <SelectTimeItem
-                    // width={deviceWidth * 0.3}
+                    width={deviceWidth * 0.3}
                     isSelected={
                       item?.courtTimingId == selectedTime
                     }

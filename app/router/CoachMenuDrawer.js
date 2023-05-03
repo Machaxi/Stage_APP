@@ -326,164 +326,219 @@ class CoachMenuDrawer extends BaseComponent {
             marginBottom: 12,
           }}
         > */}
-			<View
-					style={{
-						paddingLeft: 10, paddingTop: 16,
-						paddingBottom: 16,
-						flexDirection: 'row', backgroundColor: '#262051', marginBottom: 12
-					}}
-				>
-					{/* <Image
+        <View
+          style={{
+            paddingLeft: 10,
+            paddingTop: 16,
+            paddingBottom: 16,
+            flexDirection: "row",
+            backgroundColor: "#262051",
+            marginBottom: 12,
+          }}
+        >
+          {/* <Image
 						style={{ width: 128, height: 128, borderRadius: 8 }}
 						source={{ uri: profile_pic }}
 					></Image> */}
-				{profile_pic?
-					<FastImage
-						//resizeMode={FastImage.resizeMode.contain}
-						style={{
-							width: 93, height: 98,
-						}}
-						source={{ uri: profile_pic }}
-					/>
-					:
-					<Image
-					style={{ width: 93, height: 100, resizeMode:'cover'  }}
-					source={require('../images/dummy_user.jpg')}
-					></Image>
-					}
-
-					<View
-						style={{
-							justifyContent: 'center',
-							marginLeft: 10,
-
-						}}
-					>
-						{!signedIn ?
-
-							<View>
-
-								<Text
-									style={{
-										color: 'black',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 14, marginTop: 16,
-									}}>
-									Guest</Text>
-
-								<Text
-									style={{
-										color: '#667DDB',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 14, marginTop: 8,
-									}}>
-									Sign In</Text>
-							</View>
-
-							:
-							<View>
-								<View style={{flexDirection:'row', alignItems:'center'}}>
-								<Text
-									style={{
-										color: '#A3A5AE',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 14,
-										marginTop: 8
-									}}>
-									Guest</Text>
-								<TouchableOpacity style={{paddingLeft:8}} activeOpacity={.8} onPress={() => {
-									this.props.navigation.navigate('EditProfile', { relations: this.state.related_players })
-								}}>
-
-									<View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
-										<Image
-											resizeMode="contain"
-											style={{
-												width: 12,
-												height: 12, borderRadius: 8
-											}}
-											source={require('../images/edit_profile.png')}
-										></Image>
-
-										<Text
-											style={{
-												color: '#667DDB',
-												fontFamily: Nunito_Regular,
-												fontSize: 10, 
-												fontWeight:'400',
-												marginLeft: 4
-											}}
-										>
-											Edit
-								</Text>
-									</View>
-								</TouchableOpacity></View>
-								
-								
-								
-								<Text
-									style={{
-										color: '#FFFFFF',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 20,
-										marginTop: 8
-									}}>
-									{fullame}</Text>
-
-								
-								<Text
-									style={{
-										color: '#A3A5AE',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 14, marginTop: 8
-									}}>
-									{mobileNumber}
-								</Text>
-								<Text
-									style={{
-										color: '#7B7C83',
-										fontFamily: 'Quicksand-Medium',
-										fontSize: 12,
-										marginTop: 4
-									}}>
-									({user_type == PARENT ? 'Guardian' : camelCase(user_type)})</Text>
-							</View>
-						}
-					</View>
-				</View>
-				{/* new guest drawer top end */}
-
-        <TouchableOpacity
-          activeOpacity={0.8}
-		  //TODO:
-          //onPress={() => this.props.navigation.navigate("WebViewScreen")}
-        >
-          <View style={styles.drawercell}>
-            <Text style={styles.menu}>About Machaxi</Text>
-
-            <Image
-              style={styles.arrow_img}
-              source={require("../images/ic_drawer_arrow.png")}
+          {profile_pic ? (
+            <FastImage
+              //resizeMode={FastImage.resizeMode.contain}
+              style={{
+                width: 93,
+                height: 98,
+              }}
+              source={{ uri: profile_pic }}
             />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() =>{ 
-			//TODO:
-			//this.props.navigation.navigate("ContactUs")
-		}}
-        >
-          <View style={styles.drawercell}>
-            <Text style={styles.menu}>Contact Us</Text>
-
+          ) : (
             <Image
-              style={styles.arrow_img}
-              source={require("../images/ic_drawer_arrow.png")}
+              style={{ width: 93, height: 100, resizeMode: "cover" }}
+              source={require("../images/dummy_user.jpg")}
             />
+          )}
+
+          <View
+            style={{
+              justifyContent: "center",
+              marginLeft: 10,
+            }}
+          >
+            {!signedIn ? (
+              <View>
+                <Text
+                  style={{
+                    color: "black",
+                    fontFamily: "Quicksand-Medium",
+                    fontSize: 14,
+                    marginTop: 16,
+                  }}
+                >
+                  Guest
+                </Text>
+
+                <Text
+                  style={{
+                    color: "#667DDB",
+                    fontFamily: "Quicksand-Medium",
+                    fontSize: 14,
+                    marginTop: 8,
+                  }}
+                >
+                  Sign In
+                </Text>
+              </View>
+            ) : (
+              <View>
+                <View
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                >
+                  <Text
+                    style={{
+                      color: "#A3A5AE",
+                      fontFamily: "Quicksand-Medium",
+                      fontSize: 14,
+                      marginTop: 8,
+                    }}
+                  >
+                    Guest
+                  </Text>
+                  <TouchableOpacity
+                    style={{ paddingLeft: 8 }}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      this.props.navigation.navigate("EditProfile", {
+                        relations: this.state.related_players,
+                      });
+                    }}
+                  >
+                    <View
+                      style={{
+                        marginTop: 8,
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Image
+                        resizeMode="contain"
+                        style={{
+                          width: 12,
+                          height: 12,
+                          borderRadius: 8,
+                        }}
+                        source={require("../images/edit_profile.png")}
+                      />
+
+                      <Text
+                        style={{
+                          color: "#667DDB",
+                          fontFamily: Nunito_Regular,
+                          fontSize: 10,
+                          fontWeight: "400",
+                          marginLeft: 4,
+                        }}
+                      >
+                        Edit
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <Text
+                  style={{
+                    color: "#FFFFFF",
+                    fontFamily: "Quicksand-Medium",
+                    fontSize: 20,
+                    marginTop: 8,
+                  }}
+                >
+                  {fullame}
+                </Text>
+
+                <Text
+                  style={{
+                    color: "#A3A5AE",
+                    fontFamily: "Quicksand-Medium",
+                    fontSize: 14,
+                    marginTop: 8,
+                  }}
+                >
+                  {mobileNumber}
+                </Text>
+                <Text
+                  style={{
+                    color: "#7B7C83",
+                    fontFamily: "Quicksand-Medium",
+                    fontSize: 12,
+                    marginTop: 4,
+                  }}
+                >
+                  ({user_type == PARENT ? "Guardian" : camelCase(user_type)}
+                  )
+                </Text>
+              </View>
+            )}
           </View>
-        </TouchableOpacity>
+        </View>
+        {/* new guest drawer top end */}
+
+        <DrawerItemBtn
+          itemImage={require("../images/share_icon.png")}
+          onPress={() => {
+            this.shareApp();
+          }}
+          title={"Share App"}
+        />
+        <View style={[defaultStyle.line_style, styles.greyLine]} />
+        <ColourfulDrawerItem
+          onPress={() => {
+            this.setState({
+              staticDataVisibility: !this.state.staticDataVisibility,
+            });
+          }}
+          image={require("../images/info.png")}
+          title={"About Machaxi"}
+          isExpanded={this.state.staticDataVisibility}
+        />
+
+        {this.state.staticDataVisibility ? (
+          <>
+            <SubPointsAboutMachaxi
+              title={"About us"}
+              onPress={() => {
+                this.props.navigation.navigate("WebViewScreen");
+              }}
+            />
+            <SubPointsAboutMachaxi
+              title={"Careers Page"}
+              onPress={() => {
+                this.props.navigation.navigate("ContactUs");
+              }}
+            />
+            <SubPointsAboutMachaxi
+              title={"Privacy Policy"}
+              onPress={() => {
+                this.props.navigation.navigate("ContactUs");
+              }}
+            />
+            <SubPointsAboutMachaxi
+              title={"Blog"}
+              onPress={() => {
+                this.props.navigation.navigate("ContactUs");
+              }}
+            />
+            <SubPointsAboutMachaxi
+              title={"FAQ"}
+              onPress={() => {
+                this.props.navigation.navigate("FaqScreen");
+              }}
+            />
+          </>
+        ) : null}
+        <View
+          style={[
+            defaultStyle.line_style,
+            { marginLeft: 12, backgroundColor: "#272733", marginRight: 12 },
+          ]}
+        />
 
         <TouchableOpacity
           activeOpacity={0.8}
@@ -491,8 +546,12 @@ class CoachMenuDrawer extends BaseComponent {
             this.callApi();
           }}
         >
-          <View style={styles.drawercell}>
-            <Text style={styles.menu}>Sign Out</Text>
+          <View style={styles.signOut}>
+            <Image
+              style={styles.sign_out}
+              source={require("../images/sign_out.png")}
+            />
+            <Text style={styles.seperateFunction}>Sign Out</Text>
           </View>
         </TouchableOpacity>
 
@@ -1238,9 +1297,9 @@ class CoachMenuDrawer extends BaseComponent {
 				<View style={[defaultStyle.line_style,  styles.greyLine]}></View>
 				<ColourfulDrawerItem
 					onPress={()=> {
-						// this.setState({
-						// 	staticDataVisibility: !this.state.staticDataVisibility,
-						// });
+						this.setState({
+							staticDataVisibility: !this.state.staticDataVisibility,
+						});
 						}
 					}
 					image={require('../images/info.png')}

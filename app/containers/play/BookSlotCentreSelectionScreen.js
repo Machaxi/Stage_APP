@@ -476,6 +476,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   }
   console.log({ slotApiRes });
   console.log({slotBookedRes})
+      const {
+        playHoursRemaining,
+      } = navigation?.state?.params;
+
   
   return (
     <View style={{ flex: 1 }}>

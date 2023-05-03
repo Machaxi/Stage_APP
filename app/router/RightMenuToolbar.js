@@ -64,12 +64,22 @@ class RightMenuToolbar extends BaseComponent {
               //     />
               // </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.8} onPress={()=>{
-                this.props.darkThemFlow ? this.props.navigationProps.navigate(
+                 if(this.props.homeStack == true) {
+                  this.props.navigationProps.navigate(
+                    "NotificationsScreenHomeStack"
+                  );
+                }
+                else if (this.props.darkThemFlow) {
+                  this.props.navigationProps.navigate(
                     "NotificationsScreen"
-                  ):
+                  );
+                }
+                else {
                   this.props.navigationProps.navigate(
                     "NotificationList"
                   );
+                }
+                  
                 }} 
               >
                 <ImageBackground

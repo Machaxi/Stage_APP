@@ -20,8 +20,8 @@ export const NextSessionList = ({
                expandList={() => {
                 setRefresh(!refresh)
                 expandList(item)}}
-               onCancelPress={() => {
-                 onCancelPress(item);
+               onCancelPress={(val) => {
+                 onCancelPress(val);
                }}
                item={item}
              />

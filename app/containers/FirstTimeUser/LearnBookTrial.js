@@ -13,6 +13,10 @@ import CongratulationScreen from "./TrialBook/CongratulationScreen";
 import SorryScreen from "./TrialBook/SorryScreen";
 import GetBack from "../../components/custom/GetBack";
 import { Nunito_SemiBold } from "../util/fonts";
+import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
+import RequestHeaderBg from "../../atoms/requestHeaderBg";
+import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
+import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { KeyboardAvoidingView } from "react-native";
 
 class LearnBookTrial extends Component {
@@ -185,6 +189,24 @@ class LearnBookTrial extends Component {
     );
   }
 }
+
+LearnBookTrial.navigationOptions = ({ navigation }) => {
+  return {
+    headerTitle: <RequestHeaderTitle title={"Learn"} />,
+    headerTitleStyle: {
+      color: "white",
+    },
+
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    },
+    headerBackground: <RequestHeaderBg />,
+    headerLeft: <RequestHeaderLeft navigation={navigation} />,
+    headerRight: <RequestHeaderRight navigation={navigation} />,
+  };
+};
 
 const styles = StyleSheet.create({
   container: {

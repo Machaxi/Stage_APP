@@ -15,18 +15,19 @@ export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRa
 
          var selectedSportRelatedRating = null;
          var selectedPeers = []
-         ratingData.map((val) => {
-           if (val?.isSelected) {
-             selectedSportRelatedRating = val;
-             for(var i = 0; i < val?.players?.length; i++){
-              if(userId != val?.players[i]?.id){
-                selectedPeers.add(val?.players[i]);
-              }
+         if (ratingData?.length > 0)
+           ratingData.map((val) => {
+             if (val?.isSelected) {
+               selectedSportRelatedRating = val;
+               for (var i = 0; i < val?.players?.length; i++) {
+                 if (userId != val?.players[i]?.id) {
+                   selectedPeers.add(val?.players[i]);
+                 }
+               }
              }
-           }
-         });
+           });
          console.log(' peers -')
-         console.log({selectedPeers})
+         console.log({ selectedSportRelatedRating });
 
          const renderItems = ({ item }) => {
           
@@ -96,11 +97,13 @@ export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRa
                <Text style={styles.ratePartners}>
                  {"Rate playing partners"}
                </Text>
+               {selectedSportRelatedRating != null &&
                <Text style={styles.dateTimeInfo}>
                  {`${moment(selectedSportRelatedRating?.date).format(
                    "Mo MMMM YYYY"
                  )} | ${selectedSportRelatedRating?.displayTime}`}
                </Text>
+                }
                {selectedPeers?.length > 0 ? (
                  <FlatList
                    data={selectedPeers}
@@ -110,23 +113,30 @@ export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRa
                  />
                ) : (
                  <Text
-                   style={[styles.ratePartners, { marginVertical: 14, textAlign:'center' }]}
+                   style={[
+                     styles.ratePartners,
+                     { marginVertical: 14, textAlign: "center" },
+                   ]}
                  >
-                   {'No peers found.'}
+                   {"No peers found."}
                  </Text>
                )}
-               <GradientLine
-                 marginBottom={14}
-                 marginTop={16}
-                 marginLeft={0}
-                 colors={["#6b6a76", "#2a273a"]}
-               />
-               <Text style={[styles.ratePartners, { marginTop: 14 }]}>
-                 {`${selectedSportRelatedRating?.academy?.name}`}
-               </Text>
-               <Text style={styles.dateTimeInfo}>
-                 {`${selectedSportRelatedRating?.academy?.address}`}
-               </Text>
+               { selectedSportRelatedRating != null &&
+               <View>
+                <GradientLine
+                  marginBottom={14}
+                  marginTop={16}
+                  marginLeft={0}
+                  colors={["#6b6a76", "#2a273a"]}
+                />
+                <Text style={[styles.ratePartners, { marginTop: 14 }]}>
+                  {`${selectedSportRelatedRating?.academy?.name}`}
+                </Text>
+                <Text style={styles.dateTimeInfo}>
+                  {`${selectedSportRelatedRating?.academy?.address}`}
+                </Text>
+               </View>
+                }
              </LinearGradient>
            </View>
          );

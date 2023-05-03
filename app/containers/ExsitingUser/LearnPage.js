@@ -54,6 +54,7 @@ class LearnPage extends Component {
       >
         {this.state.learnData && (
           <CoachScreen
+            navigation={this.props.navigation}
             onPressPlan={() => {
               this.props.navigation.navigate("CoachingPlan");
             }}

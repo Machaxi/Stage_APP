@@ -33,6 +33,27 @@ export const SelfRatingCard = ({
              selectedSportRelatedRating = val;
            }
          });
+         if(selectedSportRelatedRating != null){
+           if(proficiencyData?.length > 0){
+            //check whether any proficiency is selected
+            var alreadySelected = false
+            for (var i = 0; i < proficiencyData?.length; i++) {
+              if (
+                proficiencyData[i].isSelected == true
+              ) {
+                alreadySelected = true;
+              }
+            }
+            //if no prof is selected on edit mode then set the original api prof for selected sport
+            if(!alreadySelected){
+              for(var i = 0; i < proficiencyData?.length; i++){
+                if(selectedSportRelatedRating?.self == proficiencyData[i].proficiency){
+                  proficiencyData[i].isSelected = true;
+                }
+              }
+            }
+           }
+         }
          const data = [
            {
              icon: require("./../../images/beginner.png"),
@@ -84,18 +105,14 @@ export const SelfRatingCard = ({
                  <Text style={styles.header}>Self Rating </Text>
 
                  <TouchableOpacity
+                   style={{paddingVertical: 10}}
                    activeOpacity={0.8}
                    onPress={() => {
-                    console.log(
-                      "**********" + editSelfRating
-                    );
-                     
-                       if (editSelfRating) {
-                         onSavePress(selectedSportRelatedRating);
-                       } else {
-                         onEditPress();
-                       }
-                     
+                      if (editSelfRating) {
+                        onSavePress(selectedSportRelatedRating);
+                      } else {
+                        onEditPress();
+                      }
                    }}
                  >
                    {editSelfRating ? (
