@@ -19,8 +19,10 @@ import {
   Nunito_Regular,
   Nunito_SemiBold,
 } from "../../util/fonts";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
-const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
+// const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
+const GOOGLE_MAPS_APIKEY = "AIzaSyAdy0zh69w3bYrzIMxuISgN_5V-PWA17RI";
 
 class SelectPlayCenter extends Component {
   constructor(props) {
@@ -34,6 +36,7 @@ class SelectPlayCenter extends Component {
       centerData: null,
       isLoading: false,
       isPermissionGranted: false,
+      displayDistance: false,
     };
   }
 
@@ -54,7 +57,7 @@ class SelectPlayCenter extends Component {
     }
 
     if (isPermissionGranted) {
-      this.setState({ isPermissionGranted: true });
+      this.setState({ isPermissionGranted: true, displayDistance: true });
       this.fetchLocation();
     } else {
       this.setState({
@@ -104,10 +107,15 @@ class SelectPlayCenter extends Component {
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
         axios
           .get(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lats}&lon=${lngs}`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&key=${GOOGLE_MAPS_APIKEY}`
           )
           .then((response) => {
-            this.setState({ place: response.data.address.village });
+            const city = response.data.results[0].address_components.find(
+              (component) => component.types.includes("locality")
+            );
+            if (city) {
+              this.setState({ place: city.long_name });
+            }
           })
           .catch((error) => {
             console.log(error);
@@ -148,6 +156,24 @@ class SelectPlayCenter extends Component {
     return deg * (Math.PI / 180);
   }
 
+  handleSelect = async (data) => {
+    const placeId = data.place_id;
+    const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_MAPS_APIKEY}`;
+    try {
+      const response = await fetch(apiUrl);
+      const result = await response.json();
+      const { lat, lng } = result.result.geometry.location;
+      this.setState({
+        latitude: lat,
+        longitude: lng,
+        displayDistance: true,
+      });
+      this.getsortedData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   render() {
     handlepress = async () => {
       let centerValue = this.state.centerData.find(
@@ -169,6 +195,8 @@ class SelectPlayCenter extends Component {
         <CenterDetails
           item={item}
           distance={distance}
+          isExpanded={false}
+          isDistance={this.state.displayDistance}
           currentIndex={this.state.currentIndex}
           onPress={() =>
             this.setState({ currentIndex: item.id, proseednext: true })
@@ -188,7 +216,31 @@ class SelectPlayCenter extends Component {
                 source={require("../../../images/playing/my_location.png")}
                 style={{ width: 17, height: 17, marginLeft: 8 }}
               />
-              <Text style={styles.addressText}>{this.state.place}</Text>
+              <GooglePlacesAutocomplete
+                placeholder={this.state.place}
+                onPress={this.handleSelect}
+                textInputProps={{
+                  placeholderTextColor: "white",
+                }}
+                ini
+                query={{
+                  key: GOOGLE_MAPS_APIKEY,
+                  language: "en",
+                }}
+                styles={{
+                  container: {
+                    marginTop: -5,
+                  },
+                  textInputContainer: {
+                    backgroundColor: "transparent",
+                  },
+                  textInput: {
+                    height: 30,
+                    backgroundColor: "transparent",
+                    color: "white",
+                  },
+                }}
+              />
               <Image
                 source={require("../../../images/playing/arrow_back.png")}
                 style={{ width: 12, height: 7, marginLeft: 13, marginTop: 6 }}
@@ -275,7 +327,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#4D4D4D",
     marginBottom: 15,
     marginTop: 7,
-    width: "40%",
+    marginLeft: 10,
+    width: "95%",
   },
   addressView: {
     flexDirection: "row",
@@ -290,6 +343,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     marginVertical: 10,
+    marginTop: 20,
     fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },

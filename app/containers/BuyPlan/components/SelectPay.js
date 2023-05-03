@@ -27,6 +27,7 @@ import axios from "axios";
 import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 import AppliedCouponCode from "../../../components/custom/AppliedCouponCode";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 class SelectPay extends Component {
   months = [
@@ -115,31 +116,40 @@ class SelectPay extends Component {
       levelimage = selectLevel.url;
     }
 
-    this.setState({
-      centerName: selectCenter.name,
-      centerImage: selectCenter.cover_pic,
-      centerAddress: selectCenter.address,
-      centerDistance: distance,
-      sportName: selectSport.name,
-      sportImage: selectSport.image,
-      time: selectTime,
-      selectBatch: selectBatch,
-      levelImage: levelimage,
-      levelName: levelname,
-      selectLevel: selectLevel,
-      username: username,
-      gender: gender,
-      parent: parent,
-      displayStartDate: this.props.selectPlan.start_date,
-      displayEndDate: this.props.selectPlan.end_date,
-      amount: this.props.selectPlan.paybleAmount,
-      joinDate: joinDate,
-      appliedCoupon: this.props.applycoupon,
-      userData: userData,
-      childDetails: this.props.childDetails,
-      discountAmount: this.props.selectPlan.paybleAmount,
-      coupon: this.props.coupon,
-    });
+    this.setState(
+      {
+        centerName: selectCenter.name,
+        centerImage: selectCenter.cover_pic,
+        centerAddress: selectCenter.address,
+        centerDistance: distance,
+        sportName: selectSport.name,
+        sportImage: selectSport.image,
+        time: selectTime,
+        selectBatch: selectBatch,
+        levelImage: levelimage,
+        levelName: levelname,
+        username: username,
+        gender: gender,
+        parent: parent,
+        displayStartDate: this.props.selectPlan.start_date,
+        displayEndDate: this.props.selectPlan.end_date,
+        amount: this.props.selectPlan.paybleAmount,
+        joinDate: joinDate,
+        appliedCoupon: this.props.applycoupon,
+        userData: userData,
+        childDetails: this.props.childDetails,
+        discountAmount: this.props.selectPlan.paybleAmount,
+        coupon: this.props.coupon,
+      },
+      () => {
+        if (this.props.joinBool) {
+          console.log("workings");
+          this.DataChange(this.props.joinTime);
+        } else {
+          this.setState({ selectLevel: selectLevel });
+        }
+      }
+    );
   };
 
   getdetails(displayapply) {
@@ -317,6 +327,7 @@ class SelectPay extends Component {
           displayStartDate: planData[term].start_date,
           amount: planData[term].paybleAmount,
           discountAmount: planData[term].paybleAmount,
+          selectLevel: this.props.selectLevel,
         });
         this.getdetails(false);
       })
@@ -378,6 +389,10 @@ class SelectPay extends Component {
     this.setState({ isApplied: false });
   };
 
+  onCouponPress = () => {
+    this.props.onPresscoupon(true, this.state.joinDate);
+  };
+
   render() {
     listimage = (image, name, url) => {
       return (
@@ -434,6 +449,10 @@ class SelectPay extends Component {
       )
     );
 
+    if (this.state.selectLevel == null) {
+      return <LoadingIndicator />;
+    }
+
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
@@ -453,8 +472,8 @@ class SelectPay extends Component {
                 : "Yearly"
             }
             subtitle={"Rs. " + this.props.selectPlan.planFees}
-            startDate={this.props.selectPlan.start_date}
-            endDate={this.props.selectPlan.end_date}
+            startDate={this.state.displayStartDate}
+            endDate={this.state.displayEndDate}
             image={
               this.props.selectPlan.term_id === 1
                 ? require("../../../images/playing/rocket.png")
@@ -547,7 +566,7 @@ class SelectPay extends Component {
                   discountAmount: this.state.amount,
                 });
               } else {
-                this.props.onPresscoupon();
+                this.onCouponPress();
               }
             }}
           >

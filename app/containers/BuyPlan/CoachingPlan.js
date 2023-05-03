@@ -48,6 +48,8 @@ class CoachingPlan extends Component {
       applycoupon: false,
       childDetails: null,
       coupon: null,
+      joinBool: false,
+      joinTime: null,
     };
   }
 
@@ -99,6 +101,8 @@ class CoachingPlan extends Component {
       selectSlot: selectSlot,
       applycoupon: false,
       coupon: null,
+      joinBool: false,
+      joinTime: null,
     });
   };
 
@@ -128,8 +132,8 @@ class CoachingPlan extends Component {
     this.setState({ couponCode: false });
   };
 
-  hadleCouponCode = () => {
-    this.setState({ couponCode: true });
+  hadleCouponCode = (joinBool, joinTime) => {
+    this.setState({ couponCode: true, joinBool: joinBool, joinTime: joinTime });
   };
 
   hadleCouponApply = (coupon) => {
@@ -264,6 +268,8 @@ class CoachingPlan extends Component {
                     applycoupon={this.state.applycoupon}
                     coupon={this.state.coupon}
                     childDetails={this.state.childDetails}
+                    joinTime={this.state.joinTime}
+                    joinBool={this.state.joinBool}
                     onPress={this.onPressConfirm}
                     onPresscoupon={this.hadleCouponCode}
                   />

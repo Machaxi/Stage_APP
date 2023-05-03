@@ -13,6 +13,7 @@ import CongratulationScreen from "./TrialBook/CongratulationScreen";
 import SorryScreen from "./TrialBook/SorryScreen";
 import GetBack from "../../components/custom/GetBack";
 import { Nunito_SemiBold } from "../util/fonts";
+import { KeyboardAvoidingView } from "react-native";
 
 class LearnBookTrial extends Component {
   constructor(props) {
@@ -101,7 +102,7 @@ class LearnBookTrial extends Component {
     return (
       <View>
         <GetBack title={this.state.title} onPress={this.hadleBackPress} />
-        <View style={{ height: 70, margin: 20 }}>
+        <View style={{ height: 60, margin: 20 }}>
           <CoachProcess
             number={this.state.currentPage}
             onPress={this.onPress}
@@ -138,7 +139,10 @@ class LearnBookTrial extends Component {
           />
         )}
         {!this.state.congratulationScreen && (
-          <View style={{ flex: 1 }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
             <View style={{ flex: 0.2 }}>{true && this.selectScreen()}</View>
             <View style={{ flex: 0.8 }}>
               {this.state.sportsList != null &&
@@ -175,7 +179,7 @@ class LearnBookTrial extends Component {
                 />
               )}
             </View>
-          </View>
+          </KeyboardAvoidingView>
         )}
       </LinearGradient>
     );

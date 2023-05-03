@@ -146,6 +146,7 @@ class Splash extends BaseComponent {
                                         })
                                     }
                                 }else {
+                                  if (userData.user.name != null) {
                                     if (!userData.is_learn_enabled) {
                                         if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                                             this.props.navigation.navigate("LearnHomePage");
@@ -159,7 +160,10 @@ class Splash extends BaseComponent {
                                         this.props.navigation.navigate("LearnHomePage");
                                     } else {
                                         this.props.navigation.navigate("HomeDrawer");
-                                    }                                
+                                    }  
+                                  }else {
+                                    this.props.navigation.navigate('Login')
+                                  }
                                 }
                                 // else if (userType == PARENT) {
                                 //     if (userData.can_book_court) {
@@ -170,6 +174,7 @@ class Splash extends BaseComponent {
                                 // }
 
                             } else {
+                              if (userData.user.name != null) {
                                 if (!userData.is_learn_enabled) {
                                     if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                                              this.props.navigation.navigate("LearnHomePage");
@@ -183,7 +188,10 @@ class Splash extends BaseComponent {
                                     this.props.navigation.navigate("LearnHomePage");
                                 } else {
                                     this.props.navigation.navigate("HomeDrawer");
-                                }                                
+                                }  
+                              }else {
+                                this.props.navigation.navigate('Login')
+                              }                              
                             // this.props.navigation.navigate('SwitchPlayer')
                             }
 

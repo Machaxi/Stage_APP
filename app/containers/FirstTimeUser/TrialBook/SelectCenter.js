@@ -36,6 +36,7 @@ class SelectCenter extends Component {
       centerData: null,
       isLoading: false,
       isPermissionGranted: false,
+      displayDistance: false,
     };
   }
 
@@ -56,7 +57,7 @@ class SelectCenter extends Component {
     }
 
     if (isPermissionGranted) {
-      this.setState({ isPermissionGranted: true });
+      this.setState({ isPermissionGranted: true, displayDistance: true });
       this.fetchLocation();
     } else {
       this.setState({
@@ -72,16 +73,7 @@ class SelectCenter extends Component {
     const sortedAcademies = this.props.academiesList.sort((a, b) => {
       const distanceA = this.calculateDistance(a.latitude, a.longitude);
       const distanceB = this.calculateDistance(b.latitude, b.longitude);
-      // return distanceB - distanceA;
-      console.log(distanceA);
-      console.log(distanceB);
-      if (distanceA < distanceB) {
-        console.log("efef");
-        return -1;
-      } else {
-        console.log("efefv");
-        return 1;
-      }
+      return distanceA - distanceB;
     });
     this.setState({
       centerData: sortedAcademies,
@@ -164,6 +156,24 @@ class SelectCenter extends Component {
     return deg * (Math.PI / 180);
   }
 
+  handleSelect = async (data) => {
+    const placeId = data.place_id;
+    const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_MAPS_APIKEY}`;
+    try {
+      const response = await fetch(apiUrl);
+      const result = await response.json();
+      const { lat, lng } = result.result.geometry.location;
+      this.setState({
+        latitude: lat,
+        longitude: lng,
+        displayDistance: true,
+      });
+      this.getsortedData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   render() {
     handlepress = async () => {
       let centerValue = this.state.centerData.find(
@@ -186,6 +196,8 @@ class SelectCenter extends Component {
           <CenterDetails
             item={item}
             distance={distance}
+            isExpanded={false}
+            isDistance={this.state.displayDistance}
             currentIndex={this.state.currentIndex}
             onPress={() =>
               this.setState({ currentIndex: item.id, proseednext: true })
@@ -208,25 +220,32 @@ class SelectCenter extends Component {
                 source={require("../../../images/playing/my_location.png")}
                 style={{ width: 17, height: 17, marginLeft: 8 }}
               />
-              {/* <GooglePlacesAutocomplete
-                placeholder="Search"
-                onPress={(data, details = null) => {
-                  // 'details' is provided when fetchDetails = true
-                  console.log(data, details);
+              <GooglePlacesAutocomplete
+                placeholder={this.state.place}
+                onPress={this.handleSelect}
+                textInputProps={{
+                  placeholderTextColor: "white",
                 }}
+                ini
                 query={{
                   key: GOOGLE_MAPS_APIKEY,
                   language: "en",
                 }}
                 styles={{
+                  container: {
+                    marginTop: -5,
+                  },
                   textInputContainer: {
-                    backgroundColor: "rgba(0,0,0,0)",
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
+                    backgroundColor: "transparent",
+                  },
+                  textInput: {
+                    height: 30,
+                    backgroundColor: "transparent",
+                    color: "white",
                   },
                 }}
-              /> */}
-              <Text style={styles.addressText}>{this.state.place}</Text>
+              />
+              {/* <Text style={styles.addressText}>{this.state.place}</Text> */}
               <Image
                 source={require("../../../images/playing/arrow_back.png")}
                 style={{ width: 12, height: 7, marginLeft: 13, marginTop: 6 }}
@@ -313,7 +332,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#4D4D4D",
     marginBottom: 15,
     marginTop: 7,
-    width: "40%",
+    marginLeft: 10,
+    width: "95%",
   },
   addressView: {
     flexDirection: "row",
@@ -328,6 +348,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     marginVertical: 10,
+    marginTop: 20,
     fontFamily: Nunito_SemiBold,
     color: "#D1D1D1",
   },
