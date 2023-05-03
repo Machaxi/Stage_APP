@@ -230,6 +230,7 @@ class PlayerSwitcher extends BaseComponent {
                     storeData('player_id', item.id)
 
                     if (tempuserData.user['user_type'] == 'PLAYER') {
+                    
                         if (item.can_book_court) {
                             this.props.navigation.navigate('UserBookHome')
                         } else {
@@ -237,6 +238,7 @@ class PlayerSwitcher extends BaseComponent {
                             this.props.navigation.navigate('LearnHomePage')
                         }
                     } else {
+                   
                         if (item.can_book_court) {
                             this.props.navigation.navigate('ParentBookHome')
                         } else {

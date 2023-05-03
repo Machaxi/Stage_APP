@@ -176,6 +176,7 @@ class ParentHome extends BaseComponent {
       isStatsLoading: false,
       loading: false,
       userDetails: null,
+      itemList: []
     };
     const { navigation } = this.props.navigation.setParams({
       shareProfile: this.shareProfile,
@@ -183,9 +184,9 @@ class ParentHome extends BaseComponent {
     this.props.navigation.setParams({ switchPlayer: this.switchPlayer });
   }
 
-  updateUserData () {
+  updateUserData() {
     getData("userInfo", (value) => {
-      console.log("userInfo", value);
+      console.log("userInfo asyncVal", value);
       var userData = JSON.parse(value);
       this.setState({ userDetails: userData, loading: false });
       if (userData.user) {
@@ -200,9 +201,78 @@ class ParentHome extends BaseComponent {
   }
 
   onScreenFocus = () => {
-      this.updateUserData();
+    this.updateUserData();
   };
-  
+
+  //TODO: handle it
+  getPlayerSwitchingData() {
+    console.log("hererererre");
+
+    getData("header", (value) => {
+      console.log("header", value);
+      this.props
+        .getPlayerSWitcher(value)
+        .then(() => {
+          var respns = this.props.switcherData;
+          console.log({ respns });
+          // console.log(' user response payload ' + JSON.stringify(this.props.data));
+          // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
+          let user = JSON.stringify(
+            this.props.switcherData.switherlist
+          );
+          let user1 = JSON.parse(user);
+
+          if (user1.success == true) {
+            storeData("childrenData", JSON.stringify(user1.data["players"]));
+            //TODO: verify this flow
+            //set first player as selected
+            if(user1.data["players"]?.length > 0){
+                var tempuserData = this.state.userDetails;
+                tempuserData["academy_id"] = user1.data["players"][0].academy_id;
+                tempuserData["player_id"] = user1.data["players"][0].id;
+                tempuserData["academy_name"] =
+                  user1.data["players"][0].academy_name;
+                tempuserData["academy_rating"] =
+                  user1.data["players"][0].academy_rating;
+
+                console.log("tempuserData userInfo", tempuserData);
+                console.log({tempuserData})
+                storeData("userInfo", JSON.stringify(tempuserData));
+
+                storeData(
+                  "academy_name",
+                  user1.data["players"][0].academy_name
+                );
+                storeData(
+                  "academy_id",
+                  user1.data["players"][0].academy_id
+                );
+                storeData(
+                  "academy_rating",
+                  user1.data["players"][0].academy_rating
+                );
+                storeData(
+                  "player_id",
+                  user1.data["players"][0].id
+                );
+                //after setting initial value to first user set current user data
+                this.updateUserData();
+                this.fetchPlayerDashboardData()
+            //TODO: verify this flow
+            }
+
+            this.setState({
+              itemList: user1.data["players"],
+            });
+
+          }
+        })
+        .catch((response) => {
+          //handle form errors
+          console.log(response);
+        });
+    });
+  }
 
   componentDidMount() {
     this.didFocusListener = this.props.navigation.addListener(
@@ -211,10 +281,10 @@ class ParentHome extends BaseComponent {
     );
 
     this.setState({ loading: true });
-    this.updateUserData();
+    //this.updateUserData();
     // firebase.analytics().logEvent("ParentHome", {})
-
-    this.selfComponentDidMount();
+    //get list of all the players
+    this.selfComponentDidMount(true);
 
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
@@ -250,11 +320,11 @@ class ParentHome extends BaseComponent {
     });
 
     this.refreshEvent = Events.subscribe("REFRESH_DASHBOARD", () => {
-      this.selfComponentDidMount();
+      this.selfComponentDidMount(false);
     });
 
     this.refreshEvent = Events.subscribe("REFRESH_DASHBOARD_1", () => {
-      this.selfComponentDidMount();
+      this.selfComponentDidMount(false);
     });
 
     this.getNotifications();
@@ -321,13 +391,9 @@ class ParentHome extends BaseComponent {
     });
   }
 
-  selfComponentDidMount() {
+  //final api call to fetch dashboard data for first selected user
+  fetchPlayerDashboardData(){
     var userData;
-    getData("header", (value) => {
-      console.log("header", value);
-    });
-
-    console.log("PARENTDashboard");
     getData("userInfo", (value) => {
       console.warn(value);
       userData = JSON.parse(value);
@@ -355,6 +421,21 @@ class ParentHome extends BaseComponent {
         );
       }
     });
+  }
+
+  async selfComponentDidMount(isFirstRender) {
+    var userData;
+    
+
+    console.log("PARENTDashboard");
+    
+    if (isFirstRender){ 
+      this.getPlayerSwitchingData();
+    }
+    else {
+      //this.updateUserData();
+      this.fetchPlayerDashboardData()
+    }
 
     getData("multiple", (value) => {
       //console.warn('multiple => ' + value)
@@ -486,6 +567,8 @@ class ParentHome extends BaseComponent {
       this.props
         .getPlayerDashboard(value, player_id, academy_id, sport_id)
         .then(() => {
+          var response_ = this.props.data.dashboardData;
+          console.log({response_})
           // console.log(' user response payload ' + JSON.stringify(this.props.data));
           // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
           let user = JSON.stringify(this.props.data.dashboardData);
@@ -508,7 +591,7 @@ class ParentHome extends BaseComponent {
 
             currentSportName = sportsList.find((item) => {
               return item.value == currentSportId;
-            }).label;
+            });
 
             this.setState({
               currentSportId,
@@ -580,7 +663,7 @@ class ParentHome extends BaseComponent {
 
   onRefresh = () => {
     this.setState({ refreshing: true });
-    this.selfComponentDidMount();
+    this.selfComponentDidMount(false);
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       this.setState({ refreshing: false });
@@ -1811,6 +1894,8 @@ class ParentHome extends BaseComponent {
 const mapStateToProps = (state) => {
   return {
     data: state.DashboardReducer,
+    switcherData: state.SwitchReducer,
+
   };
 };
 const mapDispatchToProps = {

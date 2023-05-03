@@ -151,9 +151,13 @@ class Splash extends BaseComponent {
                                         if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                                             this.props.navigation.navigate("LearnHomePage");
                                         } else {
-                                             this.props.navigation.navigate('SwitchPlayer', {
-                                           userType: PLAYER
-                                       })
+                                            //TODO: replacing switch with dashboard
+                                            // this.props.navigation.navigate('SwitchPlayer', {
+                                            //     userType: PLAYER
+                                            // })
+                                             this.props.navigation.navigate(
+                                               "LearnHomePage"
+                                             );
                                    }
                                    }else if (!userData.is_play_enabled) {
                                         // this.props.navigation.navigate("Guestfirsted");
@@ -179,9 +183,12 @@ class Splash extends BaseComponent {
                                     if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                                              this.props.navigation.navigate("LearnHomePage");
                                     } else {
-                                        this.props.navigation.navigate('SwitchPlayer', {
-                                            userType: PLAYER
-                                        })
+                                        // this.props.navigation.navigate('SwitchPlayer', {
+                                        //     userType: PLAYER
+                                        // })
+                                        this.props.navigation.navigate(
+                                          "LearnHomePage"
+                                        );
                                     }
                                 }else if (!userData.is_play_enabled) {
                                     // this.props.navigation.navigate("Guestfirsted");
