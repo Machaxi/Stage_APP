@@ -17,12 +17,17 @@ const PlanDetails = (props) => {
   const convertToDate = (dateString) => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const [day, month] = dateString.split(" ");
+    var [day, month] = dateString.split(" ");
+    if (day < 10) {
+      day = "0" + day;
+    }
     const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
     return date;
   };
 
   useEffect(() => {
+    console.log("ollla");
+    console.log(props.startDate);
     const startdate = convertToDate(props.startDate);
     const endDate = convertToDate(props.endDate);
     console.log(props.startDate);
@@ -80,15 +85,12 @@ const PlanDetails = (props) => {
   };
 
   const formateDate = (date) => {
-    var day = date
-      .getDate()
-      .toString()
-      .padStart(2, "0");
+    var day = date.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
     var month = date.getMonth();
-    const year = date
-      .getFullYear()
-      .toString()
-      .substr(-2);
+    const year = date.getFullYear();
     datastring = day + " " + months[month] + " " + year;
     return datastring;
   };
@@ -152,11 +154,12 @@ const PlanDetails = (props) => {
                 flex: 0.9,
                 justifyContent: "center",
                 flexDirection: "row",
+                alignItems: "center",
               }}
             >
               <Text style={styles.timetext}>{formateDate(selectDate)}</Text>
               <DatePicker
-                style={{ borderWidth: 0, width: "100%" }}
+                style={{ borderWidth: 0, width: "140%", zIndex: 2 }}
                 date={selectDate}
                 mode="date"
                 placeholder="select date"
@@ -176,8 +179,8 @@ const PlanDetails = (props) => {
                 hideText={true}
                 onDateChange={(date) => handlepress(date)}
               />
-            </View>
-            <View style={{ flex: 0.1 }}>
+              {/* </View>
+            <View style={{ flex: 0.1 }}> */}
               <Image
                 source={require("../../images/playing/calendar.png")}
                 style={[styles.calanderimage]}
@@ -210,8 +213,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Nunito_Regular,
     color: "#D9D9D9",
-    marginRight: -90,
-    marginTop: 7,
+    marginRight: -160,
+    marginLeft: 30,
   },
   inputview: {
     flex: 1,
@@ -283,6 +286,7 @@ const styles = StyleSheet.create({
   calanderimage: {
     width: 20,
     height: 20,
+    marginLeft: -30,
   },
 });
 

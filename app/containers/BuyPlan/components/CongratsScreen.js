@@ -4,10 +4,11 @@ import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
 import { Nunito_Bold, Nunito_SemiBold } from "../../util/fonts";
 import { doLoginTest } from "../../../redux/reducers/loginReducer";
-import { PUSH_TOKEN, ONE_SIGNAL_USERID } from "../../BaseComponent";
+import { PUSH_TOKEN, ONE_SIGNAL_USERID, getBaseUrl } from "../../BaseComponent";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
 import { storeData } from "../../../components/auth";
+import axios from "axios";
 
 class CongratsScreen extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class CongratsScreen extends Component {
       ONE_SIGNAL_USERID: "",
       firebase_token: "",
       userData: null,
+      header: null,
     };
   }
 
@@ -24,46 +26,42 @@ class CongratsScreen extends Component {
   }
 
   signcheck = async () => {
+    console.log("done");
     let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
     let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
     const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const header = await AsyncStorage.getItem("header");
     const userDetails = JSON.parse(userDetailsJson);
+    console.log("done");
+    const userInfoJson = await AsyncStorage.getItem("userInfo");
+    const userInfo = JSON.parse(userInfoJson);
+    console.log("done");
+    console.log(userInfo);
     this.setState({
       ONE_SIGNAL_USERID: ONE_SIGNAL,
       firebase_token: fcm_token,
       userData: userDetails,
+      header: header,
+      userInfo: userInfo,
     });
   };
 
   signInByName = () => {
-    let os = "IOS";
-    if (Platform.OS === "android") {
-      os = "android";
-    }
-    var dataDic = {};
-    var dict = {};
-    dict["phone_number"] = this.state.userData.userName;
-    dict["name"] = this.state.userData.userName;
-    dict["firebase_token"] = "token";
-    dict["device_type"] = os;
-    dict["app_version"] = "1.1.0";
-    dict["fcm_token"] = this.state.firebase_token;
-    dict["ONE_SIGNAL_USERID"] = this.state.ONE_SIGNAL_USERID;
-    dict["one_signal_device_id"] = this.state.ONE_SIGNAL_USERID;
-    dict["has_firebase_check"] = false;
-
-    dataDic["data"] = dict;
-    this.props
-      .doLoginTest(dataDic)
-      .then(async () => {
-        let user = JSON.stringify(this.props.data.user);
-        let user1 = JSON.parse(user);
-        var userData = user1["data"];
-        storeData("userInfo", JSON.stringify(userData));
+    axios
+      .get(getBaseUrl() + "/login-refreshed", {
+        headers: {
+          "x-authorization": this.state.header,
+        },
+      })
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        storeData("userInfo", JSON.stringify(batchData));
         this.props.onPress();
       })
-      .catch((response) => {
-        console.log(response);
+      .catch((error) => {
+        console.log(error);
       });
   };
 

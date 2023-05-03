@@ -157,6 +157,8 @@ class BookSlotCentreSelection extends Component {
         <CenterDetails
           item={item?.academy}
           distance={distance}
+          isDistance={true}
+          isExpanded={true}
           morningTimeData={item.courts}
           eveningTimeData={item.courts}
           selectedMorningTime={this.props.selectedMorningTime}
