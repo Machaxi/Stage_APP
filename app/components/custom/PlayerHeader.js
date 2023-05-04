@@ -18,7 +18,8 @@ export default class PlayerHeader extends BaseComponent {
         super(props);
         this.state = {
             childrenData: [],
-            wholeData: null
+            wholeData: null,
+            showAcademyName : false
         }
     }
 
@@ -27,8 +28,18 @@ export default class PlayerHeader extends BaseComponent {
           getData("childrenData", (value) => {
             let childData = JSON.parse(value);
             if (childData?.length > 0) {
+              var academyId = childData[0]?.academy_id;
+              var isDifferent = false
+              for(var i = 0; i < childData?.length; i++){
+              
+                if(academyId != childData[i].academy_id){
+                
+                  isDifferent = true
+                }
+              }
               this.setState({
                 childrenData: childData,
+                showAcademyName: isDifferent ? true : false
               });
             }
             
@@ -65,6 +76,7 @@ export default class PlayerHeader extends BaseComponent {
 
     }
 
+
     render() {
 
         const { name, academy_name, badge, rank, score,
@@ -72,6 +84,7 @@ export default class PlayerHeader extends BaseComponent {
             reward_point,
             profile_pic,
             id,
+            academy_id,
             player_category, operations } =
             this.props.player_profile
 
@@ -124,9 +137,20 @@ export default class PlayerHeader extends BaseComponent {
                         <PlayerNameBox
                           name={val?.name}
                           isParent={false}
-                          onSelected={this.onChildSelect.bind(this)}
+                          academyName={val?.academy_name}
+                          showAcademyName={
+                            this.state.showAcademyName
+                          }
+                          onSelected={this.onChildSelect.bind(
+                            this
+                          )}
                           values={val}
-                          isSelected={id == val?.id}
+                          // isSelected={id == val?.id}
+                          isSelected={
+                            id == val?.id &&
+                            academy_id == val?.academy_id
+                          }
+                        
                         />
                       );
                     })}

@@ -258,9 +258,10 @@ class LoginSceen extends Component {
             ) {
               this.props.navigation.navigate("LearnHomePage");
             } else {
-              this.props.navigation.navigate("SwitchPlayer", {
-                userType: PLAYER,
-              });
+              // this.props.navigation.navigate("SwitchPlayer", {
+              //   userType: PLAYER,
+              // });
+              this.props.navigation.navigate("LearnHomePage");
             }
           } else if (!userData.is_play_enabled) {
             // this.props.navigation.navigate("Guestfirsted");

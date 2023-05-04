@@ -8,134 +8,206 @@ import { Nunito_Medium, Nunito_Regular } from "../../containers/util/fonts";
 
 class CenterDetails extends Component {
   render() {
-    const {
-      item,
-      currentIndex,
-      distance,
-      selectedTime,
-      setTime,
-      selectedTimeVal,
-      timingsData,
-      selectedMorningTime,
-      selectedEveningTime,
-      setSelectedMorningTimeVal,
-      setSelectedEveningTimeVal,
-      morningTimeData,
-      eveningTimeData,
-      selectedTimePeriod,
-    } = this.props;
+             const {
+               item,
+               currentIndex,
+               distance,
+               selectedTime,
+               setTime,
+               selectedTimeVal,
+               timingsData,
+               selectedMorningTime,
+               selectedEveningTime,
+               setSelectedMorningTimeVal,
+               setSelectedEveningTimeVal,
+               morningTimeData,
+               eveningTimeData,
+               selectedTimePeriod,
+             } = this.props;
 
-    handlepress = () => {
-      this.props.onPress(item.id);
-    };
+             handlepress = () => {
+               this.props.onPress(item.id);
+             };
 
-    var morningData =
-      morningTimeData &&
-      morningTimeData.filter((val) => {
-        return val.timeOfDay == "Morning";
-      });
-    var eveningData =
-      eveningTimeData &&
-      eveningTimeData.filter((val) => {
-        return val.timeOfDay == "Evening";
-      });
+             var morningDataVal =
+               morningTimeData &&
+               morningTimeData.filter((val) => {
+                 return val.timeOfDay == "Morning";
+               });
+              
+              //start of duplicate removal logic
+             var morningData = [];
+             if (morningDataVal?.length > 0){
+               // Display the list of array objects
+               console.log({morningDataVal});
 
-    var isExpanded = item.id == currentIndex;
 
-    return (
-      <TouchableOpacity onPress={handlepress} activeOpacity={0.8}>
-        <LinearGradient
-          colors={
-            item.id === currentIndex
-              ? [
-                  "rgba(255, 180, 1, 0.25)",
-                  "rgba(255, 180, 1, 0.1)",
-                  "rgba(255, 180, 1, 0.06)",
-                ]
-              : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
-          }
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.outerContainer}
-        >
-          <View style={styles.item}>
-            <View style={{ flex: 0.3 }}>
-              <Image source={{ uri: item.cover_pic }} style={styles.image} />
-              {this.props.isDistance && (
-                <Text style={styles.distance}>{distance}</Text>
-              )}
-            </View>
-            <View style={styles.textContainer}>
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={[
-                    styles.title,
-                    item.id === currentIndex && {
-                      color: "#DFA35D",
-                    },
-                  ]}
-                >
-                  {item.name}
-                </Text>
-                <Text style={styles.address}>{item.address}</Text>
-              </View>
-            </View>
-          </View>
-          {isExpanded && this.props.isExpanded ? (
-            <View
-              style={{
-                marginTop: 30,
-                marginBottom: 15,
-                marginHorizontal: 7,
-              }}
-            >
-              <Text style={styles.setTime}>{"Select Preferred Time Slot"}</Text>
-              <View style={{ flexDirection: "row" }}>
-                <TimingsTab
-                  image={require("../../images/morning.png")}
-                  name={"Morning"}
-                  onPress={(val) => setTime(val)}
-                  isSelected={selectedTime == "Morning"}
-                />
-                <TimingsTab
-                  image={require("../../images/evening.png")}
-                  name={"Evening"}
-                  onPress={(val) => setTime(val)}
-                  isSelected={selectedTime == "Evening"}
-                />
-              </View>
-              {selectedTime == "Morning" &&
-              morningData &&
-              morningData.length > 0 ? (
-                <SelectPlayingTime
-                  selectedTime={selectedMorningTime}
-                  selectedTimePeriod={(val) => {
-                    console.log({ val });
-                    selectedTimePeriod(val);
-                  }}
-                  setSelectedTime={(val) => setSelectedMorningTimeVal(val)}
-                  timeData={morningData}
-                />
-              ) : null}
-              {selectedTime != "Morning" &&
-              eveningData &&
-              eveningData.length > 0 ? (
-                <SelectPlayingTime
-                  selectedTime={selectedEveningTime}
-                  selectedTimePeriod={(val) => {
-                    console.log({ val });
-                    selectedTimePeriod(val);
-                  }}
-                  setSelectedTime={(val) => setSelectedEveningTimeVal(val)}
-                  timeData={eveningData}
-                />
-              ) : null}
-            </View>
-          ) : null}
-        </LinearGradient>
-      </TouchableOpacity>
-    );
-  }
+                // Declare an empty object
+                let uniqueObject = {};
+
+                // Loop for the array elements
+                for (let i in morningDataVal) {
+                  // Extract the displayTime
+                  var objDisplayTime = morningDataVal[i]["displayTime"];
+
+                  // Use the displayTime as the index
+                  uniqueObject[objDisplayTime] =
+                    morningDataVal[i];
+                }
+                // Loop to push unique object into array
+                for (i in uniqueObject) {
+                  morningData.push(uniqueObject[i]);
+                }
+            }
+            //  end of duplicate removal logic
+            
+             var eveningDataVal =
+               eveningTimeData &&
+               eveningTimeData.filter((val) => {
+                 return val.timeOfDay == "Evening";
+               });
+
+            var eveningData = [];
+          
+             if (eveningDataVal?.length > 0) {
+               // Display the list of array objects
+               console.log({ eveningDataVal });
+
+               // Declare an empty object
+               let uniqueObject = {};
+
+               // Loop for the array elements
+               for (let i in eveningDataVal) {
+                 // Extract the displayTime
+                 var objDisplayTime =
+                   eveningDataVal[i]["displayTime"];
+
+                 // Use the displayTime as the index
+                 uniqueObject[objDisplayTime] =
+                   eveningDataVal[i];
+               }
+               // Loop to push unique object into array
+               for (i in uniqueObject) {
+                 eveningData.push(uniqueObject[i]);
+               }
+             }
+            //  end of duplicate removal logic
+            
+             var isExpanded = item.id == currentIndex;
+
+             return (
+               <TouchableOpacity
+                 onPress={handlepress}
+                 activeOpacity={0.8}
+               >
+                 <LinearGradient
+                   colors={
+                     item.id === currentIndex
+                       ? [
+                           "rgba(255, 180, 1, 0.25)",
+                           "rgba(255, 180, 1, 0.1)",
+                           "rgba(255, 180, 1, 0.06)",
+                         ]
+                       : [
+                           "rgba(255, 255, 255, 0.15)",
+                           "rgba(118, 87, 136, 0)",
+                         ]
+                   }
+                   start={{ x: 0, y: 0 }}
+                   end={{ x: 1, y: 1 }}
+                   style={styles.outerContainer}
+                 >
+                   <View style={styles.item}>
+                     <View style={{ flex: 0.3 }}>
+                       <Image
+                         source={{ uri: item.cover_pic }}
+                         style={styles.image}
+                       />
+                       {this.props.isDistance && (
+                         <Text style={styles.distance}>
+                           {distance}
+                         </Text>
+                       )}
+                     </View>
+                     <View style={styles.textContainer}>
+                       <View style={{ flex: 1 }}>
+                         <Text
+                           style={[
+                             styles.title,
+                             item.id === currentIndex && {
+                               color: "#DFA35D",
+                             },
+                           ]}
+                         >
+                           {item.name}
+                         </Text>
+                         <Text style={styles.address}>
+                           {item.address}
+                         </Text>
+                       </View>
+                     </View>
+                   </View>
+                   {isExpanded && this.props.isExpanded ? (
+                     <View
+                       style={{
+                         marginTop: 30,
+                         marginBottom: 15,
+                         marginHorizontal: 7,
+                       }}
+                     >
+                       <Text style={styles.setTime}>
+                         {"Select Preferred Time Slot"}
+                       </Text>
+                       <View style={{ flexDirection: "row" }}>
+                         <TimingsTab
+                           image={require("../../images/morning.png")}
+                           name={"Morning"}
+                           onPress={(val) => setTime(val)}
+                           isSelected={selectedTime == "Morning"}
+                         />
+                         <TimingsTab
+                           image={require("../../images/evening.png")}
+                           name={"Evening"}
+                           onPress={(val) => setTime(val)}
+                           isSelected={selectedTime == "Evening"}
+                         />
+                       </View>
+                       {selectedTime == "Morning" &&
+                       morningData &&
+                       morningData.length > 0 ? (
+                         <SelectPlayingTime
+                           selectedTime={selectedMorningTime}
+                           selectedTimePeriod={(val) => {
+                             console.log({ val });
+                             selectedTimePeriod(val);
+                           }}
+                           setSelectedTime={(val) =>
+                             setSelectedMorningTimeVal(val)
+                           }
+                           timeData={morningData}
+                         />
+                       ) : null}
+                       {selectedTime != "Morning" &&
+                       eveningData &&
+                       eveningData.length > 0 ? (
+                         <SelectPlayingTime
+                           selectedTime={selectedEveningTime}
+                           selectedTimePeriod={(val) => {
+                             console.log({ val });
+                             selectedTimePeriod(val);
+                           }}
+                           setSelectedTime={(val) =>
+                             setSelectedEveningTimeVal(val)
+                           }
+                           timeData={eveningData}
+                         />
+                       ) : null}
+                     </View>
+                   ) : null}
+                 </LinearGradient>
+               </TouchableOpacity>
+             );
+           }
 }
 
 const styles = StyleSheet.create({
