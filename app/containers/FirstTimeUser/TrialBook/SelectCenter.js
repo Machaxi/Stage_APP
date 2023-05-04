@@ -21,9 +21,9 @@ import {
   Nunito_Regular,
   Nunito_SemiBold,
 } from "../../util/fonts";
+import { GOOGLE_MAPS_APIKEY } from "../../util/utilFunctions";
 
 // const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
-const GOOGLE_MAPS_APIKEY = "AIzaSyAdy0zh69w3bYrzIMxuISgN_5V-PWA17RI";
 
 class SelectCenter extends Component {
   constructor(props) {
