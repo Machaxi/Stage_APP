@@ -7,7 +7,6 @@ import {
   Nunito_SemiBold,
 } from "../../containers/util/fonts";
 import DatePicker from "react-native-datepicker";
-import moment from "moment";
 
 const PlanDetails = (props) => {
   const [selectDate, setSelectDate] = useState(new Date());
@@ -162,9 +161,7 @@ const PlanDetails = (props) => {
                 style={{ borderWidth: 0, width: "140%", zIndex: 2 }}
                 date={selectDate}
                 mode="date"
-                placeholder="select date"
                 format="DD-MMM-YYYY"
-                // minDate={moment("1920-01-01")}
                 minDate={startDate}
                 maxDate={endDate}
                 confirmBtnText="Confirm"

@@ -11,7 +11,7 @@ class PlayPass extends Component {
         style={{
           width: 210,
           height: 200,
-          marginHorizontal: -15,
+          marginHorizontal: -20,
           marginTop: -10,
         }}
       >

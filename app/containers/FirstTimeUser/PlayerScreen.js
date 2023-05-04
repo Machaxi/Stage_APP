@@ -147,7 +147,7 @@ class PlayerScreen extends Component {
               <CustomButton
                 name="Buy Playing Plan"
                 available={true}
-                onPress={this.props.onPressPlan}
+                onPress={this.onPressPlan}
               />
             </View>
           )}
