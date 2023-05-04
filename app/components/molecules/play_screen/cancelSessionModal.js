@@ -7,7 +7,13 @@ import {
 import CancelSessionModalInnerView from "./cancelModalInnerView";
 
 
-const CancelSessionModal = ({ modalVisible, setModalVisibility, confirmType, onCancel }) => {
+const CancelSessionModal = ({
+  modalVisible,
+  setModalVisibility,
+  confirmType,
+  onCancel,
+  cancelTime,
+}) => {
   return (
     <Modal
       animationType="slide"
@@ -24,8 +30,11 @@ const CancelSessionModal = ({ modalVisible, setModalVisibility, confirmType, onC
         }}
       >
         <CancelSessionModalInnerView
+          cancelTime={cancelTime}
           confirmType={confirmType}
-          onCancel={() => onCancel()}
+          onCancel={() =>{ 
+            onCancel()
+          }}
           setModalVisibility={() => setModalVisibility(false)}
         />
       </TouchableOpacity>

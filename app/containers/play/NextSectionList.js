@@ -10,6 +10,7 @@ export const NextSessionList = ({
          NextSessionData,
          onCancelPress,
          expandList,
+         cancelDisplayTime,
          userId
        }) => {
         const [refresh, setRefresh] = useState(false)
@@ -22,6 +23,7 @@ export const NextSessionList = ({
                 expandList(item)}}
                onCancelPress={(val) => {
                  onCancelPress(val);
+                 cancelDisplayTime(item?.displayTime)
                }}
                item={item}
              />

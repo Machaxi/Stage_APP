@@ -28,6 +28,7 @@ const CancelSessionModalInnerView = ({
   setModalVisibility,
   onCancel,
   confirmType,
+  cancelTime,
 }) => {
   return (
     <TouchableOpacity activeOpacity={1}>
@@ -63,9 +64,7 @@ const CancelSessionModalInnerView = ({
         <View style={{ paddingHorizontal: 22, marginBottom: 30 }}>
           <Text style={styles.cancelTxt}>{"Cancel Session!"}</Text>
           <Text style={styles.cancelDesc}>
-            {
-              "Are you sure you want to cancel the swimming session scheduled for 4 to 5 PM?"
-            }
+            {`Are you sure you want to cancel the swimming session scheduled for ${cancelTime}?`}
           </Text>
         </View>
         {confirmType ? (
