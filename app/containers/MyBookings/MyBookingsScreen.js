@@ -10,7 +10,6 @@ import {
   FlatList,
 } from "react-native";
 import { darkBlueVariant } from "../util/colors";
-import { myBookingsData } from "../util/dummyData/myBookingsData";
 import MyRequestTabItem from "../../atoms/myRequestTabItem";
 import MyBookingsView from "../../atoms/myBookingsView";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";

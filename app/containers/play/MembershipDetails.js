@@ -131,7 +131,7 @@ export const MembershipDetails = ({
                        width={140}
                      />
                      <RoundedGradientBtn
-                       text={"More Plans"}
+                       text={"Explore Plans"}
                        colors={["#575f61ed", "#2b293aed"]}
                        onBtnPress={() => onMorePlansPress(false)}
                        width={140}

@@ -80,6 +80,8 @@ var cancelBookingError = null;
 
   const getNotifications = () => {
     getNotificationCount((count) => {
+      console.log('CCCC')
+      console.log({count})
       navigation.setParams({ notification_count: count });
       navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -456,10 +458,6 @@ const setCancelModalVisibilityCb = (val) => {
   }
 
 const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
-   console.log({ playerInfo });
-   console.log({ ratingInfo });
-   console.log({selectedPeerRating})
-      console.log("********");
 
   const data = isPeerTypeRequest
     ? {
@@ -670,7 +668,11 @@ const onPressPlan = (selectPlan, playPlanData) => {
                 ? true
                 : false
             }
-            onMorePlansPress={() => {}}
+            onMorePlansPress={() => {
+              const selectPlan = 100;
+              navigation.navigate("PlayingPlan", { selectPlan });
+                
+            }}
             onRenewPress={() => {
               navigation.navigate("RenewPlan");
             }}

@@ -97,7 +97,10 @@ const SlotBookedModalInnerView = ({
                 value: `${slotInfo?.booking?.displayTime}`,
               },
               ,
-              { name: "Pool", value: "NA" },
+              {
+                name: slotInfo?.booking?.playingAreaName ?? "",
+                value: slotInfo?.booking?.courtName ?? "",
+              },
             ].map((value) => (
               <MainBookingDetails
                 width={deviceWidth * 0.25}

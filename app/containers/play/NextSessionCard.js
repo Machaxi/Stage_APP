@@ -90,14 +90,17 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
                   : moment(item?.date).format("Mo MMMM YYYY"))}
             </Text>
           )}
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              onCancelPress(item?.id);
-            }}
-          >
-            <Text style={styles.cancelText}>Cancel Booking</Text>
-          </TouchableOpacity>
+          {(item?.isCancelled == false ||
+            item?.isCancelled == null) && (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  onCancelPress(item?.id);
+                }}
+              >
+                <Text style={styles.cancelText}>Cancel Booking</Text>
+              </TouchableOpacity>
+            )}
         </View>
         <GradientLine
           marginBottom={14}
@@ -184,7 +187,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
             </Text>
           )
         ) : null}
-        {item.isExpanded && item?.isCancelled != true? (
+        {item.isExpanded && item?.isCancelled != true ? (
           <>
             <View style={{ height: 18, width: "100%" }} />
             <GradientLine

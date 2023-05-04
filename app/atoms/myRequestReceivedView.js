@@ -11,6 +11,7 @@ import {
   lightPurpleColor,
   redVariant,
   redVariant1,
+  redVariant2,
   white,
   whiteGreyBorder,
 } from "../containers/util/colors";
@@ -26,6 +27,8 @@ import {
   Nunito_Medium,
   Nunito_Regular,
 } from "../containers/util/fonts";
+import NamedRoundedGradientContainer from "../components/molecules/roundedNamedGradientContainer";
+import { requestStatus, requestStatusBg, requestStatusName, requestStatusTxtColor } from "../containers/util/utilFunctions";
 
 const MyRequestReceivedView = ({
   val,
@@ -40,10 +43,14 @@ const MyRequestReceivedView = ({
       style={styles.requestOuterView}
     >
       {/* <View style={styles.detailsTopRow}> */}
-      <Text style={[styles.centerName, { marginBottom: 22 }]}>
-        {"TODO: be received from api"}
-      </Text>
-      <Text style={[styles.bookingDetails, { marginBottom: 13 }]}>
+      {val?.status != "" && typeof val?.status != undefined ? (
+        <NamedRoundedContainer
+          name={requestStatusName(val?.status)}
+          bgColor={requestStatusBg(val?.status)}
+          txtColor={requestStatusTxtColor(val?.status)}
+        />
+      ) : null}
+      <Text style={[styles.bookingDetails, { marginBottom: 13, marginTop: 10 }]}>
         Player details
       </Text>
       <View
@@ -61,7 +68,9 @@ const MyRequestReceivedView = ({
         </Text>
       </View>
       <Text style={[styles.detailsTxt]}>
-        {typeof val?.guestCount != undefined ? `+${val?.guestCount} Guest` : ""}
+        {typeof val?.guestCount != undefined
+          ? `+${val?.guestCount} Guest`
+          : ""}
       </Text>
       <View
         style={{
@@ -71,29 +80,36 @@ const MyRequestReceivedView = ({
           justifyContent: "space-between",
         }}
       >
-        <TouchableOpacity onPress={() => declineRequest()}>
-          <Text style={[styles.declineReq, { marginRight: 18 }]}>
-            Decline request
-          </Text>
-        </TouchableOpacity>
-
-        <LinearGradient
-          start={{ x: 0, y: 0.75 }}
-          end={{ x: 1, y: 0.25 }}
-          colors={["#0000ff80", "#0000d7e6"]}
-          style={{
-            borderRadius: 40,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => acceptRequest("")}
-            style={styles.declineBtn}
-          >
-            <Text style={[styles.reqTxt]}>Accept Request</Text>
+        {val?.status != "DECLINED" && val?.status != "CANCELLED" ? (
+          <TouchableOpacity onPress={() => declineRequest()}>
+            <Text style={[styles.declineReq, { marginRight: 18 }]}>
+              Decline request
+            </Text>
           </TouchableOpacity>
-        </LinearGradient>
+        ) : (
+          <View />
+        )}
+        {val?.status != "ACCEPTED" &&
+        val?.status != "CANCELLED" &&
+        val?.status != "DECLINED" ? (
+          <LinearGradient
+            start={{ x: 0, y: 0.75 }}
+            end={{ x: 1, y: 0.25 }}
+            colors={["#0000ff80", "#0000d7e6"]}
+            style={{
+              borderRadius: 40,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => acceptRequest("")}
+              style={styles.declineBtn}
+            >
+              <Text style={[styles.reqTxt]}>Accept Request</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        ) : null}
       </View>
       <View
         style={{
@@ -135,7 +151,7 @@ const MyRequestReceivedView = ({
                 value: `${val?.displayTime}`,
                 // `${val?.startTime} - ${val?.endTime}`
               },
-              { name: "Pool", value: "NA" },
+              { name: val?.sport?.playingAreaName, value: val?.courtName },
             ].map((value) => (
               <MainBookingDetails details={value} />
             ))}

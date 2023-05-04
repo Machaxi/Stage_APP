@@ -117,7 +117,10 @@ class BookSlotCentreSelection extends Component {
         this.setState({ isLoading: false });
         console.log(error.code, error.message);
       },
-      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
+      { enableHighAccuracy: false, timeout: 25000, 
+        //TODO: need to verify whether we can comment it bcoz it's giving timeout after 3 seconds
+       // maximumAge: 10000
+       }
     );
   };
 

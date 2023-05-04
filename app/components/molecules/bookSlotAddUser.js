@@ -54,7 +54,7 @@ const BookSlotAddUser = ({ count, setCount }) => {
         <Text style={styles.userCount}>{count == 0 ? 'Add User' : count}</Text>
         <TouchableOpacity
           onPress={() => {
-              if(count < 4){
+              if(count < 3){
                 setCount(count + 1);
               }
               else {

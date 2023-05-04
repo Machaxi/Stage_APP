@@ -553,10 +553,19 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             {renewPlanModalVisible ? (
               <AddGuestUserModal
                 onBtnPress={() => {
+                  navigation.navigate("RenewPlan");
                   //TODO: add renew plan logic
+
                 }}
                 remainingHours={playHoursRemaining}
-                onExplorePlansPressed={() => {}}
+                onExplorePlansPressed={() => {
+                 
+                  const selectPlan = 100;
+                  navigation.navigate("PlayingPlan", {
+                    selectPlan,
+                  });
+
+                }}
                 biggerImg={require("../../images/add_guests_img.png")}
                 modalVisible={renewPlanModalVisible}
                 setModalVisibility={(val) => setModalVisibilityRenewPlan(val)}
