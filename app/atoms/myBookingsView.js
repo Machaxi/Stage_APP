@@ -20,6 +20,8 @@ import moment from "moment";
 import { Nunito_Medium, Nunito_Regular } from "../containers/util/fonts";
 
 const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
+  console.log('CCCCC')
+  console.log({val})
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -71,7 +73,7 @@ const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
             // `${val?.startTime} - ${val?.endTime}`
           },
           ,
-          { name: "Pool", value: "NA" },
+          { name: val?.sport?.playingAreaName, value: val?.courtName },
         ].map((value) => (
           <MainBookingDetails details={value} />
         ))}

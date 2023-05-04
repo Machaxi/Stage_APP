@@ -2466,7 +2466,8 @@ const tabBarControllerLearn = createBottomTabNavigator({
         <TabbarItem
           label="Learn"
           focused={focused}
-          gradientColors={["#595466", "#9a97a2"]}
+          // gradientColors={["#595466", "#9a97a2"]}
+          gradientColors={["#221b33", "#595466"]}
           activeIndicatorColor={white}
           inactiveIndicatorColor={white}
           bottomBarColor={"transparent"}

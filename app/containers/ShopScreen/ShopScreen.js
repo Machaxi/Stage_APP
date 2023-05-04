@@ -20,7 +20,6 @@ import BaseComponent, {
 } from "../BaseComponent";
 import Events from "../../router/events";
 import { darkBlueVariant, goldenYellow, greyVariant5 } from "../util/colors";
-import { myBookingsData } from "../util/dummyData/myBookingsData";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";

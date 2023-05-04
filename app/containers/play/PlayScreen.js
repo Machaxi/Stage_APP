@@ -60,7 +60,9 @@ const [sportsList, setSportsList] = useState([]);
 const [peerSportsList,setPeerSportsList]=useState([]);
 const [nextSession, setNextSessionData] = useState([]);
 const [totalAvailableHours, setTotalAvailableHours] = useState(0);
+const [creditPlusRemaining, setCreditedPlusRemaining] = useState(0);
 const [cancelBookingId, setCancelBookingId] = useState(null);
+const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState('');
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
 const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
 const [selectedSelfRating, setSelectedSelfRating] = useState(null)
@@ -80,6 +82,8 @@ var cancelBookingError = null;
 
   const getNotifications = () => {
     getNotificationCount((count) => {
+      console.log('CCCC')
+      console.log({count})
       navigation.setParams({ notification_count: count });
       navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -159,10 +163,13 @@ const getPlayerDetailsApi = async () => {
            var todayLimitReached = false;
            var hoursLeft =
              json.data?.plan?.hoursRemaining ?? 0;
+           var creditedHours = json.data?.plan?.hoursCredited ?? 0;
+          
           var oldRemainingHours =
             json.data?.plan?.oldPlanRemainingHours ?? 0;
            var totalHoursRemaining = hoursLeft + oldRemainingHours;
-            
+           var totalHours = oldRemainingHours + creditedHours;
+            setCreditedPlusRemaining(totalHours);
             setTotalAvailableHours(totalHoursRemaining)
            if(json.data?.plan?.expiryDate != null){
             var startDate = moment(Date());
@@ -358,7 +365,7 @@ const cancelBookingApi = async () => {
       .catch(function(error) {
         setLoading(false);
         ToastAndroid.show(
-          `${cancelBookingError?.response?.response?.data?.error_message ??
+          `${cancelBookingError?.response?.data?.error_message ??
             ""}`,
           ToastAndroid.SHORT
         );
@@ -456,10 +463,6 @@ const setCancelModalVisibilityCb = (val) => {
   }
 
 const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
-   console.log({ playerInfo });
-   console.log({ ratingInfo });
-   console.log({selectedPeerRating})
-      console.log("********");
 
   const data = isPeerTypeRequest
     ? {
@@ -660,17 +663,20 @@ const onPressPlan = (selectPlan, playPlanData) => {
                 ? true
                 : false
             }
-            currentPlanPrice={plansResponse?.plan?.price ?? 'N/A'}
+            currentPlanPrice={plansResponse?.plan?.price ?? "N/A"}
             //planExpired={true}
-            totalHrs={totalAvailableHours}
+            totalHrs={creditPlusRemaining}
             hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
             slotsExhaused={
               !(packageRemainingDays <= 0 && expiringToday == false) &&
-               totalAvailableHours == 0
+              totalAvailableHours == 0
                 ? true
                 : false
             }
-            onMorePlansPress={() => {}}
+            onMorePlansPress={() => {
+              const selectPlan = 100;
+              navigation.navigate("PlayingPlan", { selectPlan });
+            }}
             onRenewPress={() => {
               navigation.navigate("RenewPlan");
             }}
@@ -686,6 +692,9 @@ const onPressPlan = (selectPlan, playPlanData) => {
             NextSessionData={nextSession}
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
+            cancelDisplayTime={(val) => {
+              setCancelPopupDisplayTime(val);
+            }}
             onCancelPress={(id) => {
               setCancelBookingId(id);
               setCancelModalVisibilityCb(true);
@@ -719,28 +728,28 @@ const onPressPlan = (selectPlan, playPlanData) => {
                   name={"My Rating"}
                   isSelected={selfTabEnabled}
                   onPressed={() => {
-                    if(selfTabEnabled == false){
-                    setSelfTab(true);
-                    // var profData = (profData = proficiencyStaticData.map(
-                    //   (val) => {
-                    //     if (
-                    //       val.proficiency ==
-                    //       playerDetailsResponse?.user?.proficiency
-                    //     ) {
-                    //       val.isSelected = true;
-                    //     }
-                    //   }
-                    // ));
-                    setProficiencyData(proficiencyStaticData);
-                  //
-                    }}
-                }
+                    if (selfTabEnabled == false) {
+                      setSelfTab(true);
+                      // var profData = (profData = proficiencyStaticData.map(
+                      //   (val) => {
+                      //     if (
+                      //       val.proficiency ==
+                      //       playerDetailsResponse?.user?.proficiency
+                      //     ) {
+                      //       val.isSelected = true;
+                      //     }
+                      //   }
+                      // ));
+                      setProficiencyData(proficiencyStaticData);
+                      //
+                    }
+                  }}
                 />
                 <RatingTabarHeader
                   name={"Rate Your Peers"}
                   isSelected={!selfTabEnabled}
                   onPressed={() => {
-                    if(selfTabEnabled){
+                    if (selfTabEnabled) {
                       setSelfTab(false);
                       setProficiencyData(proficiencyStaticData);
                     }
@@ -783,7 +792,9 @@ const onPressPlan = (selectPlan, playPlanData) => {
                     proficiencyData={proficiencyData}
                     ratingData={sportsList}
                     editSelfRating={editSelfRatingActive}
-                    onEditPress={() => {setSelfRatingActiveness(true)}}
+                    onEditPress={() => {
+                      setSelfRatingActiveness(true);
+                    }}
                     onSavePress={(val1) => onSavePress(val1)}
                   />
                 </>
@@ -795,6 +806,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
       {cancelModalVisible ? (
         <CancelSessionModal
           confirmType={true}
+          cancelTime={cancelPopupDisplayTime}
           onCancel={() => {
             cancelBookingApi();
             setCancelModalVisibilityCb(false);

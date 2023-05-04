@@ -28,11 +28,13 @@ const MyRequestSentView = ({ val, cancelBooking }) => {
       <View style={styles.rowSpaceBtw}>
         {[
           { name: "Sport", value: val?.sport?.name },
-          { name: "Slot", value: `${val?.displayTime}`
-          // `${val?.startTime} - ${val?.endTime}` 
-        },
+          {
+            name: "Slot",
+            value: `${val?.displayTime}`,
+            // `${val?.startTime} - ${val?.endTime}`
+          },
           ,
-          { name: "Pool", value: 'NA' },
+          { name: val?.sport?.playingAreaName ?? '', value: val?.courtName ?? '' },
         ].map((value) => (
           <MainBookingDetails details={value} />
         ))}
@@ -40,9 +42,7 @@ const MyRequestSentView = ({ val, cancelBooking }) => {
       <Text style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}>
         Registered Players
       </Text>
-      {val?.players.map((value) => (
-        <MyRequestPlayersList item={value} />
-      ))}
+      {val?.players.map((value) => <MyRequestPlayersList item={value} />)}
     </LinearGradient>
   );
   

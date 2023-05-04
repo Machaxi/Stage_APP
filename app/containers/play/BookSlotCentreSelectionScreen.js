@@ -10,6 +10,8 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import GoBackHeader from "../../components/molecules/goBackHeader";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
+import { StackActions, NavigationActions } from "react-navigation";
+
 import {
   getNotificationCount,
   notificationOpenScreen,
@@ -541,6 +543,17 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               <SlotBookedModal
                 slotRequested={slotRequested}
                 slotInfo={slotBookedRes?.data}
+                goHomePressed={()=>{
+                  const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [
+                      NavigationActions.navigate({
+                        routeName: "Play",
+                      }),
+                    ],
+                  });
+                  navigation.dispatch(resetAction);
+                }}
                 modalVisible={showSlotBookedModal}
                 setModalVisibility={(val) => {
                   if (slotRequested) {
@@ -553,10 +566,16 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             {renewPlanModalVisible ? (
               <AddGuestUserModal
                 onBtnPress={() => {
+                  navigation.navigate("RenewPlan");
                   //TODO: add renew plan logic
                 }}
                 remainingHours={playHoursRemaining}
-                onExplorePlansPressed={() => {}}
+                onExplorePlansPressed={() => {
+                  const selectPlan = 100;
+                  navigation.navigate("PlayingPlan", {
+                    selectPlan,
+                  });
+                }}
                 biggerImg={require("../../images/add_guests_img.png")}
                 modalVisible={renewPlanModalVisible}
                 setModalVisibility={(val) => setModalVisibilityRenewPlan(val)}
@@ -619,7 +638,19 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             available={
               selectedMorningTime != null || selectedEveningTime != null
             }
-            onPress={() => bookSlotPressed()}
+            onPress={() => { 
+              console.log('cc')
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({
+                    routeName: "Play",
+                  }),
+                ],
+              });
+              navigation.dispatch(resetAction);
+              bookSlotPressed()}
+            }
           />
         </View>
       </LinearGradient>

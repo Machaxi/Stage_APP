@@ -160,6 +160,8 @@ const MyRequestsHome = ({ navigation }) => {
             let json = response?.data;
             let success = json?.success;
             if (success) {
+              setLoading(true)
+              refreshData();
             } else {
                ToastAndroid.show(
                  `${updateErrorResponse?.response?.response?.data
@@ -229,17 +231,23 @@ const MyRequestsHome = ({ navigation }) => {
     setAllDataFetched(false);
   }
 
-  const onRefresh = () => {
-    setRefreshing(true)
-    resetData()
+  const refreshData = () => {
+    resetData();
     getRequestsData({
       pageCountVal: 0,
       isSentRequest: isSent,
     });
     // In actual case set refreshing to false when whatever is being refreshed is done!
+    
+  }
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    refreshData();
     setTimeout(() => {
-      setRefreshing(false)
+      setRefreshing(false);
     }, 1000);
+    
   };
  const onTabPress = (val) => {
     setSentVal(val == 'sent' ? true : false)

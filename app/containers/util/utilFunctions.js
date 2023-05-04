@@ -1,4 +1,4 @@
-import { advanceColor, advancedGradients, beginnerGradients, beginnersColor, intermediateGradients, intermediatesColor, professionalGradients, professionalsColor, white } from "./colors";
+import { acceptedRequestTxtColor, advanceColor, advancedGradients, beginnerGradients, beginnersColor, declinedRequestTxtColor, intermediateGradients, intermediatesColor, pendingRequestBg, pendingRequestTxtColor, professionalGradients, professionalsColor, requestAcceptedBg, requestDeclinedBg, white } from "./colors";
 export const GOOGLE_MAPS_APIKEY = "AIzaSyAdy0zh69w3bYrzIMxuISgN_5V-PWA17RI";
 
 export const proficiencyStaticData = [
@@ -97,6 +97,22 @@ export const requestStatus = (input) => {
       statusVal = "canceled";
     } else if (input == "DECLINED") {
       statusVal = "declined";
+    } else if (input == "PENDING") {
+      statusVal = "pending";
+    }
+    return statusVal;
+}
+
+export const requestStatusName = (input) => {
+    var statusVal = '';
+    if (input == "ACCEPTED") {
+      statusVal = "Request Accepted";
+    } else if (input == "CANCELLED") {
+      statusVal = "Request Canceled";
+    } else if (input == "DECLINED") {
+      statusVal = "Request Declined";
+    } else if (input == "PENDING") {
+      statusVal = "Request Pending";
     }
     return statusVal;
 }
@@ -163,6 +179,42 @@ export const getProficiencyGradients = (proficiency) => {
     default: 
       // return white;
       return ["#ffffff11", "#ffffff03"];
+  }
+     
+}
+
+
+export const requestStatusBg = (status) => {
+  switch (status) {
+    case "ACCEPTED":
+      return requestAcceptedBg;
+    case "PENDING":
+      return pendingRequestBg;
+    case "DECLINED":
+      return requestDeclinedBg;
+    case "CANCELLED":
+      return requestDeclinedBg;
+    default: 
+      // return white;
+      return pendingRequestBg;
+  }
+     
+}
+
+
+export const requestStatusTxtColor = (status) => {
+  switch (status) {
+    case "ACCEPTED":
+      return acceptedRequestTxtColor;
+    case "PENDING":
+      return pendingRequestTxtColor;
+    case "DECLINED":
+      return declinedRequestTxtColor;
+    case "CANCELLED":
+      return declinedRequestTxtColor;
+    default: 
+      // return white;
+      return pendingRequestTxtColor;
   }
      
 }
