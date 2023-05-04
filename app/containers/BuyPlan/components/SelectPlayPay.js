@@ -107,33 +107,34 @@ class SelectPlayPay extends Component {
     const start_date = this.formatesmallDate(startDate);
     const end_date = this.formatesmallDate(endDate);
 
-    this.setState({
-      centerName: selectCenter.name,
-      centerImage: selectCenter.cover_pic,
-      centerAddress: selectCenter.address,
-      centerDistance: distance,
-      displayStartDate: start_date,
-      displayEndDate: end_date,
-      amount: selectPlan.price,
-      appliedCoupon: this.props.applycoupon,
-      startdate: startDate,
-      enddate: endDate,
-      userDetails: userDetails,
-      extraDates: extraDates,
-      discountAmount: selectPlan.price,
-      coupon: this.props.coupon,
-    },
-    () => {
-      if (this.props.joinBool) {
-        console.log("ollla")
-        console.log(this.props.joinTime)
-        this.DataChange(this.props.joinTime);
-      } else {
-        this.setState({ selectCenter: this.props.selectCenter });
+    this.setState(
+      {
+        centerName: selectCenter.name,
+        centerImage: selectCenter.cover_pic,
+        centerAddress: selectCenter.address,
+        centerDistance: distance,
+        displayStartDate: start_date,
+        displayEndDate: end_date,
+        amount: selectPlan.price,
+        appliedCoupon: this.props.applycoupon,
+        startdate: startDate,
+        enddate: endDate,
+        userDetails: userDetails,
+        extraDates: extraDates,
+        discountAmount: selectPlan.price,
+        coupon: this.props.coupon,
+      },
+      () => {
+        if (this.props.joinBool) {
+          console.log("ollla");
+          console.log(this.props.joinTime);
+          this.DataChange(this.props.joinTime);
+        } else {
+          this.setState({ selectCenter: this.props.selectCenter });
+        }
       }
-    }
-  );
-};
+    );
+  };
 
   getdetails() {
     if (this.props.applycoupon) {
@@ -324,7 +325,7 @@ class SelectPlayPay extends Component {
       enddate: endJoin,
       displayStartDate: start_date,
       displayEndDate: end_date,
-      selectCenter: this.props.selectCenter
+      selectCenter: this.props.selectCenter,
     });
   };
 
@@ -437,7 +438,11 @@ class SelectPlayPay extends Component {
                   source={{ uri: this.state.centerImage }}
                   style={styles.image}
                 />
-                <Text style={styles.distance}>{this.state.centerDistance}</Text>
+                {this.state.centerDistance != "0 Km away" && (
+                  <Text style={styles.distance}>
+                    {this.state.centerDistance}
+                  </Text>
+                )}
               </View>
               <View style={styles.textContainer}>
                 <View style={{ flex: 1 }}>
@@ -602,7 +607,7 @@ const styles = StyleSheet.create({
   distance: {
     width: "85%",
     fontSize: 10,
-    marginTop: -15,
+    marginTop: -14,
     fontFamily: Nunito_Medium,
     color: "#FFFFFF",
     backgroundColor: "rgba(35, 35, 35, 0.66)",

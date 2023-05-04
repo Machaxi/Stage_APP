@@ -838,7 +838,7 @@ const styles = StyleSheet.create({
   subtext: {
     fontSize: 13,
     fontFamily: "Nunito-Bold",
-    color: "#D9D9D9",
+    color: "#E8AC43",
   },
   otptitle: {
     fontSize: 26,
