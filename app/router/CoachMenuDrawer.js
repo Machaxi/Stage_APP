@@ -1170,6 +1170,25 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 				}
+				{this.state.learnDataVisibility && <TouchableOpacity style={{
+						paddingLeft: 28,
+						paddingBottom: 12,
+					}} activeOpacity={0.8} onPress={() =>{
+					this.props.navigation.navigate("CoachingPlan");
+					}
+				}>
+				<View style={styles.drawercell}>
+						<Text style={styles.menuTxt}>
+							Purchase Plan
+						</Text>
+						<Image
+							style={styles.arrow_img}
+							source={require('../images/ic_drawer_arrow.png')}
+						/>
+
+					</View>
+				</TouchableOpacity>
+				}
 				 <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 0}]}></View>
 				{/* learn section end */}
 				{
