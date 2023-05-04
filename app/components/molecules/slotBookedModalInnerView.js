@@ -30,7 +30,7 @@ import { Nunito_Bold, Nunito_Medium, Nunito_Regular } from "../../containers/uti
 const SlotBookedModalInnerView = ({
   modalVisible,
   setModalVisibility,
-  onBtnPress,
+  goHomePressed,
   slotInfo,
   slotRequested,
 }) => {
@@ -102,10 +102,7 @@ const SlotBookedModalInnerView = ({
                 value: slotInfo?.booking?.courtName ?? "",
               },
             ].map((value) => (
-              <MainBookingDetails
-                width={deviceWidth * 0.25}
-                details={value}
-              />
+              <MainBookingDetails width={deviceWidth * 0.25} details={value} />
             ))}
           </View>
           <View style={{ width: 1, height: 20 }} />
@@ -125,8 +122,8 @@ const SlotBookedModalInnerView = ({
           <View style={{ width: 1, height: 34 }} />
           <RoundedGradientBtn
             colors={["#48acf1", "#3e53d9"]}
-            text={"Play"}
-            onBtnPress={() => onBtnPress()}
+            text={"Go to Home"}
+            goHomePressed={() => goHomePressed()}
             width={190}
           />
         </View>

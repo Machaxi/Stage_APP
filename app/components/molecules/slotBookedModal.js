@@ -22,10 +22,11 @@ import CouponAppliedModal from "./couponAppliedModal";
 import SlotBookedModalInnerView from "./slotBookedModalInnerView";
 
 const SlotBookedModal = ({
-  slotRequested, 
+  slotRequested,
   slotInfo,
   modalVisible,
   setModalVisibility,
+  goHomePressed,
 }) => {
   return (
     <Modal
@@ -44,6 +45,9 @@ const SlotBookedModal = ({
       >
         <SlotBookedModalInnerView
           slotInfo={slotInfo}
+          goHomePressed={() => {
+            goHomePressed();
+          }}
           slotRequested={slotRequested}
           setModalVisibility={() => setModalVisibility(false)}
         />

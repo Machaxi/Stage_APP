@@ -60,6 +60,7 @@ const [sportsList, setSportsList] = useState([]);
 const [peerSportsList,setPeerSportsList]=useState([]);
 const [nextSession, setNextSessionData] = useState([]);
 const [totalAvailableHours, setTotalAvailableHours] = useState(0);
+const [creditPlusRemaining, setCreditedPlusRemaining] = useState(0);
 const [cancelBookingId, setCancelBookingId] = useState(null);
 const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState('');
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
@@ -162,10 +163,13 @@ const getPlayerDetailsApi = async () => {
            var todayLimitReached = false;
            var hoursLeft =
              json.data?.plan?.hoursRemaining ?? 0;
+           var creditedHours = json.data?.plan?.hoursCredited ?? 0;
+          
           var oldRemainingHours =
             json.data?.plan?.oldPlanRemainingHours ?? 0;
            var totalHoursRemaining = hoursLeft + oldRemainingHours;
-            
+           var totalHours = oldRemainingHours + creditedHours;
+            setCreditedPlusRemaining(totalHours);
             setTotalAvailableHours(totalHoursRemaining)
            if(json.data?.plan?.expiryDate != null){
             var startDate = moment(Date());
@@ -661,7 +665,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
             }
             currentPlanPrice={plansResponse?.plan?.price ?? "N/A"}
             //planExpired={true}
-            totalHrs={totalAvailableHours}
+            totalHrs={creditPlusRemaining}
             hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
             slotsExhaused={
               !(packageRemainingDays <= 0 && expiringToday == false) &&
