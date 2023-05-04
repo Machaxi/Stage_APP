@@ -1,4 +1,6 @@
 import { advanceColor, advancedGradients, beginnerGradients, beginnersColor, intermediateGradients, intermediatesColor, professionalGradients, professionalsColor, white } from "./colors";
+export const GOOGLE_MAPS_APIKEY = "AIzaSyAdy0zh69w3bYrzIMxuISgN_5V-PWA17RI";
+
 export const proficiencyStaticData = [
          {
            level: "Beginner",

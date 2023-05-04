@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   PermissionsAndroid,
+  KeyboardAvoidingView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Geolocation from "react-native-geolocation-service";
@@ -18,8 +19,10 @@ import CustomButton from "../custom/CustomButton";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import BookSlotNextBtn from "./bookSlotNextBtn";
 import { Nunito_Medium, Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { GOOGLE_MAPS_APIKEY } from "../../containers/util/utilFunctions";
 
-const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
+// const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
 class BookSlotCentreSelection extends Component {
   constructor(props) {
@@ -30,9 +33,11 @@ class BookSlotCentreSelection extends Component {
       latitude: 0.0,
       longitude: 0.0,
       place: "             ",
-      centerData: null,
       isLoading: false,
-      selectedTime: "Morning"
+      selectedTime: "Morning",
+      centerData: null,
+      isPermissionGranted: false,
+      displayDistance: false,
     };
   }
 
@@ -53,15 +58,30 @@ class BookSlotCentreSelection extends Component {
     }
 
     if (isPermissionGranted) {
+      this.setState({ isPermissionGranted: true, displayDistance: true });
       this.fetchLocation();
     } else {
-      alert(
-        "Please provide location permission to show distance of societies."
-      );
+      this.setState({
+        latitude: 12.9778,
+        longitude: 77.5729,
+        place: "Bangalore",
+      });
+      this.getsortedData();
     }
   }
 
-  fetchLocation() {
+  getsortedData() {
+    const sortedAcademies = this.props.academiesList.sort((a, b) => {
+      const distanceA = this.calculateDistance(a?.latitude, a?.longitude);
+      const distanceB = this.calculateDistance(b?.latitude, b?.longitude);
+      return distanceA - distanceB;
+    });
+    this.setState({
+      centerData: sortedAcademies,
+    });
+  }
+
+  fetchLocation = async () => {
     this.setState({ isLoading: true });
     Geolocation.getCurrentPosition(
       (position) => {
@@ -70,19 +90,24 @@ class BookSlotCentreSelection extends Component {
         this.setState({
           latitude: lats,
           longitude: lngs,
-          centerData: this.props.academiesList,
-          isLoading: false
+          isLoading: false,
         });
+        this.getsortedData();
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
         // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
-        const address = "del";
         axios
           .get(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lats}&lon=${lngs}`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&key=${GOOGLE_MAPS_APIKEY}`
+            // `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lats}&lon=${lngs}`
           )
           .then((response) => {
             console.log(response);
-            this.setState({ place: response.data.address.village });
+            const city = response.data.results[0].address_components.find(
+              (component) => component.types.includes("locality")
+            );
+            if (city) {
+              this.setState({ place: city.long_name });
+            }
           })
           .catch((error) => {
             console.log(error);
@@ -90,24 +115,15 @@ class BookSlotCentreSelection extends Component {
       },
       (error) => {
         this.setState({ isLoading: false });
+        console.log(error.code, error.message);
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
     );
-  }
-
-  componentDidMount() {
-    if (this.props.preferredAcademyId != null){
-      this.setState({
-        currentIndex: this.props.preferredAcademyId,
-        proseednext: true,
-      });
-    }
-    this.requestPermissions();
-  }
+  };
 
   hasSport(sportList) {
     for (let i = 0; i < sportList.length; i++) {
-      if (sportList[i].name === this.props.selectSport.name) {
+      if (sportList[i]?.sport_id === this.props.selectSport) {
         return true;
       }
     }
@@ -129,13 +145,42 @@ class BookSlotCentreSelection extends Component {
     if (this.state.latitude == 0) {
       return "loading";
     } else {
-      return " " + d.toFixed(1) + " km away";
+      return parseInt(d);
     }
+  }
+
+  componentDidMount() {
+    if (this.props.preferredAcademyId != null) {
+      this.setState({
+        currentIndex: this.props.preferredAcademyId,
+        proseednext: true,
+      });
+    }
+    this.requestPermissions();
   }
 
   deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
+
+  handleSelect = async (data) => {
+    console.log({data})
+    const placeId = data.place_id;
+    const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_MAPS_APIKEY}`;
+    try {
+      const response = await fetch(apiUrl);
+      const result = await response.json();
+      const { lat, lng } = result.result.geometry.location;
+      this.setState({
+        latitude: lat,
+        longitude: lng,
+        displayDistance: true,
+      });
+      this.getsortedData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   setSelectedTime(val) {
     this.setState({
@@ -143,21 +188,29 @@ class BookSlotCentreSelection extends Component {
     });
   }
 
-
-
   renderItem = ({ item }) => {
-    const distance = this.calculateDistance(
-      item?.academy.latitude,
-      item?.academy.longitude
-    );
+   
+    var distance = ' Km away';
+   
+
+    if (
+      typeof item?.academy?.latitude != undefined &&
+      typeof item?.academy?.longitude != undefined
+    ){
+        distance =
+         this.calculateDistance(
+           item?.academy?.latitude ?? 0,
+           item?.academy?.longitude ?? 0
+         ) + " Km away";
+      }
     //TODO: verify whether bookings will be here
-    // if (this.hasSport(item.sports) || true) {
-      if(true){
+    if (this.hasSport(item?.academy?.sports)) {
+    // if (true) {
       return (
         <CenterDetails
           item={item?.academy}
           distance={distance}
-          isDistance={true}
+          isDistance={this.state.displayDistance}
           isExpanded={true}
           morningTimeData={item.courts}
           eveningTimeData={item.courts}
@@ -174,10 +227,11 @@ class BookSlotCentreSelection extends Component {
           currentIndex={this.state.currentIndex}
           selectedTime={this.state.selectedTime}
           setTime={(val) => this.setSelectedTime(val)}
-          selectedTimePeriod={(val) =>{ 
-            console.log('valval--->0')
-            console.log({val})
-            this.props.selectedTimePeriod(val)}}
+          selectedTimePeriod={(val) => {
+            console.log("valval--->0");
+            console.log({ val });
+            this.props.selectedTimePeriod(val);
+          }}
           onPress={() => {
             this.setState({
               currentIndex: item?.academy.id,
@@ -208,31 +262,60 @@ class BookSlotCentreSelection extends Component {
   //   //this.props.onPress(academiesList, distance);
   // };
 
-  render() {
 
+
+  render() {
     return (
-      <View style={styles.contained}>
+      <KeyboardAvoidingView
+        style={styles.contained}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <Loader visible={this.state.isLoading} />
         <View style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred centre</Text>
-          <TouchableOpacity activeOpacity={0.8}>
-            <View style={styles.addressView}>
-              <Image
-                source={require("../../images/playing/my_location.png")}
-                style={{ width: 17, height: 17, marginLeft: 8 }}
-              />
-              <Text style={styles.addressText}>{this.state.place}</Text>
-              <Image
-                source={require("../../images/playing/arrow_back.png")}
-                style={{
-                  width: 12,
-                  height: 7,
-                  marginLeft: 13,
-                  marginTop: 6,
-                }}
-              />
-            </View>
-          </TouchableOpacity>
+          {/* <TouchableOpacity activeOpacity={0.8}> */}
+          <View style={styles.addressView}>
+            <Image
+              source={require("../../images/playing/my_location.png")}
+              style={{ width: 17, height: 17, marginLeft: 8 }}
+            />
+            <GooglePlacesAutocomplete
+              placeholder={this.state.place}
+              onPress={this.handleSelect}
+              textInputProps={{
+                placeholderTextColor: "white",
+              }}
+              ini
+              query={{
+                key: GOOGLE_MAPS_APIKEY,
+                language: "en",
+              }}
+              styles={{
+                container: {
+                  marginTop: -5,
+                },
+                textInputContainer: {
+                  backgroundColor: "transparent",
+                },
+                textInput: {
+                  height: 30,
+                  backgroundColor: "transparent",
+                  color: "white",
+                },
+              }}
+            />
+            {/* <Text style={styles.addressText}>{this.state.place}</Text> */}
+            <Image
+              source={require("../../images/playing/arrow_back.png")}
+              style={{
+                width: 12,
+                height: 7,
+                marginLeft: 13,
+                marginTop: 6,
+              }}
+            />
+          </View>
+          {/* </TouchableOpacity> */}
           <View style={styles.line} />
           <FlatList
             data={this.state.centerData}
@@ -241,7 +324,7 @@ class BookSlotCentreSelection extends Component {
             extraData={[this.state.currentIndex, this.state.centerData]}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -305,7 +388,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#4D4D4D",
     marginBottom: 15,
     marginTop: 7,
-    width: "40%",
+    marginLeft: 10,
+    width: "100%",
   },
   addressView: {
     flexDirection: "row",

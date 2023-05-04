@@ -39,7 +39,11 @@ class SelectTimeItem extends Component {
           { marginRight: 10, marginBottom: 9, height: 30 },
           this.props.width ? { width: width } : {},
         ]}
-        onPress={() => this.handlepress(id)}
+        onPress={() =>{ 
+          if (this.checkIfSlotActive()){
+            //TODO: add toast for else case
+            this.handlepress(id);}
+        }}
       >
         <View>
           <LinearGradient

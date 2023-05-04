@@ -488,6 +488,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: 12 }}>
           <ScrollView
+            keyboardShouldPersistTaps="always"
             style={{ height: "100%" }}
             refreshControl={
               <RefreshControl
@@ -531,7 +532,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                     bookSlotPressed();
                   }}
                   academiesList={slotApiRes?.academyCourts}
-                  selectSport={selectedSportData}
+                  selectSport={preferredSportId}
                 />
               ) : null}
             </View>
