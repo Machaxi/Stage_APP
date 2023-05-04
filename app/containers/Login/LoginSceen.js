@@ -400,21 +400,7 @@ class LoginSceen extends Component {
           )}
         </View>
         <View>
-          <LinearGradient
-            colors={[
-              "rgba(94, 94, 94, 0.6)",
-              "rgba(94, 94, 94, 1)",
-              "rgba(94, 94, 94, 0.6)",
-            ]}
-            locations={[0, 0.5, 1]}
-            style={{
-              marginLeft: 30,
-              width: 120,
-              zIndex: 1,
-            }}
-          >
-            <Text style={styles.subtext}> Mobile Number</Text>
-          </LinearGradient>
+          <Text style={styles.subtext}> Mobile Number</Text>
           <View style={styles.inputview}>
             <TextInput
               style={styles.input}
@@ -595,7 +581,7 @@ class LoginSceen extends Component {
       <LinearGradient
         colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.06)"]}
         locations={[0, 1]}
-        style={styles.subcontainer}
+        style={[styles.subcontainer, { height: 500 }]}
       >
         <Loader visible={this.state.isLoading} />
         <View style={{ flexDirection: "row" }}>
@@ -610,27 +596,13 @@ class LoginSceen extends Component {
                 width: 300,
                 height: 290,
                 marginLeft: -130,
-                marginTop: -85,
+                marginTop: -95,
               }}
             />
           )}
         </View>
         <View>
-          <LinearGradient
-            colors={[
-              "rgba(94, 94, 94, 0.6)",
-              "rgba(94, 94, 94, 1)",
-              "rgba(94, 94, 94, 0.6)",
-            ]}
-            locations={[0, 0.5, 1]}
-            style={{
-              marginLeft: 30,
-              width: 110,
-              zIndex: 1,
-            }}
-          >
-            <Text style={styles.subtext}> Player Name</Text>
-          </LinearGradient>
+          <Text style={styles.subtext}> Player Name</Text>
           <View style={styles.inputview}>
             <TextInput
               style={styles.input}
@@ -643,21 +615,7 @@ class LoginSceen extends Component {
               }}
             />
           </View>
-          <LinearGradient
-            colors={[
-              "rgba(94, 94, 94, 0.6)",
-              "rgba(94, 94, 94, 1)",
-              "rgba(94, 94, 94, 0.6)",
-            ]}
-            locations={[0, 0.5, 1]}
-            style={{
-              marginLeft: 30,
-              width: 120,
-              zIndex: 1,
-            }}
-          >
-            <Text style={styles.subtext}> Player Gender</Text>
-          </LinearGradient>
+          <Text style={styles.subtext}> Player Gender</Text>
           <View style={[styles.inputview, { flexDirection: "row" }]}>
             <View
               style={{ flex: 1, flexDirection: "row" }}
@@ -799,7 +757,7 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 20,
     fontFamily: "Nunito-Regular",
-    color: "#BFBFBF",
+    color: "white",
   },
   dropdown: {
     height: 50,
@@ -815,7 +773,7 @@ const styles = StyleSheet.create({
     color: "#BFBFBF",
   },
   inputview: {
-    marginTop: -9,
+    marginTop: 7,
     borderColor: "#FCB550",
     borderRadius: 26,
     borderWidth: 1,
