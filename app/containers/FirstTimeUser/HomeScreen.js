@@ -89,8 +89,7 @@ class HomeScreen extends Component {
   };
 
   onPressPlan = (selectPlan) => {
-    const data = this.state.playPlanData;
-    this.props.navigation.navigate("PlayingPlan", { data, selectPlan });
+    this.props.navigation.navigate("PlayingPlan", { selectPlan });
   };
 
   render() {
@@ -219,7 +218,7 @@ class HomeScreen extends Component {
               onPressPlan={() => {
                 this.props.navigation.navigate("CoachingPlan");
               }}
-              navigation = {this.props.navigation}
+              navigation={this.props.navigation}
               onPressTrail={() => {
                 AsyncStorage.setItem("select_trial", "Coaching Trial");
                 this.props.navigation.navigate("BookTrail");
@@ -229,7 +228,7 @@ class HomeScreen extends Component {
           {this.state.currentPage === 2 && (
             <PlayerScreen
               onPressPlan={this.onPressPlan}
-              navigation = {this.props.navigation}
+              navigation={this.props.navigation}
               onPress={() => {
                 this.props.navigation.navigate("LearnBookTrial");
               }}

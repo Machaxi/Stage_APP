@@ -170,8 +170,7 @@ class RenewPlayPlan extends Component {
 
   onPressExplore = () => {
     const selectPlan = 100;
-    const data = this.state.playPlanData;
-    this.props.navigation.navigate("PlayingPlan", { data, selectPlan });
+    this.props.navigation.navigate("PlayingPlan", { selectPlan });
   };
 
   render() {
