@@ -13,7 +13,9 @@ const CustomRadioButton = (props) => {
       onPress={handlepress}
       disabled={props.disabled}
     >
-      <View style={{ flexDirection: "row", width: props.width }}>
+      <View
+        style={{ flexDirection: "row", width: props.width, marginBottom: 10 }}
+      >
         <View
           style={[
             styles.outerView,

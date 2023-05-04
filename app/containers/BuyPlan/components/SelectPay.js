@@ -513,7 +513,11 @@ class SelectPay extends Component {
                   source={{ uri: this.state.centerImage }}
                   style={styles.image}
                 />
-                <Text style={styles.distance}>{this.state.centerDistance}</Text>
+                {this.state.centerDistance != "0 Km away" && (
+                  <Text style={styles.distance}>
+                    {this.state.centerDistance}
+                  </Text>
+                )}
               </View>
               <View style={styles.textContainer}>
                 <View style={{ flex: 1 }}>
@@ -675,7 +679,7 @@ const styles = StyleSheet.create({
   distance: {
     width: "85%",
     fontSize: 10,
-    marginTop: -15,
+    marginTop: -14,
     fontFamily: Nunito_Medium,
     color: "#FFFFFF",
     backgroundColor: "rgba(35, 35, 35, 0.66)",

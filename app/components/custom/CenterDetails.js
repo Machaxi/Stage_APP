@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   distance: {
     width: "88%",
     fontSize: 10,
-    marginTop: -20,
+    marginTop: -19,
     marginBottom: 5,
     fontFamily: Nunito_Medium,
     color: "#FFFFFF",

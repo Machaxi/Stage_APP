@@ -69,7 +69,7 @@ class SelectLearnBatch extends Component {
     super(props);
     this.state = {
       currentLevel: 10,
-      currentDate: 3,
+      currentDate: 1,
       selectTime: 20,
       proseedLevel: false,
       proseedDate: false,

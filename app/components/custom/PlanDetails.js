@@ -7,7 +7,6 @@ import {
   Nunito_SemiBold,
 } from "../../containers/util/fonts";
 import DatePicker from "react-native-datepicker";
-import moment from "moment";
 
 const PlanDetails = (props) => {
   const [selectDate, setSelectDate] = useState(new Date());
@@ -137,17 +136,7 @@ const PlanDetails = (props) => {
       <View style={{ marginHorizontal: 10 }}>
         <Text style={styles.description}>Select preferred date of joining</Text>
         <View>
-          <LinearGradient
-            colors={["rgba(94, 94, 94, 0.6)", "rgba(94, 94, 94, 0.6)"]}
-            locations={[0, 1]}
-            style={{
-              marginLeft: 30,
-              width: 120,
-              zIndex: 1,
-            }}
-          >
-            <Text style={styles.subtext}>Date of Joining</Text>
-          </LinearGradient>
+          <Text style={styles.subtext}>Date of Joining</Text>
           <View style={styles.inputview}>
             <View
               style={{
@@ -162,9 +151,7 @@ const PlanDetails = (props) => {
                 style={{ borderWidth: 0, width: "140%", zIndex: 2 }}
                 date={selectDate}
                 mode="date"
-                placeholder="select date"
                 format="DD-MMM-YYYY"
-                // minDate={moment("1920-01-01")}
                 minDate={startDate}
                 maxDate={endDate}
                 confirmBtnText="Confirm"
@@ -218,7 +205,7 @@ const styles = StyleSheet.create({
   },
   inputview: {
     flex: 1,
-    marginTop: -9,
+    marginTop: 7,
     borderColor: "#FCB550",
     borderRadius: 26,
     borderWidth: 1,
