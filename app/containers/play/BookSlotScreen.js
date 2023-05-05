@@ -221,7 +221,6 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
                   { label: "Basic", value: "BASIC" },
                   { label: "Intermediate", value: "INTERMEDIATE" },
                   { label: "Advanced", value: "ADVANCED" },
-                  { label: "Professional", value: "PROFESSIONAL" },
                 ]}
                 label={"Select proficiency"}
                 setUserVal={(val) => setProficiency(val)}
