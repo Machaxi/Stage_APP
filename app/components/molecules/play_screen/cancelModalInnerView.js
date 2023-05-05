@@ -35,7 +35,8 @@ const CancelSessionModalInnerView = ({
       <LinearGradient
         start={{ x: 0, y: 0.75 }}
         end={{ x: 1, y: 0.25 }}
-        colors={["#575f61ed", "#2b293aed"]}
+        // colors={["#575f61ed", "#2b293aed"]}
+        colors={["#515157", "#202122"]}
         style={[styles.modalBg, styles.modalView]}
       >
         <View

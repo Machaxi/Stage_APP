@@ -1,4 +1,4 @@
-import { greyVariant5, greyVariant9, offWhite, redVariant, whiteGreyBorder } from "./colors";
+import { greyVariant5, greyVariant9, offWhite, redVariant, white, whiteGreyBorder } from "./colors";
 import { StyleSheet } from "react-native";
 import { Nunito_Medium, Nunito_Regular, Nunito_SemiBold } from "./fonts";
 export const commonStyles = StyleSheet.create({
@@ -56,6 +56,13 @@ export const commonStyles = StyleSheet.create({
            color: "white",
            borderRadius: 10,
            backgroundColor: "rgba(94, 94, 94, 1)",
+         },
+         noData: {
+           fontSize: 14,
+           fontWeight: "400",
+           fontFamily: Nunito_Regular,
+           color: white,
+           textAlign: "center",
          },
        });
 

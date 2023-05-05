@@ -33,7 +33,9 @@ import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
 import BeginnerWarningModal from "../../components/molecules/beginnerWarningModal";
 import { getNumericProficiency } from "../util/utilFunctions";
 import CustomButton from "../../components/custom/CustomButton";
-import { deviceWidth } from "../util/dimens";
+import { deviceHeight, deviceWidth } from "../util/dimens";
+import { commonStyles } from "../util/commonStyles";
+import { Text } from "react-native";
 
 const BookSlotCentreSelectionScreen = ({ navigation }) => {
   var fetchSlotError = null;
@@ -83,11 +85,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-     const {
-      
-      preferredSportId,
-      preferredAcademyId,
-    } = navigation?.state?.params;
+     const { sportId, preferredAcademyId } = navigation?.state?.params;
 
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -104,7 +102,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     });
 
     setPreferredAcademyId(preferredAcademyId)
-    setPreferredSportId(preferredSportId)
+    setPreferredSportId(sportId);
     bookSlotFetchApi();
     //getSportsData();
     return () => {
@@ -536,14 +534,21 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   academiesList={slotApiRes?.academyCourts}
                   selectSport={preferredSportId}
                 />
-              ) : null}
+              ) : (
+                !loading &&
+                <View style={{ flex:1, alignItems:'center', marginTop: deviceHeight * 0.4 }}>
+                  <Text style={commonStyles.noData}>
+                    {"Centres data not found."}
+                  </Text>
+                </View>
+              )}
             </View>
             {showSlotBookedModal ? (
               // ? (
               <SlotBookedModal
                 slotRequested={slotRequested}
                 slotInfo={slotBookedRes?.data}
-                goHomePressed={()=>{
+                goHomePressed={() => {
                   const resetAction = StackActions.reset({
                     index: 0,
                     actions: [
@@ -638,19 +643,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             available={
               selectedMorningTime != null || selectedEveningTime != null
             }
-            onPress={() => { 
-              console.log('cc')
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [
-                  NavigationActions.navigate({
-                    routeName: "Play",
-                  }),
-                ],
-              });
-              navigation.dispatch(resetAction);
-              bookSlotPressed()}
-            }
+            onPress={() => {
+              bookSlotPressed();
+            }}
           />
         </View>
       </LinearGradient>

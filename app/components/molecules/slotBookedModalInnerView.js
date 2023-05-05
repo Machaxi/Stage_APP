@@ -39,7 +39,7 @@ const SlotBookedModalInnerView = ({
       <LinearGradient
         start={{ x: 0, y: 0.75 }}
         end={{ x: 1, y: 0.25 }}
-        colors={["#575f61ed", "#2b293aed"]}
+        colors={["#515157", "#202122"]}
         style={[styles.modalBg, styles.modalView]}
       >
         <View
@@ -102,7 +102,10 @@ const SlotBookedModalInnerView = ({
                 value: slotInfo?.booking?.courtName ?? "",
               },
             ].map((value) => (
-              <MainBookingDetails width={deviceWidth * 0.25} details={value} />
+              <MainBookingDetails
+                width={deviceWidth * 0.25}
+                details={value}
+              />
             ))}
           </View>
           <View style={{ width: 1, height: 20 }} />
@@ -123,7 +126,7 @@ const SlotBookedModalInnerView = ({
           <RoundedGradientBtn
             colors={["#48acf1", "#3e53d9"]}
             text={"Go to Home"}
-            goHomePressed={() => goHomePressed()}
+            onBtnPress={() => goHomePressed()}
             width={190}
           />
         </View>
