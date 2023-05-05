@@ -2455,6 +2455,54 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  PaymentDetail: {
+    screen: PaymentDetail,
+    navigationOptions: ({ navigation }) => ({
+      title: "Payment",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  PaymentHistory: {
+    screen: PaymentHistory,
+    navigationOptions: ({ navigation }) => ({
+      title: "Payment History",
+      headerLeft: (
+        <NavigationDrawerStructure
+          showDrawer={false}
+          navigationProps={navigation}
+          showBackAction={true}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
 });
 
 const tabBarControllerLearn = createBottomTabNavigator({

@@ -427,7 +427,6 @@ class ParentHome extends BaseComponent {
 
   async selfComponentDidMount(isFirstRender) {
     var userData;
-    this.setState({ loading: true });
 
     console.log("PARENTDashboard");
     
@@ -436,6 +435,7 @@ class ParentHome extends BaseComponent {
     }
     else {
       //this.updateUserData();
+      this.setState({ loading: true });
       this.fetchPlayerDashboardData()
     }
 
