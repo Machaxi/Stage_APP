@@ -14,6 +14,7 @@ import { commonStyles } from "../util/commonStyles";
 import { deviceWidth } from "../util/dimens";
 import NamedRoundedContainer from "../../atoms/namedRoundedContainer";
 import moment from "moment";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
   
 export const MembershipDetails = ({
@@ -75,7 +76,11 @@ export const MembershipDetails = ({
                      bgColor={"rgba(79, 0, 25, 0.4)"}
                      txtColor={redVariant2}
                    />
-                   <Text style={styles.renew}>Renew Plan</Text>
+                   <TouchableOpacity onPress={()=>{
+                    onRenewPress()
+                   }}>
+                     <Text style={styles.renew}>Renew Plan</Text>
+                   </TouchableOpacity>
                  </View>
                )}
                {(planExpired || slotsExhaused) && !aboutToExpire && (
@@ -139,7 +144,10 @@ export const MembershipDetails = ({
                    </View>
                  </View>
                )}
-               {((aboutToExpire && slotsExhaused == false) || (aboutToExpire == false && slotsExhaused == false && planExpired == false)) && (
+               {((aboutToExpire && slotsExhaused == false) ||
+                 (aboutToExpire == false &&
+                   slotsExhaused == false &&
+                   planExpired == false)) && (
                  <View>
                    <Text style={styles.title}>Membership Details</Text>
                    <View style={{ flexDirection: "row" }}>
@@ -150,13 +158,27 @@ export const MembershipDetails = ({
                          borderWidth={0}
                          unfilledColor={"#404040"}
                          showsText={true}
-                         textStyle={{ color: "white", fontSize: 10, textAlign:'center' }}
+                         textStyle={{
+                           color: "white",
+                           fontSize: 10,
+                           textAlign: "center",
+                         }}
                          color={"#70D9E6"}
                          formatText={() => {
                            return (
-                             <Text style={[styles.hrsLeft, {fontSize: 10}]}>
+                             <Text
+                               style={[
+                                 styles.hrsLeft,
+                                 { fontSize: 10 },
+                               ]}
+                             >
                                {"Hours Left\n"}
-                               <Text style={[styles.hrsLeftValue,{fontSize:12}]}>
+                               <Text
+                                 style={[
+                                   styles.hrsLeftValue,
+                                   { fontSize: 12 },
+                                 ]}
+                               >
                                  {`${hoursLeftVal} / ${totalHoursVal}`}
                                </Text>
                              </Text>

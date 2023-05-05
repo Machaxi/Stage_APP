@@ -591,8 +591,7 @@ const onSavePress = (val) => {
 
 const onPressPlan = (selectPlan, playPlanData) => {
   console.log(selectPlan)
-  const data = playPlanData;
-  navigation.navigate("PlayingPlan", { data, selectPlan });
+  navigation.navigate("PlayingPlan", { selectPlan });
 };
 
     if (loading) {

@@ -21,6 +21,7 @@ import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { StackActions } from "react-navigation";
 import { KeyboardAvoidingView } from "react-native";
+import LoadingIndicator from "../../components/molecules/loadingIndicator";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -56,13 +57,13 @@ class PlayingPlan extends Component {
       subscriptionId: 0,
       joinBool: false,
       joinTime: null,
+      header: null,
     };
   }
 
   componentDidMount() {
     this.getData();
     this.setState({
-      planList: this.props.navigation.state.params.data,
       PlanNumber: this.props.navigation.state.params.selectPlan,
     });
     axios
@@ -81,11 +82,31 @@ class PlayingPlan extends Component {
       });
   }
 
+  apiCall = () => {
+    axios
+      .get(getBaseUrl() + "/user/learn-play", {
+        headers: {
+          "x-authorization": this.state.header,
+        },
+      })
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        this.setState({ planList: batchData["play"]["plans"] });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   getData = async () => {
     const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const header = await AsyncStorage.getItem("header");
     const userDetails = JSON.parse(userDetailsJson);
-    this.setState({ userDetails: userDetails });
-    console.log(userDetails);
+    this.setState({ userDetails: userDetails, header: header }, () => {
+      this.apiCall();
+    });
   };
 
   onPress = (value, number) => {
@@ -189,6 +210,9 @@ class PlayingPlan extends Component {
   };
 
   render() {
+    if (this.state.planList == null) {
+      return <LoadingIndicator />;
+    }
     return (
       <LinearGradient
         colors={[darkBlueVariant, darkBlueVariant]}
