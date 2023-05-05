@@ -70,7 +70,7 @@ export default class PlayerHeader extends BaseComponent {
         events.publish(
             "REFRESH_DASHBOARD"
         );
-        this.props.refreshPage();
+        // this.props.refreshPage();
 
         this.setState({})
 
@@ -122,6 +122,7 @@ export default class PlayerHeader extends BaseComponent {
                 </Text>
                 <ScrollView
                   style={{ flexDirection: "row" }}
+                  showsHorizontalScrollIndicator= {false}
                   horizontal={true}
                 >
                   {/* <PlayerNameBox

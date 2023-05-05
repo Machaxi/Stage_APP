@@ -102,6 +102,14 @@ var cancelBookingError = null;
   };
 
   useEffect(() => {
+    const didFocusListener = navigation.addListener("didFocus", onScreenFocus);
+    onScreenFocus();
+    return () => {
+      didFocusListener.remove();
+    };
+  }, []); 
+
+  const onScreenFocus = () => {
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
     });
@@ -127,7 +135,7 @@ var cancelBookingError = null;
       refreshEventCallNotif.remove();
       // Anything in here is fired on component unmount.
     };
-  }, []);
+  }
 
 const getuserdata = () => {
   getData('userInfo', (value) => {
