@@ -72,56 +72,57 @@ class ParentHome extends BaseComponent {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: (
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            alignSelf: "center",
-            flex: 1,
-          }}
-          onPress={() => {
-            navigation.getParam("switchPlayer")();
-          }}
-          activeOpacity={0.8}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              //alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Quicksand-Medium",
-                fontSize: 14,
-                color: "white",
-              }}
-            >
-              {navigation.getParam("Title", "") == ""
-                ? "Learn"
-                : navigation.getParam("Title", "")}
-            </Text>
+      headerTitle: "Learn",
+      // (
+      //   <TouchableOpacity
+      //     style={{
+      //       alignItems: "center",
+      //       justifyContent: "center",
+      //       alignSelf: "center",
+      //       flex: 1,
+      //     }}
+      //     onPress={() => {
+      //       navigation.getParam("switchPlayer")();
+      //     }}
+      //     activeOpacity={0.8}
+      //   >
+      //     <View
+      //       style={{
+      //         flexDirection: "row",
+      //         //alignItems: 'center'
+      //       }}
+      //     >
+      //       <Text
+      //         style={{
+      //           fontFamily: "Quicksand-Medium",
+      //           fontSize: 14,
+      //           color: "white",
+      //         }}
+      //       >
+      //         {navigation.getParam("Title", "") == ""
+      //           ? "Learn"
+      //           : navigation.getParam("Title", "")}
+      //       </Text>
 
-            {navigation.getParam("Title", "") == "" ? null : (
-              <Image
-                source={require("../../images/white_drop_down.png")}
-                resizeMode="contain"
-                style={{
-                  width: 8,
-                  marginLeft: 6,
-                  height: 6,
-                  justifyContent: "center",
-                  alignSelf: "center",
-                  marginTop: 3,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              />
-            )}
-          </View>
-        </TouchableOpacity>
-      ),
+      //       {navigation.getParam("Title", "") == "" ? null : (
+      //         <Image
+      //           source={require("../../images/white_drop_down.png")}
+      //           resizeMode="contain"
+      //           style={{
+      //             width: 8,
+      //             marginLeft: 6,
+      //             height: 6,
+      //             justifyContent: "center",
+      //             alignSelf: "center",
+      //             marginTop: 3,
+      //             alignItems: "center",
+      //             justifyContent: "center",
+      //           }}
+      //         />
+      //       )}
+      //     </View>
+      //   </TouchableOpacity>
+      // ),
       headerTitleStyle: {
         color: "white",
       },

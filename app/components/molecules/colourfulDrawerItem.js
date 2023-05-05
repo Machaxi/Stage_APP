@@ -9,22 +9,28 @@ import {
   Image,
 } from "react-native";
 
-
 export const ColourfulDrawerItem = ({ title, onPress, image, isExpanded }) => {
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={() => onPress()}>
       <View style={styles.drawercell}>
         <View style={{ flexDirection: "row" }}>
           <Image
-            style={{ width: 28, height: 28, marginRight: 8 }}
+            style={[styles.topimage, isExpanded && { tintColor: "#FF9C33" }]}
             source={image}
           />
-          <Text style={styles.menuHeading}>{title}</Text>
+          <Text
+            style={[styles.menuHeading, isExpanded && { color: "#FF9C33" }]}
+          >
+            {title}
+          </Text>
         </View>
         <Image
           style={[
             styles.orange_arrow_img,
-            isExpanded ? { transform: [{ rotate: "180deg" }] }: {} 
+            isExpanded && {
+              transform: [{ rotate: "180deg" }],
+              tintColor: "#FF9C33",
+            },
           ]}
           source={require("../../images/orange_arrow_down.png")}
         />
@@ -35,7 +41,7 @@ export const ColourfulDrawerItem = ({ title, onPress, image, isExpanded }) => {
 
 const styles = StyleSheet.create({
   menuHeading: {
-    color: "#FF9C33",
+    color: "#AFAFAF",
     fontSize: 16,
     fontFamily: "Quicksand-Medium",
     marginTop: 2,
@@ -45,6 +51,13 @@ const styles = StyleSheet.create({
     height: 5,
     width: 12,
     resizeMode: "contain",
+    tintColor: "#AFAFAF",
+  },
+  topimage: {
+    width: 28,
+    height: 28,
+    marginRight: 8,
+    tintColor: "#AFAFAF",
   },
   drawercell: {
     // backgroundColor:'green',
