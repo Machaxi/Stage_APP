@@ -74,13 +74,13 @@ export const SelfRatingCard = ({
              by: selectedSportRelatedRating?.peers?.ADVANCED,
              titleColor: advanceColor,
            },
-           {
-             // icon:<Intermediate height={50} width={50} />,
-             icon: require("./../../images/professional.png"),
-             title: "Professional",
-             by: selectedSportRelatedRating?.peers?.PROFESSIONAL,
-             titleColor: professionalsColor,
-           },
+          //  {
+          //    // icon:<Intermediate height={50} width={50} />,
+          //    icon: require("./../../images/professional.png"),
+          //    title: "Professional",
+          //    by: selectedSportRelatedRating?.peers?.PROFESSIONAL,
+          //    titleColor: professionalsColor,
+          //  },
          ];
          useEffect(() => {}, []);
 

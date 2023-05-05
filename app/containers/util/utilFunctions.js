@@ -23,13 +23,13 @@ export const proficiencyStaticData = [
            colors: advancedGradients,
            isSelected: false,
          },
-         {
-           level: "Professional",
-           proficiency: "PROFESSIONAL",
-           img: require("../../images/professional_emoji.png"),
-           colors: professionalGradients,
-           isSelected: false,
-         },
+        //  {
+        //    level: "Professional",
+        //    proficiency: "PROFESSIONAL",
+        //    img: require("../../images/professional_emoji.png"),
+        //    colors: professionalGradients,
+        //    isSelected: false,
+        //  },
        ];
 export const MonthNames = [
     "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
