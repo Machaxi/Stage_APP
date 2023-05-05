@@ -52,6 +52,7 @@ class CongratulationScreen extends Component {
       selectTrial: "",
       latitude: 0.0,
       longitude: 0.0,
+      todayDate: new Date(),
     };
   }
 
@@ -144,7 +145,7 @@ class CongratulationScreen extends Component {
                 </Text>
               )}
               <Text style={[styles.schedule]}>
-                {this.state.date == new Date() ? "Today, " : "Tomorrow, "}
+                {this.state.date.getDate() == this.state.todayDate.getDate() ? "Today, " : "Tomorrow, "}
                 {this.state.date.getDate()}{" "}
                 {this.months[this.state.date.getMonth()]}{" "}
                 {this.state.date.getFullYear()} at {this.state.timeString}

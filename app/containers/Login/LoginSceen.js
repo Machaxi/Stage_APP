@@ -498,7 +498,7 @@ class LoginSceen extends Component {
         </View>
         <View style={{ marginTop: -20 }}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.subtext}>Enter OTP in </Text>
+            <Text style={[styles.subtext, {color: "#E2E2E2"}]}>Enter OTP in </Text>
             {this.state.timeRemaining > 0 ? (
               <Text style={[styles.subtext, { color: "#F2AE4D" }]}>
                 {`${minutes
@@ -538,7 +538,7 @@ class LoginSceen extends Component {
             >
               <Text
                 style={[
-                  styles.subtext,
+                  styles.subtext, {color: "#BFBFBF"},
                   this.state.timeRemaining < 1 && { color: "#426DEE" },
                 ]}
               >

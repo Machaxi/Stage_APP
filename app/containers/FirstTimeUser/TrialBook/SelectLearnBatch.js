@@ -72,7 +72,7 @@ class SelectLearnBatch extends Component {
       currentDate: 1,
       selectTime: 20,
       proseedLevel: false,
-      proseedDate: false,
+      proseedDate: true,
       proseedTime: false,
       hideMorning: false,
       hideEvening: false,
