@@ -426,7 +426,7 @@ class ParentHome extends BaseComponent {
 
   async selfComponentDidMount(isFirstRender) {
     var userData;
-    
+    this.setState({ loading: true });
 
     console.log("PARENTDashboard");
     
@@ -652,7 +652,9 @@ class ParentHome extends BaseComponent {
               Events.publish(EVENT_EDIT_PROFILE);
             });
           }
-          this.setState({ isStatsLoading: false });
+          this.setState({ isStatsLoading: false }, () => {
+            this.setState({ loading: false });
+          });
         })
         .catch((response) => {
           //handle form errors
@@ -1296,7 +1298,8 @@ class ParentHome extends BaseComponent {
                 <TouchableOpacity
                   onPress={() => {
                     console.warn("Touch Press");
-                    this.props.navigation.navigate("AcademyListing");
+                    // this.props.navigation.navigate("AcademyListing");
+                    this.props.navigation.navigate("CoachingPlan");
                   }}
                 >
                   <View

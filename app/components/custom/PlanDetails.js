@@ -24,11 +24,25 @@ const PlanDetails = (props) => {
     return date;
   };
 
+  const convertToNextDate = (dateString) => {
+    const currentDate = new Date();
+    const currentYear = parseInt(currentDate.getFullYear()) + 1;
+    var [day, month] = dateString.split(" ");
+    if (day < 10) {
+      day = "0" + day;
+    }
+    const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
+    return date;
+  };
+
   useEffect(() => {
     console.log("ollla");
     console.log(props.startDate);
     const startdate = convertToDate(props.startDate);
-    const endDate = convertToDate(props.endDate);
+    var endDate = convertToDate(props.endDate);
+    if (endDate < startdate) {
+      endDate = convertToNextDate(props.endDate);
+    }
     console.log(props.startDate);
     setSelectDate(startdate);
     setStartDate(startdate);
