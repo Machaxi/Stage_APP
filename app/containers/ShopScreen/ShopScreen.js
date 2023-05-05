@@ -197,11 +197,16 @@ const ShopScreen = ({ navigation }) => {
                 Platform.OS == "android"
                   ? pickerSelectStylesShopScreen.inputAndroid
                   : pickerSelectStylesShopScreen.inputIOS,
-                { width: deviceWidth * 0.27 },
+                { width: deviceWidth * 0.27, borderRadius: 10 },
               ]}
               dropdownStyle={[
                 commonStyles.dropdownTxt,
-                { height: deviceHeight * 0.45 },
+                {
+                  height: deviceHeight * 0.45,
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  paddingVertical: 7,
+                },
               ]}
               dropdownTextStyle={commonStyles.dropdownTxtStyle}
               dropdownTextHighlightStyle={[
@@ -247,7 +252,12 @@ const ShopScreen = ({ navigation }) => {
               ]}
               dropdownStyle={[
                 commonStyles.dropdownTxt,
-                { height: deviceHeight * 0.25 },
+                {
+                  height: deviceHeight * 0.15,
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  paddingVertical: 7,
+                },
               ]}
               dropdownTextStyle={commonStyles.dropdownTxtStyle}
               renderRightComponent={() => {
