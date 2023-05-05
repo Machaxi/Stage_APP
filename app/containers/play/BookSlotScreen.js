@@ -77,6 +77,9 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
            if (json?.data?.plan?.preferredSportId != null){
              setSportsId(json?.data?.plan?.preferredSportId);
            }
+           else {
+            setProficiencyVisibility(true);
+           }
            setPlanAndSportsApiRes(json.data);
          } else {
            if (json.code == "1020") {

@@ -22,12 +22,14 @@ import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import { getNotificationCount } from "../util/notificationCount";
 import Events from "../../router/events";
 import EmptyDataContainer from "../../components/molecules/emptyDataContainer";
+import Loader from "../../components/custom/Loader";
 
 const MyBookingsScreen = ({ navigation }) => {
  var cancelBookingError = null;
  var getErrorResponse = null;
  const [refreshing, setRefreshing] = useState(false);
  const [isUpcoming, setIsUpcoming] = useState(true);
+ const [cancelBookingLoader, setCancelBookingLoader]  = useState(false)
  const [paginationLoading, setPaginationLoading] = useState(false);
  const [loading, setLoading] = useState(true);
  const [allDataFetched, setAllDataFetched] = useState(false)
@@ -122,7 +124,7 @@ const MyBookingsScreen = ({ navigation }) => {
   };
 
   const cancelPresentBooking = async (id) => {
-    setLoading(true);
+    setCancelBookingLoader(true);
     getData("header", (value) => {
       if (value == "") return;
       const headers = {
@@ -174,10 +176,10 @@ const MyBookingsScreen = ({ navigation }) => {
               Events.publish("LOGOUT");
             }
           }
-          setLoading(false);
+          setCancelBookingLoader(false);
         })
         .catch(function(error) {
-          setLoading(false);
+          setCancelBookingLoader(false);
         
           ToastAndroid.show(
             `${cancelBookingError?.response?.data
@@ -277,6 +279,7 @@ const MyBookingsScreen = ({ navigation }) => {
             }
             style={styles.main_container}
           >
+            <Loader visible={cancelBookingLoader} />
             <View style={{ width: "100%", flexDirection: "row" }}>
               <MyRequestTabItem
                 colors={
@@ -337,9 +340,7 @@ const MyBookingsScreen = ({ navigation }) => {
                     <MyBookingsView
                       val={item}
                       isUpcoming={isUpcoming}
-                      cancelBooking={() =>
-                        cancelBooking(item.id)
-                      }
+                      cancelBooking={() => cancelBooking(item.id)}
                     />
                   );
                 }}

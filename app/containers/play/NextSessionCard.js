@@ -23,8 +23,10 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
   
     var isToday = false;
     var gamePartners = []
+    
+
     if(item?.date != null){
-      if(moment(item?.date).format('MM-DD-YY') == moment(new Date()).format('MM-DD-YY')){
+      if(moment(item?.date).format('MM-DD-yyyy') == moment(new Date()).format('MM-DD-yyyy')){
         isToday = true;
       }
     }
@@ -87,7 +89,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
               {"Next Session - " +
                 (isToday
                   ? "Today"
-                  : moment(item?.date).format("Mo MMMM YYYY"))}
+                  : moment(item?.date).format("Do MMMM YYYY"))}
             </Text>
           )}
           {(item?.isCancelled == false ||

@@ -126,7 +126,10 @@ class BookSlotCentreSelection extends Component {
 
   hasSport(sportList) {
     for (let i = 0; i < sportList.length; i++) {
+       
       if (sportList[i]?.sport_id === this.props.selectSport) {
+      
+
         return true;
       }
     }
