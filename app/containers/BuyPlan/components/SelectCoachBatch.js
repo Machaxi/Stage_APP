@@ -32,11 +32,6 @@ const data = [
     image: require("../../../images/playing/advance.png"),
     name: "Advance",
   },
-  {
-    id: 4,
-    image: require("../../../images/playing/professional.png"),
-    name: "Professional",
-  },
 ];
 
 class SelectCoachBatch extends Component {
@@ -58,6 +53,13 @@ class SelectCoachBatch extends Component {
   componentDidMount() {
     const sport_id = this.props.selectSport.id;
     const academy_id = this.props.selectCenter.id;
+    const now = new Date();
+    const currentHour = now.getHours();
+    if (currentHour < 12) {
+      this.setState({ hideMorning: false, hideEvening: true });
+    } else {
+      this.setState({ hideMorning: true, hideEvening: false });
+    }
     axios
       .get(
         getBaseUrl() +

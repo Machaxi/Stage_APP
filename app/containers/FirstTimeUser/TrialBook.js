@@ -57,6 +57,10 @@ class TrialBook extends Component {
       });
   }
 
+  hadleBack = () => {
+    this.props.navigation.goBack();
+  };
+
   onPress = (value, number) => {
     if (value < number) {
       this.setState({ currentPage: value });
@@ -126,13 +130,14 @@ class TrialBook extends Component {
       >
         {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratulationScreen
-            title="Coaching Trail"
+            title="Coaching Trial"
             selectCenter={this.state.selectCenter}
             selectSport={this.state.selectSport}
             selectDate={this.state.selectDate}
             selectLevel={this.state.selectLevel}
             selectBatch={this.state.selectTime}
             distance={this.state.distance}
+            onPressBack={this.hadleBack}
           />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (

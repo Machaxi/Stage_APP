@@ -23,25 +23,19 @@ const data = [
     id: 1,
     image: require("../../../images/playing/beginner.png"),
     displayText: "Beginner",
-    name:"BASIC"
+    name: "BASIC",
   },
   {
     id: 2,
     image: require("../../../images/playing/intermediate.png"),
     displayText: "Intermediate",
-    name:"INTERMEDIATE"
+    name: "INTERMEDIATE",
   },
   {
     id: 3,
     image: require("../../../images/playing/advance.png"),
     displayText: "Advance",
-    name:"ADVANCED"
-  },
-  {
-    id: 4,
-    image: require("../../../images/playing/professional.png"),
-    displayText: "Professional",
-    name:"PROFESSIONAL"
+    name: "ADVANCED",
   },
 ];
 
@@ -64,9 +58,8 @@ class MoreDetails extends Component {
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    this.setState({ header: header});
+    this.setState({ header: header });
   };
-
 
   preferredSport = () => {
     return (
@@ -156,7 +149,7 @@ class MoreDetails extends Component {
           proseednext: false,
         });
       } else {
-        console.log(this.state.header)
+        console.log(this.state.header);
         const sportsId = this.state.currentIndex;
         const level = data[this.state.currentLevel].name;
         const subId = this.props.subscriptionId;

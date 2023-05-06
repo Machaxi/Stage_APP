@@ -102,6 +102,10 @@ class LearnBookTrial extends Component {
     }
   };
 
+  hadleBack = () => {
+    this.props.navigation.goBack();
+  };
+
   selectScreen = () => {
     return (
       <View>
@@ -134,6 +138,7 @@ class LearnBookTrial extends Component {
             selectBatch={this.state.selectTime}
             distance={this.state.distance}
             courtName={this.state.errorMessage}
+            onPressBack={this.hadleBack}
           />
         )}
         {this.state.congratulationScreen && !this.state.alreadyBook && (
@@ -192,7 +197,7 @@ class LearnBookTrial extends Component {
 
 LearnBookTrial.navigationOptions = ({ navigation }) => {
   return {
-    headerTitle: <RequestHeaderTitle title={"Learn"} />,
+    headerTitle: <RequestHeaderTitle title={"Play"} />,
     headerTitleStyle: {
       color: "white",
     },

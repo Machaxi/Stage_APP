@@ -220,7 +220,6 @@ class HomeScreen extends Component {
               }}
               navigation={this.props.navigation}
               onPressTrail={() => {
-                AsyncStorage.setItem("select_trial", "Coaching Trial");
                 this.props.navigation.navigate("BookTrail");
               }}
             />

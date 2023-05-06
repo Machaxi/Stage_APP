@@ -549,15 +549,17 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 slotRequested={slotRequested}
                 slotInfo={slotBookedRes?.data}
                 goHomePressed={() => {
-                  const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [
-                      NavigationActions.navigate({
-                        routeName: "Play",
-                      }),
-                    ],
-                  });
-                  navigation.dispatch(resetAction);
+                  // const resetAction = StackActions.reset({
+                  //   index: 0,
+                  //   actions: [
+                  //     NavigationActions.navigate({
+                  //       routeName: "Play",
+                  //     }),
+                  //   ],
+                  // });
+                  // navigation.dispatch(resetAction);
+                  const popAction = StackActions.popToTop();
+                 navigation.dispatch(popAction);
                 }}
                 modalVisible={showSlotBookedModal}
                 setModalVisibility={(val) => {

@@ -18,7 +18,11 @@ import Loader from "../custom/Loader";
 import CustomButton from "../custom/CustomButton";
 import { whiteGreyBorder } from "../../containers/util/colors";
 import BookSlotNextBtn from "./bookSlotNextBtn";
-import { Nunito_Medium, Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
+import {
+  Nunito_Medium,
+  Nunito_Regular,
+  Nunito_SemiBold,
+} from "../../containers/util/fonts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_APIKEY } from "../../containers/util/utilFunctions";
 
@@ -76,8 +80,13 @@ class BookSlotCentreSelection extends Component {
       const distanceB = this.calculateDistance(b?.latitude, b?.longitude);
       return distanceA - distanceB;
     });
+    const updatedList = sortedAcademies.sort((a, b) => {
+      if (a.academy.id === this.props.preferredAcademyId) return -1; // move item with id 3 to the top
+      if (b.academy.id === this.props.preferredAcademyId) return 1; // move item with id 3 to the top
+      return 0; // maintain original order
+    });
     this.setState({
-      centerData: sortedAcademies,
+      centerData: updatedList,
     });
   }
 
@@ -93,12 +102,9 @@ class BookSlotCentreSelection extends Component {
           isLoading: false,
         });
         this.getsortedData();
-        // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&radius=500&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`
-        // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_MAPS_APIKEY}`
         axios
           .get(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&key=${GOOGLE_MAPS_APIKEY}`
-            // `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lats}&lon=${lngs}`
           )
           .then((response) => {
             console.log(response);
@@ -117,19 +123,13 @@ class BookSlotCentreSelection extends Component {
         this.setState({ isLoading: false });
         console.log(error.code, error.message);
       },
-      { enableHighAccuracy: false, timeout: 25000, 
-        //TODO: need to verify whether we can comment it bcoz it's giving timeout after 3 seconds
-       // maximumAge: 10000
-       }
+      { enableHighAccuracy: false, timeout: 25000 }
     );
   };
 
   hasSport(sportList) {
     for (let i = 0; i < sportList.length; i++) {
-       
       if (sportList[i]?.sport_id === this.props.selectSport) {
-      
-
         return true;
       }
     }
@@ -170,7 +170,7 @@ class BookSlotCentreSelection extends Component {
   }
 
   handleSelect = async (data) => {
-    console.log({data})
+    console.log({ data });
     const placeId = data.place_id;
     const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_MAPS_APIKEY}`;
     try {
@@ -195,31 +195,41 @@ class BookSlotCentreSelection extends Component {
   }
 
   renderItem = ({ item }) => {
-   
-    var distance = ' Km away';
-   
+    var distance = " Km away";
 
     if (
       typeof item?.academy?.latitude != undefined &&
       typeof item?.academy?.longitude != undefined
-    ){
-        distance =
-         this.calculateDistance(
-           item?.academy?.latitude ?? 0,
-           item?.academy?.longitude ?? 0
-         ) + " Km away";
-      }
+    ) {
+      distance =
+        this.calculateDistance(
+          item?.academy?.latitude ?? 0,
+          item?.academy?.longitude ?? 0
+        ) + " Km away";
+    }
     //TODO: verify whether bookings will be here
     if (this.hasSport(item?.academy?.sports)) {
-    // if (true) {
+      const greaterThan12 = [];
+      const lessThan12 = [];
+      for (let i = 0; i < item.courts.length; i++) {
+        const startHour = parseInt(item.courts[i].startTime.split(":")[0]);
+        if (startHour >= 12) {
+          greaterThan12.push(item.courts[i]);
+        } else {
+          lessThan12.push(item.courts[i]);
+        }
+      }
+      const greaterThan = this.removeDublicateValue(greaterThan12);
+      const lessThan = this.removeDublicateValue(lessThan12);
+
       return (
         <CenterDetails
           item={item?.academy}
           distance={distance}
           isDistance={this.state.displayDistance}
           isExpanded={true}
-          morningTimeData={item.courts}
-          eveningTimeData={item.courts}
+          morningTimeData={lessThan}
+          eveningTimeData={greaterThan}
           selectedMorningTime={this.props.selectedMorningTime}
           selectedEveningTime={this.props.selectedEveningTime}
           setSelectedEveningTimeVal={(val) => {
@@ -252,6 +262,28 @@ class BookSlotCentreSelection extends Component {
     }
   };
 
+  removeDublicateValue = (data) => {
+    const uniqueData = [];
+    for (let i = 0; i < data.length; i++) {
+      const currentObject = data[i];
+      let isDuplicate = false;
+
+      for (let j = 0; j < uniqueData.length; j++) {
+        if (uniqueData[j].displayTime === currentObject.displayTime) {
+          if (currentObject.is_allowed) {
+            uniqueData[j] = currentObject;
+          }
+          isDuplicate = true;
+          break;
+        }
+      }
+      if (!isDuplicate) {
+        uniqueData.push(currentObject);
+      }
+    }
+    return uniqueData;
+  };
+
   // handlepress = async () => {
   //   this.props.onPress()
   //   console.log('--')
@@ -267,8 +299,6 @@ class BookSlotCentreSelection extends Component {
   //   // );
   //   //this.props.onPress(academiesList, distance);
   // };
-
-
 
   render() {
     return (

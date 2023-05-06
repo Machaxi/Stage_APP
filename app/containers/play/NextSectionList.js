@@ -23,7 +23,7 @@ export const NextSessionList = ({
                 expandList(item)}}
                onCancelPress={(val) => {
                  onCancelPress(val);
-                 cancelDisplayTime(item?.displayTime)
+                 cancelDisplayTime(item?.displayTime, item?.sport.name)
                }}
                item={item}
              />

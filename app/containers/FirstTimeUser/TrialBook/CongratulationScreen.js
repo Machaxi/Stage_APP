@@ -73,7 +73,7 @@ class CongratulationScreen extends Component {
     const distance = this.props.distance;
     const selectTime = selectBatch.startTime;
     const title = this.props.title;
-    const formattedTime = moment(selectTime, "HH:mm:ss").format("HH:mm");
+    const formattedTime = moment(selectTime, "HH:mm:ss").format("HH:mm A");
     const longitude = selectCenter.longitude;
     const latitude = selectCenter.latitude;
 
@@ -102,6 +102,10 @@ class CongratulationScreen extends Component {
     Linking.openURL(url);
   };
 
+  handleCrosspress = () => {
+    this.props.onPressBack();
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -110,11 +114,25 @@ class CongratulationScreen extends Component {
           locations={[0, 1]}
           style={[styles.subcontainer]}
         >
+          <View style={{ flexDirection: "row-reverse", width: "100%" }}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={this.handleCrosspress}
+            >
+              <Image
+                source={require("../../../images/cancel.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.title}>
             Congratulations {this.state.userName}!
           </Text>
           {this.props.title == "Playing Trial" ? (
-            <Text style={styles.subtext}>You slot has been book </Text>
+            <Text style={styles.subtext}>You slot has been booked </Text>
           ) : (
             <Text style={styles.subtext}>Your trial session is confirmed.</Text>
           )}
@@ -140,12 +158,12 @@ class CongratulationScreen extends Component {
                 </Text>
               </View>
               {this.props.title == "Playing Trial" && (
-                <Text style={styles.court}>
-                  Court : {this.state.sportName} {this.props.courtName}
-                </Text>
+                <Text style={styles.court}>{this.props.courtName}</Text>
               )}
               <Text style={[styles.schedule]}>
-                {this.state.date.getDate() == this.state.todayDate.getDate() ? "Today, " : "Tomorrow, "}
+                {this.state.date.getDate() == this.state.todayDate.getDate()
+                  ? "Today, "
+                  : "Tomorrow, "}
                 {this.state.date.getDate()}{" "}
                 {this.months[this.state.date.getMonth()]}{" "}
                 {this.state.date.getFullYear()} at {this.state.timeString}

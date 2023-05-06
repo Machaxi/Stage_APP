@@ -45,7 +45,6 @@ const PlanDetails = (props) => {
     }
     console.log(props.startDate);
     setSelectDate(startdate);
-    setStartDate(startdate);
     setEndDate(endDate);
   }, []);
 

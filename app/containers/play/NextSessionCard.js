@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -24,7 +24,6 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
     var isToday = false;
     var gamePartners = []
     
-
     if(item?.date != null){
       if(moment(item?.date).format('MM-DD-yyyy') == moment(new Date()).format('MM-DD-yyyy')){
         isToday = true;
@@ -123,6 +122,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
           />
         </View>
         <View style={{ marginTop: 12 }}>
+        <Text style={styles.centerName}>{item?.sport?.playingAreaName} : {item?.courtName}</Text>
           <Text style={styles.centerName}>{item?.academy?.name}</Text>
           <Text style={styles.centerAddress}>{item?.academy?.address}</Text>
           <View style={{ flexDirection: "row" }}>
@@ -184,7 +184,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
           ) : (
             <Text style={styles.noPartners}>
               {
-                "We apologise, but no one has scheduled sessions for this slot."
+                "We apologise, but no one has scheduled sessions for this slot. Please don't worry, a player from Machaxi will be available to play with you at this time."
               }
             </Text>
           )

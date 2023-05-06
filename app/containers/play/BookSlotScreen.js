@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import { View, StyleSheet, ToastAndroid, FlatList, Text, Image, ScrollView, RefreshControl } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ToastAndroid,
+  FlatList,
+  Text,
+  Image,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import GoBackHeader from "../../components/molecules/goBackHeader";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
@@ -31,75 +40,74 @@ import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import { getData } from "../../components/auth";
 import { client } from "../../../App";
 import CustomButton from "../../components/custom/CustomButton";
+import { Nunito_SemiBold } from "../util/fonts";
 
 const BookSlotScreen = ({ navigation }) => {
- var planAndSportsError = null;
- const [modalVisible, setModalVisibility] = useState(false);
- const [count, setCount] = useState(0);
- const [refreshing, setRefreshing] = useState(false);
+  var planAndSportsError = null;
+  const [modalVisible, setModalVisibility] = useState(false);
+  const [count, setCount] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
- const [date, setDate] = useState(
-   `${moment(new Date()).format("yyyy-MM-DD")}`
- );
+  const [date, setDate] = useState(
+    `${moment(new Date()).format("yyyy-MM-DD")}`
+  );
 
- const [proficiency, setProficiency] = useState(null);
- const [selectedSportsId, setSelectedSportsId] = useState(null);
- const [user, setUser] = useState("yourself");
- const [showProficiencyMenu, setProficiencyVisibility] = useState(false);
-const [loading, setLoading] = useState(true);
-const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
+  const [proficiency, setProficiency] = useState(null);
+  const [selectedSportsId, setSelectedSportsId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [showProficiencyMenu, setProficiencyVisibility] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
 
- const getUserPlanAndSportsData = async () => {
-   setLoading(true);
-   getData("header", (value) => {
-     if (value == "") return;
-     const headers = {
-       "Content-Type": "application/json",
-       "x-authorization": value,
-       //TODO:remove this static logic
-      //  "x-authorization":
-      //    "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
-     };
-     //client.call
-     client
-       .get("user/sport-rating", {
-         headers,
-         params: {},
-       })
-       .then(function(response) {
-         console.log({ response });
-         planAndSportsError = response;
-         console.log("requestData" + JSON.stringify(response.data));
-         let json = response.data;
-         let success = json.success;
-         console.log("---->" + success);
-         if (success) {
-           if (json?.data?.plan?.preferredSportId != null){
-             setSportsId(json?.data?.plan?.preferredSportId);
-           }
-           else {
-            setProficiencyVisibility(true);
-           }
-           setPlanAndSportsApiRes(json.data);
-         } else {
-           if (json.code == "1020") {
-             Events.publish("LOGOUT");
-           }
-         }
-         setLoading(false);
-       })
-       .catch(function(error) {
-         setLoading(false);
-         ToastAndroid.show(
-           `${planAndSportsError?.response?.response?.data
-             ?.error_message ?? ""}`,
-           ToastAndroid.SHORT
-         );
-         console.log(error);
-       });
-   });
- };
- 
+  const getUserPlanAndSportsData = async () => {
+    setLoading(true);
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+        //TODO:remove this static logic
+        //  "x-authorization":
+        //    "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
+      };
+      //client.call
+      client
+        .get("user/sport-rating", {
+          headers,
+          params: {},
+        })
+        .then(function(response) {
+          console.log({ response });
+          planAndSportsError = response;
+          console.log("requestData" + JSON.stringify(response.data));
+          let json = response.data;
+          let success = json.success;
+          console.log("---->" + success);
+          if (success) {
+            if (json?.data?.plan?.preferredSportId != null) {
+              setSportsId(json?.data?.plan?.preferredSportId);
+            } else {
+              setProficiencyVisibility(true);
+            }
+            setPlanAndSportsApiRes(json.data);
+          } else {
+            if (json.code == "1020") {
+              Events.publish("LOGOUT");
+            }
+          }
+          setLoading(false);
+        })
+        .catch(function(error) {
+          setLoading(false);
+          ToastAndroid.show(
+            `${planAndSportsError?.response?.response?.data?.error_message ??
+              ""}`,
+            ToastAndroid.SHORT
+          );
+          console.log(error);
+        });
+    });
+  };
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -119,7 +127,6 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
       } catch (err) {}
     }
   };
-
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -164,26 +171,23 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
       playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0,
       preferredAcademyId: planAndSportsApiRes?.plan?.preferredAcademyId,
       preferredSportId: planAndSportsApiRes?.plan?.preferredSportId,
-      userType: user
+      userType: user,
     });
-  }
+  };
 
-   const setModalVisibilityCb = (val) => {
-     setModalVisibility(val);
-   };
+  const setModalVisibilityCb = (val) => {
+    setModalVisibility(val);
+  };
 
-   const setSportsId = (id) => {
-      planAndSportsApiRes?.sports.map((val) => {
-        if (val.id == id) {
-          setProficiencyVisibility(
-            val.proficiency == null ? true : false
-          );
-          setSelectedSportsId(id)
-          setProficiency(val.proficiency);
-        }
-      });
-   }
-
+  const setSportsId = (id) => {
+    planAndSportsApiRes?.sports.map((val) => {
+      if (val.id == id) {
+        setProficiencyVisibility(val.proficiency == null ? true : false);
+        setSelectedSportsId(id);
+        setProficiency(val.proficiency);
+      }
+    });
+  };
 
   if (loading) {
     return <LoadingIndicator />;
@@ -217,11 +221,7 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
             {showProficiencyMenu == true && selectedSportsId != null ? (
               <UserSelectionForSlot
                 user={proficiency}
-                data={[
-                  { label: "Basic", value: "BASIC" },
-                  { label: "Intermediate", value: "INTERMEDIATE" },
-                  { label: "Advanced", value: "ADVANCED" },
-                ]}
+                data={["Basic", "Intermediate", "Advanced"]}
                 label={"Select proficiency"}
                 setUserVal={(val) => setProficiency(val)}
               />
@@ -230,15 +230,23 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
               date={date}
               setDateVal={(val) => setDate(val)}
             />
+            <Text style={styles.booking}>Booking For</Text>
             <UserSelectionForSlot
               user={user}
-              data={[
-                { label: "Yourself", value: "yourself" },
-                { label: "Entire Court", value: "entire_court" },
-                { label: "Coming with Guest", value: "with_guest" },
-              ]}
+              // { label: "Yourself", value: "yourself" },
+              // { label: "Entire Court", value: "entire_court" },
+              // { label: "Coming with Guest", value: "with_guest" },
+              data={["Yourself", "Entire Court", "Coming with Guest"]}
               label={"Select user"}
-              setUserVal={(val) => setUser(val)}
+              setUserVal={(val) => {
+                if (val == "Coming with Guest") {
+                  setUser("with_guest");
+                } else if (val == "Entire Court") {
+                  setUser("entire_court");
+                } else {
+                  setUser(val);
+                }
+              }}
             />
             {user == "with_guest" && (
               <BookSlotAddUser
@@ -259,11 +267,13 @@ const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
                 setModalVisibility={(val) => setModalVisibilityCb(val)}
               />
             ) : null}
-            <View style={{height: 20, width: '100%'}} />
+            <View style={{ height: 20, width: "100%" }} />
             <CustomButton
               name="Next "
               image={require("../../images/playing/arrow_go.png")}
-              available={selectedSportsId != null && proficiency != null}
+              available={
+                selectedSportsId != null && proficiency != null && user != null
+              }
               onPress={() => onNextPress()}
             />
           </View>
@@ -294,5 +304,9 @@ BookSlotScreen.navigationOptions = ({ navigation }) => {
 export default BookSlotScreen;
 
 const styles = StyleSheet.create({
-  
+  booking: {
+    fontSize: 14,
+    fontFamily: Nunito_SemiBold,
+    color: "#CACACA",
+  },
 });
