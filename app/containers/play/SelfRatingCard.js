@@ -27,6 +27,7 @@ export const SelfRatingCard = ({
          ratingData,
          userId,
        }) => {
+     
          var selectedSportRelatedRating = null;
          ratingData.map((val) => {
            if (val?.isSelected) {

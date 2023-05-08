@@ -49,6 +49,7 @@ import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import { getProficiencyColor, getProficiencyGradients, getProficiencyName, proficiencyStaticData } from "../util/utilFunctions";
 import moment from "moment";
 import PlayerScreen from "../FirstTimeUser/PlayerScreen";
+import Loader from "../../components/custom/Loader";
 
 export default PlayScreen =({navigation})=>{
 const [playDataVisibility,setPlayDataVisibility] =useState(false);
@@ -65,17 +66,21 @@ const [cancelBookingId, setCancelBookingId] = useState(null);
 const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState('');
 const [cancelPopupSportsName, setCancelPopupSportsName] = useState('');
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
-const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
+const [proficiencyData, setProficiencyData] = useState(
+  JSON.parse(JSON.stringify(proficiencyStaticData))
+);
 const [selectedSelfRating, setSelectedSelfRating] = useState(null)
 const [preferredDetails, setPreferredDetails] = useState(null);
 const [userProficiency, setUserProficiency] = useState(null);
 const [cancelModalVisible, setCancelModalVisibility] = useState(false);
 const [limitReachedForToday, setLimitReachForToday] = useState(true)
 const [loading, setLoading] = useState(true);
+const [modalLoading, setModalLoading] = useState(false);
 const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
 const [plansResponse, setPlansResponse] = useState(null);
 const [refreshing, setRefreshing] = useState(false);
 const [userDetails, setUserDetails] = useState(null);
+
 
 var updateRatingError = null;
 var playerDetailsApiError = null;
@@ -398,9 +403,11 @@ useEffect(() => {
 }, [playerDetailsResponse]);
  
   const onRefresh = () => {
+    
     setRefreshing(true);
     getPlayerDetailsApi();
-    setSelfRatingActiveness(true);
+    setProficiencyData(JSON.parse(JSON.stringify(proficiencyStaticData)));
+    setSelfRatingActiveness(false);
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false);
@@ -447,9 +454,6 @@ const renderGameNameBox = ({ item }) => {
   )
 };
 
-
-
-
 const bookSlotPressed=()=>{
   null
 };
@@ -461,18 +465,18 @@ const setCancelModalVisibilityCb = (val) => {
   setCancelModalVisibility(val);
 };
 
-  const expandList = (passedVal) => {
-    var sessionData = nextSession;
-    sessionData.map((val) => {
-      if (val.id == passedVal.id) {
-        val.isExpanded = !val.isExpanded;
-      }
-    });
-    setNextSessionData(sessionData);
-  }
+const expandList = (passedVal) => {
+  var sessionData = nextSession;
+  sessionData.map((val) => {
+    if (val.id == passedVal.id) {
+      val.isExpanded = !val.isExpanded;
+    }
+  });
+  setNextSessionData(sessionData);
+}
 
 const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
-
+  setModalLoading(true)
   const data = isPeerTypeRequest
     ? {
         userId: playerInfo?.id,
@@ -487,7 +491,7 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
         userId: playerDetailsResponse?.user?.id,
         sportId: selectedPeerRating?.sport?.id,
         proficiency: selectedSelfRating?.proficiency,
-        date: `${moment(Date()).format("YYYY-MM-DD")}`,
+        date: `${moment(Date()).format("YYYY-MM-DD")}`
       };
 
   // setLoading(true);
@@ -515,28 +519,51 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
           let json = response?.data;
           let success = json?.success;
           if (success) {
-            ToastAndroid.show(
-              `Rating updated.`,
-              ToastAndroid.SHORT
-            );
-            getPlayerDetailsApi();
-            if(isPeerTypeRequest){
-            var previousProfData;
-            for(var i= 0; i< proficiencyData?.length; i++){
-              if(proficiencyData[i].level == ratingInfo.level){
-                previousProfData[i] = proficiencyData[i];
-                previousProfData[i].isSelected = true;
-              }
+            if(!isPeerTypeRequest){
+              setUserProficiency(selectedSelfRating?.proficiency);
             }
-            // previousProfData = proficiencyData.map((val)=>{
-            //   if(val.level == ratingInfo.level){
-            //     val?.isSelected = true;
-            //   }
-            // })
-              setProficiencyData(previousProfData)
             
-          }
-
+            // if(!isPeerTypeRequest){
+            //   setUserProficiency(
+            //     playerDetailsResponse?.rating[
+            //       i
+            //     ]?.self
+            //   );
+            // }
+            //TODO:
+            // if (!isPeerTypeRequest){ 
+            //   getPlayerDetailsApi();
+            // }
+            if(isPeerTypeRequest){
+              var previousProfData;
+              for(var i= 0; i< proficiencyData?.length; i++){
+                if(proficiencyData[i].level == ratingInfo.level){
+                  previousProfData[i] = proficiencyData[i];
+                  previousProfData[i].isSelected = true;
+                }
+              }
+              // previousProfData = proficiencyData.map((val)=>{
+              //   if(val.level == ratingInfo.level){
+              //     val?.isSelected = true;
+              //   }
+              // })
+              setProficiencyData(previousProfData)
+            }
+            if(!isPeerTypeRequest){
+              var sportsDataCopy = [...sportsList];
+              for (var i = 0; i < sportsDataCopy?.length; i++) {
+             
+                if (
+                  sportsDataCopy[i]?.sport?.id ==
+                  selectedPeerRating?.sport?.id
+                ) {
+                  sportsDataCopy[i].self =
+                    selectedSelfRating?.proficiency;
+                }
+               
+              }
+              setSportsList(sportsDataCopy);
+            }
             if(!isPeerTypeRequest &&
                    playerDetailsResponse?.plan
                      ?.preferredSportId ==
@@ -547,9 +574,26 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
                    );
                  }
             if(!isPeerTypeRequest){
-                setProficiencyData(proficiencyStaticData);
+              if(proficiencyData?.length > 0){
+              var previousProfData2 = JSON.parse(
+                JSON.stringify(proficiencyStaticData)
+              );
+              for (var i = 0; i < proficiencyData?.length; i++) {
+                if (
+                  proficiencyData[i].proficiency ==
+                  selectedSelfRating?.proficiency
+                ) {
+                  previousProfData2[i].isSelected = true;
+                }
+              }
+              setProficiencyData(previousProfData2);
             }
-            getPlayerDetailsApi();
+            }
+            setModalLoading(false);
+            setTimeout(() => {
+              ToastAndroid.show(`Rating updated.`, ToastAndroid.SHORT);
+            }, 500);
+            //getPlayerDetailsApi();
             // setRewardsResponse(json["data"]["reward"]);
           } else {
             ToastAndroid.show(
@@ -561,9 +605,12 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
               Events.publish("LOGOUT");
             }
           }
-          setLoading(false);
+        
+          // setLoading(false);
         } catch (e) {
-          setLoading(false);
+
+          setModalLoading(false)
+          //setLoading(false);
           ToastAndroid.show(
             `${updateRatingError?.response?.response?.data?.error_message ??
               ""}`,
@@ -572,7 +619,8 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
         }
       })
       .catch(function(error) {
-        setLoading(false);
+        setModalLoading(false);
+        //setLoading(false);
         ToastAndroid.show(
           `${updateRatingError?.response?.response?.data?.error_message ??
             ""}`,
@@ -607,8 +655,6 @@ const onPressPlan = (selectPlan, playPlanData) => {
       return <LoadingIndicator />;
     }
 
-    console.log('plans data')
-    console.log({ plansResponse });
 
     if (userDetails.is_play_enabled) {
       return (
@@ -627,13 +673,15 @@ const onPressPlan = (selectPlan, playPlanData) => {
         </LinearGradient>
       );
     }
+
     
   return (
     <View style={[{ flex: 1 }]}>
       <LinearGradient
         colors={["#051732", "#232031"]}
         style={{ flex: 1, paddingBottom: 63 }}
-      >
+      >        
+        <Loader visible={modalLoading} />
         <ScrollView
           style={{ height: "100%" }}
           refreshControl={
@@ -749,7 +797,13 @@ const onPressPlan = (selectPlan, playPlanData) => {
                       //     }
                       //   }
                       // ));
-                      setProficiencyData(proficiencyStaticData);
+                      setProficiencyData(
+                        JSON.parse(
+                          JSON.stringify(
+                            proficiencyStaticData
+                          )
+                        )
+                      );
                       //
                     }
                   }}
@@ -760,11 +814,39 @@ const onPressPlan = (selectPlan, playPlanData) => {
                   onPressed={() => {
                     if (selfTabEnabled) {
                       setSelfTab(false);
-                      setProficiencyData(proficiencyStaticData);
+                      
+                      setProficiencyData(
+                        JSON.parse(
+                          JSON.stringify(
+                            proficiencyStaticData
+                          )
+                        )
+                      );
                     }
                   }}
                 />
               </View>
+              {selfTabEnabled && (
+                <>
+                  <View style={{ marginTop: 23, marginHorizontal: 13 }}>
+                    <FlatList
+                      data={sportsList}
+                      horizontal={true}
+                      renderItem={renderGameNameBox}
+                    />
+                  </View>
+                  <SelfRatingCard
+                    onRatingSelection={(val) => onRatingSelection(val)}
+                    proficiencyData={proficiencyData}
+                    ratingData={sportsList}
+                    editSelfRating={editSelfRatingActive}
+                    onEditPress={() => {
+                      setSelfRatingActiveness(true);
+                    }}
+                    onSavePress={(val1) => onSavePress(val1)}
+                  />
+                </>
+              )}
               {!selfTabEnabled && (
                 <>
                   <FlatList
@@ -784,27 +866,6 @@ const onPressPlan = (selectPlan, playPlanData) => {
                     }
                     renderGameNameBox={renderGameNameBox}
                     ratingData={peerSportsList}
-                  />
-                </>
-              )}
-              {selfTabEnabled && (
-                <>
-                  <View style={{ marginTop: 23, marginHorizontal: 13 }}>
-                    <FlatList
-                      data={sportsList}
-                      horizontal={true}
-                      renderItem={renderGameNameBox}
-                    />
-                  </View>
-                  <SelfRatingCard
-                    onRatingSelection={(val) => onRatingSelection(val)}
-                    proficiencyData={proficiencyData}
-                    ratingData={sportsList}
-                    editSelfRating={editSelfRatingActive}
-                    onEditPress={() => {
-                      setSelfRatingActiveness(true);
-                    }}
-                    onSavePress={(val1) => onSavePress(val1)}
                   />
                 </>
               )}
