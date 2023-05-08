@@ -218,6 +218,8 @@ PODS:
     - React-cxxreact (= 0.60.5)
     - React-jsi (= 0.60.5)
   - React-jsinspector (0.60.5)
+  - react-native-blur (4.3.1):
+    - React-Core
   - react-native-branch (3.1.1):
     - Branch (= 0.27.1)
     - React
@@ -338,6 +340,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-branch (from `../node_modules/react-native-branch`)
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-image-base64 (from `../node_modules/react-native-image-base64`)
@@ -434,6 +437,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
   react-native-branch:
     :path: "../node_modules/react-native-branch"
   react-native-geolocation-service:
@@ -549,6 +554,7 @@ SPEC CHECKSUMS:
   React-jsi: 4d8c9efb6312a9725b18d6fc818ffc103f60fec2
   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
+  react-native-blur: 52e2902df618ace97b3554aeb7f6a2d7ca3b5e9b
   react-native-branch: b95430177fc90d4a5d414b33c6bc7b1e8e3a2ea5
   react-native-geolocation-service: c0efb872258ed9240f1003a70fca9e9757e5c785
   react-native-image-base64: 2ff9ac788639c87a91361ab6652cc95e871b1e54
@@ -593,6 +599,6 @@ SPEC CHECKSUMS:
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
   YoutubePlayer-in-WKWebView: 4fca3b4f6f09940077bfbae7bddb771f2b43aacd
 
-PODFILE CHECKSUM: eaab6b4ebdf95a77b385b929847437aa7cd2645d
+PODFILE CHECKSUM: bc1dec5c35d3d13aa8d9261629d99f1062c09c5a
 
 COCOAPODS: 1.12.0

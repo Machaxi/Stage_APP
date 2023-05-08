@@ -230,6 +230,7 @@ class BookSlotCentreSelection extends Component {
           isExpanded={true}
           morningTimeData={lessThan}
           eveningTimeData={greaterThan}
+          preferredDate={this.props.preferredDate}
           selectedMorningTime={this.props.selectedMorningTime}
           selectedEveningTime={this.props.selectedEveningTime}
           setSelectedEveningTimeVal={(val) => {

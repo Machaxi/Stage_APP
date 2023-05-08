@@ -15,6 +15,7 @@ class SelectTimeItem extends Component {
     var randomStartDateTime =
       `${moment().format("YYYY-MM-DD")}T` + this.props.startTime;
 
+    const selectDate = new Date(this.props.preferredDate)
     const time1 = new Date();
     const time2 = new Date(randomStartDateTime);
     const diffInMillisec = time2.getTime() - time1.getTime();
@@ -22,7 +23,7 @@ class SelectTimeItem extends Component {
     // convert milliseconds to hours, minutes
     const diffInHours = diffInMillisec / (1000 * 60 * 60);
 
-    if (diffInHours > 0) {
+    if (diffInHours > 0 || selectDate > time1 ) {
       return true;
     } else {
       return false;

@@ -18,6 +18,7 @@ const SelectPlayingTime = ({
   setSelectedTime,
   selectedTime,
   selectedTimePeriod,
+  preferredDate,
 }) => {
   return (
     <ScrollView style={{ flexDirection: "row", flexWrap: "wrap" }}>
@@ -30,6 +31,7 @@ const SelectPlayingTime = ({
             return (
               <SelectTimeItem
                 width={deviceWidth * 0.38}
+                preferredDate={preferredDate}
                 isSelected={item?.courtTimingId == selectedTime}
                 image={require("../../images/playing/clock.png")}
                 selectItem={selectedTime}

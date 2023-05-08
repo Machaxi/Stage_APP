@@ -98,6 +98,7 @@ class CenterDetails extends Component {
               morningTimeData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedMorningTime}
+                  preferredDate={this.props.preferredDate}
                   selectedTimePeriod={(val) => {
                     console.log({ val });
                     selectedTimePeriod(val);
@@ -111,6 +112,7 @@ class CenterDetails extends Component {
               eveningTimeData.length > 0 ? (
                 <SelectPlayingTime
                   selectedTime={selectedEveningTime}
+                  preferredDate={this.props.preferredDate}
                   selectedTimePeriod={(val) => {
                     console.log({ val });
                     selectedTimePeriod(val);

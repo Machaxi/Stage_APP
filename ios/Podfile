@@ -55,6 +55,8 @@ target 'Dribble' do
 
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'DribbleTests' do
     inherit! :search_paths
     # Pods for testing

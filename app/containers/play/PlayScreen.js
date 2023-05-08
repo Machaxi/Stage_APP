@@ -690,10 +690,10 @@ const onPressPlan = (selectPlan, playPlanData) => {
             }}
             expiryDate={moment(
               playerDetailsResponse?.plan?.expiryDate
-            ).format("Mo MMMM YYYY")}
+            ).format("DD MMMM YYYY")}
             purchasedDate={moment(
               playerDetailsResponse?.plan?.purchaseDate
-            ).format("Mo MMMM YYYY")}
+            ).format("DD MMMM YYYY")}
           />
           <NextSessionList
             userId={playerDetailsResponse?.user?.id}
