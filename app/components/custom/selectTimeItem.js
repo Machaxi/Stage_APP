@@ -11,26 +11,27 @@ class SelectTimeItem extends Component {
     this.props.onPress(val);
   }
 
-  checkIfSlotActive () {
-     var randomStartDateTime = `${moment().format('YYYY-MM-DD')}T` + this.props.startTime;
+  checkIfSlotActive() {
+    var randomStartDateTime =
+      `${moment().format("YYYY-MM-DD")}T` + this.props.startTime;
 
-     const time1 = new Date();
-     const time2 = new Date(randomStartDateTime);
-     const diffInMillisec = time2.getTime() - time1.getTime();
+    const selectDate = new Date(this.props.preferredDate)
+    const time1 = new Date();
+    const time2 = new Date(randomStartDateTime);
+    const diffInMillisec = time2.getTime() - time1.getTime();
 
-     // convert milliseconds to hours, minutes
-     const diffInHours = diffInMillisec / (1000 * 60 * 60);
+    // convert milliseconds to hours, minutes
+    const diffInHours = diffInMillisec / (1000 * 60 * 60);
 
-     if(diffInHours > 0){
-      return true
-     }
-     else {
+    if (diffInHours > 0 || selectDate > time1 ) {
+      return true;
+    } else {
       return false;
-     }
+    }
   }
 
   render() {
-    const {  image, isSelected , id,  name, width, startTime } = this.props;
+    const { image, isSelected, id, name, width, startTime } = this.props;
 
     return (
       <TouchableOpacity
@@ -39,10 +40,11 @@ class SelectTimeItem extends Component {
           { marginRight: 10, marginBottom: 9, height: 30 },
           this.props.width ? { width: width } : {},
         ]}
-        onPress={() =>{ 
-          if (this.checkIfSlotActive()){
+        onPress={() => {
+          if (this.checkIfSlotActive()) {
             //TODO: add toast for else case
-            this.handlepress(id);}
+            this.handlepress(id);
+          }
         }}
       >
         <View>
@@ -62,9 +64,7 @@ class SelectTimeItem extends Component {
             ]}
           >
             <Text>{"    "}</Text>
-            {isSelected && (
-              <Image style={styles.clockimage} source={image} />
-            )}
+            {isSelected && <Image style={styles.clockimage} source={image} />}
             <Text
               style={[
                 styles.sportText,
@@ -83,11 +83,12 @@ class SelectTimeItem extends Component {
               style={[
                 {
                   height: "95%",
+                  width: "90%",
                   marginTop: -30,
                   tintColor: "#F2AE4D",
-                  marginLeft: 6
+                  marginLeft: 8,
                 },
-                width ? { width: width * 0.9 } : {width: deviceWidth * 0.28 },
+                // width ? { width: width * 0.9 } : {width: deviceWidth * 0.28 },
               ]}
               resizeMode="stretch"
               source={require("../../images/playing/cross.png")}

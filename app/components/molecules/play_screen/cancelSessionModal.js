@@ -13,6 +13,7 @@ const CancelSessionModal = ({
   confirmType,
   onCancel,
   cancelTime,
+  sportsName,
 }) => {
   return (
     <Modal
@@ -31,6 +32,7 @@ const CancelSessionModal = ({
       >
         <CancelSessionModalInnerView
           cancelTime={cancelTime}
+          sportsName={sportsName}
           confirmType={confirmType}
           onCancel={() =>{ 
             onCancel()

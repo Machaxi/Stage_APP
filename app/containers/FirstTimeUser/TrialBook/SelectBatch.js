@@ -94,6 +94,13 @@ class SelectBatch extends Component {
   componentDidMount() {
     const sport_id = this.props.selectSport.id;
     const academy_id = this.props.selectCenter.id;
+    const now = new Date();
+    const currentHour = now.getHours();
+    if (currentHour < 12) {
+      this.setState({ hideMorning: false, hideEvening: true });
+    } else {
+      this.setState({ hideMorning: true, hideEvening: false });
+    }
     axios
       .get(
         getBaseUrl() +
@@ -106,7 +113,6 @@ class SelectBatch extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"]["batch_details"];
-        console.log(batchData);
         this.setState({ batchData: batchData });
       })
       .catch((error) => {

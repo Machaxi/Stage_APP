@@ -13,52 +13,48 @@ import SelectSports from "../custom/SelectSports";
 import SelectTimeItem from "../custom/selectTimeItem";
 import { deviceWidth } from "../../containers/util/dimens";
 
-
 const SelectPlayingTime = ({
   timeData,
   setSelectedTime,
   selectedTime,
   selectedTimePeriod,
+  preferredDate,
 }) => {
   return (
     <ScrollView style={{ flexDirection: "row", flexWrap: "wrap" }}>
-      {timeData.length > 0 ?
-       
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                numColumns={2}
-                data={timeData}
-                renderItem={({item})=>{
-                return (
-                  <SelectTimeItem
-                    width={deviceWidth * 0.315}
-                    isSelected={
-                      item?.courtTimingId == selectedTime
-                    }
-                    image={require("../../images/playing/clock.png")}
-                    selectItem={selectedTime}
-                    startTime={item?.startTime}
-                    id={item?.courtTimingId}
-                    // name={`${item.startTime} - ${item.endTime}`}
-                    name={`${item?.displayTime}`}
-                    onPress={(val) => {
-                      selectedTimePeriod({
-                        startTime: item?.startTime,
-                        endTime: item.endTime,
-                      });
-                      setSelectedTime(val);
-                    }}
-                  />
-                );
-              }}
-          />
-        : null}
+      {timeData.length > 0 ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={timeData}
+          renderItem={({ item }) => {
+            return (
+              <SelectTimeItem
+                width={deviceWidth * 0.38}
+                preferredDate={preferredDate}
+                isSelected={item?.courtTimingId == selectedTime}
+                image={require("../../images/playing/clock.png")}
+                selectItem={selectedTime}
+                startTime={item?.startTime}
+                id={item?.courtTimingId}
+                // name={`${item.startTime} - ${item.endTime}`}
+                name={`${item?.displayTime}`}
+                onPress={(val) => {
+                  selectedTimePeriod({
+                    startTime: item?.startTime,
+                    endTime: item.endTime,
+                  });
+                  setSelectedTime(val);
+                }}
+              />
+            );
+          }}
+        />
+      ) : null}
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 
 export default SelectPlayingTime;

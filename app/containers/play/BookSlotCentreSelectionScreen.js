@@ -49,6 +49,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   const [count, setCount] = useState(0);
   const [slotRequested, setSlotRequested] = useState(false);
   const [preferredAcademyId, setPreferredAcademyId] = useState(null);
+  const [preferredDate, setPreferredDate] = useState(null);
   const [preferredSportId, setPreferredSportId] = useState(null);
   const [selectedMorningTime, setSelectedMorningTime] = useState(null);
   const [selectedEveningTime, setSelectedEveningTime] = useState(null);
@@ -83,9 +84,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       } catch (err) {}
     }
   };
-
+ 
   useEffect(() => {
-     const { sportId, preferredAcademyId } = navigation?.state?.params;
+     const {date, sportId, preferredAcademyId } = navigation?.state?.params;
 
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -102,6 +103,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     });
 
     setPreferredAcademyId(preferredAcademyId)
+    setPreferredDate(date);
     setPreferredSportId(sportId);
     bookSlotFetchApi();
     //getSportsData();
@@ -517,6 +519,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   morningTime={[]}
                   eveningTime={[]}
                   preferredAcademyId={preferredAcademyId}
+                  preferredDate={preferredDate}
                   preferredSportId={preferredSportId}
                   selectedMorningTime={selectedMorningTime}
                   setSelectedMorningTimeVal={(val) =>
@@ -549,15 +552,17 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 slotRequested={slotRequested}
                 slotInfo={slotBookedRes?.data}
                 goHomePressed={() => {
-                  const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [
-                      NavigationActions.navigate({
-                        routeName: "Play",
-                      }),
-                    ],
-                  });
-                  navigation.dispatch(resetAction);
+                  // const resetAction = StackActions.reset({
+                  //   index: 0,
+                  //   actions: [
+                  //     NavigationActions.navigate({
+                  //       routeName: "Play",
+                  //     }),
+                  //   ],
+                  // });
+                  // navigation.dispatch(resetAction);
+                  const popAction = StackActions.popToTop();
+                 navigation.dispatch(popAction);
                 }}
                 modalVisible={showSlotBookedModal}
                 setModalVisibility={(val) => {

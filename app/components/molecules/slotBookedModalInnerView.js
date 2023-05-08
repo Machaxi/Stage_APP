@@ -25,7 +25,11 @@ import { deviceWidth } from "../../containers/util/dimens";
 import LinearGradient from "react-native-linear-gradient";
 import MainBookingDetails from "../../atoms/mainBookingDetails";
 import RoundedGradientBtn from "./roundedGradientBtn";
-import { Nunito_Bold, Nunito_Medium, Nunito_Regular } from "../../containers/util/fonts";
+import {
+  Nunito_Bold,
+  Nunito_Medium,
+  Nunito_Regular,
+} from "../../containers/util/fonts";
 
 const SlotBookedModalInnerView = ({
   modalVisible,
@@ -42,24 +46,6 @@ const SlotBookedModalInnerView = ({
         colors={["#515157", "#202122"]}
         style={[styles.modalBg, styles.modalView]}
       >
-        <View
-          style={[
-            commonStyles.flexRowNormal,
-            { justifyContent: "flex-end", width: "100%" },
-          ]}
-        >
-          <TouchableOpacity
-            style={styles.crossBtn}
-            onPress={() => {
-              setModalVisibility();
-            }}
-          >
-            <Image
-              style={styles.cross}
-              source={require("../../images/cross_icon.png")}
-            />
-          </TouchableOpacity>
-        </View>
         <Image
           style={styles.congratsImage}
           source={require("../../images/congrats_emoji.png")}
@@ -102,10 +88,7 @@ const SlotBookedModalInnerView = ({
                 value: slotInfo?.booking?.courtName ?? "",
               },
             ].map((value) => (
-              <MainBookingDetails
-                width={deviceWidth * 0.25}
-                details={value}
-              />
+              <MainBookingDetails width={deviceWidth * 0.25} details={value} />
             ))}
           </View>
           <View style={{ width: 1, height: 20 }} />

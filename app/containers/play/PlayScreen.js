@@ -63,6 +63,7 @@ const [totalAvailableHours, setTotalAvailableHours] = useState(0);
 const [creditPlusRemaining, setCreditedPlusRemaining] = useState(0);
 const [cancelBookingId, setCancelBookingId] = useState(null);
 const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState('');
+const [cancelPopupSportsName, setCancelPopupSportsName] = useState('');
 const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
 const [proficiencyData, setProficiencyData] = useState(proficiencyStaticData);
 const [selectedSelfRating, setSelectedSelfRating] = useState(null)
@@ -489,7 +490,7 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
         date: `${moment(Date()).format("YYYY-MM-DD")}`,
       };
 
-  setLoading(true);
+  // setLoading(true);
   getData("header", (value) => {
     if (value == "") return;
     const headers = {
@@ -689,18 +690,19 @@ const onPressPlan = (selectPlan, playPlanData) => {
             }}
             expiryDate={moment(
               playerDetailsResponse?.plan?.expiryDate
-            ).format("Mo MMMM YYYY")}
+            ).format("DD MMMM YYYY")}
             purchasedDate={moment(
               playerDetailsResponse?.plan?.purchaseDate
-            ).format("Mo MMMM YYYY")}
+            ).format("DD MMMM YYYY")}
           />
           <NextSessionList
             userId={playerDetailsResponse?.user?.id}
             NextSessionData={nextSession}
             expandList={(val) => expandList(val)}
             onPlayingLevelPress={onPlayingLevelPress}
-            cancelDisplayTime={(val) => {
+            cancelDisplayTime={(val, val2) => {
               setCancelPopupDisplayTime(val);
+              setCancelPopupSportsName(val2);
             }}
             onCancelPress={(id) => {
               setCancelBookingId(id);
@@ -814,6 +816,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
         <CancelSessionModal
           confirmType={true}
           cancelTime={cancelPopupDisplayTime}
+          sportsName={cancelPopupSportsName}
           onCancel={() => {
             cancelBookingApi();
             setCancelModalVisibilityCb(false);
@@ -828,14 +831,15 @@ const onPressPlan = (selectPlan, playPlanData) => {
       {limitReachedForToday ? <View style={styles.emptyView} /> : null}
       {!limitReachedForToday ? (
         <View style={styles.skyFilledButtonView}>
-          <SkyFilledButton
+          <CustomButton
+            name="Book Slot "
+            available={true}
+            height={45}
             onPress={() => {
               navigation.navigate("BookSlotScreen");
               bookSlotPressed();
             }}
-          >
-            Book Slot
-          </SkyFilledButton>
+          />
         </View>
       ) : (
         <LinearGradient
@@ -914,7 +918,7 @@ const styles = StyleSheet.create({
     flex:1,
     position: "absolute",
     width: "100%",
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     alignSelf: "center",
     justifyContent:'center',
     bottom: 15,

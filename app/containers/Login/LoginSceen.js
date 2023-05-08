@@ -530,7 +530,7 @@ class LoginSceen extends Component {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={[styles.otpsubtext, { width: 200 }]}>
-              Didn’t receive OTP{" "}
+             {" "}
             </Text>
             <TouchableOpacity
               disabled={this.state.timeRemaining > 0}

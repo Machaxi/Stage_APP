@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   },
   detailsTxt: {
     fontWeight: "400",
+    height: 40,
     fontSize: 14,
     color: white,
     fontFamily: Nunito_Regular,

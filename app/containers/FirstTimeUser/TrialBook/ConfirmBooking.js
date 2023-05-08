@@ -181,7 +181,15 @@ class ConfirmBooking extends Component {
         } else {
           let usersuccess = JSON.stringify(this.props.data.playdata.data);
           let userSuccessResponce = JSON.parse(usersuccess);
-          this.props.onPress(true, userSuccessResponce.booking.courtName);
+          console.log("okk");
+          console.log(userSuccessResponce);
+          console.log(usersuccess);
+          this.props.onPress(
+            true,
+            userSuccessResponce.booking.playingAreaName +
+              " : " +
+              userSuccessResponce.booking.courtName
+          );
         }
       })
       .catch((response) => {
