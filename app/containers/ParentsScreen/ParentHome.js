@@ -276,6 +276,8 @@ class ParentHome extends BaseComponent {
   }
 
   componentDidMount() {
+    global.NEW_PLAYER_FLOW = true;
+
     this.didFocusListener = this.props.navigation.addListener(
       "didFocus",
       this.onScreenFocus

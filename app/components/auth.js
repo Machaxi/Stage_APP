@@ -5,7 +5,10 @@ export const USER_KEY = "auth-login-key";
 
 export const onSignIn = () => AsyncStorage.setItem(USER_KEY, "true");
 
-export const onSignOut = () => AsyncStorage.removeItem(USER_KEY);
+export const onSignOut = () => {
+    AsyncStorage.removeItem(USER_KEY) 
+    global.NEW_PLAYER_FLOW = false;
+};
 
 export const isSignedIn = () => {
     return new Promise((resolve, reject) => {

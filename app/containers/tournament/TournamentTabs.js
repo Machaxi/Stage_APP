@@ -79,7 +79,7 @@ class TournamentTabs extends BaseComponent {
   static navigationOptions = ({ navigation }) => {
 
     return {
-      headerTitle: 'Tournament',
+      headerTitle: "Tournament",
       headerTitleStyle: defaultStyle.headerStyle,
 
       headerLeft: (
@@ -87,32 +87,34 @@ class TournamentTabs extends BaseComponent {
           onPress={() => {
             navigation.toggleDrawer();
           }}
-          style={{padding: 7}}
-          activeOpacity={.8}>
+          style={{ padding: 7 }}
+          activeOpacity={0.8}
+        >
           <Image
-            source={require('../../images/hamburger.png')}
+            source={require("../../images/hamburger.png")}
             style={{ width: 20, height: 16, marginLeft: 12 }}
           />
         </TouchableOpacity>
       ),
-      headerRight: (
+      headerRight: global.NEW_PLAYER_FLOW == true ? null : (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('SwitchPlayer')
+            navigation.navigate("SwitchPlayer");
           }}
-          activeOpacity={.8}
+          activeOpacity={0.8}
         >
           <Text
             style={{
               marginRight: 12,
-              fontFamily: 'Quicksand-Regular',
+              fontFamily: "Quicksand-Regular",
               fontSize: 10,
-              color: '#667DDB'
+              color: "#667DDB",
             }}
-          >{navigation.getParam('Title', '')}</Text>
+          >
+            {navigation.getParam("Title", "")}
+          </Text>
         </TouchableOpacity>
-
-      )
+      ),
     };
   };
 
