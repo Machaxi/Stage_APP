@@ -81,6 +81,7 @@ const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
 const [plansResponse, setPlansResponse] = useState(null);
 const [refreshing, setRefreshing] = useState(false);
 const [userDetails, setUserDetails] = useState(null);
+const [playType, setPlayType] = useState(null);
 
 
 var updateRatingError = null;
@@ -187,6 +188,7 @@ const getPlayerDetailsApi = async () => {
             setCreditedPlusRemaining(totalHours);
             setRemainingHrsApiRes(hoursLeft);
             setTotalAvailableHours(totalHoursRemaining)
+            setPlayType(json.data?.plan?.planTerm)
            if(json.data?.plan?.expiryDate != null){
             var startDate = moment(Date());
             var endDate = moment(json.data?.plan?.expiryDate);
@@ -762,6 +764,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
                 : false
             }
             currentPlanPrice={plansResponse?.plan?.price ?? "N/A"}
+            planType={playType ?? ""}
             //planExpired={true}
             totalHrs={creditPlusRemaining}
             // hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}

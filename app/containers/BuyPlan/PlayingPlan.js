@@ -63,6 +63,7 @@ class PlayingPlan extends Component {
 
   componentDidMount() {
     this.getData();
+    this.getSportsList();
     this.setState({
       PlanNumber: this.props.navigation.state.params.selectPlan,
     });
@@ -73,7 +74,6 @@ class PlayingPlan extends Component {
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];
         this.setState({
-          sportsList: academiesData["Sports"],
           academiesList: academiesData["academies"],
         });
       })
@@ -81,6 +81,23 @@ class PlayingPlan extends Component {
         console.log(error);
       });
   }
+
+  getSportsList = () => {
+    axios
+      .get(getBaseUrl() + "/global/sports")
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        console.log(userResponce);
+        let academiesData = userResponce["data"]["data"];
+        this.setState({
+          sportsList: academiesData["sports"],
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   apiCall = () => {
     axios
@@ -174,7 +191,7 @@ class PlayingPlan extends Component {
 
   onComplete = () => {
     if (this.state.playData && this.state.learnData) {
-      this.props.navigation.navigate("LearnHomePage");
+      this.props.navigation.navigate("PlayingMainScreen");
     } else {
       const popAction = StackActions.popToTop();
       this.props.navigation.dispatch(popAction);

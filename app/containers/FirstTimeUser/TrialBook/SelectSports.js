@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  ToastAndroid,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
@@ -25,9 +26,38 @@ class SelectSports extends Component {
 
   render() {
     handlepress = () => {
-      this.props.onPress(
-        this.props.sportList.find((item) => item.id === this.state.currentIndex)
-      );
+      if (this.props.title == "Coaching Trial") {
+        const filteredData = this.props.finishSport.filter(
+          (item) => item.sport.id === this.state.currentIndex
+        );
+
+        if (this.props.parent != "Parent" && this.props.childDetails == null) {
+          this.props.onPress(
+            this.props.sportList.find(
+              (item) => item.id === this.state.currentIndex
+            )
+          );
+        }
+
+        if (!filteredData[0].isPlan && !filteredData[0].isTrialDone) {
+          this.props.onPress(
+            this.props.sportList.find(
+              (item) => item.id === this.state.currentIndex
+            )
+          );
+        } else {
+          ToastAndroid.show(
+            "You already booked trial for this sports.",
+            ToastAndroid.SHORT
+          );
+        }
+      } else {
+        this.props.onPress(
+          this.props.sportList.find(
+            (item) => item.id === this.state.currentIndex
+          )
+        );
+      }
     };
 
     return (

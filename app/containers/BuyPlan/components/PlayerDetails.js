@@ -106,6 +106,7 @@ class PlayerDetails extends Component {
           <View style={styles.contained}>
             <SelectLevel
               index={1}
+              url={false}
               currentLevel={this.state.currentIndex}
               image={require("../../../images/playing/yourself.png")}
               id={1}
@@ -129,6 +130,7 @@ class PlayerDetails extends Component {
               currentLevel={this.state.currentIndex}
               image={require("../../../images/playing/child.png")}
               id={2}
+              url={false}
               name="Child"
               onPress={() => {
                 this.setState({
@@ -140,7 +142,7 @@ class PlayerDetails extends Component {
             />
           </View>
           <Text style={styles.mainText}>Player Details</Text>
-          {this.state.currentIndex == 2 && this.state.related_players && (
+          {this.state.currentIndex == 2 && this.state.related_players && this.state.related_players.length > 0 && (
             <View>
               <Text style={styles.subText}>Select Player</Text>
               <View style={styles.usercontained}>

@@ -25,6 +25,7 @@ import {
   Nunito_Regular,
   Nunito_SemiBold,
 } from "../../util/fonts";
+import { storeData } from "../../../components/auth";
 
 class ConfirmBooking extends Component {
   months = [
@@ -68,9 +69,12 @@ class ConfirmBooking extends Component {
       selectBatch: "",
       username: "",
       gender: "",
+      parent: "",
+      childDetails: null,
       selectLevel: null,
       date: new Date(),
       isLoading: false,
+      userDetails: null,
     };
   }
 
@@ -87,13 +91,8 @@ class ConfirmBooking extends Component {
     const selectBatch = this.props.selectBatch;
     const distance = this.props.distance;
     const selectTime = selectBatch.displayTime;
-    var levelimage = selectLevel.image;
-    var levelname = selectLevel.name;
-
-    if (this.props.title == "Playing") {
-      levelname = selectLevel.displayText;
-      levelimage = selectLevel.url;
-    }
+    const levelname = selectLevel.displayText;
+    const levelimage = selectLevel.url;
 
     this.setState({
       centerName: selectCenter.name,
@@ -108,6 +107,10 @@ class ConfirmBooking extends Component {
       levelName: levelname,
       date: selectDate,
       selectLevel: selectLevel,
+      username: this.props.username,
+      gender: this.props.usergender,
+      parent: this.props.parent,
+      childDetails: this.props.childDetails,
     });
   };
 
@@ -115,12 +118,7 @@ class ConfirmBooking extends Component {
     const header = await AsyncStorage.getItem("header");
     const userDetailsJson = await AsyncStorage.getItem("user_details");
     const userDetails = JSON.parse(userDetailsJson);
-
-    this.setState({
-      header: header,
-      username: userDetails.userName,
-      gender: userDetails.gender,
-    });
+    this.setState({ header: header, userDetails: userDetails });
   };
 
   booktrail = () => {
@@ -142,6 +140,17 @@ class ConfirmBooking extends Component {
     dict["trial_date"] = formattedDate;
     dict["startTime"] = this.state.selectBatch.startTime;
     dict["endTime"] = this.state.selectBatch.endTime;
+    if (this.props.parent == "Parent") {
+      dict["user"] = "" + this.state.userDetails.id;
+    } else {
+      if (this.state.childDetails != null) {
+        dict["user"] = this.state.childDetails.id;
+      } else {
+        dict["player_name"] = this.state.username;
+        dict["gender"] = this.state.gender.toUpperCase();
+        dict["user"] = "" + this.state.userDetails.id;
+      }
+    }
     dataDic["data"] = dict;
     this.props
       .confirmCoachTrail(dataDic, this.state.header, url)
@@ -152,12 +161,31 @@ class ConfirmBooking extends Component {
           let userFailResponce = JSON.parse(userFail);
           this.props.onPress(false, userFailResponce.error_message);
         } else {
-          this.props.onPress(true);
+          this.updataData();
         }
       })
       .catch((response) => {
         this.setState({ isLoading: false });
         console.log(response);
+      });
+  };
+
+  updataData = () => {
+    axios
+      .get(getBaseUrl() + "/login-refreshed", {
+        headers: {
+          "x-authorization": this.state.header,
+        },
+      })
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        storeData("userInfo", JSON.stringify(batchData));
+        this.props.onPress(true);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -199,7 +227,7 @@ class ConfirmBooking extends Component {
   };
 
   render() {
-    listdata = (image, name, width, height, url) => {
+    listdata = (image, name, url) => {
       return (
         <View style={{ alignItems: "center" }}>
           <LinearGradient
@@ -209,13 +237,15 @@ class ConfirmBooking extends Component {
           >
             {url ? (
               <Image
-                style={[styles.imaged, { width: width, height: height }]}
+                style={styles.imaged}
                 source={{ uri: image }}
+                resizeMode="contain"
               />
             ) : (
               <Image
-                style={[styles.imaged, { width: width, height: height }]}
+                style={styles.imaged}
                 source={image}
+                resizeMode="contain"
               />
             )}
           </LinearGradient>
@@ -281,31 +311,15 @@ class ConfirmBooking extends Component {
                 ? listdata(
                     require("../../../images/playing/coach.png"),
                     "Coaching",
-                    35,
-                    52,
                     false
                   )
                 : listdata(
                     require("../../../images/playing/play.png"),
                     "Playing",
-                    35,
-                    52,
                     false
                   )}
-              {listdata(
-                this.state.sportImage,
-                this.state.sportName,
-                40,
-                40,
-                true
-              )}
-              {listdata(
-                this.state.levelImage,
-                this.state.levelName,
-                35,
-                52,
-                this.props.title == "Playing"
-              )}
+              {listdata(this.state.sportImage, this.state.sportName, true)}
+              {listdata(this.state.levelImage, this.state.levelName, true)}
             </View>
             <View
               style={{
@@ -337,8 +351,6 @@ class ConfirmBooking extends Component {
               {listdata(
                 require("../../../images/playing/clock.png"),
                 this.state.time,
-                36,
-                31,
                 false
               )}
 
@@ -441,8 +453,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   imaged: {
-    width: 29,
-    height: 35,
+    width: 32,
+    height: 50,
   },
   title: {
     fontSize: 14,

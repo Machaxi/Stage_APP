@@ -36,11 +36,19 @@ const SelectLevel = (props) => {
         ]}
       >
         <View style={styles.imaged}>
-          <Image
-            source={props.image}
-            style={[styles.imageitem]}
-            resizeMode="contain"
-          />
+          {props.url ? (
+            <Image
+              source={{ uri: props.image }}
+              style={[styles.imageitem]}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              source={props.image}
+              style={[styles.imageitem]}
+              resizeMode="contain"
+            />
+          )}
         </View>
       </LinearGradient>
       <Text

@@ -115,8 +115,6 @@ import ShopTabRoute from "./ShopTabRoute";
 import TabbarItem from "./TabbarItem";
 import { white } from "../containers/util/colors";
 import ShopPage from "../containers/ExsitingUser/ShopPage";
-import LearnPage from "../containers/ExsitingUser/LearnPage";
-import NavigationDrawerWhite from "./NavigationDrawerWhite";
 import LearnBookTrial from "../containers/FirstTimeUser/LearnBookTrial";
 import CoachingPlan from "../containers/BuyPlan/CoachingPlan";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
@@ -124,7 +122,6 @@ import ParentHome from "../containers/ParentsScreen/ParentHome";
 import { Nunito_Bold } from "../containers/util/fonts";
 import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import NotificationsScreen from "../containers/notification/NotificationsScreen";
-import GoBackHeader from "../components/molecules/goBackHeader";
 import BookSlotScreen from "../containers/play/BookSlotScreen";
 import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
 
@@ -2503,6 +2500,78 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  WebViewScreen: {
+    screen: WebViewScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "About Us",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  ContactUs: {
+    screen: ContactUs,
+    navigationOptions: ({ navigation }) => ({
+      title: "Contact Us",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  FaqScreen: {
+    screen: FaqScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "FAQ",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
 });
 
 const tabBarControllerLearn = createBottomTabNavigator({
@@ -2525,7 +2594,7 @@ const tabBarControllerLearn = createBottomTabNavigator({
       ),
     },
   },
-  Batch: {
+  PlayingMainScreen: {
     screen: PlayRoute,
     navigationOptions: {
       tabBarLabel: "Play",
@@ -2775,65 +2844,6 @@ const HomeDrawer = createDrawerNavigator(
   }
 );
 
-const tabBarMainScreen = createBottomTabNavigator(
-  {
-    CoachScreen: {
-      screen: LearnPage,
-      navigationOptions: {
-        tabBarLabel: "Learn",
-        tabBarLabel: ({ focused }) => (
-          <TabBarHighlightLabel
-            label="Learn"
-            focused={focused}
-            activeIcon={
-              focused
-                ? require("../images/learn_highlight.png")
-                : require("../images/learn.png")
-            }
-          />
-        ),
-      },
-    },
-    PlayScreen: {
-      screen: PlayRoute,
-      navigationOptions: {
-        tabBarLabel: "Play",
-        tabBarLabel: ({ focused }) => (
-          <TabBarHighlightLabel
-            label="Play"
-            focused={focused}
-            activeIcon={
-              focused
-                ? require("../images/play_highlight.png")
-                : require("../images/play.png")
-            }
-          />
-        ),
-      },
-    },
-    ShopScreen: {
-      screen: ShopPage,
-      navigationOptions: {
-        tabBarLabel: "Shop",
-        tabBarLabel: ({ focused }) => (
-          <TabBarHighlightLabel
-            label="Shop"
-            focused={focused}
-            activeIcon={require("../images/shop.png")}
-          />
-        ),
-      },
-    },
-  }
-  // ,{
-  //   tabBarOptions: {
-  //     style: {
-  //       backgroundColor: 'rgba(25, 15, 47, 0.8)', // set the background color of the tab bar
-  //     },
-  //   },
-  // }
-);
-
 const TournamentRegistration = createStackNavigator({
   Registration: {
     screen: Registration,
@@ -2986,9 +2996,6 @@ const BaseNavigator = createSwitchNavigator({
   ShopPage: {
     screen: ShopPage,
   },
-  LearnPage: {
-    screen: LearnPage,
-  },
   PlayerScreen: {
     screen: PlayerScreen,
   },
@@ -3012,9 +3019,6 @@ const BaseNavigator = createSwitchNavigator({
   },
   LearnBookTrial: {
     screen: LearnBookTrial,
-  },
-  tabBarMainScreen: {
-    screen: tabBarMainScreen,
   },
   TrialBook: {
     screen: TrialBook,

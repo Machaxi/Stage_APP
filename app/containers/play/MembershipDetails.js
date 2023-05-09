@@ -32,6 +32,7 @@ export const MembershipDetails = ({
   hoursLeft,
   planExpired,
   currentPlanPrice,
+  planType
 }) => {
   var totalHoursVal =
     typeof totalHrs == undefined || totalHrs == null || totalHrs == 0
@@ -40,6 +41,11 @@ export const MembershipDetails = ({
   var hoursLeftVal =
     typeof hoursLeft == undefined || hoursLeft == null ? 0 : hoursLeft;
 
+  const allCapsToFirstLetterCaps = (str) => {
+    return str.toLowerCase().charAt(0).toUpperCase() + str.substring(1).toLowerCase();
+  }
+  
+  var plantypestring = allCapsToFirstLetterCaps(planType);
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -184,7 +190,7 @@ export const MembershipDetails = ({
               </View>
               <View style={{ marginLeft: 24 }}>
                 <Text style={styles.monthlyMembershipText}>
-                  Monthly Membership
+                  {plantypestring} Membership
                 </Text>
                 <GradientLine
                   marginBottom={12}

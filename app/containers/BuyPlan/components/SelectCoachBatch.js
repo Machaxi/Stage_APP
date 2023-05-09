@@ -16,24 +16,6 @@ import SelectLevel from "../../../components/custom/SelectLevel";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
-const data = [
-  {
-    id: 1,
-    image: require("../../../images/playing/beginner.png"),
-    name: "Beginner",
-  },
-  {
-    id: 2,
-    image: require("../../../images/playing/intermediate.png"),
-    name: "Intermediate",
-  },
-  {
-    id: 3,
-    image: require("../../../images/playing/advance.png"),
-    name: "Advance",
-  },
-];
-
 class SelectCoachBatch extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +29,7 @@ class SelectCoachBatch extends Component {
       batchData: null,
       morningData: null,
       eveningData: null,
+      playerLevel: null,
     };
   }
 
@@ -72,8 +55,9 @@ class SelectCoachBatch extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"]["batch_details"];
+        let playerLevel = userResponce["data"]["data"]["playerLevel"];
         console.log(response);
-        this.setState({ batchData: batchData });
+        this.setState({ batchData: batchData, playerLevel: playerLevel });
       })
       .catch((error) => {
         console.log(error);
@@ -108,7 +92,7 @@ class SelectCoachBatch extends Component {
     console.log(this.state.batchData);
     for (let i = 0; i < this.state.batchData.length; i++) {
       if (
-        data[level].name.toLowerCase() ==
+        this.state.playerLevel[level].name.toLowerCase() ==
         this.state.batchData[i].proficiency_display_text.toLowerCase()
       ) {
         const startHour = parseInt(
@@ -127,7 +111,7 @@ class SelectCoachBatch extends Component {
   };
 
   handlepress = () => {
-    let selectLevel = data[this.state.currentLevel];
+    let selectLevel = this.state.playerLevel[this.state.currentLevel];
     let selectTime = this.state.batchData.find(
       (item) => item.batch_id == this.state.selectTime
     );
@@ -135,7 +119,7 @@ class SelectCoachBatch extends Component {
     this.state.batchData.forEach((PlanAvailability) => {
       if (
         PlanAvailability.displayTime == selectTime.displayTime &&
-        selectLevel.name == PlanAvailability.proficiency_display_text &&
+        selectLevel.name == PlanAvailability.proficiency &&
         PlanAvailability.is_allowed
       ) {
         selectBatch.push(PlanAvailability);
@@ -220,13 +204,14 @@ class SelectCoachBatch extends Component {
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>
-            {data.map((item, index) => (
+            {this.state.playerLevel.map((item, index) => (
               <SelectLevel
                 index={index}
                 currentLevel={this.state.currentLevel}
-                image={item.image}
+                image={item.url}
                 id={item.id}
-                name={item.name}
+                url={true}
+                name={item.displayText}
                 onPress={() => {
                   this.setState({ currentLevel: index, proseedLevel: true });
                   this.getTimeData(index);

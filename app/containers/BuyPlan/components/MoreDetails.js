@@ -18,27 +18,6 @@ import { selectPreferredSports } from "../../../redux/reducers/PlayerReducer";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const data = [
-  {
-    id: 1,
-    image: require("../../../images/playing/beginner.png"),
-    displayText: "Beginner",
-    name: "BASIC",
-  },
-  {
-    id: 2,
-    image: require("../../../images/playing/intermediate.png"),
-    displayText: "Intermediate",
-    name: "INTERMEDIATE",
-  },
-  {
-    id: 3,
-    image: require("../../../images/playing/advance.png"),
-    displayText: "Advance",
-    name: "ADVANCED",
-  },
-];
-
 class MoreDetails extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +28,7 @@ class MoreDetails extends Component {
       selectsports: true,
       selectLevel: false,
       header: null,
+      levelData: [],
     };
   }
 
@@ -76,9 +56,18 @@ class MoreDetails extends Component {
               activeOpacity={0.8}
               key={item.id}
               style={[styles.subview]}
-              onPress={() =>
-                this.setState({ currentIndex: item.id, proseednext: true })
-              }
+              onPress={() => {
+                const sport = this.props.sportList.find(
+                  (items) => items.id === item.id
+                );
+                const { proficiencies } = sport;
+                console.log(proficiencies);
+                this.setState({
+                  currentIndex: item.id,
+                  proseednext: true,
+                  levelData: proficiencies,
+                });
+              }}
             >
               <LinearGradient
                 colors={["rgba(255, 255, 255, 0.1)", "rgba(118, 87, 136, 0)"]}
@@ -122,18 +111,21 @@ class MoreDetails extends Component {
       <View>
         <GetBack title="Back" onPress={this.hadleBackPress} />
         <Text style={styles.mainText}>Select player Level</Text>
-        <View style={styles.contained}>
-          {data.map((item, index) => (
-            <SelectLevel
-              index={index}
-              currentLevel={this.state.currentLevel}
-              image={item.image}
-              id={item.id}
-              name={item.displayText}
-              onPress={() => {
-                this.setState({ currentLevel: index, proseednext: true });
-              }}
-            />
+        <View style={styles.levelContained}>
+          {this.state.levelData.map((item, index) => (
+            <View style={{ marginRight: 15 }}>
+              <SelectLevel
+                index={index}
+                currentLevel={this.state.currentLevel}
+                image={item.url}
+                id={item.id}
+                url={true}
+                name={item.displayText}
+                onPress={() => {
+                  this.setState({ currentLevel: index, proseednext: true });
+                }}
+              />
+            </View>
           ))}
         </View>
       </View>
@@ -149,9 +141,9 @@ class MoreDetails extends Component {
           proseednext: false,
         });
       } else {
-        console.log(this.state.header);
+        console.log(this.state.levelData);
         const sportsId = this.state.currentIndex;
-        const level = data[this.state.currentLevel].name;
+        const level = this.state.levelData[this.state.currentLevel].name;
         const subId = this.props.subscriptionId;
         var dataDic = {};
         var dict = {};
@@ -198,6 +190,12 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-between",
+    marginHorizontal: 10,
+  },
+  levelContained: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
     marginHorizontal: 10,
   },
   contain: {

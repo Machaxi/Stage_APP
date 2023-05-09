@@ -7,7 +7,7 @@ import {
   Image,
   ScrollView,
   Dimensions,
-  ImageBackground, 
+  ImageBackground,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CoachPass from "../../components/custom/CoachPass";
@@ -39,7 +39,10 @@ class CoachScreen extends Component {
 
   componentDidMount() {
     this.getValue();
-    this.didFocusListener = this.props.navigation.addListener("didFocus", this.onScreenFocus);
+    this.didFocusListener = this.props.navigation.addListener(
+      "didFocus",
+      this.onScreenFocus
+    );
   }
 
   onScreenFocus = () => {
@@ -82,8 +85,22 @@ class CoachScreen extends Component {
     this.setState({ currentImage: newImage });
   };
 
-  render() {
+  ifAlltrue = () => {
+    const allTrialDone = this.state.learnData.sport_trial_details.every(
+      (item) => item.isTrialDone === true
+    );
+    console.log(allTrialDone);
+    return allTrialDone;
+  };
 
+  ifOneTrue = () => {
+    const hasTrialDone = this.state.learnData.sport_trial_details.some(
+      (item) => item.isTrialDone
+    );
+    return hasTrialDone;
+  };
+
+  render() {
     if (this.state.learnData == null) {
       return <LoadingIndicator />;
     }
@@ -184,22 +201,40 @@ class CoachScreen extends Component {
           end={{ x: 1, y: 0.5 }}
           style={styles.bottomcontainer}
         >
-          {this.state.learnData.is_trial_display_required ? (
-            <View
-              style={{ width: "100%", alignItems: "center", paddingTop: 8 }}
-            >
-              <CustomButton
-                name="Book Free Trial"
-                available={true}
-                onPress={this.props.onPressTrail}
-              />
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={this.props.onPressPlan}
+          {this.ifAlltrue ? (
+            this.ifOneTrue ? (
+              <View
+                style={{ width: "100%", alignItems: "center", paddingTop: 8 }}
               >
-                <Text style={styles.insideText}>Or Buy Coaching plan</Text>
-              </TouchableOpacity>
-            </View>
+                <CustomButton
+                  name="Book Free Trial"
+                  available={true}
+                  onPress={this.props.onPressTrail}
+                />
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={this.props.onPressPlan}
+                >
+                  <Text style={styles.insideText}>Or Buy Coaching plan</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View
+                style={{ width: "100%", alignItems: "center", paddingTop: 8 }}
+              >
+                <CustomButton
+                  name="Buy Coaching plan"
+                  available={true}
+                  onPress={this.props.onPressPlan}
+                />
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={this.props.onPressTrail}
+                >
+                  <Text style={styles.insideText}>Or Book Free Trial</Text>
+                </TouchableOpacity>
+              </View>
+            )
           ) : (
             <View style={{ width: "100%" }}>
               <CustomButton

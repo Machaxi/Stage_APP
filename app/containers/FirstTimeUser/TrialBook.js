@@ -13,6 +13,10 @@ import { darkBlueVariant } from "../util/colors";
 import CongratulationScreen from "./TrialBook/CongratulationScreen";
 import SorryScreen from "./TrialBook/SorryScreen";
 import GetBack from "../../components/custom/GetBack";
+import { getPlayerSWitcher } from "../../redux/reducers/dashboardReducer";
+import { connect } from "react-redux";
+import { getData } from "../../components/auth";
+import PlayerDetails from "../BuyPlan/components/PlayerDetails";
 
 class TrialBook extends Component {
   constructor(props) {
@@ -31,7 +35,14 @@ class TrialBook extends Component {
       congratulationScreen: false,
       distance: 0,
       alreadyBook: false,
+      finishSport: null,
+      firstPage: true,
       errorMessage: "We could not book your free trial, please try again.",
+      username: "",
+      usergender: "",
+      parent: "",
+      childDetails: null,
+      playerDetails: null,
     };
   }
 
@@ -41,6 +52,8 @@ class TrialBook extends Component {
       this.setState({ title: select_trial });
     };
     getValue();
+    this.getusermainInfo();
+    this.getUserplayData();
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
@@ -56,6 +69,31 @@ class TrialBook extends Component {
         console.log(error);
       });
   }
+
+  getUserplayData = () => {
+    getData("header", (value) => {
+      console.log("header", value);
+      this.props.getPlayerSWitcher(value).then(() => {
+        let user = JSON.stringify(this.props.switcherData.switherlist);
+        let user1 = JSON.parse(user);
+        console.log("Test" + user);
+        if (user1.success == true) {
+          this.setState({
+            playerDetails: user1.data.players[0],
+          });
+        }
+      });
+    });
+  };
+
+  getusermainInfo = () => {
+    getData("userInfo", (value) => {
+      userData = JSON.parse(value);
+      this.setState({
+        finishSport: userData.sport_trial_details,
+      });
+    });
+  };
 
   hadleBack = () => {
     this.props.navigation.goBack();
@@ -102,8 +140,28 @@ class TrialBook extends Component {
     if (this.state.currentPage > 1) {
       this.setState({ currentPage: this.state.currentPage - 1 });
     } else {
-      this.props.navigation.goBack();
+      this.setState({ firstPage: true });
     }
+  };
+
+  onPressDetails = (username, usergender, parent, childDetails) => {
+    const playerInfo = this.state.finishSport;
+    console.log(childDetails);
+    if (childDetails != null) {
+      playerInfo = this.props.playerDetails.find(
+        (item) => item.name === childDetails.name
+      );
+      console.log(playerInfo);
+    }
+    this.setState({
+      firstPage: false,
+      currentPage: 1,
+      username: username,
+      usergender: usergender,
+      parent: parent,
+      childDetails: childDetails,
+      finishSport: playerInfo,
+    });
   };
 
   selectScreen = () => {
@@ -128,9 +186,16 @@ class TrialBook extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
+        {this.state.firstPage && (
+          <View style={{ flex: 1 }}>
+            <GetBack title="Coaching Trial" onPress={this.hadleBack} />
+            <PlayerDetails onPress={this.onPressDetails} />
+          </View>
+        )}
         {this.state.congratulationScreen && this.state.alreadyBook && (
           <CongratulationScreen
             title="Coaching Trial"
+            username={this.state.username}
             selectCenter={this.state.selectCenter}
             selectSport={this.state.selectSport}
             selectDate={this.state.selectDate}
@@ -146,7 +211,7 @@ class TrialBook extends Component {
             errorMessage={this.state.errorMessage}
           />
         )}
-        {!this.state.congratulationScreen && (
+        {!this.state.congratulationScreen && !this.state.firstPage && (
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -154,10 +219,15 @@ class TrialBook extends Component {
             <View style={{ flex: 0.17 }}>{true && this.selectScreen()}</View>
             <View style={{ flex: 0.83 }}>
               {this.state.sportsList != null &&
+                this.state.finishSport != null &&
                 this.state.currentPage === 1 && (
                   <SelectSports
                     onPress={this.onPressSports}
                     sportList={this.state.sportsList}
+                    parent={this.state.parent}
+                    childDetails={this.state.childDetails}
+                    finishSport={this.state.finishSport}
+                    title="Coaching Trial"
                   />
                 )}
               {this.state.currentPage === 2 && (
@@ -183,6 +253,10 @@ class TrialBook extends Component {
                   selectLevel={this.state.selectLevel}
                   selectBatch={this.state.selectTime}
                   distance={this.state.distance}
+                  username={this.state.username}
+                  usergender={this.state.usergender}
+                  parent={this.state.parent}
+                  childDetails={this.state.childDetails}
                   onPress={this.onPressConfirm}
                 />
               )}
@@ -201,4 +275,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrialBook;
+const mapStateToProps = (state) => {
+  return {
+    switcherData: state.SwitchReducer,
+  };
+};
+
+const mapDispatchToProps = { getPlayerSWitcher };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TrialBook);

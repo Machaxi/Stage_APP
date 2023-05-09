@@ -24,7 +24,7 @@ const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
         textStyle={{ padding: 10, fontSize: 16, color: "white" }}
         dropdownStyle={{
           width: "75%",
-          height: 135,
+          height: data.length * 45,
           borderRadius: 10,
           borderColor: "#FCB550",
           backgroundColor: "rgba(94, 94, 94, 1)",

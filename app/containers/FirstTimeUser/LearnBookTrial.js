@@ -18,6 +18,7 @@ import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { KeyboardAvoidingView } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 class LearnBookTrial extends Component {
   constructor(props) {
@@ -37,10 +38,13 @@ class LearnBookTrial extends Component {
       distance: 0,
       alreadyBook: false,
       errorMessage: "We could not book your free trial, please try again.",
+      username: "",
+      gender: "",
     };
   }
 
   componentDidMount() {
+    this.getUserData();
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
@@ -56,6 +60,15 @@ class LearnBookTrial extends Component {
         console.log(error);
       });
   }
+
+  getUserData = async () => {
+    const userDetailsJson = await AsyncStorage.getItem("user_details");
+    const userDetails = JSON.parse(userDetailsJson);
+    this.setState({
+      username: userDetails.userName,
+      gender: userDetails.gender,
+    });
+  };
 
   onPress = (value, number) => {
     if (value < number) {
@@ -159,6 +172,7 @@ class LearnBookTrial extends Component {
                   <SelectSports
                     onPress={this.onPressSports}
                     sportList={this.state.sportsList}
+                    title="Playing Trial"
                   />
                 )}
               {this.state.currentPage === 2 && (
@@ -184,6 +198,8 @@ class LearnBookTrial extends Component {
                   selectLevel={this.state.selectLevel}
                   selectBatch={this.state.selectTime}
                   distance={this.state.distance}
+                  username={this.state.username}
+                  usergender={this.state.gender}
                   onPress={this.onPressConfirm}
                 />
               )}

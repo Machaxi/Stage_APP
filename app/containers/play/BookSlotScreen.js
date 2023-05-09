@@ -30,7 +30,7 @@ import UserSelectionForSlot from "../../components/molecules/userSelectionForSlo
 import SlotBookedModal from "../../components/molecules/slotBookedModal";
 import AddUserModal from "../../components/molecules/addGuestUserModal";
 import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
-import Axios from "axios";
+import axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
 import SelectSports from "../../components/custom/SelectSports";
 import SelectSportsBookSlot from "../../components/molecules/selectSportsBookSlot";
@@ -58,6 +58,8 @@ const BookSlotScreen = ({ navigation }) => {
   const [showProficiencyMenu, setProficiencyVisibility] = useState(false);
   const [loading, setLoading] = useState(true);
   const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
+  const [sportsList, setSportsList] = useState(null);
+  const [bookdata, setBookdata] = useState([])
 
   const getUserPlanAndSportsData = async () => {
     setLoading(true);
@@ -107,7 +109,23 @@ const BookSlotScreen = ({ navigation }) => {
           console.log(error);
         });
     });
+    
   };
+
+  const getSports = () => {
+    axios
+    .get(getBaseUrl() + "/global/sports")
+    .then((response) => {
+      let data = JSON.stringify(response);
+      let userResponce = JSON.parse(data);
+      console.log(userResponce);
+      let academiesData = userResponce["data"]["data"];
+      setSportsList(academiesData["sports"])
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -131,6 +149,7 @@ const BookSlotScreen = ({ navigation }) => {
   const onRefresh = () => {
     setRefreshing(true);
     getUserPlanAndSportsData();
+    getSports();
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
       setRefreshing(false);
@@ -154,6 +173,7 @@ const BookSlotScreen = ({ navigation }) => {
 
     //getSlotDataApi();
     getUserPlanAndSportsData();
+    getSports();
     return () => {
       refreshEvent.remove();
       refreshEventCallNotif.remove();
@@ -211,11 +231,20 @@ const BookSlotScreen = ({ navigation }) => {
         >
           <GoBackHeader navigation={navigation} title={"Book Slot"} />
           <View style={{ paddingHorizontal: 18, marginBottom: 20 }}>
-            {planAndSportsApiRes?.sports?.length > 0 ? (
+            {sportsList.length > 0 ? (
               <SelectSportsBookSlot
                 selectedSportsId={selectedSportsId}
-                sportsList={planAndSportsApiRes?.sports}
-                setSelectedSportsIdVal={(id) => setSportsId(id)}
+                sportsList={sportsList}
+                setSelectedSportsIdVal={(id) => {
+                  setSportsId(id);
+                  const sport = sportsList.find(item => item.id === id);
+                  const { playingAreaName, allowEntireCourtBooking } = sport;
+                  if (allowEntireCourtBooking) {
+                    setBookdata(["Yourself", "Entire " + playingAreaName, "Coming with Guest"]);
+                  }else {
+                    setBookdata(["Yourself", "Coming with Guest"]);
+                  }
+                }}
               />
             ) : null}
             {showProficiencyMenu == true && selectedSportsId != null ? (
@@ -236,7 +265,7 @@ const BookSlotScreen = ({ navigation }) => {
               // { label: "Yourself", value: "yourself" },
               // { label: "Entire Court", value: "entire_court" },
               // { label: "Coming with Guest", value: "with_guest" },
-              data={["Yourself", "Entire Court", "Coming with Guest"]}
+              data={bookdata}
               label={"Select user"}
               setUserVal={(val) => {
                 if (val == "Coming with Guest") {

@@ -63,8 +63,10 @@ class CongratulationScreen extends Component {
   handleopen = async () => {
     const userDetailsJson = await AsyncStorage.getItem("user_details");
     const userDetails = JSON.parse(userDetailsJson);
-
-    const username = userDetails.userName;
+    var username = userDetails.userName;
+    if (this.props.title == "Coaching Trial") {
+      username = this.props.username;
+    }
     const selectCenter = this.props.selectCenter;
     const selectSport = this.props.selectSport;
     const selectDate = this.props.selectDate;

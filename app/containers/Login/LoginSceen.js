@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../components/custom/CustomButton";
@@ -43,7 +44,7 @@ class LoginSceen extends Component {
       gender: "Select Gender",
       confirm: null,
       prosedenext: false,
-      timeRemaining: 120,
+      timeRemaining: 30,
       code: "",
       isLoading: false,
       loginsuccess: false,
@@ -111,9 +112,11 @@ class LoginSceen extends Component {
     auth()
       .signInWithPhoneNumber("+91" + this.state.phoneNumber)
       .then((confirmResult) => {
+        console.log("OTP ");
+        console.log(confirmResult);
         this.setState({
           confirm: confirmResult,
-          timeRemaining: 120,
+          timeRemaining: 30,
           isLoading: false,
           displayImage: require("../../images/otp_user.png"),
           displayTop: -200,
@@ -128,14 +131,31 @@ class LoginSceen extends Component {
   };
 
   handleResendOTP = async () => {
-    try {
-      await auth().verifyPhoneNumber("+91" + this.state.phoneNumber, true);
-      console.log("OTP resent successfully");
-      ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
-      this.setState({ timeRemaining: 120 });
-    } catch (error) {
-      console.log(error);
-    }
+    let verificationId;
+    auth()
+      .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
+      .then((id) => {
+        verificationId = id;
+        return auth().signInWithPhoneNumber(verificationId);
+      })
+      .then((confirmResult) => {
+        this.setState({ confirm: confirmResult, timeRemaining: 30 });
+        console.log(confirmResult);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // auth()
+    //   .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
+    //   .then((confirmResult) => {
+    //     console.log("OTP resent successfully");
+    //     console.log(confirmResult);
+    //     ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
+    //     this.setState({ timeRemaining: 30 });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   confirmCode = () => {
@@ -498,7 +518,9 @@ class LoginSceen extends Component {
         </View>
         <View style={{ marginTop: -20 }}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={[styles.subtext, {color: "#E2E2E2"}]}>Enter OTP in </Text>
+            <Text style={[styles.subtext, { color: "#E2E2E2" }]}>
+              Enter OTP in{" "}
+            </Text>
             {this.state.timeRemaining > 0 ? (
               <Text style={[styles.subtext, { color: "#F2AE4D" }]}>
                 {`${minutes
@@ -529,16 +551,15 @@ class LoginSceen extends Component {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={[styles.otpsubtext, { width: 200 }]}>
-             {" "}
-            </Text>
+            <Text style={[styles.otpsubtext, { width: 200 }]}> </Text>
             <TouchableOpacity
-              disabled={this.state.timeRemaining > 0}
+              // disabled={this.state.timeRemaining > 0}
               onPress={this.handleResendOTP}
             >
               <Text
                 style={[
-                  styles.subtext, {color: "#BFBFBF"},
+                  styles.subtext,
+                  { color: "#BFBFBF" },
                   this.state.timeRemaining < 1 && { color: "#426DEE" },
                 ]}
               >
@@ -557,7 +578,9 @@ class LoginSceen extends Component {
         </View>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Text style={styles.otpsubtext}>Unable to Sign up | </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("mailto:hello@machaxi.com")}
+          >
             <Text style={[styles.subtext, { color: "#426DEE" }]}>
               {"  "}Contact us
             </Text>

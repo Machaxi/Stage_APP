@@ -79,6 +79,9 @@ class PlayerSwitcher extends BaseComponent {
                     this.setState({
                         itemList: user1.data['players']
                     })
+                  if (user1.data['players'].length == 0) {
+                    this.props.navigation.navigate('HomeDrawer');
+                  }
                 }
 
             }).catch((response) => {
@@ -105,6 +108,9 @@ class PlayerSwitcher extends BaseComponent {
                     this.setState({
                         itemList: user1.data['academies']
                     })
+                }
+                if (user1.data['academies'].length == 0) {
+                  this.props.navigation.navigate('HomeDrawer');
                 }
 
             }).catch((response) => {

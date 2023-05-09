@@ -18,29 +18,6 @@ import SelectSports from "../../../components/custom/SelectSports";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
-const data = [
-  {
-    id: 1,
-    image: require("../../../images/playing/beginner.png"),
-    name: "Basic",
-  },
-  {
-    id: 2,
-    image: require("../../../images/playing/intermediate.png"),
-    name: "Intermediate",
-  },
-  {
-    id: 3,
-    image: require("../../../images/playing/advance.png"),
-    name: "Advance",
-  },
-  {
-    id: 4,
-    image: require("../../../images/playing/professional.png"),
-    name: "Professional",
-  },
-];
-
 const months = [
   "Jan",
   "Feb",
@@ -88,6 +65,7 @@ class SelectBatch extends Component {
       batchData: null,
       morningData: null,
       eveningData: null,
+      levelData: [],
     };
   }
 
@@ -113,7 +91,8 @@ class SelectBatch extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"]["batch_details"];
-        this.setState({ batchData: batchData });
+        let levelData = userResponce["data"]["data"]["playerLevel"];
+        this.setState({ batchData: batchData, levelData: levelData });
       })
       .catch((error) => {
         console.log(error);
@@ -132,7 +111,7 @@ class SelectBatch extends Component {
     for (let i = 0; i < this.state.batchData.length; i++) {
       if (
         level < 5 &&
-        data[level].name.toLowerCase() ==
+        this.state.levelData[level].name.toLowerCase() ==
           this.state.batchData[i].proficiency.toLowerCase() &&
         dates &&
         dates.getDay() in this.state.batchData[i].weekDetails
@@ -253,7 +232,7 @@ class SelectBatch extends Component {
       if (this.state.currentDate > 1) {
         selectDate = nextDate;
       }
-      let selectLevel = data[this.state.currentLevel];
+      let selectLevel = this.state.levelData[this.state.currentLevel];
       let selectBatch = this.state.batchData.find(
         (item) => item.batch_id == this.state.selectTime
       );
@@ -270,7 +249,7 @@ class SelectBatch extends Component {
           <Text style={styles.mainText}>Select preferred Batch</Text>
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>
-            {data.map((item, index) => (
+            {this.state.levelData.map((item, index) => (
               <TouchableOpacity
                 activeOpacity={0.8}
                 key={index}
@@ -301,15 +280,13 @@ class SelectBatch extends Component {
                 >
                   <View style={styles.imaged}>
                     <Image
-                      source={item.image}
-                      style={[
-                        styles.imageitem,
-                        item.id == "4" && { width: 45 },
-                      ]}
+                      source={{ uri: item.url }}
+                      style={styles.imageitem}
+                      resizeMode="contain"
                     />
                   </View>
                 </LinearGradient>
-                <Text style={styles.sportText}>{item.name}</Text>
+                <Text style={styles.sportText}>{item.displayText}</Text>
               </TouchableOpacity>
             ))}
           </View>
