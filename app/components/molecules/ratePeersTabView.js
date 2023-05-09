@@ -10,28 +10,25 @@ import { getProficiencyName } from "../../containers/util/utilFunctions";
 // import ProgressCircle from 'react-native-progress-circle';
 
 export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRating }) => {
-
-
-
          var selectedSportRelatedRating = null;
          var selectedPeers = []
+        
          if (ratingData?.length > 0)
            ratingData.map((val) => {
              if (val?.isSelected) {
                selectedSportRelatedRating = val;
                for (var i = 0; i < val?.players?.length; i++) {
                  if (userId != val?.players[i]?.id) {
-                   selectedPeers.add(val?.players[i]);
+                   selectedPeers.push(val?.players[i]);
                  }
                }
              }
            });
-         console.log(' peers -')
-         console.log({ selectedSportRelatedRating });
-
+       
          const renderItems = ({ item }) => {
           
            var playerItem = item;
+        
            return (
              <View>
                <View
@@ -70,7 +67,7 @@ export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRa
                            playerItem.peerRating != null &&
                            playerItem.peerRating != "" && item?.proficiency == playerItem?.peerRating
                              ? //item.isSelected == false
-                             item?.colors :  
+                             item?.colors :
                               ["#ffffff11", "#ffffff03"]
                              
                          }

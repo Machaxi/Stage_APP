@@ -522,32 +522,34 @@ const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequ
             if(!isPeerTypeRequest){
               setUserProficiency(selectedSelfRating?.proficiency);
             }
-            
-            // if(!isPeerTypeRequest){
-            //   setUserProficiency(
-            //     playerDetailsResponse?.rating[
-            //       i
-            //     ]?.self
-            //   );
-            // }
-            //TODO:
-            // if (!isPeerTypeRequest){ 
-            //   getPlayerDetailsApi();
-            // }
+        
             if(isPeerTypeRequest){
-              var previousProfData;
-              for(var i= 0; i< proficiencyData?.length; i++){
-                if(proficiencyData[i].level == ratingInfo.level){
-                  previousProfData[i] = proficiencyData[i];
-                  previousProfData[i].isSelected = true;
+              var previousPeerSportsData = [];
+              if(peerSportsList?.length > 0){
+                previousPeerSportsData = JSON.parse(
+                  JSON.stringify(peerSportsList)
+                );
+                for(var i = 0; i< peerSportsList.length; i++){
+                  if(peerSportsList[i]?.sport?.id ==selectedPeerRating?.sport?.id){
+                    var players = peerSportsList[i]?.players ?? [];
+                    if(players?.length > 0){
+                      for(var j=0; j < players.length; j++){
+                        if (
+                          players[j]?.id ==
+                          playerInfo?.id
+                        ){
+                          previousPeerSportsData[
+                            i
+                          ].players[j].peerRating =
+                            ratingInfo?.proficiency;
+                        }
+                      }
+                    }
+                  }
                 }
+                setPeerSportsList(previousPeerSportsData);
               }
-              // previousProfData = proficiencyData.map((val)=>{
-              //   if(val.level == ratingInfo.level){
-              //     val?.isSelected = true;
-              //   }
-              // })
-              setProficiencyData(previousProfData)
+             
             }
             if(!isPeerTypeRequest){
               var sportsDataCopy = [...sportsList];
