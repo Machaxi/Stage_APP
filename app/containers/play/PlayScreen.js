@@ -61,6 +61,7 @@ const [sportsList, setSportsList] = useState([]);
 const [peerSportsList,setPeerSportsList]=useState([]);
 const [nextSession, setNextSessionData] = useState([]);
 const [totalAvailableHours, setTotalAvailableHours] = useState(0);
+const [remainingHrsApiRes, setRemainingHrsApiRes] = useState(0);
 const [creditPlusRemaining, setCreditedPlusRemaining] = useState(0);
 const [cancelBookingId, setCancelBookingId] = useState(null);
 const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState('');
@@ -184,6 +185,7 @@ const getPlayerDetailsApi = async () => {
            var totalHoursRemaining = hoursLeft + oldRemainingHours;
            var totalHours = oldRemainingHours + creditedHours;
             setCreditedPlusRemaining(totalHours);
+            setRemainingHrsApiRes(hoursLeft);
             setTotalAvailableHours(totalHoursRemaining)
            if(json.data?.plan?.expiryDate != null){
             var startDate = moment(Date());
@@ -337,10 +339,31 @@ const getPlansDataApi = async (planId, preferredAcademyId) => {
   });
 };
 
+const addCanceledHoursBack = (slotStartTime, slotEndTime) => {
+  var finalDifference = 0;
+  
+  if (slotStartTime != null && slotEndTime != null) {
+    var randomStartDateTime = "1970-01-01T" + slotStartTime;
+    var randomEndDateTime = "1970-01-01T" + slotEndTime;
+    const time1 = new Date(randomStartDateTime);
+    const time2 = new Date(randomEndDateTime);
+    const diffInMillisec = time2.getTime() - time1.getTime();
+
+    // convert milliseconds to hours, minutes
+    const diffInHours = diffInMillisec / (1000 * 60 * 60);
+
+    finalDifference = diffInHours;
+    if(finalDifference > 0){
+      setRemainingHrsApiRes(remainingHrsApiRes + finalDifference);
+    }
+    // Math.floor(diffInHours);
+  }
+}
+
 
 
 const cancelBookingApi = async () => {
-  setLoading(true);
+  setModalLoading(true);
   getData("header", (value) => {
     if (value == "") return;
     const headers = {
@@ -364,7 +387,24 @@ const cancelBookingApi = async () => {
         let json = response.data;
         let success = json.success;
         if (success) {
-          getPlayerDetailsApi();
+          if(nextSession?.length > 0){
+            var nextSessionVal = JSON.parse(
+              JSON.stringify(nextSession)
+            );
+            for(var i=0; i< nextSession?.length; i++){
+              if(nextSession[i]?.id == cancelBookingId){
+                nextSessionVal[i].isCancelled = true;
+                addCanceledHoursBack(
+                  nextSessionVal[i]?.startTime,
+                  nextSessionVal[i]?.endTime
+                );
+              }
+            }
+            setNextSessionData(nextSessionVal)
+          }
+          //addCanceledHoursBack();
+          //TODO: verify
+          //getPlayerDetailsApi();
            ToastAndroid.show(
              `Booking cancelled`,
              ToastAndroid.SHORT
@@ -374,10 +414,10 @@ const cancelBookingApi = async () => {
             Events.publish("LOGOUT");
           }
         }
-        setLoading(false);
+        setModalLoading(false);
       })
       .catch(function(error) {
-        setLoading(false);
+        setModalLoading(false);
         ToastAndroid.show(
           `${cancelBookingError?.response?.data?.error_message ??
             ""}`,
@@ -682,7 +722,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
       <LinearGradient
         colors={["#051732", "#232031"]}
         style={{ flex: 1, paddingBottom: 63 }}
-      >        
+      >
         <Loader visible={modalLoading} />
         <ScrollView
           style={{ height: "100%" }}
@@ -724,7 +764,8 @@ const onPressPlan = (selectPlan, playPlanData) => {
             currentPlanPrice={plansResponse?.plan?.price ?? "N/A"}
             //planExpired={true}
             totalHrs={creditPlusRemaining}
-            hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
+            // hoursLeft={playerDetailsResponse?.plan?.hoursRemaining}
+            hoursLeft={remainingHrsApiRes}
             slotsExhaused={
               !(packageRemainingDays <= 0 && expiringToday == false) &&
               totalAvailableHours == 0
@@ -800,11 +841,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
                       //   }
                       // ));
                       setProficiencyData(
-                        JSON.parse(
-                          JSON.stringify(
-                            proficiencyStaticData
-                          )
-                        )
+                        JSON.parse(JSON.stringify(proficiencyStaticData))
                       );
                       //
                     }
@@ -816,13 +853,9 @@ const onPressPlan = (selectPlan, playPlanData) => {
                   onPressed={() => {
                     if (selfTabEnabled) {
                       setSelfTab(false);
-                      
+
                       setProficiencyData(
-                        JSON.parse(
-                          JSON.stringify(
-                            proficiencyStaticData
-                          )
-                        )
+                        JSON.parse(JSON.stringify(proficiencyStaticData))
                       );
                     }
                   }}
