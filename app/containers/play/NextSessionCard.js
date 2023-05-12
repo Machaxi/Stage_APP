@@ -55,6 +55,17 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
           </View>
         );
     };
+
+  const currentDate = new Date();
+  const dateObject = new Date(item.date);
+  const isItToday = dateObject.getDate() == currentDate.getDate();
+  const targetTime = moment(item.endTime, "HH:mm:ss");
+  const currentTime = moment();
+
+  if (isItToday && !currentTime.isSameOrBefore(targetTime)) {
+    return null;
+  }
+
   return (
     <View
       style={[

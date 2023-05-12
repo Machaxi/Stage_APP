@@ -104,17 +104,12 @@ class SelectPay extends Component {
     const selectBatch = this.props.selectBatch;
     const distance = this.props.distance;
     const selectTime = selectBatch.displayTime;
-    var levelimage = selectLevel.image;
-    var levelname = selectLevel.name;
     const username = this.props.username;
     const gender = this.props.usergender;
     const parent = this.props.parent;
-
+    const levelname = selectLevel.displayText;
+    const levelimage = selectLevel.url;
     const joinDate = this.convertToDate(this.props.selectPlan.start_date);
-    if (this.props.title == "Playing") {
-      levelname = selectLevel.displayText;
-      levelimage = selectLevel.url;
-    }
 
     this.setState(
       {
@@ -539,11 +534,7 @@ class SelectPay extends Component {
                   ? "Mon to Fri"
                   : dayss
               )}
-              {listimage(
-                this.state.levelImage,
-                this.state.levelName,
-                this.props.title == "Playing"
-              )}
+              {listimage(this.state.levelImage, this.state.levelName, true)}
             </View>
             <View
               style={{

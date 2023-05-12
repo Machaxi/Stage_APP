@@ -12,6 +12,7 @@ import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
 import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
 import CoachListing from '../containers/GuestScreen/CoachListing'
 import ViewPlayerPerformance from '../containers/UserScreen/ViewPlayerPerformance'
+import RequestHeaderBack from '../atoms/requestHeaderBack';
 
 
 
@@ -39,7 +40,10 @@ const userBatchModule = createStackNavigator({
     // },
     MyBatch: {
         screen: mybatch,
-
+        navigationOptions: {
+            title: 'My Batch',
+            header: null,
+          },
     },
     CoachProfileDetail: {
         screen: CoachProfileDetail,
@@ -61,14 +65,14 @@ const userBatchModule = createStackNavigator({
         screen: PlayersListing,
         navigationOptions: ({ navigation }) => ({
             title: "My Batchmates",
-            headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-            headerRight: <RightMenuToolbar navigationProps={navigation}
-                navigation={navigation} showHome={false} />,
-            headerTitleStyle: style.headerStyle,
-            headerStyle: {
-                backgroundColor: '#FFFFFF',
-            },
-
+            // headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+            // headerRight: <RightMenuToolbar navigationProps={navigation}
+            //     navigation={navigation} showHome={false} />,
+            // headerTitleStyle: style.headerStyle,
+            // headerStyle: {
+            //     backgroundColor: '#FFFFFF',
+            // },
+            header: null,
         })
     },
 

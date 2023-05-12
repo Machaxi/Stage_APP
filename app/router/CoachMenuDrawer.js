@@ -53,6 +53,7 @@ class CoachMenuDrawer extends BaseComponent {
 			profile_pic: '',
 			updated_profile_pic: '',
 			staticDataVisibility: false,
+			trialDataVisibility: false,
 			playDataVisibility:false,
 			isLearnPlanEnabled: false,
 			isPlayPlanEnabled: false,
@@ -479,6 +480,35 @@ class CoachMenuDrawer extends BaseComponent {
           </View>
         </View>
         {/* new guest drawer top end */}
+
+		<ColourfulDrawerItem
+          onPress={() => {
+            this.setState({
+				trialDataVisibility: !this.state.trialDataVisibility,
+            });
+          }}
+          image={require("../images/info.png")}
+          title={"Trial Details"}
+          isExpanded={this.state.trialDataVisibility}
+        />
+
+        {this.state.trialDataVisibility ? (
+          <>
+            <SubPointsAboutMachaxi
+              title={"Learn Trial"}
+              onPress={() => {
+                this.props.navigation.navigate("LearnTrialList");
+              }}
+            />
+            <SubPointsAboutMachaxi
+              title={"Play Trial"}
+              onPress={() => {
+                this.props.navigation.navigate("DisplayPlayTrial");
+              }}
+            />
+          </>
+        ) : null}
+		<View style={[defaultStyle.line_style, styles.greyLine]}></View>
 
         <DrawerItemBtn
           itemImage={require("../images/share_icon.png")}
@@ -1154,8 +1184,7 @@ class CoachMenuDrawer extends BaseComponent {
 						paddingLeft: 28,
 						paddingBottom: 12,
 					}} activeOpacity={0.8} onPress={() =>{
-					//TODO:
-					//this.props.navigation.navigate("BatchDetails");
+						this.props.navigation.navigate("Batch");
 					}
 				}>
 				<View style={styles.drawercell}>
@@ -1189,7 +1218,8 @@ class CoachMenuDrawer extends BaseComponent {
 					</View>
 				</TouchableOpacity>
 				}
-				 <View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 0}]}></View>
+				{ !this.state.isLearnPlanEnabled &&  
+					<View style={[defaultStyle.line_style, styles.greyLine, {marginLeft: 0}]}></View>}
 				{/* learn section end */}
 				{
 					!this.state.isPlayPlanEnabled && 
@@ -1301,13 +1331,38 @@ class CoachMenuDrawer extends BaseComponent {
 				}}>
 				</View>
 
-				<View style={[defaultStyle.line_style, styles.greyLine]}></View>
+				{ !this.state.isPlayPlanEnabled &&
+					<View style={[defaultStyle.line_style, styles.greyLine]}></View>}
 				{!this.state.isPlayPlanEnabled && <DrawerItemBtn itemImage={require('../images/wallet.png')} onPress={()=>{
 					this.props.navigation.navigate('PaymentDetail');
 					}}
 					title={'Payment'}
 				/>}
+				{ !this.state.isPlayPlanEnabled &&
+					<View style={[defaultStyle.line_style, styles.greyLine]}></View>}
+				<ColourfulDrawerItem
+        		  onPress={() => {
+          			  this.setState({ trialDataVisibility: !this.state.trialDataVisibility,});
+          			}}
+        		   image={require("../images/info.png")}
+       			   title={"Trial Details"}
+     		       isExpanded={this.state.trialDataVisibility}
+     			/>
+
+       			 {this.state.trialDataVisibility ? (
+          			<>
+            		<SubPointsAboutMachaxi
+         		     title={"Learn Trial"}
+         		     onPress={() => { this.props.navigation.navigate("LearnTrialList"); }}
+      			    />
+       			    <SubPointsAboutMachaxi
+      			        title={"Play Trial"}
+      			        onPress={() => { this.props.navigation.navigate("DisplayPlayTrial");}}
+         		    />
+       			   </>
+     			   ) : null}
 				<View style={[defaultStyle.line_style, styles.greyLine]}></View>
+
 				<DrawerItemBtn itemImage={require('../images/share_icon.png')} onPress={()=>{
 					this.shareApp();
 					}}

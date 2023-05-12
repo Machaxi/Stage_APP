@@ -255,8 +255,13 @@ class SelectCoachBatch extends Component {
                 this.state.hideMorning && { height: 0, opacity: 0 },
               ]}
             >
-              {this.state.morningData &&
-                this.state.morningData.map((item) => this.assignTime(item))}
+              {this.state.morningData && this.state.morningData.length > 0 ? (
+                this.state.morningData.map((item) => this.assignTime(item))
+              ) : (
+                <View style={{ alignItems: "center", width: "100%" }}>
+                  <Text style={styles.sportText}>No slots available</Text>
+                </View>
+              )}
             </View>
 
             <View style={{ height: 1, backgroundColor: "gray", margin: 10 }} />
@@ -290,8 +295,13 @@ class SelectCoachBatch extends Component {
                 this.state.hideEvening && { height: 0, opacity: 0 },
               ]}
             >
-              {this.state.eveningData &&
-                this.state.eveningData.map((item) => this.assignTime(item))}
+              {this.state.eveningData && this.state.eveningData.length > 0 ? (
+                this.state.eveningData.map((item) => this.assignTime(item))
+              ) : (
+                <View style={{ alignItems: "center", width: "100%" }}>
+                  <Text style={styles.sportText}>No slots available</Text>
+                </View>
+              )}
             </View>
           </LinearGradient>
         </ScrollView>

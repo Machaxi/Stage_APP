@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   ScrollView,
   RefreshControl,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import GoBackHeader from "../../components/molecules/goBackHeader";
@@ -382,6 +383,19 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     );
   }
 
+  const showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
+  };
+
+
   const bookChosenSlotApi = async (courtTimingID, isBookingRequestType) => {
     const { date, proficiency, guestCount } = navigation?.state?.params;
     const data = {
@@ -447,6 +461,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 ?.error_message ?? ""}`,
               ToastAndroid.SHORT
             );
+            showToast(slotBookApiError?.response?.response?.data?.error_message ?? "");
           }
         })
         .catch(function(error) {

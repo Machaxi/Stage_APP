@@ -135,14 +135,9 @@ const PlanDetails = (props) => {
           <Image
             source={{ uri: props.image }}
             style={[styles.image, { marginBottom: 10 }]}
-            resizeMode="contain"
           />
         ) : (
-          <Image
-            source={props.image}
-            style={[styles.image]}
-            resizeMode="center"
-          />
+          <Image source={props.image} style={[styles.image]} />
         )}
       </View>
       <View style={styles.line} />
@@ -184,7 +179,6 @@ const PlanDetails = (props) => {
               <Image
                 source={require("../../images/playing/calendar.png")}
                 style={[styles.calanderimage]}
-                resizeMode="center"
               />
             </View>
           </View>

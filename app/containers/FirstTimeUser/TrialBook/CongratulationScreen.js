@@ -45,8 +45,6 @@ class CongratulationScreen extends Component {
       centerDistance: 0,
       sportName: "",
       sportImage: "",
-      levelImage: "",
-      levelName: "",
       date: new Date(),
       timeString: "",
       selectTrial: "",
@@ -64,18 +62,20 @@ class CongratulationScreen extends Component {
     const userDetailsJson = await AsyncStorage.getItem("user_details");
     const userDetails = JSON.parse(userDetailsJson);
     var username = userDetails.userName;
+    console.log("woekinc");
+    console.log(username);
+    console.log(this.props.selectBatch);
     if (this.props.title == "Coaching Trial") {
       username = this.props.username;
     }
     const selectCenter = this.props.selectCenter;
     const selectSport = this.props.selectSport;
     const selectDate = this.props.selectDate;
-    const selectLevel = this.props.selectLevel;
     const selectBatch = this.props.selectBatch;
     const distance = this.props.distance;
     const selectTime = selectBatch.startTime;
     const title = this.props.title;
-    const formattedTime = moment(selectTime, "HH:mm:ss").format("HH:mm A");
+    const formattedTime = moment(selectTime, "HH:mm:ss").format("hh:mm A");
     const longitude = selectCenter.longitude;
     const latitude = selectCenter.latitude;
 
@@ -87,8 +87,6 @@ class CongratulationScreen extends Component {
       centerDistance: distance,
       sportName: selectSport.name,
       sportImage: selectSport.image,
-      levelImage: selectLevel.image,
-      levelName: selectLevel.name,
       date: selectDate,
       selectTrial: title,
       timeString: formattedTime,
@@ -228,8 +226,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: Nunito_ExtraBold,
     color: "#E8AC43",
-    marginBottom: 10,
-    marginTop: 140,
+    marginBottom: 5,
+    marginTop: 120,
   },
   subtext: {
     fontSize: 16,
@@ -252,7 +250,7 @@ const styles = StyleSheet.create({
     borderColor: "#443A59",
     borderWidth: 0.7,
     width: "100%",
-    marginVertical: 20,
+    marginVertical: 15,
   },
   subtitle: {
     fontSize: 18,

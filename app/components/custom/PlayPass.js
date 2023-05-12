@@ -7,7 +7,6 @@ class PlayPass extends Component {
     return (
       <ImageBackground
         source={require("../../images/playing/playmembership.png")}
-        resizeMode="center"
         style={{
           width: 210,
           height: 200,

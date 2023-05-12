@@ -124,6 +124,10 @@ import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import NotificationsScreen from "../containers/notification/NotificationsScreen";
 import BookSlotScreen from "../containers/play/BookSlotScreen";
 import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
+import DisplayLearnTrial from "../containers/FirstTimeUser/TrialBook/DisplayLearnTrial";
+import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
+import LearnTrialList from "../containers/FirstTimeUser/TrialBook/LearnTrialList";
+import RequestHeaderBack from "../atoms/requestHeaderBack";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2504,13 +2508,7 @@ const LearnStack = createStackNavigator({
     screen: WebViewScreen,
     navigationOptions: ({ navigation }) => ({
       title: "About Us",
-      headerLeft: (
-        <NavigationDrawerStructure
-          navigationProps={navigation}
-          showBackAction={true}
-          showDrawer={false}
-        />
-      ),
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2518,9 +2516,9 @@ const LearnStack = createStackNavigator({
           showHome={false}
         />
       ),
-      headerTitleStyle: style.headerStyle,
+      headerTitleStyle: style.titlestyle,
       headerStyle: {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#21202F",
       },
     }),
   },
@@ -2528,13 +2526,7 @@ const LearnStack = createStackNavigator({
     screen: ContactUs,
     navigationOptions: ({ navigation }) => ({
       title: "Contact Us",
-      headerLeft: (
-        <NavigationDrawerStructure
-          navigationProps={navigation}
-          showBackAction={true}
-          showDrawer={false}
-        />
-      ),
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: (
         <RightMenuToolbar
           navigationProps={navigation}
@@ -2542,12 +2534,67 @@ const LearnStack = createStackNavigator({
           showHome={false}
         />
       ),
-      headerTitleStyle: style.headerStyle,
+      headerTitleStyle: style.titlestyle,
       headerStyle: {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#21202F",
       },
     }),
   },
+  LearnTrialList: {
+    screen: LearnTrialList,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  DisplayLearnTrial: {
+    screen: DisplayLearnTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  Batch: {
+    screen: userBatchModule,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Batches",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+
   FaqScreen: {
     screen: FaqScreen,
     navigationOptions: ({ navigation }) => ({
@@ -2666,21 +2713,9 @@ const parentBookDrawer = createDrawerNavigator(
   }
 );
 
-const mybookingsModule = createStackNavigator({
-  MyBookingsScreen: {
-    screen: MyBookingsScreen,
-  },
-});
-
 const bookslotModule = createStackNavigator({
   BookSlotScreen: {
     screen: BookSlotScreen,
-  },
-});
-
-const myRequestsModule = createStackNavigator({
-  MyRequestsScreen: {
-    screen: MyRequestsHome,
   },
 });
 
@@ -2709,6 +2744,23 @@ const notificationsStack = createStackNavigator({
 const HomeStack = createStackNavigator({
   HomeScreen: {
     screen: HomeScreen,
+    navigationOptions: ({ navigation }) => ({
+      // title: navigation.getParam("title"),
+      title: "Machaxi",
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          darkThemFlow={true}
+          navigationProps={navigation}
+          showNotification={true}
+          homeStack={true}
+        />
+      ),
+    }),
   },
   BookTrail: {
     screen: TrialBook,
@@ -2792,24 +2844,69 @@ const HomeStack = createStackNavigator({
     //   headerShown: false,
     // }),
   },
+  LearnTrialList: {
+    screen: LearnTrialList,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  DisplayPlayTrial: {
+    screen: DisplayPlayTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Play Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  DisplayLearnTrial: {
+    screen: DisplayLearnTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
 });
 
 const parentDrawer = createDrawerNavigator(
   {
     LearnHomePage: {
       screen: tabBarControllerLearn,
-    },
-    MyRequestsHome: {
-      screen: myRequestsModule,
-      // navigationOptions: {
-      //     header: <CustomHeader title="Academy" />,
-      // }
-    },
-    MyBookingsScreen: {
-      screen: mybookingsModule,
-      // navigationOptions: {
-      //     header: <CustomHeader title="Academy" />,
-      // }
     },
     //TODO:
     BookSlotScreen: {

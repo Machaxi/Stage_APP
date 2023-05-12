@@ -30,7 +30,7 @@ const SelectPlayingTime = ({
           renderItem={({ item }) => {
             return (
               <SelectTimeItem
-                width={deviceWidth * 0.38}
+                width={deviceWidth * 0.37}
                 preferredDate={preferredDate}
                 isSelected={item?.courtTimingId == selectedTime}
                 image={require("../../images/playing/clock.png")}

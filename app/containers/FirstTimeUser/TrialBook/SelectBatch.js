@@ -17,6 +17,7 @@ import { whiteGreyBorder } from "../../util/colors";
 import SelectSports from "../../../components/custom/SelectSports";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 import LoadingIndicator from "../../../components/molecules/loadingIndicator";
+import moment from "moment";
 
 const months = [
   "Jan",
@@ -156,25 +157,29 @@ class SelectBatch extends Component {
 
   render() {
     assigndate = (item) => {
+      const targetTime = moment(item.startTime, "HH:mm:ss");
+      const currentTime = moment();
+      const noTouch =
+        item.is_allowed == false ||
+        (this.state.currentDate == 1 &&
+          !currentTime.isSameOrBefore(targetTime.subtract(15, "minutes")));
       return (
         <TouchableOpacity
           activeOpacity={0.8}
           key={item.batch_id}
           style={{ marginRight: 10, marginVertical: 10, height: 30 }}
           onPress={() => {
-            !(
-              item.is_allowed == false ||
-              (this.state.currentDate == 1 &&
-                item.startTime.split(":")[0] <= today.getHours())
-            ) &&
-              this.setState({ selectTime: item.batch_id, proseedTime: true });
+            this.setState({ selectTime: item.batch_id, proseedTime: true });
           }}
+          disabled={noTouch}
         >
           <View>
             <LinearGradient
               colors={
                 item.batch_id === this.state.selectTime
                   ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
+                  : noTouch
+                  ? ["rgba(79, 0, 25, 0.2)", "rgba(79, 0, 25, 0.2)"]
                   : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
               }
               start={{ x: 0, y: 0 }}
@@ -184,6 +189,7 @@ class SelectBatch extends Component {
                 item.batch_id === this.state.selectTime && {
                   borderColor: "rgba(167, 134, 95, 0.6)",
                 },
+                noTouch && { borderColor: "#FF5B79" },
               ]}
             >
               <Text>{"    "}</Text>
@@ -201,15 +207,15 @@ class SelectBatch extends Component {
                     color: "#F2AE4D",
                   },
                   item.slot == false && { color: "#858585" },
+                  noTouch && { color: "#FF5775" },
                 ]}
               >
                 {item.displayTime}
                 {"    "}
               </Text>
             </LinearGradient>
-            {(item.is_allowed == false ||
-              (this.state.currentDate == 1 &&
-                item.startTime.split(":")[0] <= today.getHours())) && (
+            {/* {noTouch && (
+              // item.startTime.split(":")[0] <= today.getHours())) && (
               <Image
                 style={{
                   width: "80%",
@@ -221,7 +227,7 @@ class SelectBatch extends Component {
                 resizeMode="stretch"
                 source={require("../../../images/playing/cross.png")}
               />
-            )}
+            )} */}
           </View>
         </TouchableOpacity>
       );
@@ -361,8 +367,13 @@ class SelectBatch extends Component {
                 this.state.hideMorning && { height: 0, opacity: 0 },
               ]}
             >
-              {this.state.morningData &&
-                this.state.morningData.map((item) => assigndate(item))}
+              {this.state.morningData && this.state.morningData.length > 0 ? (
+                this.state.morningData.map((item) => assigndate(item))
+              ) : (
+                <View style={{ alignItems: "center", width: "100%" }}>
+                  <Text style={styles.sportText}>No slots available</Text>
+                </View>
+              )}
             </View>
 
             <View style={{ height: 1, backgroundColor: "gray", margin: 10 }} />
@@ -397,8 +408,13 @@ class SelectBatch extends Component {
                 this.state.hideEvening && { height: 0, opacity: 0 },
               ]}
             >
-              {this.state.eveningData &&
-                this.state.eveningData.map((item) => assigndate(item))}
+              {this.state.eveningData && this.state.eveningData.length > 0 ? (
+                this.state.eveningData.map((item) => assigndate(item))
+              ) : (
+                <View style={{ alignItems: "center", width: "100%" }}>
+                  <Text style={styles.sportText}>No slots available</Text>
+                </View>
+              )}
             </View>
           </LinearGradient>
         </ScrollView>

@@ -145,6 +145,7 @@ class LoginSceen extends Component {
       .catch((error) => {
         console.log(error);
       });
+    this.setState({ timeRemaining: 30 });
     // auth()
     //   .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
     //   .then((confirmResult) => {
@@ -428,7 +429,7 @@ class LoginSceen extends Component {
               keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
               placeholder="Enter the Mobile Number"
               placeholderTextColor="#BFBFBF"
-              maxLength={10}
+              maxLength={12}
               onChangeText={(value) => {
                 this.setState({ phoneNumber: value });
               }}
@@ -553,7 +554,7 @@ class LoginSceen extends Component {
           >
             <Text style={[styles.otpsubtext, { width: 200 }]}> </Text>
             <TouchableOpacity
-              // disabled={this.state.timeRemaining > 0}
+              disabled={this.state.timeRemaining > 0}
               onPress={this.handleResendOTP}
             >
               <Text

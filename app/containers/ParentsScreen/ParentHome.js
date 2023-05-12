@@ -1296,7 +1296,7 @@ class ParentHome extends BaseComponent {
               </Card>
             </View>
 
-            <View style={{ margin: 5 }}>
+            {/* <View style={{ margin: 5 }}>
               <Card style={{ margin: 5, borderRadius: 10 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -1351,11 +1351,11 @@ class ParentHome extends BaseComponent {
                   </View>
                 </TouchableOpacity>
               </Card>
-            </View>
+            </View> */}
 
             {/* ================================ Society Feedback =================== */}
 
-            {academy_feedback_data != null ? (
+            {/* {academy_feedback_data != null ? (
               <Card
                 style={{
                   marginLeft: 10,
@@ -1405,7 +1405,7 @@ class ParentHome extends BaseComponent {
                         marginTop: 4,
                       }}
                     >
-                      {/* <Rating
+                       <Rating
                                             type='custom'
                                             ratingColor='#F4FC9A'
                                             ratingBackgroundColor='#D7D7D7'
@@ -1414,7 +1414,7 @@ class ParentHome extends BaseComponent {
                                             readonly={true}
                                             startingValue={academy_feedback_data.target.avgFeedbackEntities[0].avgRating}
                                             style={{ width: 80 }}
-                                        /> */}
+                                        /> 
                       <StarRating
                         style={{
                           //height: 24,
@@ -1442,7 +1442,7 @@ class ParentHome extends BaseComponent {
                         fullStarColor={"#F4FC9A"}
                       />
 
-                      {/* <Text style={{
+                       <Text style={{
                                             borderColor: '#DFDFDF',
                                             borderWidth: 1,
                                             height: 19, width: 30, textAlign: 'center',
@@ -1451,7 +1451,7 @@ class ParentHome extends BaseComponent {
                                             paddingTop: 0,
                                             borderRadius: 12,
                                             fontFamily: 'Quicksand-Medium'
-                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text> */}
+                                        }}>{academy_feedback_data.target.avgFeedbackEntities[0].avgRating.toFixed(1)}</Text>
                       <RateViewBorder>
                         {academy_feedback_data.target.avgFeedbackEntities[0]
                           ? academy_feedback_data.target.avgFeedbackEntities[0]
@@ -1496,7 +1496,7 @@ class ParentHome extends BaseComponent {
                             alignItems: "center",
                           }}
                         >
-                          {/* <Rating
+                           <Rating
                                                     type='custom'
                                                     ratingColor='#F4FC9A'
                                                     ratingBackgroundColor='#D7D7D7'
@@ -1505,7 +1505,7 @@ class ParentHome extends BaseComponent {
                                                     readonly={true}
                                                     startingValue={academy_feedback_data.rating}
                                                     style={{ width: 80 }}
-                                                /> */}
+                                                /> 
                           <StarRating
                             style={{
                               //height: 24,
@@ -1528,7 +1528,7 @@ class ParentHome extends BaseComponent {
                             fullStarColor={"#F4FC9A"}
                           />
 
-                          {/* <Text style={{
+                          <Text style={{
                                                     backgroundColor: '#D8D8D8',
                                                     height: 19, width: 30, textAlign: 'center',
                                                     fontSize: 12,
@@ -1536,7 +1536,7 @@ class ParentHome extends BaseComponent {
                                                     paddingTop: 0,
                                                     borderRadius: 12,
                                                     fontFamily: 'Quicksand-Medium'
-                                                }}>{academy_feedback_data.rating.toFixed(1)}</Text> */}
+                                                }}>{academy_feedback_data.rating.toFixed(1)}</Text>
                           <RateViewFill>
                             {academy_feedback_data.rating}
                           </RateViewFill>
@@ -1591,7 +1591,7 @@ class ParentHome extends BaseComponent {
                   </TouchableOpacity>
                 </Card>
               </Card>
-            ) : null}
+            ) : null} */}
 
             {/* ================================ COACH FEEDBACk =================== */}
 

@@ -109,10 +109,6 @@ class PlayerSwitcher extends BaseComponent {
                         itemList: user1.data['academies']
                     })
                 }
-                if (user1.data['academies'].length == 0) {
-                  this.props.navigation.navigate('HomeDrawer');
-                }
-
             }).catch((response) => {
                 //handle form errors
                 console.log(response);

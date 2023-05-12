@@ -179,6 +179,13 @@ class Splash extends BaseComponent {
 
                             } else {
                               if (userData.user.name != null) {
+                            //     if (userType == COACH) {
+                            //         if (userData.can_book_court) {
+                            //             this.props.navigation.navigate('CoachBookHome');
+                            //         } else {
+                            //             this.props.navigation.navigate('CoachHome');
+                            //         }
+                            //     }else 
                                 if (!userData.is_learn_enabled) {
                                     if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
                                              this.props.navigation.navigate("LearnHomePage");
@@ -190,7 +197,7 @@ class Splash extends BaseComponent {
                                           "LearnHomePage"
                                         );
                                     }
-                                }else if (!userData.is_play_enabled) {
+                                } else if (!userData.is_play_enabled) {
                                     // this.props.navigation.navigate("Guestfirsted");
                                     this.props.navigation.navigate("LearnHomePage");
                                 } else {

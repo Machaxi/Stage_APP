@@ -16,26 +16,27 @@ import Events from '../../router/events';
 import * as Analytics from "../../Analytics"
 import PTRView from 'react-native-pull-to-refresh';
 import NavigationDrawerWhite from '../../router/NavigationDrawerWhite';
+import RightMenuToolbar from '../../router/RightMenuToolbar';
 
 class PlayerBatch extends BaseComponent {
 
 
-    static navigationOptions = ({ navigation }) => {
+    // static navigationOptions = ({ navigation }) => {
 
-        return {
-            headerTitle: 'My Batches',
-            headerTitleStyle: defaultStyle.headerStyle,
+    //     return {
+    //         headerTitle: 'My Batches',
+    //         headerTitleStyle: defaultStyle.headerStyle,
 
-            headerLeft: (<NavigationDrawerWhite navigationProps={navigation}
-                showBackAction={true}
-                 />
-            ),
-            headerRight:( <RightMenuToolbar navigationProps={navigation}
-            navigation={navigation} showHome={false} />
-    )
-        };
+    //         headerLeft: (<NavigationDrawerWhite navigationProps={navigation}
+    //             showBackAction={true}
+    //              />
+    //         ),
+    //         headerRight:( <RightMenuToolbar navigationProps={navigation}
+    //         navigation={navigation} showHome={false} />
+    // )
+    //     };
 
-    };
+    // };
 
 
     constructor(props) {

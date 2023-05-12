@@ -8,10 +8,10 @@ import {
   ImageBackground,
   ScrollView,
   ToastAndroid,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
-import AsyncStorage from "@react-native-community/async-storage";
 import { whiteGreyBorder } from "../../util/colors";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 
@@ -23,6 +23,18 @@ class SelectSports extends Component {
       proseednext: false,
     };
   }
+
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
+  };
 
   render() {
     handlepress = () => {
@@ -50,6 +62,11 @@ class SelectSports extends Component {
             "You already booked trial for this sports.",
             ToastAndroid.SHORT
           );
+          if (
+            !(this.props.parent != "Parent" && this.props.childDetails == null)
+          ) {
+            this.showToast("You already booked trial for this sport.");
+          }
         }
       } else {
         this.props.onPress(

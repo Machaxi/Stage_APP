@@ -59,7 +59,8 @@ const BookSlotScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
   const [sportsList, setSportsList] = useState(null);
-  const [bookdata, setBookdata] = useState([])
+  const [bookdata, setBookdata] = useState([]);
+  const [courtBookingNotes, setCourtBookingNotes] = useState([]);
 
   const getUserPlanAndSportsData = async () => {
     setLoading(true);
@@ -109,23 +110,22 @@ const BookSlotScreen = ({ navigation }) => {
           console.log(error);
         });
     });
-    
   };
 
   const getSports = () => {
     axios
-    .get(getBaseUrl() + "/global/sports")
-    .then((response) => {
-      let data = JSON.stringify(response);
-      let userResponce = JSON.parse(data);
-      console.log(userResponce);
-      let academiesData = userResponce["data"]["data"];
-      setSportsList(academiesData["sports"])
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+      .get(getBaseUrl() + "/global/sports")
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        console.log(userResponce);
+        let academiesData = userResponce["data"]["data"];
+        setSportsList(academiesData["sports"]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -237,13 +237,25 @@ const BookSlotScreen = ({ navigation }) => {
                 sportsList={sportsList}
                 setSelectedSportsIdVal={(id) => {
                   setSportsId(id);
-                  const sport = sportsList.find(item => item.id === id);
-                  const { playingAreaName, allowEntireCourtBooking } = sport;
+                  const sport = sportsList.find((item) => item.id === id);
+                  const {
+                    playingAreaName,
+                    allowEntireCourtBooking,
+                    courtBookingNotes,
+                  } = sport;
                   if (allowEntireCourtBooking) {
-                    setBookdata(["Yourself", "Entire " + playingAreaName, "Coming with Guest"]);
-                  }else {
+                    setBookdata([
+                      "Yourself",
+                      "Entire " + playingAreaName,
+                      "Coming with Guest",
+                    ]);
+                  } else {
                     setBookdata(["Yourself", "Coming with Guest"]);
                   }
+                  const lines = courtBookingNotes.split("\r\n");
+                  const points = lines.map((line) => line.replace(/^#\s*/, ""));
+
+                  setCourtBookingNotes(points);
                 }}
               />
             ) : null}
@@ -283,7 +295,7 @@ const BookSlotScreen = ({ navigation }) => {
                 setCount={(val) => setCount(val)}
               />
             )}
-            <SlotRelatedNotes />
+            <SlotRelatedNotes courtBookingNotes={courtBookingNotes} />
             {modalVisible ? (
               // ? (
               // <SlotBookedModal modalVisible={modalVisible} setModalVisibility={(val)=>setModalVisibilityCb(val)} />

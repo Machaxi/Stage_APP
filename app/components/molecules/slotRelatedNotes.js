@@ -1,22 +1,38 @@
-import React from "react";
-import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import React, { useEffect } from "react";
+import { Text, View, StyleSheet, Image } from "react-native";
 import { commonStyles } from "../../containers/util/commonStyles";
-import {
-  goldenYellow,
-  greyVariant7,
-  white,
-  borderGrey,
-  greyVariant2,
-  goldenBgColor,
-  yellowVariant2,
-  offWhiteVariant,
-  greyColorVariant,
-} from "../../containers/util/colors";
-import { deviceWidth } from "../../containers/util/dimens";
-import { Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
+import { goldenBgColor, offWhiteVariant } from "../../containers/util/colors";
+import { Nunito_SemiBold } from "../../containers/util/fonts";
 
-const SlotRelatedNotes = ({ count, setCount }) => {
+const SlotRelatedNotes = ({ courtBookingNotes }) => {
+  const HighlightedText = ({ text }) => {
+    const highlights = text.match(/<highlight>(.*?)<\/highlight>/g);
+    if (!highlights) {
+      return <Text style={styles.descriptionbenift}>{text}</Text>;
+    }
+    const parts = text.split(/(<highlight>.*?<\/highlight>)/g);
+    const renderedText = parts.map((part, i) => {
+      if (part.startsWith("<highlight>")) {
+        const highlightText = part.replace(/<\/?highlight>/g, "");
+        return (
+          <Text
+            key={i}
+            style={[styles.descriptionbenift, { color: "#FF9C33" }]}
+          >
+            {highlightText}
+          </Text>
+        );
+      } else {
+        return (
+          <Text key={i} style={styles.descriptionbenift}>
+            {part}
+          </Text>
+        );
+      }
+    });
+    return <Text>{renderedText}</Text>;
+  };
+
   return (
     <View
       style={[
@@ -35,90 +51,21 @@ const SlotRelatedNotes = ({ count, setCount }) => {
         />
         <Text style={styles.note}>{"Note"}</Text>
       </View>
-      <View
-        style={[
-          commonStyles.flexRowAlignStart,
-          { marginBottom: 6, paddingRight: 6 },
-        ]}
-      >
-        <Image
-          source={require("../../images/tickIcon.png")}
-          style={{ height: 18, width: 18, marginRight: 4 }}
-        />
-
-        <Text style={[styles.noteTxt, { color: offWhiteVariant }]}>
-          {"Adding "}
-          <Text style={[styles.noteTxt, { color: yellowVariant2 }]}>
-            {"1 guest "}
-          </Text>
-          {"reduces "}
-          <Text style={[styles.noteTxt, { color: yellowVariant2 }]}>
-            {"1 hour "}
-          </Text>
-          {" from your total playing limit."}
-        </Text>
-      </View>
-      <View
-        style={[
-          commonStyles.flexRowAlignStart,
-          { marginBottom: 6, paddingRight: 6 },
-        ]}
-      >
-        <Image
-          source={require("../../images/tickIcon.png")}
-          style={{ height: 18, width: 18, marginRight: 4, paddingRight: 6 }}
-        />
-
-        <Text style={[styles.noteTxt, { color: offWhiteVariant }]}>
-          {"Maximum "}
-          <Text style={[styles.noteTxt, { color: yellowVariant2 }]}>
-            {"3 guests "}
-          </Text>
-          {"are allowed per booking."}
-        </Text>
-      </View>
-      <View
-        style={[
-          commonStyles.flexRowAlignStart,
-          { marginBottom: 6, paddingRight: 6 },
-        ]}
-      >
-        <Image
-          source={require("../../images/tickIcon.png")}
-          style={{ height: 18, width: 18, marginRight: 4 }}
-        />
-        <Text style={[styles.noteTxt, { color: offWhiteVariant }]}>
-          {"Booking entire court reduces "}
-          <Text style={[styles.noteTxt, { color: yellowVariant2 }]}>
-            {"4 hours "}
-          </Text>
-          {"from your total playing limit."}
-        </Text>
-      </View>
-      <View
-        style={[
-          commonStyles.flexRowAlignStart,
-          { marginBottom: 6, paddingRight: 6 },
-        ]}
-      >
-        <Image
-          source={require("../../images/tickIcon.png")}
-          style={{ height: 18, width: 18, marginRight: 4 }}
-        />
-
-        <Text style={[styles.noteTxt, { color: offWhiteVariant }]}>
-          {"Maximum "}
-          <Text style={[styles.noteTxt, { color: yellowVariant2 }]}>
-            {"4 persons "}
-          </Text>
-          {" including yourself are allowed for entire "}
-          <Text style={[styles.noteTxt, { color: yellowVariant2 }]}>
-            {"court "}
-          </Text>
-          {"booking."}
-        </Text>
-      </View>
-      
+      {courtBookingNotes &&
+        courtBookingNotes.map((item) => (
+          <View
+            style={[
+              commonStyles.flexRowAlignStart,
+              { marginBottom: 6, paddingRight: 6 },
+            ]}
+          >
+            <Image
+              source={require("../../images/tickIcon.png")}
+              style={{ height: 18, width: 18, marginRight: 4 }}
+            />
+            <HighlightedText text={item} />
+          </View>
+        ))}
     </View>
   );
 };
@@ -129,28 +76,10 @@ const styles = StyleSheet.create({
     color: offWhiteVariant,
     fontFamily: Nunito_SemiBold,
   },
-  noteTxt: {
+  descriptionbenift: {
     fontSize: 12,
-    color: yellowVariant2,
+    color: "#E6E6E6",
     fontFamily: Nunito_SemiBold,
-  },
-  
-  userCount: {
-    fontSize: 14,
-    color: goldenYellow,
-    fontFamily: Nunito_Regular,
-  },
-  addUsr: {
-    fontSize: 14,
-    color: white,
-    fontFamily: Nunito_SemiBold,
-  },
-  tabText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: greyVariant2,
-    fontFamily: Nunito_SemiBold,
-    textAlign: "center",
   },
 });
 

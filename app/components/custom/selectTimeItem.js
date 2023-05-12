@@ -15,7 +15,7 @@ class SelectTimeItem extends Component {
     var randomStartDateTime =
       `${moment().format("YYYY-MM-DD")}T` + this.props.startTime;
 
-    const selectDate = new Date(this.props.preferredDate)
+    const selectDate = new Date(this.props.preferredDate);
     const time1 = new Date();
     const time2 = new Date(randomStartDateTime);
     const diffInMillisec = time2.getTime() - time1.getTime();
@@ -23,7 +23,7 @@ class SelectTimeItem extends Component {
     // convert milliseconds to hours, minutes
     const diffInHours = diffInMillisec / (1000 * 60 * 60);
 
-    if (diffInHours > 0 || selectDate > time1 ) {
+    if (diffInHours > 0 || selectDate > time1) {
       return true;
     } else {
       return false;
@@ -41,17 +41,17 @@ class SelectTimeItem extends Component {
           this.props.width ? { width: width } : {},
         ]}
         onPress={() => {
-          if (this.checkIfSlotActive()) {
-            //TODO: add toast for else case
-            this.handlepress(id);
-          }
+          this.handlepress(id);
         }}
+        disabled={!this.checkIfSlotActive()}
       >
         <View>
           <LinearGradient
             colors={
               isSelected
                 ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
+                : !this.checkIfSlotActive()
+                ? ["rgba(79, 0, 25, 0.2)", "rgba(79, 0, 25, 0.2)"]
                 : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
             }
             start={{ x: 0, y: 0 }}
@@ -61,6 +61,7 @@ class SelectTimeItem extends Component {
               isSelected && {
                 borderColor: "rgba(167, 134, 95, 0.6)",
               },
+              !this.checkIfSlotActive() && { borderColor: "#FF5B79" },
             ]}
           >
             <Text>{"    "}</Text>
@@ -72,13 +73,14 @@ class SelectTimeItem extends Component {
                 isSelected && {
                   color: "#F2AE4D",
                 },
+                !this.checkIfSlotActive() && { color: "#FF5775" },
               ]}
             >
               {name}
               {"    "}
             </Text>
           </LinearGradient>
-          {!this.checkIfSlotActive() && (
+          {/* {!this.checkIfSlotActive() && (
             <Image
               style={[
                 {
@@ -93,7 +95,7 @@ class SelectTimeItem extends Component {
               resizeMode="stretch"
               source={require("../../images/playing/cross.png")}
             />
-          )}
+          )} */}
         </View>
       </TouchableOpacity>
     );

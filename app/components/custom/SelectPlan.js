@@ -35,7 +35,7 @@ const SelectPlan = (props) => {
             <Text style={styles.subtitle}>
               {props.subtitle}
               <Text style={[styles.subtitle, { fontSize: 12 }]}>
-                (GST Inclusive)
+                {" "}(GST Inclusive)
               </Text>
             </Text>
             <Text style={styles.description}>{props.description}</Text>

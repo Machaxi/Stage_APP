@@ -117,11 +117,11 @@ export default class PlayerHeader extends BaseComponent {
               {/* <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
                                 navigation={this.props.navigation} /> */}
               <View style={styles.profile_txt_view}>
-                <Text style={styles.player_profile_txt}>
+                {/* <Text style={styles.player_profile_txt}>
                   Players Profile
-                </Text>
+                </Text> */}
                 <ScrollView
-                  style={{ flexDirection: "row" }}
+                  style={{ flexDirection: "row", marginTop: 10 }}
                   showsHorizontalScrollIndicator= {false}
                   horizontal={true}
                 >
@@ -200,7 +200,7 @@ export default class PlayerHeader extends BaseComponent {
                     {newName}
                   </Text>
 
-                  <View style={styles.flex_row}>
+                  {/* <View style={styles.flex_row}>
                     <Text style={styles.player_level}>
                       {getFormattedLevel(player_level)}
                     </Text>
@@ -209,7 +209,7 @@ export default class PlayerHeader extends BaseComponent {
                         {getFormattedCategory(player_category)}
                       </Text>
                     </View>
-                  </View>
+                  </View> */}
                 </View>
               </View>
             </ImageBackground>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    height: 376,
+    height: 350,
   },
   player_picture: {
       height: 113,

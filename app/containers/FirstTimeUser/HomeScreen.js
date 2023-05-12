@@ -12,24 +12,7 @@ import RightMenuToolbar from "../../router/RightMenuToolbar";
 import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 
-class HomeScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    // title: navigation.getParam("title"),
-    title: "Machaxi",
-    headerTitleStyle: styles.titlestyle,
-    headerStyle: {
-      backgroundColor: "#21202F",
-    },
-    headerLeft: <RequestHeaderLeft navigation={navigation} />,
-    headerRight: (
-      <RightMenuToolbar
-        darkThemFlow={true}
-        navigationProps={navigation}
-        showNotification={true}
-        homeStack={true}
-      />
-    ),
-  });
+class HomeScreen extends Component { 
 
   constructor(props) {
     super(props);

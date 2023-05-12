@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     flex: 0.7,
     paddingHorizontal: 10,
     paddingVertical: 5,
+    marginLeft: 15,
   },
   title: {
     flex: 0.5,

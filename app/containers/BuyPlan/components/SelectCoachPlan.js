@@ -115,7 +115,7 @@ class SelectCoachPlan extends Component {
                         ? "Quaterly"
                         : "Yearly"
                     }
-                    subtitle={plan.amount}
+                    subtitle={plan.planFees}
                     description={
                       plan.term_id === 1
                         ? "Best coaches in town"

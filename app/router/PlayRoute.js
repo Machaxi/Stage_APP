@@ -23,6 +23,10 @@ import BookSlotCentreSelectionScreen from "../containers/play/BookSlotCentreSele
 import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
 import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
+import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
+import MyRequestsHome from "../containers/MyRequests/MyRequestsHome";
+import MyBookingsScreen from "../containers/MyBookings/MyBookingsScreen";
+import RequestHeaderBack from "../atoms/requestHeaderBack";
 
 const playModule = createStackNavigator({
   Play: {
@@ -63,6 +67,44 @@ const playModule = createStackNavigator({
       },
     }),
   },
+  MyRequestsHome: {
+    screen: MyRequestsHome,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Requests",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  MyBookingsScreen: {
+    screen: MyBookingsScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Bookings",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   RenewPlan: {
     screen: RenewPlayPlan,
     navigationOptions: ({ navigation }) => ({
@@ -80,6 +122,24 @@ const playModule = createStackNavigator({
       },
     }),
   },
+  DisplayPlayTrial: {
+    screen: DisplayPlayTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "PLay Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+
   CouponList: {
     screen: CouponListScreen,
     // navigationOptions: ({ navigation }) => ({

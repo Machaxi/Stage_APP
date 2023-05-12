@@ -15,22 +15,7 @@ import { getBaseUrl } from "../../../containers/BaseComponent";
 import { whiteGreyBorder } from "../../util/colors";
 import { Nunito_Medium, Nunito_SemiBold } from "../../util/fonts";
 import LoadingIndicator from "../../../components/molecules/loadingIndicator";
-
-const timedataMorning = [
-  { id: 1, name: "4 - 5 AM", slot: true },
-  { id: 2, name: "6 - 7 AM", slot: true },
-  { id: 3, name: "7 - 8 AM", slot: true },
-  { id: 4, name: "8 - 9 AM", slot: true },
-  { id: 5, name: "9 - 10 AM", slot: false },
-];
-
-const timedataEvening = [
-  { id: 6, name: "4 - 5 PM", slot: false },
-  { id: 7, name: "6 - 7 PM", slot: true },
-  { id: 8, name: "7 - 8 PM", slot: true },
-  { id: 9, name: "8 - 9 PM", slot: true },
-  { id: 10, name: "9 - 10 PM", slot: true },
-];
+import moment from "moment";
 
 const months = [
   "Jan",
@@ -69,10 +54,10 @@ class SelectLearnBatch extends Component {
     super(props);
     this.state = {
       currentLevel: 10,
-      currentDate: 1,
+      currentDate: 3,
       selectTime: 20,
       proseedLevel: false,
-      proseedDate: true,
+      proseedDate: false,
       proseedTime: false,
       hideMorning: false,
       hideEvening: false,
@@ -126,6 +111,12 @@ class SelectLearnBatch extends Component {
   }
 
   getLevelData = (level, date) => {
+    if (this.state.proseedDate && this.state.proseedLevel) {
+      this.getLevelDatas(level, date);
+    }
+  };
+
+  getLevelDatas = (level, date) => {
     var selectDate = today;
     if (date > 1) {
       selectDate = nextDate;
@@ -203,27 +194,32 @@ class SelectLearnBatch extends Component {
 
   render() {
     assigntime = (item) => {
+      const targetTime = moment(item.startTime, "HH:mm:ss");
+      const currentTime = moment();
+      const noTouch =
+        item.is_allowed == false ||
+        (this.state.currentDate == 1 &&
+          !currentTime.isSameOrBefore(targetTime.subtract(15, "minutes")));
       return (
         <TouchableOpacity
           activeOpacity={0.8}
           key={item.batch_id}
           style={[styles.subviewclock, { marginRight: 10, marginVertical: 10 }]}
           onPress={() => {
-            !(
-              this.state.currentDate == 1 &&
-              item.startTime.split(":")[0] <= today.getHours()
-            ) &&
-              this.setState({
-                selectTime: item.courtTimingId,
-                proseedTime: true,
-              });
+            this.setState({
+              selectTime: item.courtTimingId,
+              proseedTime: true,
+            });
           }}
+          disabled={noTouch}
         >
           <View>
             <LinearGradient
               colors={
                 item.courtTimingId == this.state.selectTime
                   ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
+                  : noTouch
+                  ? ["rgba(79, 0, 25, 0.2)", "rgba(79, 0, 25, 0.2)"]
                   : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
               }
               start={{ x: 0, y: 0 }}
@@ -233,6 +229,7 @@ class SelectLearnBatch extends Component {
                 item.courtTimingId === this.state.selectTime && {
                   borderColor: "rgba(167, 134, 95, 0.6)",
                 },
+                noTouch && { borderColor: "#FF5B79" },
               ]}
             >
               <Text>{"   "}</Text>
@@ -250,26 +247,13 @@ class SelectLearnBatch extends Component {
                     color: "#F2AE4D",
                   },
                   item.slot == false && { color: "#858585" },
+                  noTouch && { color: "#FF5775" },
                 ]}
               >
                 {item.displayTime}
                 {"   "}
               </Text>
             </LinearGradient>
-            {this.state.currentDate == 1 &&
-              item.startTime.split(":")[0] <= today.getHours() && (
-                <Image
-                  style={{
-                    width: "79%",
-                    height: "100%",
-                    marginTop: -30,
-                    marginLeft: 10,
-                    tintColor: "#F2AE4D",
-                  }}
-                  resizeMode="stretch"
-                  source={require("../../../images/playing/cross.png")}
-                />
-              )}
           </View>
         </TouchableOpacity>
       );
@@ -294,12 +278,16 @@ class SelectLearnBatch extends Component {
           activeOpacity={0.8}
           style={[styles.subview]}
           onPress={() => {
-            this.setState({
-              currentLevel: index,
-              proseedLevel: true,
-              currentLevelName: item.name,
-            });
-            this.getLevelData(item.name, this.state.currentDate);
+            this.setState(
+              {
+                currentLevel: index,
+                proseedLevel: true,
+                currentLevelName: item.name,
+              },
+              () => {
+                this.getLevelData(item.name, this.state.currentDate);
+              }
+            );
           }}
         >
           <LinearGradient
@@ -351,8 +339,9 @@ class SelectLearnBatch extends Component {
               activeOpacity={0.8}
               style={[styles.subview]}
               onPress={() => {
-                this.setState({ currentDate: 1, proseedDate: true });
-                this.getLevelData(this.state.currentLevelName, 1);
+                this.setState({ currentDate: 1, proseedDate: true }, () => {
+                  this.getLevelData(this.state.currentLevelName, 1);
+                });
               }}
             >
               <DateComponent
@@ -366,8 +355,9 @@ class SelectLearnBatch extends Component {
               activeOpacity={0.8}
               style={[styles.subview, { marginLeft: 20 }]}
               onPress={() => {
-                this.setState({ currentDate: 2, proseedDate: true });
-                this.getLevelData(this.state.currentLevelName, 2);
+                this.setState({ currentDate: 2, proseedDate: true }, () => {
+                  this.getLevelData(this.state.currentLevelName, 2);
+                });
               }}
             >
               <DateComponent
@@ -415,8 +405,13 @@ class SelectLearnBatch extends Component {
                 this.state.hideMorning && { height: 0, opacity: 0 },
               ]}
             >
-              {this.state.morningData &&
-                this.state.morningData.map((item) => assigntime(item))}
+              {this.state.morningData && this.state.morningData.length > 0 ? (
+                this.state.morningData.map((item) => assigntime(item))
+              ) : (
+                <View style={{ alignItems: "center", width: "100%" }}>
+                  <Text style={styles.sportText}>No slots available</Text>
+                </View>
+              )}
             </View>
 
             <View style={{ height: 2, backgroundColor: "gray", margin: 10 }} />
@@ -451,8 +446,13 @@ class SelectLearnBatch extends Component {
                 this.state.hideEvening && { height: 0, opacity: 0 },
               ]}
             >
-              {this.state.eveningData &&
-                this.state.eveningData.map((item) => assigntime(item))}
+              {this.state.eveningData && this.state.eveningData.length > 0 ? (
+                this.state.eveningData.map((item) => assigntime(item))
+              ) : (
+                <View style={{ alignItems: "center", width: "100%" }}>
+                  <Text style={styles.sportText}>No slots available</Text>
+                </View>
+              )}
             </View>
           </LinearGradient>
         </ScrollView>

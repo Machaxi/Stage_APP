@@ -52,7 +52,7 @@ import PlayerScreen from "../FirstTimeUser/PlayerScreen";
 import Loader from "../../components/custom/Loader";
 
 export default PlayScreen =({navigation})=>{
-const [playDataVisibility,setPlayDataVisibility] =useState(false);
+const [playDataVisibility,setPlayDataVisibility] =useState(true);
 const [selfTabEnabled, setSelfTab] = useState(true);
 const [packageRemainingDays, setPackageRemainingDays] = useState(0);
 const [expiringToday, setExpiringToday] = useState(false);
@@ -365,7 +365,7 @@ const addCanceledHoursBack = (slotStartTime, slotEndTime) => {
 
 
 const cancelBookingApi = async () => {
-  setModalLoading(true);
+  // setModalLoading(true);
   getData("header", (value) => {
     if (value == "") return;
     const headers = {
@@ -388,6 +388,7 @@ const cancelBookingApi = async () => {
         console.log("requestData" + JSON.stringify(response.data));
         let json = response.data;
         let success = json.success;
+        setModalLoading(false);
         if (success) {
           if(nextSession?.length > 0){
             var nextSessionVal = JSON.parse(
@@ -416,7 +417,6 @@ const cancelBookingApi = async () => {
             Events.publish("LOGOUT");
           }
         }
-        setModalLoading(false);
       })
       .catch(function(error) {
         setModalLoading(false);
