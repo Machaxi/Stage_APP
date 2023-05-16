@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   girlImg: {
     position: "absolute",
-    top: 90,
+    top: 40,
     zIndex: 4,
     width: 205,
     resizeMode:'contain',

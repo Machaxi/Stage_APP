@@ -296,127 +296,141 @@ class SelectBatch extends Component {
               </TouchableOpacity>
             ))}
           </View>
-          <Text style={styles.select}>Select Date</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[styles.subview]}
-              onPress={() => {
-                this.setState({ currentDate: 1, proseedDate: true });
-                this.getTimeData(this.state.currentLevel, 1);
-              }}
-            >
-              <DateComponent
-                currentDate={this.state.currentDate}
-                day={day}
-                date={date}
-                myDate={1}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[styles.subview, { marginLeft: 20 }]}
-              onPress={() => {
-                this.setState({ currentDate: 2, proseedDate: true });
-                this.getTimeData(this.state.currentLevel, 2);
-              }}
-            >
-              <DateComponent
-                currentDate={this.state.currentDate}
-                day={nextday}
-                date={nextdate}
-                myDate={2}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.select}>Select Preferred time</Text>
-          <LinearGradient
-            colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.06)"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={styles.selecttime}
-          >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[styles.timeView, { marginBottom: 10 }]}
-              onPress={() =>
-                this.setState({ hideMorning: !this.state.hideMorning })
-              }
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  style={{ width: 40, height: 40 }}
-                  source={require("../../../images/playing/cloudy.png")}
-                />
-                <Text style={styles.timetext}>Morning</Text>
+          {this.state.proseedLevel && (
+            <View>
+              <Text style={styles.select}>Select Date</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={[styles.subview]}
+                  onPress={() => {
+                    this.setState({ currentDate: 1, proseedDate: true });
+                    this.getTimeData(this.state.currentLevel, 1);
+                  }}
+                >
+                  <DateComponent
+                    currentDate={this.state.currentDate}
+                    day={day}
+                    date={date}
+                    myDate={1}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={[styles.subview, { marginLeft: 20 }]}
+                  onPress={() => {
+                    this.setState({ currentDate: 2, proseedDate: true });
+                    this.getTimeData(this.state.currentLevel, 2);
+                  }}
+                >
+                  <DateComponent
+                    currentDate={this.state.currentDate}
+                    day={nextday}
+                    date={nextdate}
+                    myDate={2}
+                  />
+                </TouchableOpacity>
               </View>
-              <Image
-                style={{ width: 14, height: 8 }}
-                source={
-                  this.state.hideMorning
-                    ? require("../../../images/playing/arrow_back.png")
-                    : require("../../../images/playing/arrow_up.png")
-                }
-              />
-            </TouchableOpacity>
-            <View
-              style={[
-                styles.timecontained,
-                { marginLeft: 5 },
-                this.state.hideMorning && { height: 0, opacity: 0 },
-              ]}
-            >
-              {this.state.morningData && this.state.morningData.length > 0 ? (
-                this.state.morningData.map((item) => assigndate(item))
-              ) : (
-                <View style={{ alignItems: "center", width: "100%" }}>
-                  <Text style={styles.sportText}>No slots available</Text>
-                </View>
-              )}
             </View>
+          )}
+          {this.state.proseedDate && (
+            <View>
+              <Text style={styles.select}>Select Preferred time</Text>
+              <LinearGradient
+                colors={[
+                  "rgba(255, 255, 255, 0.2)",
+                  "rgba(255, 255, 255, 0.06)",
+                ]}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.5 }}
+                style={styles.selecttime}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={[styles.timeView, { marginBottom: 10 }]}
+                  onPress={() =>
+                    this.setState({ hideMorning: !this.state.hideMorning })
+                  }
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image
+                      style={{ width: 40, height: 40 }}
+                      source={require("../../../images/playing/cloudy.png")}
+                    />
+                    <Text style={styles.timetext}>Morning</Text>
+                  </View>
+                  <Image
+                    style={{ width: 14, height: 8 }}
+                    source={
+                      this.state.hideMorning
+                        ? require("../../../images/playing/arrow_back.png")
+                        : require("../../../images/playing/arrow_up.png")
+                    }
+                  />
+                </TouchableOpacity>
+                <View
+                  style={[
+                    styles.timecontained,
+                    { marginLeft: 5 },
+                    this.state.hideMorning && { height: 0, opacity: 0 },
+                  ]}
+                >
+                  {this.state.morningData &&
+                  this.state.morningData.length > 0 ? (
+                    this.state.morningData.map((item) => assigndate(item))
+                  ) : (
+                    <View style={{ alignItems: "center", width: "100%" }}>
+                      <Text style={styles.sportText}>No slots available</Text>
+                    </View>
+                  )}
+                </View>
 
-            <View style={{ height: 1, backgroundColor: "gray", margin: 10 }} />
-
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.timeView}
-              onPress={() =>
-                this.setState({ hideEvening: !this.state.hideEvening })
-              }
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  style={{ width: 40, height: 40 }}
-                  source={require("../../../images/playing/fullmoon.png")}
+                <View
+                  style={{ height: 1, backgroundColor: "gray", margin: 10 }}
                 />
-                <Text style={styles.timetext}>Evening</Text>
-              </View>
-              <Image
-                style={{ width: 14, height: 8 }}
-                source={
-                  this.state.hideEvening
-                    ? require("../../../images/playing/arrow_back.png")
-                    : require("../../../images/playing/arrow_up.png")
-                }
-              />
-            </TouchableOpacity>
-            <View
-              style={[
-                styles.timecontained,
-                { marginLeft: 5 },
-                this.state.hideEvening && { height: 0, opacity: 0 },
-              ]}
-            >
-              {this.state.eveningData && this.state.eveningData.length > 0 ? (
-                this.state.eveningData.map((item) => assigndate(item))
-              ) : (
-                <View style={{ alignItems: "center", width: "100%" }}>
-                  <Text style={styles.sportText}>No slots available</Text>
+
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.timeView}
+                  onPress={() =>
+                    this.setState({ hideEvening: !this.state.hideEvening })
+                  }
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image
+                      style={{ width: 40, height: 40 }}
+                      source={require("../../../images/playing/fullmoon.png")}
+                    />
+                    <Text style={styles.timetext}>Evening</Text>
+                  </View>
+                  <Image
+                    style={{ width: 14, height: 8 }}
+                    source={
+                      this.state.hideEvening
+                        ? require("../../../images/playing/arrow_back.png")
+                        : require("../../../images/playing/arrow_up.png")
+                    }
+                  />
+                </TouchableOpacity>
+                <View
+                  style={[
+                    styles.timecontained,
+                    { marginLeft: 5 },
+                    this.state.hideEvening && { height: 0, opacity: 0 },
+                  ]}
+                >
+                  {this.state.eveningData &&
+                  this.state.eveningData.length > 0 ? (
+                    this.state.eveningData.map((item) => assigndate(item))
+                  ) : (
+                    <View style={{ alignItems: "center", width: "100%" }}>
+                      <Text style={styles.sportText}>No slots available</Text>
+                    </View>
+                  )}
                 </View>
-              )}
+              </LinearGradient>
             </View>
-          </LinearGradient>
+          )}
         </ScrollView>
         <View style={{ flex: 0.07, paddingTop: 20 }}>
           <CustomButton

@@ -262,9 +262,17 @@ const BookSlotScreen = ({ navigation }) => {
             {showProficiencyMenu == true && selectedSportsId != null ? (
               <UserSelectionForSlot
                 user={proficiency}
-                data={["Basic", "Intermediate", "Advanced"]}
+                data={["Beginner", "Intermediate", "Advance"]}
                 label={"Select proficiency"}
-                setUserVal={(val) => setProficiency(val)}
+                setUserVal={(val) => {
+                  if (val == "Beginner") {
+                    setProficiency("BASIC");
+                  } else if (val == "Advance") {
+                    setProficiency("ADVANCED");
+                  } else {
+                    setProficiency("INTERMEDIATE");
+                  }
+                }}
               />
             ) : null}
             <SelectDateBookSlot

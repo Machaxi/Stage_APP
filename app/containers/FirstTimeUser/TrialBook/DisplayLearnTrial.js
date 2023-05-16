@@ -37,19 +37,6 @@ class DisplayLearnTrial extends Component {
     });
   };
 
-  dateCheck = () => {
-    const currentDate = new Date();
-    const targetTime = moment(this.state.selectBatch.endTime, "HH:mm:ss");
-    const currentTime = moment();
-
-    if (this.state.selectDate.getDate() < currentDate.getDate()) {
-      return false;
-    } else {
-      const noTouch = currentTime.isSameOrBefore(targetTime);
-      return noTouch;
-    }
-  };
-
   hadleBackPress = () => {
     this.props.navigation.goBack();
   };
@@ -71,32 +58,23 @@ class DisplayLearnTrial extends Component {
       );
     }
 
-    const datevalue = this.dateCheck();
     return (
       <LinearGradient
         colors={[darkBlueVariant, darkBlueVariant]}
         locations={[0, 1]}
         style={styles.container}
       >
-        {datevalue ? (
-          <CongratulationScreen
-            title="Coaching Trial"
-            username={this.state.username}
-            selectCenter={this.state.selectCenter}
-            selectSport={this.state.selectSport}
-            selectDate={this.state.selectDate}
-            selectBatch={this.state.selectBatch}
-            distance={this.state.distance}
-            courtName={this.state.courtName}
-            onPressBack={this.hadleBackPress}
-          />
-        ) : (
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <Text style={styles.insideText}>No booking available</Text>
-          </View>
-        )}
+        <CongratulationScreen
+          title="Coaching Trial"
+          username={this.state.username}
+          selectCenter={this.state.selectCenter}
+          selectSport={this.state.selectSport}
+          selectDate={this.state.selectDate}
+          selectBatch={this.state.selectBatch}
+          distance={this.state.distance}
+          courtName={this.state.courtName}
+          onPressBack={this.hadleBackPress}
+        />
       </LinearGradient>
     );
   }

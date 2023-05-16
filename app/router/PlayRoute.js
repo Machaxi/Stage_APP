@@ -23,10 +23,12 @@ import BookSlotCentreSelectionScreen from "../containers/play/BookSlotCentreSele
 import RequestHeaderLeft from "../atoms/requestHeaderLeft";
 import PlayingPlan from "../containers/BuyPlan/PlayingPlan";
 import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
-import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
 import MyRequestsHome from "../containers/MyRequests/MyRequestsHome";
 import MyBookingsScreen from "../containers/MyBookings/MyBookingsScreen";
 import RequestHeaderBack from "../atoms/requestHeaderBack";
+import EditPreferredSports from "../containers/play/EditPreferredSports";
+import PlayTrialList from "../containers/FirstTimeUser/TrialBook/PlayTrialList";
+import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
 
 const playModule = createStackNavigator({
   Play: {
@@ -35,6 +37,23 @@ const playModule = createStackNavigator({
   },
   BookPlayTrail: {
     screen: LearnBookTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "PLay",
+      headerLeft: <RequestHeaderLeft navigation={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  EditPreferredSports: {
+    screen: EditPreferredSports,
     navigationOptions: ({ navigation }) => ({
       title: "PLay",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
@@ -122,6 +141,23 @@ const playModule = createStackNavigator({
       },
     }),
   },
+  PlayTrialList: {
+    screen: PlayTrialList,
+    navigationOptions: ({ navigation }) => ({
+      title: "PLay Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   DisplayPlayTrial: {
     screen: DisplayPlayTrial,
     navigationOptions: ({ navigation }) => ({
@@ -139,7 +175,6 @@ const playModule = createStackNavigator({
       },
     }),
   },
-
   CouponList: {
     screen: CouponListScreen,
     // navigationOptions: ({ navigation }) => ({

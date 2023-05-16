@@ -133,6 +133,12 @@ class PlayerDetails extends Component {
               url={false}
               name="Child"
               onPress={() => {
+                if (
+                  this.state.related_players &&
+                  this.state.related_players.length > 1
+                ) {
+                  this.setState({ displayname: false });
+                }
                 this.setState({
                   currentIndex: 2,
                   proseedLevel: true,
@@ -142,43 +148,63 @@ class PlayerDetails extends Component {
             />
           </View>
           <Text style={styles.mainText}>Player Details</Text>
-          {this.state.currentIndex == 2 && this.state.related_players && this.state.related_players.length > 0 && (
-            <View>
-              <Text style={styles.subText}>Select Player</Text>
-              <View style={styles.usercontained}>
-                {this.state.related_players.map((item, index) => (
-                  <CustomRadioButton
-                    disabled={false}
-                    index={index}
-                    currentLevel={this.state.currentChild}
-                    name={item.name}
-                    width={deviceWidth * 0.3}
-                    onPress={() => {
-                      this.setState({
-                        currentChild: index,
-                        displayname: false,
-                        procednext: true,
-                        childDetails: this.state.related_players[index],
-                      });
-                    }}
-                  />
-                ))}
-                <CustomRadioButton
-                  disabled={false}
-                  index={this.state.related_players.length}
-                  currentLevel={this.state.currentChild}
-                  name="Add New Player"
-                  onPress={() => {
-                    this.setState({
-                      currentChild: this.state.related_players.length,
-                      displayname: true,
-                      procednext: false,
-                    });
-                  }}
-                />
+          {this.state.currentIndex == 2 &&
+            this.state.related_players &&
+            this.state.related_players.length > 0 && (
+              <View>
+                <Text style={styles.subText}>Select Player</Text>
+                <View style={styles.usercontained}>
+                  {this.state.related_players.map((item, index) => (
+                    <CustomRadioButton
+                      disabled={false}
+                      index={index}
+                      currentLevel={this.state.currentChild}
+                      name={item.name}
+                      width={deviceWidth * 0.3}
+                      onPress={() => {
+                        this.setState({
+                          currentChild: index,
+                          displayname: false,
+                          procednext: true,
+                          childDetails: this.state.related_players[index],
+                        });
+                      }}
+                    />
+                  ))}
+                  {this.props.title == "Coaching Trial" &&
+                    this.state.related_players.length < 2 && (
+                      <CustomRadioButton
+                        disabled={false}
+                        index={this.state.related_players.length}
+                        currentLevel={this.state.currentChild}
+                        name="Add New Player"
+                        onPress={() => {
+                          this.setState({
+                            currentChild: this.state.related_players.length,
+                            displayname: true,
+                            procednext: false,
+                          });
+                        }}
+                      />
+                    )}
+                  {this.props.title != "Coaching Trial" && (
+                    <CustomRadioButton
+                      disabled={false}
+                      index={this.state.related_players.length}
+                      currentLevel={this.state.currentChild}
+                      name="Add New Player"
+                      onPress={() => {
+                        this.setState({
+                          currentChild: this.state.related_players.length,
+                          displayname: true,
+                          procednext: false,
+                        });
+                      }}
+                    />
+                  )}
+                </View>
               </View>
-            </View>
-          )}
+            )}
           {this.state.displayname && (
             <View>
               <Text style={styles.subText}>Player Name</Text>

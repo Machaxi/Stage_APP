@@ -197,7 +197,7 @@ class CoachingPlan extends Component {
         {this.state.firstPage && (
           <View style={{ flex: 1 }}>
             <GetBack title={this.state.title} onPress={this.hadleBack} />
-            <PlayerDetails onPress={this.onPressDetails} />
+            <PlayerDetails title="Coaching Plan" onPress={this.onPressDetails} />
           </View>
         )}
         {this.state.couponCode && (

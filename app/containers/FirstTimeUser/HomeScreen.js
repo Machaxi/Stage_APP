@@ -12,8 +12,7 @@ import RightMenuToolbar from "../../router/RightMenuToolbar";
 import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 
-class HomeScreen extends Component { 
-
+class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -203,7 +202,7 @@ class HomeScreen extends Component {
               }}
               navigation={this.props.navigation}
               onPressTrail={() => {
-                this.props.navigation.navigate("BookTrail");
+                this.props.navigation.navigate("BookLearnTrail");
               }}
             />
           )}

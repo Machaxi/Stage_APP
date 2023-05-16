@@ -42,12 +42,8 @@ const SelectPlan = (props) => {
           </View>
           <Image
             source={props.image}
-            style={[
-              styles.image,
-              props.index == 0 && { width: 110, height: 120 },
-              props.index == 3 && { marginLeft: -20 },
-            ]}
-            resizeMode="center"
+            style={styles.image}
+            resizeMode="contain"
           />
         </View>
         {props.benefits.length > 1 && (

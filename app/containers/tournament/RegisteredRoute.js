@@ -12,6 +12,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import TournamentCategoryDialog from './TournamentCategoryDialog'
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import FastImage from 'react-native-fast-image'
+import LinearGradient from "react-native-linear-gradient";
 
 var filterData = ''
 
@@ -246,27 +247,18 @@ class RegisteredRoute extends BaseComponent {
                     marginBottom: 8,
                     borderRadius: 12
                 }}>
-                <Card style={{ borderRadius: 16, elevation: 1 }}>
-
+                 <View style={styles.inputview}>
                     <TextInput
-                        onChangeText={text => {
-                            this.state.query = text
-                            //console.warn(this.state.query)
-                            this.setState({
-                                query: text
-                            })
-                        }}
-                        style={{
-                            marginLeft: 8,
-                            height: 45,
-                            backgroundColor: 'white',
-                            borderRadius: 16,
-                            fontFamily: 'Quicksand-Regular'
-                        }} placeholder="Search"></TextInput>
-
-
-                </Card>
-
+                    style={styles.input}
+                    placeholder="Search"
+                    placeholderTextColor="#BFBFBF"
+                    maxLength={30}
+                    onChangeText={text => {
+                        this.state.query = text
+                        this.setState({ query: text })
+                    }}
+                    />
+                 </View>
                 <TouchableOpacity
                     onPress={() => {
                         this.props.navigation.navigate('TournamentFilter', {
@@ -279,7 +271,7 @@ class RegisteredRoute extends BaseComponent {
                         marginTop: 8,
                         marginBottom: 4,
                         textAlign: 'right',
-                        color: '#404040',
+                        color: 'white',
                         fontSize: 12,
                         fontFamily: 'Quicksand-Regular'
                     }} >Filter</Text>
@@ -302,7 +294,7 @@ class RegisteredRoute extends BaseComponent {
                     })
                 }}>
 
-                <Card
+                {/* <Card
                     style={{
                         borderRadius: 12,
                         marginLeft: 12,
@@ -311,7 +303,11 @@ class RegisteredRoute extends BaseComponent {
                         marginBottom: 8,
                         elevation: 2
 
-                    }}>
+                    }}> */}
+            <LinearGradient
+                colors={["rgba(255, 255, 255, 0.068)", " rgba(255, 255, 255, 0.0102)"]}
+                style={ styles.gradient }
+            >
                     <View>
                         {/* <Image style={{
                             height: 150, width: "100%",
@@ -343,7 +339,7 @@ class RegisteredRoute extends BaseComponent {
                                 flexDirection: 'row', flex: 1, justifyContent: 'space-between'
                             }}>
 
-                                <Text style={defaultStyle.bold_text_14}>
+                                <Text style={[defaultStyle.bold_text_14, {color: "white"}]}>
                                     {item.name}
                                 </Text>
 
@@ -360,7 +356,7 @@ class RegisteredRoute extends BaseComponent {
 
                             <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
-                                <Text style={defaultStyle.bold_text_14}>
+                                <Text style={[defaultStyle.bold_text_14, {color: "white"}]}>
                                     {Moment(item.start_date).format('MMM YYYY')}
                                 </Text>
                                 <View style={defaultStyle.blue_rounded_4}>
@@ -375,10 +371,10 @@ class RegisteredRoute extends BaseComponent {
                             <Text style={{
                                 paddingTop: 6,
                                 fontSize: 14,
-                                color: '#404040',
+                                color: 'white',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Dates <Text style={defaultStyle.bold_text_14}>
+                                Dates <Text style={[defaultStyle.bold_text_14, {color: '#A3A5AE'}]}>
                                     {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
                                 </Text>
                             </Text>
@@ -389,7 +385,7 @@ class RegisteredRoute extends BaseComponent {
                                 fontFamily: 'Quicksand-Regular'
                             }}>
                                 Last Date of Registration
-                            <Text style={defaultStyle.bold_text_14}> {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
+                            <Text style={[defaultStyle.bold_text_14, {color: '#A3A5AE'}]}> {Moment(item.registration_last_date).format('DD MMM YYYY')}</Text>
                             </Text>
 
 
@@ -482,7 +478,7 @@ class RegisteredRoute extends BaseComponent {
                         </View>
                     </View>
 
-                </Card>
+                </LinearGradient>
             </TouchableOpacity>
 
         )
@@ -522,6 +518,10 @@ class RegisteredRoute extends BaseComponent {
 
         return (
 
+            <LinearGradient
+            colors={["#051732", "#232031"]}
+            style={{ flex: 1}}
+          >
             <View style={styles.chartContainer}>
 
                 <Spinner
@@ -557,11 +557,13 @@ class RegisteredRoute extends BaseComponent {
                         <Text style={[defaultStyle.regular_text_14, {
                             justifyContent: 'center',
                             flex: 1, textAlign: 'center',
+                            color: "white"
                         }]}>No Tournament found</Text></View>
                 }
 
 
             </View>
+            </LinearGradient>
         );
     }
 }
@@ -578,8 +580,29 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegisteredRoute);
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        backgroundColor: '#F7F7F7'
     },
-
+    inputview: {
+        marginTop: 7,
+        borderColor: "#FCB550",
+        borderRadius: 26,
+        borderWidth: 1,
+        height: 50,
+        justifyContent: "center",
+      },
+      input: {
+        paddingHorizontal: 20,
+        fontFamily: "Nunito-Regular",
+        color: "white",
+      },
+      gradient: {
+        borderRadius: 10,
+        paddingBottom: 14,
+        paddingTop: 3,
+        paddingHorizontal: 6,
+        marginHorizontal: 15,
+        borderColor: "#70765788",
+        borderWidth: 1,
+        marginTop: 10,
+      },
 });
 

@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     color: "#AFAFAF",
     fontSize: 16,
     fontFamily: "Quicksand-Medium",
-    marginTop: 2,
     textAlign: "center",
   },
   orange_arrow_img: {
@@ -57,6 +56,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     marginRight: 8,
+    marginTop: 2,
     tintColor: "#AFAFAF",
   },
   drawercell: {

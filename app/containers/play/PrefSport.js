@@ -1,63 +1,58 @@
 import React from "react";
-import {
-    View,
-    Text,
-    Image,
-    StyleSheet,
-  } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { redVariant2, yellowVariant4 } from "../util/colors";
 import NamedRoundedGradientContainer from "../../components/molecules/roundedNamedGradientContainer";
-import { getProficiencyGradients, getProficiencyName } from "../util/utilFunctions";
+import { Nunito_Regular } from "../util/fonts";
 
-  
 export const PrefSport = ({
-         gradientColors, 
-         icon,
-         sportTitle,
-         currentRating,
-         currentRatingColor,
-       }) => {
-         return (
-           <View style={styles.container}>
-             <LinearGradient
-               colors={[
-                 "rgba(255, 255, 255, 0.24)",
-                 "rgba(255, 255, 255, 0.036)",
-               ]}
-               style={styles.gradient}
-             >
-               <View>
-                 <Text style={styles.preferredSport}>
-                   Preferred sport
-                 </Text>
-                 <View
-                   style={[styles.rounded_button, styles.sportTitleView]}
-                 >
-                   <Image
-                     style={{ height: 16, width: 16 }}
-                     source={icon}
-                     resizeMode="cover"
-                   />
-                   <Text style={styles.sportTitle}>{sportTitle}</Text>
-                 </View>
-               </View>
+  gradientColors,
+  icon,
+  sportTitle,
+  currentRating,
+  currentRatingColor,
+}) => {
+  return (
+    <LinearGradient
+      colors={["rgba(255, 255, 255, 0.24)", "rgba(255, 255, 255, 0.036)"]}
+      style={{ marginHorizontal: 20, borderRadius: 12 }}
+    >
+      <View
+        style={{ flexDirection: "row-reverse", marginTop: 5, paddingRight: 20 }}
+      >
+        <Text style={styles.editText}>Edit</Text>
+        <Image
+          resizeMode="contain"
+          style={{ width: 12, height: 12 }}
+          source={require("../../images/edit_profile.png")}
+        />
+      </View>
+      <View style={styles.gradient}>
+        <View>
+          <Text style={styles.preferredSport}>Preferred sport</Text>
+          <View style={[styles.rounded_button, styles.sportTitleView]}>
+            <Image
+              style={{ height: 16, width: 16 }}
+              source={icon}
+              resizeMode="cover"
+            />
+            <Text style={styles.sportTitle}>{sportTitle}</Text>
+          </View>
+        </View>
 
-               <View style={styles.seperator} />
+        <View style={styles.seperator} />
 
-               <View>
-                 <Text style={styles.currentRating}>Current rating</Text>
-                 <NamedRoundedGradientContainer
-                   name={currentRating}
-                   colors={gradientColors}
-                   txtColor={currentRatingColor}
-                 />
-               </View>
-             </LinearGradient>
-           </View>
-         );
-       };
-
+        <View>
+          <Text style={styles.currentRating}>Current rating</Text>
+          <NamedRoundedGradientContainer
+            name={currentRating}
+            colors={gradientColors}
+            txtColor={currentRatingColor}
+          />
+        </View>
+      </View>
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -74,12 +69,9 @@ const styles = StyleSheet.create({
     borderColor: "#FFFFFF",
   },
   gradient: {
-    paddingTop: 14,
     paddingBottom: 14,
-    paddingHorizontal: 28,
     flexDirection: "row",
-    justifyContent: "space-between",
-    borderRadius: 12,
+    justifyContent: "space-around",
   },
   preferredSport: {
     color: "#F3F2F5",
@@ -115,6 +107,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Nunito-Regular",
     fontWeight: "400",
+  },
+  editText: {
+    color: "#667DDB",
+    fontFamily: Nunito_Regular,
+    fontSize: 12,
+    fontWeight: "400",
+    marginLeft: 4,
+    marginRight: 10,
   },
   rounded_button: {
     alignItems: "center",

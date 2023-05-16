@@ -18,6 +18,7 @@ import {
   Linking,
   Alert,
   ToastAndroid,
+  ActionSheetIOS,
 } from "react-native";
 import { PeerRatingCard } from "./PeerRatingCard";
 import { SelfRatingCard } from "./SelfRatingCard";
@@ -82,6 +83,7 @@ const [plansResponse, setPlansResponse] = useState(null);
 const [refreshing, setRefreshing] = useState(false);
 const [userDetails, setUserDetails] = useState(null);
 const [playType, setPlayType] = useState(null);
+const [planData, setPlanData] = useState(null);
 
 
 var updateRatingError = null;
@@ -189,6 +191,7 @@ const getPlayerDetailsApi = async () => {
             setRemainingHrsApiRes(hoursLeft);
             setTotalAvailableHours(totalHoursRemaining)
             setPlayType(json.data?.plan?.planTerm)
+            setPlanData(json.data?.plan)
            if(json.data?.plan?.expiryDate != null){
             var startDate = moment(Date());
             var endDate = moment(json.data?.plan?.expiryDate);
@@ -201,9 +204,9 @@ const getPlayerDetailsApi = async () => {
 
            }
            todayLimitReached =
-             json.data?.plan?.maxPlayingHourPerDay == 0 ||
-             json.data?.plan?.maxPlayingHourPerDay == 0.0 ||
-             json.data?.plan?.maxPlayingHourPerDay == null
+             json.data?.plan?.maxSlotBookingPerDay == 0 ||
+             json.data?.plan?.maxSlotBookingPerDay == 0.0 ||
+             json.data?.plan?.maxSlotBookingPerDay == null
                ? true
                : false;
            setLimitReachForToday(todayLimitReached);
@@ -424,10 +427,26 @@ const cancelBookingApi = async () => {
           `${cancelBookingError?.response?.data?.error_message ??
             ""}`,
           ToastAndroid.SHORT
-        );
+        ); 
+        {
+          Platform.OS === "ios" &&
+            showToast("You already booked trial for this sport.");
+        }
         console.log(error);
       });
   });
+};
+
+showToast = (message) => {
+  const options = ["Cancel"];
+  ActionSheetIOS.showActionSheetWithOptions(
+    {
+      title: message,
+      options: options,
+      cancelButtonIndex: options.length - 1,
+    },
+    (buttonIndex) => {}
+  );
 };
 
 useEffect(() => {
@@ -741,13 +760,20 @@ const onPressPlan = (selectPlan, playPlanData) => {
             name={playerDetailsResponse?.user?.name ?? ""}
             image={{ uri: playerDetailsResponse?.user?.profile_pic ?? "" }}
           />
-          <PrefSport
-            gradientColors={getProficiencyGradients(userProficiency)}
-            currentRatingColor={getProficiencyColor(userProficiency)}
-            currentRating={getProficiencyName(userProficiency)}
-            icon={{ uri: preferredDetails?.sport?.image }}
-            sportTitle={preferredDetails?.sport?.name}
-          />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              var sentdata = planData?.subscriptionId
+              navigation.navigate("EditPreferredSports", { sentdata });
+            }}>
+            <PrefSport
+              gradientColors={getProficiencyGradients(userProficiency)}
+              currentRatingColor={getProficiencyColor(userProficiency)}
+              currentRating={getProficiencyName(userProficiency)}
+              icon={{ uri: preferredDetails?.sport?.image }}
+              sportTitle={preferredDetails?.sport?.name}
+            />
+          </TouchableOpacity>
           <MembershipDetails
             //TODO:
             packageRemainingDays={packageRemainingDays}

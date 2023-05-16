@@ -10,7 +10,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-
+import LinearGradient from "react-native-linear-gradient";
 import CustomAnimationProgress from "../../components/custom/CustomAnimationProgress";
 import { Card } from "react-native-paper";
 var deviceWidth = Dimensions.get("window").width - 20;
@@ -52,8 +52,8 @@ const MyStats = (props) => {
               justifyContent: "space-between",
             }}
           >
-            <Text style={defaultStyle.bold_text_14}>{item.name}</Text>
-            <Text style={defaultStyle.bold_text_12}>{item.score}</Text>
+            <Text style={[defaultStyle.bold_text_14, {color: 'white'}]}>{item.name}</Text>
+            <Text style={[defaultStyle.bold_text_12, {color: 'white'}]}>{item.score}</Text>
           </View>
 
           <CustomAnimationProgress
@@ -88,7 +88,13 @@ const MyStats = (props) => {
 
   return (
     <View style={{ margin: 10 }}>
-      <Card style={{ borderRadius: 12 }}>
+      <LinearGradient
+        colors={[
+          "rgba(255, 255, 255, 0.068)",
+          " rgba(255, 255, 255, 0.0102)",
+        ]}
+        style={[styles.gradient]}
+      >
         <View>
           <View
             style={{
@@ -108,7 +114,7 @@ const MyStats = (props) => {
                 <Text
                   style={[
                     defaultStyle.bold_text_14,
-                    { marginLeft: 10, marginTop: 10 },
+                    { marginLeft: 10, marginTop: 10, color: 'white' },
                   ]}
                 >
                   My Stats
@@ -189,14 +195,15 @@ const MyStats = (props) => {
                 marginBottom: 20,
               }}
             >
-              <Text>No data to show</Text>
+              <Text style={{color: 'white'}}>No data to show</Text>
             </View>
           )}
         </View>
-      </Card>
+      </LinearGradient>
     </View>
   );
 };
+
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 14,
@@ -204,7 +211,7 @@ const pickerSelectStyles = StyleSheet.create({
     //paddingHorizontal: 10,
     borderColor: "#614051",
     borderRadius: 8,
-    color: "black",
+    color: "white",
     //marginBottom: 4,
     //alignItems: 'center',
     //textAlign: 'center',
@@ -218,9 +225,18 @@ const pickerSelectStyles = StyleSheet.create({
     fontFamily: "Quicksand-Regular",
     borderColor: "#614051",
     borderRadius: 8,
-    color: "black",
+    color: "white",
     paddingRight: 10, // to ensure the text is never behind the icon
   },
 });
-const styles = StyleSheet.create({});
+
+const styles = StyleSheet.create({
+  gradient: {
+    shadowOpacity: 0.2,
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    borderColor: "rgba(0, 0, 0, 0.7)",
+    borderWidth: 1,
+    borderRadius: 10
+  },
+});
 export default MyStats;

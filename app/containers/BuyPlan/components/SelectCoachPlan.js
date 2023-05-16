@@ -103,6 +103,8 @@ class SelectCoachPlan extends Component {
           <Text style={styles.select}>Select Payment plan</Text>
           {this.state.planData &&
             this.state.planData.map((plan, index) => {
+              console.log(plan);
+              
               return (
                 plan.term_id != 3 && (
                   <SelectPlan
@@ -112,10 +114,10 @@ class SelectCoachPlan extends Component {
                       plan.term_id === 1
                         ? "Monthly"
                         : plan.term_id === 2
-                        ? "Quaterly"
+                        ? "Quarterly"
                         : "Yearly"
                     }
-                    subtitle={plan.planFees}
+                    subtitle={"Rs. " + plan.planFees}
                     description={
                       plan.term_id === 1
                         ? "Best coaches in town"

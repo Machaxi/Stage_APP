@@ -182,7 +182,7 @@ export const SelfRatingCard = ({
                  marginTop={22}
                  colors={["#6b6a76", "#2a273a"]}
                />
-               <Text style={styles.peersRating}>Peers rating</Text>
+               <Text style={[styles.header, {marginVertical: 15}]}>Peers rating</Text>
 
                <FlatList data={data} renderItem={renderSocialFeedCard} />
              </LinearGradient>

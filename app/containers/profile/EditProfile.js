@@ -142,9 +142,9 @@ class EditProfile extends BaseComponent {
             getData('userInfo', value => {
                 userData = (JSON.parse(value))
                 let parentChild = relations.map(item => {
-                    return {value: item.user_id, label: formattedName(item.name)}
+                    return {value: item.user_id, label: item.name}
                 })
-                parentChild.push({value: this.parent_user_id, label: formattedName(userData.user['name'])})
+                parentChild.push({value: this.parent_user_id, label: userData.user['name']})
                 this.setState({parentChild})
             })
         }

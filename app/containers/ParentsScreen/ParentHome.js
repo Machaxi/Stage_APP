@@ -123,32 +123,36 @@ class ParentHome extends BaseComponent {
       //     </View>
       //   </TouchableOpacity>
       // ),
-      headerTitleStyle: {
-        color: "white",
-      },
-      headerStyle: {
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      },
+      // headerTitleStyle: {
+      //   color: "white",
+      // },
+      // headerStyle: {
+      //   elevation: 0,
+      //   shadowOpacity: 0,
+      //   borderBottomWidth: 0,
+      // },
       //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
       // navigation={navigation} />,
-      headerBackground: (
-        // <LinearGradient
-        //     colors={['#24262A', '#332B70']}
-        //     style={{ flex: 1 }}
-        //     start={{ x: 1, y: 0 }}
-        //     end={{ x: 0.5, y: 1 }}
-        //     locations={[0.0, 0.15, 0.90]}
-        // />
-        <ImageBackground
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-          source={require("../../images/toolbar_bg.png")}
-        />
-      ),
+      // headerBackground: (
+      //   // <LinearGradient
+      //   //     colors={['#24262A', '#332B70']}
+      //   //     style={{ flex: 1 }}
+      //   //     start={{ x: 1, y: 0 }}
+      //   //     end={{ x: 0.5, y: 1 }}
+      //   //     locations={[0.0, 0.15, 0.90]}
+      //   // />
+      //   <ImageBackground
+      //     style={{
+      //       width: "100%",
+      //       height: "100%",
+      //     }}
+      //     source={require("../../images/toolbar_bg.png")}
+      //   />
+      // ),
+      headerTitleStyle: styles.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
     };
@@ -852,6 +856,7 @@ class ParentHome extends BaseComponent {
                       defaultStyle.regular_text_14,
                       {
                         textDecorationLine: "line-through",
+                        color: "white"
                       },
                     ]}
                   >
@@ -864,6 +869,7 @@ class ParentHome extends BaseComponent {
                       {
                         textDecorationLine: "line-through",
                         marginLeft: 10,
+                        color: "white"
                       },
                     ]}
                   >
@@ -892,13 +898,13 @@ class ParentHome extends BaseComponent {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Text style={defaultStyle.regular_text_14}>
+                  <Text style={[defaultStyle.regular_text_14,{color: 'white'}]}>
                     {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
                     {getUtcDateFromTime(session_date, start_time)}
                   </Text>
 
                   <Text
-                    style={[defaultStyle.regular_text_14, { marginLeft: 10 }]}
+                    style={[defaultStyle.regular_text_14, { marginLeft: 10, color: 'white' }]}
                   >
                     {getFormatTimeDate(session_date, start_time) +
                       "  -   " +
@@ -958,7 +964,10 @@ class ParentHome extends BaseComponent {
         }
       }
       return (
-        <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}>
+        <LinearGradient
+        colors={["#051732", "#232031"]}
+        style={{ flex: 1}}
+      >
           <ScrollView
             refreshControl={
               <RefreshControl
@@ -982,35 +991,44 @@ class ParentHome extends BaseComponent {
             </View> */}
 
             {sessionArray.length != 0 ? (
-              <CustomeCard>
+              <LinearGradient
+              colors={[
+                "rgba(255, 255, 255, 0.068)",
+                " rgba(255, 255, 255, 0.0102)",
+              ]}
+              style={styles.gradient}
+              >
                 <TouchableOpacity
                   onPress={() => {
                     global.click_batch_id = operations.batch_id;
                     this.props.navigation.navigate("Batch");
                   }}
                 >
-                  <View
-                    style={{
-                      borderTopLeftRadius: 10,
-                      borderTopRightRadius: 10,
-                      backgroundColor: "#F9FBE9",
-                      paddingLeft: 12,
-                      paddingRight: 12,
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                      paddingTop: 8,
-                      paddingBottom: 8,
-                      alignItems: "center",
-                    }}
+                  <LinearGradient
+                  colors={[
+                    "rgba(255, 255, 255, 0.068)",
+                    " rgba(255, 255, 255, 0.0102)",
+                  ]}
+                  style={{
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    paddingLeft: 12,
+                    paddingRight: 12,
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                    alignItems: "center",
+                  }}
                   >
                     <View>
-                      <Text style={defaultStyle.bold_text_10}>
+                      <Text style={[defaultStyle.bold_text_10, {color: "white"}]}>
                         {operations.batch_name}
                       </Text>
                       <Text
                         style={{
                           ...defaultStyle.bold_text_10,
-                          marginTop: 18,
+                          marginTop: 18, color: "white"
                         }}
                       >
                         Next Session :{" "}
@@ -1041,25 +1059,31 @@ class ParentHome extends BaseComponent {
                               source={require("../../images/whatsapp_logo.png")}
                             />
                           </TouchableOpacity>
-                          <Text style={defaultStyle.bold_text_10}>
+                          <Text style={[defaultStyle.bold_text_10, {color: "white"}]}>
                             Join Whatsapp Group
                           </Text>
                         </View>
                       ) : null}
                     </View>
-                  </View>
+                  </LinearGradient>
                   <View style={{ marginLeft: 12, marginRight: 12 }}>
                     <View style={[defaultStyle.line_style, { marginTop: 0 }]} />
 
                     {sessionArray}
                   </View>
                 </TouchableOpacity>
-              </CustomeCard>
+              </LinearGradient>
             ) : null}
 
             {is_payment_due ? (
-              <CustomeCard>
-                <View
+              <LinearGradient
+              colors={[
+                "rgba(255, 255, 255, 0.068)",
+                " rgba(255, 255, 255, 0.0102)",
+              ]}
+              style={styles.gradient}
+              >
+              <View
                   style={{
                     marginLeft: 12,
                     marginRight: 12,
@@ -1079,7 +1103,7 @@ class ParentHome extends BaseComponent {
                         alignItems: "center",
                       }}
                     >
-                      <Text style={defaultStyle.bold_text_10}>Payment</Text>
+                      <Text style={[defaultStyle.bold_text_10, {color:"white"}]}>Payment</Text>
                       <View style={{ marginLeft: 10 }}>
                         <DueView />
                       </View>
@@ -1112,7 +1136,7 @@ class ParentHome extends BaseComponent {
                   />
 
                   <Text
-                    style={[defaultStyle.bold_text_14, { marginRight: 16 }]}
+                    style={[defaultStyle.bold_text_14, { marginRight: 16, color: 'white' }]}
                   >
                     {name}
                   </Text>
@@ -1136,13 +1160,13 @@ class ParentHome extends BaseComponent {
                         <Text
                           style={[
                             defaultStyle.bold_text_10,
-                            { color: "#A3A5AE" },
+                            { color: "white" },
                           ]}
                         >
                           Amount
                         </Text>
                         <Text
-                          style={[defaultStyle.bold_text_14, { marginTop: 10 }]}
+                          style={[defaultStyle.bold_text_14, { marginTop: 10, color: "white" }]}
                         >
                           {payment_detail_academy.totalAmount}
                         </Text>
@@ -1159,7 +1183,7 @@ class ParentHome extends BaseComponent {
                     </View>
                   </View>
                 </View>
-              </CustomeCard>
+              </LinearGradient>
             ) : null}
 
             {is_reward_point_due ? (
@@ -1239,7 +1263,14 @@ class ParentHome extends BaseComponent {
             />
 
             <View style={{ margin: 5 }}>
-              <Card style={{ margin: 5, borderRadius: 10 }}>
+              {/* <Card style={{ margin: 5, borderRadius: 10 }}> */}
+              <LinearGradient
+                colors={[
+                  "rgba(255, 255, 255, 0.068)",
+                  " rgba(255, 255, 255, 0.0102)",
+                ]}
+                style={[styles.gradient,{marginHorizontal: 5}]}
+              >
                 <TouchableOpacity
                   onPress={() => {
                     //console.warn("Touch Press")
@@ -1263,6 +1294,7 @@ class ParentHome extends BaseComponent {
                         height: 30,
                         marginRight: 20,
                         marginTop: 5,
+                        tintColor: 'white'
                       }}
                     />
                     <View style={{ flex: 1 }}>
@@ -1276,7 +1308,7 @@ class ParentHome extends BaseComponent {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Text style={defaultStyle.bold_text_14}>
+                        <Text style={[defaultStyle.bold_text_14, {color: 'white'}]}>
                           View Other Players
                         </Text>
 
@@ -1287,13 +1319,14 @@ class ParentHome extends BaseComponent {
                             height: 13,
                             marginRight: 0,
                             marginTop: 5,
+                            tintColor: 'white'
                           }}
                         />
                       </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              </Card>
+              </LinearGradient>
             </View>
 
             {/* <View style={{ margin: 5 }}>
@@ -1601,7 +1634,7 @@ class ParentHome extends BaseComponent {
                   marginBottom: 20,
                 }}
               >
-                <Card
+                {/* <Card
                   style={{
                     marginLeft: 10,
                     marginRight: 10,
@@ -1609,7 +1642,14 @@ class ParentHome extends BaseComponent {
                     marginBottom: 10,
                     borderRadius: 12,
                   }}
-                >
+                > */}
+              <LinearGradient
+                colors={[
+                  "rgba(255, 255, 255, 0.068)",
+                  " rgba(255, 255, 255, 0.0102)",
+                ]}
+                style={[styles.gradient, {margin: 10}]}
+              >
                   <View
                     style={{
                       marginLeft: 12,
@@ -1617,7 +1657,7 @@ class ParentHome extends BaseComponent {
                       marginTop: 16,
                     }}
                   >
-                    <Text style={defaultStyle.bold_text_10}>
+                    <Text style={[defaultStyle.bold_text_10,{color: "white"}]}>
                       Coach Feedback
                     </Text>
                   </View>
@@ -1641,7 +1681,7 @@ class ParentHome extends BaseComponent {
                       <Text
                         style={[
                           defaultStyle.bold_text_14,
-                          { color: "#707070" },
+                          { color: "white" },
                         ]}
                       >
                         {coach_feedback_data.target.name}
@@ -1712,7 +1752,7 @@ class ParentHome extends BaseComponent {
                         <Text
                           style={[
                             defaultStyle.bold_text_10,
-                            { marginTop: 5, color: "#A3A5AE" },
+                            { marginTop: 5, color: "white" },
                           ]}
                         >
                           Top Reviews
@@ -1802,7 +1842,7 @@ class ParentHome extends BaseComponent {
                       </View>
                     </View>
                   </View>
-                  <Card
+                  {/* <Card
                     style={{
                       elevation: 4,
                       borderBottomLeftRadius: 12,
@@ -1811,7 +1851,9 @@ class ParentHome extends BaseComponent {
                       borderTopRightRadius: 0,
                       marginTop: 12,
                     }}
-                  >
+                  > */}
+                  <View style={{width: "100%", height: 1, backgroundColor: "#575f61ed"}}/>
+                  <View>
                     <TouchableOpacity
                       onPress={() => {
                         this.props.navigation.navigate("CoachProfileDetail", {
@@ -1827,15 +1869,15 @@ class ParentHome extends BaseComponent {
                             textAlign: "center",
                             flex: 1,
                             padding: 16,
-                            color: "#707070",
+                            color: "white",
                           },
                         ]}
                       >
                         View Coach
                       </Text>
                     </TouchableOpacity>
-                  </Card>
-                </Card>
+                  </View>
+                </LinearGradient>
               </View>
             ) : null}
 
@@ -1887,13 +1929,14 @@ class ParentHome extends BaseComponent {
                             } */}
             </ViewShot>
           </ScrollView>
-        </View>
+        </LinearGradient>
       );
     } else {
       return (
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        />
+        <LinearGradient
+        colors={["#051732", "#232031"]}
+        style={{ flex: 1}}
+      />
       );
     }
   }
@@ -1974,7 +2017,15 @@ const styles = StyleSheet.create({
     marginRight: 20,
     //backgroundColor: 'white',
   },
-
+  headerStyle: {
+    color: "#F2F2F2",
+    fontFamily: "Quicksand-Medium",
+    fontWeight: "400",
+    textAlign: "center",
+    fontSize: 16,
+    flexGrow: 1,
+    alignSelf: "center",
+  },
   scoreBox: {
     color: "white",
     marginRight: 20,
@@ -2002,6 +2053,13 @@ const styles = StyleSheet.create({
   main_container: {
     flex: 1,
     marginTop: 0,
-    backgroundColor: "#F7F7F7",
+  },
+  gradient: {
+    shadowOpacity: 0.2,
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    borderColor: "rgba(0, 0, 0, 0.7)",
+    margin: 10, 
+    borderWidth: 1,
+    borderRadius: 10
   },
 });

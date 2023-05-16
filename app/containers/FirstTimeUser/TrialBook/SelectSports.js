@@ -49,9 +49,7 @@ class SelectSports extends Component {
               (item) => item.id === this.state.currentIndex
             )
           );
-        }
-
-        if (!filteredData[0].isPlan && !filteredData[0].isTrialDone) {
+        } else if (!filteredData[0].isPlan && !filteredData[0].isTrialDone) {
           this.props.onPress(
             this.props.sportList.find(
               (item) => item.id === this.state.currentIndex
@@ -62,10 +60,9 @@ class SelectSports extends Component {
             "You already booked trial for this sports.",
             ToastAndroid.SHORT
           );
-          if (
-            !(this.props.parent != "Parent" && this.props.childDetails == null)
-          ) {
-            this.showToast("You already booked trial for this sport.");
+          {
+            Platform.OS === "ios" &&
+              this.showToast("You already booked trial for this sport.");
           }
         }
       } else {

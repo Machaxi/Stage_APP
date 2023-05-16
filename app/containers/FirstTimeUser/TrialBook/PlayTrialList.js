@@ -18,9 +18,8 @@ import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import { GradientLine } from "../../../components/molecules/gradientLine";
-import CustomButton from "../../../components/custom/CustomButton";
 
-class LearnTrialList extends Component {
+class PlayTrialList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +41,7 @@ class LearnTrialList extends Component {
 
   apiCall = () => {
     axios
-      .get(getBaseUrl() + "/batch/trial-details", {
+      .get(getBaseUrl() + "/court/trials", {
         headers: {
           "x-authorization": this.state.header,
         },
@@ -50,20 +49,8 @@ class LearnTrialList extends Component {
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
-        let selfBooking =
-          userResponce["data"]["data"]["details"]["selfBooking"];
-        let childBooking =
-          userResponce["data"]["data"]["details"]["childBooking"];
-        var combinedBookings = [...selfBooking];
-        if (childBooking != null) {
-          combinedBookings = [...selfBooking, ...childBooking];
-        }
-        combinedBookings.sort((a, b) => {
-          const dateA = new Date(a.trial_date + "T" + a.startTime);
-          const dateB = new Date(b.trial_date + "T" + b.startTime);
-          return dateA - dateB;
-        });
-        this.setState({ trailList: combinedBookings });
+        let academiesData = userResponce["data"]["data"]["trials"][0];
+        this.setState({ trailList: [academiesData] });
       })
       .catch((error) => {
         console.log(error);
@@ -76,10 +63,11 @@ class LearnTrialList extends Component {
 
   nextSessionCard = ({ item }) => {
     const currentDate = new Date();
-    const dateObject = new Date(item.trial_date);
+    const dateObject = new Date(item.date);
+    console.log(item);
     const isToday = dateObject.getDate() == currentDate.getDate();
     const combinedString =
-      item.trial_date.slice(0, 10) + "T" + item.endTime + ".000Z";
+      item?.booking?.date.slice(0, 10) + "T" + item.endTime + ".000Z";
     const dateA = new Date(combinedString);
     if (dateA < currentDate) {
       return null;
@@ -89,7 +77,7 @@ class LearnTrialList extends Component {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          this.props.navigation.navigate("DisplayLearnTrial", { item });
+          this.props.navigation.navigate("DisplayPlayTrial", { item });
         }}
       >
         <View style={[styles.contained]}>
@@ -104,7 +92,6 @@ class LearnTrialList extends Component {
               <Text style={styles.heading}>
                 {"Next Session - " + (isToday ? "Today" : "Tomorrow")}
               </Text>
-              <Text style={styles.sports}>{item?.user?.name}</Text>
             </View>
             <GradientLine
               marginBottom={14}
@@ -113,23 +100,17 @@ class LearnTrialList extends Component {
               colors={["#6b6a76", "#2a273a"]}
             />
             <View style={[styles.sportsDetail, { marginTop: 10 }]}>
-              <Text style={styles.sports}>{item?.sportDto?.name}</Text>
-              <Text style={styles.sports}>{item?.displayTime}</Text>
+              <Text style={styles.sports}>{item?.booking?.sportName}</Text>
+              <Text style={styles.sports}>{item?.booking?.displayTime}</Text>
             </View>
             <View style={{ marginTop: 12 }}>
-              <Text style={styles.centerName}>{item?.academyDto?.name}</Text>
-              <Text style={styles.centerAddress}>
-                {item?.academyDto?.address}
-              </Text>
+              <Text style={styles.centerName}>{item?.academy?.name}</Text>
+              <Text style={styles.centerAddress}>{item?.academy?.address}</Text>
             </View>
           </LinearGradient>
         </View>
       </TouchableOpacity>
     );
-  };
-
-  onPressExplore = () => {
-    this.props.navigation.navigate("BookLearnTrail");
   };
 
   render() {
@@ -155,25 +136,16 @@ class LearnTrialList extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
-        <View style={{ flex: 0.9 }}>
-          <FlatList
-            data={this.state.trailList}
-            renderItem={this.nextSessionCard}
-            keyExtractor={(item) => item.id}
-          />
-          {this.state.displayNoText && (
-            <View style={{ flex: 1, alignItems: "center" }}>
-              <Text style={styles.insideText}>No booking available</Text>
-            </View>
-          )}
-        </View>
-        <View style={{ flex: 0.1, justifyContent: "center" }}>
-          <CustomButton
-            name="Book Trial "
-            available={true}
-            onPress={this.onPressExplore}
-          />
-        </View>
+        <FlatList
+          data={this.state.trailList}
+          renderItem={this.nextSessionCard}
+          keyExtractor={(item) => item.id}
+        />
+        {this.state.displayNoText && (
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Text style={styles.insideText}>No booking available</Text>
+          </View>
+        )}
       </LinearGradient>
     );
   }
@@ -247,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LearnTrialList;
+export default PlayTrialList;

@@ -103,11 +103,11 @@ export default class PlayerHeader extends BaseComponent {
 
         return (
           <View style={styles.main}>
-            <ImageBackground
+            {/* <ImageBackground
               //resizeMode="cover"
               source={bg_img}
               style={styles.top_container}
-            >
+            > */}
               {/* <LinearGradient
                     colors={['#332B70', '#24262A']}
                     style={{ flex: 1 }}
@@ -168,10 +168,10 @@ export default class PlayerHeader extends BaseComponent {
                       resizeMode={FastImage.resizeMode.contain}
                       style={styles.pic}
                       source={{ uri: profile_pic }}
-                    />
+                    /> 
                   </View>
-                  <View style={styles.details_view}>
-                    {/* <View style={{ transform: [{ rotate: "180deg" }] }}> */}
+                  {/* <View style={styles.details_view}>
+                    <View style={{ transform: [{ rotate: "180deg" }] }}>
                     <Image
                       style={{
                         height: 22,
@@ -190,14 +190,13 @@ export default class PlayerHeader extends BaseComponent {
                         {getFormattedBadge(badge)}
                       </Text>
                     </View>
-                    {/* </View> */}
                     <Image
                       style={{ height: 22, width: 30 }}
                       source={require("../../images/spiked_banner.png")}
                     />
-                  </View>
+                  </View> */}
                   <Text style={styles.player_name} numberOfLines={1}>
-                    {newName}
+                    {name}
                   </Text>
 
                   {/* <View style={styles.flex_row}>
@@ -212,7 +211,7 @@ export default class PlayerHeader extends BaseComponent {
                   </View> */}
                 </View>
               </View>
-            </ImageBackground>
+            {/* </ImageBackground> */}
           </View>
         );
 
@@ -235,7 +234,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    height: 350,
+    height: 270,
   },
   player_picture: {
       height: 113,
@@ -279,13 +278,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   player_name: {
-    width: 120,
+    width: "90%",
     color: "white",
     marginRight: 0,
     textAlign: "center",
     fontFamily: "Quicksand-Bold",
     fontWeight: "700",
-    fontSize: 28,
+    fontSize: 20,
     marginTop: 19,
     marginBottom: 15,
   },

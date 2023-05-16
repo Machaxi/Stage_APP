@@ -12,6 +12,8 @@ import { connect } from 'react-redux';
 import { TOURNAMENT_FILTER } from '../../actions/actionTypes';
 import * as Analytics from "../../Analytics"
 import { PLAYER, PARENT, COACH } from '../../components/Constants';
+import { Nunito_Regular } from '../util/fonts';
+import LinearGradient from "react-native-linear-gradient";
 
 class TournamentTabs extends BaseComponent {
 
@@ -80,9 +82,12 @@ class TournamentTabs extends BaseComponent {
 
     return {
       headerTitle: "Tournament",
-      headerTitleStyle: defaultStyle.headerStyle,
+      headerTitleStyle: styles.headerStyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
 
-      headerLeft: (
+      headerLeft: ( 
         <TouchableOpacity
           onPress={() => {
             navigation.toggleDrawer();
@@ -91,7 +96,7 @@ class TournamentTabs extends BaseComponent {
           activeOpacity={0.8}
         >
           <Image
-            source={require("../../images/hamburger.png")}
+            source={require("../../images/hamburger_white.png")}
             style={{ width: 20, height: 16, marginLeft: 12 }}
           />
         </TouchableOpacity>
@@ -180,6 +185,11 @@ class TournamentTabs extends BaseComponent {
 
   render() {
     return (
+      <LinearGradient
+      colors={["#051732", "#232031"]}
+      style={{ flex: 1 }}
+    >
+
       <TabView
 
         navigationState={this.state}
@@ -188,13 +198,14 @@ class TournamentTabs extends BaseComponent {
           <TabBar
             {...props}
             indicatorStyle={{ backgroundColor: '#667DDB', height: 4 }}
-            style={{ backgroundColor: 'white', elevation: 0 }}
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', elevation: 0 }}
             getLabelText={this._getLabelText}
-            labelStyle={{ color: '#404040', fontFamily: 'Quicksand-Regular', }}
+            labelStyle={{ color: '#F3F2F5', fontFamily: Nunito_Regular, }}
           />
         }
         onIndexChange={this._handleIndexChange}
       />
+      </LinearGradient>
     );
   }
 }
@@ -221,5 +232,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 16,
+  },
+  headerStyle: {
+    color: "#F2F2F2",
+    fontFamily: "Quicksand-Medium",
+    fontWeight: "400",
+    textAlign: "center",
+    fontSize: 16,
+    flexGrow: 1,
+    alignSelf: "center",
   },
 });

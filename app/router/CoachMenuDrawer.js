@@ -503,7 +503,7 @@ class CoachMenuDrawer extends BaseComponent {
             <SubPointsAboutMachaxi
               title={"Play Trial"}
               onPress={() => {
-                this.props.navigation.navigate("DisplayPlayTrial");
+                this.props.navigation.navigate("PlayTrialList");
               }}
             />
           </>
@@ -1336,7 +1336,7 @@ class CoachMenuDrawer extends BaseComponent {
 				{!this.state.isPlayPlanEnabled && <DrawerItemBtn itemImage={require('../images/wallet.png')} onPress={()=>{
 					this.props.navigation.navigate('PaymentDetail');
 					}}
-					title={'Payment'}
+					title={'Coaching Payment'}
 				/>}
 				{ !this.state.isPlayPlanEnabled &&
 					<View style={[defaultStyle.line_style, styles.greyLine]}></View>}
@@ -1357,7 +1357,7 @@ class CoachMenuDrawer extends BaseComponent {
       			    />
        			    <SubPointsAboutMachaxi
       			        title={"Play Trial"}
-      			        onPress={() => { this.props.navigation.navigate("DisplayPlayTrial");}}
+      			        onPress={() => { this.props.navigation.navigate("PlayTrialList");}}
          		    />
        			   </>
      			   ) : null}

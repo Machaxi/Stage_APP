@@ -10,6 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Moment from 'moment';
 import { SkyFilledButton } from '../../components/Home/SkyFilledButton';
 import FastImage from 'react-native-fast-image'
+import LinearGradient from "react-native-linear-gradient";
 
 var filterData = ''
 
@@ -145,19 +146,17 @@ class ResultsRoute extends BaseComponent {
                     marginBottom: 8,
                     borderRadius: 12
                 }}>
-                <Card style={{ borderRadius: 16, elevation: 1 }}>
-
-                    <TextInput style={{
-                        marginLeft: 8,
-                        height: 45,
-                        backgroundColor: 'white',
-                        borderRadius: 16,
-                        fontFamily: 'Quicksand-Regular'
-                    }} placeholder="Search"></TextInput>
-
-
-                </Card>
-
+                 <View style={styles.inputview}>
+                    <TextInput
+                    style={styles.input}
+                    placeholder="Search"
+                    placeholderTextColor="#BFBFBF"
+                    maxLength={30}
+                    onChangeText={text => {
+                        this.setState({ query: text })
+                    }}
+                    />
+                 </View>
                 <TouchableOpacity
                     onPress={() => {
                         this.props.navigation.navigate('TournamentFilter', {
@@ -168,7 +167,7 @@ class ResultsRoute extends BaseComponent {
                     <Text style={{
                         marginTop: 8, marginBottom: 4,
                         textAlign: 'right',
-                        color: '#404040', fontSize: 12,
+                        color: 'white', fontSize: 12,
                         fontFamily: 'Quicksand-Regular'
                     }} >Filter</Text>
                 </TouchableOpacity>
@@ -207,7 +206,7 @@ class ResultsRoute extends BaseComponent {
                                 flex: 1,
                                 justifyContent: 'space-between'
                             }}>
-                                <Text style={defaultStyle.bold_text_14}>
+                                <Text style={[defaultStyle.bold_text_14, { color: 'white' }] }>
                                     {data.name}
                                 </Text>
 
@@ -215,7 +214,7 @@ class ResultsRoute extends BaseComponent {
                                     1st
                                 </Text> */}
 
-                                <Text style={defaultStyle.regular_text_14}>
+                                <Text style={[defaultStyle.regular_text_14, { color: 'white' }]}>
                                     {data.academy_name == undefined ? ' - ' : data.academy_name}
                                 </Text>
 
@@ -235,7 +234,7 @@ class ResultsRoute extends BaseComponent {
                     })
                 }}>
 
-                <Card
+                {/* <Card
                     style={{
                         borderRadius: 12,
                         marginLeft: 12,
@@ -244,7 +243,11 @@ class ResultsRoute extends BaseComponent {
                         marginBottom: 8,
                         elevation: 2
 
-                    }}>
+                    }}> */}
+            <LinearGradient
+                colors={["rgba(255, 255, 255, 0.068)", " rgba(255, 255, 255, 0.0102)"]}
+                style={ styles.gradient }
+            >
                     <View>
                         {/* <Image style={{
 
@@ -278,7 +281,7 @@ class ResultsRoute extends BaseComponent {
                                 flexDirection: 'row', flex: 1, justifyContent: 'space-between'
                             }}>
 
-                                <Text style={defaultStyle.bold_text_14}>
+                            <Text style={[defaultStyle.bold_text_14, {color: "white"}]}>            
                                     {item.name}
                                 </Text>
 
@@ -291,7 +294,7 @@ class ResultsRoute extends BaseComponent {
 
                             <View style={{ paddingTop: 8, flexDirection: 'row', flex: 1 }}>
 
-                                <Text style={defaultStyle.bold_text_14}>
+                                <Text style={[defaultStyle.bold_text_14, {color: "white"}]}>            
                                     {item.month + " " + item.year}
                                 </Text>
 
@@ -306,10 +309,10 @@ class ResultsRoute extends BaseComponent {
                             <Text style={{
                                 paddingTop: 6,
                                 fontSize: 14,
-                                color: '#404040',
+                                color: 'white',
                                 fontFamily: 'Quicksand-Regular'
                             }}>
-                                Dates <Text style={defaultStyle.bold_text_14}>{Moment(item.start_date).format('DD MMM YY')}</Text>
+                                Dates <Text style={[defaultStyle.bold_text_14, { color: 'white' }]}>{Moment(item.start_date).format('DD MMM YY')}</Text>
                             </Text>
 
 
@@ -413,7 +416,7 @@ class ResultsRoute extends BaseComponent {
 
                     </View>
 
-                </Card>
+                </LinearGradient>
             </TouchableOpacity >
 
         )
@@ -431,6 +434,10 @@ class ResultsRoute extends BaseComponent {
 
         return (
 
+            <LinearGradient
+            colors={["#051732", "#232031"]}
+            style={{ flex: 1}}
+          >
             <View style={styles.chartContainer}>
 
                 <Spinner
@@ -460,10 +467,12 @@ class ResultsRoute extends BaseComponent {
                         <Text style={[defaultStyle.regular_text_14, {
                             justifyContent: 'center',
                             flex: 1, textAlign: 'center',
+                            color: "white"
                         }]}>No Tournament found</Text></View>
                 }
 
             </View>
+            </LinearGradient>
         );
     }
 }
@@ -480,7 +489,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(ResultsRoute);
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        backgroundColor: '#F7F7F7'
     },
     rounded_button: {
         width: '48%',
@@ -495,6 +503,29 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'Quicksand-Regular'
     },
+    inputview: {
+        marginTop: 7,
+        borderColor: "#FCB550",
+        borderRadius: 26,
+        borderWidth: 1,
+        height: 50,
+        justifyContent: "center",
+      },
+      input: {
+        paddingHorizontal: 20,
+        fontFamily: "Nunito-Regular",
+        color: "white",
+      },
+      gradient: {
+        borderRadius: 10,
+        paddingBottom: 14,
+        paddingTop: 3,
+        paddingHorizontal: 6,
+        marginHorizontal: 15,
+        borderColor: "#70765788",
+        borderWidth: 1,
+        marginTop: 10,
+      },
     // rounded_button: {
     //     width: '48%',
     //     height: 44,

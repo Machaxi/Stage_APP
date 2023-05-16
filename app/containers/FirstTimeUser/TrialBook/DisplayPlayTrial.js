@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Nunito_Regular, Nunito_SemiBold } from "../../util/fonts";
 import { darkBlueVariant } from "../../util/colors";
-import axios from "axios";
-import { getBaseUrl } from "../../../containers/BaseComponent";
 import CongratulationScreen from "./CongratulationScreen";
-import AsyncStorage from "@react-native-community/async-storage";
-import moment from "moment";
 
 class DisplayPlayTrial extends Component {
   constructor(props) {
@@ -28,58 +24,24 @@ class DisplayPlayTrial extends Component {
   }
 
   getData = async () => {
-    const header = await AsyncStorage.getItem("header");
-    this.setState({ header: header }, () => {
-      this.apiCall();
+    let academiesData = this.props.navigation.state.params.item;
+    console.log(academiesData);
+    const selectSports = {
+      name: academiesData["booking"].sportName,
+      image: academiesData["booking"].sportImage,
+    };
+    const courtName =
+      academiesData["booking"].playingAreaName +
+      " : " +
+      academiesData["booking"].courtName;
+    const dateObject = new Date(academiesData["booking"].date);
+    this.setState({
+      selectBatch: academiesData["booking"],
+      selectCenter: academiesData["academy"],
+      selectDate: dateObject,
+      courtName: courtName,
+      selectSport: selectSports,
     });
-  };
-
-  apiCall = () => {
-    axios
-      .get(getBaseUrl() + "/court/trials", {
-        headers: {
-          "x-authorization": this.state.header,
-        },
-      })
-      .then((response) => {
-        let data = JSON.stringify(response);
-        let userResponce = JSON.parse(data);
-        let academiesData = userResponce["data"]["data"]["trials"][0];
-        console.log(academiesData);
-        const selectSports = {
-          name: academiesData["booking"].sportName,
-          image: academiesData["booking"].sportImage,
-        };
-        const courtName =
-          academiesData["booking"].playingAreaName +
-          " : " +
-          academiesData["booking"].courtName;
-        const dateObject = new Date(academiesData["booking"].date);
-        this.setState({
-          selectBatch: academiesData["booking"],
-          selectCenter: academiesData["academy"],
-          selectDate: dateObject,
-          courtName: courtName,
-          selectSport: selectSports,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  dateCheck = () => {
-    const currentDate = new Date();
-    const targetTime = moment(this.state.selectBatch.endTime, "HH:mm:ss");
-    const currentTime = moment();
-    console.log("olla");
-
-    if (this.state.selectDate.getDate() > currentDate.getDate()) {
-      return true;
-    } else {
-      const noTouch = currentTime.isSameOrBefore(targetTime);
-      return noTouch;
-    }
   };
 
   hadleBackPress = () => {
@@ -103,31 +65,22 @@ class DisplayPlayTrial extends Component {
       );
     }
 
-    const datevalue = this.dateCheck();
     return (
       <LinearGradient
         colors={[darkBlueVariant, darkBlueVariant]}
         locations={[0, 1]}
         style={styles.container}
       >
-        {datevalue ? (
-          <CongratulationScreen
-            title="Playing Trial"
-            selectCenter={this.state.selectCenter}
-            selectSport={this.state.selectSport}
-            selectDate={this.state.selectDate}
-            selectBatch={this.state.selectBatch}
-            distance={this.state.distance}
-            courtName={this.state.courtName}
-            onPressBack={this.hadleBackPress}
-          />
-        ) : (
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <Text style={styles.insideText}>No booking available</Text>
-          </View>
-        )}
+        <CongratulationScreen
+          title="Playing Trial"
+          selectCenter={this.state.selectCenter}
+          selectSport={this.state.selectSport}
+          selectDate={this.state.selectDate}
+          selectBatch={this.state.selectBatch}
+          distance={this.state.distance}
+          courtName={this.state.courtName}
+          onPressBack={this.hadleBackPress}
+        />
       </LinearGradient>
     );
   }
@@ -169,4 +122,5 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_SemiBold,
   },
 });
+
 export default DisplayPlayTrial;

@@ -125,9 +125,11 @@ import NotificationsScreen from "../containers/notification/NotificationsScreen"
 import BookSlotScreen from "../containers/play/BookSlotScreen";
 import RenewPlayPlan from "../containers/RenewPlan/RenewPlayPlan";
 import DisplayLearnTrial from "../containers/FirstTimeUser/TrialBook/DisplayLearnTrial";
-import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
 import LearnTrialList from "../containers/FirstTimeUser/TrialBook/LearnTrialList";
 import RequestHeaderBack from "../atoms/requestHeaderBack";
+import PlayTrialList from "../containers/FirstTimeUser/TrialBook/PlayTrialList";
+import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
+import RequestHeaderRight from "../atoms/requestHeaderRight";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2456,6 +2458,25 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  EditProfile: {
+    screen: EditProfile,
+    navigationOptions: ({ navigation }) => ({
+      title: "Edit Profile",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   PaymentDetail: {
     screen: PaymentDetail,
     navigationOptions: ({ navigation }) => ({
@@ -2689,6 +2710,9 @@ const tabBarControllerLearn = createBottomTabNavigator({
           inactiveIndicatorColor={white}
           focused={focused}
           bottomBarColor={"transparent"}
+          focusedIcon={
+            focused ? require("../images/tournament_active.png") : null
+          }
           activeIcon={require("../images/tournament.png")}
         />
       ),
@@ -2752,29 +2776,15 @@ const HomeStack = createStackNavigator({
         backgroundColor: "#21202F",
       },
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          darkThemFlow={true}
-          navigationProps={navigation}
-          showNotification={true}
-          homeStack={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
     }),
   },
-  BookTrail: {
+  BookLearnTrail: {
     screen: TrialBook,
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-          darkThemFlow={true}
-          homeStack={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2786,14 +2796,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Play",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-          darkThemFlow={true}
-          homeStack={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2839,10 +2842,29 @@ const HomeStack = createStackNavigator({
     }),
   },
   NotificationsScreenHomeStack: {
-    screen: NotificationsScreen,
-    // navigationOptions: ({ navigation }) => ({
-    //   headerShown: false,
-    // }),
+    screen: notificationsStack,
+    navigationOptions: ({ navigation }) => ({
+      headerShown: false,
+    }),
+  },
+  EditProfile: {
+    screen: EditProfile,
+    navigationOptions: ({ navigation }) => ({
+      title: "Edit Profile",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
   },
   LearnTrialList: {
     screen: LearnTrialList,
@@ -2863,8 +2885,8 @@ const HomeStack = createStackNavigator({
       },
     }),
   },
-  DisplayPlayTrial: {
-    screen: DisplayPlayTrial,
+  PlayTrialList: {
+    screen: PlayTrialList,
     navigationOptions: ({ navigation }) => ({
       title: "Play Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
@@ -2884,6 +2906,25 @@ const HomeStack = createStackNavigator({
   },
   DisplayLearnTrial: {
     screen: DisplayLearnTrial,
+    navigationOptions: ({ navigation }) => ({
+      title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          showNotification={true}
+          darkThemFlow={true}
+          homeStack={true}
+        />
+      ),
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  DisplayPlayTrial: {
+    screen: DisplayPlayTrial,
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,

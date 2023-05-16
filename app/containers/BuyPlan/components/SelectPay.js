@@ -155,7 +155,7 @@ class SelectPay extends Component {
       dict["join_date"] = this.state.joinDate;
       dict["user_id"] = this.state.userDetails.id;
       if (this.props.parent == "Parent") {
-        if (userData.user["user_type"] == "GUEST") {
+        if (userData.user["user_type"] == "GUEST" || userData.user["user_type"] == "FAMILY") {
           dict["parent_name"] = this.state.userDetails.userName;
           dict["player_name"] = this.state.userDetails.userName;
           dict["gender"] = this.state.gender.toUpperCase();
@@ -169,7 +169,7 @@ class SelectPay extends Component {
           dict["gender"] = this.state.gender.toUpperCase();
         }
       }
-      dict["couponCode"] = this.props.coupon.couponCode;
+      dict["coupon_code"] = this.props.coupon.couponCode;
       dataDic["data"] = dict;
       this.props
         .selectPlanDate(dataDic, this.state.header)
@@ -363,7 +363,7 @@ class SelectPay extends Component {
     }
 
     if (this.props.coupon) {
-      dict["couponCode"] = this.props.coupon.couponCode;
+      dict["coupon_code"] = this.props.coupon.couponCode;
     }
     dataDic["data"] = dict;
 
@@ -405,7 +405,7 @@ class SelectPay extends Component {
               <Image
                 style={styles.imaged}
                 source={{ uri: image }}
-                resizeMode="cover"
+                resizeMode="contain"
               />
             ) : (
               <Image
@@ -467,7 +467,7 @@ class SelectPay extends Component {
               this.props.selectPlan.term_id === 1
                 ? "Monthly"
                 : this.props.selectPlan.term_id === 2
-                ? "Quaterly"
+                ? "Quarterly"
                 : "Yearly"
             }
             subtitle={"Rs. " + this.props.selectPlan.planFees}

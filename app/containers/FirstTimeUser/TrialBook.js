@@ -79,7 +79,7 @@ class TrialBook extends Component {
         console.log("Test" + user);
         if (user1.success == true) {
           this.setState({
-            playerDetails: user1.data.players[0],
+            playerDetails: user1.data.players,
           });
         }
       });
@@ -145,13 +145,12 @@ class TrialBook extends Component {
   };
 
   onPressDetails = (username, usergender, parent, childDetails) => {
-    const playerInfo = this.state.finishSport;
-    console.log(childDetails);
+    var playerInfo = this.state.finishSport;
     if (childDetails != null) {
-      playerInfo = this.props.playerDetails.find(
+      const playerdetails = this.state.playerDetails.find(
         (item) => item.name === childDetails.name
       );
-      console.log(playerInfo);
+      playerInfo = playerdetails.sport_trial_details;
     }
     this.setState({
       firstPage: false,
@@ -189,7 +188,10 @@ class TrialBook extends Component {
         {this.state.firstPage && (
           <View style={{ flex: 1 }}>
             <GetBack title="Coaching Trial" onPress={this.hadleBack} />
-            <PlayerDetails onPress={this.onPressDetails} />
+            <PlayerDetails
+              title="Coaching Trial"
+              onPress={this.onPressDetails}
+            />
           </View>
         )}
         {this.state.congratulationScreen && this.state.alreadyBook && (

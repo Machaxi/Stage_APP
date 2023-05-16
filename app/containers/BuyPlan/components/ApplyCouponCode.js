@@ -109,7 +109,8 @@ class ApplyCouponCode extends Component {
               >
                 <CouponListItem
                   coupon_code={item.title}
-                  discount={item.description}
+                  discount={item.maxDiscountAmount}
+                  percentage={item.percentage}
                   couponApplied={this.state.code == item.coupon_code}
                 />
               </TouchableOpacity>

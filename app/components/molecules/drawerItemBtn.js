@@ -25,6 +25,7 @@ export const DrawerItemBtn = ({ onPress, itemImage, title }) => {
               height: 28,
               resizeMode: "contain",
               marginRight: 4,
+              marginTop: 2
             }}
             source={itemImage}
           />
@@ -56,7 +57,6 @@ const styles = StyleSheet.create({
     color: "#AFAFAF",
     fontSize: 16,
     fontFamily: "Quicksand-Medium",
-    marginTop: 2,
     textAlign: "center",
   },
   arrow_img: {

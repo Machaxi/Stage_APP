@@ -127,11 +127,12 @@ export const MembershipDetails = ({
                 onBtnPress={() => onRenewPress(false)}
                 width={140}
               />
+              <View style={{marginHorizontal: 10}}/>
               <RoundedGradientBtn
                 text={"Explore Plans"}
                 colors={["#575f61ed", "#2b293aed"]}
                 onBtnPress={() => onMorePlansPress(false)}
-                width={140}
+                width={160}
               />
             </View>
           </View>

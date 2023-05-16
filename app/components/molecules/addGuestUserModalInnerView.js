@@ -55,8 +55,8 @@ const AddGuestUserModalInnerView = ({
             style={[
               commonStyles.flexRowSpaceBtw,
               {
-                marginHorizontal: 19,
-                width: deviceWidth * 0.7,
+                marginHorizontal: 10,
+                width: deviceWidth * 0.8,
                 marginBottom: 20,
               },
             ]}
@@ -67,11 +67,12 @@ const AddGuestUserModalInnerView = ({
               onBtnPress={() => onBtnPress()}
               width={140}
             />
+            <View style={{marginHorizontal: 10}}/>
             <RoundedGradientBtn
               text={"Explore Plans"}
               colors={["#575f61ed", "#2b293aed"]}
               onBtnPress={() => onExplorePlansPressed()}
-              width={140}
+              width={160}
             />
           </View>
         </View>
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: Nunito_Regular,
     textAlign: "center",
-    marginBottom: 53,
+    marginBottom: 30,
   },
   modalView: {},
 });

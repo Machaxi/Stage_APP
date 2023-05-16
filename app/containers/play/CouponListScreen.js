@@ -128,7 +128,8 @@ const
               return (
                 <CouponListItem
                   coupon_code={item.coupon_code}
-                  discount={item.discount}
+                  discount={item.maxDiscountAmount}
+                  percentage={item.percentage}
                   couponApplied={code == item.coupon_code}
                 />
               );

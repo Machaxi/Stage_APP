@@ -27,6 +27,7 @@ import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 import AppliedCouponCode from "../../../components/custom/AppliedCouponCode";
 import LoadingIndicator from "../../../components/molecules/loadingIndicator";
+import moment from "moment";
 
 class SelectPlayPay extends Component {
   months = [
@@ -71,7 +72,7 @@ class SelectPlayPay extends Component {
       phonenumber: "",
       startdate: new Date(),
       enddate: new Date(),
-      extraDates: 30,
+      selectType: 30,
       discountAmount: 0,
       couponAmount: 0,
       coupon: null,
@@ -90,18 +91,19 @@ class SelectPlayPay extends Component {
     const distance = this.props.distance;
     const selectPlan = this.props.selectPlan;
     const selectType = this.props.selectPlan.type;
-    var extraDates = 30;
+    const today = moment();
+    var presentdate;
     if (selectType == "QUARTERLY") {
-      extraDates = 90;
+      presentdate = today.add(3, "months").subtract(1, "days");
     } else if (selectType == "HALF_YEARLY") {
-      extraDates = 180;
+      presentdate = today.add(6, "months").subtract(1, "days");
     } else if (selectType == "YEARLY") {
-      extraDates = 365;
+      presentdate = today.add(1, "years").subtract(1, "days");
+    } else {
+      presentdate = today.add(1, "months").subtract(1, "days");
     }
     const startDate = new Date();
-    const endDate = new Date(
-      startDate.getTime() + extraDates * 24 * 60 * 60 * 1000
-    );
+    const endDate = new Date(presentdate);
     var userDetails = this.props.userDetails;
 
     const start_date = this.formatesmallDate(startDate);
@@ -120,7 +122,7 @@ class SelectPlayPay extends Component {
         startdate: startDate,
         enddate: endDate,
         userDetails: userDetails,
-        extraDates: extraDates,
+        selectType: selectType,
         discountAmount: selectPlan.price,
         coupon: this.props.coupon,
       },
@@ -313,11 +315,19 @@ class SelectPlayPay extends Component {
   };
 
   DataChange = (join_date) => {
-    console.log(join_date);
     const joinDate = new Date(join_date);
-    const endJoin = new Date(
-      joinDate.getTime() + this.state.extraDates * 24 * 60 * 60 * 1000
-    );
+    const today = moment(join_date, "YYYY-MM-DD");
+    var presentdate;
+    if (this.state.selectType == "QUARTERLY") {
+      presentdate = today.add(3, "months").subtract(1, "days");
+    } else if (this.state.selectType == "HALF_YEARLY") {
+      presentdate = today.add(6, "months").subtract(1, "days");
+    } else if (this.state.selectType == "YEARLY") {
+      presentdate = today.add(1, "years").subtract(1, "days");
+    } else {
+      presentdate = today.add(1, "months").subtract(1, "days");
+    }
+    const endJoin = new Date(presentdate);
     const start_date = this.formatesmallDate(joinDate);
     const end_date = this.formatesmallDate(endJoin);
     this.setState({

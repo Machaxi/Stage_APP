@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import {
   View,
   TouchableOpacity,
@@ -20,11 +20,13 @@ import axios from "axios";
 import { getBaseUrl } from "../BaseComponent";
 
 const images = [
-  { id: 1, url: require("../../images/playing/badminton_play.png") },
-  { id: 2, url: require("../../images/playing/badminton_play.png") },
-  { id: 3, url: require("../../images/playing/badminton_play.png") },
-  { id: 4, url: require("../../images/playing/badminton_play.png") },
-  { id: 5, url: require("../../images/playing/badminton_play.png") },
+  { id: 1, url: require("../../images/sports/learn-1.jpg") },
+  { id: 2, url: require("../../images/sports/learn-2.jpg") },
+  { id: 3, url: require("../../images/sports/learn-3.jpg") },
+  { id: 4, url: require("../../images/sports/learn-4.jpg") },
+  { id: 5, url: require("../../images/sports/learn-5.jpg") },
+  { id: 6, url: require("../../images/sports/learn-6.jpg") },
+  { id: 7, url: require("../../images/sports/learn-7.jpg") },
 ];
 
 class CoachScreen extends Component {
@@ -32,9 +34,9 @@ class CoachScreen extends Component {
     super(props);
     this.state = {
       currentIndex: 0,
-      currentImage: images[0],
       learnData: null,
     };
+    this.scrollViewRef = createRef();
   }
 
   componentDidMount() {
@@ -50,7 +52,26 @@ class CoachScreen extends Component {
   };
 
   componentWillUnmount() {
+    this.stopAutoScroll();
     this.didFocusListener.remove();
+  }
+
+  startAutoScroll() {
+    this.autoScrollInterval = setInterval(() => {
+      var off =
+        (Dimensions.get("window").width - 40) * (this.state.currentIndex + 1);
+      console.log(off);
+      this.scrollViewRef.current.scrollTo({ x: off, animated: true });
+      if (this.state.currentIndex > images.length - 2) {
+        this.setState({ currentIndex: 0 });
+      } else {
+        this.setState({ currentIndex: this.state.currentIndex + 1 });
+      }
+    }, 3000);
+  }
+
+  stopAutoScroll() {
+    clearInterval(this.autoScrollInterval);
   }
 
   getValue = async () => {
@@ -73,6 +94,7 @@ class CoachScreen extends Component {
         this.setState({
           learnData: batchData["learn"],
         });
+        this.startAutoScroll();
       })
       .catch((error) => {
         console.log(error);
@@ -81,8 +103,8 @@ class CoachScreen extends Component {
 
   handleSlide = (index) => {
     this.setState({ currentIndex: index });
-    const newImage = images[index];
-    this.setState({ currentImage: newImage });
+    var off = (Dimensions.get("window").width - 40) * index;
+    this.scrollViewRef.current.scrollTo({ x: off, animated: true });
   };
 
   ifAlltrue = () => {
@@ -107,7 +129,7 @@ class CoachScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 0.83 }}>
+        <ScrollView style={{ flex: 0.83 }} nestedScrollEnabled>
           <ImageBackground
             source={require("../../images/playing/learnbackground.png")}
             style={{
@@ -129,10 +151,22 @@ class CoachScreen extends Component {
                 source={require("../../images/playing/learnt.png")}
                 style={{ height: 160, width: 300, marginBottom: -35 }}
               />
+              <ImageBackground
+                style={{
+                  marginTop: 10,
+                  marginLeft: 40,
+                  width: 280,
+                  height: 280,
+                  marginBottom: -280,
+                }}
+                source={require("../../images/sports/Ovel.png")}
+              />
+
               <ScrollView
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
+                ref={this.scrollViewRef}
                 onMomentumScrollEnd={(event) => {
                   const { contentOffset } = event.nativeEvent;
                   const index = Math.round(
@@ -140,7 +174,6 @@ class CoachScreen extends Component {
                   );
                   this.setState({ currentIndex: index });
                   const newImage = images[index];
-                  this.setState({ currentImage: newImage });
                 }}
               >
                 {images.map((image) => (
@@ -152,24 +185,62 @@ class CoachScreen extends Component {
                     }}
                   >
                     <Image
-                      key={this.state.currentImage.id}
-                      source={this.state.currentImage.url}
+                      key={image.id}
+                      source={image.url}
                       style={styles.image}
                     />
                   </View>
                 ))}
               </ScrollView>
+              <View
+                style={{
+                  marginTop: -280,
+                  marginLeft: 40,
+                  width: 270,
+                  height: 280,
+                  marginBottom: 0,
+                  justifyContent: "space-between",
+                  paddingVertical: 30,
+                }}
+              >
+                <View style={{ flexDirection: "row-reverse" }}>
+                  <LinearGradient
+                    colors={[
+                      "rgba(255, 255, 255, 0.4)",
+                      "rgba(118, 87, 136, 0.44)",
+                    ]}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                    style={{ width: 28, height: 28, borderRadius: 14 }}
+                  />
+                </View>
+                <View style={{ marginLeft: 20 }}>
+                  <LinearGradient
+                    colors={[
+                      "rgba(255, 255, 255, 0.4)",
+                      "rgba(118, 87, 136, 0.44)",
+                    ]}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                    style={{ width: 34, height: 34, borderRadius: 17 }}
+                  />
+                </View>
+              </View>
               <View style={styles.buttonContainer}>
                 {images.map((image, index) => (
                   <TouchableOpacity
-                    activeOpacity={0.8}
                     key={image.id}
-                    style={[
-                      styles.button,
-                      this.state.currentIndex === index && styles.activeButton,
-                    ]}
+                    style={{ paddingHorizontal: 10 }}
                     onPress={() => this.handleSlide(index)}
-                  />
+                  >
+                    <View
+                      style={[
+                        styles.button,
+                        this.state.currentIndex === index &&
+                          styles.activeButton,
+                      ]}
+                    />
+                  </TouchableOpacity>
                 ))}
               </View>
               <HeaderContentComponent
@@ -270,8 +341,12 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 320,
-    height: 320,
+    width: 260,
+    height: 260,
+    borderBottomLeftRadius: 100,
+    borderBottomRightRadius: 160,
+    borderTopLeftRadius: 160,
+    borderTopRightRadius: 100,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -280,11 +355,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: "#989898",
-    marginHorizontal: 5,
+    marginHorizontal: 0,
   },
   activeButton: {
     backgroundColor: "#5F87FF",
