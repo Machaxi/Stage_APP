@@ -299,6 +299,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                     `Selected court is fully occupied.`,
                     ToastAndroid.SHORT
                   );
+                  { Platform.OS === "ios" && showToast(`Selected court is fully occupied.`); }
                   //TODO: need to verify whether to show toast only or hit bookslotapi
                 }
             }
@@ -397,17 +398,15 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
 
   const bookChosenSlotApi = async (courtTimingID, isBookingRequestType) => {
-    const { date, proficiency, guestCount } = navigation?.state?.params;
+    const { date, proficiency, guestCount, entirecourt } = navigation?.state?.params;
     const data = {
-      //TODO:
       date: date,
-      //date: '2023-04-23',
       courtTimingId: courtTimingID,
       proficiency: proficiency,
       guestCount: guestCount,
+      bookEntireCourt: entirecourt,
     };
-
-
+    console.log(data);
     setLoading(true);
     getData("header", (value) => {
       if (value == "") return;
@@ -461,7 +460,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                 ?.error_message ?? ""}`,
               ToastAndroid.SHORT
             );
-            showToast(slotBookApiError?.response?.response?.data?.error_message ?? "");
+            {
+              Platform.OS === "ios" &&
+              showToast(slotBookApiError?.response?.response?.data?.error_message ?? "");
+            }
           }
         })
         .catch(function(error) {

@@ -139,7 +139,7 @@ class SelectLearnBatch extends Component {
       if (!booking.proficiency.includes(level)) {
         excludeData.push(booking);
       } else {
-        if (booking.maxPlayersAllowed - booking.totalPlayers < 0) {
+        if (booking.maxPlayersAllowed - booking.totalPlayers <= 0) {
           excludeData.push(booking);
         }
       }

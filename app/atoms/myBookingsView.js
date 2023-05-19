@@ -60,7 +60,7 @@ const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
             styles.bookingDetails,
           ]}
         >
-          Played on {moment(val.date).format("DD/MM/YYYY")}
+         {val.isCancelled ? "Canceled on" : "Played on"}  {moment(val.date).format("DD/MM/YYYY")}
         </Text>
       )}
       <MyRequestCentreDetails details={val?.academy} />

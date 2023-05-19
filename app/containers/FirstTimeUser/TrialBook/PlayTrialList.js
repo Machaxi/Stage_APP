@@ -136,15 +136,18 @@ class PlayTrialList extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
-        <FlatList
-          data={this.state.trailList}
-          renderItem={this.nextSessionCard}
-          keyExtractor={(item) => item.id}
-        />
-        {this.state.displayNoText && (
-          <View style={{ flex: 1, alignItems: "center" }}>
+        {this.state.displayNoText ? (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
             <Text style={styles.insideText}>No booking available</Text>
           </View>
+        ) : (
+          <FlatList
+            data={this.state.trailList}
+            renderItem={this.nextSessionCard}
+            keyExtractor={(item) => item.id}
+          />
         )}
       </LinearGradient>
     );

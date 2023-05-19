@@ -55,7 +55,7 @@ const playModule = createStackNavigator({
   EditPreferredSports: {
     screen: EditPreferredSports,
     navigationOptions: ({ navigation }) => ({
-      title: "PLay",
+      title: "Play",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar

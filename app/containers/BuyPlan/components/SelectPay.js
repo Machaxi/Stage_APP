@@ -89,6 +89,7 @@ class SelectPay extends Component {
       couponAmount: 0,
       coupon: null,
       isApplied: false,
+      displayBottomStart: "",
     };
   }
 
@@ -110,6 +111,8 @@ class SelectPay extends Component {
     const levelname = selectLevel.displayText;
     const levelimage = selectLevel.url;
     const joinDate = this.convertToDate(this.props.selectPlan.start_date);
+    const stDate = new Date(joinDate);
+    const start_d_date = this.formatesmallDateYear(stDate);
 
     this.setState(
       {
@@ -128,6 +131,7 @@ class SelectPay extends Component {
         parent: parent,
         displayStartDate: this.props.selectPlan.start_date,
         displayEndDate: this.props.selectPlan.end_date,
+        displayBottomStart: start_d_date,
         amount: this.props.selectPlan.paybleAmount,
         joinDate: joinDate,
         appliedCoupon: this.props.applycoupon,
@@ -155,7 +159,7 @@ class SelectPay extends Component {
       dict["join_date"] = this.state.joinDate;
       dict["user_id"] = this.state.userDetails.id;
       if (this.props.parent == "Parent") {
-        if (userData.user["user_type"] == "GUEST" || userData.user["user_type"] == "FAMILY") {
+        if (userData.user["user_type"] == "GUEST") {
           dict["parent_name"] = this.state.userDetails.userName;
           dict["player_name"] = this.state.userDetails.userName;
           dict["gender"] = this.state.gender.toUpperCase();
@@ -198,6 +202,15 @@ class SelectPay extends Component {
     const [day, month] = dateString.split(" ");
     const date = `${currentYear}-${this.getMonthNumber(month)}-${day}`;
     return date;
+  };
+
+  formatesmallDateYear = (date) => {
+    var data = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    const ye = " '" + year.toString().slice(-2);
+    datastring = data + " " + this.months[month] + ye;
+    return datastring;
   };
 
   getMonthNumber = (monthName) => {
@@ -261,6 +274,7 @@ class SelectPay extends Component {
         payment_details: paymentDetails,
       },
     };
+    console.log(postData);
     this.props
       .paymentConfirmation(
         this.state.header,
@@ -303,7 +317,9 @@ class SelectPay extends Component {
   };
 
   DataChange = (join_date) => {
-    this.setState({ joinDate: join_date });
+    const stDate = new Date(join_date);
+    const start_d_date = this.formatesmallDateYear(stDate);
+    this.setState({ joinDate: join_date, displayBottomStart: start_d_date });
     const batch_id = this.state.selectBatch.batch_id;
     axios
       .get(
@@ -578,7 +594,7 @@ class SelectPay extends Component {
           <PaymentDetails
             title={
               "Payment for " +
-              this.state.displayStartDate +
+              this.state.displayBottomStart +
               " to " +
               this.state.displayEndDate
             }

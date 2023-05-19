@@ -14,7 +14,7 @@ const MyRequestPlayersList = ({ item }) => {
       }}
     >
       <Text style={[styles.detailsTxt, { marginRight: 8 }]}>
-        {item?.name}
+        {item?.name} {item?.guestCount > 0 && " + "+ item?.guestCount + " Guests"}
       </Text>
       <NamedRoundedContainer name={item?.proficiency} />
     </View>

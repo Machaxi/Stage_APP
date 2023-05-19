@@ -313,7 +313,8 @@ class EditProfile extends BaseComponent {
                                 this.props.navigation.navigate('RegistrationSteps')
                             } else {
                                 this.props.navigation.goBack()
-                                Events.publish('REFRESH_DASHBOARD');
+                                Events.publish("REFRESH_DASHBOARD_PURSCHASE");
+                                // Events.publish('REFRESH_DASHBOARD');
                             }
                         } else {
                             let error_message = data.error_message

@@ -19,6 +19,8 @@ import ApplyCouponCode from "./components/ApplyCouponCode";
 import AppliedCouponCode from "../../components/custom/AppliedCouponCode";
 import { StackActions } from "react-navigation";
 import { KeyboardAvoidingView } from "react-native";
+import events from "../../router/events";
+import { getData, storeData } from "../../components/auth";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -173,11 +175,14 @@ class CoachingPlan extends Component {
   };
 
   onPressSuccess = (playData, learnData) => {
-    console.log(playData);
-    console.log(learnData);
     if (playData && learnData) {
       this.props.navigation.navigate("LearnHomePage");
     } else {
+      if (!learnData) {
+        events.publish("REFRESH_DASHBOARD_PURSCHASE");
+      } else {
+        events.publish("REFRESH_DASHBOARD_NEW");
+      }
       const popAction = StackActions.popToTop();
       this.props.navigation.dispatch(popAction);
     }
@@ -197,7 +202,10 @@ class CoachingPlan extends Component {
         {this.state.firstPage && (
           <View style={{ flex: 1 }}>
             <GetBack title={this.state.title} onPress={this.hadleBack} />
-            <PlayerDetails title="Coaching Plan" onPress={this.onPressDetails} />
+            <PlayerDetails
+              title="Coaching Plan"
+              onPress={this.onPressDetails}
+            />
           </View>
         )}
         {this.state.couponCode && (

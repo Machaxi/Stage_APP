@@ -25,6 +25,7 @@ class SorryPage extends Component {
       header: null,
       phonenumber: null,
       isLoading: false,
+      failed: "Payment Failed !",
     };
   }
 
@@ -112,6 +113,9 @@ class SorryPage extends Component {
       header: header,
       phonenumber: phonenumber,
     });
+    if (this.props.title == "Playing") {
+      this.setState({ failed: this.props.failed });
+    }
   };
 
   render() {
@@ -147,7 +151,7 @@ class SorryPage extends Component {
               />
             </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Payment Failed !</Text>
+          <Text style={styles.title}>{this.state.failed}</Text>
           <Text style={styles.subtext}>{this.props.error_message}</Text>
           <CustomButton
             name={

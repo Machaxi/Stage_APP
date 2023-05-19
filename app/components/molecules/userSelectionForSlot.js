@@ -19,7 +19,9 @@ const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
         style={{
           justifyContent: "center",
           flex: 1,
-          marginHorizontal: 10,
+          marginLeft: 10,
+          marginRight: -30,
+          zIndex: 1,
         }}
         textStyle={{ padding: 10, fontSize: 16, color: "white" }}
         dropdownStyle={{
@@ -46,6 +48,7 @@ const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
               width: 24,
               resizeMode: "contain",
               alignSelf: "center",
+              marginLeft: -10,
             },
           ]}
           source={require("../../images/expand_more_golden.png")}

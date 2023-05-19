@@ -33,7 +33,7 @@ export const NextSessionList = ({
          return (
            <FlatList
              extraData={refresh}
-             data={[NextSessionData[0]]}
+             data={NextSessionData.length > 0 ? [NextSessionData[0]] : []}
              renderItem={renderNextScreenCard}
            />
          );

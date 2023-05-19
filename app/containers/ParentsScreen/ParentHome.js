@@ -48,7 +48,7 @@ import BaseComponent, {
 } from "../BaseComponent";
 import Events from "../../router/events";
 import CustomProgress from "../../components/custom/CustomProgress";
-import * as Analytics from "../../Analytics"
+import * as Analytics from "../../Analytics";
 import StarRating from "react-native-star-rating";
 import CustomAnimationProgress from "../../components/custom/CustomAnimationProgress";
 import CustomProgres from "../../components/custom/CustomProgress";
@@ -61,6 +61,8 @@ import MyStats from "../../components/custom/MyStats";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import CoachScreen from "../FirstTimeUser/CoachScreen";
+import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
+import RequestHeaderBg from "../../atoms/requestHeaderBg";
 
 var deviceWidth = Dimensions.get("window").width - 20;
 
@@ -71,88 +73,102 @@ class ParentHome extends BaseComponent {
   acedemy_name = "";
 
   static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: "Learn",
-      // (
-      //   <TouchableOpacity
-      //     style={{
-      //       alignItems: "center",
-      //       justifyContent: "center",
-      //       alignSelf: "center",
-      //       flex: 1,
-      //     }}
-      //     onPress={() => {
-      //       navigation.getParam("switchPlayer")();
-      //     }}
-      //     activeOpacity={0.8}
-      //   >
-      //     <View
-      //       style={{
-      //         flexDirection: "row",
-      //         //alignItems: 'center'
-      //       }}
-      //     >
-      //       <Text
-      //         style={{
-      //           fontFamily: "Quicksand-Medium",
-      //           fontSize: 14,
-      //           color: "white",
-      //         }}
-      //       >
-      //         {navigation.getParam("Title", "") == ""
-      //           ? "Learn"
-      //           : navigation.getParam("Title", "")}
-      //       </Text>
+    // return {
+    //   headerTitle: "Learn",
+    // (
+    //   <TouchableOpacity
+    //     style={{
+    //       alignItems: "center",
+    //       justifyContent: "center",
+    //       alignSelf: "center",
+    //       flex: 1,
+    //     }}
+    //     onPress={() => {
+    //       navigation.getParam("switchPlayer")();
+    //     }}
+    //     activeOpacity={0.8}
+    //   >
+    //     <View
+    //       style={{
+    //         flexDirection: "row",
+    //         //alignItems: 'center'
+    //       }}
+    //     >
+    //       <Text
+    //         style={{
+    //           fontFamily: "Quicksand-Medium",
+    //           fontSize: 14,
+    //           color: "white",
+    //         }}
+    //       >
+    //         {navigation.getParam("Title", "") == ""
+    //           ? "Learn"
+    //           : navigation.getParam("Title", "")}
+    //       </Text>
 
-      //       {navigation.getParam("Title", "") == "" ? null : (
-      //         <Image
-      //           source={require("../../images/white_drop_down.png")}
-      //           resizeMode="contain"
-      //           style={{
-      //             width: 8,
-      //             marginLeft: 6,
-      //             height: 6,
-      //             justifyContent: "center",
-      //             alignSelf: "center",
-      //             marginTop: 3,
-      //             alignItems: "center",
-      //             justifyContent: "center",
-      //           }}
-      //         />
-      //       )}
-      //     </View>
-      //   </TouchableOpacity>
-      // ),
-      // headerTitleStyle: {
-      //   color: "white",
-      // },
-      // headerStyle: {
-      //   elevation: 0,
-      //   shadowOpacity: 0,
-      //   borderBottomWidth: 0,
-      // },
-      //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
-      // navigation={navigation} />,
-      // headerBackground: (
-      //   // <LinearGradient
-      //   //     colors={['#24262A', '#332B70']}
-      //   //     style={{ flex: 1 }}
-      //   //     start={{ x: 1, y: 0 }}
-      //   //     end={{ x: 0.5, y: 1 }}
-      //   //     locations={[0.0, 0.15, 0.90]}
-      //   // />
-      //   <ImageBackground
-      //     style={{
-      //       width: "100%",
-      //       height: "100%",
-      //     }}
-      //     source={require("../../images/toolbar_bg.png")}
-      //   />
-      // ),
-      headerTitleStyle: styles.headerStyle,
-      headerStyle: {
-        backgroundColor: "#21202F",
+    //       {navigation.getParam("Title", "") == "" ? null : (
+    //         <Image
+    //           source={require("../../images/white_drop_down.png")}
+    //           resizeMode="contain"
+    //           style={{
+    //             width: 8,
+    //             marginLeft: 6,
+    //             height: 6,
+    //             justifyContent: "center",
+    //             alignSelf: "center",
+    //             marginTop: 3,
+    //             alignItems: "center",
+    //             justifyContent: "center",
+    //           }}
+    //         />
+    //       )}
+    //     </View>
+    //   </TouchableOpacity>
+    // ),
+    // headerTitleStyle: {
+    //   color: "white",
+    // },
+    // headerStyle: {
+    //   elevation: 0,
+    //   shadowOpacity: 0,
+    //   borderBottomWidth: 0,
+    // },
+    //  header: <CustomHeader title="Navdeep's Academy ▼ " showBackArrow={true}
+    // navigation={navigation} />,
+    // headerBackground: (
+    //   // <LinearGradient
+    //   //     colors={['#24262A', '#332B70']}
+    //   //     style={{ flex: 1 }}
+    //   //     start={{ x: 1, y: 0 }}
+    //   //     end={{ x: 0.5, y: 1 }}
+    //   //     locations={[0.0, 0.15, 0.90]}
+    //   // />
+    //   <ImageBackground
+    //     style={{
+    //       width: "100%",
+    //       height: "100%",
+    //     }}
+    //     source={require("../../images/toolbar_bg.png")}
+    //   />
+    // ),
+    //   headerTitleStyle: styles.headerStyle,
+    //   headerStyle: {
+    //     backgroundColor: "#21202F",
+    //   },
+    //   headerLeft: <RequestHeaderLeft navigation={navigation} />,
+    //   headerRight: <RequestHeaderRight navigation={navigation} />,
+    // };
+    return {
+      headerTitle: <RequestHeaderTitle title={"Learn"} />,
+      headerTitleStyle: {
+        color: "white",
       },
+      headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+      headerBackground: <RequestHeaderBg />,
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
     };
@@ -181,7 +197,7 @@ class ParentHome extends BaseComponent {
       isStatsLoading: false,
       loading: false,
       userDetails: null,
-      itemList: []
+      itemList: [],
     };
     const { navigation } = this.props.navigation.setParams({
       shareProfile: this.shareProfile,
@@ -190,6 +206,7 @@ class ParentHome extends BaseComponent {
   }
 
   updateUserData() {
+    console.log("in am worling");
     getData("userInfo", (value) => {
       console.log("userInfo asyncVal", value);
       var userData = JSON.parse(value);
@@ -206,6 +223,7 @@ class ParentHome extends BaseComponent {
   }
 
   onScreenFocus = () => {
+    console.log("in am ");
     this.updateUserData();
   };
 
@@ -222,54 +240,42 @@ class ParentHome extends BaseComponent {
           console.log({ respns });
           // console.log(' user response payload ' + JSON.stringify(this.props.data));
           // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
-          let user = JSON.stringify(
-            this.props.switcherData.switherlist
-          );
+          let user = JSON.stringify(this.props.switcherData.switherlist);
           let user1 = JSON.parse(user);
 
           if (user1.success == true) {
             storeData("childrenData", JSON.stringify(user1.data["players"]));
             //TODO: verify this flow
             //set first player as selected
-            if(user1.data["players"]?.length > 0){
-                var tempuserData = this.state.userDetails;
-                tempuserData["academy_id"] = user1.data["players"][0].academy_id;
-                tempuserData["player_id"] = user1.data["players"][0].id;
-                tempuserData["academy_name"] =
-                  user1.data["players"][0].academy_name;
-                tempuserData["academy_rating"] =
-                  user1.data["players"][0].academy_rating;
+            if (user1.data["players"]?.length > 0) {
+              var tempuserData = this.state.userDetails;
+              tempuserData["academy_id"] = user1.data["players"][0].academy_id;
+              tempuserData["player_id"] = user1.data["players"][0].id;
+              tempuserData["academy_name"] =
+                user1.data["players"][0].academy_name;
+              tempuserData["academy_rating"] =
+                user1.data["players"][0].academy_rating;
 
-                console.log("tempuserData userInfo", tempuserData);
-                console.log({tempuserData})
-                storeData("userInfo", JSON.stringify(tempuserData));
+              console.log("tempuserData userInfo", tempuserData);
+              console.log({ tempuserData });
+              storeData("userInfo", JSON.stringify(tempuserData));
 
-                storeData(
-                  "academy_name",
-                  user1.data["players"][0].academy_name
-                );
-                storeData(
-                  "academy_id",
-                  user1.data["players"][0].academy_id
-                );
-                storeData(
-                  "academy_rating",
-                  user1.data["players"][0].academy_rating
-                );
-                storeData(
-                  "player_id",
-                  user1.data["players"][0].id
-                );
-                //after setting initial value to first user set current user data
-                this.updateUserData();
-                this.fetchPlayerDashboardData()
-            //TODO: verify this flow
+              storeData("academy_name", user1.data["players"][0].academy_name);
+              storeData("academy_id", user1.data["players"][0].academy_id);
+              storeData(
+                "academy_rating",
+                user1.data["players"][0].academy_rating
+              );
+              storeData("player_id", user1.data["players"][0].id);
+              //after setting initial value to first user set current user data
+              this.updateUserData();
+              this.fetchPlayerDashboardData();
+              //TODO: verify this flow
             }
 
             this.setState({
               itemList: user1.data["players"],
             });
-
           }
         })
         .catch((response) => {
@@ -349,6 +355,18 @@ class ParentHome extends BaseComponent {
       });
     });
 
+    this.refreshEvent = Events.subscribe("REFRESH_DASHBOARD_PURSCHASE", () => {
+      if (this.state.academy_id) {
+        console.log("ollla");
+        this.getPlayerSwitchingData();
+      }
+    });
+
+    this.refreshEvent = Events.subscribe("REFRESH_DASHBOARD_NEW", () => {
+      console.log("ollladd");
+      this.updateUserData();
+      Events.publish(EVENT_EDIT_PROFILE);
+    });
     setTimeout(() => {
       console.log("component did mount");
       if (this.viewShot) {
@@ -367,7 +385,7 @@ class ParentHome extends BaseComponent {
   }
 
   componentWillUnmount() {
-    this.didFocusListener.remove();
+    this.didFocusListener && this.didFocusListener.remove();
     this.willFocusSubscription.remove();
   }
 
@@ -400,7 +418,7 @@ class ParentHome extends BaseComponent {
   }
 
   //final api call to fetch dashboard data for first selected user
-  fetchPlayerDashboardData(){
+  fetchPlayerDashboardData() {
     var userData;
     getData("userInfo", (value) => {
       console.warn(value);
@@ -435,14 +453,13 @@ class ParentHome extends BaseComponent {
     var userData;
 
     console.log("PARENTDashboard");
-    
-    if (isFirstRender){ 
+
+    if (isFirstRender) {
       this.getPlayerSwitchingData();
-    }
-    else {
+    } else {
       //this.updateUserData();
       this.setState({ loading: true });
-      this.fetchPlayerDashboardData()
+      this.fetchPlayerDashboardData();
     }
 
     getData("multiple", (value) => {
@@ -576,7 +593,7 @@ class ParentHome extends BaseComponent {
         .getPlayerDashboard(value, player_id, academy_id, sport_id)
         .then(() => {
           var response_ = this.props.data.dashboardData;
-          console.log({response_})
+          console.log({ response_ });
           // console.log(' user response payload ' + JSON.stringify(this.props.data));
           // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
           let user = JSON.stringify(this.props.data.dashboardData);
@@ -657,6 +674,7 @@ class ParentHome extends BaseComponent {
               userData["user_id"] = user1.data["player_profile"].user_id;
               storeData("userInfo", JSON.stringify(userData));
               Events.publish(EVENT_EDIT_PROFILE);
+              this.refreshPage();
             });
           }
           this.setState({ isStatsLoading: false }, () => {
@@ -856,7 +874,7 @@ class ParentHome extends BaseComponent {
                       defaultStyle.regular_text_14,
                       {
                         textDecorationLine: "line-through",
-                        color: "white"
+                        color: "white",
                       },
                     ]}
                   >
@@ -869,7 +887,7 @@ class ParentHome extends BaseComponent {
                       {
                         textDecorationLine: "line-through",
                         marginLeft: 10,
-                        color: "white"
+                        color: "white",
                       },
                     ]}
                   >
@@ -898,13 +916,18 @@ class ParentHome extends BaseComponent {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Text style={[defaultStyle.regular_text_14,{color: 'white'}]}>
+                  <Text
+                    style={[defaultStyle.regular_text_14, { color: "white" }]}
+                  >
                     {/* {moment.utc(session_date).local().format(SESSION_DATE_FORMAT)} */}
                     {getUtcDateFromTime(session_date, start_time)}
                   </Text>
 
                   <Text
-                    style={[defaultStyle.regular_text_14, { marginLeft: 10, color: 'white' }]}
+                    style={[
+                      defaultStyle.regular_text_14,
+                      { marginLeft: 10, color: "white" },
+                    ]}
                   >
                     {getFormatTimeDate(session_date, start_time) +
                       "  -   " +
@@ -964,10 +987,7 @@ class ParentHome extends BaseComponent {
         }
       }
       return (
-        <LinearGradient
-        colors={["#051732", "#232031"]}
-        style={{ flex: 1}}
-      >
+        <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
           <ScrollView
             refreshControl={
               <RefreshControl
@@ -992,11 +1012,11 @@ class ParentHome extends BaseComponent {
 
             {sessionArray.length != 0 ? (
               <LinearGradient
-              colors={[
-                "rgba(255, 255, 255, 0.068)",
-                " rgba(255, 255, 255, 0.0102)",
-              ]}
-              style={styles.gradient}
+                colors={[
+                  "rgba(255, 255, 255, 0.068)",
+                  " rgba(255, 255, 255, 0.0102)",
+                ]}
+                style={styles.gradient}
               >
                 <TouchableOpacity
                   onPress={() => {
@@ -1005,30 +1025,33 @@ class ParentHome extends BaseComponent {
                   }}
                 >
                   <LinearGradient
-                  colors={[
-                    "rgba(255, 255, 255, 0.068)",
-                    " rgba(255, 255, 255, 0.0102)",
-                  ]}
-                  style={{
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    paddingLeft: 12,
-                    paddingRight: 12,
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                    paddingTop: 8,
-                    paddingBottom: 8,
-                    alignItems: "center",
-                  }}
+                    colors={[
+                      "rgba(255, 255, 255, 0.068)",
+                      " rgba(255, 255, 255, 0.0102)",
+                    ]}
+                    style={{
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
+                      paddingLeft: 12,
+                      paddingRight: 12,
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      paddingTop: 8,
+                      paddingBottom: 8,
+                      alignItems: "center",
+                    }}
                   >
                     <View>
-                      <Text style={[defaultStyle.bold_text_10, {color: "white"}]}>
+                      <Text
+                        style={[defaultStyle.bold_text_10, { color: "white" }]}
+                      >
                         {operations.batch_name}
                       </Text>
                       <Text
                         style={{
                           ...defaultStyle.bold_text_10,
-                          marginTop: 18, color: "white"
+                          marginTop: 18,
+                          color: "white",
                         }}
                       >
                         Next Session :{" "}
@@ -1059,7 +1082,12 @@ class ParentHome extends BaseComponent {
                               source={require("../../images/whatsapp_logo.png")}
                             />
                           </TouchableOpacity>
-                          <Text style={[defaultStyle.bold_text_10, {color: "white"}]}>
+                          <Text
+                            style={[
+                              defaultStyle.bold_text_10,
+                              { color: "white" },
+                            ]}
+                          >
                             Join Whatsapp Group
                           </Text>
                         </View>
@@ -1077,13 +1105,13 @@ class ParentHome extends BaseComponent {
 
             {is_payment_due ? (
               <LinearGradient
-              colors={[
-                "rgba(255, 255, 255, 0.068)",
-                " rgba(255, 255, 255, 0.0102)",
-              ]}
-              style={styles.gradient}
+                colors={[
+                  "rgba(255, 255, 255, 0.068)",
+                  " rgba(255, 255, 255, 0.0102)",
+                ]}
+                style={styles.gradient}
               >
-              <View
+                <View
                   style={{
                     marginLeft: 12,
                     marginRight: 12,
@@ -1103,7 +1131,11 @@ class ParentHome extends BaseComponent {
                         alignItems: "center",
                       }}
                     >
-                      <Text style={[defaultStyle.bold_text_10, {color:"white"}]}>Payment</Text>
+                      <Text
+                        style={[defaultStyle.bold_text_10, { color: "white" }]}
+                      >
+                        Payment
+                      </Text>
                       <View style={{ marginLeft: 10 }}>
                         <DueView />
                       </View>
@@ -1136,7 +1168,10 @@ class ParentHome extends BaseComponent {
                   />
 
                   <Text
-                    style={[defaultStyle.bold_text_14, { marginRight: 16, color: 'white' }]}
+                    style={[
+                      defaultStyle.bold_text_14,
+                      { marginRight: 16, color: "white" },
+                    ]}
                   >
                     {name}
                   </Text>
@@ -1166,7 +1201,10 @@ class ParentHome extends BaseComponent {
                           Amount
                         </Text>
                         <Text
-                          style={[defaultStyle.bold_text_14, { marginTop: 10, color: "white" }]}
+                          style={[
+                            defaultStyle.bold_text_14,
+                            { marginTop: 10, color: "white" },
+                          ]}
                         >
                           {payment_detail_academy.totalAmount}
                         </Text>
@@ -1269,7 +1307,7 @@ class ParentHome extends BaseComponent {
                   "rgba(255, 255, 255, 0.068)",
                   " rgba(255, 255, 255, 0.0102)",
                 ]}
-                style={[styles.gradient,{marginHorizontal: 5}]}
+                style={[styles.gradient, { marginHorizontal: 5 }]}
               >
                 <TouchableOpacity
                   onPress={() => {
@@ -1294,7 +1332,7 @@ class ParentHome extends BaseComponent {
                         height: 30,
                         marginRight: 20,
                         marginTop: 5,
-                        tintColor: 'white'
+                        tintColor: "white",
                       }}
                     />
                     <View style={{ flex: 1 }}>
@@ -1308,7 +1346,12 @@ class ParentHome extends BaseComponent {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Text style={[defaultStyle.bold_text_14, {color: 'white'}]}>
+                        <Text
+                          style={[
+                            defaultStyle.bold_text_14,
+                            { color: "white" },
+                          ]}
+                        >
                           View Other Players
                         </Text>
 
@@ -1319,7 +1362,7 @@ class ParentHome extends BaseComponent {
                             height: 13,
                             marginRight: 0,
                             marginTop: 5,
-                            tintColor: 'white'
+                            tintColor: "white",
                           }}
                         />
                       </View>
@@ -1643,13 +1686,13 @@ class ParentHome extends BaseComponent {
                     borderRadius: 12,
                   }}
                 > */}
-              <LinearGradient
-                colors={[
-                  "rgba(255, 255, 255, 0.068)",
-                  " rgba(255, 255, 255, 0.0102)",
-                ]}
-                style={[styles.gradient, {margin: 10}]}
-              >
+                <LinearGradient
+                  colors={[
+                    "rgba(255, 255, 255, 0.068)",
+                    " rgba(255, 255, 255, 0.0102)",
+                  ]}
+                  style={[styles.gradient, { margin: 10 }]}
+                >
                   <View
                     style={{
                       marginLeft: 12,
@@ -1657,7 +1700,9 @@ class ParentHome extends BaseComponent {
                       marginTop: 16,
                     }}
                   >
-                    <Text style={[defaultStyle.bold_text_10,{color: "white"}]}>
+                    <Text
+                      style={[defaultStyle.bold_text_10, { color: "white" }]}
+                    >
                       Coach Feedback
                     </Text>
                   </View>
@@ -1679,10 +1724,7 @@ class ParentHome extends BaseComponent {
                       }}
                     >
                       <Text
-                        style={[
-                          defaultStyle.bold_text_14,
-                          { color: "white" },
-                        ]}
+                        style={[defaultStyle.bold_text_14, { color: "white" }]}
                       >
                         {coach_feedback_data.target.name}
                       </Text>
@@ -1852,7 +1894,13 @@ class ParentHome extends BaseComponent {
                       marginTop: 12,
                     }}
                   > */}
-                  <View style={{width: "100%", height: 1, backgroundColor: "#575f61ed"}}/>
+                  <View
+                    style={{
+                      width: "100%",
+                      height: 1,
+                      backgroundColor: "#575f61ed",
+                    }}
+                  />
                   <View>
                     <TouchableOpacity
                       onPress={() => {
@@ -1933,10 +1981,7 @@ class ParentHome extends BaseComponent {
       );
     } else {
       return (
-        <LinearGradient
-        colors={["#051732", "#232031"]}
-        style={{ flex: 1}}
-      />
+        <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }} />
       );
     }
   }
@@ -1945,7 +1990,6 @@ const mapStateToProps = (state) => {
   return {
     data: state.DashboardReducer,
     switcherData: state.SwitchReducer,
-
   };
 };
 const mapDispatchToProps = {
@@ -2058,8 +2102,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowColor: "rgba(0, 0, 0, 0.2)",
     borderColor: "rgba(0, 0, 0, 0.7)",
-    margin: 10, 
+    margin: 10,
     borderWidth: 1,
-    borderRadius: 10
+    borderRadius: 10,
   },
 });

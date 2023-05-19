@@ -58,6 +58,7 @@ class PlayingPlan extends Component {
       joinBool: false,
       joinTime: null,
       header: null,
+      failed: "Failed !",
     };
   }
 
@@ -163,13 +164,14 @@ class PlayingPlan extends Component {
     });
   };
 
-  onPressConfirm = (alreadyBook, orderId, amount, subscriptionId) => {
+  onPressConfirm = (alreadyBook, orderId, amount, subscriptionId, failed) => {
     this.setState({
       congratulationScreen: true,
       alreadyBook: alreadyBook,
       amount: amount,
       orderId: orderId,
       subscriptionId: subscriptionId,
+      failed: failed,
     });
   };
 
@@ -251,6 +253,7 @@ class PlayingPlan extends Component {
             amount={this.state.amount}
             error_message={this.state.subscriptionId}
             title="Playing"
+            failed={this.state.failed}
             buttonName={"Pay"}
           />
         )}

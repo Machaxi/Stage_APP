@@ -408,7 +408,7 @@ class LoginSceen extends Component {
               keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
               placeholder="Enter the Mobile Number"
               placeholderTextColor="#BFBFBF"
-              maxLength={12}
+              maxLength={10}
               onChangeText={(value) => {
                 this.setState({ phoneNumber: value });
               }}

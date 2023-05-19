@@ -51,6 +51,7 @@ import { getProficiencyColor, getProficiencyGradients, getProficiencyName, profi
 import moment from "moment";
 import PlayerScreen from "../FirstTimeUser/PlayerScreen";
 import Loader from "../../components/custom/Loader";
+import { EVENT_EDIT_PROFILE } from "../BaseComponent";
 
 export default PlayScreen =({navigation})=>{
 const [playDataVisibility,setPlayDataVisibility] =useState(true);
@@ -133,7 +134,7 @@ var cancelBookingError = null;
 
     getuserdata();
     checkNotification();
-
+    Events.publish(EVENT_EDIT_PROFILE);
     var refreshEvent = Events.subscribe("NOTIFICATION_CLICKED", (msg) => {
       checkNotification();
     });
@@ -430,7 +431,7 @@ const cancelBookingApi = async () => {
         ); 
         {
           Platform.OS === "ios" &&
-            showToast("You already booked trial for this sport.");
+            showToast(cancelBookingError?.response?.data?.error_message ?? "");
         }
         console.log(error);
       });

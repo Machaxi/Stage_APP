@@ -40,7 +40,7 @@ const PaymentDetails = (props) => {
               <Image
                 source={require("../../images/delete.png")}
                 style={[styles.image]}
-                resizeMode="center"
+                resizeMode="contain"
               />
             </View>
             <Text style={[styles.title, { color: "rgba(1, 227, 214, 0.77)" }]}>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#FFFFFF",
     fontFamily: Nunito_Medium,
   },

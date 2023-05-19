@@ -108,7 +108,7 @@ class SelectSports extends Component {
                     <Image
                       source={{ uri: item.image }}
                       style={styles.imageitem}
-                      resizeMode="center"
+                      resizeMode="contain"
                     />
                   </ImageBackground>
                 </LinearGradient>

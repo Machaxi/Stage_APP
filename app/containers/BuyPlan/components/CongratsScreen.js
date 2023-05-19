@@ -33,13 +33,18 @@ class CongratsScreen extends Component {
     const userDetails = JSON.parse(userDetailsJson);
     const userInfoJson = await AsyncStorage.getItem("userInfo");
     const userInfo = JSON.parse(userInfoJson);
-    this.setState({
-      ONE_SIGNAL_USERID: ONE_SIGNAL,
-      firebase_token: fcm_token,
-      userData: userDetails,
-      header: header,
-      userInfo: userInfo,
-    });
+    this.setState(
+      {
+        ONE_SIGNAL_USERID: ONE_SIGNAL,
+        firebase_token: fcm_token,
+        userData: userDetails,
+        header: header,
+        userInfo: userInfo,
+      },
+      () => {
+        this.signInByName();
+      }
+    );
   };
 
   signInByName = () => {
@@ -53,11 +58,8 @@ class CongratsScreen extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
+        console.log(batchData);
         storeData("userInfo", JSON.stringify(batchData));
-        this.props.onPress(
-          this.state.userInfo.is_play_enabled,
-          this.state.userInfo.is_learn_enabled
-        );
       })
       .catch((error) => {
         console.log(error);
@@ -66,7 +68,10 @@ class CongratsScreen extends Component {
 
   render() {
     handlepress = () => {
-      this.signInByName();
+      this.props.onPress(
+        this.state.userInfo.is_play_enabled,
+        this.state.userInfo.is_learn_enabled
+      );
     };
 
     return (

@@ -78,6 +78,8 @@ class SelectPlayPay extends Component {
       coupon: null,
       isApplied: false,
       selectCenter: null,
+      displayBottomStart: "",
+      displayBottomEnd: "",
     };
   }
 
@@ -108,6 +110,8 @@ class SelectPlayPay extends Component {
 
     const start_date = this.formatesmallDate(startDate);
     const end_date = this.formatesmallDate(endDate);
+    const start_d_date = this.formatesmallDateYear(startDate);
+    const end_d_date = this.formatesmallDateYear(endDate);
 
     this.setState(
       {
@@ -117,6 +121,8 @@ class SelectPlayPay extends Component {
         centerDistance: distance,
         displayStartDate: start_date,
         displayEndDate: end_date,
+        displayBottomEnd: end_d_date,
+        displayBottomStart: start_d_date,
         amount: selectPlan.price,
         appliedCoupon: this.props.applycoupon,
         startdate: startDate,
@@ -128,8 +134,6 @@ class SelectPlayPay extends Component {
       },
       () => {
         if (this.props.joinBool) {
-          console.log("ollla");
-          console.log(this.props.joinTime);
           this.DataChange(this.props.joinTime);
         } else {
           this.setState({ selectCenter: this.props.selectCenter });
@@ -171,6 +175,15 @@ class SelectPlayPay extends Component {
     var data = date.getDate();
     var month = date.getMonth();
     datastring = data + " " + this.months[month];
+    return datastring;
+  };
+
+  formatesmallDateYear = (date) => {
+    var data = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    const ye = " '" + year.toString().slice(-2);
+    datastring = data + " " + this.months[month] + ye;
     return datastring;
   };
 
@@ -236,7 +249,14 @@ class SelectPlayPay extends Component {
             responcedata.data.amount
           );
         } else {
-          this.props.onPress(false, 0, 0, result.response.data.error_message);
+          const failed = "Membership limit reached !";
+          this.props.onPress(
+            false,
+            0,
+            0,
+            result.response.data.error_message,
+            failed
+          );
         }
       })
       .catch((response) => {
@@ -271,7 +291,8 @@ class SelectPlayPay extends Component {
           false,
           orderId,
           amount,
-          "You can retry your pay for the Playing Plan if it appears that your payment was failed."
+          "You can retry your pay for the Playing Plan if it appears that your payment was failed.",
+          "Payment Failed !"
         );
       });
   };
@@ -294,13 +315,18 @@ class SelectPlayPay extends Component {
       .then((result) => {
         result = result.payload;
         if (result.data) {
-          this.props.onPress(true, "", "", result.data.data.subscriptionId);
+          this.props.onPress(true, "", "", result.data.data.subscriptionId, "");
         } else {
+          var failed = "Payment Failed !";
+          if (result.response.data.error_code == "1000") {
+            failed = "Membership limit reached !";
+          }
           this.props.onPress(
             false,
             orderId,
             amount,
-            result.response.data.error_message
+            result.response.data.error_message,
+            failed
           );
         }
       });
@@ -330,11 +356,15 @@ class SelectPlayPay extends Component {
     const endJoin = new Date(presentdate);
     const start_date = this.formatesmallDate(joinDate);
     const end_date = this.formatesmallDate(endJoin);
+    const start_d_date = this.formatesmallDateYear(joinDate);
+    const end_d_date = this.formatesmallDateYear(endJoin);
     this.setState({
       startdate: joinDate,
       enddate: endJoin,
       displayStartDate: start_date,
       displayEndDate: end_date,
+      displayBottomEnd: end_d_date,
+      displayBottomStart: start_d_date,
       selectCenter: this.props.selectCenter,
     });
   };
@@ -408,7 +438,7 @@ class SelectPlayPay extends Component {
           {this.state.displayStartDate && (
             <PlanDetails
               title={this.props.selectPlan.name}
-              subtitle={this.props.selectPlan.price}
+              subtitle={"₹ " + this.props.selectPlan.price}
               startDate={this.state.displayStartDate}
               endDate={this.state.displayEndDate}
               image={this.props.selectPlan.planIconUrl}
@@ -505,9 +535,9 @@ class SelectPlayPay extends Component {
           <PaymentDetails
             title={
               "Payment for " +
-              this.state.displayStartDate +
+              this.state.displayBottomStart +
               " to " +
-              this.state.displayEndDate
+              this.state.displayBottomEnd
             }
             appliedCoupon={this.state.appliedCoupon}
             coupounPrice={this.state.couponAmount}
@@ -517,7 +547,7 @@ class SelectPlayPay extends Component {
         </ScrollView>
         <View style={{ flex: 0.06, paddingTop: 15 }}>
           <CustomButton
-            name={"Pay " + this.state.discountAmount}
+            name={"Pay ₹ " + this.state.discountAmount}
             available={true}
             onPress={this.startPayment}
           />

@@ -14,6 +14,10 @@ import * as Analytics from "../../Analytics"
 import { PLAYER, PARENT, COACH } from '../../components/Constants';
 import { Nunito_Regular } from '../util/fonts';
 import LinearGradient from "react-native-linear-gradient";
+import RequestHeaderTitle from '../../atoms/requestHeaderTitle';
+import RequestHeaderBg from '../../atoms/requestHeaderBg';
+import RequestHeaderLeft from '../../atoms/requestHeaderLeft';
+import RequestHeaderRight from '../../atoms/requestHeaderRight';
 
 class TournamentTabs extends BaseComponent {
 
@@ -79,48 +83,62 @@ class TournamentTabs extends BaseComponent {
   }
 
   static navigationOptions = ({ navigation }) => {
-
     return {
-      headerTitle: "Tournament",
-      headerTitleStyle: styles.headerStyle,
-      headerStyle: {
-        backgroundColor: "#21202F",
-      },
+      headerTitle: <RequestHeaderTitle title={"Tournament"} />,
+    headerTitleStyle: {
+      color: "white",
+    },
 
-      headerLeft: ( 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}
-          style={{ padding: 7 }}
-          activeOpacity={0.8}
-        >
-          <Image
-            source={require("../../images/hamburger_white.png")}
-            style={{ width: 20, height: 16, marginLeft: 12 }}
-          />
-        </TouchableOpacity>
-      ),
-      headerRight: global.NEW_PLAYER_FLOW == true ? null : (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("SwitchPlayer");
-          }}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={{
-              marginRight: 12,
-              fontFamily: "Quicksand-Regular",
-              fontSize: 10,
-              color: "#667DDB",
-            }}
-          >
-            {navigation.getParam("Title", "")}
-          </Text>
-        </TouchableOpacity>
-      ),
-    };
+    headerStyle: {
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    },
+    headerBackground: <RequestHeaderBg />,
+    headerLeft: <RequestHeaderLeft navigation={navigation} />,
+    headerRight: <RequestHeaderRight navigation={navigation} />,
+    }
+    // return {
+    //   headerTitle: "Tournament",
+    //   headerTitleStyle: styles.headerStyle,
+    //   headerStyle: {
+    //     backgroundColor: "#141a2e",
+    //   },
+
+    //   headerLeft: ( 
+    //     <TouchableOpacity
+    //       onPress={() => {
+    //         navigation.toggleDrawer();
+    //       }}
+    //       style={{ padding: 7 }}
+    //       activeOpacity={0.8}
+    //     >
+    //       <Image
+    //         source={require("../../images/hamburger_white.png")}
+    //         style={{ width: 20, height: 16, marginLeft: 12 }}
+    //       />
+    //     </TouchableOpacity>
+    //   ),
+    //   headerRight: global.NEW_PLAYER_FLOW == true ? null : (
+    //     <TouchableOpacity
+    //       onPress={() => {
+    //         navigation.navigate("SwitchPlayer");
+    //       }}
+    //       activeOpacity={0.8}
+    //     >
+    //       <Text
+    //         style={{
+    //           marginRight: 12,
+    //           fontFamily: "Quicksand-Regular",
+    //           fontSize: 10,
+    //           color: "#667DDB",
+    //         }}
+    //       >
+    //         {navigation.getParam("Title", "")}
+    //       </Text>
+    //     </TouchableOpacity>
+    //   ),
+    // };
   };
 
 

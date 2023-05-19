@@ -104,7 +104,7 @@ const MyBookingsScreen = ({ navigation }) => {
         .then(function(response) {
           console.log({ response });
           getErrorResponse = response;
-          console.log("requestData" + JSON.stringify(response.data));
+          console.log("requestDatadd" + JSON.stringify(response.data));
           let json = response.data;
           let success = json.success;
           if (success) {
@@ -295,9 +295,6 @@ const MyBookingsScreen = ({ navigation }) => {
   };
 
   const getTimeData = (monthNumber, yearVal) => {
-    console.log(monthNumber);
-    console.log(yearVal);
-    console.log(pastBookings);
     const filtereddata = pastBookings.filter((item) => {
       console.log(item.date);
       const dateObject = moment(item.date);
@@ -307,8 +304,6 @@ const MyBookingsScreen = ({ navigation }) => {
       );
     });
     setFilteredData(filtereddata);
-    console.log("olla");
-    console.log(filtereddata);
   };
 
   return (

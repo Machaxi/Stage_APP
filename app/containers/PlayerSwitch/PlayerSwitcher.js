@@ -234,9 +234,8 @@ class PlayerSwitcher extends BaseComponent {
                     if (tempuserData.user['user_type'] == 'PLAYER') {
                     
                         if (item.can_book_court) {
-                            this.props.navigation.navigate('UserBookHome')
+                            this.props.navigation.navigate('ParentBookHome')
                         } else {
-                            // this.props.navigation.navigate('UserHome')
                             this.props.navigation.navigate('LearnHomePage')
                         }
                     } else {

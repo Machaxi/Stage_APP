@@ -24,6 +24,7 @@ export default class PlayerHeader extends BaseComponent {
     }
 
     componentDidMount(){
+      console.log("I am working");
         // if (isParent(userData)) {
           getData("childrenData", (value) => {
             let childData = JSON.parse(value);

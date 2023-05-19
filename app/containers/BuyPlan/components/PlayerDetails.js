@@ -34,7 +34,7 @@ class PlayerDetails extends Component {
       name: "",
       currentGender: 0,
       currentChild: 1,
-      gender: "Male",
+      gender: "MALE",
       related_players: null,
       displayname: true,
       procednext: false,
@@ -135,7 +135,8 @@ class PlayerDetails extends Component {
               onPress={() => {
                 if (
                   this.state.related_players &&
-                  this.state.related_players.length > 1
+                  this.state.related_players.length > 1 &&
+                  this.props.title == "Coaching Trial"
                 ) {
                   this.setState({ displayname: false });
                 }

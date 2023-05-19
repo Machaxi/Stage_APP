@@ -118,13 +118,6 @@ class Splash extends BaseComponent {
                                 console.log(userData);
                                 if (userType == GUEST) {
                                     this.props.navigation.navigate('GuestBookHome')
-                                // } else if (userType == PLAYER) {
-                                //     if (userData.can_book_court) {
-                                //         this.props.navigation.navigate('UserBookHome');
-                                //     } else {
-                                //         this.props.navigation.navigate('UserHome');
-                                //     }
-
                                 } else if (userType == COACH) {
                                     if (userData.can_book_court) {
                                         this.props.navigation.navigate('CoachBookHome');

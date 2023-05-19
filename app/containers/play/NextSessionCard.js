@@ -183,9 +183,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
                 ]}
               >
                 {/* TODO: */}
-                {`Number of players right now - ${item?.maxPlayersAllowed}/${
-                  gamePartners?.length
-                }`}
+                {`Number of players right now - ${gamePartners?.length + gamePartners.reduce((acc, obj) => acc + obj.guestCount, 0) + 1 + item?.guestCount}/${item?.maxPlayersAllowed}`}
               </Text>
               <FlatList
                 data={gamePartners}
@@ -219,7 +217,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
               <Text style={styles.noteTxt}>
                 {
                   // TODO: need to handle this
-                  "To cancel a session player, you must do so at least three hours before the booking time."
+                  "To cancel a session, you must do so at least three hours before the booking time."
                 }
               </Text>
             </View>
@@ -282,6 +280,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 14,
     marginBottom: 10,
+    marginTop: 6,
   },
   noPartners: {
     color: yellowVariant2,

@@ -141,9 +141,20 @@ class LearnTrialList extends Component {
           style={styles.container}
         >
           <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+            style={{
+              flex: 0.85,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <Text style={styles.insideText}>No booking available</Text>
+          </View>
+          <View style={{ flex: 0.15, justifyContent: "center" }}>
+            <CustomButton
+              name="Book Trial "
+              available={true}
+              onPress={this.onPressExplore}
+            />
           </View>
         </LinearGradient>
       );

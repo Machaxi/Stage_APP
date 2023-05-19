@@ -73,7 +73,6 @@ const CouponListItem = ({
           <Text style={styles.discount}>{percentage + "%"}</Text>
           {" off upto "}
           <Text style={styles.discount}>{"₹ " + discount}</Text>
-          {" on you current playing plan."}
         </Text>
       </View>
       {/* </TouchableOpacity> */}

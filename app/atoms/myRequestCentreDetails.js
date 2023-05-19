@@ -8,7 +8,11 @@ import {
   goldenYellow,
   white,
 } from "../containers/util/colors";
-import { Nunito_Bold, Nunito_Medium, Nunito_Regular } from "../containers/util/fonts";
+import {
+  Nunito_Bold,
+  Nunito_Medium,
+  Nunito_Regular,
+} from "../containers/util/fonts";
 
 const MyRequestCentreDetails = ({ details }) => {
   return (
@@ -22,11 +26,11 @@ const MyRequestCentreDetails = ({ details }) => {
             }}
             style={[styles.centerImgView, styles.centerImg]}
           >
-            <View style={styles.playCenterView}>
+            {/* <View style={styles.playCenterView}>
               <View style={styles.playCenterInner}>
                 <Text style={styles.distance}>{details?.distance} away</Text>
               </View>
-            </View>
+            </View> */}
           </ImageBackground>
         </View>
         <View style={{ flexDirection: "column", marginLeft: 12 }}>

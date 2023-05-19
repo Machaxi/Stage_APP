@@ -37,6 +37,7 @@ class CoachScreen extends Component {
       learnData: null,
     };
     this.scrollViewRef = createRef();
+    this.autoScrollInterval = null;
   }
 
   componentDidMount() {
@@ -52,8 +53,8 @@ class CoachScreen extends Component {
   };
 
   componentWillUnmount() {
-    this.stopAutoScroll();
     this.didFocusListener.remove();
+    this.stopAutoScroll();
   }
 
   startAutoScroll() {
@@ -61,7 +62,7 @@ class CoachScreen extends Component {
       var off =
         (Dimensions.get("window").width - 40) * (this.state.currentIndex + 1);
       console.log(off);
-      this.scrollViewRef.current.scrollTo({ x: off, animated: true });
+      this.scrollViewRef?.current?.scrollTo({ x: off, animated: true });
       if (this.state.currentIndex > images.length - 2) {
         this.setState({ currentIndex: 0 });
       } else {

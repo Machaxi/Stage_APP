@@ -953,7 +953,7 @@ class CoachMenuDrawer extends BaseComponent {
 		}}>
 			<Text
 				numberOfLines={1}
-				style={[defaultStyle.bold_text_14, { width: 90 ,color:'#CECECE'}]}>{formattedName(obj.name)}</Text>
+				style={[defaultStyle.bold_text_14, { width: 250 ,color:'#CECECE'}]}>{obj.name}</Text>
 			<Text style={[defaultStyle.regular_text_12, { color:'#CECECE'}]}>{obj.phone_number}</Text>
 
 		</View>

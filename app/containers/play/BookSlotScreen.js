@@ -183,6 +183,10 @@ const BookSlotScreen = ({ navigation }) => {
 
   const onNextPress = () => {
     //setModalVisibility(true)
+    var entirecourt = false;
+    if (user == "entire_court") {
+      entirecourt = true;
+    }
     navigation.navigate("BookSlotCentreSelectionScreen", {
       date: date,
       proficiency: proficiency,
@@ -192,6 +196,7 @@ const BookSlotScreen = ({ navigation }) => {
       preferredAcademyId: planAndSportsApiRes?.plan?.preferredAcademyId,
       preferredSportId: planAndSportsApiRes?.plan?.preferredSportId,
       userType: user,
+      entirecourt: entirecourt,
     });
   };
 
@@ -231,7 +236,7 @@ const BookSlotScreen = ({ navigation }) => {
         >
           <GoBackHeader navigation={navigation} title={"Book Slot"} />
           <View style={{ paddingHorizontal: 18, marginBottom: 20 }}>
-            {sportsList.length > 0 ? (
+            {sportsList && sportsList.length > 0 ? (
               <SelectSportsBookSlot
                 selectedSportsId={selectedSportsId}
                 sportsList={sportsList}
