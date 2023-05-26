@@ -171,6 +171,7 @@ class TrialBook extends Component {
           <CoachProcess
             number={this.state.currentPage}
             onPress={this.onPress}
+            title="Coaching Trial"
           />
         </View>
         <View style={{ height: 1, backgroundColor: "gray", marginTop: 15 }} />

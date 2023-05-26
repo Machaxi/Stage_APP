@@ -31,7 +31,10 @@ class PlayerScreen extends Component {
   componentDidMount() {
     this.getValue();
     if (this.props.navigation != null) {
-      this.didFocusListener = this.props.navigation.addListener("didFocus", this.onScreenFocus);
+      this.didFocusListener = this.props.navigation.addListener(
+        "didFocus",
+        this.onScreenFocus
+      );
     }
   }
 
@@ -106,7 +109,7 @@ class PlayerScreen extends Component {
             {this.state.playData["plans"].map((item, index) => (
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => this.onPlan(index)}
+                onPress={() => this.onPlan(item.id)}
               >
                 <PlayPass
                   name={item.name}

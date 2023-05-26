@@ -79,7 +79,7 @@ class CoachProcess extends Component {
               this.props.number > 2 && { color: "#FF9C33" },
             ]}
           >
-            Batch
+            {this.props.title == "Playing Trial" ? "Slot" : "Batch"}
           </Text>
         </TouchableOpacity>
         <View

@@ -262,6 +262,7 @@ class CoachingPlan extends Component {
                 {this.state.currentPage === 3 && (
                   <SelectCoachBatch
                     onPress={this.onPressBatch}
+                    parent={this.state.parent}
                     selectCenter={this.state.selectCenter}
                     selectSport={this.state.selectSport}
                   />

@@ -50,7 +50,10 @@ class PlayTrialList extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"]["trials"][0];
-        this.setState({ trailList: [academiesData] });
+        console.log(academiesData);
+        if (academiesData) {
+          this.setState({ trailList: [academiesData] });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -124,7 +127,7 @@ class PlayTrialList extends Component {
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
-            <Text style={styles.insideText}>No booking available</Text>
+            <Text style={styles.insideText}>No bookings available</Text>
           </View>
         </LinearGradient>
       );
@@ -136,18 +139,19 @@ class PlayTrialList extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
-        {this.state.displayNoText ? (
+        <FlatList
+          data={this.state.trailList}
+          renderItem={this.nextSessionCard}
+          keyExtractor={(item) => item.id}
+        />
+        {this.state.displayNoText && (
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
-            <Text style={styles.insideText}>No booking available</Text>
+            <Text style={styles.insideText}>
+              Maximum number of trials reached
+            </Text>
           </View>
-        ) : (
-          <FlatList
-            data={this.state.trailList}
-            renderItem={this.nextSessionCard}
-            keyExtractor={(item) => item.id}
-          />
         )}
       </LinearGradient>
     );

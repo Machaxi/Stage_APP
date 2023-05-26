@@ -300,7 +300,7 @@ class EditProfile extends BaseComponent {
                         let data = JSON.parse(resp.data)//JSON.parse(resp)
                         console.warn('suces => ', data.success)
                         console.log(' saveUserStartupProfile payload ' + JSON.stringify(data));
-
+                        this.refreshUserProfileData();
                         let success = data.success
                         if (success) {
 

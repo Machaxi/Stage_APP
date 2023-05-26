@@ -48,7 +48,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
                 : ""}
             </Text>
             <NamedRoundedGradientContainer
-              name={getProficiencyName(item?.proficiency)}
+              name={getProficiencyName(item?.proficiency ? item?.proficiency.toLowerCase() : '')}
               colors={getProficiencyGradients(item?.proficiency)}
               txtColor={getProficiencyColor(item?.proficiency)}
             />
@@ -127,7 +127,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
         </View>
         <View style={styles.gameContainer}>
           <NamedRoundedGradientContainer
-            name={getProficiencyName(item?.proficiency)}
+            name={getProficiencyName(item?.proficiency.toLowerCase())}
             colors={getProficiencyGradients(item?.proficiency)}
             txtColor={getProficiencyColor(item?.proficiency)}
           />
@@ -192,7 +192,7 @@ export const NextSessionCard = ({item, userId,onCancelPress, expandList}) => {
             </View>
           ) : (
             <Text style={styles.noPartners}>
-              {
+              { item?.maxPlayersAllowed ==  1 + item?.guestCount ? "Entire Court is booked by you" :
                 "We apologise, but no one has scheduled sessions for this slot. Please don't worry, a player from Machaxi will be available to play with you at this time."
               }
             </Text>

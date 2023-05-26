@@ -37,6 +37,7 @@ const SlotBookedModalInnerView = ({
   goHomePressed,
   slotInfo,
   slotRequested,
+  entirecourt
 }) => {
   return (
     <TouchableOpacity activeOpacity={1}>
@@ -52,7 +53,7 @@ const SlotBookedModalInnerView = ({
         />
         <View style={{ paddingHorizontal: 30 }}>
           <Text style={styles.slotBooked}>
-            {slotRequested ? "Request Sent!" : "Slot Booked"}
+            {slotRequested ? "Request Sent!" : entirecourt ? "Court Booked" : "Slot Booked"}
           </Text>
           <Text style={styles.slotBookedMsg}>
             {slotRequested

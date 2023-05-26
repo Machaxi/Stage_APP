@@ -205,7 +205,7 @@ const MyBookingsScreen = ({ navigation }) => {
 
           ToastAndroid.show(
             `${cancelBookingError?.response?.data?.error_message ?? ""}`,
-            ToastAndroid.SHORT
+            ToastAndroid.LONG
           );
           console.log(error);
         });

@@ -167,7 +167,7 @@ export const SelfRatingCard = ({
                {!editSelfRating  &&
                <SelfRatingBox
                  title={getProficiencyName(
-                   selectedSportRelatedRating?.self
+                   selectedSportRelatedRating?.self ? selectedSportRelatedRating?.self.toLowerCase() : ''
                  )}
                  titleColor={getProficiencyColor(
                    selectedSportRelatedRating?.self

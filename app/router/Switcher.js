@@ -1,31 +1,33 @@
-import React from 'react'
+import React from "react";
 
 import { createStackNavigator } from "react-navigation";
 import mybatch from "../containers/PlayerBatch/PlayerBatch";
 import PlayersListing from "../containers/GuestScreen/PlayersListing";
 import AppMain from "./router";
-import NavigationDrawerStructure from './NavigationDrawerStructure'
+import NavigationDrawerStructure from "./NavigationDrawerStructure";
 import RightMenuToolbar from "./RightMenuToolbar";
 import { StyleSheet } from "react-native";
-import switchplayer from '../containers/PlayerSwitch/PlayerSwitcher'
-import CurrentBooking from '../containers/court_booking/CurrentBooking';
-import CourtAcademyListing from '../containers/court_booking/CourtAcademyListing'
-import ChooseTimeDate from '../containers/court_booking/ChooseTimeDate'
-import AcademyListing from '../containers/GuestScreen/AcademyListing'
-import AcademyProfile from '../containers/GuestScreen/AcademyProfile'
-import CoachListing from '../containers/GuestScreen/CoachListing'
-import CoachProfileDetail from '../containers/GuestScreen/CoachProfileDetail'
-import EditProfile from '../containers/profile/EditProfile'
-import WriteFeedback from '../containers/feedback/WriteFeedbackListing'
-import WriteAcademyFeedback from '../containers/feedback/WriteAcademyFeedback'
-import AcademyFilter from '../containers/GuestScreen/AcademyFilter'
-import BookTrial from '../containers/GuestScreen/BookTrial'
-import WebViewScreen from '../containers/util/WebViewScreen'
-import AcademyBatch from '../containers/GuestScreen/AcademyBatch'
-import PaymentPage from '../containers/court_booking/PaymentPage'
+import switchplayer from "../containers/PlayerSwitch/PlayerSwitcher";
+import CurrentBooking from "../containers/court_booking/CurrentBooking";
+import CourtAcademyListing from "../containers/court_booking/CourtAcademyListing";
+import ChooseTimeDate from "../containers/court_booking/ChooseTimeDate";
+import AcademyListing from "../containers/GuestScreen/AcademyListing";
+import AcademyProfile from "../containers/GuestScreen/AcademyProfile";
+import CoachListing from "../containers/GuestScreen/CoachListing";
+import CoachProfileDetail from "../containers/GuestScreen/CoachProfileDetail";
+import EditProfile from "../containers/profile/EditProfile";
+import WriteFeedback from "../containers/feedback/WriteFeedbackListing";
+import WriteAcademyFeedback from "../containers/feedback/WriteAcademyFeedback";
+import AcademyFilter from "../containers/GuestScreen/AcademyFilter";
+import BookTrial from "../containers/GuestScreen/BookTrial";
+import WebViewScreen from "../containers/util/WebViewScreen";
+import AcademyBatch from "../containers/GuestScreen/AcademyBatch";
+import PaymentPage from "../containers/court_booking/PaymentPage";
 import Registration from "../containers/tournament/Registration";
-import otherplayerDetails from '../containers/OtherPlayerDetails/OtherPlayerDetails'
-import PlanPurchaseView from '../components/custom/PlanPurchaseView';
+import otherplayerDetails from "../containers/OtherPlayerDetails/OtherPlayerDetails";
+import PlanPurchaseView from "../components/custom/PlanPurchaseView";
+import PrivacyPolicy from "../containers/util/PrivacyPolicy";
+import BlogScreen from "../containers/util/BlogScreen";
 
 const Switcher = createStackNavigator({
   SwitchPlayer1: {
@@ -348,7 +350,54 @@ const Switcher = createStackNavigator({
       },
     }),
   },
-
+  PrivacyPolicy: {
+    screen: PrivacyPolicy,
+    navigationOptions: ({ navigation }) => ({
+      title: "Privacy Policy",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
+  BlogScreen: {
+    screen: BlogScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "BLog",
+      headerLeft: (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          showBackAction={true}
+          showDrawer={false}
+        />
+      ),
+      headerRight: (
+        <RightMenuToolbar
+          navigationProps={navigation}
+          navigation={navigation}
+          showHome={false}
+        />
+      ),
+      headerTitleStyle: style.headerStyle,
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+      },
+    }),
+  },
   CurrentBooking: {
     screen: CurrentBooking,
     navigationOptions: ({ navigation }) => ({
@@ -458,27 +507,26 @@ const Switcher = createStackNavigator({
   },
   SubscriptionPurchaseScreen: {
     screen: PlanPurchaseView,
-    
-     navigationOptions: ({ navigation }) => ({
-      header:null,
+
+    navigationOptions: ({ navigation }) => ({
+      header: null,
       headerTitleStyle: style.headerStyle,
       headerStyle: {
         backgroundColor: "#FFFFFF",
       },
-     }),
+    }),
   },
 });
 export default Switcher;
 
-
 const style = StyleSheet.create({
-    headerStyle: {
-        color: '#191919',
-        fontFamily: 'Quicksand-Medium',
-        fontWeight: '400',
-        textAlign: 'center',
-        fontSize: 16,
-        flexGrow: 1,
-        alignSelf: 'center',
-    }
-})
+  headerStyle: {
+    color: "#191919",
+    fontFamily: "Quicksand-Medium",
+    fontWeight: "400",
+    textAlign: "center",
+    fontSize: 16,
+    flexGrow: 1,
+    alignSelf: "center",
+  },
+});

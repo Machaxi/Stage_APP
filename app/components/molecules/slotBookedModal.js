@@ -27,6 +27,7 @@ const SlotBookedModal = ({
   modalVisible,
   setModalVisibility,
   goHomePressed,
+  entirecourt
 }) => {
   return (
     <Modal
@@ -48,6 +49,7 @@ const SlotBookedModal = ({
           goHomePressed={() => {
             goHomePressed();
           }}
+          entirecourt={entirecourt}
           slotRequested={slotRequested}
           setModalVisibility={() => setModalVisibility(false)}
         />

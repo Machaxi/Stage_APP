@@ -303,7 +303,9 @@ class ConfirmBooking extends Component {
               </View>
             </View>
             <View style={styles.line} />
-            <Text style={styles.subtitle}>Batch Details</Text>
+            <Text style={styles.subtitle}>
+              {this.props.title == "Playing" ? "Slot Details" : "Batch Details"}
+            </Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-around" }}
             >

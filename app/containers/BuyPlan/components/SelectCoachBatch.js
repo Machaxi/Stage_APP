@@ -30,6 +30,7 @@ class SelectCoachBatch extends Component {
       morningData: null,
       eveningData: null,
       playerLevel: null,
+      batchType: "ADULTS",
     };
   }
 
@@ -38,10 +39,22 @@ class SelectCoachBatch extends Component {
     const academy_id = this.props.selectCenter.id;
     const now = new Date();
     const currentHour = now.getHours();
+    var batchType = "ADULTS";
+    if (this.props.parent != "Parent") {
+      batchType = "KIDS";
+    }
     if (currentHour < 12) {
-      this.setState({ hideMorning: false, hideEvening: true });
+      this.setState({
+        hideMorning: false,
+        hideEvening: true,
+        batchType: batchType,
+      });
     } else {
-      this.setState({ hideMorning: true, hideEvening: false });
+      this.setState({
+        hideMorning: true,
+        hideEvening: false,
+        batchType: batchType,
+      });
     }
     axios
       .get(
@@ -93,7 +106,8 @@ class SelectCoachBatch extends Component {
     for (let i = 0; i < this.state.batchData.length; i++) {
       if (
         this.state.playerLevel[level].name ==
-        this.state.batchData[i].proficiency
+          this.state.batchData[i].proficiency &&
+        this.state.batchType == this.state.batchData[i].batchType
       ) {
         const startHour = parseInt(
           this.state.batchData[i].startTime.split(":")[0]
@@ -129,21 +143,24 @@ class SelectCoachBatch extends Component {
   };
 
   assignTime = (item) => {
+    var noTouch = !item.is_allowed;
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         key={item.batch_id}
         style={{ marginRight: 10, marginVertical: 10, height: 30 }}
         onPress={() => {
-          item.is_allowed &&
-            this.setState({ selectTime: item.batch_id, proseedTime: true });
+          this.setState({ selectTime: item.batch_id, proseedTime: true });
         }}
+        disabled={noTouch}
       >
         <View>
           <LinearGradient
             colors={
               item.batch_id === this.state.selectTime
                 ? ["rgba(255, 180, 1, 0.06))", "rgba(255, 212, 89, 0.03)"]
+                : noTouch
+                ? ["rgba(79, 0, 25, 0.2)", "rgba(79, 0, 25, 0.2)"]
                 : ["rgba(255, 255, 255, 0.15)", "rgba(118, 87, 136, 0)"]
             }
             start={{ x: 0, y: 0 }}
@@ -153,6 +170,7 @@ class SelectCoachBatch extends Component {
               item.batch_id === this.state.selectTime && {
                 borderColor: "rgba(167, 134, 95, 0.6)",
               },
+              noTouch && { borderColor: "#FF5B79" },
             ]}
           >
             <Text>{"    "}</Text>
@@ -170,25 +188,13 @@ class SelectCoachBatch extends Component {
                   color: "#F2AE4D",
                 },
                 item.slot == false && { color: "#858585" },
+                noTouch && { color: "#FF5775" },
               ]}
             >
               {item.displayTime}
               {"    "}
             </Text>
           </LinearGradient>
-          {item.is_allowed == false && (
-            <Image
-              style={{
-                width: "79%",
-                height: "100%",
-                marginTop: -30,
-                marginLeft: 10,
-                tintColor: "#F2AE4D",
-              }}
-              resizeMode="stretch"
-              source={require("../../../images/playing/cross.png")}
-            />
-          )}
         </View>
       </TouchableOpacity>
     );

@@ -10,23 +10,31 @@ class SelectTimeItem extends Component {
   handlepress(val) {
     this.props.onPress(val);
   }
-
+ 
   checkIfSlotActive() {
-    var randomStartDateTime =
-      `${moment().format("YYYY-MM-DD")}T` + this.props.startTime;
+    // var randomStartDateTime =
+    //   `${moment().format("YYYY-MM-DD")}T` + this.props.startTime;
 
-    const selectDate = new Date(this.props.preferredDate);
-    const time1 = new Date();
-    const time2 = new Date(randomStartDateTime);
-    const diffInMillisec = time2.getTime() - time1.getTime();
+    // const selectDate = new Date(this.props.preferredDate);
+    // const time1 = new Date();
+    // const time2 = new Date(randomStartDateTime);
+    // const diffInMillisec = time2.getTime() - time1.getTime();
 
-    // convert milliseconds to hours, minutes
-    const diffInHours = diffInMillisec / (1000 * 60 * 60);
+    // // convert milliseconds to hours, minutes
+    // const diffInHours = diffInMillisec / (1000 * 60 * 60);
 
-    if (diffInHours > 0 || selectDate > time1) {
-      return true;
-    } else {
-      return false;
+    // if (diffInHours > 0 || selectDate > time1) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+    const targetTime = moment(this.props.startTime, "HH:mm:ss");
+    const currentTime = moment();
+    const preferredDate = moment(this.props.preferredDate)
+    if (preferredDate > currentTime) {
+      return true
+    }else {
+      return currentTime.isSameOrBefore(targetTime.subtract(15, "minutes"));
     }
   }
 

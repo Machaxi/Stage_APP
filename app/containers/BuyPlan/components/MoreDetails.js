@@ -44,6 +44,9 @@ class MoreDetails extends Component {
   preferredSport = () => {
     return (
       <View>
+        {this.props.title == "EditPreferredSports" && (
+          <GetBack title="Back" onPress={this.hadleBack} />
+        )}
         <Text style={styles.mainText}>
           Select preferred sport{" "}
           <Text style={[styles.mainText, { fontSize: 11 }]}>
@@ -98,6 +101,10 @@ class MoreDetails extends Component {
     );
   };
 
+  hadleBack = () => {
+    this.props.onBackPress();
+  };
+
   hadleBackPress = () => {
     this.setState({
       selectLevel: false,
@@ -150,8 +157,12 @@ class MoreDetails extends Component {
         dict["subscriptionId"] = subId;
         dict["sportId"] = sportsId;
         dict["proficiency"] = level;
+        console.log(this.props.title);
+        if (this.props.title == "EditPreferredSports") {
+          dict["preferredAcademyId"] = "" + this.props.preferredAcademyId;
+        }
         dataDic["data"] = dict;
-
+        console.log(dataDic)
         this.props
           .selectPreferredSports(dataDic, this.state.header)
           .then(() => {

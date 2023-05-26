@@ -401,6 +401,7 @@ const cancelBookingApi = async () => {
             for(var i=0; i< nextSession?.length; i++){
               if(nextSession[i]?.id == cancelBookingId){
                 nextSessionVal[i].isCancelled = true;
+                onRefresh();
                 addCanceledHoursBack(
                   nextSessionVal[i]?.startTime,
                   nextSessionVal[i]?.endTime
@@ -517,8 +518,18 @@ const renderGameNameBox = ({ item }) => {
 };
 
 const bookSlotPressed=()=>{
-  null
+  const startDate = moment(playerDetailsResponse?.plan?.joiningDate)
+  const expiryD = moment(playerDetailsResponse?.plan?.expiryDate)
+  const expiryDate = expiryD.add(1, 'day')
+  const presentDate = moment();
+  const prestD = presentDate.add(1, 'day')
+  if (presentDate > startDate && presentDate < expiryDate) {
+    navigation.navigate("BookSlotScreen");
+  }else {
+    ToastAndroid.show(`Your current plan doesn't allow you to book a slot.`, ToastAndroid.SHORT);
+  }
 };
+
 const onPlayingLevelPress=()=>{
   null
 };
@@ -770,7 +781,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
             <PrefSport
               gradientColors={getProficiencyGradients(userProficiency)}
               currentRatingColor={getProficiencyColor(userProficiency)}
-              currentRating={getProficiencyName(userProficiency)}
+              currentRating={getProficiencyName(userProficiency ? userProficiency.toLowerCase() : '')}
               icon={{ uri: preferredDetails?.sport?.image }}
               sportTitle={preferredDetails?.sport?.name}
             />
@@ -786,7 +797,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
             //aboutToExpire={true}
             showOffer={false}
             planExpired={
-              packageRemainingDays <= 0 && expiringToday == false
+              (packageRemainingDays <= 0 && expiringToday == false) || remainingHrsApiRes < 1
                 ? true
                 : false
             }
@@ -962,7 +973,6 @@ const onPressPlan = (selectPlan, playPlanData) => {
             available={true}
             height={45}
             onPress={() => {
-              navigation.navigate("BookSlotScreen");
               bookSlotPressed();
             }}
           />

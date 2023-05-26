@@ -67,10 +67,8 @@ const SelectLevel = (props) => {
 const styles = StyleSheet.create({
   subview: {
     width: 98,
-    height: 100,
+    height: 120,
     marginVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
   },
   levelView: {
     width: 98,
@@ -94,6 +92,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontFamily: Nunito_Medium,
     color: "#BBBBBB",
+    textAlign: "center",
   },
   imageitem: {
     width: 52,

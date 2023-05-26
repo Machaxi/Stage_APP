@@ -134,6 +134,7 @@ class SelectPay extends Component {
         displayBottomStart: start_d_date,
         amount: this.props.selectPlan.paybleAmount,
         joinDate: joinDate,
+        date: stDate,
         appliedCoupon: this.props.applycoupon,
         userData: userData,
         childDetails: this.props.childDetails,
@@ -159,11 +160,11 @@ class SelectPay extends Component {
       dict["join_date"] = this.state.joinDate;
       dict["user_id"] = this.state.userDetails.id;
       if (this.props.parent == "Parent") {
-        if (userData.user["user_type"] == "GUEST") {
-          dict["parent_name"] = this.state.userDetails.userName;
-          dict["player_name"] = this.state.userDetails.userName;
-          dict["gender"] = this.state.gender.toUpperCase();
-        }
+        // if (userData.user["user_type"] == "GUEST") {
+        //   dict["parent_name"] = this.state.userDetails.userName;
+        //   dict["player_name"] = this.state.userDetails.userName;
+        //   dict["gender"] = this.state.gender.toUpperCase();
+        // }
       } else {
         if (this.state.childDetails != null) {
           dict["player_user_id"] = this.state.childDetails.id;
@@ -319,7 +320,7 @@ class SelectPay extends Component {
   DataChange = (join_date) => {
     const stDate = new Date(join_date);
     const start_d_date = this.formatesmallDateYear(stDate);
-    this.setState({ joinDate: join_date, displayBottomStart: start_d_date });
+    this.setState({ joinDate: join_date, displayBottomStart: start_d_date, date: stDate });
     const batch_id = this.state.selectBatch.batch_id;
     axios
       .get(

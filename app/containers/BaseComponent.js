@@ -643,8 +643,31 @@ export default class BaseComponent extends React.Component {
        
      });
   }
-  }
 
+  refreshUserProfileData=()=> {
+    getData("header", (value) => {
+    if (value == "") return;    
+    const headers = {
+       "Content-Type": "application/json",
+       "x-authorization": value,
+    };
+    console.log("Refreshing Profile");
+    client
+      .get(getBaseUrl() + "login-refreshed", { headers })
+      .then((response)=>{
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        console.log("working")
+        console.log(batchData);
+        storeData("userInfo", JSON.stringify(batchData));
+      })
+      .catch(function(error) {
+       console.log(error);
+     });
+    });
+  }
+}
 
 export function getFormatTime(time) {
   //utc commented

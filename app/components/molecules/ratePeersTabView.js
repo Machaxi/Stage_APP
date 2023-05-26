@@ -38,7 +38,7 @@ export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRa
                    {playerItem?.name}
                  </Text>
                  <Text style={styles.proficiencyStyle}>
-                   {getProficiencyName(playerItem?.proficiency)}
+                   {getProficiencyName(playerItem?.proficiency ? playerItem?.proficiency.toLowerCase() : '')}
                  </Text>
                </View>
                <FlatList
@@ -97,7 +97,7 @@ export const RatePeersTabView = ({ userId, ratingData, proficiencyData, updateRa
                {selectedSportRelatedRating != null &&
                <Text style={styles.dateTimeInfo}>
                  {`${moment(selectedSportRelatedRating?.date).format(
-                   "Mo MMMM YYYY"
+                   "Do MMMM YYYY"
                  )} | ${selectedSportRelatedRating?.displayTime}`}
                </Text>
                 }

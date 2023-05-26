@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, DatePickerIOS } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {
   Nunito_Bold,
@@ -107,8 +107,18 @@ const PlanDetails = (props) => {
     return datastring;
   };
 
+  const formateDates = (date) => {
+    var day = date.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    var month = date.getMonth();
+    const year = date.getFullYear();
+    datastring = day + "-" + months[month] + "-" + year;
+    return datastring;
+  };
+
   handlepress = (date) => {
-    console.log(formatDateToCustomDate(date));
     var presentDate = new Date(formatDateToCustomDate(date));
     setSelectDate(presentDate);
     props.onPress(formatDateToCustomDate(date));
@@ -155,25 +165,49 @@ const PlanDetails = (props) => {
               }}
             >
               <Text style={styles.timetext}>{formateDate(selectDate)}</Text>
-              <DatePicker
-                style={{ borderWidth: 0, width: "140%", zIndex: 2 }}
-                date={selectDate}
-                mode="date"
-                format="DD-MMM-YYYY"
-                minDate={startDate}
-                maxDate={endDate}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateInput: {
-                    marginLeft: 0,
-                    borderWidth: 0,
-                  },
-                }}
-                showIcon={false}
-                hideText={true}
-                onDateChange={(date) => handlepress(date)}
-              />
+              {Platform.OS === "ios" ? (
+                <DatePickerIOS
+                  style={{ borderWidth: 0, width: "140%", zIndex: 2, opacity: 0}}
+                  mode="date"
+                  format="DD-MMM-YYYY"
+                  date={selectDate}
+                  minimumDate={startDate}
+                  maximumDate={endDate}
+                  customStyles={{
+                    dateInput: {
+                      marginLeft: 0,
+                      borderWidth: 0,
+                    },
+                  }}
+                  hideText={false}
+                  textColor="red" 
+                  onDateChange={(date) => {
+                    var datest = formateDates(date)
+                    handlepress(datest)
+                  }
+                  }
+                />
+              ) : (
+                <DatePicker
+                  style={{ borderWidth: 0, width: "140%", zIndex: 2 }}
+                  date={selectDate}
+                  mode="date"
+                  format="DD-MMM-YYYY"
+                  minDate={startDate}
+                  maxDate={endDate}
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateInput: {
+                      marginLeft: 0,
+                      borderWidth: 0,
+                    },
+                  }}
+                  showIcon={false}
+                  hideText={true}
+                  onDateChange={(date) => handlepress(date)}
+                />
+              )}
               {/* </View>
             <View style={{ flex: 0.1 }}> */}
               <Image

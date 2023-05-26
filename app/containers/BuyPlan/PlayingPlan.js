@@ -262,6 +262,7 @@ class PlayingPlan extends Component {
             sportList={this.state.sportsList}
             subscriptionId={this.state.subscriptionId}
             onPress={this.onComplete}
+            title="PlayingPlan"
           />
         )}
         {this.state.couponCode && (

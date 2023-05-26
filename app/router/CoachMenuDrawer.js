@@ -12,7 +12,7 @@ import { isSignedIn, getData } from "../components/auth";
 import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
 import LinearGradient from 'react-native-linear-gradient';
 import { onSignOut, clearData } from "../components/auth";
-import BaseComponent, { defaultStyle, camelCase, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName } from '../containers/BaseComponent'
+import BaseComponent, { defaultStyle, camelCase, EVENT_EDIT_PROFILE, PROFILE_PIC_UPDATED, RATING_UPDATE, formattedName, getBaseUrl } from '../containers/BaseComponent'
 import { getRelationsDetails, logout } from "../redux/reducers/RelationReducer";
 import { connect } from 'react-redux';
 import Events from '../router/events';
@@ -400,7 +400,7 @@ class CoachMenuDrawer extends BaseComponent {
                       marginTop: 8,
                     }}
                   >
-                    Guest
+                    User
                   </Text>
                   <TouchableOpacity
                     style={{ paddingLeft: 8 }}
@@ -472,8 +472,7 @@ class CoachMenuDrawer extends BaseComponent {
                     marginTop: 4,
                   }}
                 >
-                  ({user_type == PARENT ? "Guardian" : camelCase(user_type)}
-                  )
+                  {user_type == PARENT ? "(Guardian)" : user_type == GUEST ? "" : "(" + camelCase(user_type) + ")"}
                 </Text>
               </View>
             )}
@@ -538,21 +537,16 @@ class CoachMenuDrawer extends BaseComponent {
               }}
             />
             <SubPointsAboutMachaxi
-              title={"Careers Page"}
-              onPress={() => {
-                this.props.navigation.navigate("ContactUs");
-              }}
-            />
-            <SubPointsAboutMachaxi
               title={"Privacy Policy"}
               onPress={() => {
-                this.props.navigation.navigate("ContactUs");
+                this.props.navigation.navigate("PrivacyPolicy");
               }}
             />
             <SubPointsAboutMachaxi
               title={"Blog"}
               onPress={() => {
-                this.props.navigation.navigate("ContactUs");
+				const url = "https://blog.machaxi.com"
+                this.props.navigation.navigate("BlogScreen");
               }}
             />
             <SubPointsAboutMachaxi
@@ -1385,15 +1379,12 @@ class CoachMenuDrawer extends BaseComponent {
 				<SubPointsAboutMachaxi title={'About us'} onPress={()=>{
 					this.props.navigation.navigate("WebViewScreen");
 				}} />
-				<SubPointsAboutMachaxi title={'Careers Page'} onPress={()=>{
-					this.props.navigation.navigate("ContactUs");
-				}} />
 				<SubPointsAboutMachaxi title={'Privacy Policy'} onPress={()=>{
-					this.props.navigation.navigate("ContactUs");
+                this.props.navigation.navigate("PrivacyPolicy");
 				}} />
 				<SubPointsAboutMachaxi title={'Blog'} onPress={()=>{
-					this.props.navigation.navigate("ContactUs");
-				}} />
+                this.props.navigation.navigate("BlogScreen");
+			}} />
 				<SubPointsAboutMachaxi title={'FAQ'} onPress={()=>{
 					this.props.navigation.navigate("FaqScreen");
 				}} />

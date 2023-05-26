@@ -50,10 +50,12 @@ class PlayerDetails extends Component {
   }
 
   signcheck = async () => {
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
-    const userDetails = JSON.parse(userDetailsJson);
+    const userDetailsJson = await AsyncStorage.getItem("userInfo");
+    const userDetailed = JSON.parse(userDetailsJson);
+    const userDetails = userDetailed.user;
+    console.log(userDetails);
     var gendernum = 1;
-    if (userDetails.gender == "MALE") {
+    if (userDetails.genderType == "MALE") {
       gendernum = 0;
     }
     this.setState({ userDetails: userDetails, currentGender: gendernum });
@@ -89,8 +91,8 @@ class PlayerDetails extends Component {
       if (this.state.currentIndex == 2) {
         parent = "Child";
       } else {
-        name = this.state.userDetails.userName;
-        gend = this.state.userDetails.gender;
+        name = this.state.userDetails.name;
+        gend = this.state.userDetails.genderType;
       }
       this.props.onPress(name, gend, parent, this.state.childDetails);
     };
@@ -110,10 +112,10 @@ class PlayerDetails extends Component {
               currentLevel={this.state.currentIndex}
               image={require("../../../images/playing/yourself.png")}
               id={1}
-              name="Yourself"
+              name="Yourself (Adult)"
               onPress={() => {
                 var gendernum = 1;
-                if (this.state.userDetails.gender == "MALE") {
+                if (this.state.userDetails.genderType == "MALE") {
                   gendernum = 0;
                 }
                 this.setState({
@@ -131,7 +133,7 @@ class PlayerDetails extends Component {
               image={require("../../../images/playing/child.png")}
               id={2}
               url={false}
-              name="Child"
+              name="Child (Kids)"
               onPress={() => {
                 if (
                   this.state.related_players &&
@@ -215,7 +217,7 @@ class PlayerDetails extends Component {
                   value={
                     this.state.currentIndex == 2
                       ? this.state.name
-                      : this.state.userDetails.userName
+                      : this.state.userDetails.name
                   }
                   placeholder="Enter Player Name"
                   placeholderTextColor="#7E7E7E"
@@ -275,12 +277,12 @@ class PlayerDetails extends Component {
                   disabled={this.state.currentIndex == 1}
                   index={2}
                   currentLevel={this.state.currentGender}
-                  name="Other"
+                  name="Prefer not to say"
                   onPress={() => {
                     this.setState({
                       currentGender: 2,
                       proseedLevel: true,
-                      gender: "OTHER",
+                      gender: "PREFER_NOT_TO_SAY",
                     });
                   }}
                 />

@@ -144,7 +144,7 @@ const playModule = createStackNavigator({
   PlayTrialList: {
     screen: PlayTrialList,
     navigationOptions: ({ navigation }) => ({
-      title: "PLay Trial",
+      title: "Play Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: (
         <RightMenuToolbar
@@ -161,7 +161,7 @@ const playModule = createStackNavigator({
   DisplayPlayTrial: {
     screen: DisplayPlayTrial,
     navigationOptions: ({ navigation }) => ({
-      title: "PLay Trial",
+      title: "Play Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: (
         <RightMenuToolbar

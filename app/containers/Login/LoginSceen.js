@@ -10,6 +10,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Linking,
+  PermissionsAndroid,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../components/custom/CustomButton";
@@ -33,6 +34,7 @@ import { Nunito_ExtraBold } from "../util/fonts";
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import { storeData, getData, onSignIn } from "../../components/auth";
 import { COACH, PLAYER } from "../../components/Constants";
+import Geolocation from "react-native-geolocation-service";
 
 class LoginSceen extends Component {
   constructor(props) {
@@ -68,6 +70,7 @@ class LoginSceen extends Component {
   }
 
   componentDidMount() {
+    this.requestPermissions();
     const intervalId = setInterval(() => {
       this.setState((prevState) => ({
         timeRemaining: prevState.timeRemaining - 1,
@@ -86,6 +89,22 @@ class LoginSceen extends Component {
       "keyboardDidHide",
       this.keyboardDidHide
     );
+  }
+
+  async requestPermissions() {
+    let isPermissionGranted = false;
+    if (Platform.OS === "ios") {
+      const auth = await Geolocation.requestAuthorization("whenInUse");
+      if (auth === "granted") isPermissionGranted = true;
+    }
+    if (Platform.OS === "android") {
+      let res = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      );
+      if (res === PermissionsAndroid.RESULTS.GRANTED)
+        isPermissionGranted = true;
+    }
+    console.log(isPermissionGranted);
   }
 
   keyboardDidShow = () => {
@@ -578,6 +597,7 @@ class LoginSceen extends Component {
     data = [
       { label: "Male", value: "MALE" },
       { label: "Female", value: "FEMALE" },
+      { label: "Prefer not to say", value: "PREFER_NOT_TO_SAY" },
     ];
 
     return (
@@ -625,7 +645,7 @@ class LoginSceen extends Component {
               onTouchStart={this.handleDropdownPress}
             >
               <ModalDropdown
-                options={["Male", "Female"]}
+                options={["Male", "Female", "Prefer not to say"]}
                 defaultValue="Select an option"
                 disabled={this.state.isKeyboardOpen}
                 style={{
@@ -636,7 +656,7 @@ class LoginSceen extends Component {
                 textStyle={{ padding: 10, fontSize: 16, color: "white" }}
                 dropdownStyle={{
                   width: "75%",
-                  height: 90,
+                  height: 135,
                   borderRadius: 10,
                   borderColor: "#FCB550",
                   backgroundColor: "rgba(94, 94, 94, 1)",

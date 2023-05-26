@@ -568,6 +568,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               <SlotBookedModal
                 slotRequested={slotRequested}
                 slotInfo={slotBookedRes?.data}
+                entirecourt = {navigation?.state?.params?.entirecourt}
                 goHomePressed={() => {
                   // const resetAction = StackActions.reset({
                   //   index: 0,

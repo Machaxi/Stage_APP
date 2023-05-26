@@ -89,6 +89,16 @@ const BookSlotScreen = ({ navigation }) => {
           if (success) {
             if (json?.data?.plan?.preferredSportId != null) {
               setSportsId(json?.data?.plan?.preferredSportId);
+              json?.data?.sports.map((val) => {
+                if (val.id == json?.data?.plan?.preferredSportId) {
+                  setProficiencyVisibility(
+                    val.proficiency == null ? true : false
+                  );
+                  setSelectedSportsId(val.id);
+                  setProficiency(val.proficiency);
+                  preferredSportsData(val.id);
+                }
+              });
             } else {
               setProficiencyVisibility(true);
             }
@@ -110,6 +120,36 @@ const BookSlotScreen = ({ navigation }) => {
           console.log(error);
         });
     });
+  };
+
+  useEffect(() => {
+    if (sportsList !== null) {
+      getUserPlanAndSportsData();
+    }
+  }, [sportsList]);
+
+  const preferredSportsData = (id) => {
+    const sport = sportsList.find((item) => item.id === id);
+    const {
+      playingAreaName,
+      allowEntireCourtBooking,
+      courtBookingNotes,
+    } = sport;
+
+    console.log(allowEntireCourtBooking);
+    console.log(playingAreaName);
+    if (allowEntireCourtBooking) {
+      setBookdata([
+        "Yourself",
+        "Entire " + playingAreaName,
+        "Coming with Guest",
+      ]);
+    } else {
+      setBookdata(["Yourself", "Coming with Guest"]);
+    }
+    const lines = courtBookingNotes.split("\r\n");
+    const points = lines.map((line) => line.replace(/^#\s*/, ""));
+    setCourtBookingNotes(points);
   };
 
   const getSports = () => {
@@ -148,7 +188,6 @@ const BookSlotScreen = ({ navigation }) => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    getUserPlanAndSportsData();
     getSports();
     // In actual case set refreshing to false when whatever is being refreshed is done!
     setTimeout(() => {
@@ -172,7 +211,6 @@ const BookSlotScreen = ({ navigation }) => {
     });
 
     //getSlotDataApi();
-    getUserPlanAndSportsData();
     getSports();
     return () => {
       refreshEvent.remove();
@@ -187,10 +225,14 @@ const BookSlotScreen = ({ navigation }) => {
     if (user == "entire_court") {
       entirecourt = true;
     }
+    var guestCount = count;
+    if (user != "with_guest") {
+      guestCount = 0;
+    }
     navigation.navigate("BookSlotCentreSelectionScreen", {
       date: date,
       proficiency: proficiency,
-      guestCount: count,
+      guestCount: guestCount,
       sportId: selectedSportsId,
       playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0,
       preferredAcademyId: planAndSportsApiRes?.plan?.preferredAcademyId,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {  Linking, View, ActivityIndicator } from 'react-native';
-import BaseComponent from '../BaseComponent'
+import BaseComponent, { getBaseUrl } from '../BaseComponent'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { WebView } from 'react-native-webview';
 
@@ -16,7 +16,7 @@ export default class WebViewScreen extends BaseComponent {
     }
 
     render() {
-        const uri = 'https://machaxi.com/about-us';
+        const uri = 'https://stage.machaxi.com/about-us';
         //const uri = 'http://www.africau.edu/images/default/sample.pdf'
         let visible = this.state.visible
       

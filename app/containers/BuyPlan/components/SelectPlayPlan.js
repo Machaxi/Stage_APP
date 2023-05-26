@@ -42,7 +42,7 @@ class SelectPlayPlan extends Component {
 
   render() {
     handlepress = () => {
-      const id = this.state.currentPlan + 1;
+      const id = this.state.currentPlan;
       this.props.onPress(this.props.planList.find((item) => item.id === id));
     };
 
@@ -58,7 +58,7 @@ class SelectPlayPlan extends Component {
           <View style={styles.contained}>
             {this.props.planList.map((item, index) => (
               <PlayPlanDetails
-                index={index}
+                index={item.id}
                 currentLevel={this.state.currentPlan}
                 title={item.name}
                 subtitle={item.price}
@@ -66,7 +66,7 @@ class SelectPlayPlan extends Component {
                 description={item.tagline}
                 benefits={item.benefits}
                 onPress={() => {
-                  this.setState({ currentPlan: index, proseednext: true });
+                  this.setState({ currentPlan: item.id, proseednext: true });
                   if (index > 1) {
                     this.scrollViewRef.current.scrollToEnd({ animated: true });
                   }

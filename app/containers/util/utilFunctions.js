@@ -152,13 +152,13 @@ export const getProficiencyEmoji = (proficiency) => {
 
 export const getProficiencyName = (proficiency) => {
   switch (proficiency) {
-    case "BASIC":
+    case "basic":
       return 'Beginner';
-    case "INTERMEDIATE":
+    case "intermediate":
       return 'Intermediate';
-    case "ADVANCED":
+    case "advanced":
       return 'Advanced';
-    case "PROFESSIONAL":
+    case "professional":
       return 'Professional';
     default: 
       return '';

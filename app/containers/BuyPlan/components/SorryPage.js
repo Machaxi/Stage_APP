@@ -120,15 +120,11 @@ class SorryPage extends Component {
 
   render() {
     handleCrosspress = () => {
-      this.props.onPressBack();
+      this.props.onPress();
     };
 
     handlePaypress = () => {
-      if (this.props.amount == 0) {
-        this.props.onPressBack();
-      } else {
-        this.props.onPress();
-      }
+      this.props.onPress();
     };
 
     return (

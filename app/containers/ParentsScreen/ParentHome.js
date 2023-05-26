@@ -414,6 +414,9 @@ class ParentHome extends BaseComponent {
     this.getNotificationCount((count) => {
       this.props.navigation.setParams({ notification_count: count });
       notification_count = count;
+      this.props.navigation.setParams({
+        headerRight: <RequestHeaderRight navigation={navigation} />,
+      });
     });
   }
 
@@ -1030,6 +1033,7 @@ class ParentHome extends BaseComponent {
                       " rgba(255, 255, 255, 0.0102)",
                     ]}
                     style={{
+                      flex: 1,
                       borderTopLeftRadius: 10,
                       borderTopRightRadius: 10,
                       paddingLeft: 12,
@@ -1041,7 +1045,7 @@ class ParentHome extends BaseComponent {
                       alignItems: "center",
                     }}
                   >
-                    <View>
+                    <View style={{ flex: 0.68 }}>
                       <Text
                         style={[defaultStyle.bold_text_10, { color: "white" }]}
                       >
@@ -1059,7 +1063,7 @@ class ParentHome extends BaseComponent {
                       </Text>
                     </View>
 
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flex: 0.32, flexDirection: "row" }}>
                       {operations.whats_app_url &&
                       operations.whats_app_url != "" ? (
                         <View

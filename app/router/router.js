@@ -130,6 +130,8 @@ import RequestHeaderBack from "../atoms/requestHeaderBack";
 import PlayTrialList from "../containers/FirstTimeUser/TrialBook/PlayTrialList";
 import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayTrial";
 import RequestHeaderRight from "../atoms/requestHeaderRight";
+import PrivacyPolicy from "../containers/util/PrivacyPolicy";
+import BlogScreen from "../containers/util/BlogScreen";
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2409,13 +2411,12 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-          darkThemFlow={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2427,13 +2428,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-          darkThemFlow={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2445,13 +2440,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-          darkThemFlow={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2463,14 +2452,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Edit Profile",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-          darkThemFlow={true}
-          homeStack={true}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2530,13 +2512,31 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "About Us",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          navigation={navigation}
-          showHome={false}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  PrivacyPolicy: {
+    screen: PrivacyPolicy,
+    navigationOptions: ({ navigation }) => ({
+      title: "Privacy Policy",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  BlogScreen: {
+    screen: BlogScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "Blog",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2548,13 +2548,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Contact Us",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          navigation={navigation}
-          showHome={false}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2566,13 +2560,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          navigation={navigation}
-          showHome={false}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2584,13 +2572,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          navigation={navigation}
-          showHome={false}
-        />
-      ),
+      headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2615,7 +2597,6 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
-
   FaqScreen: {
     screen: FaqScreen,
     navigationOptions: ({ navigation }) => ({
@@ -2885,6 +2866,42 @@ const HomeStack = createStackNavigator({
     screen: DisplayPlayTrial,
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  WebViewScreen: {
+    screen: WebViewScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "About Us",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  PrivacyPolicy: {
+    screen: PrivacyPolicy,
+    navigationOptions: ({ navigation }) => ({
+      title: "Privacy Policy",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  BlogScreen: {
+    screen: BlogScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "Blog",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
