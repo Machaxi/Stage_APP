@@ -320,7 +320,11 @@ class SelectPay extends Component {
   DataChange = (join_date) => {
     const stDate = new Date(join_date);
     const start_d_date = this.formatesmallDateYear(stDate);
-    this.setState({ joinDate: join_date, displayBottomStart: start_d_date, date: stDate });
+    this.setState({
+      joinDate: join_date,
+      displayBottomStart: start_d_date,
+      date: stDate,
+    });
     const batch_id = this.state.selectBatch.batch_id;
     axios
       .get(
@@ -350,29 +354,19 @@ class SelectPay extends Component {
   startPayment = () => {
     var dataDic = {};
     var dict = {};
+    dict["plan_id"] = "" + this.props.selectPlan.id;
+    dict["join_date"] = this.state.joinDate;
+    dict["user_id"] = this.state.userDetails.id;
     if (this.props.parent == "Parent") {
-      if (userData.user["user_type"] == "GUEST") {
-        dict["plan_id"] = "" + this.props.selectPlan.id;
-        dict["join_date"] = this.state.joinDate;
-        dict["user_id"] = this.state.userDetails.id;
-        dict["parent_name"] = this.state.userDetails.userName;
-        dict["player_name"] = this.state.userDetails.userName;
-        dict["gender"] = this.state.gender.toUpperCase();
-      } else {
-        dict["plan_id"] = "" + this.props.selectPlan.id;
-        dict["join_date"] = this.state.joinDate;
-        dict["user_id"] = this.state.userDetails.id;
-      }
+      // if (userData.user["user_type"] == "GUEST") {
+      // dict["parent_name"] = this.state.userDetails.userName;
+      // dict["player_name"] = this.state.userDetails.userName;
+      // dict["gender"] = this.state.gender.toUpperCase();
+      // }
     } else {
       if (this.state.childDetails != null) {
-        dict["plan_id"] = "" + this.props.selectPlan.id;
-        dict["join_date"] = this.state.joinDate;
-        dict["user_id"] = this.state.userDetails.id;
         dict["player_user_id"] = this.state.childDetails.id;
       } else {
-        dict["plan_id"] = "" + this.props.selectPlan.id;
-        dict["join_date"] = this.state.joinDate;
-        dict["user_id"] = this.state.userDetails.id;
         dict["parent_name"] = this.state.userDetails.userName;
         dict["player_name"] = this.state.username;
         dict["gender"] = this.state.gender.toUpperCase();

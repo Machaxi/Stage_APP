@@ -104,7 +104,7 @@ class SelectCoachPlan extends Component {
           {this.state.planData &&
             this.state.planData.map((plan, index) => {
               console.log(plan);
-              
+
               return (
                 plan.term_id != 3 && (
                   <SelectPlan

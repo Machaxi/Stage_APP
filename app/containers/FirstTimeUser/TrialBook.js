@@ -17,6 +17,7 @@ import { getPlayerSWitcher } from "../../redux/reducers/dashboardReducer";
 import { connect } from "react-redux";
 import { getData } from "../../components/auth";
 import PlayerDetails from "../BuyPlan/components/PlayerDetails";
+import { BackHandler } from 'react-native';
 
 class TrialBook extends Component {
   constructor(props) {
@@ -44,9 +45,11 @@ class TrialBook extends Component {
       childDetails: null,
       playerDetails: null,
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     getValue = async () => {
       const select_trial = await AsyncStorage.getItem("select_trial");
       this.setState({ title: select_trial });
@@ -68,6 +71,15 @@ class TrialBook extends Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  handleBackButtonClick = () => {
+    this.hadleBackPress();
+    return true;
+  };
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
   }
 
   getUserplayData = () => {
@@ -140,7 +152,11 @@ class TrialBook extends Component {
     if (this.state.currentPage > 1) {
       this.setState({ currentPage: this.state.currentPage - 1 });
     } else {
-      this.setState({ firstPage: true });
+      if (this.state.firstPage) {
+        this.hadleBack();
+      }else {
+        this.setState({ firstPage: true });
+      }
     }
   };
 
@@ -243,6 +259,7 @@ class TrialBook extends Component {
               {this.state.currentPage === 3 && (
                 <SelectBatch
                   onPress={this.onPressBatch}
+                  parent={this.state.parent}
                   selectCenter={this.state.selectCenter}
                   selectSport={this.state.selectSport}
                 />

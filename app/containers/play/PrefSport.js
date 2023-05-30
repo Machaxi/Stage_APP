@@ -10,21 +10,21 @@ export const PrefSport = ({
   sportTitle,
   currentRating,
   currentRatingColor,
+  centreTitle,
+  centreImg,
 }) => {
   return (
     <LinearGradient
       colors={["rgba(255, 255, 255, 0.24)", "rgba(255, 255, 255, 0.036)"]}
       style={{ marginHorizontal: 20, borderRadius: 12 }}
     >
-      <View
-        style={{ flexDirection: "row-reverse", marginTop: 5, paddingRight: 20 }}
-      >
-        <Text style={styles.editText}>Edit</Text>
+      <View style={{ flexDirection: "row", marginTop: 5, paddingLeft: 20 }}>
         <Image
           resizeMode="contain"
           style={{ width: 12, height: 12 }}
           source={require("../../images/edit_profile.png")}
         />
+        <Text style={styles.editText}>Edit</Text>
       </View>
       <View style={styles.gradient}>
         <View>
@@ -38,9 +38,7 @@ export const PrefSport = ({
             <Text style={styles.sportTitle}>{sportTitle}</Text>
           </View>
         </View>
-
         <View style={styles.seperator} />
-
         <View>
           <Text style={styles.currentRating}>Current rating</Text>
           <NamedRoundedGradientContainer
@@ -50,6 +48,30 @@ export const PrefSport = ({
           />
         </View>
       </View>
+      {sportTitle && (
+        <View style={{ flexDirection: "row", marginTop: 5 }}>
+          <View>
+            <Text style={[styles.preferredSport, { marginLeft: -10 }]}>
+              Preferred center
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                marginLeft: 20,
+                alignItems: "center",
+                marginBottom: 10,
+              }}
+            >
+              <Image
+                style={{ height: 40, width: 40 }}
+                source={centreImg}
+                resizeMode="cover"
+              />
+              <Text style={styles.sportTitle}>{centreTitle}</Text>
+            </View>
+          </View>
+        </View>
+      )}
     </LinearGradient>
   );
 };
@@ -113,8 +135,8 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_Regular,
     fontSize: 12,
     fontWeight: "400",
-    marginLeft: 4,
-    marginRight: 10,
+    marginLeft: 10,
+    marginRight: 4,
   },
   rounded_button: {
     alignItems: "center",

@@ -17,7 +17,11 @@ import {
   yellowVariant2,
 } from "../../containers/util/colors";
 import Strings from "../../containers/util/strings";
-import { Nunito_Bold, Nunito_Regular, Nunito_SemiBold } from "../../containers/util/fonts";
+import {
+  Nunito_Bold,
+  Nunito_Regular,
+  Nunito_SemiBold,
+} from "../../containers/util/fonts";
 
 const ShopRewardsView = ({ balance, rewardPoints, rewardRedeemed }) => {
   return (
@@ -34,12 +38,12 @@ const ShopRewardsView = ({ balance, rewardPoints, rewardRedeemed }) => {
               <Text style={[styles.rewardRedeem]}>
                 {Strings.rewardRedeemed}
               </Text>
-              <Text style={[styles.rewardPts]}>{rewardPoints + " pts"}</Text>
+              <Text style={[styles.rewardPts]}>{rewardRedeemed + " pts"}</Text>
             </View>
             <View style={styles.verticalBar} />
             <View>
               <Text style={[styles.rewardRedeem]}>{Strings.rewardEarned}</Text>
-              <Text style={[styles.rewardPts]}>{rewardRedeemed + " pts"}</Text>
+              <Text style={[styles.rewardPts]}>{rewardPoints + " pts"}</Text>
             </View>
           </View>
         </View>

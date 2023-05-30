@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import {
   borderGrey,
@@ -18,10 +18,36 @@ import MyRequestCentreDetails from "./myRequestCentreDetails";
 import LinearGradient from "react-native-linear-gradient";
 import moment from "moment";
 import { Nunito_Medium, Nunito_Regular } from "../containers/util/fonts";
+import { getData } from "../components/auth";
 
 const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
-  console.log('CCCCC')
-  console.log({val})
+  console.log("CCCCC");
+  console.log({ val });
+
+  const [userInfo, setUserInfo] = useState();
+  const [sentOurData, setSentOurData] = useState({
+    name: "",
+    guestCount: val.guestCount,
+    proficiency: val.proficiency,
+  });
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const getUserInfo = () => {
+    getData("userInfo", (value) => {
+      let userData = JSON.parse(value);
+      setUserInfo(userData);
+      const sentData = {
+        name: userData.user.name,
+        guestCount: val.guestCount,
+        proficiency: val.proficiency,
+      };
+      setSentOurData(sentData);
+    });
+  };
+
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -60,7 +86,8 @@ const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
             styles.bookingDetails,
           ]}
         >
-         {val.isCancelled ? "Canceled on" : "Played on"}  {moment(val.date).format("DD/MM/YYYY")}
+          {val.isCancelled ? "Canceled on" : "Played on"}{" "}
+          {moment(val.date).format("DD/MM/YYYY")}
         </Text>
       )}
       <MyRequestCentreDetails details={val?.academy} />
@@ -81,6 +108,7 @@ const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
       <Text style={[styles.detailsTitle, { marginTop: 15, marginBottom: 5 }]}>
         Registered Players
       </Text>
+      <MyRequestPlayersList item={sentOurData} />
       {val?.players?.map((value) => <MyRequestPlayersList item={value} />)}
     </LinearGradient>
   );

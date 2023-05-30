@@ -124,6 +124,12 @@ class SelectPlayCenter extends Component {
       (error) => {
         this.setState({ isLoading: false });
         console.log(error.code, error.message);
+        this.setState({
+          latitude: 12.9778,
+          longitude: 77.5729,
+          place: "Bangalore",
+        });
+        this.getsortedData();
       },
       { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
     );

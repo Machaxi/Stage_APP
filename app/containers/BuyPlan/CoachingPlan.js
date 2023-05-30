@@ -21,6 +21,7 @@ import { StackActions } from "react-navigation";
 import { KeyboardAvoidingView } from "react-native";
 import events from "../../router/events";
 import { getData, storeData } from "../../components/auth";
+import { BackHandler } from 'react-native';
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -55,9 +56,11 @@ class CoachingPlan extends Component {
       joinBool: false,
       joinTime: null,
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     axios
       .get(getBaseUrl() + "/global/academy/all")
       .then((response) => {
@@ -72,6 +75,15 @@ class CoachingPlan extends Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  handleBackButtonClick = () => {
+    this.hadleBackPress();
+    return true;
+  };
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
   }
 
   onPress = (value, number) => {
@@ -128,7 +140,11 @@ class CoachingPlan extends Component {
     if (this.state.currentPage > 1) {
       this.setState({ currentPage: this.state.currentPage - 1 });
     } else {
-      this.setState({ firstPage: true });
+      if (this.state.firstPage) {
+        this.hadleBack();
+      }else {
+        this.setState({ firstPage: true });
+      }
     }
   };
 

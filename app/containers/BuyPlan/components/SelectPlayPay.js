@@ -492,7 +492,7 @@ class SelectPlayPay extends Component {
               </View>
             </View>
             <View style={styles.line} />
-            <Text style={styles.subtitle}>Batch Details</Text>
+            <Text style={styles.subtitle}>Membership Details</Text>
             <View
               style={{
                 flexDirection: "row",

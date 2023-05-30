@@ -51,12 +51,16 @@ let nextDate = new Date(today.getTime() + oneDay);
 const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
 const nextday = weekdays[nextDate.getDay()];
 
+let secondDate = new Date(nextDate.getTime() + oneDay);
+const seconddate = secondDate.getDate() + " " + months[secondDate.getMonth()];
+const secondday = weekdays[secondDate.getDay()];
+
 class SelectBatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentLevel: 10,
-      currentDate: 3,
+      currentDate: 4,
       selectTime: 20,
       proseedLevel: false,
       proseedDate: false,
@@ -67,6 +71,7 @@ class SelectBatch extends Component {
       morningData: null,
       eveningData: null,
       levelData: [],
+      batchType: "ADULTS",
     };
   }
 
@@ -75,10 +80,22 @@ class SelectBatch extends Component {
     const academy_id = this.props.selectCenter.id;
     const now = new Date();
     const currentHour = now.getHours();
+    var batchType = "ADULTS";
+    if (this.props.parent != "Parent") {
+      batchType = "KIDS";
+    }
     if (currentHour < 12) {
-      this.setState({ hideMorning: false, hideEvening: true });
+      this.setState({
+        hideMorning: false,
+        hideEvening: true,
+        batchType: batchType,
+      });
     } else {
-      this.setState({ hideMorning: true, hideEvening: false });
+      this.setState({
+        hideMorning: true,
+        hideEvening: false,
+        batchType: batchType,
+      });
     }
     axios
       .get(
@@ -94,6 +111,7 @@ class SelectBatch extends Component {
         let batchData = userResponce["data"]["data"]["batch_details"];
         let levelData = userResponce["data"]["data"]["playerLevel"];
         this.setState({ batchData: batchData, levelData: levelData });
+        console.log(batchData);
       })
       .catch((error) => {
         console.log(error);
@@ -108,14 +126,16 @@ class SelectBatch extends Component {
       dates = nextDate;
     } else if (dateSelect == 1) {
       dates = today;
+    } else if (dateSelect == 3) {
+      dates = secondDate;
     }
     for (let i = 0; i < this.state.batchData.length; i++) {
       if (
-        level < 5 &&
         this.state.levelData[level].name.toLowerCase() ==
           this.state.batchData[i].proficiency.toLowerCase() &&
         dates &&
-        dates.getDay() in this.state.batchData[i].weekDetails
+        dates.getDay() in this.state.batchData[i].weekDetails &&
+        this.state.batchType == this.state.batchData[i].batchType
       ) {
         const startHour = parseInt(
           this.state.batchData[i].startTime.split(":")[0]
@@ -235,8 +255,10 @@ class SelectBatch extends Component {
 
     handlepress = () => {
       var selectDate = today;
-      if (this.state.currentDate > 1) {
+      if (this.state.currentDate == 2) {
         selectDate = nextDate;
+      } else if (this.state.currentDate > 2) {
+        selectDate = secondDate;
       }
       let selectLevel = this.state.levelData[this.state.currentLevel];
       let selectBatch = this.state.batchData.find(
@@ -328,6 +350,21 @@ class SelectBatch extends Component {
                     day={nextday}
                     date={nextdate}
                     myDate={2}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={[styles.subview, { marginLeft: 20 }]}
+                  onPress={() => {
+                    this.setState({ currentDate: 3, proseedDate: true });
+                    this.getTimeData(this.state.currentLevel, 3);
+                  }}
+                >
+                  <DateComponent
+                    currentDate={this.state.currentDate}
+                    day={secondday}
+                    date={seconddate}
+                    myDate={3}
                   />
                 </TouchableOpacity>
               </View>

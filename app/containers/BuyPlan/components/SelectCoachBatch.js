@@ -134,7 +134,8 @@ class SelectCoachBatch extends Component {
       if (
         PlanAvailability.displayTime == selectTime.displayTime &&
         selectLevel.name == PlanAvailability.proficiency &&
-        PlanAvailability.is_allowed
+        PlanAvailability.is_allowed &&
+        this.state.batchType == PlanAvailability.batchType
       ) {
         selectBatch.push(PlanAvailability);
       }

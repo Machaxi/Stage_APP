@@ -18,6 +18,7 @@ import axios from "axios";
 import { getBaseUrl } from "../../../containers/BaseComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import { GradientLine } from "../../../components/molecules/gradientLine";
+import moment from "moment";
 
 class PlayTrialList extends Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class PlayTrialList extends Component {
           >
             <View style={styles.sportsDetail}>
               <Text style={styles.heading}>
-                {"Next Session - " + (isToday ? "Today" : "Tomorrow")}
+                {"  " + moment(item.date).format("Do MMMM YYYY")}
               </Text>
             </View>
             <GradientLine

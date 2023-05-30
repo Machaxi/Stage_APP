@@ -230,6 +230,9 @@ class BookSlotCentreSelection extends Component {
           isExpanded={true}
           morningTimeData={lessThan}
           eveningTimeData={greaterThan}
+          bookings={item?.bookings}
+          entirecourt={this.props.entirecourt}
+          guestCount={this.props.guestCount}
           preferredDate={this.props.preferredDate}
           selectedMorningTime={this.props.selectedMorningTime}
           selectedEveningTime={this.props.selectedEveningTime}
@@ -309,7 +312,7 @@ class BookSlotCentreSelection extends Component {
       >
         <Loader visible={this.state.isLoading} />
         <View style={{ flex: 0.93 }}>
-          <Text style={styles.mainText}>Select preferred centre</Text>
+          <Text style={styles.mainText}>Select Centre</Text>
           {/* <TouchableOpacity activeOpacity={0.8}> */}
           <View style={styles.addressView}>
             <Image

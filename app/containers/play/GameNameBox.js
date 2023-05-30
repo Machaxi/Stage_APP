@@ -1,15 +1,19 @@
-import React, {  useState } from "react";
-import {
-  StyleSheet,
-    Text,
-    TouchableOpacity
-  } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { white } from "../util/colors";
 
-  
-export const GameNameBox = ({isSelected, item,paddingHorizontal, paddingVertical, height,borderRadius,fontSize,marginTop,onPress}) => {
-
+export const GameNameBox = ({
+  isSelected,
+  item,
+  paddingHorizontal,
+  paddingVertical,
+  height,
+  borderRadius,
+  fontSize,
+  marginTop,
+  onPress,
+}) => {
   return (
     <LinearGradient
       colors={
@@ -28,23 +32,11 @@ export const GameNameBox = ({isSelected, item,paddingHorizontal, paddingVertical
         },
       ]}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        style={[
-          {
-            marginTop: marginTop ? marginTop : 6,
-            paddingHorizontal: paddingHorizontal ? paddingHorizontal : 20,
-            paddingVertical: paddingVertical ? paddingVertical : 6,
-            height: height ? height : null,
-            borderRadius: borderRadius ? borderRadius : 20,
-          },
-        ]}
-        onPress={() => onPress()}
-      >
+      <TouchableOpacity activeOpacity={1} onPress={() => onPress()}>
         <Text
           style={{
             color: isSelected ? "#F2AE4D" : white,
-            fontSize: fontSize ? fontSize : 14,
+            fontSize: 14,
             textAlign: "center",
             fontFamily: "Nunito-Regular",
             fontWeight: "400",
@@ -54,14 +46,18 @@ export const GameNameBox = ({isSelected, item,paddingHorizontal, paddingVertical
         </Text>
       </TouchableOpacity>
     </LinearGradient>
-  );}
+  );
+};
 
-  const styles = StyleSheet.create( {
-    rounded_button: {
-        marginLeft: 5,
-        marginRight: 5,
-        borderWidth: 0.5,
-        height: 42,
-        borderRadius: 20,
-    },
-  })
+const styles = StyleSheet.create({
+  rounded_button: {
+    width: 120,
+    marginLeft: 5,
+    marginRight: 5,
+    borderWidth: 0.5,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

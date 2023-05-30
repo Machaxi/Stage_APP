@@ -17,6 +17,9 @@ const SelectPlayingTime = ({
   timeData,
   setSelectedTime,
   selectedTime,
+  bookings,
+  guestCount,
+  entirecourt,
   selectedTimePeriod,
   preferredDate,
 }) => {
@@ -37,6 +40,9 @@ const SelectPlayingTime = ({
                 selectItem={selectedTime}
                 startTime={item?.startTime}
                 id={item?.courtTimingId}
+                bookings= {bookings}
+                guestCount={guestCount}
+                entirecourt={entirecourt}
                 // name={`${item.startTime} - ${item.endTime}`}
                 name={`${item?.displayTime}`}
                 onPress={(val) => {

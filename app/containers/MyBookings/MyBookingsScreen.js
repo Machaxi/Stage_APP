@@ -32,6 +32,7 @@ import { MonthNames, getNumericMonth } from "../util/utilFunctions";
 import { deviceHeight, deviceWidth } from "../util/dimens";
 import ModalDropdown from "react-native-modal-dropdown";
 import moment from "moment";
+import CancelSessionModal from "../../components/molecules/play_screen/cancelSessionModal";
 
 const MyBookingsScreen = ({ navigation }) => {
   var cancelBookingError = null;
@@ -52,6 +53,10 @@ const MyBookingsScreen = ({ navigation }) => {
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
   const [filteredData, setFilteredData] = useState([]);
+  const [cancelModalVisible, setCancelModalVisibility] = useState(false);
+  const [cancelBookingId, setCancelBookingId] = useState(null);
+  const [cancelPopupSportsName, setCancelPopupSportsName] = useState("");
+  const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState("");
   const [numericMonth, setNumericMonth] = useState(
     getNumericMonth(currentMonth)
   );
@@ -358,7 +363,12 @@ const MyBookingsScreen = ({ navigation }) => {
                   <MyBookingsView
                     val={item}
                     isUpcoming={isUpcoming}
-                    cancelBooking={() => cancelBooking(item.id)}
+                    cancelBooking={() => {
+                      setCancelPopupDisplayTime(item?.displayTime);
+                      setCancelPopupSportsName(item?.sport.name);          
+                      setCancelBookingId(item.id);
+                      setCancelModalVisibility(true);
+                    }}
                   />
                 );
               }}
@@ -497,6 +507,22 @@ const MyBookingsScreen = ({ navigation }) => {
         ) : null}
         <View style={{ height: 20, width: "100%" }} />
       </ScrollView>
+      {cancelModalVisible ? (
+        <CancelSessionModal
+          confirmType={true}
+          cancelTime={cancelPopupDisplayTime}
+          sportsName={cancelPopupSportsName}
+          onCancel={() => {
+            cancelBooking(cancelBookingId)
+            setCancelModalVisibility(false);
+          }}
+          cancelModalVisible={cancelModalVisible}
+          setModalVisibility={() => {
+            setCancelModalVisibility(false);
+            setCancelBookingId(null);
+          }}
+        />
+      ) : null}
     </SafeAreaView>
   );
 };

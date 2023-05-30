@@ -3,6 +3,7 @@ import { Text, StyleSheet, View } from "react-native";
 import { white } from "../containers/util/colors";
 import NamedRoundedContainer from "./namedRoundedContainer";
 import { Nunito_Regular } from "../containers/util/fonts";
+import { getProficiencyName } from "../containers/util/utilFunctions";
 
 
 const MyRequestPlayersList = ({ item }) => {
@@ -16,7 +17,7 @@ const MyRequestPlayersList = ({ item }) => {
       <Text style={[styles.detailsTxt, { marginRight: 8 }]}>
         {item?.name} {item?.guestCount > 0 && " + "+ item?.guestCount + " Guests"}
       </Text>
-      <NamedRoundedContainer name={item?.proficiency} />
+      <NamedRoundedContainer name= {getProficiencyName(item?.proficiency ? item?.proficiency.toLowerCase() : '')} /> 
     </View>
   );
 };

@@ -7,6 +7,7 @@ import { getBatchPlayersList, getAcademyPlayersList } from '../../redux/reducers
 import BaseComponent, { defaultStyle, formattedName, getFormattedBadge, getFormattedCategory, getFormattedLevel } from '../BaseComponent';
 import { getData } from "../../components/auth";
 import FastImage from 'react-native-fast-image'
+import LinearGradient from "react-native-linear-gradient";
 
 class PlayersListing extends BaseComponent {
 
@@ -198,7 +199,7 @@ class PlayersListing extends BaseComponent {
                     <View style={{
                         position: 'absolute',
                         marginTop: 103,
-                        width: "100%", height: 23, backgroundColor: 'white'
+                        width: "95%", height: 23, backgroundColor: 'white'
                     }}>
 
                         <Text style={{
@@ -265,15 +266,17 @@ class PlayersListing extends BaseComponent {
 
         if (this.props.data.loading || this.state.players == null) {
             return (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <LinearGradient colors={["#051732", "#232031"]} 
+                style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <ActivityIndicator size="large" color="#67BAF5" />
-                </View>
+                </LinearGradient>
             )
         }
 
 
 
         return (
+            <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
             <View style={styles.chartContainer}>
 
                 {this.listHeader()}
@@ -288,6 +291,7 @@ class PlayersListing extends BaseComponent {
 
 
             </View>
+            </LinearGradient>
         );
     }
 }
@@ -309,7 +313,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(PlayersListing);
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        backgroundColor: '#F7F7F7'
+        // backgroundColor: '#F7F7F7'
     }
 });
 

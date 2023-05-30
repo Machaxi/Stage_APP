@@ -276,9 +276,10 @@ class OtherPlayerDetails extends BaseComponent {
       } = this.state.player_profile;
 
       return (
-        <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}>
+        <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
+        {/* <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}> */}
           <ScrollView
-            style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}
+            style={{ flex: 1, marginTop: 0 }}
           >
             <PlayerHeader player_profile={this.state.player_profile} />
 
@@ -318,7 +319,7 @@ class OtherPlayerDetails extends BaseComponent {
               />
             ) : null}
           </ScrollView>
-        </View>
+        </LinearGradient>
       );
     } else {
       return (

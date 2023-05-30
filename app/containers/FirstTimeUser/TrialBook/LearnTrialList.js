@@ -19,6 +19,7 @@ import { getBaseUrl } from "../../../containers/BaseComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import { GradientLine } from "../../../components/molecules/gradientLine";
 import CustomButton from "../../../components/custom/CustomButton";
+import moment from "moment";
 
 class LearnTrialList extends Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class LearnTrialList extends Component {
           >
             <View style={styles.sportsDetail}>
               <Text style={styles.heading}>
-                {"Next Session - " + (isToday ? "Today" : "Tomorrow")}
+                {"  " + moment(item.trial_date).format("Do MMMM YYYY")}
               </Text>
               <Text style={styles.sports}>{item?.user?.name}</Text>
             </View>

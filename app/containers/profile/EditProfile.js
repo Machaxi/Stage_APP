@@ -305,8 +305,8 @@ class EditProfile extends BaseComponent {
                         if (success) {
 
                             // alert('Success.')
-                            if(this.parent_user_id === this.user_id)
-                                this.updatePrefData(JSON.stringify(data.data))
+                            // if(this.parent_user_id === this.user_id)
+                            //     this.updatePrefData(JSON.stringify(data.data))
 
                             if (this.state.is_navigation_to_tournament) {
                                 storeData(TOURNAMENT_REGISTER, '')

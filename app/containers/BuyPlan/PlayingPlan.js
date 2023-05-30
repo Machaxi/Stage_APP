@@ -22,6 +22,7 @@ import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { StackActions } from "react-navigation";
 import { KeyboardAvoidingView } from "react-native";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
+import { BackHandler } from 'react-native';
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -60,9 +61,11 @@ class PlayingPlan extends Component {
       header: null,
       failed: "Failed !",
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     this.getData();
     this.getSportsList();
     this.setState({
@@ -81,6 +84,15 @@ class PlayingPlan extends Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  handleBackButtonClick = () => {
+    this.hadleBackPress();
+    return true;
+  };
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
   }
 
   getSportsList = () => {

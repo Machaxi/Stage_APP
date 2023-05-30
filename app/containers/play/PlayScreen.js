@@ -33,7 +33,13 @@ import { NextSessionList } from "./NextSectionList";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { deviceWidth } from "../util/dimens";
 import { Nunito_Regular } from "../util/fonts";
-import { blueVariant, greyVariant1, greyVariant11, lightYellowVariant, white } from "../util/colors";
+import {
+  blueVariant,
+  greyVariant1,
+  greyVariant11,
+  lightYellowVariant,
+  white,
+} from "../util/colors";
 import RatingTabarHeader from "../../components/molecules/ratingTabbarHeader";
 import { RatePeersTabView } from "../../components/molecules/ratePeersTabView";
 import CancelSessionModal from "../../components/molecules/play_screen/cancelSessionModal";
@@ -42,59 +48,67 @@ import { getData } from "../../components/auth";
 import { client } from "../../../App";
 import Events from "../../router/events";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
-import { getNotificationCount, notificationOpenScreen } from "../util/notificationCount";
+import {
+  getNotificationCount,
+  notificationOpenScreen,
+} from "../util/notificationCount";
 import RequestHeaderTitle from "../../atoms/requestHeaderTitle";
 import RequestHeaderBg from "../../atoms/requestHeaderBg";
 import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
-import { getProficiencyColor, getProficiencyGradients, getProficiencyName, proficiencyStaticData } from "../util/utilFunctions";
+import {
+  getProficiencyColor,
+  getProficiencyGradients,
+  getProficiencyName,
+  proficiencyStaticData,
+} from "../util/utilFunctions";
 import moment from "moment";
 import PlayerScreen from "../FirstTimeUser/PlayerScreen";
 import Loader from "../../components/custom/Loader";
 import { EVENT_EDIT_PROFILE } from "../BaseComponent";
 
-export default PlayScreen =({navigation})=>{
-const [playDataVisibility,setPlayDataVisibility] =useState(true);
-const [selfTabEnabled, setSelfTab] = useState(true);
-const [packageRemainingDays, setPackageRemainingDays] = useState(0);
-const [expiringToday, setExpiringToday] = useState(false);
+export default (PlayScreen = ({ navigation }) => {
+  const [playDataVisibility, setPlayDataVisibility] = useState(true);
+  const [selfTabEnabled, setSelfTab] = useState(true);
+  const [packageRemainingDays, setPackageRemainingDays] = useState(0);
+  const [expiringToday, setExpiringToday] = useState(false);
 
-const [sportsList, setSportsList] = useState([]);
-const [peerSportsList,setPeerSportsList]=useState([]);
-const [nextSession, setNextSessionData] = useState([]);
-const [totalAvailableHours, setTotalAvailableHours] = useState(0);
-const [remainingHrsApiRes, setRemainingHrsApiRes] = useState(0);
-const [creditPlusRemaining, setCreditedPlusRemaining] = useState(0);
-const [cancelBookingId, setCancelBookingId] = useState(null);
-const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState('');
-const [cancelPopupSportsName, setCancelPopupSportsName] = useState('');
-const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
-const [proficiencyData, setProficiencyData] = useState(
-  JSON.parse(JSON.stringify(proficiencyStaticData))
-);
-const [selectedSelfRating, setSelectedSelfRating] = useState(null)
-const [preferredDetails, setPreferredDetails] = useState(null);
-const [userProficiency, setUserProficiency] = useState(null);
-const [cancelModalVisible, setCancelModalVisibility] = useState(false);
-const [limitReachedForToday, setLimitReachForToday] = useState(true)
-const [loading, setLoading] = useState(true);
-const [modalLoading, setModalLoading] = useState(false);
-const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
-const [plansResponse, setPlansResponse] = useState(null);
-const [refreshing, setRefreshing] = useState(false);
-const [userDetails, setUserDetails] = useState(null);
-const [playType, setPlayType] = useState(null);
-const [planData, setPlanData] = useState(null);
+  const [sportsList, setSportsList] = useState([]);
+  const [peerSportsList, setPeerSportsList] = useState([]);
+  const [nextSession, setNextSessionData] = useState([]);
+  const [totalAvailableHours, setTotalAvailableHours] = useState(0);
+  const [remainingHrsApiRes, setRemainingHrsApiRes] = useState(0);
+  const [creditPlusRemaining, setCreditedPlusRemaining] = useState(0);
+  const [cancelBookingId, setCancelBookingId] = useState(null);
+  const [cancelPopupDisplayTime, setCancelPopupDisplayTime] = useState("");
+  const [cancelPopupSportsName, setCancelPopupSportsName] = useState("");
+  const [editSelfRatingActive, setSelfRatingActiveness] = useState(false);
+  const [proficiencyData, setProficiencyData] = useState(
+    JSON.parse(JSON.stringify(proficiencyStaticData))
+  );
+  const [selectedSelfRating, setSelectedSelfRating] = useState(null);
+  const [preferredDetails, setPreferredDetails] = useState(null);
+  const [userProficiency, setUserProficiency] = useState(null);
+  const [cancelModalVisible, setCancelModalVisibility] = useState(false);
+  const [limitReachedForToday, setLimitReachForToday] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [playerDetailsResponse, setPlayerDetailsResponse] = useState(null);
+  const [plansResponse, setPlansResponse] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+  const [playType, setPlayType] = useState(null);
+  const [planData, setPlanData] = useState(null);
+  const [academyData, setAcademyData] = useState(null);
 
-
-var updateRatingError = null;
-var playerDetailsApiError = null;
-var cancelBookingError = null;
+  var updateRatingError = null;
+  var playerDetailsApiError = null;
+  var cancelBookingError = null;
 
   const getNotifications = () => {
     getNotificationCount((count) => {
-      console.log('CCCC')
-      console.log({count})
+      console.log("CCCC");
+      console.log({ count });
       navigation.setParams({ notification_count: count });
       navigation.setParams({
         headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -118,19 +132,16 @@ var cancelBookingError = null;
     return () => {
       didFocusListener.remove();
     };
-  }, []); 
+  }, []);
 
   const onScreenFocus = () => {
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
     });
     getNotifications();
-    var refreshEventCallNotif = Events.subscribe(
-      "NOTIFICATION_CALL",
-      (msg) => {
-        getNotifications();
-      }
-    );
+    var refreshEventCallNotif = Events.subscribe("NOTIFICATION_CALL", (msg) => {
+      getNotifications();
+    });
 
     getuserdata();
     checkNotification();
@@ -146,327 +157,316 @@ var cancelBookingError = null;
       refreshEventCallNotif.remove();
       // Anything in here is fired on component unmount.
     };
-  }
+  };
 
-const getuserdata = () => {
-  getData('userInfo', (value) => {
-    userData = (JSON.parse(value))
-    setUserDetails(userData);
-  })
-} 
+  const getuserdata = () => {
+    getData("userInfo", (value) => {
+      userData = JSON.parse(value);
+      setUserDetails(userData);
+    });
+  };
 
-const getPlayerDetailsApi = async () => {
-  setLoading(true);
-  getData("header", (value) => {
-    if (value == "") return;
-    const headers = {
-      "Content-Type": "application/json",
-      "x-authorization": value,
-      //TODO:remove this static logic
-      // "x-authorization":
-      //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
-    };
-    //client.call
-    client
-      .get("user/playing-profile", {
-        headers,
-        params: {},
-      })
-      .then(function(response) {
-        console.log({ response });
-        playerDetailsApiError = response;
-        console.log("requestData" + JSON.stringify(response.data));
-        let json = response.data;
-        let success = json.success;
-        if (success) {
-           var todayLimitReached = false;
-           var hoursLeft =
-             json.data?.plan?.hoursRemaining ?? 0;
-           var creditedHours = json.data?.plan?.hoursCredited ?? 0;
-          
-          var oldRemainingHours =
-            json.data?.plan?.oldPlanRemainingHours ?? 0;
-           var totalHoursRemaining = hoursLeft + oldRemainingHours;
-           var totalHours = oldRemainingHours + creditedHours;
+  const getPlayerDetailsApi = async () => {
+    setLoading(true);
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+        //TODO:remove this static logic
+        // "x-authorization":
+        //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+      };
+      //client.call
+      client
+        .get("user/playing-profile", {
+          headers,
+          params: {},
+        })
+        .then(function(response) {
+          console.log({ response });
+          playerDetailsApiError = response;
+          console.log("requestData profile" + JSON.stringify(response.data));
+          let json = response.data;
+          let success = json.success;
+          if (success) {
+            var todayLimitReached = false;
+            var hoursLeft = json.data?.plan?.hoursRemaining ?? 0;
+            var creditedHours = json.data?.plan?.hoursCredited ?? 0;
+
+            var oldRemainingHours = json.data?.plan?.oldPlanRemainingHours ?? 0;
+            var totalHoursRemaining = hoursLeft + oldRemainingHours;
+            var totalHours = oldRemainingHours + creditedHours;
             setCreditedPlusRemaining(totalHours);
             setRemainingHrsApiRes(hoursLeft);
-            setTotalAvailableHours(totalHoursRemaining)
-            setPlayType(json.data?.plan?.planTerm)
-            setPlanData(json.data?.plan)
-           if(json.data?.plan?.expiryDate != null){
-            var startDate = moment(Date());
-            var endDate = moment(json.data?.plan?.expiryDate);
-            var days = 0;
-            days = endDate.diff(startDate, "days");
-            setPackageRemainingDays(days);
-            if (startDate.format("yyyy-dd-mm") == endDate.format('yyyy-dd-mm')){
-              setExpiringToday(true)
+            setTotalAvailableHours(totalHoursRemaining);
+            setPlayType(json.data?.plan?.planTerm);
+            setPlanData(json.data?.plan);
+            if (json.data?.plan?.expiryDate != null) {
+              var startDate = moment(Date());
+              var endDate = moment(json.data?.plan?.expiryDate);
+              var days = 0;
+              days = endDate.diff(startDate, "days");
+              setPackageRemainingDays(days);
+              if (
+                startDate.format("yyyy-dd-mm") == endDate.format("yyyy-dd-mm")
+              ) {
+                setExpiringToday(true);
+              }
             }
+            todayLimitReached =
+              json.data?.plan?.maxSlotBookingPerDay == 0 ||
+              json.data?.plan?.maxSlotBookingPerDay == 0.0 ||
+              json.data?.plan?.maxSlotBookingPerDay == null
+                ? true
+                : false;
+            setLimitReachForToday(todayLimitReached);
+            if (json.data?.rating?.length > 0) {
+              var sportsData = json.data?.rating;
+              var selectedIndex = null;
+              if (
+                sportsList?.length > 0 &&
+                sportsData.length == sportsList.length
+              ) {
+                for (var i = 0; i < sportsList.length; i++) {
+                  if (sportsList[i].isSelected) {
+                    selectedIndex = i;
+                  }
+                }
+              }
 
-           }
-           todayLimitReached =
-             json.data?.plan?.maxSlotBookingPerDay == 0 ||
-             json.data?.plan?.maxSlotBookingPerDay == 0.0 ||
-             json.data?.plan?.maxSlotBookingPerDay == null
-               ? true
-               : false;
-           setLimitReachForToday(todayLimitReached);
-           if(json.data?.rating?.length > 0) {
-            var sportsData = json.data?.rating;
-            var selectedIndex = null;
-            if (
-              sportsList?.length > 0 &&
-              sportsData.length == sportsList.length
-            ) {
-              for (var i = 0; i < sportsList.length; i++) {
-                if (sportsList[i].isSelected) {
-                  selectedIndex = i;
+              //   for (var i = 0; i < sportsData?.length; i++) {
+              //     sportsData[i].isSelected = i == 0 ? true : false;
+              // }
+              for (var i = 0; i < sportsData?.length; i++) {
+                if (selectedIndex != null) {
+                  sportsData[i].isSelected = i == selectedIndex ? true : false;
+                } else {
+                  sportsData[i].isSelected = i == 0 ? true : false;
+                }
+                //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
+                //  peerData[i]?.peerRating != "" ? true : false;
+              }
+              setSportsList(sportsData);
+            }
+            var nextSessionVal = json.data?.bookings;
+            for (var i = 0; i < json.data?.bookings?.length; i++) {
+              nextSessionVal[i].isExpanded = false;
+              setNextSessionData(nextSessionVal);
+            }
+            if (json.data?.peerRating?.length > 0) {
+              var peerData = json.data?.peerRating;
+              var peerSelectedIndex = null;
+              if (
+                peerSportsList?.length > 0 &&
+                peerData.length == peerSportsList.length
+              ) {
+                for (var i = 0; i < peerSportsList.length; i++) {
+                  if (peerSportsList[i].isSelected) {
+                    peerSelectedIndex = i;
+                  }
                 }
               }
-            }
-            
-            //   for (var i = 0; i < sportsData?.length; i++) {
-            //     sportsData[i].isSelected = i == 0 ? true : false;
-            // }
-            for (var i = 0; i < sportsData?.length; i++) {
-              if (selectedIndex != null) {
-                sportsData[i].isSelected =
-                  i == selectedIndex ? true : false;
-              } else {
-                sportsData[i].isSelected =
-                  i == 0 ? true : false;
-              }
-              //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
-              //  peerData[i]?.peerRating != "" ? true : false;
-            }
-            setSportsList(sportsData);
-          }
-          var nextSessionVal = json.data?.bookings;
-          for (var i = 0; i < json.data?.bookings?.length; i++) {
-            nextSessionVal[i].isExpanded = false;
-            setNextSessionData(nextSessionVal);
-          }
-          if (json.data?.peerRating?.length > 0) {
-            var peerData = json.data?.peerRating;
-            var peerSelectedIndex = null;
-            if (
-              peerSportsList?.length > 0 &&
-              (peerData.length == peerSportsList.length)
-            ) {
-              for (var i = 0; i < peerSportsList.length; i++) {
-                if (peerSportsList[i].isSelected) {
-                  peerSelectedIndex = i;
-                }
-              }
-            }
               for (var i = 0; i < peerData?.length; i++) {
                 if (peerSelectedIndex != null) {
                   peerData[i].isSelected =
                     i == peerSelectedIndex ? true : false;
                 } else {
-                  peerData[i].isSelected =
-                    i == 0 ? true : false;
+                  peerData[i].isSelected = i == 0 ? true : false;
                 }
                 //  peerData["isSelected"] = peerData[i]?.peerRating != null &&
                 //  peerData[i]?.peerRating != "" ? true : false;
               }
-            
-            setPeerSportsList(peerData);
-          }
-         
-          setPlayerDetailsResponse(json.data);
-          if (json.data?.plan?.planId != null) {
-          getPlansDataApi(
-            json.data?.plan?.planId,
-            json.data?.plan
-              ?.preferredAcademyId
-          );
-          }
 
-        } else {
-          if (json.code == "1020") {
-            Events.publish("LOGOUT");
-          }
-        }
-        setLoading(false);
-      })
-      .catch(function(error) {
-        setLoading(false);
-        ToastAndroid.show(
-          `${playerDetailsApiError?.response?.response?.data
-            ?.error_message ?? ""}`,
-          ToastAndroid.SHORT
-        );
-        console.log(error);
-      });
-  });
-};
-
-
-const getPlansDataApi = async (planId, preferredAcademyId) => {
-  setLoading(true);
-  getData("header", (value) => {
-    if (value == "") return;
-    const headers = {
-      "Content-Type": "application/json",
-      "x-authorization": value,
-      //TODO:remove this static logic
-      // "x-authorization":
-      //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
-    };
-    //client.call
-    client
-      .get("global/play/plan-info", {
-        headers,
-        params: {
-          planId: planId,
-          preferredAcademyId: preferredAcademyId
-        },
-      })
-      .then(function(response) {
-        console.log({ response });
-        console.log("requestData" + JSON.stringify(response.data));
-        let json = response.data;
-        let success = json.success;
-        if (success) {
-          setPlansResponse(json.data);
-        } else {
-          if (json.code == "1020") {
-            Events.publish("LOGOUT");
-          }
-        }
-        setLoading(false);
-      })
-      .catch(function(error) {
-        setLoading(false);
-       
-        console.log(error);
-      });
-  });
-};
-
-const addCanceledHoursBack = (slotStartTime, slotEndTime) => {
-  var finalDifference = 0;
-  
-  if (slotStartTime != null && slotEndTime != null) {
-    var randomStartDateTime = "1970-01-01T" + slotStartTime;
-    var randomEndDateTime = "1970-01-01T" + slotEndTime;
-    const time1 = new Date(randomStartDateTime);
-    const time2 = new Date(randomEndDateTime);
-    const diffInMillisec = time2.getTime() - time1.getTime();
-
-    // convert milliseconds to hours, minutes
-    const diffInHours = diffInMillisec / (1000 * 60 * 60);
-
-    finalDifference = diffInHours;
-    if(finalDifference > 0){
-      setRemainingHrsApiRes(remainingHrsApiRes + finalDifference);
-    }
-    // Math.floor(diffInHours);
-  }
-}
-
-
-
-const cancelBookingApi = async () => {
-  // setModalLoading(true);
-  getData("header", (value) => {
-    if (value == "") return;
-    const headers = {
-      "Content-Type": "application/json",
-      "x-authorization": value,
-      //TODO:remove this static logic
-      // "x-authorization":
-      //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
-    };
-    //client.call
-    client
-      .get("court/cancel-court-booking/" + cancelBookingId, {
-        headers,
-        params: {
-        },
-      })
-      .then(function(response) {
-        console.log({ response });
-        cancelBookingError = response;
-        console.log("requestData" + JSON.stringify(response.data));
-        let json = response.data;
-        let success = json.success;
-        setModalLoading(false);
-        if (success) {
-          if(nextSession?.length > 0){
-            var nextSessionVal = JSON.parse(
-              JSON.stringify(nextSession)
-            );
-            for(var i=0; i< nextSession?.length; i++){
-              if(nextSession[i]?.id == cancelBookingId){
-                nextSessionVal[i].isCancelled = true;
-                onRefresh();
-                addCanceledHoursBack(
-                  nextSessionVal[i]?.startTime,
-                  nextSessionVal[i]?.endTime
-                );
-              }
+              setPeerSportsList(peerData);
             }
-            setNextSessionData(nextSessionVal)
-          }
-          //addCanceledHoursBack();
-          //TODO: verify
-          //getPlayerDetailsApi();
-           ToastAndroid.show(
-             `Booking cancelled`,
-             ToastAndroid.SHORT
-           );
-        } else {
-          if (json.code == "1020") {
-            Events.publish("LOGOUT");
-          }
-        }
-      })
-      .catch(function(error) {
-        setModalLoading(false);
-        ToastAndroid.show(
-          `${cancelBookingError?.response?.data?.error_message ??
-            ""}`,
-          ToastAndroid.SHORT
-        ); 
-        {
-          Platform.OS === "ios" &&
-            showToast(cancelBookingError?.response?.data?.error_message ?? "");
-        }
-        console.log(error);
-      });
-  });
-};
+            console.log("olla");
+            console.log(json.data);
 
-showToast = (message) => {
-  const options = ["Cancel"];
-  ActionSheetIOS.showActionSheetWithOptions(
-    {
-      title: message,
-      options: options,
-      cancelButtonIndex: options.length - 1,
-    },
-    (buttonIndex) => {}
-  );
-};
+            setPlayerDetailsResponse(json.data);
+            if (json.data?.plan?.planId != null) {
+              getPlansDataApi(
+                json.data?.plan?.planId,
+                json.data?.plan?.preferredAcademyId
+              );
+            }
+          } else {
+            if (json.code == "1020") {
+              Events.publish("LOGOUT");
+            }
+          }
+          setLoading(false);
+        })
+        .catch(function(error) {
+          setLoading(false);
+          ToastAndroid.show(
+            `${playerDetailsApiError?.response?.response?.data?.error_message ??
+              ""}`,
+            ToastAndroid.SHORT
+          );
+          console.log(error);
+        });
+    });
+  };
 
-useEffect(() => {
- 
-  if (playerDetailsResponse?.plan?.preferredSportId != null)
-    if (playerDetailsResponse?.rating?.length > 0) {
-      for(var i = 0; i < playerDetailsResponse?.rating?.length; i++){
-        if(playerDetailsResponse?.plan?.preferredSportId == playerDetailsResponse?.rating[i]?.sport?.id){
-          setPreferredDetails(playerDetailsResponse?.rating[i]);
-          setUserProficiency(playerDetailsResponse?.rating[i]?.self);
+  const getPlansDataApi = async (planId, preferredAcademyId) => {
+    setLoading(true);
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+        //TODO:remove this static logic
+        // "x-authorization":
+        //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+      };
+      //client.call
+      client
+        .get("global/play/plan-info", {
+          headers,
+          params: {
+            planId: planId,
+            preferredAcademyId: preferredAcademyId,
+          },
+        })
+        .then(function(response) {
+          console.log({ response });
+          console.log("requestData Plan" + JSON.stringify(response.data));
+          let json = response.data;
+          let success = json.success;
+          if (success) {
+            setPlansResponse(json.data);
+            setAcademyData(json.data?.academy);
+          } else {
+            if (json.code == "1020") {
+              Events.publish("LOGOUT");
+            }
+          }
+          setLoading(false);
+        })
+        .catch(function(error) {
+          setLoading(false);
+
+          console.log(error);
+        });
+    });
+  };
+
+  const addCanceledHoursBack = (slotStartTime, slotEndTime) => {
+    var finalDifference = 0;
+
+    if (slotStartTime != null && slotEndTime != null) {
+      var randomStartDateTime = "1970-01-01T" + slotStartTime;
+      var randomEndDateTime = "1970-01-01T" + slotEndTime;
+      const time1 = new Date(randomStartDateTime);
+      const time2 = new Date(randomEndDateTime);
+      const diffInMillisec = time2.getTime() - time1.getTime();
+
+      // convert milliseconds to hours, minutes
+      const diffInHours = diffInMillisec / (1000 * 60 * 60);
+
+      finalDifference = diffInHours;
+      if (finalDifference > 0) {
+        setRemainingHrsApiRes(remainingHrsApiRes + finalDifference);
+      }
+      // Math.floor(diffInHours);
+    }
+  };
+
+  const cancelBookingApi = async () => {
+    // setModalLoading(true);
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+        //TODO:remove this static logic
+        // "x-authorization":
+        //   "Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+      };
+      //client.call
+      client
+        .get("court/cancel-court-booking/" + cancelBookingId, {
+          headers,
+          params: {},
+        })
+        .then(function(response) {
+          console.log({ response });
+          cancelBookingError = response;
+          console.log("requestData Cancel" + JSON.stringify(response.data));
+          let json = response.data;
+          let success = json.success;
+          setModalLoading(false);
+          if (success) {
+            if (nextSession?.length > 0) {
+              var nextSessionVal = JSON.parse(JSON.stringify(nextSession));
+              for (var i = 0; i < nextSession?.length; i++) {
+                if (nextSession[i]?.id == cancelBookingId) {
+                  nextSessionVal[i].isCancelled = true;
+                  onRefresh();
+                  addCanceledHoursBack(
+                    nextSessionVal[i]?.startTime,
+                    nextSessionVal[i]?.endTime
+                  );
+                }
+              }
+              setNextSessionData(nextSessionVal);
+            }
+            //addCanceledHoursBack();
+            //TODO: verify
+            //getPlayerDetailsApi();
+            ToastAndroid.show(`Booking cancelled`, ToastAndroid.SHORT);
+          } else {
+            if (json.code == "1020") {
+              Events.publish("LOGOUT");
+            }
+          }
+        })
+        .catch(function(error) {
+          setModalLoading(false);
+          ToastAndroid.show(
+            `${cancelBookingError?.response?.data?.error_message ?? ""}`,
+            ToastAndroid.SHORT
+          );
+          {
+            Platform.OS === "ios" &&
+              showToast(
+                cancelBookingError?.response?.data?.error_message ?? ""
+              );
+          }
+          console.log(error);
+        });
+    });
+  };
+
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
+  };
+
+  useEffect(() => {
+    if (playerDetailsResponse?.plan?.preferredSportId != null)
+      if (playerDetailsResponse?.rating?.length > 0) {
+        for (var i = 0; i < playerDetailsResponse?.rating?.length; i++) {
+          if (
+            playerDetailsResponse?.plan?.preferredSportId ==
+            playerDetailsResponse?.rating[i]?.sport?.id
+          ) {
+            setPreferredDetails(playerDetailsResponse?.rating[i]);
+            setUserProficiency(playerDetailsResponse?.rating[i]?.self);
+          }
         }
       }
-      
-    }
-}, [playerDetailsResponse]);
- 
+  }, [playerDetailsResponse]);
+
   const onRefresh = () => {
-    
     setRefreshing(true);
     getPlayerDetailsApi();
     setProficiencyData(JSON.parse(JSON.stringify(proficiencyStaticData)));
@@ -477,279 +477,267 @@ useEffect(() => {
     }, 1000);
   };
 
+  const onGameSelected = (item) => {
+    if (selfTabEnabled) {
+      let index = sportsList.findIndex((game) => {
+        return game?.sport?.id == item?.sport?.id;
+      });
+      if (index == -1) return;
 
-const onGameSelected=(item)=>{
-  if(selfTabEnabled){
-    let index = sportsList.findIndex((game) => {
-      return game?.sport?.id == item?.sport?.id;
-    });
-    if(index == -1) return;
+      let newData = sportsList.map((game) => {
+        return { ...game, isSelected: false };
+      });
+      newData[index]["isSelected"] = !newData[index]["isSelected"];
+      setSportsList([...newData]);
+    } else {
+      let index1 = peerSportsList.findIndex((game) => {
+        return game?.sport?.id == item?.sport?.id;
+      });
+      if (index1 == -1) return;
 
-    let newData = sportsList.map((game) => {
-      return {...game, isSelected: false}
-    });
-    newData[index]["isSelected"] = !newData[index]["isSelected"];
-    setSportsList([...newData]);
-  }
-  else {
-    let index1 = peerSportsList.findIndex((game) => {
-      return game?.sport?.id == item?.sport?.id;
-    });
-    if (index1 == -1) return;
-
-    let newData1 = peerSportsList.map((game) => {
-      return { ...game, isSelected: false };
-    });
-    newData1[index1]["isSelected"] = !newData1[index1]["isSelected"];
-    setPeerSportsList([...newData1]);
-  }
-  
-}
-
-const renderGameNameBox = ({ item }) => {
-
-  return (
-    <GameNameBox
-      isSelected={item?.isSelected}
-      item={item?.sport}
-      onPress={()=>onGameSelected(item)}
-    />
-  )
-};
-
-const bookSlotPressed=()=>{
-  const startDate = moment(playerDetailsResponse?.plan?.joiningDate)
-  const expiryD = moment(playerDetailsResponse?.plan?.expiryDate)
-  const expiryDate = expiryD.add(1, 'day')
-  const presentDate = moment();
-  const prestD = presentDate.add(1, 'day')
-  if (presentDate > startDate && presentDate < expiryDate) {
-    navigation.navigate("BookSlotScreen");
-  }else {
-    ToastAndroid.show(`Your current plan doesn't allow you to book a slot.`, ToastAndroid.SHORT);
-  }
-};
-
-const onPlayingLevelPress=()=>{
-  null
-};
-
-const setCancelModalVisibilityCb = (val) => {
-  setCancelModalVisibility(val);
-};
-
-const expandList = (passedVal) => {
-  var sessionData = nextSession;
-  sessionData.map((val) => {
-    if (val.id == passedVal.id) {
-      val.isExpanded = !val.isExpanded;
+      let newData1 = peerSportsList.map((game) => {
+        return { ...game, isSelected: false };
+      });
+      newData1[index1]["isSelected"] = !newData1[index1]["isSelected"];
+      setPeerSportsList([...newData1]);
     }
-  });
-  setNextSessionData(sessionData);
-}
+  };
 
-const updateRating = (playerInfo, ratingInfo, selectedPeerRating, isPeerTypeRequest) => {
-  setModalLoading(true)
-  const data = isPeerTypeRequest
-    ? {
-        userId: playerInfo?.id,
-        sportId: selectedPeerRating?.sport?.id,
-        proficiency: ratingInfo?.proficiency,
-        date: `${moment(selectedPeerRating?.date).format("YYYY-MM-DD")}`,
-        //date: `${moment(Date()).format('YYYY-MM-DD')}`,
-        startTime: selectedPeerRating?.startTime,
-        endTime: selectedPeerRating?.endTime,
+  const renderGameNameBox = ({ item }) => {
+    return (
+      <GameNameBox
+        isSelected={item?.isSelected}
+        item={item?.sport}
+        onPress={() => onGameSelected(item)}
+      />
+    );
+  };
+
+  const bookSlotPressed = () => {
+    const startDate = moment(playerDetailsResponse?.plan?.joiningDate);
+    const expiryD = moment(playerDetailsResponse?.plan?.expiryDate);
+    const expiryDate = expiryD.add(1, "day");
+    const presentDate = moment();
+    const prestD = presentDate.add(1, "day");
+    if (presentDate > startDate && presentDate < expiryDate) {
+      navigation.navigate("BookSlotScreen");
+    } else {
+      ToastAndroid.show(
+        `Your current plan doesn't allow you to book a slot.`,
+        ToastAndroid.SHORT
+      );
+    }
+  };
+
+  const onPlayingLevelPress = () => {
+    null;
+  };
+
+  const setCancelModalVisibilityCb = (val) => {
+    setCancelModalVisibility(val);
+  };
+
+  const expandList = (passedVal) => {
+    var sessionData = nextSession;
+    sessionData.map((val) => {
+      if (val.id == passedVal.id) {
+        val.isExpanded = !val.isExpanded;
       }
-    : {
-        userId: playerDetailsResponse?.user?.id,
-        sportId: selectedPeerRating?.sport?.id,
-        proficiency: selectedSelfRating?.proficiency,
-        date: `${moment(Date()).format("YYYY-MM-DD")}`
-      };
+    });
+    setNextSessionData(sessionData);
+  };
 
-  // setLoading(true);
-  getData("header", (value) => {
-    if (value == "") return;
-    const headers = {
-      "Content-Type": "application/json",
-      "x-authorization": value,
-      //TODO:remove this static logic
-      // "x-authorization":
-      //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
-    };
-    //client.call
-    client
-      .post(
-        "user/playing-level-rating",
-        { data: data },
-        { headers: headers }
-      )
-      .then(function(response) {
-        updateRatingError = { response };
-        console.log({ response });
-        setSelfRatingActiveness(false);
-        try {
-          let json = response?.data;
-          let success = json?.success;
-          if (success) {
-            if(!isPeerTypeRequest){
-              setUserProficiency(selectedSelfRating?.proficiency);
-            }
-        
-            if(isPeerTypeRequest){
-              var previousPeerSportsData = [];
-              if(peerSportsList?.length > 0){
-                previousPeerSportsData = JSON.parse(
-                  JSON.stringify(peerSportsList)
-                );
-                for(var i = 0; i< peerSportsList.length; i++){
-                  if(peerSportsList[i]?.sport?.id ==selectedPeerRating?.sport?.id){
-                    var players = peerSportsList[i]?.players ?? [];
-                    if(players?.length > 0){
-                      for(var j=0; j < players.length; j++){
-                        if (
-                          players[j]?.id ==
-                          playerInfo?.id
-                        ){
-                          previousPeerSportsData[
-                            i
-                          ].players[j].peerRating =
-                            ratingInfo?.proficiency;
+  const updateRating = (
+    playerInfo,
+    ratingInfo,
+    selectedPeerRating,
+    isPeerTypeRequest
+  ) => {
+    setModalLoading(true);
+    const data = isPeerTypeRequest
+      ? {
+          userId: playerInfo?.id,
+          sportId: selectedPeerRating?.sport?.id,
+          proficiency: ratingInfo?.proficiency,
+          date: `${moment(selectedPeerRating?.date).format("YYYY-MM-DD")}`,
+          //date: `${moment(Date()).format('YYYY-MM-DD')}`,
+          startTime: selectedPeerRating?.startTime,
+          endTime: selectedPeerRating?.endTime,
+        }
+      : {
+          userId: playerDetailsResponse?.user?.id,
+          sportId: selectedPeerRating?.sport?.id,
+          proficiency: selectedSelfRating?.proficiency,
+          date: `${moment(Date()).format("YYYY-MM-DD")}`,
+        };
+
+    // setLoading(true);
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+        //TODO:remove this static logic
+        // "x-authorization":
+        //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
+      };
+      //client.call
+      client
+        .post("user/playing-level-rating", { data: data }, { headers: headers })
+        .then(function(response) {
+          updateRatingError = { response };
+          console.log({ response });
+          setSelfRatingActiveness(false);
+          try {
+            let json = response?.data;
+            let success = json?.success;
+            if (success) {
+              if (!isPeerTypeRequest) {
+                setUserProficiency(selectedSelfRating?.proficiency);
+              }
+
+              if (isPeerTypeRequest) {
+                var previousPeerSportsData = [];
+                if (peerSportsList?.length > 0) {
+                  previousPeerSportsData = JSON.parse(
+                    JSON.stringify(peerSportsList)
+                  );
+                  for (var i = 0; i < peerSportsList.length; i++) {
+                    if (
+                      peerSportsList[i]?.sport?.id ==
+                      selectedPeerRating?.sport?.id
+                    ) {
+                      var players = peerSportsList[i]?.players ?? [];
+                      if (players?.length > 0) {
+                        for (var j = 0; j < players.length; j++) {
+                          if (players[j]?.id == playerInfo?.id) {
+                            previousPeerSportsData[i].players[j].peerRating =
+                              ratingInfo?.proficiency;
+                          }
                         }
                       }
                     }
                   }
+                  setPeerSportsList(previousPeerSportsData);
                 }
-                setPeerSportsList(previousPeerSportsData);
               }
-             
-            }
-            if(!isPeerTypeRequest){
-              var sportsDataCopy = [...sportsList];
-              for (var i = 0; i < sportsDataCopy?.length; i++) {
-             
-                if (
-                  sportsDataCopy[i]?.sport?.id ==
+              if (!isPeerTypeRequest) {
+                var sportsDataCopy = [...sportsList];
+                for (var i = 0; i < sportsDataCopy?.length; i++) {
+                  if (
+                    sportsDataCopy[i]?.sport?.id ==
+                    selectedPeerRating?.sport?.id
+                  ) {
+                    sportsDataCopy[i].self = selectedSelfRating?.proficiency;
+                  }
+                }
+                setSportsList(sportsDataCopy);
+              }
+              if (
+                !isPeerTypeRequest &&
+                playerDetailsResponse?.plan?.preferredSportId ==
                   selectedPeerRating?.sport?.id
-                ) {
-                  sportsDataCopy[i].self =
-                    selectedSelfRating?.proficiency;
-                }
-               
+              ) {
+                setUserProficiency(selectedSelfRating?.proficiency);
               }
-              setSportsList(sportsDataCopy);
-            }
-            if(!isPeerTypeRequest &&
-                   playerDetailsResponse?.plan
-                     ?.preferredSportId ==
-                   selectedPeerRating?.sport?.id
-                 ) {
-                   setUserProficiency(
-                     selectedSelfRating?.proficiency
-                   );
-                 }
-            if(!isPeerTypeRequest){
-              if(proficiencyData?.length > 0){
-              var previousProfData2 = JSON.parse(
-                JSON.stringify(proficiencyStaticData)
+              if (!isPeerTypeRequest) {
+                if (proficiencyData?.length > 0) {
+                  var previousProfData2 = JSON.parse(
+                    JSON.stringify(proficiencyStaticData)
+                  );
+                  for (var i = 0; i < proficiencyData?.length; i++) {
+                    if (
+                      proficiencyData[i].proficiency ==
+                      selectedSelfRating?.proficiency
+                    ) {
+                      previousProfData2[i].isSelected = true;
+                    }
+                  }
+                  setProficiencyData(previousProfData2);
+                }
+              }
+              setModalLoading(false);
+              setTimeout(() => {
+                ToastAndroid.show(`Rating updated.`, ToastAndroid.SHORT);
+              }, 500);
+              //getPlayerDetailsApi();
+              // setRewardsResponse(json["data"]["reward"]);
+            } else {
+              ToastAndroid.show(
+                `${updateRatingError?.response?.response?.data?.error_message ??
+                  ""}`,
+                ToastAndroid.SHORT
               );
-              for (var i = 0; i < proficiencyData?.length; i++) {
-                if (
-                  proficiencyData[i].proficiency ==
-                  selectedSelfRating?.proficiency
-                ) {
-                  previousProfData2[i].isSelected = true;
-                }
+              if (json.code == "1020") {
+                Events.publish("LOGOUT");
               }
-              setProficiencyData(previousProfData2);
             }
-            }
+
+            // setLoading(false);
+          } catch (e) {
             setModalLoading(false);
-            setTimeout(() => {
-              ToastAndroid.show(`Rating updated.`, ToastAndroid.SHORT);
-            }, 500);
-            //getPlayerDetailsApi();
-            // setRewardsResponse(json["data"]["reward"]);
-          } else {
+            //setLoading(false);
             ToastAndroid.show(
-              `${updateRatingError?.response?.response?.data
-                ?.error_message ?? ""}`,
+              `${updateRatingError?.response?.response?.data?.error_message ??
+                ""}`,
               ToastAndroid.SHORT
             );
-            if (json.code == "1020") {
-              Events.publish("LOGOUT");
-            }
           }
-        
-          // setLoading(false);
-        } catch (e) {
-
-          setModalLoading(false)
+        })
+        .catch(function(error) {
+          setModalLoading(false);
           //setLoading(false);
           ToastAndroid.show(
             `${updateRatingError?.response?.response?.data?.error_message ??
               ""}`,
             ToastAndroid.SHORT
           );
-        }
-      })
-      .catch(function(error) {
-        setModalLoading(false);
-        //setLoading(false);
-        ToastAndroid.show(
-          `${updateRatingError?.response?.response?.data?.error_message ??
-            ""}`,
-          ToastAndroid.SHORT
-        );
-      });
-  });
-};
+        });
+    });
+  };
 
-const onRatingSelection = (passedVal) => {
- 
-  var previousProfData = proficiencyData;
-  for (var i = 0; i < proficiencyData.length; i++) {
-    previousProfData[i].isSelected =
-      proficiencyData[i].level == passedVal.level ? true : false;
+  const onRatingSelection = (passedVal) => {
+    var previousProfData = proficiencyData;
+    for (var i = 0; i < proficiencyData.length; i++) {
+      previousProfData[i].isSelected =
+        proficiencyData[i].level == passedVal.level ? true : false;
+    }
+
+    setSelectedSelfRating(passedVal);
+    setProficiencyData(previousProfData);
+  };
+
+  const onSavePress = (val) => {
+    updateRating(null, null, val, false);
+  };
+
+  const onPressPlan = (selectPlan, playPlanData) => {
+    console.log(selectPlan);
+    navigation.navigate("PlayingPlan", { selectPlan });
+  };
+
+  if (loading) {
+    return <LoadingIndicator />;
   }
-  
-  setSelectedSelfRating(passedVal)
-  setProficiencyData(previousProfData)
-}
 
-const onSavePress = (val) => {
-  updateRating(null, null, val, false);
-}
+  if (userDetails.is_play_enabled) {
+    return (
+      <LinearGradient
+        colors={["#332B70", "#24262A"]}
+        locations={[0, 1]}
+        style={{ flex: 1 }}
+      >
+        <PlayerScreen
+          onPressPlan={onPressPlan}
+          navigation={navigation}
+          onPress={() => {
+            navigation.navigate("BookPlayTrail");
+          }}
+        />
+      </LinearGradient>
+    );
+  }
 
-const onPressPlan = (selectPlan, playPlanData) => {
-  console.log(selectPlan)
-  navigation.navigate("PlayingPlan", { selectPlan });
-};
-
-    if (loading) {
-      return <LoadingIndicator />;
-    }
-
-
-    if (userDetails.is_play_enabled) {
-      return (
-        <LinearGradient
-          colors={["#332B70", "#24262A"]}
-          locations={[0, 1]}
-          style={{ flex: 1 }}
-        >
-            <PlayerScreen
-              onPressPlan={onPressPlan}
-              navigation = {navigation}
-              onPress={() => {
-                navigation.navigate("BookPlayTrail");
-              }}
-            />
-        </LinearGradient>
-      );
-    }
-
-    
   return (
     <View style={[{ flex: 1 }]}>
       <LinearGradient
@@ -775,15 +763,20 @@ const onPressPlan = (selectPlan, playPlanData) => {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              var sentdata = planData?.subscriptionId
+              var sentdata = planData?.subscriptionId;
               navigation.navigate("EditPreferredSports", { sentdata });
-            }}>
+            }}
+          >
             <PrefSport
               gradientColors={getProficiencyGradients(userProficiency)}
               currentRatingColor={getProficiencyColor(userProficiency)}
-              currentRating={getProficiencyName(userProficiency ? userProficiency.toLowerCase() : '')}
+              currentRating={getProficiencyName(
+                userProficiency ? userProficiency.toLowerCase() : ""
+              )}
               icon={{ uri: preferredDetails?.sport?.image }}
               sportTitle={preferredDetails?.sport?.name}
+              centreImg={{ uri: academyData?.cover_pic }}
+              centreTitle={academyData?.name}
             />
           </TouchableOpacity>
           <MembershipDetails
@@ -797,7 +790,8 @@ const onPressPlan = (selectPlan, playPlanData) => {
             //aboutToExpire={true}
             showOffer={false}
             planExpired={
-              (packageRemainingDays <= 0 && expiringToday == false) || remainingHrsApiRes < 1
+              (packageRemainingDays <= 0 && expiringToday == false) ||
+              remainingHrsApiRes < 1
                 ? true
                 : false
             }
@@ -820,9 +814,9 @@ const onPressPlan = (selectPlan, playPlanData) => {
             onRenewPress={() => {
               navigation.navigate("RenewPlan");
             }}
-            expiryDate={moment(
-              playerDetailsResponse?.plan?.expiryDate
-            ).format("DD MMMM YYYY")}
+            expiryDate={moment(playerDetailsResponse?.plan?.expiryDate).format(
+              "DD MMMM YYYY"
+            )}
             purchasedDate={moment(
               playerDetailsResponse?.plan?.purchaseDate
             ).format("DD MMMM YYYY")}
@@ -1009,7 +1003,7 @@ const onPressPlan = (selectPlan, playPlanData) => {
       )}
     </View>
   );
-}
+});
 
 PlayScreen.navigationOptions = ({ navigation }) => {
   return {
@@ -1040,7 +1034,7 @@ const styles = StyleSheet.create({
     color: lightYellowVariant,
     fontFamily: Nunito_Regular,
     fontWeight: "600",
-    marginBottom:9
+    marginBottom: 9,
   },
   menuHeading: {
     color: "#FF9C33",
@@ -1049,14 +1043,14 @@ const styles = StyleSheet.create({
     marginTop: 2,
     textAlign: "center",
   },
-  emptyView: {height: 62, width: '100%', backgroundColor:'transparent'},
+  emptyView: { height: 62, width: "100%", backgroundColor: "transparent" },
   skyFilledButtonView: {
-    flex:1,
+    flex: 1,
     position: "absolute",
     width: "100%",
     paddingHorizontal: 20,
     alignSelf: "center",
-    justifyContent:'center',
+    justifyContent: "center",
     bottom: 15,
   },
 

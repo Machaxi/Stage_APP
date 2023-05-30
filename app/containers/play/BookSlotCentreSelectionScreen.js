@@ -138,15 +138,13 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           headers,
           params: {
             sportId: sportId,
-            // TODO:
             date: date,
-            //date: "2023-04-20",
           },
         })
         .then(function(response) {
           console.log({ response });
           fetchSlotError = response;
-          console.log("requestData" + JSON.stringify(response.data));
+          console.log("requestData working" + JSON.stringify(response.data));
           let json = response.data;
           let success = json.success;
           if (success) {
@@ -500,6 +498,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       const {
         playHoursRemaining,
       } = navigation?.state?.params;
+ const { guestCount, entirecourt } = navigation?.state?.params;
 
   
   return (
@@ -535,6 +534,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   }}
                   morningTime={[]}
                   eveningTime={[]}
+                  guestCount={guestCount}
+                  entirecourt={entirecourt}
                   preferredAcademyId={preferredAcademyId}
                   preferredDate={preferredDate}
                   preferredSportId={preferredSportId}

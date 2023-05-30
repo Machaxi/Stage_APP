@@ -62,8 +62,6 @@ class CongratulationScreen extends Component {
     const userDetailsJson = await AsyncStorage.getItem("user_details");
     const userDetails = JSON.parse(userDetailsJson);
     var username = userDetails.userName;
-    console.log("woekinc");
-    console.log(username);
     console.log(this.props.selectBatch);
     if (this.props.title == "Coaching Trial") {
       username = this.props.username;
@@ -161,9 +159,9 @@ class CongratulationScreen extends Component {
                 <Text style={styles.court}>{this.props.courtName}</Text>
               )}
               <Text style={[styles.schedule]}>
-                {this.state.date.getDate() == this.state.todayDate.getDate()
+                {/* {this.state.date.getDate() == this.state.todayDate.getDate()
                   ? "Today, "
-                  : "Tomorrow, "}
+                  : "Tomorrow, "} */}
                 {this.state.date.getDate()}{" "}
                 {this.months[this.state.date.getMonth()]}{" "}
                 {this.state.date.getFullYear()} at {this.state.timeString}

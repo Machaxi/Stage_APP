@@ -2459,6 +2459,18 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  ImageGuidelines: {
+    screen: ImageGuidelines,
+    navigationOptions: ({ navigation }) => ({
+      title: "Image Guidelines",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   PaymentDetail: {
     screen: PaymentDetail,
     navigationOptions: ({ navigation }) => ({
@@ -2571,6 +2583,30 @@ const LearnStack = createStackNavigator({
     screen: DisplayLearnTrial,
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  PlayersListing: {
+    screen: PlayersListing,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Batchmates",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  OtherPlayerDeatils: {
+    screen: otherplayerDetails,
+    navigationOptions: ({ navigation }) => ({
+      title: "Player Detail",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,

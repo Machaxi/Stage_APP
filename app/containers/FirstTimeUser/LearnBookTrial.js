@@ -19,6 +19,7 @@ import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { KeyboardAvoidingView } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import { BackHandler } from 'react-native';
 
 class LearnBookTrial extends Component {
   constructor(props) {
@@ -41,9 +42,11 @@ class LearnBookTrial extends Component {
       username: "",
       gender: "",
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     this.getUserData();
     axios
       .get(getBaseUrl() + "/global/academy/all")
@@ -59,6 +62,15 @@ class LearnBookTrial extends Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  handleBackButtonClick = () => {
+    this.hadleBackPress();
+    return true;
+  };
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
   }
 
   getUserData = async () => {

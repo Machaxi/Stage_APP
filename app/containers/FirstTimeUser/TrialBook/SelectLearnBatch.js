@@ -49,12 +49,16 @@ let nextDate = new Date(today.getTime() + oneDay);
 const nextdate = nextDate.getDate() + " " + months[nextDate.getMonth()];
 const nextday = weekdays[nextDate.getDay()];
 
+let secondDate = new Date(nextDate.getTime() + oneDay);
+const seconddate = secondDate.getDate() + " " + months[secondDate.getMonth()];
+const secondday = weekdays[secondDate.getDay()];
+
 class SelectLearnBatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentLevel: 10,
-      currentDate: 3,
+      currentDate: 4,
       selectTime: 20,
       proseedLevel: false,
       proseedDate: false,
@@ -118,8 +122,10 @@ class SelectLearnBatch extends Component {
 
   getLevelDatas = (level, date) => {
     var selectDate = today;
-    if (date > 1) {
+    if (date == 2) {
       selectDate = nextDate;
+    } else if (date == 3) {
+      selectDate = secondDate;
     }
     let unavailableCourt = this.state.courtUnavailability.filter((item) => {
       let endDate = new Date(item.endDate);
@@ -261,8 +267,10 @@ class SelectLearnBatch extends Component {
 
     handlepress = () => {
       var selectDate = today;
-      if (this.state.currentDate > 1) {
+      if (this.state.currentDate == 2) {
         selectDate = nextDate;
+      } else if (this.state.currentDate > 2) {
+        selectDate = secondDate;
       }
       let selectLevel = this.state.playerLevel[this.state.currentLevel];
       let selectBatch = this.state.batchData.find(
@@ -367,6 +375,22 @@ class SelectLearnBatch extends Component {
                     day={nextday}
                     date={nextdate}
                     myDate={2}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={[styles.subview, { marginLeft: 20 }]}
+                  onPress={() => {
+                    this.setState({ currentDate: 3, proseedDate: true }, () => {
+                      this.getLevelData(this.state.currentLevelName, 3);
+                    });
+                  }}
+                >
+                  <DateComponent
+                    currentDate={this.state.currentDate}
+                    day={secondday}
+                    date={seconddate}
+                    myDate={3}
                   />
                 </TouchableOpacity>
               </View>

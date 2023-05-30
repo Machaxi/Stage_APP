@@ -78,7 +78,7 @@ class CenterDetails extends Component {
                 marginHorizontal: 7,
               }}
             >
-              <Text style={styles.setTime}>{"Select Preferred Time Slot"}</Text>
+              <Text style={styles.setTime}>{"Select Time Slot"}</Text>
               <View style={{ flexDirection: "row" }}>
                 <TimingsTab
                   image={require("../../images/morning.png")}
@@ -99,6 +99,9 @@ class CenterDetails extends Component {
                 <SelectPlayingTime
                   selectedTime={selectedMorningTime}
                   preferredDate={this.props.preferredDate}
+                  bookings= {this.props.bookings}
+                  guestCount={this.props.guestCount}
+                  entirecourt={this.props.entirecourt}
                   selectedTimePeriod={(val) => {
                     console.log({ val });
                     selectedTimePeriod(val);
@@ -113,6 +116,9 @@ class CenterDetails extends Component {
                 <SelectPlayingTime
                   selectedTime={selectedEveningTime}
                   preferredDate={this.props.preferredDate}
+                  bookings= {this.props.bookings}
+                  guestCount={this.props.guestCount}
+                  entirecourt={this.props.entirecourt}
                   selectedTimePeriod={(val) => {
                     console.log({ val });
                     selectedTimePeriod(val);
