@@ -229,17 +229,24 @@ const BookSlotScreen = ({ navigation }) => {
     if (user != "with_guest") {
       guestCount = 0;
     }
+    const requestAllowed = getRequestAllowedById(selectedSportsId);
     navigation.navigate("BookSlotCentreSelectionScreen", {
       date: date,
       proficiency: proficiency,
       guestCount: guestCount,
       sportId: selectedSportsId,
+      requestAllowed: requestAllowed,
       playHoursRemaining: planAndSportsApiRes?.plan?.hoursRemaining ?? 0,
       preferredAcademyId: planAndSportsApiRes?.plan?.preferredAcademyId,
       preferredSportId: planAndSportsApiRes?.plan?.preferredSportId,
       userType: user,
       entirecourt: entirecourt,
     });
+  };
+
+  const getRequestAllowedById = (id) => {
+    const sport = sportsList.find((sport) => sport.id === id);
+    return sport ? sport.requestAllowed : true;
   };
 
   const setModalVisibilityCb = (val) => {

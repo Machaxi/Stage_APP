@@ -65,10 +65,12 @@ class MoreDetails extends Component {
                 );
                 const { proficiencies } = sport;
                 console.log(proficiencies);
+                const sortdata = proficiencies.sort((a, b) => parseInt(a.order) - parseInt(b.order));
+                console.log(sortdata);
                 this.setState({
                   currentIndex: item.id,
                   proseednext: true,
-                  levelData: proficiencies,
+                  levelData: sortdata,
                 });
               }}
             >
@@ -207,7 +209,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    marginHorizontal: 10,
   },
   contain: {
     flex: 1,

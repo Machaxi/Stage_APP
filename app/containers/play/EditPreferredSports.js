@@ -90,6 +90,7 @@ class EditPreferredSports extends Component {
             preferredAcademyId = {this.state.preferredAcademyId}
             title = "EditPreferredSports"
             onPress={this.onComplete}
+            onBackPress={this.moreBackPress}
           />
         )}
       </LinearGradient>

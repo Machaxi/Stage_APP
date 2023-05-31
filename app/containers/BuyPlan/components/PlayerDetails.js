@@ -54,9 +54,11 @@ class PlayerDetails extends Component {
     const userDetailed = JSON.parse(userDetailsJson);
     const userDetails = userDetailed.user;
     console.log(userDetails);
-    var gendernum = 1;
+    var gendernum = 2;
     if (userDetails.genderType == "MALE") {
       gendernum = 0;
+    }else if (userDetails.genderType == "FEMALE") {
+      gendernum = 1;
     }
     this.setState({ userDetails: userDetails, currentGender: gendernum });
   };

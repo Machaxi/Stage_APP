@@ -323,7 +323,7 @@ const MyBookingsScreen = ({ navigation }) => {
         }
         style={styles.main_container}
       >
-        <Loader visible={cancelBookingLoader} />
+        {/* <Loader visible={cancelBookingLoader} /> */}
         <View style={{ width: "100%", flexDirection: "row" }}>
           <MyRequestTabItem
             colors={

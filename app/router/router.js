@@ -2495,6 +2495,18 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  CoachProfileDetail: {
+    screen: CoachProfileDetail,
+    navigationOptions: ({ navigation }) => ({
+      title: "Coach Profile",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   PaymentHistory: {
     screen: PaymentHistory,
     navigationOptions: ({ navigation }) => ({

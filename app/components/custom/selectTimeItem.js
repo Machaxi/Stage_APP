@@ -28,33 +28,33 @@ class SelectTimeItem extends Component {
     // } else {
     //   return false;
     // }
-    console.log("test", +this.props.id);
-    console.log(this.props.bookings);
     const courtData = this.props.bookings.find(
-      (item) => item.courtId === this.props.id
+      (item) =>
+        item.courtId === this.props.item.courtId &&
+        item.startTime == this.props.item.startTime
     );
-    console.log(courtData);
     var guestvalue = 0;
     var showData = true;
     if (courtData) {
       guestvalue = courtData.maxPlayersAllowed - courtData.totalPlayers;
+      console.log(guestvalue);
+      if (this.props.entirecourt && guestvalue > 0) {
+        showData = false;
+      }
+      if (this.props.guestCount >= guestvalue) {
+        showData = false;
+      }
     }
-    console.log(guestvalue);
-    if (this.props.entirecourt && guestvalue > 0) {
-      showData = false;
-    }
-    if (this.props.guestCount <= guestvalue) {
-      showData = false;
-    }
-    console.log(showData);
-
     const targetTime = moment(this.props.startTime, "HH:mm:ss");
     const currentTime = moment();
     const preferredDate = moment(this.props.preferredDate);
     if (preferredDate > currentTime) {
-      return true;
+      return showData;
     } else {
-      return currentTime.isSameOrBefore(targetTime.subtract(15, "minutes"));
+      return (
+        showData &&
+        currentTime.isSameOrBefore(targetTime.subtract(15, "minutes"))
+      );
     }
   }
 

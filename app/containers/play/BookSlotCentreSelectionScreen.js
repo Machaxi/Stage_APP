@@ -46,6 +46,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   const [showBeginnerWarningModal, setBeginnerWarningModalVisibility] = useState(false);
   const [showAdvancedWarningModal, setAdvancedWarningModalVisibility] = useState(false);
   const [showSlotUnavailableModal, setSlotUnavailableModalVisibility] = useState(false);
+  const [requestAllowed, setRequestAllowed] = useState(true);
   const [selectedAcademyData, setSelectedAcademyData] = useState(null);
   const [count, setCount] = useState(0);
   const [slotRequested, setSlotRequested] = useState(false);
@@ -87,8 +88,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
  
   useEffect(() => {
-     const {date, sportId, preferredAcademyId } = navigation?.state?.params;
-
+     const {date, sportId, preferredAcademyId, requestAllowed } = navigation?.state?.params;
+    setRequestAllowed(requestAllowed);
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
     });
@@ -303,7 +304,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             }
             })
             if (sameTimeSlotFoundInBookings){
-                  if (lowerProfFound) {
+                  if (lowerProfFound && requestAllowed) {
                     console.log(
                       "lowerProfFound setAdvancedWarningModalVisibility called" +
                         lowerProfFound
@@ -312,7 +313,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                       setAdvancedWarningModalVisibility(true);
                     }
                   }
-                  else if (equalProfFound) {
+                  else if (equalProfFound || !requestAllowed) {
                     console.log('EQUAL PROF FOUND, calling API')
                       bookChosenSlotApi(
                         selectedEveningTime != null

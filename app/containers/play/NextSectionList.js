@@ -14,11 +14,9 @@ export const NextSessionList = ({
   const [filterData, setFilterData] = useState([]);
 
   useEffect(() => {
-    console.log("ollad");
-    console.log(NextSessionData);
     if (NextSessionData.length == 1) {
       setFilterData(NextSessionData);
-    } else {
+    } else if (NextSessionData.length > 1) {
       const sortedData = NextSessionData.sort((a, b) => {
         const dateA = new Date(
           moment(a.date).format("YYYY-MM-DD") + "T" + a.startTime

@@ -100,6 +100,7 @@ export default (PlayScreen = ({ navigation }) => {
   const [playType, setPlayType] = useState(null);
   const [planData, setPlanData] = useState(null);
   const [academyData, setAcademyData] = useState(null);
+  const [currentRating, setCurrentRating] = useState(null);
 
   var updateRatingError = null;
   var playerDetailsApiError = null;
@@ -461,6 +462,23 @@ export default (PlayScreen = ({ navigation }) => {
           ) {
             setPreferredDetails(playerDetailsResponse?.rating[i]);
             setUserProficiency(playerDetailsResponse?.rating[i]?.self);
+            const { self, peers } = playerDetailsResponse?.rating[i];
+            const newArray = Object.keys(peers).reduce((acc, key) => {
+              acc[key] = key === self ? peers[key] + 1 : peers[key];
+              return acc;
+            }, {});
+            const priorityOrder = ["ADVANCED", "PROFESSIONAL", "INTERMEDIATE", "BASIC"];
+            let highestKey = priorityOrder[0];
+            let highestValue = newArray[highestKey];
+            for (let i = 1; i < priorityOrder.length; i++) {
+              const key = priorityOrder[i];
+              const value = newArray[key];              
+              if (value > highestValue) {
+                highestKey = key;
+                highestValue = value;
+              }
+            }
+            setCurrentRating(highestKey)
           }
         }
       }
@@ -768,10 +786,10 @@ export default (PlayScreen = ({ navigation }) => {
             }}
           >
             <PrefSport
-              gradientColors={getProficiencyGradients(userProficiency)}
-              currentRatingColor={getProficiencyColor(userProficiency)}
+              gradientColors={getProficiencyGradients(currentRating)}
+              currentRatingColor={getProficiencyColor(currentRating)}
               currentRating={getProficiencyName(
-                userProficiency ? userProficiency.toLowerCase() : ""
+                currentRating ? currentRating.toLowerCase() : ""
               )}
               icon={{ uri: preferredDetails?.sport?.image }}
               sportTitle={preferredDetails?.sport?.name}

@@ -103,6 +103,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "445376033321-dj3pc8a4e1a0h732agusm0i85eqlmviq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi",
+            "certificate_hash": "93c8f2ea6c0957bcff8ca2f80bdc2520ea3bf248"
+          }
+        },
+        {
           "client_id": "445376033321-dqgjs0p51lffkl4954vbmg75vb3skrp0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -116,6 +124,14 @@
           "android_info": {
             "package_name": "com.machaxi",
             "certificate_hash": "ff5c2b14a20fec316b556c1a10bfc393fd05ab42"
+          }
+        },
+        {
+          "client_id": "445376033321-l1om4a4ebmnmisf6k4q4l7eeoqi49f6g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi",
+            "certificate_hash": "cdbbd54e1b81e24dea584904c0c1a94ca54fb24e"
           }
         },
         {
@@ -155,11 +171,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "445376033321-0645jet96q6gaojl5tqhdl8h6btj0sh5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.checkin",
+            "certificate_hash": "cdbbd54e1b81e24dea584904c0c1a94ca54fb24e"
+          }
+        },
+        {
+          "client_id": "445376033321-185876kddj0t8j6ja59k1vl35rrglqji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.checkin",
+            "certificate_hash": "1868c98188c66178192936940a99fd0ce746423d"
+          }
+        },
+        {
           "client_id": "445376033321-3rcr7kphbdp5laagna3872h3g7quv4k5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.machaxi.checkin",
             "certificate_hash": "9681ec33d2d323c5234fd59ad92793be0842f4b5"
+          }
+        },
+        {
+          "client_id": "445376033321-nahpgkufr6apg35i63hs7dfp5djhgoq5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.checkin",
+            "certificate_hash": "93c8f2ea6c0957bcff8ca2f80bdc2520ea3bf248"
           }
         },
         {
@@ -215,11 +255,43 @@
           }
         },
         {
+          "client_id": "445376033321-3amfa0qptos2kruocilp0m2peib7sn6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "4051982ef2160f5919613d6ef1abbcfe3bc8354a"
+          }
+        },
+        {
           "client_id": "445376033321-7chkupkffqf7ts6frg8eet8dg1n18v1l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.machaxi.staging",
             "certificate_hash": "69931def1e41ec1d2667d842bc5e47cb739259f8"
+          }
+        },
+        {
+          "client_id": "445376033321-8gl53pliack5mhmfj4jdsaej3eognjo4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "93c8f2ea6c0957bcff8ca2f80bdc2520ea3bf248"
+          }
+        },
+        {
+          "client_id": "445376033321-evrcpp794la4vmloncqumvlqpjoj97sh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "cdbbd54e1b81e24dea584904c0c1a94ca54fb24e"
+          }
+        },
+        {
+          "client_id": "445376033321-i6h8qn3rmtqtitkhhql4bfnub4bska5d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.machaxi.staging",
+            "certificate_hash": "ff5c2b14a20fec316b556c1a10bfc393fd05ab42"
           }
         },
         {

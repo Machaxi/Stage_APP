@@ -43,6 +43,7 @@ const SelectPlayingTime = ({
                 bookings= {bookings}
                 guestCount={guestCount}
                 entirecourt={entirecourt}
+                item={item}
                 // name={`${item.startTime} - ${item.endTime}`}
                 name={`${item?.displayTime}`}
                 onPress={(val) => {
