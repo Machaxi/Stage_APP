@@ -59,7 +59,7 @@ class SelectCoachBatch extends Component {
     axios
       .get(
         getBaseUrl() +
-          "/global/coaching/slots?sport_id=" +
+          "global/coaching/slots?sport_id=" +
           sport_id +
           "&academy_id=" +
           academy_id

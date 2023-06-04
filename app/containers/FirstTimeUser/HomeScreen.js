@@ -50,7 +50,7 @@ class HomeScreen extends Component {
   apiCall = () => {
     console.log(this.state.header);
     axios
-      .get(getBaseUrl() + "/user/learn-play", {
+      .get(getBaseUrl() + "user/learn-play", {
         headers: {
           "x-authorization": this.state.header,
         },

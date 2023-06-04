@@ -168,7 +168,7 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - OneSignal (2.12.4)
+  - OneSignal (2.16.5)
   - PromisesObjC (2.2.0)
   - RCTYouTube (2.0.0-beta.2):
     - React
@@ -233,8 +233,8 @@ PODS:
     - React
   - react-native-netinfo (4.2.1):
     - React
-  - react-native-onesignal (3.6.2):
-    - OneSignal (= 2.12.4)
+  - react-native-onesignal (3.9.4):
+    - OneSignal (= 2.16.5)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-splash-screen (3.2.0):
     - React
@@ -544,7 +544,7 @@ SPEC CHECKSUMS:
   JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  OneSignal: f2fbf3c497bc6ef111bfcdb0180c432af51fc9af
+  OneSignal: b72068b06b359f22e27404edee87338f4b68e783
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   RCTYouTube: d3eaf9e4c9fed8a0dc50a602336bbbf4cc851055
   React: 53c53c4d99097af47cf60594b8706b4e3321e722
@@ -561,7 +561,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
   react-native-image-resizer: 48eb06a18a6d0a632ffa162a51ca61a68fb5322f
   react-native-netinfo: aeb1752abb78a9c15cdcea067a6c95d596dcfc45
-  react-native-onesignal: 29813e90679fe02ce79ac766908be3a580016978
+  react-native-onesignal: 5187b12401c959102a64bde48fbca39c5e3b8136
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-view-shot: 5f80b8f4f9003c3da8c0c0013488e5b2db17b1e2
   react-native-webview: db4682f1698ab4b17a5e88f951031d203ff8aea8

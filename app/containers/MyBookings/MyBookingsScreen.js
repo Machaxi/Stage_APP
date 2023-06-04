@@ -8,6 +8,7 @@ import {
   ScrollView,
   ToastAndroid,
   FlatList,
+  ActionSheetIOS,
 } from "react-native";
 import { darkBlueVariant, goldenYellow, greyVariant5 } from "../util/colors";
 import MyRequestTabItem from "../../atoms/myRequestTabItem";
@@ -145,10 +146,28 @@ const MyBookingsScreen = ({ navigation }) => {
             `${getErrorResponse?.response?.response?.data?.error_message ??
               ""}`,
             ToastAndroid.SHORT
-          );
+          ); 
+          {
+            Platform.OS === "ios" &&
+            showToast(getErrorResponse?.response?.response?.data?.error_message?? "");
+          }
           console.log(error);
         });
     });
+  };
+
+  const showToast = (message) => {
+    console.log("message");
+    console.log(message);
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
   };
 
   const cancelPresentBooking = async (id) => {
@@ -207,11 +226,14 @@ const MyBookingsScreen = ({ navigation }) => {
         })
         .catch(function(error) {
           setCancelBookingLoader(false);
-
           ToastAndroid.show(
             `${cancelBookingError?.response?.data?.error_message ?? ""}`,
             ToastAndroid.LONG
           );
+          {
+            Platform.OS === "ios" &&
+            showToast(cancelBookingError?.response?.data?.error_message ?? "");
+          }
           console.log(error);
         });
     });
@@ -331,7 +353,7 @@ const MyBookingsScreen = ({ navigation }) => {
                 ? ["#a975284d", "#a9752880"]
                 : ["#ffffff54", "#ffffff33"]
             }
-            name={"Upcoming"}
+            name={"Upcomng"}
             isLeft={true}
             onTabPress={() => onTabPress("upcoming")}
             isSelected={isUpcoming}

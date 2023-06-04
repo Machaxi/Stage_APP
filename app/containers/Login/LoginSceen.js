@@ -23,11 +23,13 @@ import {
   PUSH_TOKEN,
   ONE_SIGNAL_USERID,
   getShowLoginByName,
+  getBaseUrl,
 } from "../BaseComponent";
 import {
   doLogin,
   createUser,
   doLoginTest,
+  doSendOTP,
 } from "../../redux/reducers/loginReducer";
 import { connect } from "react-redux";
 import { Nunito_ExtraBold } from "../util/fonts";
@@ -35,6 +37,7 @@ import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import { storeData, getData, onSignIn } from "../../components/auth";
 import { COACH, PLAYER } from "../../components/Constants";
 import Geolocation from "react-native-geolocation-service";
+import axios from "axios";
 
 class LoginSceen extends Component {
   constructor(props) {
@@ -44,7 +47,7 @@ class LoginSceen extends Component {
       name: "",
       userid: "",
       gender: "Select Gender",
-      confirm: null,
+      phoneconfirm: false,
       prosedenext: false,
       timeRemaining: 30,
       code: "",
@@ -59,12 +62,13 @@ class LoginSceen extends Component {
       displayTop: -220,
       token: null,
       isKeyboardOpen: false,
+      is_existing_user: false,
     };
     this.intervalIdRef = React.createRef();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.timeRemaining < 1 && this.state.confirm != null) {
+    if (this.state.timeRemaining < 1) {
       clearInterval(this.intervalIdRef.current);
     }
   }
@@ -128,19 +132,48 @@ class LoginSceen extends Component {
 
   signInWithPhoneNumber = () => {
     this.setState({ isLoading: true });
-    auth()
-      .signInWithPhoneNumber("+91" + this.state.phoneNumber)
-      .then((confirmResult) => {
-        console.log("OTP ");
-        console.log(confirmResult);
-        this.setState({
-          confirm: confirmResult,
-          timeRemaining: 30,
-          isLoading: false,
-          displayImage: require("../../images/otp_user.png"),
-          displayTop: -200,
-        });
-        ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
+    // auth()
+    //   .signInWithPhoneNumber("+91" + this.state.phoneNumber)
+    //   .then((confirmResult) => {
+    //     console.log("OTP ");
+    //     console.log(confirmResult);
+    //     this.setState({
+    //       confirm: confirmResult,
+    //       timeRemaining: 30,
+    //       isLoading: false,
+    //       displayImage: require("../../images/otp_user.png"),
+    //       displayTop: -200,
+    //     });
+    //     ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ isLoading: false });
+    //     console.log(error);
+    //     ToastAndroid.show("Invalid Phone Number", ToastAndroid.SHORT);
+    //   });
+    var dataDic = {};
+    var dict = {};
+    dict["phone_number"] = "+91" + this.state.phoneNumber;
+    dataDic["data"] = dict;
+
+    this.props
+      .doSendOTP(dataDic)
+      .then(async (response) => {
+        let data = JSON.stringify(response.payload.data);
+        let user = JSON.parse(data);
+        if (user.data) {
+          this.setState({
+            timeRemaining: 30,
+            isLoading: false,
+            displayImage: require("../../images/otp_user.png"),
+            displayTop: -200,
+            is_existing_user: user.data.is_existing_user,
+            phoneconfirm: true,
+          });
+          ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show("Invalid Phone Number", ToastAndroid.SHORT);
+        }
       })
       .catch((error) => {
         this.setState({ isLoading: false });
@@ -150,52 +183,73 @@ class LoginSceen extends Component {
   };
 
   handleResendOTP = async () => {
-    let verificationId;
-    auth()
-      .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
-      .then((id) => {
-        verificationId = id;
-        return auth().signInWithPhoneNumber(verificationId);
-      })
-      .then((confirmResult) => {
-        this.setState({ confirm: confirmResult, timeRemaining: 30 });
-        console.log(confirmResult);
+    var dataDic = {};
+    var dict = {};
+    dict["phone_number"] = "+91" + this.state.phoneNumber;
+    dataDic["data"] = dict;
+    this.props
+      .doSendOTP(dataDic)
+      .then(async (response) => {
+        let user = JSON.stringify(response.payload.data.data);
+        console.log(user);
+        if (user) {
+          this.setState({ timeRemaining: 30 });
+          ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show("Invalid Phone Number", ToastAndroid.SHORT);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
-    this.setState({ timeRemaining: 30 });
-    // auth()
-    //   .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
-    //   .then((confirmResult) => {
-    //     console.log("OTP resent successfully");
-    //     console.log(confirmResult);
-    //     ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
-    //     this.setState({ timeRemaining: 30 });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
+  // handleResendOTP = async () => {
+  //   let verificationId;
+  //   auth()
+  //     .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
+  //     .then((id) => {
+  //       verificationId = id;
+  //       return auth().signInWithPhoneNumber(verificationId);
+  //     })
+  //     .then((confirmResult) => {
+  //       this.setState({ confirm: confirmResult, timeRemaining: 30 });
+  //       console.log(confirmResult);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   this.setState({ timeRemaining: 30 });
+  //   // auth()
+  //   //   .verifyPhoneNumber("+91" + this.state.phoneNumber, true)
+  //   //   .then((confirmResult) => {
+  //   //     console.log("OTP resent successfully");
+  //   //     console.log(confirmResult);
+  //   //     ToastAndroid.show("Code has been sent!", ToastAndroid.SHORT);
+  //   //     this.setState({ timeRemaining: 30 });
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.log(error);
+  //   //   });
+  // };
 
-  confirmCode = () => {
-    this.setState({ isLoading: true });
-    this.state.confirm
-      .confirm(this.state.code)
-      .then(() => {
-        auth()
-          .currentUser.getIdToken(true)
-          .then((token) => {
-            this.signIn(token);
-            this.setState({ token: token });
-          });
-      })
-      .catch(() => {
-        this.setState({ isLoading: false });
-        ToastAndroid.show("Invalid OTP", ToastAndroid.SHORT);
-        console.log("Invalid code.");
-      });
-  };
+  // confirmCode = () => {
+  //   this.setState({ isLoading: true });
+  //   this.state.confirm
+  //     .confirm(this.state.code)
+  //     .then(() => {
+  //       auth()
+  //         .currentUser.getIdToken(true)
+  //         .then((token) => {
+  //           this.signIn(token);
+  //           this.setState({ token: token });
+  //         });
+  //     })
+  //     .catch(() => {
+  //       this.setState({ isLoading: false });
+  //       ToastAndroid.show("Invalid OTP", ToastAndroid.SHORT);
+  //       console.log("Invalid code.");
+  //     });
+  // };
 
   confirmLogin = () => {
     var dataDic = {};
@@ -208,12 +262,6 @@ class LoginSceen extends Component {
     this.props
       .createUser(dataDic, this.state.header)
       .then(() => {
-        console.log(
-          " user response payload " + JSON.stringify(this.props.data)
-        );
-        console.log(
-          " user response payload " + JSON.stringify(this.props.data.createUser)
-        );
         let user = JSON.stringify(this.props.data.createUser);
         console.log("doLogin-payload " + JSON.stringify(user));
         let userResponce = JSON.parse(user);
@@ -225,7 +273,23 @@ class LoginSceen extends Component {
           };
           AsyncStorage.setItem("user_details", JSON.stringify(userDetail));
           AsyncStorage.setItem("phone_number", this.state.phoneNumber);
-          this.signIn(this.state.token);
+          getData("header", (value) => {
+            if (value == "") return;
+            axios
+              .get(getBaseUrl() + "login-refreshed", {
+                headers: { "x-authorization": value },
+              })
+              .then((response) => {
+                let data = JSON.stringify(response);
+                let userResponce = JSON.parse(data);
+                let batchData = userResponce["data"]["data"];
+                storeData("userInfo", JSON.stringify(batchData));
+                this.props.navigation.navigate("HomeDrawer");
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          });
         }
       })
       .catch((response) => {
@@ -244,7 +308,7 @@ class LoginSceen extends Component {
 
     var dataDic = {};
     var dict = {};
-    dict["phone_number"] = this.state.phoneNumber; //user1.phoneNumber;//"+919214088636"//
+    dict["phone_number"] = this.state.phoneNumber; //"+919214088636"//
     dict["name"] = this.state.phoneNumber;
     dict["firebase_token"] = "token";
     dict["device_type"] = os;
@@ -306,7 +370,7 @@ class LoginSceen extends Component {
       });
   };
 
-  signIn = (token) => {
+  signIn = () => {
     let os = "IOS";
     if (Platform.OS === "android") {
       os = "android";
@@ -317,13 +381,13 @@ class LoginSceen extends Component {
     var dict = {};
     dict["phone_number"] = "+91" + this.state.phoneNumber; //"+919550042123"//
     dict["login_type"] = "MOBILE";
-    dict["firebase_token"] = token;
     dict["device_type"] = os;
     dict["app_version"] = "1.1.0";
     dict["fcm_token"] = fcm_token;
     dict["ONE_SIGNAL_USERID"] = ONE_SIGNAL_USERID;
     dict["one_signal_device_id"] = ONE_SIGNAL_USERID;
-    dict["has_firebase_check"] = getFirebaseCheck();
+    dict["has_firebase_check"] = false;
+    dict["otp"] = "" + this.state.code;
 
     dataDic["data"] = dict;
     console.log(dict);
@@ -342,7 +406,7 @@ class LoginSceen extends Component {
           storeData("userInfo", JSON.stringify(userData));
           this.setState({ userDetails: userData });
           this.getHeader();
-          if (userData.is_existing_user == false) {
+          if (this.state.is_existing_user == false) {
             this.setState({ loginsuccess: true });
           } else if (userData["user"].name == null) {
             this.setState({ loginsuccess: true });
@@ -384,6 +448,7 @@ class LoginSceen extends Component {
       })
       .catch((response) => {
         this.setState({ isLoading: false });
+        ToastAndroid.show("Invalid OTP", ToastAndroid.SHORT);
       });
   };
 
@@ -480,7 +545,7 @@ class LoginSceen extends Component {
               activeOpacity={0.8}
               onPress={() => {
                 this.setState({
-                  confirm: null,
+                  phoneconfirm: false,
                   displayImage: require("../../images/login_user.png"),
                   displayTop: -220,
                 });
@@ -572,7 +637,7 @@ class LoginSceen extends Component {
             name={"Confirm"}
             height={50}
             available={this.state.code.length > 5}
-            onPress={this.confirmCode}
+            onPress={this.signIn}
           />
         </View>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -725,9 +790,11 @@ class LoginSceen extends Component {
           ]}
         >
           {this.state.showscreen &&
-            this.state.confirm == null &&
+            !this.state.phoneconfirm &&
             this.PhoneScreen()}
-          {this.state.confirm && !this.state.loginsuccess && this.OTPScreen()}
+          {this.state.phoneconfirm &&
+            !this.state.loginsuccess &&
+            this.OTPScreen()}
           {this.state.loginsuccess && this.NameScreen()}
           {Platform.OS === "ios" && (
             <Image
@@ -860,6 +927,7 @@ const mapDispatchToProps = {
   doLogin,
   createUser,
   doLoginTest,
+  doSendOTP,
 };
 
 export default connect(

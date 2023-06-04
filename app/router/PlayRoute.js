@@ -38,7 +38,7 @@ const playModule = createStackNavigator({
   BookPlayTrail: {
     screen: LearnBookTrial,
     navigationOptions: ({ navigation }) => ({
-      title: "PLay",
+      title: "Play",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
       headerRight: (
         <RightMenuToolbar

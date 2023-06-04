@@ -44,7 +44,7 @@ import EditProfile from "../containers/profile/EditProfile";
 import markAttendence from "../containers/CoachScreen/MarkAttendence";
 import AddCompensatoryBatch from "../containers/CoachScreen/AddCompensatoryBatch";
 import otherplayerDetails from "../containers/OtherPlayerDetails/OtherPlayerDetails";
-
+import DeviceInfo from "react-native-device-info";
 import { isSignedIn } from "../components/auth";
 import BaseComponent from "../containers/BaseComponent";
 import TournamentModule from "./TournamentRouter";
@@ -132,6 +132,8 @@ import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayT
 import RequestHeaderRight from "../atoms/requestHeaderRight";
 import PrivacyPolicy from "../containers/util/PrivacyPolicy";
 import BlogScreen from "../containers/util/BlogScreen";
+
+const deviceModel = DeviceInfo.getModel();
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? 0 : 0,
@@ -2416,11 +2418,6 @@ const LearnStack = createStackNavigator({
       headerStyle: {
         backgroundColor: "#21202F",
       },
-
-      headerTitleStyle: style.titlestyle,
-      headerStyle: {
-        backgroundColor: "#21202F",
-      },
     }),
   },
   BookLearnTrail: {
@@ -2671,83 +2668,94 @@ const LearnStack = createStackNavigator({
   },
 });
 
-const tabBarControllerLearn = createBottomTabNavigator({
-  Home: {
-    screen: LearnStack,
-    navigationOptions: {
-      tabBarLabel: "Learn",
-      tabBarLabel: ({ focused }) => (
-        <TabbarItem
-          label="Learn"
-          focused={focused}
-          // gradientColors={["#595466", "#9a97a2"]}
-          gradientColors={["#221b33", "#595466"]}
-          activeIndicatorColor={white}
-          inactiveIndicatorColor={white}
-          bottomBarColor={"transparent"}
-          focusedIcon={focused ? require("../images/learn_active.png") : null}
-          activeIcon={require("../images/learn.png")}
-        />
-      ),
+const tabBarControllerLearn = createBottomTabNavigator(
+  {
+    Home: {
+      screen: LearnStack,
+      navigationOptions: {
+        tabBarLabel: "Learn",
+        tabBarLabel: ({ focused }) => (
+          <TabbarItem
+            label="Learn"
+            focused={focused}
+            // gradientColors={["#595466", "#9a97a2"]}
+            gradientColors={["#221b33", "#595466"]}
+            activeIndicatorColor={white}
+            inactiveIndicatorColor={white}
+            bottomBarColor={"transparent"}
+            focusedIcon={focused ? require("../images/learn_active.png") : null}
+            activeIcon={require("../images/learn.png")}
+          />
+        ),
+      },
+    },
+    PlayingMainScreen: {
+      screen: PlayRoute,
+      navigationOptions: {
+        tabBarLabel: "Play",
+        tabBarLabel: ({ focused }) => (
+          <TabbarItem
+            label="Play"
+            focused={focused}
+            gradientColors={["#595466", "#9a97a2"]}
+            activeIndicatorColor={white}
+            inactiveIndicatorColor={white}
+            bottomBarColor={"transparent"}
+            focusedIcon={
+              focused ? require("../images/play_highlight.png") : null
+            }
+            activeIcon={require("../images/play_inactive.png")}
+          />
+        ),
+      },
+    },
+    Tournament: {
+      screen: ShopTabRoute,
+      navigationOptions: {
+        tabBarLabel: "Shop",
+        tabBarLabel: ({ focused }) => (
+          <TabbarItem
+            label="Shop"
+            focused={focused}
+            activeIndicatorColor={white}
+            gradientColors={["#9a97a2", "#595466"]}
+            inactiveIndicatorColor={white}
+            bottomBarColor={"transparent"}
+            focusedIcon={focused ? require("../images/shop_active.png") : null}
+            activeIcon={require("../images/shop.png")}
+          />
+        ),
+      },
+    },
+    Challenge: {
+      screen: TournamentModule,
+      navigationOptions: {
+        tabBarLabel: "Tournament",
+        tabBarLabel: ({ focused }) => (
+          <TabbarItem
+            label="Tournament"
+            activeIndicatorColor={white}
+            gradientColors={["#595466", "#221b33"]}
+            inactiveIndicatorColor={white}
+            focused={focused}
+            bottomBarColor={"transparent"}
+            focusedIcon={
+              focused ? require("../images/tournament_active.png") : null
+            }
+            activeIcon={require("../images/tournament.png")}
+          />
+        ),
+      },
     },
   },
-  PlayingMainScreen: {
-    screen: PlayRoute,
-    navigationOptions: {
-      tabBarLabel: "Play",
-      tabBarLabel: ({ focused }) => (
-        <TabbarItem
-          label="Play"
-          focused={focused}
-          gradientColors={["#595466", "#9a97a2"]}
-          activeIndicatorColor={white}
-          inactiveIndicatorColor={white}
-          bottomBarColor={"transparent"}
-          focusedIcon={focused ? require("../images/play_highlight.png") : null}
-          activeIcon={require("../images/play_inactive.png")}
-        />
-      ),
+  {
+    tabBarOptions: {
+      style: {
+        marginBottom: deviceModel === "iPhone 11 Pro" ? -40 : 0,
+      },
     },
-  },
-  Tournament: {
-    screen: ShopTabRoute,
-    navigationOptions: {
-      tabBarLabel: "Shop",
-      tabBarLabel: ({ focused }) => (
-        <TabbarItem
-          label="Shop"
-          focused={focused}
-          activeIndicatorColor={white}
-          gradientColors={["#9a97a2", "#595466"]}
-          inactiveIndicatorColor={white}
-          bottomBarColor={"transparent"}
-          focusedIcon={focused ? require("../images/shop_active.png") : null}
-          activeIcon={require("../images/shop.png")}
-        />
-      ),
-    },
-  },
-  Challenge: {
-    screen: TournamentModule,
-    navigationOptions: {
-      tabBarLabel: "Tournament",
-      tabBarLabel: ({ focused }) => (
-        <TabbarItem
-          label="Tournament"
-          activeIndicatorColor={white}
-          gradientColors={["#595466", "#221b33"]}
-          inactiveIndicatorColor={white}
-          focused={focused}
-          bottomBarColor={"transparent"}
-          focusedIcon={
-            focused ? require("../images/tournament_active.png") : null
-          }
-          activeIcon={require("../images/tournament.png")}
-        />
-      ),
-    },
-  },
-});
+  }
+);
 
 const parentBookDrawer = createDrawerNavigator(
   {

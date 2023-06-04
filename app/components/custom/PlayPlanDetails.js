@@ -72,7 +72,7 @@ const PlayPlanDetails = (props) => {
             <Text style={styles.subtitle}>
               ₹ {props.subtitle}{" "}
               <Text style={[styles.subtitle, { fontSize: 12 }]}>
-                (GST Inclusive)
+                {props.gstInclusive ? "(GST Inclusive)" : "(GST Exclusive)"}
               </Text>
             </Text>
             <Text style={styles.description}>{props.description}</Text>

@@ -326,6 +326,10 @@ class App extends BaseComponent {
           SafeAreaView
             .setStatusBarHeight
             (57);
+        }else if (Platform.OS === "ios") {
+            SafeAreaView
+            .setStatusBarHeight
+            (20);
         }
     }
 

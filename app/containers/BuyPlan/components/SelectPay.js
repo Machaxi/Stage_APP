@@ -234,8 +234,31 @@ class SelectPay extends Component {
   };
 
   handleOnStartPayment = (orderId, amount) => {
+    plantitle =
+      this.props.selectPlan.term_id === 1
+        ? "Monthly"
+        : this.props.selectPlan.term_id === 2
+        ? "Quarterly"
+        : this.props.selectPlan.term_id === 3
+        ? "Half Yearly"
+        : "Yearly";
+    var description =
+      "Coaching Plan for " +
+      this.state.userDetails.userName +
+      ", Ph no: " +
+      this.state.phonenumber +
+      ", Display Time: " +
+      this.state.time +
+      ", Batch Name: " +
+      this.props.selectBatch.batch_name +
+      ", Plan Type: " +
+      plantitle;
+    if (description.length < 240) {
+      description = description + ", Order Id: " + orderId;
+    }
+    console.log(description);
     var options = {
-      description: "Payment for Subscription",
+      description: description,
       currency: "INR",
       key: getPaymentKey(),
       amount: amount * 100,
@@ -328,7 +351,7 @@ class SelectPay extends Component {
     const batch_id = this.state.selectBatch.batch_id;
     axios
       .get(
-        getBaseUrl() + "/global/batch/" + batch_id + "/?join_date=" + join_date
+        getBaseUrl() + "global/batch/" + batch_id + "/?join_date=" + join_date
       )
       .then((response) => {
         let data = JSON.stringify(response);
@@ -400,7 +423,7 @@ class SelectPay extends Component {
   };
 
   onCouponPress = () => {
-    this.props.onPresscoupon(true, this.state.joinDate);
+    this.props.onPresscoupon(true, this.state.joinDate, this.state.amount);
   };
 
   render() {

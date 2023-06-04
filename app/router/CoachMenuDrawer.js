@@ -126,10 +126,7 @@ class CoachMenuDrawer extends BaseComponent {
         academy_id: userData.academy_id,
         academy_rating: userData.academy_rating,
         academy_name: userData.academy_name,
-        profile_pic:
-          updated_profile_pic != ""
-            ? updated_profile_pic
-            : userData.user.profilePic,
+        profile_pic: userData.user.profilePic,
         user_id: userData.user_id,
       });
 
@@ -339,7 +336,11 @@ class CoachMenuDrawer extends BaseComponent {
                 width: 93,
                 height: 98,
               }}
-              source={{ uri: "https://dribble-images.s3.ap-south-1.amazonaws.com/" + profile_pic }}
+              source={{
+                uri:
+                  "https://dribble-images.s3.ap-south-1.amazonaws.com/" +
+                  profile_pic,
+              }}
             />
           ) : (
             <Image
@@ -1052,7 +1053,11 @@ class CoachMenuDrawer extends BaseComponent {
                 width: 93,
                 height: 98,
               }}
-              source={{ uri: "https://dribble-images.s3.ap-south-1.amazonaws.com/" + profile_pic }}
+              source={{
+                uri:
+                  "https://dribble-images.s3.ap-south-1.amazonaws.com/" +
+                  profile_pic,
+              }}
             />
           ) : (
             <Image

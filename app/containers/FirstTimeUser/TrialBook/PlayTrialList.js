@@ -42,7 +42,7 @@ class PlayTrialList extends Component {
 
   apiCall = () => {
     axios
-      .get(getBaseUrl() + "/court/trials", {
+      .get(getBaseUrl() + "court/trials", {
         headers: {
           "x-authorization": this.state.header,
         },

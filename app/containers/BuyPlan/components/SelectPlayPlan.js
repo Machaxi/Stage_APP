@@ -26,7 +26,7 @@ class SelectPlayPlan extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.PlanNumber);
+    console.log(this.props.planList);
     var next = false;
     if (this.props.PlanNumber < 100) {
       next = true;
@@ -61,7 +61,8 @@ class SelectPlayPlan extends Component {
                 index={item.id}
                 currentLevel={this.state.currentPlan}
                 title={item.name}
-                subtitle={item.price}
+                subtitle={item.originalPrice}
+                gstInclusive={item.gstInclusive}
                 image={item.planIconUrl}
                 description={item.tagline}
                 benefits={item.benefits}

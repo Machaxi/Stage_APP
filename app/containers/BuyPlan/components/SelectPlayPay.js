@@ -265,8 +265,19 @@ class SelectPlayPay extends Component {
   };
 
   handleOnStartPayment = (orderId, amount) => {
+    const description =
+      "Playing Plan for " +
+      this.state.userDetails.userName +
+      ", Ph no: " +
+      this.state.phonenumber +
+      ", Center Name: " +
+      this.state.centerName +
+      ", Plan Name: " +
+      this.props.selectPlan.name +
+      ", Order Id: " +
+      orderId;
     var options = {
-      description: "Payment for Subscription",
+      description: description,
       currency: "INR",
       key: getPaymentKey(),
       amount: amount * 100,
@@ -390,7 +401,7 @@ class SelectPlayPay extends Component {
 
   onCouponPress = () => {
     const joinDate = this.convertToDate(this.state.displayStartDate);
-    this.props.onPresscoupon(true, joinDate);
+    this.props.onPresscoupon(true, joinDate, this.state.amount);
   };
 
   render() {

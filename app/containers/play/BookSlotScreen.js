@@ -154,7 +154,7 @@ const BookSlotScreen = ({ navigation }) => {
 
   const getSports = () => {
     axios
-      .get(getBaseUrl() + "/global/sports")
+      .get(getBaseUrl() + "global/sports")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);

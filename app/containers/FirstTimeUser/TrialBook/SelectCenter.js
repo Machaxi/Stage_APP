@@ -121,9 +121,9 @@ class SelectCenter extends Component {
           longitude: 77.5729,
           place: "Bangalore",
         });
-        this.getsortedData();  
+        this.getsortedData();
       },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 10000 }
+      { enableHighAccuracy: false, timeout: 10000 }
     );
   };
 

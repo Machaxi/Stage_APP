@@ -38,7 +38,7 @@ class EditPreferredSports extends Component {
 
   getSportsList = () => {
     axios
-      .get(getBaseUrl() + "/global/sports")
+      .get(getBaseUrl() + "global/sports")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -53,7 +53,7 @@ class EditPreferredSports extends Component {
 
   getAcademyData = () => {
     axios
-      .get(getBaseUrl() + "/global/academy/all")
+      .get(getBaseUrl() + "global/academy/all")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -87,8 +87,8 @@ class EditPreferredSports extends Component {
           <MoreDetails
             sportList={this.state.sportsList}
             subscriptionId={this.props.navigation.state.params.sentdata}
-            preferredAcademyId = {this.state.preferredAcademyId}
-            title = "EditPreferredSports"
+            preferredAcademyId={this.state.preferredAcademyId}
+            title="EditPreferredSports"
             onPress={this.onComplete}
             onBackPress={this.moreBackPress}
           />

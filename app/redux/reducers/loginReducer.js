@@ -54,8 +54,21 @@ export function doLogin(postdata) {
             }
         }
     };
+} 
 
-}
+export function doSendOTP(postdata) {
+    console.log("doSendOTP postdata",postdata)
+    return {
+        type: types.DO_SEND_OTP,
+        payload: {
+            request: {
+                url: `global/send-otp`,
+                method: 'POST',
+                data: postdata,
+            }
+        }
+    };
+} 
 
 export function createUser(postdata, header) {
     return {

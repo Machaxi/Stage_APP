@@ -20358,6 +20358,29 @@
 			};
 			name = Debug;
 		};
+		4AF49DF3ED60D0AA97514C6E2D75CC40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F7980F9ED371A728DD0EF463DA795E4 /* react-native-onesignal.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-onesignal/react-native-onesignal-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_onesignal;
+				PRODUCT_NAME = "react-native-onesignal";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		4CC26835D81B3AB2937267A5939403A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 558249A3171BE690BF58F198BA60378B /* React-RCTActionSheet.debug.xcconfig */;
@@ -21884,28 +21907,6 @@
 			};
 			name = Debug;
 		};
-		C930B432AF11B4F98FE236E07A4D6F85 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93B3E92F8D8F9CC8CA4D61B0863539F1 /* react-native-onesignal.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-onesignal/react-native-onesignal-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_onesignal;
-				PRODUCT_NAME = "react-native-onesignal";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		C944C06D6E23C329B9D29FD79ACDFBC8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D68E3926D7D6604973C86F76DDF1C14F /* React-RCTVibration.release.xcconfig */;
@@ -22442,6 +22443,28 @@
 			};
 			name = Release;
 		};
+		DCBB80C036846028CD4F495215F37F78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93B3E92F8D8F9CC8CA4D61B0863539F1 /* react-native-onesignal.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-onesignal/react-native-onesignal-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_onesignal;
+				PRODUCT_NAME = "react-native-onesignal";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		E32FA281B621D4C44F4A43A1D24339F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DC6F9F864865FF86CE8E50F0304AB4EB /* nanopb.debug.xcconfig */;
@@ -22515,29 +22538,6 @@
 				PRIVATE_HEADERS_FOLDER_PATH = "";
 				PRODUCT_MODULE_NAME = React;
 				PRODUCT_NAME = "React-RCTBlob";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		E72F4206943935A94A1E07B10164B242 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F7980F9ED371A728DD0EF463DA795E4 /* react-native-onesignal.release.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-onesignal/react-native-onesignal-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_onesignal;
-				PRODUCT_NAME = "react-native-onesignal";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -23453,8 +23453,8 @@
 		C9763A4123A33D315542C18BC562436E /* Build configuration list for PBXNativeTarget "react-native-onesignal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C930B432AF11B4F98FE236E07A4D6F85 /* Debug */,
-				E72F4206943935A94A1E07B10164B242 /* Release */,
+				DCBB80C036846028CD4F495215F37F78 /* Debug */,
+				4AF49DF3ED60D0AA97514C6E2D75CC40 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

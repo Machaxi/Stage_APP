@@ -134,8 +134,8 @@ android {
         applicationId "com.machaxi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 29
-        versionName "2.2.2"
+        versionCode 30
+        versionName "2.2.3"
         multiDexEnabled true
 
     }
@@ -153,10 +153,10 @@ android {
         }
     }
 
-dexOptions {
-    javaMaxHeapSize "4g"
-    preDexLibraries = false
-}
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
+    }
 
     signingConfigs {
     release {
@@ -204,6 +204,10 @@ dexOptions {
         pickFirst '**/x86/libjsc.so'
         pickFirst '**/armeabi-v7a/libjsc.so'
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
   
 
@@ -236,7 +240,7 @@ dependencies {
     implementation files('libs/universal-image-loader-1.9.3.jar')
     implementation "com.google.android.gms:play-services-base:18.0.1"
     implementation "com.google.android.gms:play-services-location:19.0.1"
-
+    implementation 'com.google.firebase:firebase-appcheck-playintegrity'
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
       debugImplementation files(hermesPath + "hermes-debug.aar")

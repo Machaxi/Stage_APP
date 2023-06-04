@@ -51,6 +51,7 @@ class SelectCoachPlan extends Component {
       proseedNext: false,
       batchData: null,
       planData: null,
+      planList: null,
     };
   }
 
@@ -58,6 +59,7 @@ class SelectCoachPlan extends Component {
     this.setState({
       batchData: this.props.selectBatch,
       planData: this.props.selectBatch[0].batchPlansDto.plans[0].payable_amount,
+      planList: this.props.planList,
     });
   }
 
@@ -104,7 +106,15 @@ class SelectCoachPlan extends Component {
           {this.state.planData &&
             this.state.planData.map((plan, index) => {
               console.log(plan);
-
+              const title =
+                plan.term_id === 1
+                  ? "Monthly"
+                  : plan.term_id === 2
+                  ? "Quarterly"
+                  : "Yearly";
+              const indexed = this.state.planList.find(
+                (plan) => plan.name === title
+              );
               return (
                 plan.term_id != 3 && (
                   <SelectPlan
@@ -118,20 +128,8 @@ class SelectCoachPlan extends Component {
                         : "Yearly"
                     }
                     subtitle={"Rs. " + plan.planFees}
-                    description={
-                      plan.term_id === 1
-                        ? "Best coaches in town"
-                        : plan.term_id === 2
-                        ? "Progress tracking over Machaxi app."
-                        : "Admissible design by experts."
-                    }
-                    benefits={
-                      plan.term_id === 1
-                        ? ""
-                        : plan.term_id === 2
-                        ? "Earn reward points up-to 150 for every hour of coaching session"
-                        : "Earn reward points up-to 200 for every hour of coaching session"
-                    }
+                    description={indexed?.description}
+                    benefits={indexed?.extraBenifits}
                     image={
                       plan.term_id === 1
                         ? require("../../../images/playing/rocket.png")

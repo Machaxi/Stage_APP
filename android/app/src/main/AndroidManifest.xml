@@ -9,7 +9,7 @@ xmlns:tools="http://schemas.android.com/tools"
     <uses-permission android:name="android.permission.ACCESS_NETWROK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
 
     <application
       android:name=".MainApplication"
@@ -21,18 +21,21 @@ xmlns:tools="http://schemas.android.com/tools"
       android:appComponentFactory="whateverString"
       android:usesCleartextTraffic="true"
       android:requestLegacyExternalStorage="true"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      android:exported="true">
 
    <activity
         android:name=".SplashActivity"
         android:screenOrientation="portrait" 
         android:launchMode="singleTop"
+        android:exported="true"
         />
 
         <activity
         android:name=".FullImageView"
         android:screenOrientation="portrait" 
         android:launchMode="singleTop"
+        android:exported="true"
         />
 
       <activity
@@ -41,7 +44,9 @@ xmlns:tools="http://schemas.android.com/tools"
         android:launchMode="singleTop"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="adjustResize">
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true"
+        >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -103,7 +108,63 @@ xmlns:tools="http://schemas.android.com/tools"
         </receiver>
 
         
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="true"/>
+      <activity
+        android:name="com.razorpay.CheckoutActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:theme="@style/CheckoutTheme"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <data
+                android:host="rzp.io"
+                android:scheme="io.rzp" />
+        </intent-filter>
+    </activity>
+
+    <receiver android:name="com.razorpay.RzpTokenReceiver"
+        android:exported="true"
+        android:permission="android.permission.INTERNET">
+        <intent-filter>
+            <action android:name="rzp.device_token.share" />
+        </intent-filter>
+    </receiver>
+
+    <activity
+    android:name="com.onesignal.NotificationOpenedActivityHMS"
+    android:exported="true"
+    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+     tools:replace="android:theme">
+</activity>
+    <receiver
+    android:name="com.onesignal.GcmBroadcastReceiver"
+    android:exported="true"
+    android:permission="com.google.android.c2dm.permission.SEND">
+    <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+        <category android:name="${applicationId}" />
+    </intent-filter>
+</receiver>
+<receiver
+    android:name="com.onesignal.BootUpReceiver"
+    android:exported="true"
+    tools:replace="android:exported">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+        <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+        <category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
+</receiver>
+<receiver
+    android:name="com.onesignal.UpgradeReceiver"
+    android:exported="false"
+    tools:replace="android:exported">
+</receiver>
+
     </application>
 
 </manifest>

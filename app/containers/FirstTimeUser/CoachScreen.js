@@ -55,6 +55,7 @@ class CoachScreen extends Component {
   componentWillUnmount() {
     this.didFocusListener.remove();
     this.stopAutoScroll();
+    clearTimeout(this.timer);
   }
 
   startAutoScroll() {
@@ -69,6 +70,9 @@ class CoachScreen extends Component {
         this.setState({ currentIndex: this.state.currentIndex + 1 });
       }
     }, 3000);
+    this.timer = setTimeout(() => {
+      clearInterval(this.autoScrollInterval);
+    }, 25000);
   }
 
   stopAutoScroll() {
@@ -83,7 +87,7 @@ class CoachScreen extends Component {
 
   apiCall = () => {
     axios
-      .get(getBaseUrl() + "/user/learn-play", {
+      .get(getBaseUrl() + "user/learn-play", {
         headers: {
           "x-authorization": this.state.header,
         },

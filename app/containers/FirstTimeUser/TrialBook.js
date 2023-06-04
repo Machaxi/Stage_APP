@@ -17,7 +17,7 @@ import { getPlayerSWitcher } from "../../redux/reducers/dashboardReducer";
 import { connect } from "react-redux";
 import { getData } from "../../components/auth";
 import PlayerDetails from "../BuyPlan/components/PlayerDetails";
-import { BackHandler } from 'react-native';
+import { BackHandler } from "react-native";
 
 class TrialBook extends Component {
   constructor(props) {
@@ -49,7 +49,10 @@ class TrialBook extends Component {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
     getValue = async () => {
       const select_trial = await AsyncStorage.getItem("select_trial");
       this.setState({ title: select_trial });
@@ -58,7 +61,7 @@ class TrialBook extends Component {
     this.getusermainInfo();
     this.getUserplayData();
     axios
-      .get(getBaseUrl() + "/global/academy/all")
+      .get(getBaseUrl() + "global/academy/all")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -77,9 +80,12 @@ class TrialBook extends Component {
     this.hadleBackPress();
     return true;
   };
-  
+
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
   }
 
   getUserplayData = () => {
@@ -154,7 +160,7 @@ class TrialBook extends Component {
     } else {
       if (this.state.firstPage) {
         this.hadleBack();
-      }else {
+      } else {
         this.setState({ firstPage: true });
       }
     }

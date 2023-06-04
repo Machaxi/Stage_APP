@@ -35,7 +35,8 @@ const SelectPlan = (props) => {
             <Text style={styles.subtitle}>
               {props.subtitle}
               <Text style={[styles.subtitle, { fontSize: 12 }]}>
-                {" "}(GST Inclusive)
+                {" "}
+                (GST Inclusive)
               </Text>
             </Text>
             <Text style={styles.description}>{props.description}</Text>
@@ -51,13 +52,15 @@ const SelectPlan = (props) => {
             <View style={styles.line} />
             <View>
               <Text style={styles.benefits}>Extra benefits</Text>
-              <View style={{ flexDirection: "row" }}>
-                <Image
-                  source={require("../../images/playing/checklist.png")}
-                  style={styles.next}
-                />
-                <Text style={styles.descriptionbenift}>{props.benefits}</Text>
-              </View>
+              {props.benefits.map((plan, index) => (
+                <View key={index} style={{ flexDirection: "row" }}>
+                  <Image
+                    source={require("../../images/playing/checklist.png")}
+                    style={styles.next}
+                  />
+                  <Text style={styles.descriptionbenift}>{plan}</Text>
+                </View>
+              ))}
             </View>
           </View>
         )}

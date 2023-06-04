@@ -43,7 +43,7 @@ class LearnTrialList extends Component {
 
   apiCall = () => {
     axios
-      .get(getBaseUrl() + "/batch/trial-details", {
+      .get(getBaseUrl() + "batch/trial-details", {
         headers: {
           "x-authorization": this.state.header,
         },

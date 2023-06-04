@@ -19,7 +19,7 @@ import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { KeyboardAvoidingView } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import { BackHandler } from 'react-native';
+import { BackHandler } from "react-native";
 
 class LearnBookTrial extends Component {
   constructor(props) {
@@ -46,10 +46,13 @@ class LearnBookTrial extends Component {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
     this.getUserData();
     axios
-      .get(getBaseUrl() + "/global/academy/all")
+      .get(getBaseUrl() + "global/academy/all")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -68,9 +71,12 @@ class LearnBookTrial extends Component {
     this.hadleBackPress();
     return true;
   };
-  
+
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
   }
 
   getUserData = async () => {

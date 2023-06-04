@@ -467,18 +467,23 @@ export default (PlayScreen = ({ navigation }) => {
               acc[key] = key === self ? peers[key] + 1 : peers[key];
               return acc;
             }, {});
-            const priorityOrder = ["ADVANCED", "PROFESSIONAL", "INTERMEDIATE", "BASIC"];
+            const priorityOrder = [
+              "ADVANCED",
+              "PROFESSIONAL",
+              "INTERMEDIATE",
+              "BASIC",
+            ];
             let highestKey = priorityOrder[0];
             let highestValue = newArray[highestKey];
             for (let i = 1; i < priorityOrder.length; i++) {
               const key = priorityOrder[i];
-              const value = newArray[key];              
+              const value = newArray[key];
               if (value > highestValue) {
                 highestKey = key;
                 highestValue = value;
               }
             }
-            setCurrentRating(highestKey)
+            setCurrentRating(highestKey);
           }
         }
       }

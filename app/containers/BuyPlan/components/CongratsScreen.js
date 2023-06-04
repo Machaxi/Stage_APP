@@ -49,7 +49,7 @@ class CongratsScreen extends Component {
 
   signInByName = () => {
     axios
-      .get(getBaseUrl() + "/login-refreshed", {
+      .get(getBaseUrl() + "login-refreshed", {
         headers: {
           "x-authorization": this.state.header,
         },

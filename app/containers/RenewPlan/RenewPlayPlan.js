@@ -34,6 +34,7 @@ class RenewPlayPlan extends Component {
       amount: 0,
       header: null,
       playPlanData: null,
+      couponminamount: 0,
     };
   }
 
@@ -44,7 +45,7 @@ class RenewPlayPlan extends Component {
   apiCall = () => {
     console.log("olla");
     axios
-      .get(getBaseUrl() + "/user/playing-profile", {
+      .get(getBaseUrl() + "user/playing-profile", {
         headers: {
           "x-authorization": this.state.header,
         },
@@ -65,7 +66,7 @@ class RenewPlayPlan extends Component {
 
   planValue = () => {
     axios
-      .get(getBaseUrl() + "/user/learn-play", {
+      .get(getBaseUrl() + "user/learn-play", {
         headers: {
           "x-authorization": this.state.header,
         },
@@ -87,7 +88,7 @@ class RenewPlayPlan extends Component {
     axios
       .get(
         getBaseUrl() +
-          "/global/play/plan-info?planId=" +
+          "global/play/plan-info?planId=" +
           planId +
           "&preferredAcademyId=" +
           preferredAcademyId,
@@ -130,8 +131,8 @@ class RenewPlayPlan extends Component {
     this.setState({ couponCode: false });
   };
 
-  hadleCouponCode = () => {
-    this.setState({ couponCode: true });
+  hadleCouponCode = (joinBool, joinTime, amount) => {
+    this.setState({ couponCode: true, couponminamount: amount});
   };
 
   hadleCouponApply = (coupon) => {
@@ -209,6 +210,7 @@ class RenewPlayPlan extends Component {
               subscriptionType="PLAYING_SUBSCRIPTION"
               selectCenter={this.state.selectCenter}
               onPress={this.hadleCouponApply}
+              amount= {this.state.couponminamount}
             />
           </View>
         )}
@@ -216,7 +218,7 @@ class RenewPlayPlan extends Component {
           <View style={{ flex: 1 }}>
             <GetBack title="Playing Plan" onPress={this.handlepress} />
             <SelectPlayPay
-              title="Coaching"
+              title="Playing"
               userDetails={this.state.userDetails}
               selectCenter={this.state.selectCenter}
               selectPlan={this.state.selectPlan}

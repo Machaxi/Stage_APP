@@ -7,7 +7,7 @@ import axios from "axios";
 import { client } from "../../App";
 import moment from "moment";
 import { StatusBar } from "react-native";
-import auth from '@react-native-firebase/auth';
+import auth from "@react-native-firebase/auth";
 import Snackbar from "react-native-snackbar";
 msg = "GUEST";
 
@@ -78,7 +78,7 @@ global.PROFILE_REFRESH = null;
 
 //===============================================================================================
 
-export const DEBUG_APP = true;
+export const DEBUG_APP = false;
 export const PROD_DEBUG = false;
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b";
@@ -88,7 +88,8 @@ export const REFRESH_SCREEN_CALLBACK = "REFRESH_SCREEN_CALLBACK";
 
 export function getBaseUrl() {
   if (DEBUG_APP) return "https://admin.stage.machaxi.com/api/";
-  else return "https://www.machaxi.com/api/";
+  else return "https://admin.machaxi.com/api/";
+  // else return "https://www.machaxi.com/api/";
 }
 
 export function getPaymentKey() {
@@ -119,7 +120,7 @@ export function getRazorPayEmail() {
 export default class BaseComponent extends React.Component {
   static isUserLoggedIn = false;
   myNavigation = null;
-  profileRefreshEvent=null;
+  profileRefreshEvent = null;
   constructor(props) {
     super(props);
 
@@ -135,8 +136,7 @@ export default class BaseComponent extends React.Component {
       }
     });
 
-    if(global.PROFILE_REFRESH)
-      global.PROFILE_REFRESH.remove();
+    if (global.PROFILE_REFRESH) global.PROFILE_REFRESH.remove();
 
     this.refreshEvent = Events.subscribe(GO_TO_HOME, (from_registration) => {
       this.goToHome(from_registration);
@@ -153,7 +153,6 @@ export default class BaseComponent extends React.Component {
     global.PROFILE_REFRESH = Events.subscribe("PROFILE_REFRESH", () => {
       this.refreshUserProfile();
     });
-
   }
 
   getDefaultRazorPayEmail() {
@@ -394,9 +393,9 @@ export default class BaseComponent extends React.Component {
   navigate(screen, param) {
     this.props.navigation.navigate(screen, param);
   }
-  navigateMe=(screen)=>{
+  navigateMe = (screen) => {
     myNavigation.navigate(screen);
-  }
+  };
   _handleConnectivityChange = (isConnected) => {
     connected = isConnected;
   };
@@ -417,7 +416,7 @@ export default class BaseComponent extends React.Component {
   //This function is used when we go for tournament registration and  go back to home
   //in that case we have to use this, we are using tournaments in new stack, we cannot
   // go back on back press.
-  goToHome(data){
+  goToHome(data) {
     getData("userInfo", (value) => {
       if (value != "") {
         let userData = JSON.parse(value);
@@ -548,125 +547,122 @@ export default class BaseComponent extends React.Component {
     });
   }
 
-  getProfileCallback =(response)=>{
-      let json = response.data;
-      console.log("Refreshing Profile" + JSON.stringify(json));
-      let success = json.success;
-      if (success) {
-        var userData = json['data'];
-        var userInfoData = userData['user'];
-        storeData("userInfo", JSON.stringify(userData))
-        if (userInfoData.user_type == GUEST) {
-          console.log("Navigation to Guest Home");
-          this.navigateMe('GuestBookHome');
-      }
-      else if (userInfoData.user_type == PLAYER) {
-          storeData('multiple', userData.has_multiple_acadmies)
-          if (!userData.has_multiple_acadmies && userData.academy_id != null) {
-              if (userData.can_book_court) {
-                this.navigateMe('UserBookHome');
-              } else {
-                this.navigateMe('UserHome');
-              }
+  getProfileCallback = (response) => {
+    let json = response.data;
+    console.log("Refreshing Profile" + JSON.stringify(json));
+    let success = json.success;
+    if (success) {
+      var userData = json["data"];
+      var userInfoData = userData["user"];
+      storeData("userInfo", JSON.stringify(userData));
+      if (userInfoData.user_type == GUEST) {
+        console.log("Navigation to Guest Home");
+        this.navigateMe("GuestBookHome");
+      } else if (userInfoData.user_type == PLAYER) {
+        storeData("multiple", userData.has_multiple_acadmies);
+        if (!userData.has_multiple_acadmies && userData.academy_id != null) {
+          if (userData.can_book_court) {
+            this.navigateMe("UserBookHome");
           } else {
-            this.navigateMe('SwitchPlayer1', {
-                  userType: 'PLAYER'
-              })
+            this.navigateMe("UserHome");
           }
-
+        } else {
+          this.navigateMe("SwitchPlayer1", {
+            userType: "PLAYER",
+          });
+        }
       } else if (userInfoData.user_type == PARENT) {
-          storeData('multiple', userData.has_multiple_acadmies)
-          this.navigateMe('SwitchPlayer1', {
-            userType: PLAYER
-        })
-
-      }
-      else if (userInfoData.user_type == COACH) {
-          storeData('multiple', userData.has_multiple_acadmies)
-          if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-              if (userData.can_book_court) {
-                this.navigateMe('CoachBookHome')
-              } else {
-                this.navigateMe('CoachHome');
-              }
+        storeData("multiple", userData.has_multiple_acadmies);
+        this.navigateMe("SwitchPlayer1", {
+          userType: PLAYER,
+        });
+      } else if (userInfoData.user_type == COACH) {
+        storeData("multiple", userData.has_multiple_acadmies);
+        if (
+          userData.has_multiple_acadmies == false &&
+          userData.academy_id != null
+        ) {
+          if (userData.can_book_court) {
+            this.navigateMe("CoachBookHome");
           } else {
-            this.navigateMe('SwitchPlayer1', {
-                  userType: COACH
-              })
+            this.navigateMe("CoachHome");
           }
-
-      }
-      else if (userInfoData.user_type == ACADEMY) {
-          //==================== NOTE ==========================
-          //      Forcefully adding coach_id = '', to run coach section as academy
-          //      academy section does not require coach_id
-          //=====================================================
-          userData['coach_id'] = ''
-          storeData("userInfo", JSON.stringify(userData))
-          storeData('academy_name', userData.user.name)
-          console.log('coach userData => ', JSON.stringify(userData))
-          storeData('multiple', userData.has_multiple_acadmies)
-          if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-              if (userData.can_book_court) {
-                this.navigateMe('CoachBookHome');
-              } else {
-                this.navigateMe('CoachHome');
-              }
+        } else {
+          this.navigateMe("SwitchPlayer1", {
+            userType: COACH,
+          });
+        }
+      } else if (userInfoData.user_type == ACADEMY) {
+        //==================== NOTE ==========================
+        //      Forcefully adding coach_id = '', to run coach section as academy
+        //      academy section does not require coach_id
+        //=====================================================
+        userData["coach_id"] = "";
+        storeData("userInfo", JSON.stringify(userData));
+        storeData("academy_name", userData.user.name);
+        console.log("coach userData => ", JSON.stringify(userData));
+        storeData("multiple", userData.has_multiple_acadmies);
+        if (
+          userData.has_multiple_acadmies == false &&
+          userData.academy_id != null
+        ) {
+          if (userData.can_book_court) {
+            this.navigateMe("CoachBookHome");
           } else {
-            this.navigateMe('SwitchPlayer1', {
-                  userType: COACH
-              })
+            this.navigateMe("CoachHome");
           }
+        } else {
+          this.navigateMe("SwitchPlayer1", {
+            userType: COACH,
+          });
+        }
       }
-  }
-}
+    }
+  };
 
-  refreshUserProfile=()=> {
-     getData("header", (value) => {
-     if (value == "") return;
-     
+  refreshUserProfile = () => {
+    getData("header", (value) => {
+      if (value == "") return;
+
       const headers = {
         "Content-Type": "application/json",
         "x-authorization": value,
       };
-       console.log("Refreshing Profile");
-       client
-         .get(getBaseUrl() + "login-refreshed", { headers })
-         .then((response)=>{
-          this.getProfileCallback(response)
-         })
-         .catch(function(error) {
+      console.log("Refreshing Profile");
+      client
+        .get(getBaseUrl() + "login-refreshed", { headers })
+        .then((response) => {
+          this.getProfileCallback(response);
+        })
+        .catch(function(error) {
           console.log(error);
         });
-    
-      
-       
-     });
-  }
-
-  refreshUserProfileData=()=> {
-    getData("header", (value) => {
-    if (value == "") return;    
-    const headers = {
-       "Content-Type": "application/json",
-       "x-authorization": value,
-    };
-    console.log("Refreshing Profile");
-    client
-      .get(getBaseUrl() + "login-refreshed", { headers })
-      .then((response)=>{
-        let data = JSON.stringify(response);
-        let userResponce = JSON.parse(data);
-        let batchData = userResponce["data"]["data"];
-        console.log("working")
-        console.log(batchData);
-        storeData("userInfo", JSON.stringify(batchData));
-      })
-      .catch(function(error) {
-       console.log(error);
-     });
     });
-  }
+  };
+
+  refreshUserProfileData = () => {
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+      };
+      console.log("Refreshing Profile");
+      client
+        .get(getBaseUrl() + "login-refreshed", { headers })
+        .then((response) => {
+          let data = JSON.stringify(response);
+          let userResponce = JSON.parse(data);
+          let batchData = userResponce["data"]["data"];
+          console.log("working");
+          console.log(batchData);
+          storeData("userInfo", JSON.stringify(batchData));
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    });
+  };
 }
 
 export function getFormatTime(time) {
@@ -910,8 +906,6 @@ export function getUtcDateFromTimeFormatted(date, time) {
   console.log("localFormat: ", test);
   return test;
 }
-
-
 
 export const defaultStyle = {
   spinnerTextStyle: {

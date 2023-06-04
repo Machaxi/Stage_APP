@@ -145,9 +145,14 @@ const PlanDetails = (props) => {
           <Image
             source={{ uri: props.image }}
             style={[styles.image, { marginBottom: 10 }]}
+            resizeMode="contain"
           />
         ) : (
-          <Image source={props.image} style={[styles.image]} />
+          <Image
+            source={props.image}
+            style={[styles.image]}
+            resizeMode="contain"
+          />
         )}
       </View>
       <View style={styles.line} />
@@ -167,7 +172,12 @@ const PlanDetails = (props) => {
               <Text style={styles.timetext}>{formateDate(selectDate)}</Text>
               {Platform.OS === "ios" ? (
                 <DatePickerIOS
-                  style={{ borderWidth: 0, width: "140%", zIndex: 2, opacity: 0}}
+                  style={{
+                    borderWidth: 0,
+                    width: "140%",
+                    zIndex: 2,
+                    opacity: 0,
+                  }}
                   mode="date"
                   format="DD-MMM-YYYY"
                   date={selectDate}
@@ -180,12 +190,11 @@ const PlanDetails = (props) => {
                     },
                   }}
                   hideText={false}
-                  textColor="red" 
+                  textColor="red"
                   onDateChange={(date) => {
-                    var datest = formateDates(date)
-                    handlepress(datest)
-                  }
-                  }
+                    var datest = formateDates(date);
+                    handlepress(datest);
+                  }}
                 />
               ) : (
                 <DatePicker
@@ -213,6 +222,7 @@ const PlanDetails = (props) => {
               <Image
                 source={require("../../images/playing/calendar.png")}
                 style={[styles.calanderimage]}
+                resizeMode="contain"
               />
             </View>
           </View>

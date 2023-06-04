@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ToastAndroid,
+  ActionSheetIOS,
+} from "react-native";
 import { darkGreyVariant } from "../../util/colors";
 import EnterCouponCode from "../../../components/molecules/enterCouponCode";
 import CouponListItem from "../../../components/molecules/couponListItem";
@@ -35,7 +42,7 @@ class ApplyCouponCode extends Component {
     axios
       .get(
         getBaseUrl() +
-          "/coupons/list?academyId=" +
+          "coupons/list?academyId=" +
           academy_id +
           "&scope=" +
           subscriptionType,
@@ -61,7 +68,33 @@ class ApplyCouponCode extends Component {
 
   render() {
     handlepress = (item) => {
-      this.props.onPress(item);
+      console.log(this.props.amount);
+      if (item.minOrderAmount < this.props.amount) {
+        this.props.onPress(item);
+      } else {
+        ToastAndroid.show(
+          "Minimum Order Amount should be ₹ " + item.minOrderAmount,
+          ToastAndroid.SHORT
+        );
+        {
+          Platform.OS === "ios" &&
+            showToast(
+              "Minimum Order Amount should be ₹ " + item.minOrderAmount
+            );
+        }
+      }
+    };
+
+    showToast = (message) => {
+      const options = ["Cancel"];
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title: message,
+          options: options,
+          cancelButtonIndex: options.length - 1,
+        },
+        (buttonIndex) => {}
+      );
     };
 
     const handleChange = (text) => {

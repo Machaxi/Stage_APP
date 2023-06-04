@@ -22,7 +22,7 @@ import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import { StackActions } from "react-navigation";
 import { KeyboardAvoidingView } from "react-native";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
-import { BackHandler } from 'react-native';
+import { BackHandler } from "react-native";
 
 class PlayingPlan extends Component {
   constructor(props) {
@@ -60,19 +60,23 @@ class PlayingPlan extends Component {
       joinTime: null,
       header: null,
       failed: "Failed !",
+      couponminamount: 0,
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
     this.getData();
     this.getSportsList();
     this.setState({
       PlanNumber: this.props.navigation.state.params.selectPlan,
     });
     axios
-      .get(getBaseUrl() + "/global/academy/all")
+      .get(getBaseUrl() + "global/academy/all")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -90,14 +94,17 @@ class PlayingPlan extends Component {
     this.hadleBackPress();
     return true;
   };
-  
+
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
   }
 
   getSportsList = () => {
     axios
-      .get(getBaseUrl() + "/global/sports")
+      .get(getBaseUrl() + "global/sports")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -114,7 +121,7 @@ class PlayingPlan extends Component {
 
   apiCall = () => {
     axios
-      .get(getBaseUrl() + "/user/learn-play", {
+      .get(getBaseUrl() + "user/learn-play", {
         headers: {
           "x-authorization": this.state.header,
         },
@@ -149,8 +156,8 @@ class PlayingPlan extends Component {
     this.setState({ couponCode: false });
   };
 
-  hadleCouponCode = (joinBool, joinTime) => {
-    this.setState({ couponCode: true, joinBool: joinBool, joinTime: joinTime });
+  hadleCouponCode = (joinBool, joinTime, amount) => {
+    this.setState({ couponCode: true, joinBool: joinBool, joinTime: joinTime, couponminamount: amount});
   };
 
   hadleCouponApply = (coupon) => {
@@ -284,6 +291,7 @@ class PlayingPlan extends Component {
               subscriptionType="PLAYING_SUBSCRIPTION"
               selectCenter={this.state.selectCenter}
               onPress={this.hadleCouponApply}
+              amount= {this.state.couponminamount}
             />
           </View>
         )}
@@ -311,7 +319,7 @@ class PlayingPlan extends Component {
                 )}
                 {this.state.currentPage === 3 && (
                   <SelectPlayPay
-                    title="Coaching"
+                    title="Playing"
                     userDetails={this.state.userDetails}
                     selectCenter={this.state.selectCenter}
                     selectPlan={this.state.selectPlan}

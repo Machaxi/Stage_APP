@@ -57,7 +57,7 @@ class PlayerScreen extends Component {
 
   apiCall = () => {
     axios
-      .get(getBaseUrl() + "/user/learn-play", {
+      .get(getBaseUrl() + "user/learn-play", {
         headers: {
           "x-authorization": this.state.header,
         },
@@ -113,7 +113,7 @@ class PlayerScreen extends Component {
               >
                 <PlayPass
                   name={item.name}
-                  price={item.price}
+                  price={item.originalPrice}
                   image={item.planIconUrl}
                 />
               </TouchableOpacity>

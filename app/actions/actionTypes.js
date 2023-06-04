@@ -1,4 +1,5 @@
 export const DO_LOGIN = "user/LOAD";
+export const DO_SEND_OTP = "user/DO_SEND_OTP";
 export const DO_ADD_TO_CART = "user/LOAD_START";
 export const CREATE_USER = "user/CREATE_USER";
 export const CREATE_USER_SUCCESS = "user/CREATE_USER_SUCCESS";

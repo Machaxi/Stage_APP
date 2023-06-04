@@ -65,7 +65,7 @@ const MyBookingsView = ({ val, cancelBooking, isUpcoming }) => {
               styles.bookingDetails,
             ]}
           >
-            Booked on {moment(val.date).format("DD/MM/YYYY")}
+            Booked for {moment(val.date).format("DD/MM/YYYY")}
           </Text>
           {val.isCancelled ? (
             <NamedRoundedContainer

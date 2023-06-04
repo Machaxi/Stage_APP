@@ -145,7 +145,7 @@ class CurrentBooking extends BaseComponent {
                 }}>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={styles.text_12}>Booked on {moment.utc(item.created_at).local().format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.text_12}>Booked for {moment.utc(item.created_at).local().format('DD/MM/YYYY')}</Text>
                         {/* <Text style={styles.small_text}>Edit</Text> */}
                     </View>
 

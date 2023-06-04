@@ -51,9 +51,7 @@ export const PrefSport = ({
       {sportTitle && (
         <View style={{ flexDirection: "row", marginTop: 5 }}>
           <View>
-            <Text style={[styles.preferredSport, { marginLeft: -10 }]}>
-              Preferred center
-            </Text>
+            <Text style={[styles.preferredCenter]}>Preferred center</Text>
             <View
               style={{
                 flexDirection: "row",
@@ -100,6 +98,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
     marginBottom: 6,
+    fontFamily: "Nunito-Regular",
+    fontWeight: "600",
+  },
+  preferredCenter: {
+    color: "#F3F2F5",
+    fontSize: 12,
+    marginBottom: 6,
+    marginLeft: 20,
     fontFamily: "Nunito-Regular",
     fontWeight: "600",
   },

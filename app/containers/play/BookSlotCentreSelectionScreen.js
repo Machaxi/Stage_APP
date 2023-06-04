@@ -395,7 +395,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     );
   };
 
-
   const bookChosenSlotApi = async (courtTimingID, isBookingRequestType) => {
     const { date, proficiency, guestCount, entirecourt } = navigation?.state?.params;
     const data = {

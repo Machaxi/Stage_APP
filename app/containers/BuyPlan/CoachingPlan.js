@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  AsyncStorage,
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import SelectCenter from "../FirstTimeUser/TrialBook/SelectCenter";
 import SelectSports from "../FirstTimeUser/TrialBook/SelectSports";
@@ -21,7 +28,7 @@ import { StackActions } from "react-navigation";
 import { KeyboardAvoidingView } from "react-native";
 import events from "../../router/events";
 import { getData, storeData } from "../../components/auth";
-import { BackHandler } from 'react-native';
+import { BackHandler } from "react-native";
 
 class CoachingPlan extends Component {
   constructor(props) {
@@ -55,14 +62,21 @@ class CoachingPlan extends Component {
       coupon: null,
       joinBool: false,
       joinTime: null,
+      couponminamount: 0,
+      planList: null,
+      header: null,
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
+    this.getData();
     axios
-      .get(getBaseUrl() + "/global/academy/all")
+      .get(getBaseUrl() + "global/academy/all")
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
@@ -81,10 +95,40 @@ class CoachingPlan extends Component {
     this.hadleBackPress();
     return true;
   };
-  
+
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick)
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
   }
+
+  getData = async () => {
+    console.log("okkka");
+    console.log(getBaseUrl());
+    const header = await AsyncStorage.getItem("header");
+    this.setState({ header: header }, () => {
+      this.apiCall();
+    });
+  };
+
+  apiCall = () => {
+    axios
+      .get(getBaseUrl() + "user/learn-play", {
+        headers: {
+          "x-authorization": this.state.header,
+        },
+      })
+      .then((response) => {
+        let data = JSON.stringify(response);
+        let userResponce = JSON.parse(data);
+        let batchData = userResponce["data"]["data"];
+        this.setState({ planList: batchData["learn"]["plans"] });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   onPress = (value, number) => {
     if (value < number) {
@@ -142,7 +186,7 @@ class CoachingPlan extends Component {
     } else {
       if (this.state.firstPage) {
         this.hadleBack();
-      }else {
+      } else {
         this.setState({ firstPage: true });
       }
     }
@@ -152,8 +196,13 @@ class CoachingPlan extends Component {
     this.setState({ couponCode: false });
   };
 
-  hadleCouponCode = (joinBool, joinTime) => {
-    this.setState({ couponCode: true, joinBool: joinBool, joinTime: joinTime });
+  hadleCouponCode = (joinBool, joinTime, amount) => {
+    this.setState({
+      couponCode: true,
+      joinBool: joinBool,
+      joinTime: joinTime,
+      couponminamount: amount,
+    });
   };
 
   hadleCouponApply = (coupon) => {
@@ -231,6 +280,7 @@ class CoachingPlan extends Component {
               subscriptionType="COACHING_SUBSCRIPTION"
               selectCenter={this.state.selectCenter}
               onPress={this.hadleCouponApply}
+              amount={this.state.couponminamount}
             />
           </View>
         )}
@@ -287,6 +337,7 @@ class CoachingPlan extends Component {
                   <SelectCoachPlan
                     onPress={this.onPressPlan}
                     selectBatch={this.state.selectTime}
+                    planList={this.state.planList}
                   />
                 )}
                 {this.state.currentPage === 5 && (
