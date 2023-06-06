@@ -74,7 +74,7 @@ class LoginSceen extends Component {
   }
 
   componentDidMount() {
-    this.requestPermissions();
+    // this.requestPermissions();
     const intervalId = setInterval(() => {
       this.setState((prevState) => ({
         timeRemaining: prevState.timeRemaining - 1,

@@ -21,7 +21,17 @@ class SelectSports extends Component {
     this.state = {
       currentIndex: 100,
       proseednext: false,
+      sportList: null,
     };
+  }
+
+  componentDidMount() {
+    if (this.props.sportList.length % 3 == 2) {
+      var sportsdata = [...this.props.sportList, []];
+      this.setState({ sportList: sportsdata });
+    } else {
+      this.setState({ sportList: this.props.sportList });
+    }
   }
 
   showToast = (message) => {
@@ -45,13 +55,13 @@ class SelectSports extends Component {
 
         if (this.props.parent != "Parent" && this.props.childDetails == null) {
           this.props.onPress(
-            this.props.sportList.find(
+            this.state.sportList.find(
               (item) => item.id === this.state.currentIndex
             )
           );
         } else if (!filteredData[0].isPlan && !filteredData[0].isTrialDone) {
           this.props.onPress(
-            this.props.sportList.find(
+            this.state.sportList.find(
               (item) => item.id === this.state.currentIndex
             )
           );
@@ -67,7 +77,7 @@ class SelectSports extends Component {
         }
       } else {
         this.props.onPress(
-          this.props.sportList.find(
+          this.state.sportList.find(
             (item) => item.id === this.state.currentIndex
           )
         );
@@ -79,42 +89,52 @@ class SelectSports extends Component {
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
           <Text style={styles.mainText}>Select preferred sport</Text>
           <View style={styles.contained}>
-            {this.props.sportList.map((item) => (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                key={item.id}
-                style={[styles.subview]}
-                onPress={() =>
-                  this.setState({
-                    currentIndex: item.id,
-                    proseednext: true,
-                  })
-                }
-              >
-                <LinearGradient
-                  colors={["rgba(255, 255, 255, 0.1)", "rgba(118, 87, 136, 0)"]}
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
-                  style={styles.sportsview}
-                >
-                  <ImageBackground
-                    source={
-                      item.id === this.state.currentIndex
-                        ? require("../../../images/playing/select_sports.png")
-                        : null
-                    }
-                    style={styles.imaged}
-                  >
-                    <Image
-                      source={{ uri: item.image }}
-                      style={styles.imageitem}
-                      resizeMode="contain"
-                    />
-                  </ImageBackground>
-                </LinearGradient>
-                <Text style={styles.sportText}>{item.name}</Text>
-              </TouchableOpacity>
-            ))}
+            {this.state.sportList &&
+              this.state.sportList.map((item) => (
+                <View>
+                  {item.name ? (
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      key={item.id}
+                      style={[styles.subview]}
+                      onPress={() =>
+                        this.setState({
+                          currentIndex: item.id,
+                          proseednext: true,
+                        })
+                      }
+                    >
+                      <LinearGradient
+                        colors={[
+                          "rgba(255, 255, 255, 0.1)",
+                          "rgba(118, 87, 136, 0)",
+                        ]}
+                        start={{ x: 0, y: 0.5 }}
+                        end={{ x: 1, y: 0.5 }}
+                        style={styles.sportsview}
+                      >
+                        <ImageBackground
+                          source={
+                            item.id === this.state.currentIndex
+                              ? require("../../../images/playing/select_sports.png")
+                              : null
+                          }
+                          style={styles.imaged}
+                        >
+                          <Image
+                            source={{ uri: item.image }}
+                            style={styles.imageitem}
+                            resizeMode="contain"
+                          />
+                        </ImageBackground>
+                      </LinearGradient>
+                      <Text style={styles.sportText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={{ width: 100, height: 93, opacity: 0 }} />
+                  )}
+                </View>
+              ))}
           </View>
         </ScrollView>
         <View style={{ flex: 0.07, paddingTop: 20 }}>

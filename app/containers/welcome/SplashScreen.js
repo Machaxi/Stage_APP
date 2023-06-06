@@ -1,12 +1,13 @@
 import React from 'react'
 
-import { View, Image, Linking, Platform } from 'react-native'
+import { View, Image, Linking, Platform, PermissionsAndroid } from 'react-native'
 import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
 import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
 import Events from '../../router/events';
 import SplashScreen from 'react-native-splash-screen'
 import * as Analytics from "../../Analytics"
+import Geolocation from "react-native-geolocation-service";
 
 var is_deep_linking = false
 var deep_data
@@ -53,11 +54,47 @@ class Splash extends BaseComponent {
     }
 
     componentDidMount() {
-
+        this.requestPermissions();
         SplashScreen.hide();
         this.moveNext()
     }
 
+    requestPermissions = async() => {
+        let isPermissionGranted = false;
+        console.log("isPermissionGra" + isPermissionGranted);
+        if (Platform.OS === "ios") {
+          const auth = await Geolocation.requestAuthorization("whenInUse");
+          if (auth === "granted") isPermissionGranted = true;
+        }
+        if (Platform.OS === "android") {
+          let res = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+          );
+          if (res === PermissionsAndroid.RESULTS.GRANTED)
+            isPermissionGranted = true;
+        }
+        if (isPermissionGranted) {
+          this.fetchLocation();
+        }
+    }
+    
+    fetchLocation = () => {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            var lats = parseFloat(position.coords.latitude);
+            var lngs = parseFloat(position.coords.longitude);
+            storeData("latitude", lats);
+            storeData("longitude", lngs);
+            console.log("mdhvjhdv");
+        },
+          (error) => {
+            storeData("latitude", 12.9778);
+            storeData("longitude", 77.5729);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+    };
+    
     moveNext() {
         // this.props.navigation.navigate('FixtureSelection',
         //     { match_id: 46,

@@ -337,9 +337,10 @@ class CoachMenuDrawer extends BaseComponent {
                 height: 98,
               }}
               source={{
-                uri:
-                  "https://dribble-images.s3.ap-south-1.amazonaws.com/" +
-                  profile_pic,
+                uri: profile_pic.includes("https")
+                  ? profile_pic
+                  : "https://dribble-images.s3.ap-south-1.amazonaws.com/" +
+                    profile_pic,
               }}
             />
           ) : (

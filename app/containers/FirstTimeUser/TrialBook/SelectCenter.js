@@ -22,6 +22,7 @@ import {
   Nunito_SemiBold,
 } from "../../util/fonts";
 import { GOOGLE_MAPS_APIKEY } from "../../util/utilFunctions";
+import { getData } from "../../../components/auth";
 
 // const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
@@ -102,11 +103,21 @@ class SelectCenter extends Component {
           )
           .then((response) => {
             console.log(response);
-            const city = response.data.results[0].address_components.find(
-              (component) => component.types.includes("locality")
-            );
-            if (city) {
-              this.setState({ place: city.long_name });
+            // const city = response.data.results[0].address_components.find(
+            //   (component) => component.types.includes("locality")
+            // );
+            // if (city) {
+            //   this.setState({ place: city.long_name });
+            // }
+            const city = response.data.results[0]?.formatted_address;
+            if (city.length > 30) {
+              let cityString = city.substring(0, 30);
+              let lastCommaIndex = cityString.lastIndexOf(",");
+              let truncatedString = cityString.substring(0, lastCommaIndex);
+              console.log(truncatedString);
+              this.setState({ place: truncatedString });
+            } else {
+              this.setState({ place: city });
             }
           })
           .catch((error) => {
@@ -123,12 +134,46 @@ class SelectCenter extends Component {
         });
         this.getsortedData();
       },
-      { enableHighAccuracy: false, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
 
   componentDidMount() {
-    this.requestPermissions();
+    getData("latitude", (latitude) => {
+      getData("longitude", (longitude) => {
+        if (latitude != 12.9778 && longitude != 77.5729) {
+          this.setState({
+            latitude: latitude,
+            longitude: longitude,
+            displayDistance: true,
+          });
+          this.getsortedData();
+          axios
+            .get(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_APIKEY}`
+              // `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lats}&lon=${lngs}`
+            )
+            .then((response) => {
+              console.log(response);
+              const city = response.data.results[0]?.formatted_address;
+              if (city.length > 30) {
+                let cityString = city.substring(0, 30);
+                let lastCommaIndex = cityString.lastIndexOf(",");
+                let truncatedString = cityString.substring(0, lastCommaIndex);
+                console.log(truncatedString);
+                this.setState({ place: truncatedString });
+              } else {
+                this.setState({ place: city });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          this.requestPermissions();
+        }
+      });
+    });
   }
 
   hasSport(sportList) {
