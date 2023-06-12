@@ -422,7 +422,7 @@ export default class BaseComponent extends React.Component {
         let userData = JSON.parse(value);
         // onSignIn()
         let userType = userData.user["user_type"];
-        console.log("SplashScreen1=> ", JSON.stringify(userData));
+        console.log("SplashScreen1sdcddd=> ", JSON.stringify(userData));
         console.warn("userType ", userType);
         let academy_id = userData.academy_id;
         //console.warn('academy_id ', userData.academy_id)
@@ -431,10 +431,15 @@ export default class BaseComponent extends React.Component {
           this.props.navigation.navigate("GuestBookHome");
         } else if (academy_id != null) {
           if (userType == PLAYER) {
-            if (userData.can_book_court) {
-              this.props.navigation.navigate("UserBookHome");
+            // if (userData.can_book_court) {
+            //   this.props.navigation.navigate("UserBookHome");
+            // } else {
+            //   this.props.navigation.navigate("UserHome");
+            // }
+            if (userData.is_learn_enabled && userData.is_play_enabled) {
+              this.props.navigation.navigate("HomeDrawer");
             } else {
-              this.props.navigation.navigate("UserHome");
+              this.props.navigation.navigate("LearnHomePage");
             }
           } else if (userType == COACH) {
             if (userData.can_book_court) {
@@ -456,25 +461,35 @@ export default class BaseComponent extends React.Component {
               });
             }
           } else if (userType == PARENT) {
-            if (userData.can_book_court) {
-              this.props.navigation.navigate("ParentBookHome");
+            // if (userData.can_book_court) {
+            //   this.props.navigation.navigate("ParentBookHome");
+            // } else {
+            //   this.props.navigation.navigate("ParentHome");
+            // }
+            if (userData.is_learn_enabled && userData.is_play_enabled) {
+              this.props.navigation.navigate("HomeDrawer");
             } else {
-              this.props.navigation.navigate("ParentHome");
+              this.props.navigation.navigate("LearnHomePage");
             }
           }
         } else {
           if (userType == PLAYER) {
             //this.props.navigation.navigate('UHome')
-            if (!userData.has_multiple_acadmies) {
-              if (userData.can_book_court) {
-                this.props.navigation.navigate("UserBookHome");
-              } else {
-                this.props.navigation.navigate("UserHome");
-              }
+            // if (!userData.has_multiple_acadmies) {
+            //   if (userData.can_book_court) {
+            //     this.props.navigation.navigate("UserBookHome");
+            //   } else {
+            //     this.props.navigation.navigate("UserHome");
+            //   }
+            // } else {
+            //   this.props.navigation.navigate("SwitchPlayer", {
+            //     userType: "PLAYER",
+            //   });
+            // }
+            if (userData.is_learn_enabled && userData.is_play_enabled) {
+              this.props.navigation.navigate("HomeDrawer");
             } else {
-              this.props.navigation.navigate("SwitchPlayer", {
-                userType: "PLAYER",
-              });
+              this.props.navigation.navigate("LearnHomePage");
             }
           } else if (userType == COACH || userType == ACADEMY) {
             //this.props.navigation.navigate('CHome')
@@ -492,16 +507,21 @@ export default class BaseComponent extends React.Component {
             }
           } else if (userType == PARENT) {
             //this.props.navigation.navigate('PHome')
-            if (userData.has_multiple_acadmies == false) {
-              if (userData.can_book_court) {
-                this.props.navigation.navigate("ParentBookHome");
-              } else {
-                this.props.navigation.navigate("ParentHome");
-              }
+            // if (userData.has_multiple_acadmies == false) {
+            //   if (userData.can_book_court) {
+            //     this.props.navigation.navigate("ParentBookHome");
+            //   } else {
+            //     this.props.navigation.navigate("ParentHome");
+            //   }
+            // } else {
+            //   this.props.navigation.navigate("SwitchPlayer", {
+            //     userType: PLAYER,
+            //   });
+            // }
+            if (userData.is_learn_enabled && userData.is_play_enabled) {
+              this.props.navigation.navigate("HomeDrawer");
             } else {
-              this.props.navigation.navigate("SwitchPlayer", {
-                userType: PLAYER,
-              });
+              this.props.navigation.navigate("LearnHomePage");
             }
           }
         }

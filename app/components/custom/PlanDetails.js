@@ -7,6 +7,7 @@ import {
   Nunito_SemiBold,
 } from "../../containers/util/fonts";
 import DatePicker from "react-native-datepicker";
+import moment from "moment";
 
 const PlanDetails = (props) => {
   const [selectDate, setSelectDate] = useState(new Date());
@@ -14,30 +15,28 @@ const PlanDetails = (props) => {
   const [startDate, setStartDate] = useState(new Date());
 
   const convertToDate = (dateString) => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    var [day, month] = dateString.split(" ");
-    if (day < 10) {
-      day = "0" + day;
-    }
-    const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
+    // const currentDate = new Date();
+    // const currentYear = currentDate.getFullYear();
+    // var [day, month] = dateString.split(" ");
+    // if (day < 10) {
+    //   day = "0" + day;
+    // }
+    // const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
+    const dateFormat = "DD MMM";
+    const date = moment(dateString, dateFormat).toDate();
     return date;
   };
 
   const convertToNextDate = (dateString) => {
-    const currentDate = new Date();
-    const currentYear = parseInt(currentDate.getFullYear()) + 1;
-    var [day, month] = dateString.split(" ");
-    if (day < 10) {
-      day = "0" + day;
-    }
-    const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
-    return date;
+    const dateFormat = "DD MMM";
+    const date = moment(dateString, dateFormat).toDate();
+    const updatedDate = moment(date)
+      .add(1, "year")
+      .toDate();
+    return updatedDate;
   };
 
   useEffect(() => {
-    console.log("ollla");
-    console.log(props.startDate);
     const startdate = convertToDate(props.startDate);
     var endDate = convertToDate(props.endDate);
     if (endDate < startdate) {

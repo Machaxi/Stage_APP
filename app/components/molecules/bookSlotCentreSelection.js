@@ -108,11 +108,15 @@ class BookSlotCentreSelection extends Component {
           )
           .then((response) => {
             console.log(response);
-            const city = response.data.results[0].address_components.find(
-              (component) => component.types.includes("locality")
-            );
-            if (city) {
-              this.setState({ place: city.long_name });
+            const city = response.data.results[0]?.formatted_address;
+            if (city.length > 30) {
+              let cityString = city.substring(0, 30);
+              let lastCommaIndex = cityString.lastIndexOf(",");
+              let truncatedString = cityString.substring(0, lastCommaIndex);
+              console.log(truncatedString);
+              this.setState({ place: truncatedString });
+            } else {
+              this.setState({ place: city });
             }
           })
           .catch((error) => {

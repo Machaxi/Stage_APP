@@ -59,7 +59,7 @@ class SelectSports extends Component {
               (item) => item.id === this.state.currentIndex
             )
           );
-        } else if (!filteredData[0].isPlan && !filteredData[0].isTrialDone) {
+        } else if (!filteredData[0]?.isPlan && !filteredData[0]?.isTrialDone) {
           this.props.onPress(
             this.state.sportList.find(
               (item) => item.id === this.state.currentIndex

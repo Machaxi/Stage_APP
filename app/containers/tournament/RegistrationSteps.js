@@ -1426,8 +1426,8 @@ class RegistrationSteps extends BaseComponent {
             if (name == null || name == undefined)
                 name = ''
             const logo = this.state.dribble_logo
-            const desc = 'Payment for ' + this.state.data['name']
             const mobile_number = this.state.userData['user'].mobile_number
+            const desc = 'Payment for ' + name + ' Ph No: ' + mobile_number + ' academy id : ' + this.academy_id
 
             var options = {
                 description: desc,

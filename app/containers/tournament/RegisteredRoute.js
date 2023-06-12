@@ -375,7 +375,7 @@ class RegisteredRoute extends BaseComponent {
                                 fontFamily: 'Quicksand-Regular'
                             }}>
                                 Dates <Text style={[defaultStyle.bold_text_14, {color: '#A3A5AE'}]}>
-                                    {Moment(item.start_date).format('DD') + " - " + Moment(item.end_date).format('DD MMM')}
+                                    {Moment(item.start_date).format('DD MMM') + " - " + Moment(item.end_date).format('DD MMM')}
                                 </Text>
                             </Text>
 

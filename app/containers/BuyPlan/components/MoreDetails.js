@@ -29,11 +29,18 @@ class MoreDetails extends Component {
       selectLevel: false,
       header: null,
       levelData: [],
+      sportList: null,
     };
   }
 
   componentDidMount() {
     this.getData();
+    if (this.props.sportList.length % 3 == 2) {
+      var sportsdata = [...this.props.sportList, []];
+      this.setState({ sportList: sportsdata });
+    } else {
+      this.setState({ sportList: this.props.sportList });
+    }
   }
 
   getData = async () => {
@@ -54,50 +61,60 @@ class MoreDetails extends Component {
           </Text>
         </Text>
         <View style={styles.contained}>
-          {this.props.sportList.map((item) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              key={item.id}
-              style={[styles.subview]}
-              onPress={() => {
-                const sport = this.props.sportList.find(
-                  (items) => items.id === item.id
-                );
-                const { proficiencies } = sport;
-                console.log(proficiencies);
-                const sortdata = proficiencies.sort((a, b) => parseInt(a.order) - parseInt(b.order));
-                console.log(sortdata);
-                this.setState({
-                  currentIndex: item.id,
-                  proseednext: true,
-                  levelData: sortdata,
-                });
-              }}
-            >
-              <LinearGradient
-                colors={["rgba(255, 255, 255, 0.1)", "rgba(118, 87, 136, 0)"]}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1, y: 0.5 }}
-                style={styles.sportsview}
-              >
-                <ImageBackground
-                  source={
-                    item.id === this.state.currentIndex
-                      ? require("../../../images/playing/select_sports.png")
-                      : null
-                  }
-                  style={styles.imaged}
-                >
-                  <Image
-                    source={{ uri: item.image }}
-                    style={styles.imageitem}
-                    resizeMode="contain"
-                  />
-                </ImageBackground>
-              </LinearGradient>
-              <Text style={styles.sportText}>{item.name}</Text>
-            </TouchableOpacity>
-          ))}
+          {this.state.sportList &&
+            this.state.sportList.map((item) => (
+              <View>
+                {item.name ? (
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    key={item.id}
+                    style={[styles.subview]}
+                    onPress={() => {
+                      const sport = this.state.sportList.find(
+                        (items) => items.id === item.id
+                      );
+                      const { proficiencies } = sport;
+                      const sortdata = proficiencies.sort(
+                        (a, b) => parseInt(a.order) - parseInt(b.order)
+                      );
+                      this.setState({
+                        currentIndex: item.id,
+                        proseednext: true,
+                        levelData: sortdata,
+                      });
+                    }}
+                  >
+                    <LinearGradient
+                      colors={[
+                        "rgba(255, 255, 255, 0.1)",
+                        "rgba(118, 87, 136, 0)",
+                      ]}
+                      start={{ x: 0, y: 0.5 }}
+                      end={{ x: 1, y: 0.5 }}
+                      style={styles.sportsview}
+                    >
+                      <ImageBackground
+                        source={
+                          item.id === this.state.currentIndex
+                            ? require("../../../images/playing/select_sports.png")
+                            : null
+                        }
+                        style={styles.imaged}
+                      >
+                        <Image
+                          source={{ uri: item.image }}
+                          style={styles.imageitem}
+                          resizeMode="contain"
+                        />
+                      </ImageBackground>
+                    </LinearGradient>
+                    <Text style={styles.sportText}>{item.name}</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={{ width: 100, height: 93, opacity: 0 }} />
+                )}
+              </View>
+            ))}
         </View>
       </View>
     );
@@ -164,7 +181,6 @@ class MoreDetails extends Component {
           dict["preferredAcademyId"] = "" + this.props.preferredAcademyId;
         }
         dataDic["data"] = dict;
-        console.log(dataDic)
         this.props
           .selectPreferredSports(dataDic, this.state.header)
           .then(() => {

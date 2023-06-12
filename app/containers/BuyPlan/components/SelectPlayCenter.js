@@ -20,6 +20,7 @@ import {
   Nunito_SemiBold,
 } from "../../util/fonts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 // const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 const GOOGLE_MAPS_APIKEY = "AIzaSyAdy0zh69w3bYrzIMxuISgN_5V-PWA17RI";
@@ -70,25 +71,44 @@ class SelectPlayCenter extends Component {
   }
 
   getsortedData() {
-    const sortedAcademies = this.props.academiesList.sort((a, b) => {
-      const distanceA = this.calculateDistance(a.latitude, a.longitude);
-      const distanceB = this.calculateDistance(b.latitude, b.longitude);
-      // return distanceB - distanceA;
-      console.log(distanceA);
-      console.log(distanceB);
-      if (distanceA < distanceB) {
-        console.log("efef");
-        return -1;
-      } else {
-        console.log("efefv");
-        return 1;
-      }
-    });
-    console.log(sortedAcademies);
-    console.log(this.props.academiesList);
-    this.setState({
-      centerData: sortedAcademies,
-    });
+    const data = this.props.academiesList;
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      const originLatitude = this.state.latitude;
+      const originLongitude = this.state.longitude;
+
+      const destinationLatitude = item.latitude;
+      const destinationLongitude = item.longitude;
+      axios
+        .get(
+          `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${originLatitude},${originLongitude}&destinations=${destinationLatitude},${destinationLongitude}&key=${GOOGLE_MAPS_APIKEY}`
+        )
+        .then((response) => {
+          const { status, rows } = response.data;
+          if (status === "OK") {
+            const { elements } = rows[0];
+            const { distance } = elements[0];
+            const d = distance.text.split(" ");
+            const numericDistance = parseInt(d[0].replace(",", ""));
+            data[i].distance = numericDistance;
+            console.log(distance.text);
+            if (i == data.length - 1) {
+              const sortedAcademies = data.sort((a, b) => {
+                return a.distance - b.distance;
+              });
+              this.setState({
+                centerData: sortedAcademies,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            centerData: this.props.academiesList,
+          });
+          console.error(error);
+        });
+    }
   }
 
   fetchLocation() {
@@ -144,29 +164,6 @@ class SelectPlayCenter extends Component {
     this.requestPermissions();
   }
 
-  calculateDistance(lat2, lon2) {
-    const R = 6371; // Radius of the earth in km
-    const dLat = this.deg2rad(lat2 - this.state.latitude);
-    const dLon = this.deg2rad(lon2 - this.state.longitude);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(this.state.latitude)) *
-        Math.cos(this.deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in km
-    if (this.state.latitude == 0) {
-      return "loading";
-    } else {
-      return parseInt(d);
-    }
-  }
-
-  deg2rad(deg) {
-    return deg * (Math.PI / 180);
-  }
-
   handleSelect = async (data) => {
     const placeId = data.place_id;
     const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_MAPS_APIKEY}`;
@@ -190,9 +187,7 @@ class SelectPlayCenter extends Component {
       let centerValue = this.state.centerData.find(
         (item) => item.id === this.state.currentIndex
       );
-      var distance =
-        this.calculateDistance(centerValue.latitude, centerValue.longitude) +
-        " Km away";
+      var distance = centerValue.distance + " Km away";
       if (!this.state.isPermissionGranted) {
         distance = "0 Km away";
       }
@@ -200,8 +195,7 @@ class SelectPlayCenter extends Component {
     };
 
     const renderItem = ({ item }) => {
-      const distance =
-        this.calculateDistance(item.latitude, item.longitude) + " Km away";
+      const distance = item.distance + " Km away";
       return (
         <CenterDetails
           item={item}
@@ -215,6 +209,10 @@ class SelectPlayCenter extends Component {
         />
       );
     };
+
+    if (this.state.centerData == null) {
+      return <LoadingIndicator />;
+    }
 
     return (
       <View style={styles.contained}>

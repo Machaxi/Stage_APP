@@ -234,7 +234,7 @@ class UpcomingTournamentDetail extends BaseComponent {
                                     }}>
                                         Dates
                                     <Text style={defaultStyle.bold_text_14}>
-                                            {" " + Moment(data.start_date).format('DD') + " - " + Moment(data.end_date).format('DD MMM')}
+                                            {" " + Moment(data.start_date).format('DD MMM') + " - " + Moment(data.end_date).format('DD MMM')}
                                         </Text>
                                     </Text>
 

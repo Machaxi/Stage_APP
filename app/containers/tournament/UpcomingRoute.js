@@ -295,7 +295,7 @@ class UpcomingRoute extends BaseComponent {
                             fontFamily: 'Quicksand-Regular'
                         }}>
                             Dates <Text style={[defaultStyle.bold_text_14, {color: "#A3A5AE"}]}>
-                                {Moment.utc(item.start_date).local().format('DD') + " - " + Moment.utc(item.end_date).local().format('DD MMM')}
+                                {Moment.utc(item.start_date).local().format('DD MMM') + " - " + Moment.utc(item.end_date).local().format('DD MMM')}
                             </Text>
                         </Text>
 
