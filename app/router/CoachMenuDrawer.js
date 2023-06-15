@@ -552,6 +552,29 @@ class CoachMenuDrawer extends BaseComponent {
             />
           </>
         ) : null}
+
+        <View
+          style={[
+            defaultStyle.line_style,
+            { marginLeft: 12, backgroundColor: "#272733", marginRight: 12 },
+          ]}
+        />
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            this.props.navigation.navigate("DeleteAccount");
+          }}
+        >
+          <View style={styles.signOut}>
+            <Image
+              style={styles.delete_account}
+              source={require("../images/delete.png")}
+            />
+            <Text style={styles.seperateFunction}>Delete Account</Text>
+          </View>
+        </TouchableOpacity>
+
         <View
           style={[
             defaultStyle.line_style,
@@ -1533,6 +1556,27 @@ class CoachMenuDrawer extends BaseComponent {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
+            this.props.navigation.navigate("DeleteAccount");
+          }}
+        >
+          <View style={styles.signOut}>
+            <Image
+              style={styles.delete_account}
+              source={require("../images/delete.png")}
+            />
+            <Text style={styles.seperateFunction}>Delete Account</Text>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={[
+            defaultStyle.line_style,
+            { marginLeft: 12, backgroundColor: "#272733", marginRight: 12 },
+          ]}
+        />
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
             this.callApi();
           }}
         >
@@ -1691,6 +1735,15 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     marginRight: 8,
+    resizeMode: "contain",
+  },
+  delete_account: {
+    tintColor: "gray",
+    width: 22,
+    height: 22,
+    marginTop: 5,
+    marginRight: 12,
+    marginLeft: 2,
     resizeMode: "contain",
   },
   filled_button: {

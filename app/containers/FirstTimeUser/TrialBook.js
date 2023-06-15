@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import { getData } from "../../components/auth";
 import PlayerDetails from "../BuyPlan/components/PlayerDetails";
 import { BackHandler } from "react-native";
+import events from "../../router/events";
 
 class TrialBook extends Component {
   constructor(props) {
@@ -114,6 +115,7 @@ class TrialBook extends Component {
   };
 
   hadleBack = () => {
+    events.publish("REFRESH_LEARN_TRAIL"); 
     this.props.navigation.goBack();
   };
 

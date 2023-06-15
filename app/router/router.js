@@ -132,6 +132,7 @@ import DisplayPlayTrial from "../containers/FirstTimeUser/TrialBook/DisplayPlayT
 import RequestHeaderRight from "../atoms/requestHeaderRight";
 import PrivacyPolicy from "../containers/util/PrivacyPolicy";
 import BlogScreen from "../containers/util/BlogScreen";
+import DeleteAccount from "../containers/util/DeleteAccount";
 
 const deviceModel = DeviceInfo.getModel();
 
@@ -2564,6 +2565,18 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  DeleteAccount: {
+    screen: DeleteAccount,
+    navigationOptions: ({ navigation }) => ({
+      title: "Delete Account",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   ContactUs: {
     screen: ContactUs,
     navigationOptions: ({ navigation }) => ({
@@ -2922,6 +2935,18 @@ const HomeStack = createStackNavigator({
     screen: DisplayPlayTrial,
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  DeleteAccount: {
+    screen: DeleteAccount,
+    navigationOptions: ({ navigation }) => ({
+      title: "Delete Account",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,

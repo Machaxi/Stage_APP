@@ -144,7 +144,7 @@ class ConfirmBooking extends Component {
       dict["user"] = "" + this.state.userDetails.id;
     } else {
       if (this.state.childDetails != null) {
-        dict["user"] = this.state.childDetails.id;
+        dict["user"] = this.state.childDetails.user_id;
       } else {
         dict["player_name"] = this.state.username;
         dict["gender"] = this.state.gender.toUpperCase();

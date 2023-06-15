@@ -1427,8 +1427,35 @@ class RegistrationSteps extends BaseComponent {
                 name = ''
             const logo = this.state.dribble_logo
             const mobile_number = this.state.userData['user'].mobile_number
-            const desc = 'Payment for ' + name + ' Ph No: ' + mobile_number + ' academy id : ' + this.academy_id
-
+            const tournament_id = this.state.data['id']
+            let participant_user_id = this.state.selected_player['user_id']
+            let desc = 'Payment for ' + name;
+            var tc = "Payment for "
+            for (let i = 0; i < this.state.user_selection.length; i++) {
+                let element = this.state.user_selection[i]
+                let title = " " + element['title'] + " "
+                tc = tc + title
+                let tournament_types = element['tournament_types']
+                for (let j = 0; j < tournament_types.length; j++) {
+                    let selected = tournament_types[j].selected
+                    if (selected) { 
+                        if (tournament_types[j].partner_name) {
+                            tc = tc + tournament_types[j].tournament_type + " " + tournament_types[j].partner_name
+                        }else {
+                            tc = tc + tournament_types[j].tournament_type
+                        }
+                    }
+                }    
+            }    
+            if (tc.length > 255) {
+                desc = 'Payment for ' + name + 'tournament_category' +  ' tournament_id: ' + tournament_id + ' participant_user_id: ' + participant_user_id
+            }else {
+                if (tc.length < 240) {
+                    desc = tc + ' id: ' + participant_user_id
+                }else {
+                    desc = tc
+                }
+            }
             var options = {
                 description: desc,
                 image: logo,

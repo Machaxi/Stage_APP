@@ -20,6 +20,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { GradientLine } from "../../../components/molecules/gradientLine";
 import CustomButton from "../../../components/custom/CustomButton";
 import moment from "moment";
+import events from "../../../router/events";
 
 class LearnTrialList extends Component {
   constructor(props) {
@@ -32,6 +33,10 @@ class LearnTrialList extends Component {
 
   componentDidMount() {
     this.getData();
+    this.refreshEvent = events.subscribe("REFRESH_LEARN_TRAIL", () => {
+        console.log("ollla");
+        this.getData();
+    });
   }
 
   getData = async () => {
