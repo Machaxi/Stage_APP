@@ -59,9 +59,10 @@ class CongratulationScreen extends Component {
   }
 
   handleopen = async () => {
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
-    const userDetails = JSON.parse(userDetailsJson);
-    var username = userDetails.userName;
+    const userDetailsJson = await AsyncStorage.getItem("userInfo");
+    const userDetailed = JSON.parse(userDetailsJson);
+    const userDetails = userDetailed.user;
+    var username = userDetails.name;
     console.log(this.props.selectBatch);
     if (this.props.title == "Coaching Trial") {
       username = this.props.username;
@@ -162,9 +163,8 @@ class CongratulationScreen extends Component {
                 {/* {this.state.date.getDate() == this.state.todayDate.getDate()
                   ? "Today, "
                   : "Tomorrow, "} */}
-                {this.state.date.getDate()}{" "}
-                {this.months[this.state.date.getMonth()]}{" "}
-                {this.state.date.getFullYear()} at {this.state.timeString}
+                {moment(this.state.date).format("Do MMMM YYYY")} at{" "}
+                {this.state.timeString}
               </Text>
               <Text style={styles.center}>{this.state.centerName}</Text>
               <Text style={styles.address}>{this.state.centerAddress}</Text>
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     color: "#E8AC43",
     marginBottom: 5,
     marginTop: 120,
+    textAlign: "center",
   },
   subtext: {
     fontSize: 16,

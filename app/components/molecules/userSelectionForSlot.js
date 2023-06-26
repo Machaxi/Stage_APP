@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import { greyColorVariant, yellowVariant2 } from "../../containers/util/colors";
 import UserPickerForSlot from "./userPickerForSlot";
 import ModalDropdown from "react-native-modal-dropdown";
 
-const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
+const UserSelectionForSlot = ({ user, setUserVal, data, label, reset }) => {
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    console.log(reset);
+    console.log(data);
+    if (!reset) {
+      dropdownRef.current.select(-1);
+    }
+  });
   return (
     <View style={styles.userSelectionBox}>
       {/* <UserPickerForSlot
@@ -14,6 +22,7 @@ const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
         onSelect={(val) => setUserVal(val)}
       /> */}
       <ModalDropdown
+        ref={dropdownRef}
         options={data}
         defaultValue={label}
         style={{
@@ -26,7 +35,7 @@ const UserSelectionForSlot = ({ user, setUserVal, data, label }) => {
         textStyle={{ padding: 10, fontSize: 16, color: "white" }}
         dropdownStyle={{
           width: "75%",
-          height: data.length * 45,
+          height: data.length > 0 ? data.length * 45 : 45,
           borderRadius: 10,
           borderColor: "#FCB550",
           backgroundColor: "rgba(94, 94, 94, 1)",

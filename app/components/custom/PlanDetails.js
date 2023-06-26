@@ -42,9 +42,12 @@ const PlanDetails = (props) => {
     if (endDate < startdate) {
       endDate = convertToNextDate(props.endDate);
     }
-    console.log(props.startDate);
+    const confirmstartDat = convertToDate(props.confirmstartDate);
     setSelectDate(startdate);
     setEndDate(endDate);
+    if (props.confirmstartDate) {
+      setStartDate(confirmstartDat);
+    }
   }, []);
 
   const getMonthNumber = (monthName) => {

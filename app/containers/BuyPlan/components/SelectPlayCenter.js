@@ -88,18 +88,18 @@ class SelectPlayCenter extends Component {
           if (status === "OK") {
             const { elements } = rows[0];
             const { distance } = elements[0];
-            const d = distance.text.split(" ");
-            const numericDistance = parseInt(d[0].replace(",", ""));
+            const d = distance.value;
+            const numericDistance = parseInt(d);
             data[i].distance = numericDistance;
+            data[i].displayDistance = distance.text;
             console.log(distance.text);
-            if (i == data.length - 1) {
+            console.log("olla");
+            setTimeout(() => {
               const sortedAcademies = data.sort((a, b) => {
                 return a.distance - b.distance;
               });
-              this.setState({
-                centerData: sortedAcademies,
-              });
-            }
+              this.setState({ centerData: sortedAcademies });
+            }, 1000);
           }
         })
         .catch((error) => {
@@ -187,15 +187,15 @@ class SelectPlayCenter extends Component {
       let centerValue = this.state.centerData.find(
         (item) => item.id === this.state.currentIndex
       );
-      var distance = centerValue.distance + " Km away";
+      var distance = centerValue.displayDistance + " away";
       if (!this.state.isPermissionGranted) {
-        distance = "0 Km away";
+        distance = "0 km away";
       }
       this.props.onPress(centerValue, distance);
     };
 
     const renderItem = ({ item }) => {
-      const distance = item.distance + " Km away";
+      var distance = item.displayDistance;
       return (
         <CenterDetails
           item={item}

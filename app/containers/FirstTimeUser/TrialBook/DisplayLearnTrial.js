@@ -27,7 +27,7 @@ class DisplayLearnTrial extends Component {
 
   getData = () => {
     let academiesData = this.props.navigation.state.params.item;
-    const dateObject = new Date(academiesData.trial_date);
+    const dateObject = academiesData.trial_date;
     this.setState({
       selectBatch: academiesData,
       selectCenter: academiesData["academyDto"],

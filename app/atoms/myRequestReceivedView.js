@@ -28,7 +28,12 @@ import {
   Nunito_Regular,
 } from "../containers/util/fonts";
 import NamedRoundedGradientContainer from "../components/molecules/roundedNamedGradientContainer";
-import { requestStatus, requestStatusBg, requestStatusName, requestStatusTxtColor } from "../containers/util/utilFunctions";
+import {
+  requestStatus,
+  requestStatusBg,
+  requestStatusName,
+  requestStatusTxtColor,
+} from "../containers/util/utilFunctions";
 
 const MyRequestReceivedView = ({
   val,
@@ -50,7 +55,9 @@ const MyRequestReceivedView = ({
           txtColor={requestStatusTxtColor(val?.status)}
         />
       ) : null}
-      <Text style={[styles.bookingDetails, { marginBottom: 13, marginTop: 10 }]}>
+      <Text
+        style={[styles.bookingDetails, { marginBottom: 13, marginTop: 10 }]}
+      >
         Player details
       </Text>
       <View
@@ -68,9 +75,7 @@ const MyRequestReceivedView = ({
         </Text>
       </View>
       <Text style={[styles.detailsTxt]}>
-        {typeof val?.guestCount != undefined
-          ? `+${val?.guestCount} Guest`
-          : ""}
+        {typeof val?.guestCount != undefined ? `+${val?.guestCount} Guest` : ""}
       </Text>
       <View
         style={{
@@ -80,7 +85,8 @@ const MyRequestReceivedView = ({
           justifyContent: "space-between",
         }}
       >
-        {val?.status != "DECLINED" && val?.status != "CANCELLED" ? (
+        {/* {val?.status != "DECLINED" && val?.status != "CANCELLED" ? ( */}
+        {val?.status == "PENDING" ? (
           <TouchableOpacity onPress={() => declineRequest()}>
             <Text style={[styles.declineReq, { marginRight: 18 }]}>
               Decline request

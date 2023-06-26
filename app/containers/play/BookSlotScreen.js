@@ -60,7 +60,10 @@ const BookSlotScreen = ({ navigation }) => {
   const [planAndSportsApiRes, setPlanAndSportsApiRes] = useState(null);
   const [sportsList, setSportsList] = useState(null);
   const [bookdata, setBookdata] = useState([]);
+  const [proficiencydata, setProficiencydata] = useState([]);
   const [courtBookingNotes, setCourtBookingNotes] = useState([]);
+  const [showNotes, setNotes] = useState(true);
+  const [resetModel, setResetModel] = useState(true);
 
   const getUserPlanAndSportsData = async () => {
     setLoading(true);
@@ -134,6 +137,7 @@ const BookSlotScreen = ({ navigation }) => {
       playingAreaName,
       allowEntireCourtBooking,
       courtBookingNotes,
+      proficiencies,
     } = sport;
 
     console.log(allowEntireCourtBooking);
@@ -147,6 +151,14 @@ const BookSlotScreen = ({ navigation }) => {
     } else {
       setBookdata(["Yourself", "Coming with Guest"]);
     }
+    if (courtBookingNotes) {
+      setNotes(true);
+    } else {
+      setNotes(false);
+    }
+    const sortedData = proficiencies.sort((a, b) => a.order - b.order);
+    const transformedData = sortedData.map((item) => item.displayText);
+    setProficiencydata(transformedData);
     const lines = courtBookingNotes.split("\r\n");
     const points = lines.map((line) => line.replace(/^#\s*/, ""));
     setCourtBookingNotes(points);
@@ -161,6 +173,7 @@ const BookSlotScreen = ({ navigation }) => {
         console.log(userResponce);
         let academiesData = userResponce["data"]["data"];
         setSportsList(academiesData["sports"]);
+        console.log(academiesData);
       })
       .catch((error) => {
         console.log(error);
@@ -273,8 +286,13 @@ const BookSlotScreen = ({ navigation }) => {
         colors={["#051732", "#232031"]}
         style={{ flex: 1, paddingHorizontal: 12 }}
       >
+        <GoBackHeader
+          navigation={navigation}
+          title={"Book Slot"}
+          style={{ flex: 0.09 }}
+        />
         <ScrollView
-          style={{ height: "100%" }}
+          style={{ height: "100%", flex: 0.78 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -283,7 +301,6 @@ const BookSlotScreen = ({ navigation }) => {
             />
           }
         >
-          <GoBackHeader navigation={navigation} title={"Book Slot"} />
           <View style={{ paddingHorizontal: 18, marginBottom: 20 }}>
             {sportsList && sportsList.length > 0 ? (
               <SelectSportsBookSlot
@@ -296,6 +313,7 @@ const BookSlotScreen = ({ navigation }) => {
                     playingAreaName,
                     allowEntireCourtBooking,
                     courtBookingNotes,
+                    proficiencies,
                   } = sport;
                   if (allowEntireCourtBooking) {
                     setBookdata([
@@ -305,10 +323,26 @@ const BookSlotScreen = ({ navigation }) => {
                     ]);
                   } else {
                     setBookdata(["Yourself", "Coming with Guest"]);
+                    if (user == "entire_court") {
+                      setResetModel(false);
+                      setUser(null);
+                    }
+                  }
+                  const sortedData = proficiencies.sort(
+                    (a, b) => a.order - b.order
+                  );
+                  const transformedData = sortedData.map(
+                    (item) => item.displayText
+                  );
+                  setProficiencydata(transformedData);
+                  if (courtBookingNotes) {
+                    setNotes(true);
+                  } else {
+                    setNotes(false);
                   }
                   const lines = courtBookingNotes.split("\r\n");
                   const points = lines.map((line) => line.replace(/^#\s*/, ""));
-
+                  console.log(points);
                   setCourtBookingNotes(points);
                 }}
               />
@@ -316,8 +350,9 @@ const BookSlotScreen = ({ navigation }) => {
             {showProficiencyMenu == true && selectedSportsId != null ? (
               <UserSelectionForSlot
                 user={proficiency}
-                data={["Beginner", "Intermediate", "Advance"]}
+                data={proficiencydata}
                 label={"Select proficiency"}
+                reset={proficiency != null}
                 setUserVal={(val) => {
                   if (val == "Beginner") {
                     setProficiency("BASIC");
@@ -341,7 +376,9 @@ const BookSlotScreen = ({ navigation }) => {
               // { label: "Coming with Guest", value: "with_guest" },
               data={bookdata}
               label={"Select user"}
+              reset={resetModel}
               setUserVal={(val) => {
+                setResetModel(true);
                 if (val == "Coming with Guest") {
                   setUser("with_guest");
                 } else if (val == "Entire Court") {
@@ -357,7 +394,9 @@ const BookSlotScreen = ({ navigation }) => {
                 setCount={(val) => setCount(val)}
               />
             )}
-            <SlotRelatedNotes courtBookingNotes={courtBookingNotes} />
+            {showNotes && (
+              <SlotRelatedNotes courtBookingNotes={courtBookingNotes} />
+            )}
             {modalVisible ? (
               // ? (
               // <SlotBookedModal modalVisible={modalVisible} setModalVisibility={(val)=>setModalVisibilityCb(val)} />
@@ -371,16 +410,18 @@ const BookSlotScreen = ({ navigation }) => {
               />
             ) : null}
             <View style={{ height: 20, width: "100%" }} />
-            <CustomButton
-              name="Next "
-              image={require("../../images/playing/arrow_go.png")}
-              available={
-                selectedSportsId != null && proficiency != null && user != null
-              }
-              onPress={() => onNextPress()}
-            />
           </View>
         </ScrollView>
+        <View style={{ flex: 0.13, paddingTop: 12 }}>
+          <CustomButton
+            name="Next "
+            image={require("../../images/playing/arrow_go.png")}
+            available={
+              selectedSportsId != null && proficiency != null && user != null
+            }
+            onPress={() => onNextPress()}
+          />
+        </View>
       </LinearGradient>
     </View>
   );

@@ -4,8 +4,8 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
-  ImageBackground,
+  ToastAndroid,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
@@ -116,8 +116,9 @@ class ConfirmBooking extends Component {
 
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
-    const userDetails = JSON.parse(userDetailsJson);
+    const userDetailsJson = await AsyncStorage.getItem("userInfo");
+    const userDetailed = JSON.parse(userDetailsJson);
+    const userDetails = userDetailed.user;
     this.setState({ header: header, userDetails: userDetails });
   };
 
@@ -167,7 +168,29 @@ class ConfirmBooking extends Component {
       .catch((response) => {
         this.setState({ isLoading: false });
         console.log(response);
+        this.displayToast(
+          "Sorry, Unable to book trial now, please try again later"
+        );
       });
+  };
+
+  displayToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+    {
+      Platform.OS === "ios" && showToast(message);
+    }
+  };
+
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
   };
 
   updataData = () => {
@@ -258,7 +281,7 @@ class ConfirmBooking extends Component {
       <View style={{ marginVertical: 20, flex: 1 }}>
         <Loader visible={this.state.isLoading} />
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.94 }}>
-          <Text style={styles.mainText}>Confirm Book free Trial</Text>
+          <Text style={styles.mainText}>Confirm free trial</Text>
           <LinearGradient
             colors={[
               "rgba(255, 255, 255, 0.15)",
@@ -284,7 +307,7 @@ class ConfirmBooking extends Component {
             <View style={styles.line} />
             <Text style={styles.subtitle}>Centre Detail</Text>
             <View style={styles.item}>
-              <View style={{ flex: 0.35 }}>
+              <View style={{ flex: 0.38 }}>
                 <Image
                   source={{ uri: this.state.centerImage }}
                   style={styles.image}
@@ -400,7 +423,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textContainer: {
-    flex: 0.65,
+    flex: 0.62,
     padding: 10,
   },
   sportsview: {
@@ -449,7 +472,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
   },
   image: {
-    width: 100,
+    width: 90,
     height: 90,
     marginRight: 20,
     borderRadius: 6,

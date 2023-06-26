@@ -6,6 +6,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
+  ToastAndroid,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
@@ -54,6 +57,7 @@ const nextday = weekdays[nextDate.getDay()];
 let secondDate = new Date(nextDate.getTime() + oneDay);
 const seconddate = secondDate.getDate() + " " + months[secondDate.getMonth()];
 const secondday = weekdays[secondDate.getDay()];
+var deviceWidth = Dimensions.get("window").width / 3 - 15;
 
 class SelectBatch extends Component {
   constructor(props) {
@@ -61,7 +65,7 @@ class SelectBatch extends Component {
     this.state = {
       currentLevel: 10,
       currentDate: 4,
-      selectTime: 20,
+      selectTime: 2000,
       proseedLevel: false,
       proseedDate: false,
       proseedTime: false,
@@ -72,6 +76,7 @@ class SelectBatch extends Component {
       eveningData: null,
       levelData: [],
       batchType: "ADULTS",
+      loading: true,
     };
   }
 
@@ -106,12 +111,37 @@ class SelectBatch extends Component {
           academy_id
       )
       .then((response) => {
+        this.setState({ loading: false });
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"]["batch_details"];
         let levelData = userResponce["data"]["data"]["playerLevel"];
         this.setState({ batchData: batchData, levelData: levelData });
         console.log(batchData);
+        if (this.props.selectLevel) {
+          const indexs = levelData.findIndex(
+            (item) => item.displayText === this.props.selectLevel.displayText
+          );
+          var selectDate = 1;
+          if (this.props.selectDate == nextDate) {
+            selectDate = 2;
+          } else if (this.props.selectDate == secondDate) {
+            selectDate = 3;
+          }
+          if (indexs != null) {
+            this.setState(
+              {
+                currentDate: selectDate,
+                proseedDate: true,
+                currentLevel: indexs,
+                proseedLevel: true,
+              },
+              () => {
+                this.getTimeData(indexs, selectDate);
+              }
+            );
+          }
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -134,7 +164,7 @@ class SelectBatch extends Component {
         this.state.levelData[level].name.toLowerCase() ==
           this.state.batchData[i].proficiency.toLowerCase() &&
         dates &&
-        dates.getDay() in this.state.batchData[i].weekDetails &&
+        ((dates.getDay() + 6) % 7) + 1 in this.state.batchData[i].weekDetails &&
         this.state.batchType == this.state.batchData[i].batchType
       ) {
         const startHour = parseInt(
@@ -175,6 +205,25 @@ class SelectBatch extends Component {
     return uniqueData;
   };
 
+  displayToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+    {
+      Platform.OS === "ios" && showToast(message);
+    }
+  };
+
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
+  };
+
   render() {
     assigndate = (item) => {
       const targetTime = moment(item.startTime, "HH:mm:ss");
@@ -189,9 +238,13 @@ class SelectBatch extends Component {
           key={item.batch_id}
           style={{ marginRight: 10, marginVertical: 10, height: 30 }}
           onPress={() => {
-            this.setState({ selectTime: item.batch_id, proseedTime: true });
+            if (noTouch) {
+              this.displayToast("Selected slot is unavailable ");
+            } else {
+              this.setState({ selectTime: item.batch_id, proseedTime: true });
+            }
           }}
-          disabled={noTouch}
+          // disabled={noTouch}
         >
           <View>
             <LinearGradient
@@ -267,22 +320,33 @@ class SelectBatch extends Component {
       this.props.onPress(selectDate, selectLevel, selectBatch);
     };
 
-    if (this.state.batchData == null) {
+    if (this.state.loading) {
       return <LoadingIndicator />;
     }
 
+    if (this.state.levelData == null || this.state.levelData.length == 0) {
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text style={styles.select}> No Batchs available</Text>
+        </View>
+      );
+    }
     return (
       <View style={styles.contain}>
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.93 }}>
-          <Text style={styles.mainText}>Select preferred Batch</Text>
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>
             {this.state.levelData.map((item, index) => (
               <TouchableOpacity
                 activeOpacity={0.8}
                 key={index}
-                style={[styles.subview]}
+                style={[styles.subview, { marginVertical: 15 }]}
                 onPress={() => {
+                  if (this.state.currentLevel != index) {
+                    this.setState({ selectTime: 2000, proseedTime: false });
+                  }
                   this.setState({ currentLevel: index, proseedLevel: true });
                   this.getTimeData(index, this.state.currentDate);
                 }}
@@ -324,8 +388,14 @@ class SelectBatch extends Component {
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  style={[styles.subview]}
+                  style={[
+                    styles.subview,
+                    { width: deviceWidth, marginLeft: -15 },
+                  ]}
                   onPress={() => {
+                    if (this.state.currentDate != 1) {
+                      this.setState({ selectTime: 2000, proseedTime: false });
+                    }
                     this.setState({ currentDate: 1, proseedDate: true });
                     this.getTimeData(this.state.currentLevel, 1);
                   }}
@@ -339,8 +409,11 @@ class SelectBatch extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  style={[styles.subview, { marginLeft: 20 }]}
+                  style={[styles.subview, { width: deviceWidth }]}
                   onPress={() => {
+                    if (this.state.currentDate != 2) {
+                      this.setState({ selectTime: 2000, proseedTime: false });
+                    }
                     this.setState({ currentDate: 2, proseedDate: true });
                     this.getTimeData(this.state.currentLevel, 2);
                   }}
@@ -354,8 +427,11 @@ class SelectBatch extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  style={[styles.subview, { marginLeft: 20 }]}
+                  style={[styles.subview, { width: deviceWidth }]}
                   onPress={() => {
+                    if (this.state.currentDate != 3) {
+                      this.setState({ selectTime: 2000, proseedTime: false });
+                    }
                     this.setState({ currentDate: 3, proseedDate: true });
                     this.getTimeData(this.state.currentLevel, 3);
                   }}
@@ -519,7 +595,7 @@ const styles = StyleSheet.create({
   subview: {
     width: 98,
     height: 100,
-    marginVertical: 15,
+    marginVertical: 10,
     justifyContent: "center",
     alignItems: "center",
   },

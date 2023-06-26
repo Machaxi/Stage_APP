@@ -232,7 +232,24 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                     "selectedTimePeriodVal" +
                       selectedCourtTimingId
                   );
-              if (selectedCourtTimingId != val.courtTimingId) {
+              const foundItem = selectedAcademyData?.courts?.find((item) => item.courtTimingId === selectedCourtTimingId);
+              var doprocess = true
+              if (foundItem) {
+                const displayTime = foundItem.displayTime;
+                const startTime = foundItem.startTime
+                const endTime = foundItem.endTime
+                  const filteredArray = selectedAcademyData?.courts?.filter((item) => item.displayTime === displayTime);
+                if (filteredArray && filteredArray.length > 1) {
+                  const filteredArr = selectedAcademyData?.bookings.filter((item) => item.startTime === startTime && item.endTime === endTime);
+                  if (filteredArr && filteredArr.length == filteredArray.length) {
+                    doprocess = false
+                  }
+                }
+              }
+              console.log(selectedCourtTimingId);
+              console.log(val.courtTimingId);
+              console.log("okkka");
+              if (doprocess && selectedCourtTimingId != val.courtTimingId) {
                 courtMatchFound = true;
                 console.log(
                  "OTHER COURTS AVAILABLE, CALL API"
@@ -255,10 +272,17 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             var lowerProfData = null;
             var playerSpaceAvailable = false;
             var sameTimeSlotFoundInBookings = false;
+            console.log("olllas")
+            console.log(selectedAcademyData?.bookings)
             selectedAcademyData?.bookings?.map((val)=>{
                 //TODO: api se max 0 and total 1 aa raha hai, backend issue for present data
+                console.log("olllag")
                 var bookingTimePeriod = val.startTime + val.endTime;
+                console.log("olllahg")
                 var playerTimePeriod = slotStartTime + slotEndTime;
+                console.log("olllahgss")
+                console.log(bookingTimePeriod)
+                console.log(playerTimePeriod)
                 if (bookingTimePeriod == playerTimePeriod) {
                   var availablePlayerCount = val.maxPlayersAllowed - val.totalPlayers;
                   if(availablePlayerCount >= totalPlayersCount){
@@ -280,6 +304,9 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                       );
                       console.log('BOOKED_PLAYER_PROF'+ val.proficiency[0])
                       console.log('CURRENT_PLAYER_PROF'+ proficiency)
+                      console.log(val.proficiency)
+                      console.log(bookedPlayerNumericProf);
+                      console.log(numericCurrentUserProf)
                       if (bookedPlayerNumericProf < numericCurrentUserProf) {
                         lowerProfData = val;
                         lowerProfFound = true;
@@ -288,7 +315,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                         if (!lowerProfFound)
                           equalProfFound = true;
                       }
-                    
+                      console.log(lowerProfFound);
+                      console.log(equalProfFound)
                     // }
                   // });
                 }

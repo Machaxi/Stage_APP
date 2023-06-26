@@ -32,6 +32,12 @@ class SelectSports extends Component {
     } else {
       this.setState({ sportList: this.props.sportList });
     }
+    if (this.props.selectSport) {
+      this.setState({
+        currentIndex: this.props.selectSport.id,
+        proseednext: true,
+      });
+    }
   }
 
   showToast = (message) => {
@@ -52,27 +58,61 @@ class SelectSports extends Component {
         const filteredData = this.props.finishSport.filter(
           (item) => item.sport.id === this.state.currentIndex
         );
-
-        if (this.props.parent != "Parent" && this.props.childDetails == null) {
+        const filteredList = this.props.finishSport.filter(
+          (item) => item.isTrialDone === true
+        );
+        if (filteredList?.length > 1) {
+          ToastAndroid.show(
+            "you have booked trial for 2 sports so no more allowed. ",
+            ToastAndroid.SHORT
+          );
+          {
+            Platform.OS === "ios" &&
+              this.showToast(
+                "you have booked trial for 2 sports so no more allowed. "
+              );
+          }
+        } else if (
+          this.props.parent != "Parent" &&
+          this.props.childDetails == null
+        ) {
           this.props.onPress(
             this.state.sportList.find(
               (item) => item.id === this.state.currentIndex
             )
           );
-        } else if (!filteredData[0]?.isPlan && !filteredData[0]?.isTrialDone) {
+        } else if (
+          !filteredData[0]?.isPlanForYourself &&
+          !filteredData[0]?.isTrialDone
+        ) {
           this.props.onPress(
             this.state.sportList.find(
               (item) => item.id === this.state.currentIndex
             )
           );
         } else {
-          ToastAndroid.show(
-            "You already booked trial for this sports.",
-            ToastAndroid.SHORT
-          );
-          {
-            Platform.OS === "ios" &&
-              this.showToast("You already booked trial for this sport.");
+          if (filteredData[0]?.isPlanForYourself) {
+            ToastAndroid.show(
+              "You already purchased plan for this sport.you can book for other sport",
+              ToastAndroid.SHORT
+            );
+            {
+              Platform.OS === "ios" &&
+                this.showToast(
+                  "You already purchased plan for this sport.you can book for other sports"
+                );
+            }
+          } else {
+            ToastAndroid.show(
+              "You already booked trial for this sport.you can book for other sports",
+              ToastAndroid.SHORT
+            );
+            {
+              Platform.OS === "ios" &&
+                this.showToast(
+                  "You already booked trial for this sport.you can book for other sports"
+                );
+            }
           }
         }
       } else {

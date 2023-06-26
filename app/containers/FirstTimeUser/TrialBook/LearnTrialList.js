@@ -5,6 +5,8 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
+  ScrollView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Nunito_Bold, Nunito_Regular, Nunito_SemiBold } from "../../util/fonts";
@@ -21,6 +23,7 @@ import { GradientLine } from "../../../components/molecules/gradientLine";
 import CustomButton from "../../../components/custom/CustomButton";
 import moment from "moment";
 import events from "../../../router/events";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 class LearnTrialList extends Component {
   constructor(props) {
@@ -28,14 +31,15 @@ class LearnTrialList extends Component {
     this.state = {
       trailList: null,
       displayNoText: true,
+      loader: true,
+      refreshing: false,
     };
   }
 
   componentDidMount() {
     this.getData();
     this.refreshEvent = events.subscribe("REFRESH_LEARN_TRAIL", () => {
-        console.log("ollla");
-        this.getData();
+      this.getData();
     });
   }
 
@@ -69,7 +73,7 @@ class LearnTrialList extends Component {
           const dateB = new Date(b.trial_date + "T" + b.startTime);
           return dateA - dateB;
         });
-        this.setState({ trailList: combinedBookings });
+        this.setState({ trailList: combinedBookings, loader: false });
       })
       .catch((error) => {
         console.log(error);
@@ -78,6 +82,13 @@ class LearnTrialList extends Component {
 
   hadleBackPress = () => {
     this.props.navigation.goBack();
+  };
+
+  truncateString = (text) => {
+    if (text.length <= 25) {
+      return text;
+    }
+    return text.substring(0, 25) + "..";
   };
 
   nextSessionCard = ({ item }) => {
@@ -91,6 +102,10 @@ class LearnTrialList extends Component {
       return null;
     }
     this.setState({ displayNoText: false });
+    var truncatedText = "";
+    if (item?.user?.name) {
+      truncatedText = this.truncateString(item?.user?.name);
+    }
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -110,7 +125,7 @@ class LearnTrialList extends Component {
               <Text style={styles.heading}>
                 {"  " + moment(item.trial_date).format("Do MMMM YYYY")}
               </Text>
-              <Text style={styles.sports}>{item?.user?.name}</Text>
+              <Text style={styles.sports}>{truncatedText}</Text>
             </View>
             <GradientLine
               marginBottom={14}
@@ -138,7 +153,19 @@ class LearnTrialList extends Component {
     this.props.navigation.navigate("BookLearnTrail");
   };
 
+  onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.getData();
+    setTimeout(() => {
+      this.setState({ refreshing: false });
+    }, 1000);
+  };
+
   render() {
+    if (this.state.loader) {
+      return <LoadingIndicator />;
+    }
+
     if (this.state.trailList == null || this.state.trailList.length == 0) {
       return (
         <LinearGradient
@@ -146,15 +173,27 @@ class LearnTrialList extends Component {
           locations={[0, 1]}
           style={styles.container}
         >
-          <View
-            style={{
-              flex: 0.85,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={() => this.onRefresh()}
+                title="Pull to refresh"
+              />
+            }
+            style={{ flex: 0.85 }}
           >
-            <Text style={styles.insideText}>No booking available</Text>
-          </View>
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={[styles.insideText, { marginTop: 250 }]}>
+                No booking available
+              </Text>
+            </View>
+          </ScrollView>
           <View style={{ flex: 0.15, justifyContent: "center" }}>
             <CustomButton
               name="Book Trial "
@@ -172,19 +211,31 @@ class LearnTrialList extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
-        <View style={{ flex: 0.9 }}>
-          <FlatList
-            data={this.state.trailList}
-            renderItem={this.nextSessionCard}
-            keyExtractor={(item) => item.id}
-          />
-          {this.state.displayNoText && (
-            <View style={{ flex: 1, alignItems: "center" }}>
-              <Text style={styles.insideText}>No booking available</Text>
-            </View>
-          )}
+        <View style={{ flex: 0.85 }}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={() => this.onRefresh()}
+                title="Pull to refresh"
+              />
+            }
+          >
+            <FlatList
+              data={this.state.trailList}
+              renderItem={this.nextSessionCard}
+              keyExtractor={(item) => item.id}
+            />
+            {this.state.displayNoText && (
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <Text style={[styles.insideText, { marginTop: 250 }]}>
+                  No booking available
+                </Text>
+              </View>
+            )}
+          </ScrollView>
         </View>
-        <View style={{ flex: 0.1, justifyContent: "center" }}>
+        <View style={{ flex: 0.15, justifyContent: "center" }}>
           <CustomButton
             name="Book Trial "
             available={true}

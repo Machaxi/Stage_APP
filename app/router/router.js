@@ -2616,7 +2616,7 @@ const LearnStack = createStackNavigator({
   PlayersListing: {
     screen: PlayersListing,
     navigationOptions: ({ navigation }) => ({
-      title: "My Batchmates",
+      title: "Other Players",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,
@@ -2983,6 +2983,30 @@ const HomeStack = createStackNavigator({
     screen: BlogScreen,
     navigationOptions: ({ navigation }) => ({
       title: "Blog",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  FaqScreen: {
+    screen: FaqScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "FAQ",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  ImageGuidelines: {
+    screen: ImageGuidelines,
+    navigationOptions: ({ navigation }) => ({
+      title: "Image Guidelines",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
       headerRight: <RequestHeaderRight navigation={navigation} />,
       headerTitleStyle: style.titlestyle,

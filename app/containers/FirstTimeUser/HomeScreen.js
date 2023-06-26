@@ -59,10 +59,13 @@ class HomeScreen extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
+        const playData = batchData["play"]["plans"].sort(
+          (a, b) => a.order - b.order
+        );
         this.setState({
           learnData: batchData["learn"],
           playData: batchData["play"],
-          playPlanData: batchData["play"]["plans"],
+          playPlanData: playData,
         });
       })
       .catch((error) => {

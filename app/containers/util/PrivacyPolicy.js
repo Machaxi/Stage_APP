@@ -17,7 +17,7 @@ export default class PrivacyPolicy extends BaseComponent {
   }
 
   render() {
-    const uri = 'https://stage.machaxi.com/privacy-policy';
+    const uri = "https://machaxi.com/privacy-policy";
     let visible = this.state.visible;
 
     return (
@@ -32,12 +32,12 @@ export default class PrivacyPolicy extends BaseComponent {
             this.webview = ref;
           }}
           source={{ uri }}
-          onNavigationStateChange={(event) => {
-            if (event.url !== uri) {
-              this.webview.stopLoading();
-              Linking.openURL(event.url);
-            }
-          }}
+          // onNavigationStateChange={(event) => {
+          //   if (event.url !== uri) {
+          //     this.webview.stopLoading();
+          //     Linking.openURL(event.url);
+          //   }
+          // }}
         />
       </View>
     );

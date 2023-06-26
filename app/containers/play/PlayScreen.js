@@ -207,7 +207,13 @@ export default (PlayScreen = ({ navigation }) => {
               var startDate = moment(Date());
               var endDate = moment(json.data?.plan?.expiryDate);
               var days = 0;
-              days = endDate.diff(startDate, "days");
+              // const currentDate = new Date();
+              // const targetDate = new Date(json.data?.plan?.expiryDate);
+              // const timeDifference =
+              //   targetDate.getTime() - currentDate.getTime();
+              // days = Math.ceil(timeDifference / (1000 * 3600 * 24));
+              const duration = moment.duration(endDate.diff(startDate));
+              days = Math.ceil(duration.asDays());
               setPackageRemainingDays(days);
               if (
                 startDate.format("yyyy-dd-mm") == endDate.format("yyyy-dd-mm")
@@ -453,7 +459,7 @@ export default (PlayScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (playerDetailsResponse?.plan?.preferredSportId != null)
+    if (playerDetailsResponse?.plan?.preferredSportId != null) {
       if (playerDetailsResponse?.rating?.length > 0) {
         for (var i = 0; i < playerDetailsResponse?.rating?.length; i++) {
           if (
@@ -487,7 +493,13 @@ export default (PlayScreen = ({ navigation }) => {
           }
         }
       }
-  }, [playerDetailsResponse]);
+    } else {
+      if (planData && !userDetails.is_play_enabled) {
+        var sentdata = planData?.subscriptionId;
+        navigation.navigate("EditPreferredSports", { sentdata });
+      }
+    }
+  }, [playerDetailsResponse, userProficiency]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -806,14 +818,14 @@ export default (PlayScreen = ({ navigation }) => {
             //TODO:
             packageRemainingDays={packageRemainingDays}
             aboutToExpire={
-              packageRemainingDays < 6 && packageRemainingDays > 1
+              packageRemainingDays < 3 && packageRemainingDays >= 0
                 ? true
                 : false
             }
             //aboutToExpire={true}
             showOffer={false}
             planExpired={
-              (packageRemainingDays <= 0 && expiringToday == false) ||
+              (packageRemainingDays < 0 && expiringToday == false) ||
               remainingHrsApiRes < 1
                 ? true
                 : false

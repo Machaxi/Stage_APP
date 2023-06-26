@@ -50,8 +50,8 @@ class CenterDetails extends Component {
           <View style={styles.item}>
             <View style={{ flex: 0.3 }}>
               <Image source={{ uri: item.cover_pic }} style={styles.image} />
-              {this.props.isDistance && (
-                <Text style={styles.distance}>{distance}</Text>
+              {this.props.isDistance && this.props.distance && (
+                <Text style={styles.distance}>{distance + " away"}</Text>
               )}
             </View>
             <View style={styles.textContainer}>
@@ -99,7 +99,7 @@ class CenterDetails extends Component {
                 <SelectPlayingTime
                   selectedTime={selectedMorningTime}
                   preferredDate={this.props.preferredDate}
-                  bookings= {this.props.bookings}
+                  bookings={this.props.bookings}
                   guestCount={this.props.guestCount}
                   entirecourt={this.props.entirecourt}
                   selectedTimePeriod={(val) => {
@@ -116,7 +116,7 @@ class CenterDetails extends Component {
                 <SelectPlayingTime
                   selectedTime={selectedEveningTime}
                   preferredDate={this.props.preferredDate}
-                  bookings= {this.props.bookings}
+                  bookings={this.props.bookings}
                   guestCount={this.props.guestCount}
                   entirecourt={this.props.entirecourt}
                   selectedTimePeriod={(val) => {

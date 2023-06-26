@@ -22,7 +22,7 @@ export const NextSessionList = ({
           moment(a.date).format("YYYY-MM-DD") + "T" + a.startTime
         );
         const dateB = new Date(
-          moment(a.date).format("YYYY-MM-DD") + "T" + b.startTime
+          moment(b.date).format("YYYY-MM-DD") + "T" + b.startTime
         );
         return dateA - dateB;
       });

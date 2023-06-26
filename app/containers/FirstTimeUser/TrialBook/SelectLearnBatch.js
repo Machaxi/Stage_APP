@@ -6,6 +6,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
+  ToastAndroid,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
@@ -52,6 +55,7 @@ const nextday = weekdays[nextDate.getDay()];
 let secondDate = new Date(nextDate.getTime() + oneDay);
 const seconddate = secondDate.getDate() + " " + months[secondDate.getMonth()];
 const secondday = weekdays[secondDate.getDay()];
+var deviceWidth = Dimensions.get("window").width / 3 - 15;
 
 class SelectLearnBatch extends Component {
   constructor(props) {
@@ -59,7 +63,7 @@ class SelectLearnBatch extends Component {
     this.state = {
       currentLevel: 10,
       currentDate: 4,
-      selectTime: 20,
+      selectTime: 2000,
       proseedLevel: false,
       proseedDate: false,
       proseedTime: false,
@@ -73,6 +77,7 @@ class SelectLearnBatch extends Component {
       eveningData: null,
       filterData: null,
       currentLevelName: "",
+      loading: true,
     };
   }
 
@@ -97,6 +102,7 @@ class SelectLearnBatch extends Component {
       .then((response) => {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
+        this.setState({ loading: false });
         let batchData = userResponce["data"]["data"]["courtAvailability"];
         let playerLevel = userResponce["data"]["data"]["playerLevel"];
         let courtUnavailability =
@@ -108,6 +114,30 @@ class SelectLearnBatch extends Component {
           courtUnavailability: courtUnavailability,
           courtBookings: courtBookings,
         });
+        if (this.props.selectLevel) {
+          const indexs = playerLevel.findIndex(
+            (item) => item.displayText === this.props.selectLevel.displayText
+          );
+          var selectDate = 1;
+          if (this.props.selectDate == nextDate) {
+            selectDate = 2;
+          } else if (this.props.selectDate == secondDate) {
+            selectDate = 3;
+          }
+          if (indexs != null) {
+            this.setState(
+              {
+                currentDate: selectDate,
+                proseedDate: true,
+                currentLevel: indexs,
+                proseedLevel: true,
+              },
+              () => {
+                this.getLevelData(indexs, selectDate);
+              }
+            );
+          }
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -198,6 +228,25 @@ class SelectLearnBatch extends Component {
     this.setState({ eveningData: greaterThan12, morningData: lessThan12 });
   };
 
+  displayToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+    {
+      Platform.OS === "ios" && showToast(message);
+    }
+  };
+
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
+  };
+
   render() {
     assigntime = (item) => {
       const targetTime = moment(item.startTime, "HH:mm:ss");
@@ -212,12 +261,15 @@ class SelectLearnBatch extends Component {
           key={item.batch_id}
           style={[styles.subviewclock, { marginRight: 10, marginVertical: 10 }]}
           onPress={() => {
-            this.setState({
-              selectTime: item.courtTimingId,
-              proseedTime: true,
-            });
+            if (noTouch) {
+              this.displayToast("Selected slot is unavailable ");
+            } else {
+              this.setState({
+                selectTime: item.courtTimingId,
+                proseedTime: true,
+              });
+            }
           }}
-          disabled={noTouch}
         >
           <View>
             <LinearGradient
@@ -276,7 +328,6 @@ class SelectLearnBatch extends Component {
       let selectBatch = this.state.batchData.find(
         (item) => item.courtTimingId == this.state.selectTime
       );
-      console.log(selectLevel);
       this.props.onPress(selectDate, selectLevel, selectBatch);
     };
 
@@ -286,6 +337,9 @@ class SelectLearnBatch extends Component {
           activeOpacity={0.8}
           style={[styles.subview]}
           onPress={() => {
+            if (this.state.currentLevel != index) {
+              this.setState({ selectTime: 2000, proseedTime: false });
+            }
             this.setState(
               {
                 currentLevel: index,
@@ -326,14 +380,25 @@ class SelectLearnBatch extends Component {
       );
     };
 
-    if (this.state.batchData == null) {
+    if (this.state.loading) {
       return <LoadingIndicator />;
+    }
+
+    if (this.state.playerLevel == null || this.state.playerLevel.length == 0) {
+      console.log("working");
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text style={styles.select}> No Batchs available</Text>
+        </View>
+      );
     }
 
     return (
       <View style={styles.contain}>
         <ScrollView style={{ flex: 0.93 }}>
-          <Text style={styles.mainText}>Select preferred Batch</Text>
+          {/* <Text style={styles.mainText}>Select preferred Batch</Text> */}
           <Text style={styles.select}>Select player Level</Text>
           <View style={styles.contained}>
             {this.state.playerLevel &&
@@ -347,8 +412,14 @@ class SelectLearnBatch extends Component {
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  style={[styles.subview]}
+                  style={[
+                    styles.subview,
+                    { width: deviceWidth, marginLeft: -15 },
+                  ]}
                   onPress={() => {
+                    if (this.state.currentDate != 1) {
+                      this.setState({ selectTime: 2000, proseedTime: false });
+                    }
                     this.setState({ currentDate: 1, proseedDate: true }, () => {
                       this.getLevelData(this.state.currentLevelName, 1);
                     });
@@ -363,8 +434,11 @@ class SelectLearnBatch extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  style={[styles.subview, { marginLeft: 20 }]}
+                  style={[styles.subview, { width: deviceWidth }]}
                   onPress={() => {
+                    if (this.state.currentDate != 2) {
+                      this.setState({ selectTime: 2000, proseedTime: false });
+                    }
                     this.setState({ currentDate: 2, proseedDate: true }, () => {
                       this.getLevelData(this.state.currentLevelName, 2);
                     });
@@ -379,8 +453,11 @@ class SelectLearnBatch extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  style={[styles.subview, { marginLeft: 20 }]}
+                  style={[styles.subview, { width: deviceWidth }]}
                   onPress={() => {
+                    if (this.state.currentDate != 3) {
+                      this.setState({ selectTime: 2000, proseedTime: false });
+                    }
                     this.setState({ currentDate: 3, proseedDate: true }, () => {
                       this.getLevelData(this.state.currentLevelName, 3);
                     });

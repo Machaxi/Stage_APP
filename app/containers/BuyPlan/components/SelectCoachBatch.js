@@ -71,6 +71,16 @@ class SelectCoachBatch extends Component {
         let playerLevel = userResponce["data"]["data"]["playerLevel"];
         console.log(response);
         this.setState({ batchData: batchData, playerLevel: playerLevel });
+        if (this.props.selectLevel) {
+          const indexs = playerLevel.findIndex(
+            (item) => item.displayText === this.props.selectLevel.displayText
+          );
+          if (indexs != null) {
+            this.setState({ currentLevel: indexs, proseedLevel: true }, () => {
+              this.getTimeData(indexs);
+            });
+          }
+        }
       })
       .catch((error) => {
         console.log(error);

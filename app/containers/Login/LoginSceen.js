@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Linking,
   PermissionsAndroid,
+  BackHandler,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../components/custom/CustomButton";
@@ -65,6 +66,7 @@ class LoginSceen extends Component {
       is_existing_user: false,
     };
     this.intervalIdRef = React.createRef();
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -75,6 +77,10 @@ class LoginSceen extends Component {
 
   componentDidMount() {
     // this.requestPermissions();
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
     const intervalId = setInterval(() => {
       this.setState((prevState) => ({
         timeRemaining: prevState.timeRemaining - 1,
@@ -94,6 +100,25 @@ class LoginSceen extends Component {
       this.keyboardDidHide
     );
   }
+
+  handleBackButtonClick = () => {
+    this.hadleBackPress();
+    return true;
+  };
+
+  hadleBackPress = () => {
+    if (!this.state.loginsuccess) {
+      if (this.state.phoneconfirm) {
+        this.setState({
+          phoneconfirm: false,
+          displayImage: require("../../images/login_user.png"),
+          displayTop: -220,
+        });
+      } else {
+        BackHandler.exitApp();
+      }
+    }
+  };
 
   async requestPermissions() {
     let isPermissionGranted = false;
@@ -119,6 +144,10 @@ class LoginSceen extends Component {
     this.setState({ isKeyboardOpen: false });
   };
   componentWillUnmount() {
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
     clearInterval(this.intervalIdRef.current);
@@ -266,12 +295,6 @@ class LoginSceen extends Component {
         console.log("doLogin-payload " + JSON.stringify(user));
         let userResponce = JSON.parse(user);
         if (userResponce.success == true) {
-          const userDetail = {
-            userName: this.state.name,
-            gender: this.state.gender,
-            id: this.state.userDetails["user"].id,
-          };
-          AsyncStorage.setItem("user_details", JSON.stringify(userDetail));
           AsyncStorage.setItem("phone_number", this.state.phoneNumber);
           getData("header", (value) => {
             if (value == "") return;
@@ -345,13 +368,6 @@ class LoginSceen extends Component {
             });
           }
         } else {
-          const userDetails = {
-            userName: userData["user"].name,
-            gender: userData["user"].genderType,
-            id: userData["user"].id,
-          };
-          console.log(userData["user"]);
-          AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
           const inputString = userData["user"].mobile_number;
           const outputString = inputString.replace("+91", "");
           AsyncStorage.setItem("phone_number", outputString);
@@ -411,12 +427,6 @@ class LoginSceen extends Component {
           } else if (userData["user"].name == null) {
             this.setState({ loginsuccess: true });
           } else {
-            const userDetails = {
-              userName: userData["user"].name,
-              gender: userData["user"].genderType,
-              id: userData["user"].id,
-            };
-            AsyncStorage.setItem("user_details", JSON.stringify(userDetails));
             AsyncStorage.setItem("phone_number", this.state.phoneNumber);
             if (userInfoData.user_type == COACH) {
               storeData("multiple", userData.has_multiple_acadmies);
@@ -489,12 +499,15 @@ class LoginSceen extends Component {
             <TextInput
               style={styles.input}
               value={this.state.phoneNumber}
-              keyboardType={getShowLoginByName() ? "default" : "phone-pad"}
+              keyboardType={getShowLoginByName() ? "default" : "number-pad"}
               placeholder="Enter the Mobile Number"
               placeholderTextColor="#BFBFBF"
               maxLength={10}
               onChangeText={(value) => {
-                this.setState({ phoneNumber: value });
+                const numericValue = value.replace(/[^0-9]/g, "");
+                this.setState({
+                  phoneNumber: getShowLoginByName() ? value : numericValue,
+                });
               }}
             />
           </View>
@@ -583,17 +596,8 @@ class LoginSceen extends Component {
         <View style={{ marginTop: -20 }}>
           <View style={{ flexDirection: "row" }}>
             <Text style={[styles.subtext, { color: "#E2E2E2" }]}>
-              Enter OTP in{" "}
+              Enter OTP{" "}
             </Text>
-            {this.state.timeRemaining > 0 ? (
-              <Text style={[styles.subtext, { color: "#F2AE4D" }]}>
-                {`${minutes
-                  .toString()
-                  .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
-              </Text>
-            ) : (
-              <Text style={[styles.subtext, { color: "#F2AE4D" }]}>00:00</Text>
-            )}
           </View>
           <CodeField
             value={this.state.code}
@@ -627,7 +631,19 @@ class LoginSceen extends Component {
                   this.state.timeRemaining < 1 && { color: "#426DEE" },
                 ]}
               >
-                Resend OTP
+                Resend OTP{" "}
+                {this.state.timeRemaining > 0 && (
+                  <Text style={[styles.subtext, { color: "#BFBFBF" }]}>
+                    in{" "}
+                    <Text style={[styles.subtext, { color: "#F2AE4D" }]}>
+                      {`${minutes
+                        .toString()
+                        .padStart(2, "0")}:${seconds
+                        .toString()
+                        .padStart(2, "0")}  `}
+                    </Text>
+                  </Text>
+                )}
               </Text>
             </TouchableOpacity>
           </View>
@@ -641,12 +657,12 @@ class LoginSceen extends Component {
           />
         </View>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text style={styles.otpsubtext}>Unable to Sign up | </Text>
+          {/* <Text style={styles.otpsubtext}>Unable to Sign up | </Text> */}
           <TouchableOpacity
             onPress={() => Linking.openURL("mailto:hello@machaxi.com")}
           >
             <Text style={[styles.subtext, { color: "#426DEE" }]}>
-              {"  "}Contact us
+              Contact us
             </Text>
           </TouchableOpacity>
         </View>

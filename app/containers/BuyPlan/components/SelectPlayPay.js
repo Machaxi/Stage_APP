@@ -67,10 +67,12 @@ class SelectPlayPay extends Component {
       appliedCoupon: false,
       displayStartDate: null,
       displayEndDate: "",
+      lastdatedisplay: "",
       userDetails: null,
       amount: "",
       phonenumber: "",
       startdate: new Date(),
+      confirmstartDate: new Date(),
       enddate: new Date(),
       selectType: 30,
       discountAmount: 0,
@@ -104,10 +106,22 @@ class SelectPlayPay extends Component {
     } else {
       presentdate = today.add(1, "months").subtract(1, "days");
     }
-    const startDate = new Date();
+    var startDate = new Date();
+    var lastdate = moment()
+      .add(1, "months")
+      .subtract(1, "days");
+    console.log(lastdate);
+    if (this.props.expiryDate) {
+      startDate = this.props.expiryDate;
+      lastdate = moment(this.props.expiryDate)
+        .add(1, "months")
+        .subtract(1, "days");
+    }
     const endDate = new Date(presentdate);
     var userDetails = this.props.userDetails;
-
+    const lastd = new Date(lastdate);
+    const lastdatedisplay = this.formatesmallDate(lastd);
+    const firstdatedisplay = this.formatesmallDate(startDate);
     const start_date = this.formatesmallDate(startDate);
     const end_date = this.formatesmallDate(endDate);
     const start_d_date = this.formatesmallDateYear(startDate);
@@ -121,11 +135,13 @@ class SelectPlayPay extends Component {
         centerDistance: distance,
         displayStartDate: start_date,
         displayEndDate: end_date,
+        lastdatedisplay: lastdatedisplay,
         displayBottomEnd: end_d_date,
         displayBottomStart: start_d_date,
         amount: selectPlan.price,
         appliedCoupon: this.props.applycoupon,
         startdate: startDate,
+        confirmstartDate: firstdatedisplay,
         enddate: endDate,
         userDetails: userDetails,
         selectType: selectType,
@@ -267,7 +283,7 @@ class SelectPlayPay extends Component {
   handleOnStartPayment = (orderId, amount) => {
     const description =
       "Playing Plan for " +
-      this.state.userDetails.userName +
+      this.state.userDetails.name +
       ", Ph no: " +
       this.state.phonenumber +
       ", Center Name: " +
@@ -285,7 +301,7 @@ class SelectPlayPay extends Component {
       prefill: {
         email: getRazorPayEmail(),
         contact: this.state.phonenumber,
-        name: this.state.userDetails.userName,
+        name: this.state.userDetails.name,
       },
       theme: { color: "#67BAF5" },
     };
@@ -309,7 +325,6 @@ class SelectPlayPay extends Component {
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
-    this.setState({ isLoading: true });
     let postData = {
       data: {
         orderId: orderId,
@@ -404,6 +419,13 @@ class SelectPlayPay extends Component {
     this.props.onPresscoupon(true, joinDate, this.state.amount);
   };
 
+  deletecoupon = () => {
+    this.setState({
+      appliedCoupon: !this.state.appliedCoupon,
+      discountAmount: this.state.amount,
+    });
+  };
+
   render() {
     listText = (title, subtitle, heading) => {
       return (
@@ -451,7 +473,8 @@ class SelectPlayPay extends Component {
               title={this.props.selectPlan.name}
               subtitle={"₹ " + this.props.selectPlan.price}
               startDate={this.state.displayStartDate}
-              endDate={this.state.displayEndDate}
+              confirmstartDate={this.state.confirmstartDate}
+              endDate={this.state.lastdatedisplay}
               image={this.props.selectPlan.planIconUrl}
               url={true}
               onPress={this.DataChange}
@@ -470,14 +493,14 @@ class SelectPlayPay extends Component {
             <View style={{ flexDirection: "row" }}>
               {this.state.userDetails && (
                 <Text style={styles.name}>
-                  {this.state.userDetails.userName} ·{" "}
+                  {this.state.userDetails.name} ·{" "}
                 </Text>
               )}
               {this.state.userDetails && (
                 <Text
                   style={[styles.subtitle, { color: "#FFC498", marginLeft: 2 }]}
                 >
-                  {this.state.userDetails.gender}
+                  {this.state.userDetails.genderType}
                 </Text>
               )}
             </View>
@@ -527,12 +550,7 @@ class SelectPlayPay extends Component {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              if (this.state.appliedCoupon) {
-                this.setState({
-                  appliedCoupon: !this.state.appliedCoupon,
-                  discountAmount: this.state.amount,
-                });
-              } else {
+              if (!this.state.appliedCoupon) {
                 this.onCouponPress();
               }
             }}
@@ -541,6 +559,7 @@ class SelectPlayPay extends Component {
               appliedCoupon={this.state.appliedCoupon}
               coupon={this.state.coupon}
               amount={this.state.couponAmount}
+              onPressCancel={this.deletecoupon}
             />
           </TouchableOpacity>
           <PaymentDetails

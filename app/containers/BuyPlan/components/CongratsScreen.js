@@ -16,7 +16,6 @@ class CongratsScreen extends Component {
     this.state = {
       ONE_SIGNAL_USERID: "",
       firebase_token: "",
-      userData: null,
       header: null,
     };
   }
@@ -28,16 +27,13 @@ class CongratsScreen extends Component {
   signcheck = async () => {
     let ONE_SIGNAL = await AsyncStorage.getItem(ONE_SIGNAL_USERID);
     let fcm_token = await AsyncStorage.getItem(PUSH_TOKEN);
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
     const header = await AsyncStorage.getItem("header");
-    const userDetails = JSON.parse(userDetailsJson);
     const userInfoJson = await AsyncStorage.getItem("userInfo");
     const userInfo = JSON.parse(userInfoJson);
     this.setState(
       {
         ONE_SIGNAL_USERID: ONE_SIGNAL,
         firebase_token: fcm_token,
-        userData: userDetails,
         header: header,
         userInfo: userInfo,
       },

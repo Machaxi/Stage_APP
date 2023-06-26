@@ -6,6 +6,8 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ToastAndroid,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../../components/custom/CustomButton";
@@ -113,7 +115,6 @@ class SelectPay extends Component {
     const joinDate = this.convertToDate(this.props.selectPlan.start_date);
     const stDate = new Date(joinDate);
     const start_d_date = this.formatesmallDateYear(stDate);
-
     this.setState(
       {
         centerName: selectCenter.name,
@@ -161,15 +162,15 @@ class SelectPay extends Component {
       dict["user_id"] = this.state.userDetails.id;
       if (this.props.parent == "Parent") {
         // if (userData.user["user_type"] == "GUEST") {
-        //   dict["parent_name"] = this.state.userDetails.userName;
-        //   dict["player_name"] = this.state.userDetails.userName;
+        //   dict["parent_name"] = this.state.userDetails.name;
+        //   dict["player_name"] = this.state.userDetails.name;
         //   dict["gender"] = this.state.gender.toUpperCase();
         // }
       } else {
         if (this.state.childDetails != null) {
-          dict["player_user_id"] = this.state.childDetails.id;
+          dict["player_user_id"] = this.state.childDetails.user_id;
         } else {
-          dict["parent_name"] = this.state.userDetails.userName;
+          dict["parent_name"] = this.state.userDetails.name;
           dict["player_name"] = this.state.username;
           dict["gender"] = this.state.gender.toUpperCase();
         }
@@ -183,12 +184,14 @@ class SelectPay extends Component {
           let responcedata = JSON.parse(jsondata);
           console.log(this.state.amount, responcedata.amount);
           const couponamt = this.state.amount - responcedata.amount;
+          console.log(couponamt);
+          console.log("ollla");
           if (displayapply) {
             this.setState({ isApplied: true });
           }
           this.setState({
             discountAmount: responcedata.amount,
-            couponAmount: couponamt,
+            couponAmount: parseFloat(couponamt.toFixed(2)),
           });
         })
         .catch((response) => {
@@ -244,7 +247,7 @@ class SelectPay extends Component {
         : "Yearly";
     var description =
       "Coaching Plan for " +
-      this.state.userDetails.userName +
+      this.state.userDetails.name +
       ", Ph no: " +
       this.state.phonenumber +
       ", Display Time: " +
@@ -266,7 +269,7 @@ class SelectPay extends Component {
       prefill: {
         email: getRazorPayEmail(),
         contact: this.state.phonenumber,
-        name: this.state.userDetails.userName,
+        name: this.state.userDetails.name,
       },
       theme: { color: "#67BAF5" },
     };
@@ -290,7 +293,6 @@ class SelectPay extends Component {
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
-    this.setState({ isLoading: true });
     let postData = {
       data: {
         due_order_id: orderId,
@@ -298,7 +300,6 @@ class SelectPay extends Component {
         payment_details: paymentDetails,
       },
     };
-    console.log(postData);
     this.props
       .paymentConfirmation(
         this.state.header,
@@ -306,10 +307,21 @@ class SelectPay extends Component {
         `payment/due-subscription-plan-payment/v1`
       )
       .then((result) => {
+        this.setState({ isLoading: false });
         result = result.payload;
         if (result.data) {
-          this.props.onPress(true);
+          if (result.data.success) {
+            this.props.onPress(true);
+          } else {
+            this.props.onPress(
+              false,
+              orderId,
+              amount,
+              "Do to some technical issue. we are unable to book the plan. your amount will be reverted back within 2-3 days. Need help please contact us"
+            );
+          }
         } else {
+          this.setState({ isLoading: false });
           this.props.onPress(
             false,
             orderId,
@@ -320,13 +332,24 @@ class SelectPay extends Component {
       });
   };
 
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
+  };
+
   getData = async () => {
     const header = await AsyncStorage.getItem("header");
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
     const phonenumber = await AsyncStorage.getItem("phone_number");
     const userDatas = await AsyncStorage.getItem("userInfo");
     const userData = JSON.parse(userDatas);
-    const userDetails = JSON.parse(userDetailsJson);
+    const userDetails = userData.user;
     this.setState(
       {
         userDetails: userDetails,
@@ -382,15 +405,15 @@ class SelectPay extends Component {
     dict["user_id"] = this.state.userDetails.id;
     if (this.props.parent == "Parent") {
       // if (userData.user["user_type"] == "GUEST") {
-      // dict["parent_name"] = this.state.userDetails.userName;
-      // dict["player_name"] = this.state.userDetails.userName;
+      // dict["parent_name"] = this.state.userDetails.name;
+      // dict["player_name"] = this.state.userDetails.name;
       // dict["gender"] = this.state.gender.toUpperCase();
       // }
     } else {
       if (this.state.childDetails != null) {
-        dict["player_user_id"] = this.state.childDetails.id;
+        dict["player_user_id"] = this.state.childDetails.user_id;
       } else {
-        dict["parent_name"] = this.state.userDetails.userName;
+        dict["parent_name"] = this.state.userDetails.name;
         dict["player_name"] = this.state.username;
         dict["gender"] = this.state.gender.toUpperCase();
       }
@@ -424,6 +447,13 @@ class SelectPay extends Component {
 
   onCouponPress = () => {
     this.props.onPresscoupon(true, this.state.joinDate, this.state.amount);
+  };
+
+  onPressCancel = () => {
+    this.setState({
+      appliedCoupon: !this.state.appliedCoupon,
+      discountAmount: this.state.amount,
+    });
   };
 
   render() {
@@ -593,12 +623,7 @@ class SelectPay extends Component {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              if (this.state.appliedCoupon) {
-                this.setState({
-                  appliedCoupon: !this.state.appliedCoupon,
-                  discountAmount: this.state.amount,
-                });
-              } else {
+              if (!this.state.appliedCoupon) {
                 this.onCouponPress();
               }
             }}
@@ -607,6 +632,7 @@ class SelectPay extends Component {
               appliedCoupon={this.state.appliedCoupon}
               coupon={this.state.coupon}
               amount={this.state.couponAmount}
+              onPressCancel={this.onPressCancel}
             />
           </TouchableOpacity>
           <PaymentDetails

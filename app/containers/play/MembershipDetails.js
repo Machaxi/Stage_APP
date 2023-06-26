@@ -32,7 +32,7 @@ export const MembershipDetails = ({
   hoursLeft,
   planExpired,
   currentPlanPrice,
-  planType
+  planType,
 }) => {
   var totalHoursVal =
     typeof totalHrs == undefined || totalHrs == null || totalHrs == 0
@@ -42,9 +42,14 @@ export const MembershipDetails = ({
     typeof hoursLeft == undefined || hoursLeft == null ? 0 : hoursLeft;
 
   const allCapsToFirstLetterCaps = (str) => {
-    return str.toLowerCase().charAt(0).toUpperCase() + str.substring(1).toLowerCase();
-  }
-  
+    return (
+      str
+        .toLowerCase()
+        .charAt(0)
+        .toUpperCase() + str.substring(1).toLowerCase()
+    );
+  };
+
   var plantypestring = allCapsToFirstLetterCaps(planType);
   return (
     <View style={styles.container}>
@@ -61,10 +66,9 @@ export const MembershipDetails = ({
               width={deviceWidth * 0.3}
               paddingVertical={6}
               name={
-                moment(expiryDate).format("Mo MMMM YYYY") ==
-                moment(Date()).format("Mo MMMM YYYY")
+                packageRemainingDays == 0
                   ? "Expiring today"
-                  : `Expire in ${packageRemainingDays} days`
+                  : `Expires in ${packageRemainingDays} days`
               }
               bgColor={"rgba(79, 0, 25, 0.4)"}
               txtColor={redVariant2}
@@ -127,7 +131,7 @@ export const MembershipDetails = ({
                 onBtnPress={() => onRenewPress(false)}
                 width={140}
               />
-              <View style={{marginHorizontal: 10}}/>
+              <View style={{ marginHorizontal: 10 }} />
               <RoundedGradientBtn
                 text={"Explore Plans"}
                 colors={["#575f61ed", "#2b293aed"]}

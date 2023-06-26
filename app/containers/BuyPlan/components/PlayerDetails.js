@@ -53,11 +53,10 @@ class PlayerDetails extends Component {
     const userDetailsJson = await AsyncStorage.getItem("userInfo");
     const userDetailed = JSON.parse(userDetailsJson);
     const userDetails = userDetailed.user;
-    console.log(userDetails);
     var gendernum = 2;
     if (userDetails.genderType == "MALE") {
       gendernum = 0;
-    }else if (userDetails.genderType == "FEMALE") {
+    } else if (userDetails.genderType == "FEMALE") {
       gendernum = 1;
     }
     this.setState({ userDetails: userDetails, currentGender: gendernum });
@@ -74,10 +73,55 @@ class PlayerDetails extends Component {
               related_players: data.data.players,
               currentChild: data.data.players.length,
             });
+            console.log(this.props.parent);
+            console.log(this.props.childDetails);
+            if (this.props.parent == "Child") {
+              if (this.props.childDetails) {
+                const indexs = data.data.players.findIndex(
+                  (item) => item.user_id === this.props.childDetails.user_id
+                );
+                if (indexs != null) {
+                  this.setState({
+                    currentIndex: 2,
+                    currentChild: indexs,
+                    displayname: false,
+                    procednext: true,
+                    childDetails: this.props.childDetails,
+                  });
+                }
+              } else {
+                var gendernum = 2;
+                if (this.props.usergender == "MALE") {
+                  gendernum = 0;
+                } else if (this.props.usergender == "FEMALE") {
+                  gendernum = 1;
+                }
+                this.setState({
+                  currentIndex: 2,
+                  name: this.props.username,
+                  currentGender: gendernum,
+                });
+              }
+            }
           }
         })
         .catch((response) => {
-          console.log(response);
+          console.log("response");
+          if (this.props.parent == "Child") {
+            if (!this.props.childDetails) {
+              var gendernum = 2;
+              if (this.props.usergender == "MALE") {
+                gendernum = 0;
+              } else if (this.props.usergender == "FEMALE") {
+                gendernum = 1;
+              }
+              this.setState({
+                currentIndex: 2,
+                name: this.props.username,
+                currentGender: gendernum,
+              });
+            }
+          }
         });
     });
   }
@@ -125,6 +169,8 @@ class PlayerDetails extends Component {
                   proseedLevel: true,
                   currentGender: gendernum,
                   procedyourself: true,
+                  displayname: true,
+                  procednext: false,
                 });
               }}
             />
@@ -191,6 +237,18 @@ class PlayerDetails extends Component {
                           });
                         }}
                       />
+                    )}
+                  {this.props.title == "Coaching Trial" &&
+                    this.state.related_players.length > 1 && (
+                      <Text
+                        style={[
+                          styles.mainText,
+                          { fontSize: 13, margin: 10, marginTop: 60 },
+                        ]}
+                      >
+                        At the moment, we support Trial for only 2 Kids per
+                        Parent. You can choose multiple sports for trial.
+                      </Text>
                     )}
                   {this.props.title != "Coaching Trial" && (
                     <CustomRadioButton

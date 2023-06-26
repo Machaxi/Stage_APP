@@ -129,6 +129,9 @@ class SelectCenter extends Component {
   };
 
   componentDidMount() {
+    if (this.props.selectCenter) {
+      this.setState({ currentIndex: this.props.selectCenter.id });
+    }
     getData("latitude", (latitude) => {
       getData("longitude", (longitude) => {
         if (latitude != 12.9778 && longitude != 77.5729) {
@@ -193,6 +196,7 @@ class SelectCenter extends Component {
     //   return parseInt(d);
     // }
     const data = this.props.academiesList;
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
       const originLatitude = this.state.latitude;
@@ -206,21 +210,22 @@ class SelectCenter extends Component {
         )
         .then((response) => {
           const { status, rows } = response.data;
+          console.log(response.data);
           if (status === "OK") {
             const { elements } = rows[0];
             const { distance } = elements[0];
-            const d = distance.text.split(" ");
-            const numericDistance = parseInt(d[0].replace(",", ""));
+            const d = distance.value;
+            const numericDistance = parseInt(d);
             data[i].distance = numericDistance;
-            console.log(distance.text);
-            if (i == data.length - 1) {
+            data[i].displayDistance = distance.text;
+            console.log(distance);
+            console.log("olla");
+            setTimeout(() => {
               const sortedAcademies = data.sort((a, b) => {
                 return a.distance - b.distance;
               });
-              this.setState({
-                centerData: sortedAcademies,
-              });
-            }
+              this.setState({ centerData: sortedAcademies });
+            }, 1000);
           }
         })
         .catch((error) => {
@@ -259,7 +264,7 @@ class SelectCenter extends Component {
       let centerValue = this.state.centerData.find(
         (item) => item.id === this.state.currentIndex
       );
-      var distance = centerValue.distance + " Km away";
+      var distance = centerValue.displayDistance + " away";
       if (!this.state.isPermissionGranted) {
         distance = "0 Km away";
       }
@@ -267,7 +272,7 @@ class SelectCenter extends Component {
     };
 
     const renderItem = ({ item }) => {
-      const distance = item.distance + " Km away";
+      const distance = item.displayDistance;
       if (this.hasSport(item.sports)) {
         return (
           <CenterDetails
@@ -348,7 +353,9 @@ class SelectCenter extends Component {
           <CustomButton
             name="Next "
             image={require("../../../images/playing/arrow_go.png")}
-            available={this.state.proseednext}
+            available={this.state.centerData.find(
+              (item) => item.id === this.state.currentIndex
+            )}
             onPress={handlepress}
           />
         </View>

@@ -205,6 +205,24 @@ class ParentHome extends BaseComponent {
     this.props.navigation.setParams({ switchPlayer: this.switchPlayer });
   }
 
+  updaterefresh() {
+    console.log("in am worling");
+    getData("userInfo", (value) => {
+      console.log("userInfo asyncVal", value);
+      var userData = JSON.parse(value);
+      this.setState({ userDetails: userData, loading: false });
+      if (userData.user) {
+        var userid = userData.user["id"];
+        var username = userData.user["name"];
+        Analytics.logEvent("ParentHome", {
+          userid: userid,
+          username: username,
+        });
+        this.getPlayerSwitchingData();
+      }
+    });
+  }
+
   updateUserData() {
     console.log("in am worling");
     getData("userInfo", (value) => {
@@ -237,36 +255,36 @@ class ParentHome extends BaseComponent {
         .getPlayerSWitcher(value)
         .then(() => {
           var respns = this.props.switcherData;
+          console.log("jdbcdjc")
           console.log({ respns });
           // console.log(' user response payload ' + JSON.stringify(this.props.data));
           // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
           let user = JSON.stringify(this.props.switcherData.switherlist);
-          let user1 = JSON.parse(user);
-
-          if (user1.success == true) {
-            storeData("childrenData", JSON.stringify(user1.data["players"]));
+          let usered = JSON.parse(user);
+          console.log("workings");
+          console.log(usered)
+          let user1 = usered.data["players"].filter(
+            (item) => item.isCoaching === true
+          );
+          if (usered.success == true) {
+            storeData("childrenData", JSON.stringify(user1));
             //TODO: verify this flow
             //set first player as selected
-            if (user1.data["players"]?.length > 0) {
+            if (user1?.length > 0) {
               var tempuserData = this.state.userDetails;
-              tempuserData["academy_id"] = user1.data["players"][0].academy_id;
-              tempuserData["player_id"] = user1.data["players"][0].id;
-              tempuserData["academy_name"] =
-                user1.data["players"][0].academy_name;
-              tempuserData["academy_rating"] =
-                user1.data["players"][0].academy_rating;
+              tempuserData["academy_id"] = user1[0].academy_id;
+              tempuserData["player_id"] = user1[0].id;
+              tempuserData["academy_name"] = user1[0].academy_name;
+              tempuserData["academy_rating"] = user1[0].academy_rating;
 
               console.log("tempuserData userInfo", tempuserData);
               console.log({ tempuserData });
               storeData("userInfo", JSON.stringify(tempuserData));
 
-              storeData("academy_name", user1.data["players"][0].academy_name);
-              storeData("academy_id", user1.data["players"][0].academy_id);
-              storeData(
-                "academy_rating",
-                user1.data["players"][0].academy_rating
-              );
-              storeData("player_id", user1.data["players"][0].id);
+              storeData("academy_name", user1[0].academy_name);
+              storeData("academy_id", user1[0].academy_id);
+              storeData("academy_rating", user1[0].academy_rating);
+              storeData("player_id", user1[0].id);
               //after setting initial value to first user set current user data
               this.updateUserData();
               this.fetchPlayerDashboardData();
@@ -274,7 +292,7 @@ class ParentHome extends BaseComponent {
             }
 
             this.setState({
-              itemList: user1.data["players"],
+              itemList: user1,
             });
           }
         })
@@ -364,8 +382,7 @@ class ParentHome extends BaseComponent {
 
     this.refreshEvent = Events.subscribe("REFRESH_DASHBOARD_NEW", () => {
       console.log("ollladd");
-      this.updateUserData();
-      Events.publish(EVENT_EDIT_PROFILE);
+      this.updaterefresh();
     });
     setTimeout(() => {
       console.log("component did mount");
@@ -481,10 +498,12 @@ class ParentHome extends BaseComponent {
         .then(() => {
           let user = JSON.stringify(this.props.data.dashboardData);
           console.log(" getSwitchData payload " + user);
-          let user1 = JSON.parse(user);
-
-          if (user1.success == true) {
-            let data = user1.data["players"];
+          let usered = JSON.parse(user);
+          let user1 = usered.data["players"].filter(
+            (item) => item.isCoaching === true
+          );
+          if (usered.success == true) {
+            let data = user1;
             if (data.length > 0) {
               let name = data[0].academy_name;
               //let academy_id = data[0].academy_id
@@ -495,7 +514,7 @@ class ParentHome extends BaseComponent {
                 const userData = JSON.parse(value1);
                 userData["academy_name"] = name;
                 userData["academy_user_id"] =
-                  user1.data["player_profile"].academy_user_id;
+                  usered.data["player_profile"].academy_user_id;
                 storeData("userInfo", JSON.stringify(userData));
 
                 let obj = {

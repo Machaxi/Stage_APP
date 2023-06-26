@@ -30,7 +30,7 @@ class NotificationsScreen extends BaseComponent {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Notification",
-      headerTitleStyle: commonStyles.headerStyle,
+      headerTitleStyle: [commonStyles.headerStyle, { marginLeft: -46 }],
       //   headerLeft: <GoBackHeader title={""} navigation={navigation} />,
       headerStyle: {
         backgroundColor: "#FFFFFF",
@@ -202,7 +202,7 @@ class NotificationsScreen extends BaseComponent {
 
     if (data && data.length > 0)
       return (
-        <View style={{ flex: 1, backgroundColor:white }}>
+        <View style={{ flex: 1, backgroundColor: white }}>
           <FlatList
             onEndReachedThreshold={0.1}
             onEndReached={({ distanceFromEnd }) => {
@@ -228,7 +228,12 @@ class NotificationsScreen extends BaseComponent {
     else {
       return (
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor:white }}
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: white,
+          }}
         >
           <Text style={defaultStyle.regular_text_14}>
             No Notifications Yet!

@@ -37,11 +37,6 @@ const PaymentDetails = (props) => {
               >
                 Coupon Applied{"  "}
               </Text>
-              <Image
-                source={require("../../images/delete.png")}
-                style={[styles.image]}
-                resizeMode="contain"
-              />
             </View>
             <Text style={[styles.title, { color: "rgba(1, 227, 214, 0.77)" }]}>
               - ₹ {props.coupounPrice}

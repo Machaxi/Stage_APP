@@ -54,8 +54,8 @@ class CoachScreen extends Component {
 
   componentWillUnmount() {
     this.didFocusListener.remove();
-    this.stopAutoScroll();
-    clearTimeout(this.timer);
+    // this.stopAutoScroll();
+    // clearTimeout(this.timer);
   }
 
   startAutoScroll() {
@@ -66,13 +66,16 @@ class CoachScreen extends Component {
       this.scrollViewRef?.current?.scrollTo({ x: off, animated: true });
       if (this.state.currentIndex > images.length - 2) {
         this.setState({ currentIndex: 0 });
+        clearInterval(this.autoScrollInterval);
       } else {
         this.setState({ currentIndex: this.state.currentIndex + 1 });
       }
     }, 3000);
-    this.timer = setTimeout(() => {
-      clearInterval(this.autoScrollInterval);
-    }, 25000);
+    // this.timer = setTimeout(() => {
+    //   if (this.autoScrollInterval) {
+    //     clearInterval(this.autoScrollInterval);
+    //   }
+    // }, 25000);
   }
 
   stopAutoScroll() {

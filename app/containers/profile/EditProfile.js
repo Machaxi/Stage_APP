@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, ImageBackground, Text, TextInput, Image, Alert, Platform, StyleSheet } from 'react-native'
+import { View, ImageBackground, Text, TextInput, Image, Alert, Platform, StyleSheet, ToastAndroid, ActionSheetIOS} from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import {Switch} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker'
@@ -312,7 +312,9 @@ class EditProfile extends BaseComponent {
                                 storeData(TOURNAMENT_REGISTER, '')
                                 this.props.navigation.navigate('RegistrationSteps')
                             } else {
-                                this.props.navigation.goBack()
+                                ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
+                                { Platform.OS === "ios" && showToast("Profile updated successfully") }
+                                this.props.navigation.goBack()                                
                                 Events.publish("REFRESH_DASHBOARD_PURSCHASE");
                                 // Events.publish('REFRESH_DASHBOARD');
                             }
@@ -375,6 +377,18 @@ class EditProfile extends BaseComponent {
         })
     }
 
+    showToast = (message) => {
+        const options = ["Cancel"];
+        ActionSheetIOS.showActionSheetWithOptions(
+          {
+            title: message,
+            options: options,
+            cancelButtonIndex: options.length - 1,
+          },
+          (buttonIndex) => {}
+        );
+    };
+    
     pickImage() {
 
         const options = {
@@ -480,7 +494,7 @@ class EditProfile extends BaseComponent {
                         }}
                     >
                         { (this.login_user === PARENT || this.state.user_type === PARENT) &&
-                            <View style={{width: '35%', paddingLeft: 8, marginBottom: 10}}>
+                            <View style={{ paddingLeft: 8, marginBottom: 10}}>
                                 <RNPickerSelect
                                     placeholder={{}}
                                     items={this.state.parentChild}
@@ -585,12 +599,13 @@ class EditProfile extends BaseComponent {
                                 label='name'
                                 // theme={{ colors: { placeholder: 'black', text: 'black', primary: 'black', underlineColor: '#ffffff80', background: '#ffffff80' } }}
                                 value={this.state.txtname}
+                                maxLength={30}
                                 onChangeText={(txtname) => this.setState({ txtname: txtname })}
                             />
 
                         </View>
 
-                        <View
+                        {this.state.txtphone > 5 && <View
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -603,16 +618,19 @@ class EditProfile extends BaseComponent {
 
                             <TextInput
                                 value={this.state.txtphone}
-                                keyboardType={'phone-pad'}
+                                keyboardType={'number-pad'}
                                 style={style.textinput}
+                                maxLength={13}
+                                editable={false}
                                 onChangeText={(txtphone) => {
-                                    if (txtphone.length === 1 && txtphone !== '+') {
-                                        txtphone = '+91' + txtphone
+                                    var numericValue = txtphone.replace(/[^0-9+]/g, "");
+                                    if (numericValue.length > 0 && !numericValue.includes("+")) {
+                                        numericValue = '+91' + numericValue
                                     }
-                                    this.setState({ txtphone: txtphone })
+                                    this.setState({ txtphone: numericValue })
                                 }}
                             />
-                        </View>
+                        </View>}
 
                         <View
                             style={{
@@ -822,6 +840,7 @@ const pickerSelectStyles = StyleSheet.create({
     inputAndroid: {
       fontSize: 16,
       paddingHorizontal: 0,
+      paddingRight:35,
       paddingVertical: 6,
       fontFamily: 'Quicksand-Regular',
       borderColor: '#614051',

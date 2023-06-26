@@ -5,6 +5,8 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
+  ScrollView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Nunito_Bold, Nunito_Regular, Nunito_SemiBold } from "../../util/fonts";
@@ -19,13 +21,16 @@ import { getBaseUrl } from "../../../containers/BaseComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import { GradientLine } from "../../../components/molecules/gradientLine";
 import moment from "moment";
+import LoadingIndicator from "../../../components/molecules/loadingIndicator";
 
 class PlayTrialList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       trailList: null,
+      loader: true,
       displayNoText: true,
+      refreshing: false,
     };
   }
 
@@ -51,10 +56,10 @@ class PlayTrialList extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"]["trials"][0];
-        console.log(academiesData);
         if (academiesData) {
           this.setState({ trailList: [academiesData] });
         }
+        this.setState({ loader: false });
       })
       .catch((error) => {
         console.log(error);
@@ -117,7 +122,19 @@ class PlayTrialList extends Component {
     );
   };
 
+  onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.getData();
+    setTimeout(() => {
+      this.setState({ refreshing: false });
+    }, 1000);
+  };
+
   render() {
+    if (this.state.loader) {
+      return <LoadingIndicator />;
+    }
+
     if (this.state.trailList == null || this.state.trailList.length == 0) {
       return (
         <LinearGradient
@@ -125,11 +142,28 @@ class PlayTrialList extends Component {
           locations={[0, 1]}
           style={styles.container}
         >
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={() => this.onRefresh()}
+                title="Pull to refresh"
+              />
+            }
+            style={{ flex: 1 }}
           >
-            <Text style={styles.insideText}>No bookings available</Text>
-          </View>
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={[styles.insideText, { marginTop: 250 }]}>
+                No bookings available
+              </Text>
+            </View>
+          </ScrollView>
         </LinearGradient>
       );
     }
@@ -140,20 +174,34 @@ class PlayTrialList extends Component {
         locations={[0, 1]}
         style={styles.container}
       >
-        <FlatList
-          data={this.state.trailList}
-          renderItem={this.nextSessionCard}
-          keyExtractor={(item) => item.id}
-        />
-        {this.state.displayNoText && (
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <Text style={styles.insideText}>
-              Maximum number of trials reached
-            </Text>
-          </View>
-        )}
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={() => this.onRefresh()}
+              title="Pull to refresh"
+            />
+          }
+        >
+          <FlatList
+            data={this.state.trailList}
+            renderItem={this.nextSessionCard}
+            keyExtractor={(item) => item.id}
+          />
+          {this.state.displayNoText && (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={styles.insideText}>
+                Maximum number of trials reached
+              </Text>
+            </View>
+          )}
+        </ScrollView>
       </LinearGradient>
     );
   }

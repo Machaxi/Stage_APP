@@ -39,7 +39,7 @@ const MyBookingsScreen = ({ navigation }) => {
   var cancelBookingError = null;
   var getErrorResponse = null;
   const currentYear = moment(new Date()).year();
-  const nextYear = currentYear + 1;
+  const nextYear = currentYear - 1;
   const currentMonth = moment(new Date()).format("MMMM");
   const [refreshing, setRefreshing] = useState(false);
   const [isUpcoming, setIsUpcoming] = useState(true);
@@ -115,10 +115,21 @@ const MyBookingsScreen = ({ navigation }) => {
           let success = json.success;
           if (success) {
             if (json.data?.upcoming?.length > 0) {
-              setUpcomingBookings([...json.data?.upcoming]);
+              var datastore = [...json.data?.upcoming];
+              datastore.sort((a, b) => {
+                const dateA = new Date(
+                  a.date.split("T")[0] + "T" + a.startTime
+                );
+                const dateB = new Date(
+                  b.date.split("T")[0] + "T" + b.startTime
+                );
+                return dateB - dateA;
+              });
+              setUpcomingBookings(datastore.reverse());
             }
             if (json.data?.past?.length > 0) {
-              setPastBookings([...json.data?.past]);
+              const datastorepast = [...json.data?.past];
+              setPastBookings(datastorepast.reverse());
             }
 
             setBookingsApiResponse(json.data);
@@ -146,10 +157,12 @@ const MyBookingsScreen = ({ navigation }) => {
             `${getErrorResponse?.response?.response?.data?.error_message ??
               ""}`,
             ToastAndroid.SHORT
-          ); 
+          );
           {
             Platform.OS === "ios" &&
-            showToast(getErrorResponse?.response?.response?.data?.error_message?? "");
+              showToast(
+                getErrorResponse?.response?.response?.data?.error_message ?? ""
+              );
           }
           console.log(error);
         });
@@ -232,7 +245,9 @@ const MyBookingsScreen = ({ navigation }) => {
           );
           {
             Platform.OS === "ios" &&
-            showToast(cancelBookingError?.response?.data?.error_message ?? "");
+              showToast(
+                cancelBookingError?.response?.data?.error_message ?? ""
+              );
           }
           console.log(error);
         });
@@ -353,7 +368,7 @@ const MyBookingsScreen = ({ navigation }) => {
                 ? ["#a975284d", "#a9752880"]
                 : ["#ffffff54", "#ffffff33"]
             }
-            name={"Upcomng"}
+            name={"Upcoming"}
             isLeft={true}
             onTabPress={() => onTabPress("upcoming")}
             isSelected={isUpcoming}
@@ -387,7 +402,7 @@ const MyBookingsScreen = ({ navigation }) => {
                     isUpcoming={isUpcoming}
                     cancelBooking={() => {
                       setCancelPopupDisplayTime(item?.displayTime);
-                      setCancelPopupSportsName(item?.sport.name);          
+                      setCancelPopupSportsName(item?.sport.name);
                       setCancelBookingId(item.id);
                       setCancelModalVisibility(true);
                     }}
@@ -456,7 +471,7 @@ const MyBookingsScreen = ({ navigation }) => {
               <View style={{ width: deviceWidth * 0.05, height: 1 }} />
               <View style={{ maxWidth: deviceWidth * 0.3 }}>
                 <ModalDropdown
-                  options={[`${currentYear}`, `${nextYear}`]}
+                  options={[`${nextYear}`, `${currentYear}`]}
                   defaultValue={`${currentYear}`}
                   style={{ minWidth: deviceWidth * 0.3 }}
                   showsVerticalScrollIndicator={false}
@@ -484,7 +499,7 @@ const MyBookingsScreen = ({ navigation }) => {
                     return <DropdownArrow />;
                   }}
                   onSelect={(value) => {
-                    onYearSelect(value == 0 ? currentYear : nextYear);
+                    onYearSelect(value == 1 ? currentYear : nextYear);
                   }}
                 />
                 <View
@@ -535,7 +550,7 @@ const MyBookingsScreen = ({ navigation }) => {
           cancelTime={cancelPopupDisplayTime}
           sportsName={cancelPopupSportsName}
           onCancel={() => {
-            cancelBooking(cancelBookingId)
+            cancelBooking(cancelBookingId);
             setCancelModalVisibility(false);
           }}
           cancelModalVisible={cancelModalVisible}

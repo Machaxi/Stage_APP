@@ -14,6 +14,7 @@ import axios from "axios";
 import { getBaseUrl } from "../../BaseComponent";
 import AsyncStorage from "@react-native-community/async-storage";
 import LoadingIndicator from "../../../components/molecules/loadingIndicator";
+import moment from "moment";
 
 class ApplyCouponCode extends Component {
   constructor(props) {
@@ -22,6 +23,8 @@ class ApplyCouponCode extends Component {
       code: "",
       modalVisible: false,
       couponData: null,
+      filterData: null,
+      filteredData: null,
       header: null,
     };
   }
@@ -56,10 +59,26 @@ class ApplyCouponCode extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let academiesData = userResponce["data"]["data"];
-        this.setState({
-          couponData: academiesData["coupons"],
-        });
-        console.log(academiesData["coupons"]);
+        if (academiesData) {
+          console.log(academiesData["coupons"]);
+          const couponData = academiesData["coupons"];
+          const filteredData = couponData.filter((item) => {
+            if (
+              moment() <= moment(item.endTime) &&
+              moment() >= moment(item.startTime)
+            ) {
+              return item.couponCode
+                .toLowerCase()
+                .includes(this.state.code.toLowerCase());
+            }
+          });
+          console.log(filteredData);
+          this.setState({
+            couponData: academiesData["coupons"],
+            filterData: academiesData["coupons"],
+            filteredData: filteredData,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -104,22 +123,27 @@ class ApplyCouponCode extends Component {
     const handleKeyDown = () => {};
 
     const setModalVisibilityCb = (val) => {
-      this.setState({ modalVisible: val });
+      console.log(this.state.code);
+      const isCoachingNewAvailable = this.state.filteredData.find(
+        (item) => item.couponCode == this.state.code
+      );
+      console.log(isCoachingNewAvailable);
+      if (isCoachingNewAvailable) {
+        handlepress(isCoachingNewAvailable);
+      } else {
+        ToastAndroid.show(
+          "Please enter valid coupon code ",
+          ToastAndroid.SHORT
+        );
+        {
+          Platform.OS === "ios" && showToast("Please enter valid coupon code ");
+        }
+      }
     };
 
-    if (this.state.couponData == null) {
+    if (this.state.filterData == null) {
       return <LoadingIndicator />;
     }
-
-    const filteredData = this.state.couponData.filter((item) => {
-      let endDate = new Date(item.endTime);
-      let startDate = new Date(item.startTime);
-      if (new Date() <= endDate && new Date() >= startDate) {
-        return item.couponCode
-          .toLowerCase()
-          .includes(this.state.code.toLowerCase());
-      }
-    });
 
     return (
       <View style={styles.contain}>
@@ -131,9 +155,9 @@ class ApplyCouponCode extends Component {
         />
         <View style={styles.bar} />
         <FlatList
-          data={filteredData}
+          data={this.state.filteredData}
           keyExtractor={(item) => item.id}
-          extraData={filteredData}
+          extraData={this.state.filteredData}
           renderItem={({ item }) => {
             return (
               <TouchableOpacity

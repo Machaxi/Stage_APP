@@ -25,6 +25,7 @@ import {
 } from "../../containers/util/fonts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_APIKEY } from "../../containers/util/utilFunctions";
+import moment from "moment";
 
 // const GOOGLE_MAPS_APIKEY = "AIzaSyAJMceBtcOfZ4-_PCKCktAGUbnfZiOSZjo";
 
@@ -75,19 +76,60 @@ class BookSlotCentreSelection extends Component {
   }
 
   getsortedData() {
-    const sortedAcademies = this.props.academiesList.sort((a, b) => {
-      const distanceA = this.calculateDistance(a?.latitude, a?.longitude);
-      const distanceB = this.calculateDistance(b?.latitude, b?.longitude);
-      return distanceA - distanceB;
-    });
-    const updatedList = sortedAcademies.sort((a, b) => {
-      if (a.academy.id === this.props.preferredAcademyId) return -1; // move item with id 3 to the top
-      if (b.academy.id === this.props.preferredAcademyId) return 1; // move item with id 3 to the top
-      return 0; // maintain original order
-    });
-    this.setState({
-      centerData: updatedList,
-    });
+    // const sortedAcademies = this.props.academiesList.sort((a, b) => {
+    //   const distanceA = this.calculateDistance(a?.latitude, a?.longitude);
+    //   const distanceB = this.calculateDistance(b?.latitude, b?.longitude);
+    //   return distanceA - distanceB;
+    // });
+    // const updatedList = sortedAcademies.sort((a, b) => {
+    //   if (a.academy.id === this.props.preferredAcademyId) return -1; // move item with id 3 to the top
+    //   if (b.academy.id === this.props.preferredAcademyId) return 1; // move item with id 3 to the top
+    //   return 0; // maintain original order
+    // });
+    // this.setState({
+    //   centerData: updatedList,
+    // });
+
+    const data = this.props.academiesList;
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      const originLatitude = this.state.latitude;
+      const originLongitude = this.state.longitude;
+
+      const destinationLatitude = item.academy?.latitude ?? 12.9778;
+      const destinationLongitude = item.academy?.longitude ?? 77.5729;
+      axios
+        .get(
+          `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${originLatitude},${originLongitude}&destinations=${destinationLatitude},${destinationLongitude}&key=${GOOGLE_MAPS_APIKEY}`
+        )
+        .then((response) => {
+          const { status, rows } = response.data;
+          console.log(response.data);
+          if (status === "OK") {
+            const { elements } = rows[0];
+            const { distance } = elements[0];
+            const d = distance.value;
+            const numericDistance = parseInt(d);
+            data[i].distance = numericDistance;
+            data[i].displayDistance = distance.text;
+            console.log(distance.text);
+            console.log("olla");
+            setTimeout(() => {
+              const sortedAcademies = data.sort((a, b) => {
+                return a.distance - b.distance;
+              });
+              this.setState({ centerData: sortedAcademies });
+            }, 1000);
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            centerData: this.props.academiesList,
+          });
+          console.error("error");
+        });
+    }
   }
 
   fetchLocation = async () => {
@@ -107,13 +149,11 @@ class BookSlotCentreSelection extends Component {
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lats},${lngs}&key=${GOOGLE_MAPS_APIKEY}`
           )
           .then((response) => {
-            console.log(response);
             const city = response.data.results[0]?.formatted_address;
             if (city.length > 30) {
               let cityString = city.substring(0, 30);
               let lastCommaIndex = cityString.lastIndexOf(",");
               let truncatedString = cityString.substring(0, lastCommaIndex);
-              console.log(truncatedString);
               this.setState({ place: truncatedString });
             } else {
               this.setState({ place: city });
@@ -167,6 +207,10 @@ class BookSlotCentreSelection extends Component {
       });
     }
     this.requestPermissions();
+    const now = new Date();
+    if (now.getHours() > 12) {
+      this.setState({ selectedTime: "Evening" });
+    }
   }
 
   deg2rad(deg) {
@@ -174,7 +218,6 @@ class BookSlotCentreSelection extends Component {
   }
 
   handleSelect = async (data) => {
-    console.log({ data });
     const placeId = data.place_id;
     const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_MAPS_APIKEY}`;
     try {
@@ -198,19 +241,27 @@ class BookSlotCentreSelection extends Component {
     });
   }
 
-  renderItem = ({ item }) => {
-    var distance = " Km away";
-
-    if (
-      typeof item?.academy?.latitude != undefined &&
-      typeof item?.academy?.longitude != undefined
-    ) {
-      distance =
-        this.calculateDistance(
-          item?.academy?.latitude ?? 0,
-          item?.academy?.longitude ?? 0
-        ) + " Km away";
+  checkIfSlotActive(val, bookings) {
+    const courtData = bookings.find(
+      (item) => item.courtId === val.courtId && item.startTime == val.startTime
+    );
+    var guestvalue = 0;
+    var showData = true;
+    if (courtData) {
+      guestvalue = courtData.maxPlayersAllowed - courtData.totalPlayers;
+      console.log(guestvalue);
+      if (this.props.entirecourt && guestvalue > 0) {
+        showData = false;
+      }
+      if (this.props.guestCount >= guestvalue) {
+        showData = false;
+      }
     }
+    return showData;
+  }
+
+  renderItem = ({ item }) => {
+    distance = item.displayDistance;
     //TODO: verify whether bookings will be here
     if (this.hasSport(item?.academy?.sports)) {
       const greaterThan12 = [];
@@ -223,8 +274,28 @@ class BookSlotCentreSelection extends Component {
           lessThan12.push(item.courts[i]);
         }
       }
-      const greaterThan = this.removeDublicateValue(greaterThan12);
-      const lessThan = this.removeDublicateValue(lessThan12);
+
+      const EveningTime = greaterThan12.sort((a, b) => {
+        const dateA = new Date(
+          moment().format("YYYY-MM-DD") + "T" + a.startTime
+        );
+        const dateB = new Date(
+          moment().format("YYYY-MM-DD") + "T" + b.startTime
+        );
+        return dateA - dateB;
+      });
+      const greaterThan = this.removeDublicateValue(EveningTime, item.bookings);
+
+      const MorningTime = lessThan12.sort((a, b) => {
+        const dateA = new Date(
+          moment().format("YYYY-MM-DD") + "T" + a.startTime
+        );
+        const dateB = new Date(
+          moment().format("YYYY-MM-DD") + "T" + b.startTime
+        );
+        return dateA - dateB;
+      });
+      const lessThan = this.removeDublicateValue(MorningTime, item.bookings);
 
       return (
         <CenterDetails
@@ -270,15 +341,14 @@ class BookSlotCentreSelection extends Component {
     }
   };
 
-  removeDublicateValue = (data) => {
+  removeDublicateValue = (data, bookings) => {
     const uniqueData = [];
     for (let i = 0; i < data.length; i++) {
       const currentObject = data[i];
       let isDuplicate = false;
-
       for (let j = 0; j < uniqueData.length; j++) {
         if (uniqueData[j].displayTime === currentObject.displayTime) {
-          if (currentObject.is_allowed) {
+          if (this.checkIfSlotActive(currentObject, bookings)) {
             uniqueData[j] = currentObject;
           }
           isDuplicate = true;

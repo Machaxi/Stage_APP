@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {
   Nunito_Bold,
@@ -31,11 +31,19 @@ const CouponView = (props) => {
               <Text style={[styles.titled, { color: "#01E3D6" }]}>
                 Coupon Applied
               </Text>
-              <Image
-                style={{ width: 14, height: 14 }}
-                source={require("../../images/delete.png")}
-                resizeMode="contain"
-              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{ alignItems: "center", zIndex: 1 }}
+                onPress={() => {
+                  props.onPressCancel();
+                }}
+              >
+                <Image
+                  style={{ width: 14, height: 14 }}
+                  source={require("../../images/delete.png")}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
             </View>
             {props.coupon != null && (
               <Text style={styles.subtitle}>{props.coupon.couponCode}</Text>

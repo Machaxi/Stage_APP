@@ -34,7 +34,7 @@ class DisplayPlayTrial extends Component {
       academiesData["booking"].playingAreaName +
       " : " +
       academiesData["booking"].courtName;
-    const dateObject = new Date(academiesData["booking"].date);
+    const dateObject = academiesData["booking"].date;
     this.setState({
       selectBatch: academiesData["booking"],
       selectCenter: academiesData["academy"],

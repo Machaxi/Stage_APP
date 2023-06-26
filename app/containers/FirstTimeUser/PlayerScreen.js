@@ -66,9 +66,12 @@ class PlayerScreen extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
+        const playData = batchData["play"]["plans"].sort(
+          (a, b) => a.order - b.order
+        );
         this.setState({
           playData: batchData["play"],
-          playPlanData: batchData["play"]["plans"],
+          playPlanData: playData,
         });
       })
       .catch((error) => {
@@ -106,7 +109,7 @@ class PlayerScreen extends Component {
           />
           <Text style={styles.header}>{this.state.playData.header}</Text>
           <View style={styles.plancontained}>
-            {this.state.playData["plans"].map((item, index) => (
+            {this.state.playPlanData.map((item) => (
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => this.onPlan(item.id)}

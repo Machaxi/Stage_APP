@@ -3,11 +3,12 @@ import React from 'react'
 import { View, Image, Linking, Platform, PermissionsAndroid } from 'react-native'
 import { getData, isSignedIn, onSignIn, storeData } from "../../components/auth";
 import { COACH, GUEST, PARENT, PLAYER, ACADEMY } from "../../components/Constants";
-import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME } from '../BaseComponent';
+import BaseComponent, { TOURNAMENT_REGISTER, GO_TO_HOME, getBaseUrl } from '../BaseComponent';
 import Events from '../../router/events';
 import SplashScreen from 'react-native-splash-screen'
 import * as Analytics from "../../Analytics"
 import Geolocation from "react-native-geolocation-service";
+import { client } from '../../../App';
 
 var is_deep_linking = false
 var deep_data
@@ -57,6 +58,116 @@ class Splash extends BaseComponent {
         this.requestPermissions();
         SplashScreen.hide();
         this.moveNext()
+    }
+
+    refreshUserProfileData = () => {
+        getData("header", (value) => {
+          if (value == "") { 
+            this.updataData();
+            return
+          };
+          const headers = {
+            "Content-Type": "application/json",
+            "x-authorization": value,
+          };
+          client
+            .get(getBaseUrl() + "login-refreshed", { headers })
+            .then((response) => {
+              let data = JSON.stringify(response);
+              let userResponce = JSON.parse(data);
+              let batchData = userResponce["data"]["data"];
+              storeData("userInfo", JSON.stringify(batchData));
+              this.updataData();
+            })
+            .catch(function(error) {
+              console.log(error);
+              this.updataData();
+            });
+        });
+    };
+
+    updataData = () => {
+        getData('userInfo', (value) => {
+            userData = (JSON.parse(value))
+            // onSignIn()
+            let userType = userData.user['user_type']
+            global.USER_TYPE = userType
+            console.log("SplashScreen=> ", JSON.stringify(userData));
+            // if (userType == GUEST) {
+            //     console.warn(userType)
+            //     this.props.navigation.navigate('GuestBookHome')
+            // }
+            // else 
+            if (userData.academy_id != null) {
+                console.log(userData);
+                if (userType == GUEST) {
+                    this.props.navigation.navigate('GuestBookHome')
+                } else if (userType == COACH) {
+                    if (userData.can_book_court) {
+                        this.props.navigation.navigate('CoachBookHome');
+                    } else {
+                        this.props.navigation.navigate('CoachHome');
+                    }
+                }
+                else if (userType == ACADEMY) {
+                    storeData('multiple', userData.has_multiple_acadmies)
+                    if (userData.has_multiple_acadmies == false) {
+                        if (userData.can_book_court) {
+                            this.props.navigation.navigate('CoachBookHome');
+                        } else {
+                            this.props.navigation.navigate('CoachHome');
+                        }
+                    } else {
+                        this.props.navigation.navigate('SwitchPlayer', {
+                            userType: COACH
+                        })
+                    }
+                }else {
+                  if (userData.user.name != null) {
+                    if (!userData.is_learn_enabled) {
+                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
+                            this.props.navigation.navigate("LearnHomePage");
+                        } else {
+                            //TODO: replacing switch with dashboard
+                            // this.props.navigation.navigate('SwitchPlayer', {
+                            //     userType: PLAYER
+                            // })
+                             this.props.navigation.navigate(
+                               "LearnHomePage"
+                             );
+                   }
+                   }else if (!userData.is_play_enabled) {
+                        // this.props.navigation.navigate("Guestfirsted");
+                        this.props.navigation.navigate("LearnHomePage");
+                    } else {
+                        this.props.navigation.navigate("HomeDrawer");
+                    }  
+                  }else {
+                    this.props.navigation.navigate('Login')
+                  }
+                }
+                // else if (userType == PARENT) {
+                //     if (userData.can_book_court) {
+                //         this.props.navigation.navigate('ParentBookHome');
+                //     } else {
+                //         this.props.navigation.navigate('ParentHome');
+                //     }
+                // }
+
+            } else {
+              if (userData.user.name != null) {
+                if (!userData.is_learn_enabled) {
+                    this.props.navigation.navigate( "LearnHomePage");
+                } else if (!userData.is_play_enabled) {
+                    this.props.navigation.navigate("LearnHomePage");
+                } else {
+                    this.props.navigation.navigate("HomeDrawer");
+                }  
+              }else {
+                this.props.navigation.navigate('Login')
+              }
+            }
+        });
     }
 
     requestPermissions = async() => {
@@ -118,15 +229,12 @@ class Splash extends BaseComponent {
                 BaseComponent.isUserLoggedIn = true
 
                 setTimeout(() => {
-
                     console.warn('is_deep_linking => ' + is_deep_linking, JSON.stringify(deep_data))
                     if (is_deep_linking) {
                         is_deep_linking = false
                         Events.publish(GO_TO_HOME, deep_data);
                         return
                     }
-
-
                     const { checkedSignIn, signedIn } = this.state;
                     console.log("signedIn", signedIn)
                     if (!checkedSignIn) {
@@ -137,110 +245,8 @@ class Splash extends BaseComponent {
                     if (signedIn !== true) {
                        // this.props.navigation.navigate('IntroScreen')//'SignedOut')
                         this.props.navigation.navigate('Login')//'SignedOut')
-
-
                     } else {
-                        getData('userInfo', (value) => {
-                            userData = (JSON.parse(value))
-                            // onSignIn()
-                            let userType = userData.user['user_type']
-                            global.USER_TYPE = userType
-                            console.log("SplashScreen=> ", JSON.stringify(userData));
-                            // if (userType == GUEST) {
-                            //     console.warn(userType)
-                            //     this.props.navigation.navigate('GuestBookHome')
-                            // }
-                            // else 
-                            if (userData.academy_id != null) {
-                                console.log(userData);
-                                if (userType == GUEST) {
-                                    this.props.navigation.navigate('GuestBookHome')
-                                } else if (userType == COACH) {
-                                    if (userData.can_book_court) {
-                                        this.props.navigation.navigate('CoachBookHome');
-                                    } else {
-                                        this.props.navigation.navigate('CoachHome');
-                                    }
-                                }
-                                else if (userType == ACADEMY) {
-                                    storeData('multiple', userData.has_multiple_acadmies)
-                                    if (userData.has_multiple_acadmies == false) {
-                                        if (userData.can_book_court) {
-                                            this.props.navigation.navigate('CoachBookHome');
-                                        } else {
-                                            this.props.navigation.navigate('CoachHome');
-                                        }
-                                    } else {
-                                        this.props.navigation.navigate('SwitchPlayer', {
-                                            userType: COACH
-                                        })
-                                    }
-                                }else {
-                                  if (userData.user.name != null) {
-                                    if (!userData.is_learn_enabled) {
-                                        if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                                            this.props.navigation.navigate("LearnHomePage");
-                                        } else {
-                                            //TODO: replacing switch with dashboard
-                                            // this.props.navigation.navigate('SwitchPlayer', {
-                                            //     userType: PLAYER
-                                            // })
-                                             this.props.navigation.navigate(
-                                               "LearnHomePage"
-                                             );
-                                   }
-                                   }else if (!userData.is_play_enabled) {
-                                        // this.props.navigation.navigate("Guestfirsted");
-                                        this.props.navigation.navigate("LearnHomePage");
-                                    } else {
-                                        this.props.navigation.navigate("HomeDrawer");
-                                    }  
-                                  }else {
-                                    this.props.navigation.navigate('Login')
-                                  }
-                                }
-                                // else if (userType == PARENT) {
-                                //     if (userData.can_book_court) {
-                                //         this.props.navigation.navigate('ParentBookHome');
-                                //     } else {
-                                //         this.props.navigation.navigate('ParentHome');
-                                //     }
-                                // }
-
-                            } else {
-                              if (userData.user.name != null) {
-                            //     if (userType == COACH) {
-                            //         if (userData.can_book_court) {
-                            //             this.props.navigation.navigate('CoachBookHome');
-                            //         } else {
-                            //             this.props.navigation.navigate('CoachHome');
-                            //         }
-                            //     }else 
-                                if (!userData.is_learn_enabled) {
-                                    if (userData.has_multiple_acadmies == false && userData.academy_id != null) {
-                                             this.props.navigation.navigate("LearnHomePage");
-                                    } else {
-                                        // this.props.navigation.navigate('SwitchPlayer', {
-                                        //     userType: PLAYER
-                                        // })
-                                        this.props.navigation.navigate(
-                                          "LearnHomePage"
-                                        );
-                                    }
-                                } else if (!userData.is_play_enabled) {
-                                    // this.props.navigation.navigate("Guestfirsted");
-                                    this.props.navigation.navigate("LearnHomePage");
-                                } else {
-                                    this.props.navigation.navigate("HomeDrawer");
-                                }  
-                              }else {
-                                this.props.navigation.navigate('Login')
-                              }                              
-                            // this.props.navigation.navigate('SwitchPlayer')
-                            }
-
-                        });
-
+                        this.refreshUserProfileData();
                     }
 
                 }, 1000)

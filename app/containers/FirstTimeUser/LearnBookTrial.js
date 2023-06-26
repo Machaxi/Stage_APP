@@ -80,11 +80,12 @@ class LearnBookTrial extends Component {
   }
 
   getUserData = async () => {
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
-    const userDetails = JSON.parse(userDetailsJson);
+    const userDetailsJson = await AsyncStorage.getItem("userInfo");
+    const userDetailed = JSON.parse(userDetailsJson);
+    const userDetails = userDetailed.user;
     this.setState({
-      username: userDetails.userName,
-      gender: userDetails.gender,
+      username: userDetails.name,
+      gender: userDetails.genderType,
     });
   };
 
@@ -189,6 +190,7 @@ class LearnBookTrial extends Component {
               {this.state.sportsList != null &&
                 this.state.currentPage === 1 && (
                   <SelectSports
+                    selectSport={this.state.selectSport}
                     onPress={this.onPressSports}
                     sportList={this.state.sportsList}
                     title="Playing Trial"
@@ -199,6 +201,7 @@ class LearnBookTrial extends Component {
                   onPress={this.onPressCenter}
                   academiesList={this.state.academiesList}
                   selectSport={this.state.selectSport}
+                  selectCenter={this.state.selectCenter}
                 />
               )}
               {this.state.currentPage === 3 && (
@@ -206,6 +209,8 @@ class LearnBookTrial extends Component {
                   onPress={this.onPressBatch}
                   selectCenter={this.state.selectCenter}
                   selectSport={this.state.selectSport}
+                  selectDate={this.state.selectDate}
+                  selectLevel={this.state.selectLevel}
                 />
               )}
               {this.state.currentPage === 4 && (

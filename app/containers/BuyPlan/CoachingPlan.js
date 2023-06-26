@@ -181,13 +181,17 @@ class CoachingPlan extends Component {
   };
 
   hadleBackPress = () => {
-    if (this.state.currentPage > 1) {
-      this.setState({ currentPage: this.state.currentPage - 1 });
+    if (this.state.couponCode) {
+      this.setState({ couponCode: false });
     } else {
-      if (this.state.firstPage) {
-        this.hadleBack();
+      if (this.state.currentPage > 1) {
+        this.setState({ currentPage: this.state.currentPage - 1 });
       } else {
-        this.setState({ firstPage: true });
+        if (this.state.firstPage) {
+          this.hadleBack();
+        } else {
+          this.setState({ firstPage: true });
+        }
       }
     }
   };
@@ -202,6 +206,8 @@ class CoachingPlan extends Component {
       joinBool: joinBool,
       joinTime: joinTime,
       couponminamount: amount,
+      applycoupon: false,
+      coupon: null,
     });
   };
 
@@ -270,6 +276,10 @@ class CoachingPlan extends Component {
             <PlayerDetails
               title="Coaching Plan"
               onPress={this.onPressDetails}
+              username={this.state.username}
+              usergender={this.state.usergender}
+              parent={this.state.parent}
+              childDetails={this.state.childDetails}
             />
           </View>
         )}
@@ -314,6 +324,7 @@ class CoachingPlan extends Component {
                 {this.state.sportsList != null &&
                   this.state.currentPage === 1 && (
                     <SelectSports
+                      selectSport={this.state.selectSport}
                       onPress={this.onPressSports}
                       sportList={this.state.sportsList}
                     />
@@ -323,6 +334,7 @@ class CoachingPlan extends Component {
                     onPress={this.onPressCenter}
                     academiesList={this.state.academiesList}
                     selectSport={this.state.selectSport}
+                    selectCenter={this.state.selectCenter}
                   />
                 )}
                 {this.state.currentPage === 3 && (
@@ -331,6 +343,7 @@ class CoachingPlan extends Component {
                     parent={this.state.parent}
                     selectCenter={this.state.selectCenter}
                     selectSport={this.state.selectSport}
+                    selectLevel={this.state.selectLevel}
                   />
                 )}
                 {this.state.currentPage === 4 && (

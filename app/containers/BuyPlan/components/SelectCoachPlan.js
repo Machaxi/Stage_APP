@@ -56,8 +56,18 @@ class SelectCoachPlan extends Component {
   }
 
   componentDidMount() {
+    const batchd = this.props.selectBatch.sort((a, b) => {
+      return Object.keys(a.weekDetails)[0] - Object.keys(b.weekDetails)[0];
+    });
+
+    const batchdata = batchd.sort((a, b) => {
+      return (
+        Object.keys(a.weekDetails).length - Object.keys(b.weekDetails).length
+      );
+    });
+
     this.setState({
-      batchData: this.props.selectBatch,
+      batchData: batchdata,
       planData: this.props.selectBatch[0].batchPlansDto.plans[0].payable_amount,
       planList: this.props.planList,
     });

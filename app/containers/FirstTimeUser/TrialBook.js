@@ -38,6 +38,7 @@ class TrialBook extends Component {
       distance: 0,
       alreadyBook: false,
       finishSport: null,
+      playersports: null,
       firstPage: true,
       errorMessage: "We could not book your free trial, please try again.",
       username: "",
@@ -110,12 +111,13 @@ class TrialBook extends Component {
       userData = JSON.parse(value);
       this.setState({
         finishSport: userData.sport_trial_details,
+        playersports: userData.sport_trial_details,
       });
     });
   };
 
   hadleBack = () => {
-    events.publish("REFRESH_LEARN_TRAIL"); 
+    events.publish("REFRESH_LEARN_TRAIL");
     this.props.navigation.goBack();
   };
 
@@ -169,12 +171,15 @@ class TrialBook extends Component {
   };
 
   onPressDetails = (username, usergender, parent, childDetails) => {
-    var playerInfo = this.state.finishSport;
+    var playerInfo = this.state.playersports;
     if (childDetails != null) {
       const playerdetails = this.state.playerDetails.find(
         (item) => item.name === childDetails.name
       );
       playerInfo = playerdetails.sport_trial_details;
+    }
+    if (parent == "Parent") {
+      playerInfo = this.state.playersports;
     }
     this.setState({
       firstPage: false,
@@ -216,6 +221,10 @@ class TrialBook extends Component {
             <PlayerDetails
               title="Coaching Trial"
               onPress={this.onPressDetails}
+              username={this.state.username}
+              usergender={this.state.usergender}
+              parent={this.state.parent}
+              childDetails={this.state.childDetails}
             />
           </View>
         )}
@@ -251,6 +260,7 @@ class TrialBook extends Component {
                   <SelectSports
                     onPress={this.onPressSports}
                     sportList={this.state.sportsList}
+                    selectSport={this.state.selectSport}
                     parent={this.state.parent}
                     childDetails={this.state.childDetails}
                     finishSport={this.state.finishSport}
@@ -262,6 +272,7 @@ class TrialBook extends Component {
                   onPress={this.onPressCenter}
                   academiesList={this.state.academiesList}
                   selectSport={this.state.selectSport}
+                  selectCenter={this.state.selectCenter}
                 />
               )}
               {this.state.currentPage === 3 && (
@@ -270,6 +281,8 @@ class TrialBook extends Component {
                   parent={this.state.parent}
                   selectCenter={this.state.selectCenter}
                   selectSport={this.state.selectSport}
+                  selectDate={this.state.selectDate}
+                  selectLevel={this.state.selectLevel}
                 />
               )}
               {this.state.currentPage === 4 && (

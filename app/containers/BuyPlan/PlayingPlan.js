@@ -61,6 +61,7 @@ class PlayingPlan extends Component {
       header: null,
       failed: "Failed !",
       couponminamount: 0,
+      expiryDate: new Date(),
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
@@ -75,6 +76,11 @@ class PlayingPlan extends Component {
     this.setState({
       PlanNumber: this.props.navigation.state.params.selectPlan,
     });
+    if (this.props.navigation.state.params.expire) {
+      this.setState({
+        expiryDate: this.props.navigation.state.params.expire,
+      });
+    }
     axios
       .get(getBaseUrl() + "global/academy/all")
       .then((response) => {
@@ -130,7 +136,10 @@ class PlayingPlan extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
-        this.setState({ planList: batchData["play"]["plans"] });
+        const playData = batchData["play"]["plans"].sort(
+          (a, b) => a.order - b.order
+        );
+        this.setState({ planList: playData });
       })
       .catch((error) => {
         console.log(error);
@@ -138,9 +147,10 @@ class PlayingPlan extends Component {
   };
 
   getData = async () => {
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
     const header = await AsyncStorage.getItem("header");
-    const userDetails = JSON.parse(userDetailsJson);
+    const userDetailsJson = await AsyncStorage.getItem("userInfo");
+    const userDetailed = JSON.parse(userDetailsJson);
+    const userDetails = userDetailed.user;
     this.setState({ userDetails: userDetails, header: header }, () => {
       this.apiCall();
     });
@@ -157,7 +167,14 @@ class PlayingPlan extends Component {
   };
 
   hadleCouponCode = (joinBool, joinTime, amount) => {
-    this.setState({ couponCode: true, joinBool: joinBool, joinTime: joinTime, couponminamount: amount});
+    this.setState({
+      couponCode: true,
+      joinBool: joinBool,
+      joinTime: joinTime,
+      couponminamount: amount,
+      applycoupon: false,
+      coupon: null,
+    });
   };
 
   hadleCouponApply = (coupon) => {
@@ -199,10 +216,14 @@ class PlayingPlan extends Component {
   };
 
   hadleBackPress = () => {
-    if (this.state.currentPage > 1) {
-      this.setState({ currentPage: this.state.currentPage - 1 });
+    if (this.state.couponCode) {
+      this.setState({ couponCode: false });
     } else {
-      this.props.navigation.goBack();
+      if (this.state.currentPage > 1) {
+        this.setState({ currentPage: this.state.currentPage - 1 });
+      } else {
+        this.props.navigation.goBack();
+      }
     }
   };
 
@@ -291,7 +312,7 @@ class PlayingPlan extends Component {
               subscriptionType="PLAYING_SUBSCRIPTION"
               selectCenter={this.state.selectCenter}
               onPress={this.hadleCouponApply}
-              amount= {this.state.couponminamount}
+              amount={this.state.couponminamount}
             />
           </View>
         )}
@@ -329,6 +350,7 @@ class PlayingPlan extends Component {
                     joinTime={this.state.joinTime}
                     joinBool={this.state.joinBool}
                     explore={false}
+                    expiryDate={this.state.expiryDate}
                     onPresscoupon={this.hadleCouponCode}
                     onPress={this.onPressConfirm}
                   />

@@ -78,7 +78,7 @@ global.PROFILE_REFRESH = null;
 
 //===============================================================================================
 
-export const DEBUG_APP = false;
+export const DEBUG_APP = true;
 export const PROD_DEBUG = false;
 
 export const ONE_SIGNAL_ID = "0afba88e-fe31-4da9-9540-412faf6b856b";
@@ -677,6 +677,7 @@ export default class BaseComponent extends React.Component {
           console.log("working");
           console.log(batchData);
           storeData("userInfo", JSON.stringify(batchData));
+          Events.publish(EVENT_EDIT_PROFILE);
         })
         .catch(function(error) {
           console.log(error);

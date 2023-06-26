@@ -21,9 +21,6 @@ class SorryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userDetails: null,
-      header: null,
-      phonenumber: null,
       isLoading: false,
       failed: "Payment Failed !",
     };
@@ -33,86 +30,7 @@ class SorryPage extends Component {
     this.getData();
   }
 
-  handleOnStartPayment = (orderId, amount) => {
-    this.setState({ isLoading: true });
-    // this.RBSheet.close()
-    var options = {
-      description: "Payment for Subscription",
-      currency: "INR",
-      key: getPaymentKey(),
-      amount: amount * 100,
-      name: "Machaxi",
-      prefill: {
-        email: getRazorPayEmail(),
-        contact: this.state.phonenumber,
-        name: this.state.userDetails.userName,
-      },
-      theme: { color: "#67BAF5" },
-    };
-    console.log(options);
-    RazorpayCheckout.open(options)
-      .then((data) => {
-        let payment_details = {
-          razorpay_payment_id: data.razorpay_payment_id,
-        };
-        this.submitPaymentConfirmation(orderId, amount, payment_details);
-      })
-      .catch((error) => {
-        console.log("Razor Rspo ", error);
-        alert("Payment could not succeed. Please try again.");
-        this.setState({ isLoading: false });
-      });
-  };
-
-  submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
-    if ((this.props.title = "Playing")) {
-      this.paymentProcess(
-        orderId,
-        amount,
-        paymentDetails,
-        `court/buy-subscription`
-      );
-    } else {
-      this.paymentProcess(
-        orderId,
-        amount,
-        paymentDetails,
-        `payment/due-subscription-plan-payment/v1`
-      );
-    }
-  };
-
-  paymentProcess = (orderId, amount, paymentDetails, url) => {
-    let postData = {
-      data: {
-        due_order_id: orderId,
-        amount,
-        payment_details: paymentDetails,
-      },
-    };
-    this.props
-      .paymentConfirmation(this.state.header, postData, url)
-      .then((result) => {
-        result = result.payload.data;
-        if (result.success) {
-          this.props.onPress(true);
-        } else {
-          this.setState({ isLoading: false });
-          alert(result.error_message);
-        }
-      });
-  };
-
   getData = async () => {
-    const header = await AsyncStorage.getItem("header");
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
-    const phonenumber = await AsyncStorage.getItem("phone_number");
-    const userDetails = JSON.parse(userDetailsJson);
-    this.setState({
-      userDetails: userDetails,
-      header: header,
-      phonenumber: phonenumber,
-    });
     if (this.props.title == "Playing") {
       this.setState({ failed: this.props.failed });
     }

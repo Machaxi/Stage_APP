@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   Platform,
+  Share,
 } from "react-native";
 import { isSignedIn, getData } from "../components/auth";
 import { GUEST, PLAYER, COACH, ACADEMY, PARENT } from "../components/Constants";
@@ -27,7 +28,7 @@ import Events from "../router/events";
 import { Rating } from "react-native-ratings";
 import { RateViewBorder } from "../components/Home/RateViewBorder";
 import { SkyFilledButton } from "../components/Home/SkyFilledButton";
-import Share from "react-native-share";
+// import Share from "react-native-share";
 import FastImage from "react-native-fast-image";
 import StarRating from "react-native-star-rating";
 import DeviceInfo from "react-native-device-info";
@@ -38,6 +39,7 @@ import { DrawerCloseBtn } from "../components/molecules/drawerCloseBtn";
 import { DrawerItemBtn } from "../components/molecules/drawerItemBtn";
 import { ColourfulDrawerItem } from "../components/molecules/colourfulDrawerItem";
 import { PlayerDetailsAndEdit } from "../components/molecules/playerDetailsAndEdit";
+import SignOutDialog from "../components/custom/SignOutDialog";
 
 let placeholder_img = "https://databytenitt.github.io/img/male.png";
 
@@ -49,7 +51,7 @@ class CoachMenuDrawer extends BaseComponent {
     this.state = {
       signedIn: false,
       user_type: "",
-      fullName: "",
+      fullName: "Guest",
       mobileNumber: "",
       academy_id: "",
       player_id: "",
@@ -65,6 +67,7 @@ class CoachMenuDrawer extends BaseComponent {
       isLearnPlanEnabled: false,
       isPlayPlanEnabled: false,
       learnDataVisibility: false,
+      showpopup: false,
     };
 
     isSignedIn()
@@ -77,8 +80,10 @@ class CoachMenuDrawer extends BaseComponent {
     this.updateData();
 
     this.refreshEvent = Events.subscribe(EVENT_EDIT_PROFILE, () => {
-      //console.warn(EVENT_EDIT_PROFILE)
-      this.updateData();
+      console.log("EVENT_EDIT_PROFILEss");
+      setTimeout(() => {
+        this.updateData();
+      }, 2000);
     });
 
     this.refreshEvent = Events.subscribe(RATING_UPDATE, (obj) => {
@@ -442,7 +447,7 @@ class CoachMenuDrawer extends BaseComponent {
                     marginTop: 8,
                   }}
                 >
-                  {fullame}
+                  {this.state.fullName}
                 </Text>
 
                 <Text
@@ -585,7 +590,7 @@ class CoachMenuDrawer extends BaseComponent {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
-            this.callApi();
+            this.setState({ showpopup: true });
           }}
         >
           <View style={styles.signOut}>
@@ -597,6 +602,16 @@ class CoachMenuDrawer extends BaseComponent {
           </View>
         </TouchableOpacity>
 
+        <SignOutDialog
+          exitPressed={() => {
+            this.setState({ showpopup: false });
+            this.callApi();
+          }}
+          cancelPressed={() => {
+            this.setState({ showpopup: false });
+          }}
+          visible={this.state.showpopup}
+        />
         <Text style={styles.version_style}>
           App Version: {DeviceInfo.getVersion()}
         </Text>
@@ -693,7 +708,7 @@ class CoachMenuDrawer extends BaseComponent {
                   marginTop: 8,
                 }}
               >
-                {fullame}
+                {this.state.fullName}
               </Text>
 
               <Text
@@ -1182,7 +1197,7 @@ class CoachMenuDrawer extends BaseComponent {
                     marginTop: 8,
                   }}
                 >
-                  {fullame}
+                  {this.state.fullName}
                 </Text>
 
                 <Text
@@ -1217,7 +1232,7 @@ class CoachMenuDrawer extends BaseComponent {
                 learnDataVisibility: !this.state.learnDataVisibility,
               });
             }}
-            image={require("../images/play.png")}
+            image={require("../images/learn.png")}
             title={"Learn"}
             isExpanded={this.state.learnDataVisibility}
           />
@@ -1458,7 +1473,7 @@ class CoachMenuDrawer extends BaseComponent {
         {!this.state.isPlayPlanEnabled && (
           <View style={[defaultStyle.line_style, styles.greyLine]} />
         )}
-        {!this.state.isPlayPlanEnabled && (
+        {!this.state.isLearnPlanEnabled && (
           <DrawerItemBtn
             itemImage={require("../images/wallet.png")}
             onPress={() => {
@@ -1467,7 +1482,7 @@ class CoachMenuDrawer extends BaseComponent {
             title={"Coaching Payment"}
           />
         )}
-        {!this.state.isPlayPlanEnabled && (
+        {!this.state.isLearnPlanEnabled && (
           <View style={[defaultStyle.line_style, styles.greyLine]} />
         )}
         <ColourfulDrawerItem
@@ -1573,11 +1588,10 @@ class CoachMenuDrawer extends BaseComponent {
             { marginLeft: 12, backgroundColor: "#272733", marginRight: 12 },
           ]}
         />
-
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
-            this.callApi();
+            this.setState({ showpopup: true });
           }}
         >
           <View style={styles.signOut}>
@@ -1588,25 +1602,56 @@ class CoachMenuDrawer extends BaseComponent {
             <Text style={styles.seperateFunction}>Sign Out</Text>
           </View>
         </TouchableOpacity>
+        <SignOutDialog
+          exitPressed={() => {
+            this.setState({ showpopup: false });
+            this.callApi();
+          }}
+          cancelPressed={() => {
+            this.setState({ showpopup: false });
+          }}
+          visible={this.state.showpopup}
+        />
       </View>
     );
   }
 
-  shareApp() {
+  shareApp = () => {
     this.props.navigation.closeDrawer();
-    setTimeout(() => {
+    setTimeout(async () => {
       let url = "https://machaxi.app.link/get-machaxi";
 
-      const shareOptions = {
-        title: "Share via",
-        message: "I'm using Machaxi app.",
-        url: url,
-        //social: Share.Social.WHATSAPP,
-        //whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
-      };
-      Share.open(shareOptions).catch((err) => console.log(err));
+      // const shareOptions = {
+      //   title: "Share via",
+      //   message: "I'm using Machaxi app.",
+      //   url: url,
+      //   flags: PendingIntent.FLAG_MUTABLE,
+      //   //social: Share.Social.WHATSAPP,
+      //   //whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
+      // };
+      // Share.open(shareOptions).catch((err) => console.log(err));
+      if (Platform.OS === "ios") {
+        try {
+          await Share.share({
+            title: "Share via",
+            message: "I'm using Machaxi app.",
+            url: url,
+          });
+        } catch (error) {
+          alert(error.message);
+        }
+      } else {
+        try {
+          await Share.share({
+            title: "Share via",
+            message: "I'm using Machaxi app. \n" + url,
+          });
+        } catch (error) {
+          alert(error.message);
+        }
+      }
     }, 1000);
-  }
+  };
 
   render() {
     let signedIn = this.state.signedIn;

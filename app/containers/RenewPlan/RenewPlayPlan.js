@@ -35,6 +35,7 @@ class RenewPlayPlan extends Component {
       header: null,
       playPlanData: null,
       couponminamount: 0,
+      expiryDate: new Date(),
     };
   }
 
@@ -58,6 +59,10 @@ class RenewPlayPlan extends Component {
         const preferredAcademyId = batchData["plan"].preferredAcademyId;
         console.log(userResponce);
         this.apicalling(planId, preferredAcademyId);
+        const expire = new Date(batchData["plan"].expiryDate);
+        const oneDay = 24 * 60 * 60 * 1000;
+        let nextDate = new Date(expire.getTime() + oneDay);
+        this.setState({ expiryDate: nextDate });
       })
       .catch((error) => {
         console.log(error);
@@ -75,8 +80,11 @@ class RenewPlayPlan extends Component {
         let data = JSON.stringify(response);
         let userResponce = JSON.parse(data);
         let batchData = userResponce["data"]["data"];
+        const playData = batchData["play"]["plans"].sort(
+          (a, b) => a.order - b.order
+        );
         this.setState({
-          playPlanData: batchData["play"]["plans"],
+          playPlanData: playData,
         });
       })
       .catch((error) => {
@@ -104,9 +112,6 @@ class RenewPlayPlan extends Component {
         let batchData = userResponce["data"]["data"];
         const planId = batchData["plan"];
         const preferredAcademyId = batchData["academy"];
-        console.log("hhhhh");
-        console.log(preferredAcademyId);
-        console.log(planId);
         this.setState({
           selectPlan: planId,
           selectCenter: preferredAcademyId,
@@ -118,9 +123,10 @@ class RenewPlayPlan extends Component {
   };
 
   getData = async () => {
-    const userDetailsJson = await AsyncStorage.getItem("user_details");
     const header = await AsyncStorage.getItem("header");
-    const userDetails = JSON.parse(userDetailsJson);
+    const userDetailsJson = await AsyncStorage.getItem("userInfo");
+    const userDetailed = JSON.parse(userDetailsJson);
+    const userDetails = userDetailed.user;
     this.setState({ userDetails: userDetails, header: header }, () => {
       this.apiCall();
       this.planValue();
@@ -132,7 +138,7 @@ class RenewPlayPlan extends Component {
   };
 
   hadleCouponCode = (joinBool, joinTime, amount) => {
-    this.setState({ couponCode: true, couponminamount: amount});
+    this.setState({ couponCode: true, couponminamount: amount });
   };
 
   hadleCouponApply = (coupon) => {
@@ -171,7 +177,8 @@ class RenewPlayPlan extends Component {
 
   onPressExplore = () => {
     const selectPlan = 100;
-    this.props.navigation.navigate("PlayingPlan", { selectPlan });
+    const expire = this.state.expiryDate;
+    this.props.navigation.navigate("PlayingPlan", { selectPlan, expire });
   };
 
   render() {
@@ -210,7 +217,7 @@ class RenewPlayPlan extends Component {
               subscriptionType="PLAYING_SUBSCRIPTION"
               selectCenter={this.state.selectCenter}
               onPress={this.hadleCouponApply}
-              amount= {this.state.couponminamount}
+              amount={this.state.couponminamount}
             />
           </View>
         )}
@@ -225,6 +232,7 @@ class RenewPlayPlan extends Component {
               distance={this.state.distance}
               applycoupon={this.state.applycoupon}
               coupon={this.state.coupon}
+              expiryDate={this.state.expiryDate}
               explore={true}
               onPresscoupon={this.hadleCouponCode}
               onPress={this.onPressConfirm}

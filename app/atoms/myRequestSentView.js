@@ -20,9 +20,9 @@ const MyRequestSentView = ({ val, cancelBooking }) => {
         <NamedRoundedContainer
           name={"Request " + requestStatus(val?.status)}
         />
-        <TouchableOpacity onPress={() => cancelBooking()}>
+        {val?.status == "PENDING" && (<TouchableOpacity onPress={() => cancelBooking()}>
           <Text style={commonStyles.cancelBooking}>Cancel Booking</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>)}
       </View>
       <MyRequestCentreDetails details={val?.academy} />
       <View style={styles.rowSpaceBtw}>
