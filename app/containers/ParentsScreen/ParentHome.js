@@ -255,14 +255,14 @@ class ParentHome extends BaseComponent {
         .getPlayerSWitcher(value)
         .then(() => {
           var respns = this.props.switcherData;
-          console.log("jdbcdjc")
+          console.log("jdbcdjc");
           console.log({ respns });
           // console.log(' user response payload ' + JSON.stringify(this.props.data));
           // console.log(' user response payload ' + JSON.stringify(this.props.data.user));
           let user = JSON.stringify(this.props.switcherData.switherlist);
           let usered = JSON.parse(user);
           console.log("workings");
-          console.log(usered)
+          console.log(usered);
           let user1 = usered.data["players"].filter(
             (item) => item.isCoaching === true
           );
@@ -794,7 +794,11 @@ class ParentHome extends BaseComponent {
       );
     }
 
-    if (this.state.userDetails && this.state.userDetails.is_learn_enabled) {
+    if (
+      this.state.userDetails &&
+      (this.state.userDetails.is_learn_enabled ||
+        this.state.itemList?.length == 0)
+    ) {
       return (
         <LinearGradient
           colors={["#332B70", "#24262A"]}

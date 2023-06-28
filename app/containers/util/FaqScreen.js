@@ -15,7 +15,7 @@ export default class FaqScreen extends BaseComponent {
   }
 
   render() {
-    const uri = "https://machaxi.com/faq";
+    const uri = "https://machaxi.com/faq-mobile";
     //const uri = 'http://www.africau.edu/images/default/sample.pdf'
     let visible = this.state.visible;
 
@@ -31,12 +31,12 @@ export default class FaqScreen extends BaseComponent {
             this.webview = ref;
           }}
           source={{ uri }}
-          // onNavigationStateChange={(event) => {
-          //   if (event.url !== uri) {
-          //     this.webview.stopLoading();
-          //     Linking.openURL(event.url);
-          //   }
-          // }}
+          onNavigationStateChange={(event) => {
+            if (event.url !== uri) {
+              this.webview.stopLoading();
+              Linking.openURL(event.url);
+            }
+          }}
         />
       </View>
     );

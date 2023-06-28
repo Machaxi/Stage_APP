@@ -78,7 +78,7 @@ class SelectPay extends Component {
       parent: "",
       selectLevel: null,
       date: new Date(),
-      isLoading: false,
+      isLoading: true,
       appliedCoupon: false,
       displayStartDate: "",
       displayEndDate: "",
@@ -115,6 +115,7 @@ class SelectPay extends Component {
     const joinDate = this.convertToDate(this.props.selectPlan.start_date);
     const stDate = new Date(joinDate);
     const start_d_date = this.formatesmallDateYear(stDate);
+    console.log(this.props.selectPlan);
     this.setState(
       {
         centerName: selectCenter.name,
@@ -147,7 +148,7 @@ class SelectPay extends Component {
           console.log("workings");
           this.DataChange(this.props.joinTime);
         } else {
-          this.setState({ selectLevel: selectLevel });
+          this.setState({ selectLevel: selectLevel, isLoading: false });
         }
       }
     );
@@ -264,7 +265,7 @@ class SelectPay extends Component {
       description: description,
       currency: "INR",
       key: getPaymentKey(),
-      amount: amount * 100,
+      amount: (amount * 100).toFixed(0),
       name: "Machaxi",
       prefill: {
         email: getRazorPayEmail(),
@@ -293,6 +294,7 @@ class SelectPay extends Component {
   };
 
   submitPaymentConfirmation = (orderId, amount, paymentDetails) => {
+    this.setState({ isLoading: true });
     let postData = {
       data: {
         due_order_id: orderId,
@@ -518,7 +520,6 @@ class SelectPay extends Component {
 
     return (
       <View style={{ marginVertical: 20, flex: 1 }}>
-        <Loader visible={this.state.isLoading} />
         <AppliedCouponCode
           visible={this.state.isApplied}
           price={"₹ " + this.state.couponAmount}

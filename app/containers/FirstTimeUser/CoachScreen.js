@@ -42,11 +42,22 @@ class CoachScreen extends Component {
 
   componentDidMount() {
     this.getValue();
+    this.startAutoScroll();
     this.didFocusListener = this.props.navigation.addListener(
       "didFocus",
       this.onScreenFocus
     );
+    this.didBlurListener = this.props.navigation.addListener(
+      "didBlur",
+      this.onScreenBlur
+    );
   }
+
+  onScreenBlur = () => {
+    if (this.autoScrollInterval) {
+      clearInterval(this.autoScrollInterval);
+    }
+  };
 
   onScreenFocus = () => {
     this.apiCall();
@@ -54,28 +65,20 @@ class CoachScreen extends Component {
 
   componentWillUnmount() {
     this.didFocusListener.remove();
-    // this.stopAutoScroll();
-    // clearTimeout(this.timer);
+    this.didBlurListener.remove();
   }
 
   startAutoScroll() {
     this.autoScrollInterval = setInterval(() => {
       var off =
         (Dimensions.get("window").width - 40) * (this.state.currentIndex + 1);
-      console.log(off);
       this.scrollViewRef?.current?.scrollTo({ x: off, animated: true });
       if (this.state.currentIndex > images.length - 2) {
         this.setState({ currentIndex: 0 });
-        clearInterval(this.autoScrollInterval);
       } else {
         this.setState({ currentIndex: this.state.currentIndex + 1 });
       }
-    }, 3000);
-    // this.timer = setTimeout(() => {
-    //   if (this.autoScrollInterval) {
-    //     clearInterval(this.autoScrollInterval);
-    //   }
-    // }, 25000);
+    }, 4000);
   }
 
   stopAutoScroll() {
@@ -102,7 +105,6 @@ class CoachScreen extends Component {
         this.setState({
           learnData: batchData["learn"],
         });
-        this.startAutoScroll();
       })
       .catch((error) => {
         console.log(error);

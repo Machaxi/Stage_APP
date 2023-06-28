@@ -285,6 +285,7 @@ class EditProfile extends BaseComponent {
                 console.log('param is', JSON.stringify(param))
                 let url = getBaseUrl() + 'user/profile'
                 console.log('api url is', url)
+                this.progress(false)
                 RNFetchBlob.
                     config({ timeout: 1000 * 60 })
                     .fetch('POST', url, {
@@ -313,7 +314,7 @@ class EditProfile extends BaseComponent {
                                 this.props.navigation.navigate('RegistrationSteps')
                             } else {
                                 ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
-                                { Platform.OS === "ios" && showToast("Profile updated successfully") }
+                                { Platform.OS === "ios" && this.showToast("Profile updated successfully") }
                                 this.props.navigation.goBack()                                
                                 Events.publish("REFRESH_DASHBOARD_PURSCHASE");
                                 // Events.publish('REFRESH_DASHBOARD');

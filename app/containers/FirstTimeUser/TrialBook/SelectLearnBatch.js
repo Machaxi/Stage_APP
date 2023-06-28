@@ -231,7 +231,7 @@ class SelectLearnBatch extends Component {
   displayToast = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
     {
-      Platform.OS === "ios" && showToast(message);
+      Platform.OS === "ios" && this.showToast(message);
     }
   };
 

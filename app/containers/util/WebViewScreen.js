@@ -15,7 +15,7 @@ export default class WebViewScreen extends BaseComponent {
   }
 
   render() {
-    const uri = "https://machaxi.com/about-us";
+    const uri = "https://machaxi.com/about-us-mobile";
     //const uri = 'http://www.africau.edu/images/default/sample.pdf'
     let visible = this.state.visible;
 
@@ -35,12 +35,12 @@ export default class WebViewScreen extends BaseComponent {
             this.webview = ref;
           }}
           source={{ uri }}
-          // onNavigationStateChange={(event) => {
-          //     if (event.url !== uri) {
-          //         this.webview.stopLoading();
-          //         Linking.openURL(event.url);
-          //     }
-          // }}
+          onNavigationStateChange={(event) => {
+            if (event.url !== uri) {
+              this.webview.stopLoading();
+              Linking.openURL(event.url);
+            }
+          }}
         />
       </View>
     );

@@ -92,20 +92,17 @@ class SelectPlayCenter extends Component {
             const numericDistance = parseInt(d);
             data[i].distance = numericDistance;
             data[i].displayDistance = distance.text;
-            console.log(distance.text);
-            console.log("olla");
-            setTimeout(() => {
-              const sortedAcademies = data.sort((a, b) => {
-                return a.distance - b.distance;
-              });
-              this.setState({ centerData: sortedAcademies });
-            }, 1000);
+            if (i == data.length - 1) {
+              setTimeout(() => {
+                const sortedAcademies = data.sort((a, b) => {
+                  return a.distance - b.distance;
+                });
+                this.setState({ centerData: sortedAcademies });
+              }, 1000);
+            }
           }
         })
         .catch((error) => {
-          this.setState({
-            centerData: this.props.academiesList,
-          });
           console.error(error);
         });
     }
@@ -162,6 +159,11 @@ class SelectPlayCenter extends Component {
 
   componentDidMount() {
     this.requestPermissions();
+    setTimeout(() => {
+      if (this.state.centerData == null) {
+        this.setState({ centerData: this.props.academiesList });
+      }
+    }, 10000);
   }
 
   handleSelect = async (data) => {

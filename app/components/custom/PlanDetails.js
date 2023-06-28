@@ -10,18 +10,11 @@ import DatePicker from "react-native-datepicker";
 import moment from "moment";
 
 const PlanDetails = (props) => {
-  const [selectDate, setSelectDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [startDate, setStartDate] = useState(new Date());
+  const [selectDate, setSelectDate] = useState(moment().toDate());
+  const [endDate, setEndDate] = useState(moment().toDate());
+  const [startDate, setStartDate] = useState(moment().toDate());
 
   const convertToDate = (dateString) => {
-    // const currentDate = new Date();
-    // const currentYear = currentDate.getFullYear();
-    // var [day, month] = dateString.split(" ");
-    // if (day < 10) {
-    //   day = "0" + day;
-    // }
-    // const date = new Date(`${currentYear}-${getMonthNumber(month)}-${day}`);
     const dateFormat = "DD MMM";
     const date = moment(dateString, dateFormat).toDate();
     return date;
@@ -38,36 +31,17 @@ const PlanDetails = (props) => {
 
   useEffect(() => {
     const startdate = convertToDate(props.startDate);
+    setSelectDate(startdate);
     var endDate = convertToDate(props.endDate);
     if (endDate < startdate) {
       endDate = convertToNextDate(props.endDate);
     }
     const confirmstartDat = convertToDate(props.confirmstartDate);
-    setSelectDate(startdate);
     setEndDate(endDate);
     if (props.confirmstartDate) {
       setStartDate(confirmstartDat);
     }
   }, []);
-
-  const getMonthNumber = (monthName) => {
-    // Map month names to their corresponding month numbers
-    const monthMap = {
-      Jan: "01",
-      Feb: "02",
-      Mar: "03",
-      Apr: "04",
-      May: "05",
-      Jun: "06",
-      Jul: "07",
-      Aug: "08",
-      Sep: "09",
-      Oct: "10",
-      Nov: "11",
-      Dec: "12",
-    };
-    return monthMap[monthName];
-  };
 
   const months = [
     "Jan",
@@ -84,12 +58,6 @@ const PlanDetails = (props) => {
     "Dec",
   ];
 
-  const options = {
-    day: "2-digit",
-    month: "short",
-    year: "2-digit",
-  };
-
   const formatDateToCustomDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
     const monthIndex = months.findIndex((m) => m === month) + 1;
@@ -98,30 +66,8 @@ const PlanDetails = (props) => {
     return formattedDate;
   };
 
-  const formateDate = (date) => {
-    var day = date.getDate();
-    if (day < 10) {
-      day = "0" + day;
-    }
-    var month = date.getMonth();
-    const year = date.getFullYear();
-    datastring = day + " " + months[month] + " " + year;
-    return datastring;
-  };
-
-  const formateDates = (date) => {
-    var day = date.getDate();
-    if (day < 10) {
-      day = "0" + day;
-    }
-    var month = date.getMonth();
-    const year = date.getFullYear();
-    datastring = day + "-" + months[month] + "-" + year;
-    return datastring;
-  };
-
   handlepress = (date) => {
-    var presentDate = new Date(formatDateToCustomDate(date));
+    var presentDate = moment(formatDateToCustomDate(date)).toDate();
     setSelectDate(presentDate);
     props.onPress(formatDateToCustomDate(date));
   };
@@ -171,7 +117,9 @@ const PlanDetails = (props) => {
                 alignItems: "center",
               }}
             >
-              <Text style={styles.timetext}>{formateDate(selectDate)}</Text>
+              <Text style={styles.timetext}>
+                {moment(selectDate).format("DD MMM YYYY")}
+              </Text>
               {Platform.OS === "ios" ? (
                 <DatePickerIOS
                   style={{
@@ -183,8 +131,8 @@ const PlanDetails = (props) => {
                   mode="date"
                   format="DD-MMM-YYYY"
                   date={selectDate}
-                  minimumDate={startDate}
-                  maximumDate={endDate}
+                  // minimumDate={startDate}
+                  // maximumDate={endDate}
                   customStyles={{
                     dateInput: {
                       marginLeft: 0,
@@ -194,7 +142,7 @@ const PlanDetails = (props) => {
                   hideText={false}
                   textColor="red"
                   onDateChange={(date) => {
-                    var datest = formateDates(date);
+                    var datest = moment(date).format("DD-MMM-YYYY");
                     handlepress(datest);
                   }}
                 />

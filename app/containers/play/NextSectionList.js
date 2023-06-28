@@ -18,12 +18,8 @@ export const NextSessionList = ({
       setFilterData(NextSessionData);
     } else if (NextSessionData.length > 1) {
       const sortedData = NextSessionData.sort((a, b) => {
-        const dateA = new Date(
-          moment(a.date).format("YYYY-MM-DD") + "T" + a.startTime
-        );
-        const dateB = new Date(
-          moment(b.date).format("YYYY-MM-DD") + "T" + b.startTime
-        );
+        const dateA = moment(a.date).format("YYYY-MM-DD") + "T" + a.startTime;
+        const dateB = moment(b.date).format("YYYY-MM-DD") + "T" + b.startTime;
         return dateA - dateB;
       });
       const filteredData = sortedData.filter(

@@ -64,7 +64,7 @@ class ApplyCouponCode extends Component {
           const couponData = academiesData["coupons"];
           const filteredData = couponData.filter((item) => {
             if (
-              moment() <= moment(item.endTime) &&
+              moment() <= moment(item.endTime).add(1, "days") &&
               moment() >= moment(item.startTime)
             ) {
               return item.couponCode

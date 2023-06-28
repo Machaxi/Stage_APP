@@ -43,9 +43,18 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   var slotBookApiError = null;
   const [renewPlanModalVisible, setModalVisibilityRenewPlan] = useState(false);
   const [showSlotBookedModal, setSlotBookedModalVisibility] = useState(false);
-  const [showBeginnerWarningModal, setBeginnerWarningModalVisibility] = useState(false);
-  const [showAdvancedWarningModal, setAdvancedWarningModalVisibility] = useState(false);
-  const [showSlotUnavailableModal, setSlotUnavailableModalVisibility] = useState(false);
+  const [
+    showBeginnerWarningModal,
+    setBeginnerWarningModalVisibility,
+  ] = useState(false);
+  const [
+    showAdvancedWarningModal,
+    setAdvancedWarningModalVisibility,
+  ] = useState(false);
+  const [
+    showSlotUnavailableModal,
+    setSlotUnavailableModalVisibility,
+  ] = useState(false);
   const [requestAllowed, setRequestAllowed] = useState(true);
   const [selectedAcademyData, setSelectedAcademyData] = useState(null);
   const [count, setCount] = useState(0);
@@ -86,9 +95,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       } catch (err) {}
     }
   };
- 
+
   useEffect(() => {
-     const {date, sportId, preferredAcademyId, requestAllowed } = navigation?.state?.params;
+    const {
+      date,
+      sportId,
+      preferredAcademyId,
+      requestAllowed,
+    } = navigation?.state?.params;
     setRequestAllowed(requestAllowed);
     navigation.setParams({
       headerRight: <RequestHeaderRight navigation={navigation} />,
@@ -104,7 +118,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       checkNotification();
     });
 
-    setPreferredAcademyId(preferredAcademyId)
+    setPreferredAcademyId(preferredAcademyId);
     setPreferredDate(date);
     setPreferredSportId(sportId);
     bookSlotFetchApi();
@@ -117,11 +131,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   }, []);
 
   const bookSlotFetchApi = async () => {
-    const {
-      date,
-      sportId, 
-      preferredAcademyId
-    } = navigation?.state?.params;
+    const { date, sportId, preferredAcademyId } = navigation?.state?.params;
 
     setLoading(true);
     getData("header", (value) => {
@@ -149,14 +159,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           let json = response.data;
           let success = json.success;
           if (success) {
-            if (json.data?.academyCourts?.length > 0){
-              json.data?.academyCourts?.map((val)=> {
-                if(val.academy?.id == preferredAcademyId){
-                  onAcademySelection(val)
+            if (json.data?.academyCourts?.length > 0) {
+              json.data?.academyCourts?.map((val) => {
+                if (val.academy?.id == preferredAcademyId) {
+                  onAcademySelection(val);
                 }
-              })
+              });
             }
-              setSlotApiResponse(json.data);
+            setSlotApiResponse(json.data);
           } else {
             if (json.code == "1020") {
               Events.publish("LOGOUT");
@@ -167,8 +177,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
         .catch(function(error) {
           setLoading(false);
           ToastAndroid.show(
-            `${fetchSlotError?.response?.response?.data?.error_message ??
-              ""}`,
+            `${fetchSlotError?.response?.response?.data?.error_message ?? ""}`,
             ToastAndroid.SHORT
           );
           console.log(error);
@@ -176,9 +185,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
     });
   };
 
-  const bookSlotPressed = async() => {
-    const { playHoursRemaining, guestCount, proficiency } = navigation?.state?.params;
-    var guestCountVal = guestCount == null || typeof guestCount == undefined ? 0 : guestCount;
+  const bookSlotPressed = async () => {
+    const {
+      playHoursRemaining,
+      guestCount,
+      proficiency,
+    } = navigation?.state?.params;
+    var guestCountVal =
+      guestCount == null || typeof guestCount == undefined ? 0 : guestCount;
     var totalPlayersCount = 1 + guestCountVal;
     var finalDifference = 0;
     console.log("startTime" + slotStartTime);
@@ -192,15 +206,14 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
 
       // convert milliseconds to hours, minutes
       const diffInHours = diffInMillisec / (1000 * 60 * 60);
-      console.log('hrs diff'+diffInHours)
-      
+      console.log("hrs diff" + diffInHours);
 
       finalDifference = diffInHours;
-       // Math.floor(diffInHours);
+      // Math.floor(diffInHours);
     }
     console.log("playHoursRemaining" + playHoursRemaining);
     console.log("finalDifference" + finalDifference);
-    if(playHoursRemaining > finalDifference){
+    if (playHoursRemaining > finalDifference) {
       //after verifying that player has sufficient hours to play proceed to check other contrainsts below
       //bookChosenSlotApi()
 
@@ -209,40 +222,45 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
           selectedAcademyData?.bookings != null &&
           selectedAcademyData?.bookings?.length > 0
         ) {
-          console.log({selectedAcademyData})
+          console.log({ selectedAcademyData });
           console.log("BOOKINGS PRESENT");
           //check if any other court is available for booking
           var courtMatchFound = false;
-          selectedAcademyData?.courts?.map((val) =>  {
+          selectedAcademyData?.courts?.map((val) => {
             var playerTimePeriod = slotStartTime + slotEndTime;
             var courtTimePeriod = val.startTime + val.endTime;
-            
-            if(playerTimePeriod == courtTimePeriod){
+
+            if (playerTimePeriod == courtTimePeriod) {
               console.log("playerTimePeriod" + playerTimePeriod);
               console.log("courtTimePeriod" + courtTimePeriod);
-              
-              console.log(
-                "val.courtTimingId" + val.courtTimingId
-              );
+
+              console.log("val.courtTimingId" + val.courtTimingId);
               var selectedCourtTimingId =
                 selectedEveningTime != null
                   ? selectedEveningTime
                   : selectedMorningTime;
-                  console.log(
-                    "selectedTimePeriodVal" +
-                      selectedCourtTimingId
-                  );
-              const foundItem = selectedAcademyData?.courts?.find((item) => item.courtTimingId === selectedCourtTimingId);
-              var doprocess = true
+              console.log("selectedTimePeriodVal" + selectedCourtTimingId);
+              const foundItem = selectedAcademyData?.courts?.find(
+                (item) => item.courtTimingId === selectedCourtTimingId
+              );
+              var doprocess = true;
               if (foundItem) {
                 const displayTime = foundItem.displayTime;
-                const startTime = foundItem.startTime
-                const endTime = foundItem.endTime
-                  const filteredArray = selectedAcademyData?.courts?.filter((item) => item.displayTime === displayTime);
+                const startTime = foundItem.startTime;
+                const endTime = foundItem.endTime;
+                const filteredArray = selectedAcademyData?.courts?.filter(
+                  (item) => item.displayTime === displayTime
+                );
                 if (filteredArray && filteredArray.length > 1) {
-                  const filteredArr = selectedAcademyData?.bookings.filter((item) => item.startTime === startTime && item.endTime === endTime);
-                  if (filteredArr && filteredArr.length == filteredArray.length) {
-                    doprocess = false
+                  const filteredArr = selectedAcademyData?.bookings.filter(
+                    (item) =>
+                      item.startTime === startTime && item.endTime === endTime
+                  );
+                  if (
+                    filteredArr &&
+                    filteredArr.length == filteredArray.length
+                  ) {
+                    doprocess = false;
                   }
                 }
               }
@@ -251,165 +269,161 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               console.log("okkka");
               if (doprocess && selectedCourtTimingId != val.courtTimingId) {
                 courtMatchFound = true;
-                console.log(
-                 "OTHER COURTS AVAILABLE, CALL API"
-                );
+                console.log("OTHER COURTS AVAILABLE, CALL API");
                 bookChosenSlotApi(
                   selectedEveningTime != null
                     ? selectedEveningTime
-                    : selectedMorningTime, false
+                    : selectedMorningTime,
+                  false
                 );
               }
             }
-
-          })
+          });
 
           //court could not be found so now we need to check availability in already booked courts
-          if(!courtMatchFound){
-            console.log('CHECK ALREADY BOOKED COURTS')
+          if (!courtMatchFound) {
+            console.log("CHECK ALREADY BOOKED COURTS");
             var lowerProfFound = false;
             var equalProfFound = false;
             var lowerProfData = null;
             var playerSpaceAvailable = false;
             var sameTimeSlotFoundInBookings = false;
-            console.log("olllas")
-            console.log(selectedAcademyData?.bookings)
-            selectedAcademyData?.bookings?.map((val)=>{
-                //TODO: api se max 0 and total 1 aa raha hai, backend issue for present data
-                console.log("olllag")
-                var bookingTimePeriod = val.startTime + val.endTime;
-                console.log("olllahg")
-                var playerTimePeriod = slotStartTime + slotEndTime;
-                console.log("olllahgss")
-                console.log(bookingTimePeriod)
-                console.log(playerTimePeriod)
-                if (bookingTimePeriod == playerTimePeriod) {
-                  var availablePlayerCount = val.maxPlayersAllowed - val.totalPlayers;
-                  if(availablePlayerCount >= totalPlayersCount){
-                    sameTimeSlotFoundInBookings = true;
-                    console.log('PLAYER SPACE AVAILABLE')
-                    playerSpaceAvailable = true;
-                     console.log('BOOKED_PLAYER_PROF'+ val.proficiency[0])
-                      console.log('CURRENT_PLAYER_PROF'+ proficiency)
-                    //there are no other courts available for same time slot in the selected academy
+            console.log("olllas");
+            console.log(selectedAcademyData?.bookings);
+            selectedAcademyData?.bookings?.map((val) => {
+              //TODO: api se max 0 and total 1 aa raha hai, backend issue for present data
+              console.log("olllag");
+              var bookingTimePeriod = val.startTime + val.endTime;
+              console.log("olllahg");
+              var playerTimePeriod = slotStartTime + slotEndTime;
+              console.log("olllahgss");
+              console.log(bookingTimePeriod);
+              console.log(playerTimePeriod);
+              if (bookingTimePeriod == playerTimePeriod) {
+                var availablePlayerCount =
+                  val.maxPlayersAllowed - val.totalPlayers;
+                if (availablePlayerCount >= totalPlayersCount) {
+                  sameTimeSlotFoundInBookings = true;
+                  console.log("PLAYER SPACE AVAILABLE");
+                  playerSpaceAvailable = true;
+                  console.log("BOOKED_PLAYER_PROF" + val.proficiency[0]);
+                  console.log("CURRENT_PLAYER_PROF" + proficiency);
+                  //there are no other courts available for same time slot in the selected academy
                   // selectedAcademyData?.bookings?.map((VAL) => {
-                    // var bookingTimePeriod = VAL.startTime + VAL.endTime;
-                    // var playerTimePeriod = slotStartTime + slotEndTime;
-                    // if (bookingTimePeriod == playerTimePeriod) {
-                      var bookedPlayerNumericProf = getNumericProficiency(
-                        val.proficiency[0]
-                      );
-                      var numericCurrentUserProf = getNumericProficiency(
-                        proficiency
-                      );
-                      console.log('BOOKED_PLAYER_PROF'+ val.proficiency[0])
-                      console.log('CURRENT_PLAYER_PROF'+ proficiency)
-                      console.log(val.proficiency)
-                      console.log(bookedPlayerNumericProf);
-                      console.log(numericCurrentUserProf)
-                      if (bookedPlayerNumericProf < numericCurrentUserProf) {
-                        lowerProfData = val;
-                        lowerProfFound = true;
-                      }
-                      if (bookedPlayerNumericProf == numericCurrentUserProf) {
-                        if (!lowerProfFound)
-                          equalProfFound = true;
-                      }
-                      console.log(lowerProfFound);
-                      console.log(equalProfFound)
-                    // }
+                  // var bookingTimePeriod = VAL.startTime + VAL.endTime;
+                  // var playerTimePeriod = slotStartTime + slotEndTime;
+                  // if (bookingTimePeriod == playerTimePeriod) {
+                  var bookedPlayerNumericProf = getNumericProficiency(
+                    val.proficiency[0]
+                  );
+                  var numericCurrentUserProf = getNumericProficiency(
+                    proficiency
+                  );
+                  console.log("BOOKED_PLAYER_PROF" + val.proficiency[0]);
+                  console.log("CURRENT_PLAYER_PROF" + proficiency);
+                  console.log(val.proficiency);
+                  console.log(bookedPlayerNumericProf);
+                  console.log(numericCurrentUserProf);
+                  if (bookedPlayerNumericProf < numericCurrentUserProf) {
+                    lowerProfData = val;
+                    lowerProfFound = true;
+                  }
+                  if (bookedPlayerNumericProf == numericCurrentUserProf) {
+                    if (!lowerProfFound) equalProfFound = true;
+                  }
+                  console.log(lowerProfFound);
+                  console.log(equalProfFound);
+                  // }
                   // });
-                }
-                else {
-                  console.log("COUNT NOT AVAILABLE, NEED TO RENEW")
+                } else {
+                  console.log("COUNT NOT AVAILABLE, NEED TO RENEW");
                   ToastAndroid.show(
                     `Selected court is fully occupied.`,
                     ToastAndroid.SHORT
                   );
-                  { Platform.OS === "ios" && showToast(`Selected court is fully occupied.`); }
+                  {
+                    Platform.OS === "ios" &&
+                      this.showToast(`Selected court is fully occupied.`);
+                  }
                   //TODO: need to verify whether to show toast only or hit bookslotapi
                 }
-            }
-            })
-            if (sameTimeSlotFoundInBookings){
-                  if (lowerProfFound && requestAllowed) {
-                    console.log(
-                      "lowerProfFound setAdvancedWarningModalVisibility called" +
-                        lowerProfFound
-                    );
-                    if (lowerProfData != null) {
-                      setAdvancedWarningModalVisibility(true);
-                    }
-                  }
-                  else if (equalProfFound || !requestAllowed) {
-                    console.log('EQUAL PROF FOUND, calling API')
-                      bookChosenSlotApi(
-                        selectedEveningTime != null
-                          ? selectedEveningTime
-                          : selectedMorningTime,
-                        false
-                      );
-                       } else {
-                         console.log(
-                           "lowerProfFound not found setBeginnerWarningModalVisibility called0" +
-                             lowerProfFound
-                         );
+              }
+            });
+            if (sameTimeSlotFoundInBookings) {
+              if (lowerProfFound && requestAllowed) {
+                console.log(
+                  "lowerProfFound setAdvancedWarningModalVisibility called" +
+                    lowerProfFound
+                );
+                if (lowerProfData != null) {
+                  setAdvancedWarningModalVisibility(true);
+                }
+              } else if (equalProfFound || !requestAllowed) {
+                console.log("EQUAL PROF FOUND, calling API");
+                bookChosenSlotApi(
+                  selectedEveningTime != null
+                    ? selectedEveningTime
+                    : selectedMorningTime,
+                  false
+                );
+              } else {
+                console.log(
+                  "lowerProfFound not found setBeginnerWarningModalVisibility called0" +
+                    lowerProfFound
+                );
 
-                         //if (playerSpaceAvailable) {
-                         console.log(
-                           "playerSpaceAvailable lowerProfFound not found setBeginnerWarningModalVisibility called1" +
-                             lowerProfFound
-                         );
-                         setBeginnerWarningModalVisibility(
-                           true
-                         );
-                         // } else {
-                         //   console.log(
-                         //     "space unavailable and lower not found"
-                         //   );
-                         //TODO: need to verify whether to show toast only or hit bookslotapi
-                         //}
-                       }
-            }
-            else {
-              console.log('timeslot not matched in bookings array')
+                //if (playerSpaceAvailable) {
+                console.log(
+                  "playerSpaceAvailable lowerProfFound not found setBeginnerWarningModalVisibility called1" +
+                    lowerProfFound
+                );
+                setBeginnerWarningModalVisibility(true);
+                // } else {
+                //   console.log(
+                //     "space unavailable and lower not found"
+                //   );
+                //TODO: need to verify whether to show toast only or hit bookslotapi
+                //}
+              }
+            } else {
+              console.log("timeslot not matched in bookings array");
               //same timeslot not found in bookings so we can call api to book the slot
               bookChosenSlotApi(
                 selectedEveningTime != null
                   ? selectedEveningTime
-                  : selectedMorningTime, false
+                  : selectedMorningTime,
+                false
               );
             }
           }
 
           //
         } else {
-          console.log("bookings data null || []")
+          console.log("bookings data null || []");
           //here we've not got any bookings so can proceed for book slot
-          bookChosenSlotApi(selectedEveningTime != null
-                    ? selectedEveningTime
-                    : selectedMorningTime, false);
+          bookChosenSlotApi(
+            selectedEveningTime != null
+              ? selectedEveningTime
+              : selectedMorningTime,
+            false
+          );
         }
+      } else {
+        console.log("academydata null" + selectedAcademyData);
       }
-      else {
-        console.log('academydata null'+ selectedAcademyData)
-      }
-    }
-    else {
+    } else {
       console.log("setModalVisibilityRenewPlan need to renew");
-      setModalVisibilityRenewPlan(true)
+      setModalVisibilityRenewPlan(true);
     }
     //bookChosenSlotApi()
-  }
+  };
 
   const bookSlotCb = (isRequestType) => {
     bookChosenSlotApi(
-      selectedEveningTime != null
-        ? selectedEveningTime
-        : selectedMorningTime,
+      selectedEveningTime != null ? selectedEveningTime : selectedMorningTime,
       isRequestType
     );
-  }
+  };
 
   const showToast = (message) => {
     const options = ["Cancel"];
@@ -424,7 +438,12 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   const bookChosenSlotApi = async (courtTimingID, isBookingRequestType) => {
-    const { date, proficiency, guestCount, entirecourt } = navigation?.state?.params;
+    const {
+      date,
+      proficiency,
+      guestCount,
+      entirecourt,
+    } = navigation?.state?.params;
     const data = {
       date: date,
       courtTimingId: courtTimingID,
@@ -446,9 +465,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       //client.call
       client
         .post(
-          isBookingRequestType
-            ? "court/booking-request"
-            : "court/book-court",
+          isBookingRequestType ? "court/booking-request" : "court/book-court",
           { data: data },
           { headers: headers }
         )
@@ -461,16 +478,16 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             let success = json?.success;
             if (success) {
               setSlotBookedRes(json);
-              if(isBookingRequestType){
-                setSlotRequested(true)
+              if (isBookingRequestType) {
+                setSlotRequested(true);
               }
               setSlotBookedModalVisibility(true);
               bookSlotFetchApi();
               // setRewardsResponse(json["data"]["reward"]);
             } else {
               ToastAndroid.show(
-                `${slotBookApiError?.response?.response?.data
-                  ?.error_message ?? ""}`,
+                `${slotBookApiError?.response?.response?.data?.error_message ??
+                  ""}`,
                 ToastAndroid.SHORT
               );
               if (json.code == "1020") {
@@ -482,21 +499,24 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             const { proficiency } = navigation?.state?.params;
             setLoading(false);
             ToastAndroid.show(
-              `${slotBookApiError?.response?.response?.data
-                ?.error_message ?? ""}`,
+              `${slotBookApiError?.response?.response?.data?.error_message ??
+                ""}`,
               ToastAndroid.SHORT
             );
             {
               Platform.OS === "ios" &&
-              showToast(slotBookApiError?.response?.response?.data?.error_message ?? "");
+                showToast(
+                  slotBookApiError?.response?.response?.data?.error_message ??
+                    ""
+                );
             }
           }
         })
         .catch(function(error) {
           setLoading(false);
           ToastAndroid.show(
-            `${slotBookApiError?.response?.response?.data
-              ?.error_message ?? ""}`,
+            `${slotBookApiError?.response?.response?.data?.error_message ??
+              ""}`,
             ToastAndroid.SHORT
           );
         });
@@ -504,31 +524,27 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   };
 
   const onAcademySelection = (value) => {
-    console.log({value})
-    setSelectedAcademyData(value)
-  }
+    console.log({ value });
+    setSelectedAcademyData(value);
+  };
 
-    const onRefresh = () => {
-      setRefreshing(true);
-      bookSlotFetchApi();
-      // In actual case set refreshing to false when whatever is being refreshed is done!
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 1000);
-    };
-
+  const onRefresh = () => {
+    setRefreshing(true);
+    bookSlotFetchApi();
+    // In actual case set refreshing to false when whatever is being refreshed is done!
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
 
   if (loading) {
     return <LoadingIndicator />;
   }
   console.log({ slotApiRes });
-  console.log({slotBookedRes})
-      const {
-        playHoursRemaining,
-      } = navigation?.state?.params;
- const { guestCount, entirecourt } = navigation?.state?.params;
+  console.log({ slotBookedRes });
+  const { playHoursRemaining } = navigation?.state?.params;
+  const { guestCount, entirecourt } = navigation?.state?.params;
 
-  
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
@@ -584,12 +600,19 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   selectSport={preferredSportId}
                 />
               ) : (
-                !loading &&
-                <View style={{ flex:1, alignItems:'center', marginTop: deviceHeight * 0.4 }}>
-                  <Text style={commonStyles.noData}>
-                    {"Centres data not found."}
-                  </Text>
-                </View>
+                !loading && (
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      marginTop: deviceHeight * 0.4,
+                    }}
+                  >
+                    <Text style={commonStyles.noData}>
+                      {"Centres data not found."}
+                    </Text>
+                  </View>
+                )
               )}
             </View>
             {showSlotBookedModal ? (
@@ -597,7 +620,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               <SlotBookedModal
                 slotRequested={slotRequested}
                 slotInfo={slotBookedRes?.data}
-                entirecourt = {navigation?.state?.params?.entirecourt}
+                entirecourt={navigation?.state?.params?.entirecourt}
                 goHomePressed={() => {
                   // const resetAction = StackActions.reset({
                   //   index: 0,
@@ -609,7 +632,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   // });
                   // navigation.dispatch(resetAction);
                   const popAction = StackActions.popToTop();
-                 navigation.dispatch(popAction);
+                  navigation.dispatch(popAction);
                 }}
                 modalVisible={showSlotBookedModal}
                 setModalVisibility={(val) => {

@@ -112,7 +112,7 @@ class SelectPlayPay extends Component {
       .subtract(1, "days");
     console.log(lastdate);
     if (this.props.expiryDate) {
-      startDate = this.props.expiryDate;
+      startDate = new Date(this.props.expiryDate);
       lastdate = moment(this.props.expiryDate)
         .add(1, "months")
         .subtract(1, "days");
@@ -296,7 +296,7 @@ class SelectPlayPay extends Component {
       description: description,
       currency: "INR",
       key: getPaymentKey(),
-      amount: amount * 100,
+      amount: (amount * 100).toFixed(0),
       name: "Machaxi",
       prefill: {
         email: getRazorPayEmail(),

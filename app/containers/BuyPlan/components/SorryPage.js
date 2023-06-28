@@ -11,10 +11,8 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
 import CustomButton from "../../../components/custom/CustomButton";
 import { Nunito_Bold, Nunito_SemiBold } from "../../util/fonts";
-import { getPaymentKey, getRazorPayEmail } from "../../BaseComponent";
 import { paymentConfirmation } from "../../../redux/reducers/PaymentReducer";
 import { connect } from "react-redux";
-import RazorpayCheckout from "react-native-razorpay";
 import Loader from "../../../components/custom/Loader";
 
 class SorryPage extends Component {

@@ -13,6 +13,7 @@ import axios from "axios";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import SelectPlayPay from "../BuyPlan/components/SelectPlayPay";
 import AsyncStorage from "@react-native-community/async-storage";
+import moment from "moment";
 
 class RenewPlayPlan extends Component {
   constructor(props) {
@@ -59,10 +60,8 @@ class RenewPlayPlan extends Component {
         const preferredAcademyId = batchData["plan"].preferredAcademyId;
         console.log(userResponce);
         this.apicalling(planId, preferredAcademyId);
-        const expire = new Date(batchData["plan"].expiryDate);
-        const oneDay = 24 * 60 * 60 * 1000;
-        let nextDate = new Date(expire.getTime() + oneDay);
-        this.setState({ expiryDate: nextDate });
+        const targetDate = moment(batchData["plan"].expiryDate).add(1, "days");
+        this.setState({ expiryDate: targetDate });
       })
       .catch((error) => {
         console.log(error);
@@ -178,7 +177,7 @@ class RenewPlayPlan extends Component {
   onPressExplore = () => {
     const selectPlan = 100;
     const expire = this.state.expiryDate;
-    this.props.navigation.navigate("PlayingPlan", { selectPlan, expire });
+    this.props.navigation.navigate("PlayingPlan", { selectPlan });
   };
 
   render() {

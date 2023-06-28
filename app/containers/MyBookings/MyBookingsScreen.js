@@ -160,7 +160,7 @@ const MyBookingsScreen = ({ navigation }) => {
           );
           {
             Platform.OS === "ios" &&
-              showToast(
+              this.showToast(
                 getErrorResponse?.response?.response?.data?.error_message ?? ""
               );
           }
@@ -245,7 +245,7 @@ const MyBookingsScreen = ({ navigation }) => {
           );
           {
             Platform.OS === "ios" &&
-              showToast(
+              this.showToast(
                 cancelBookingError?.response?.data?.error_message ?? ""
               );
           }

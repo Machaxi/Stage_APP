@@ -167,6 +167,11 @@ class SelectCenter extends Component {
         }
       });
     });
+    setTimeout(() => {
+      if (this.state.centerData == null) {
+        this.setState({ centerData: this.props.academiesList });
+      }
+    }, 10000);
   }
 
   hasSport(sportList) {
@@ -220,18 +225,20 @@ class SelectCenter extends Component {
             data[i].displayDistance = distance.text;
             console.log(distance);
             console.log("olla");
-            setTimeout(() => {
-              const sortedAcademies = data.sort((a, b) => {
-                return a.distance - b.distance;
-              });
-              this.setState({ centerData: sortedAcademies });
-            }, 1000);
+            if (i == data.length - 1) {
+              setTimeout(() => {
+                const sortedAcademies = data.sort((a, b) => {
+                  return a.distance - b.distance;
+                });
+                this.setState({ centerData: sortedAcademies });
+              }, 1000);
+            }
           }
         })
         .catch((error) => {
-          this.setState({
-            centerData: this.props.academiesList,
-          });
+          // this.setState({
+          //   centerData: this.props.academiesList,
+          // });
           console.error(error);
         });
     }

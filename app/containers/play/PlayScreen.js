@@ -437,7 +437,7 @@ export default (PlayScreen = ({ navigation }) => {
           );
           {
             Platform.OS === "ios" &&
-              showToast(
+              this.showToast(
                 cancelBookingError?.response?.data?.error_message ?? ""
               );
           }
@@ -818,7 +818,8 @@ export default (PlayScreen = ({ navigation }) => {
             //TODO:
             packageRemainingDays={packageRemainingDays}
             aboutToExpire={
-              packageRemainingDays < 3 && packageRemainingDays >= 0
+              (packageRemainingDays < 3 && packageRemainingDays >= 0) ||
+              remainingHrsApiRes < 3
                 ? true
                 : false
             }
