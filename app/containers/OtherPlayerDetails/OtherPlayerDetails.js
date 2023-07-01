@@ -50,6 +50,7 @@ class OtherPlayerDetails extends BaseComponent {
       sportsOptionsVisible: false,
       currentSportName: "",
       isStatsLoading: false,
+      loading: true,
     };
   }
 
@@ -147,11 +148,15 @@ class OtherPlayerDetails extends BaseComponent {
             this.setState({
               player_profile: user1.data["player_profile"],
               strenthList: user1.data.player_profile["stats"],
+              loading: false,
             });
+          } else {
+            this.setState({ loading: false });
           }
         })
         .catch((response) => {
           //handle form errors
+          this.setState({ loading: false });
           console.log(response);
         });
     });
@@ -171,11 +176,15 @@ class OtherPlayerDetails extends BaseComponent {
           this.setState({
             player_profile: user1.data["player_profile"],
             strenthList: user1.data.player_profile["stats"],
+            loading: false,
           });
+        } else {
+          this.setState({ loading: false });
         }
       })
       .catch((response) => {
         //handle form errors
+        this.setState({ loading: false });
         console.log(response);
       });
   }
@@ -191,6 +200,8 @@ class OtherPlayerDetails extends BaseComponent {
           console.log(" user getOtherPlayerDashboard " + user);
           let user1 = JSON.parse(user);
 
+          console.log("workingsssxx");
+          console.log(user1);
           //Getting Sports Data
           let sportsList, currentSportId, currentSportName;
 
@@ -207,10 +218,6 @@ class OtherPlayerDetails extends BaseComponent {
           if (user1.data["player_profile"] != null) {
             currentSportId = user1.data["player_profile"].sport_id;
 
-            currentSportName = sportsList.find((item) => {
-              return item.value == currentSportId;
-            }).label;
-
             this.setState({
               currentSportId,
             });
@@ -220,7 +227,10 @@ class OtherPlayerDetails extends BaseComponent {
             this.setState({
               player_profile: user1.data["player_profile"],
               strenthList: user1.data.player_profile["stats"],
+              loading: false,
             });
+          } else {
+            this.setState({ loading: false });
           }
           this.setState({
             isStatsLoading: false,
@@ -228,7 +238,7 @@ class OtherPlayerDetails extends BaseComponent {
         })
         .catch((response) => {
           //handle form errors
-          this.setState({ isStatsLoading: false });
+          this.setState({ isStatsLoading: false, loading: false });
           console.log(response);
         });
     });
@@ -253,13 +263,14 @@ class OtherPlayerDetails extends BaseComponent {
   render() {
     console.log("other player detail component");
     this.state.showChallenge = false;
-    if (this.props.data.loading && !this.state.player_profile) {
+    if (this.state.loading) {
       return (
-        <View
+        <LinearGradient
+          colors={["#051732", "#232031"]}
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           <ActivityIndicator size="large" color="#67BAF5" />
-        </View>
+        </LinearGradient>
       );
     }
     if (this.state.player_profile) {
@@ -277,10 +288,8 @@ class OtherPlayerDetails extends BaseComponent {
 
       return (
         <LinearGradient colors={["#051732", "#232031"]} style={{ flex: 1 }}>
-        {/* <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}> */}
-          <ScrollView
-            style={{ flex: 1, marginTop: 0 }}
-          >
+          {/* <View style={{ flex: 1, marginTop: 0, backgroundColor: "#F7F7F7" }}> */}
+          <ScrollView style={{ flex: 1, marginTop: 0 }}>
             <PlayerHeader player_profile={this.state.player_profile} />
 
             {/* <View style={{ margin: 10 }}>

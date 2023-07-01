@@ -29,6 +29,7 @@ import {
 } from "../containers/util/fonts";
 import NamedRoundedGradientContainer from "../components/molecules/roundedNamedGradientContainer";
 import {
+  getProficiencyName,
   requestStatus,
   requestStatusBg,
   requestStatusName,
@@ -42,6 +43,7 @@ const MyRequestReceivedView = ({
   showBookingDetails,
   areDetailsShown,
 }) => {
+  const proficiency = getProficiencyName(val?.user?.proficiency ? val?.user?.proficiency.toLowerCase() : "basic")
   return (
     <LinearGradient
       colors={["#ffffff11", "#ffffff03"]}
@@ -71,7 +73,7 @@ const MyRequestReceivedView = ({
           {val?.user?.name}
         </Text>
         <Text style={[styles.level]}>
-          {val?.user?.proficiency} | {val?.user?.age} Y
+          {proficiency} | {val?.user?.age} Y
         </Text>
       </View>
       <Text style={[styles.detailsTxt]}>
@@ -147,7 +149,7 @@ const MyRequestReceivedView = ({
       </TouchableOpacity>
       {areDetailsShown ? (
         <View>
-          <MyRequestCentreDetails details={val} />
+          <MyRequestCentreDetails details={val?.academy} />
 
           <View style={styles.rowSpaceBtw}>
             {[

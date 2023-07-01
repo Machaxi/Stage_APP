@@ -47,8 +47,19 @@ class NotificationsScreen extends BaseComponent {
   };
 
   componentDidMount() {
-    this.selfComponentDidMount();
     Events.publish("NOTIFICATION_CALL");
+    this.willFocusSubscription = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.setState({ page: 0, notifications: [] }, () => {
+          this.selfComponentDidMount();
+        });
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
   }
 
   selfComponentDidMount() {

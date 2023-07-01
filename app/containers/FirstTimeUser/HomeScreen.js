@@ -6,13 +6,12 @@ import PlayerScreen from "./PlayerScreen";
 import ShopScreen from "./ShopScreen";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
-import { getBaseUrl } from "../BaseComponent";
-import NavigationDrawerWhite from "../../router/NavigationDrawerWhite";
-import RightMenuToolbar from "../../router/RightMenuToolbar";
+import BaseComponent, { getBaseUrl, getNotificationCount } from "../BaseComponent";
 import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
-import RequestHeaderLeft from "../../atoms/requestHeaderLeft";
+import RequestHeaderRight from "../../atoms/requestHeaderRight";
+import Events from "../../router/events";
 
-class HomeScreen extends Component {
+class HomeScreen extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,12 +27,30 @@ class HomeScreen extends Component {
     this.getData();
     // this.props.navigation.setParams({ title: "Learn" });
     this.props.navigation.addListener("didFocus", this.onScreenFocus);
+    this.willFocusSubscription = this.props.navigation.addListener(
+      "willFocus", () => {
+        this.getNotifications();
+      }
+    );
+    this.refreshEvent = Events.subscribe("NOTIFICATION_CALL", (msg) => {
+      this.getNotifications();
+    });
   }
+
+  getNotifications = () => {
+    this.getNotificationCount((count) => {
+      this.props.navigation.setParams({ notification_count: count });
+      this.props.navigation.setParams({
+        headerRight: <RequestHeaderRight navigation={navigation} />,
+      });
+    });
+  };
 
   componentWillUnmount() {
     if (this.props.navigation.removeListener) {
       this.props.navigation.removeListener("didFocus", this.onScreenFocus);
     }
+    this.willFocusSubscription.remove();
   }
 
   onScreenFocus = () => {

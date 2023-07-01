@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, BackHandler, Text, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Rating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -58,12 +58,24 @@ class CoachProfileDetail extends BaseComponent {
             let type = this.state.type
             this.getCoachFeedbacks(sortType, type, false)
         });
-
-        
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentWillUnmount() {
         this.willFocusSubscription.remove();
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick = () => {
+        let filter_dialog = this.state.filter_dialog
+        if (filter_dialog) {
+            this.setState({
+                filter_dialog: !filter_dialog
+            })
+        } else {
+            this.props.navigation.goBack(null);
+            return true;
+        }
     }
 
     getCoachFeedbacks(sortType, type, showLoading) {
@@ -107,6 +119,7 @@ class CoachProfileDetail extends BaseComponent {
 
 
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
         this.willFocusSubscription = this.props.navigation.addListener(
             'willFocus',
@@ -335,7 +348,7 @@ class CoachProfileDetail extends BaseComponent {
                         touchOutside={(id, type) => {
                             this.sort(id, type, true)
                         }}
-                        visible={filter_dialog} />
+                        visible={this.state.filter_dialog} />
 
                     <View style={{ padding: 16 }}>
 

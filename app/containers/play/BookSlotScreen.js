@@ -91,14 +91,46 @@ const BookSlotScreen = ({ navigation }) => {
           console.log("---->" + success);
           if (success) {
             if (json?.data?.plan?.preferredSportId != null) {
-              setSportsId(json?.data?.plan?.preferredSportId);
+              const filteredData = json?.data?.sports.filter(
+                (item) => item.id === json?.data?.plan?.preferredSportId
+              );
+              const proficiencyCounts = filteredData.reduce((counts, item) => {
+                const { proficiency } = item;
+                counts[proficiency] = (counts[proficiency] || 0) + 1;
+                return counts;
+              }, {});
+              const allProficiencies = {
+                PROFESSIONAL: 0,
+                ADVANCE: 0,
+                INTERMEDIATE: 0,
+                BASIC: 0,
+              };
+              const mergedProficiencies = {
+                ...allProficiencies,
+                ...proficiencyCounts,
+              };
+              const highestProficiency = Object.entries(
+                mergedProficiencies
+              ).reduce(
+                (prev, [key, value]) => {
+                  if (value > prev.value) {
+                    return { key, value };
+                  }
+                  return prev;
+                },
+                { key: null, value: -Infinity }
+              );
               json?.data?.sports.map((val) => {
                 if (val.id == json?.data?.plan?.preferredSportId) {
                   setProficiencyVisibility(
                     val.proficiency == null ? true : false
                   );
                   setSelectedSportsId(val.id);
-                  setProficiency(val.proficiency);
+                  if (highestProficiency.key) {
+                    setProficiency(highestProficiency.key);
+                  } else {
+                    setProficiency(val.proficiency);
+                  }
                   preferredSportsData(val.id);
                 }
               });
@@ -267,11 +299,42 @@ const BookSlotScreen = ({ navigation }) => {
   };
 
   const setSportsId = (id) => {
+    const filteredData = planAndSportsApiRes?.sports.filter(
+      (item) => item.id === id
+    );
+    const proficiencyCounts = filteredData.reduce((counts, item) => {
+      const { proficiency } = item;
+      counts[proficiency] = (counts[proficiency] || 0) + 1;
+      return counts;
+    }, {});
+    const allProficiencies = {
+      PROFESSIONAL: 0,
+      ADVANCE: 0,
+      INTERMEDIATE: 0,
+      BASIC: 0,
+    };
+    const mergedProficiencies = {
+      ...allProficiencies,
+      ...proficiencyCounts,
+    };
+    const highestProficiency = Object.entries(mergedProficiencies).reduce(
+      (prev, [key, value]) => {
+        if (value > prev.value) {
+          return { key, value };
+        }
+        return prev;
+      },
+      { key: null, value: -Infinity }
+    );
     planAndSportsApiRes?.sports.map((val) => {
       if (val.id == id) {
         setProficiencyVisibility(val.proficiency == null ? true : false);
         setSelectedSportsId(id);
-        setProficiency(val.proficiency);
+        if (highestProficiency.key) {
+          setProficiency(highestProficiency.key);
+        } else {
+          setProficiency(val.proficiency);
+        }
       }
     });
   };

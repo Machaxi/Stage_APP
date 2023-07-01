@@ -37,6 +37,7 @@ import AcademyBatch from "../containers/GuestScreen/AcademyBatch";
 import CustomHeader from "../components/custom/CustomHeader";
 import spalsh from "../containers/welcome/SplashScreen";
 import IntroScreen from "../containers/welcome/IntroScreen";
+import mybatch from "../containers/PlayerBatch/PlayerBatch";
 
 import phoneauth from "../containers/Login/PhoneAuth";
 import CoachMenuDrawer from "./CoachMenuDrawer";
@@ -2637,8 +2638,44 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  CoachListing: {
+    screen: CoachListing,
+    navigationOptions: ({ navigation }) => ({
+      title: "Coach Listing",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  ViewPlayerPerformance: {
+    screen: ViewPlayerPerformance,
+    navigationOptions: ({ navigation }) => ({
+      title: "My Stats",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  WriteAcademyFeedback: {
+    screen: WriteAcademyFeedback,
+    navigationOptions: ({ navigation }) => ({
+      title: "Give Feedback",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
   Batch: {
-    screen: userBatchModule,
+    screen: mybatch,
     navigationOptions: ({ navigation }) => ({
       title: "My Batch",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,

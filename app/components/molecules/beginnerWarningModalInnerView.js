@@ -17,6 +17,7 @@ const BeginnerWarningModalInnerView = ({
   forBeginner,
   onRequestBookSlot,
   setModalVisibility,
+  forlevel
 }) => {
   return (
     <TouchableOpacity activeOpacity={1}>
@@ -43,9 +44,9 @@ const BeginnerWarningModalInnerView = ({
               ? "No slot available as per your playing level. Would you like to play with an \n"
               : "No slot available as per your playing level. Would you like to play with\n"}
             <Text style={[styles.desc, { color: yellowVariant4 }]}>
-              {forBeginner
-                ? "Advanced player"
-                : "beginner/intermediate level players"}
+              {forlevel}
+                {/* ? "Advanced player"
+                : "beginner/intermediate level players"} */}
             </Text>
             {"?"}
           </Text>

@@ -131,39 +131,6 @@ xmlns:tools="http://schemas.android.com/tools"
         </intent-filter>
     </receiver>
 
-    <activity
-    android:name="com.onesignal.NotificationOpenedActivityHMS"
-    android:exported="true"
-    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-     tools:replace="android:theme">
-</activity>
-    <receiver
-    android:name="com.onesignal.GcmBroadcastReceiver"
-    android:exported="true"
-    android:permission="com.google.android.c2dm.permission.SEND">
-    <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
-        <category android:name="${applicationId}" />
-    </intent-filter>
-</receiver>
-<receiver
-    android:name="com.onesignal.BootUpReceiver"
-    android:exported="true"
-    tools:replace="android:exported">
-    <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-        <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-        <category android:name="android.intent.category.DEFAULT" />
-    </intent-filter>
-</receiver>
-<receiver
-    android:name="com.onesignal.UpgradeReceiver"
-    android:exported="false"
-    tools:replace="android:exported">
-</receiver>
 
     </application>
 

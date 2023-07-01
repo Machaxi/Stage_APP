@@ -10,7 +10,8 @@ const BeginnerWarningModal = ({
   biggerImg,
   onBtnPress,
   forBeginner,
-  onRequestBookSlot
+  onRequestBookSlot,
+  forlevel,
 }) => {
   return (
     <Modal
@@ -32,6 +33,7 @@ const BeginnerWarningModal = ({
           setModalVisibility={() => setModalVisibility()}
           onRequestBookSlot={() => onRequestBookSlot()}
           forBeginner={forBeginner}
+          forlevel = {forlevel}
           onBtnPress={() => onBtnPress()}
         />
       </TouchableOpacity>

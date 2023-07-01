@@ -1612,6 +1612,9 @@ class CoachMenuDrawer extends BaseComponent {
           }}
           visible={this.state.showpopup}
         />
+        <Text style={styles.version_style}>
+          App Version: {DeviceInfo.getVersion()}
+        </Text>
       </View>
     );
   }

@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
 		01FB6F05A0AD4AFAAA2E3201 /* Nunito-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F7464EFD452450C985F292B /* Nunito-400.ttf */; };
@@ -15,13 +16,15 @@
 		1CDCF3C0B03946DA95DB233E /* Nunito-900.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D848303269C4AB4A39F334C /* Nunito-900.ttf */; };
 		2DCD954D1E0B4F2C00145EB5 /* DribbleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DribbleTests.m */; };
 		36C4A39FDA5042F18DFC8465 /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71EA5BC2B51A48109E84D980 /* Nunito-SemiBold.ttf */; };
+		5919DBE18D2243BFADD04C93 /* Nunito-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37A55B054AEB4DB0A6E27624 /* Nunito-Medium.ttf */; };
 		623F3BE365E840159B5E1D75 /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A1B405BD9174404B10908DB /* Nunito-Bold.ttf */; };
 		78A735801ACA44E281540017 /* Nunito-600.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49D3EEEFACB64A7BA741D18E /* Nunito-600.ttf */; };
 		79D0F2D5ECE543329DDC0920 /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76D5B65669E94B65BC98E310 /* Quicksand-Bold.ttf */; };
 		7BD6F082AE5C41D8A4270AC4 /* Nunito-700.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC4EBF65C41641E4A60D037E /* Nunito-700.ttf */; };
 		7C18C45A930B94D3E591BF8D /* libPods-DribbleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE01E04CED7A014757AC0FA0 /* libPods-DribbleTests.a */; };
 		80967E324F494EFC9FE474C4 /* Nunito-300.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C103EDA398E54FEBB149EBC5 /* Nunito-300.ttf */; };
-		A21CAD3A236FEC4300C4DF6F /* (null) in Resources */ = {isa = PBXBuildFile; };
+		8AC408560EFA44328A6991BB /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2A27EE40B114E089CF22EFD /* Nunito-Light.ttf */; };
+		A21CAD3A236FEC4300C4DF6F /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A251647523DF2372005F3FB2 /* GoogleService-Info.plist */; };
 		A2695805233B9B2F00AF8563 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2695804233B9B2F00AF8563 /* NotificationService.swift */; };
 		A2695809233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A2695802233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -41,8 +44,6 @@
 		FC0D8A5524204CB9A7920C17 /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B3BE952B28A4F72B4B1A9AE /* Quicksand-Medium.ttf */; };
 		FDC04F7A6D6544EA923155A2 /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945BB826650C44EAB6DCDCC5 /* Nunito-ExtraBold.ttf */; };
 		FFD393947B6B42EAFBC79940 /* libPods-Dribble.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AEB2DEEE870A236C3BA8AF5A /* libPods-Dribble.a */; };
-		8AC408560EFA44328A6991BB /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2A27EE40B114E089CF22EFD /* Nunito-Light.ttf */; };
-		5919DBE18D2243BFADD04C93 /* Nunito-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37A55B054AEB4DB0A6E27624 /* Nunito-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +131,7 @@
 		2D02E4901E0B4A5D006451C7 /* Dribble-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dribble-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFE6FC481A34737AA2F511B /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		3532B16D2EFF4744BA759E71 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		37A55B054AEB4DB0A6E27624 /* Nunito-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Medium.ttf"; path = "../app/fonts/Nunito-Medium.ttf"; sourceTree = "<group>"; };
 		39C4D4F20A44A0B8409FFAF5 /* Pods-Dribble.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dribble.debug.xcconfig"; path = "Target Support Files/Pods-Dribble/Pods-Dribble.debug.xcconfig"; sourceTree = "<group>"; };
 		49D3EEEFACB64A7BA741D18E /* Nunito-600.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-600.ttf"; path = "../app/fonts/Nunito-600.ttf"; sourceTree = "<group>"; };
 		4A1B405BD9174404B10908DB /* Nunito-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Bold.ttf"; path = "../app/fonts/Nunito-Bold.ttf"; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		A2695806233B9B2F00AF8563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2695810233BA2FC00AF8563 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		A2837896233200DC0019E155 /* Dribble.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Dribble.entitlements; path = Dribble/Dribble.entitlements; sourceTree = "<group>"; };
+		A2A27EE40B114E089CF22EFD /* Nunito-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Light.ttf"; path = "../app/fonts/Nunito-Light.ttf"; sourceTree = "<group>"; };
 		A2CAB428232F62C900ACA14E /* Razorpay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Razorpay.framework; path = "../node_modules/react-native-razorpay/ios/Razorpay.framework"; sourceTree = "<group>"; };
 		AE56B6BA477B47F580AD90B4 /* Nunito-500.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-500.ttf"; path = "../app/fonts/Nunito-500.ttf"; sourceTree = "<group>"; };
 		AEB2DEEE870A236C3BA8AF5A /* libPods-Dribble.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Dribble.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,8 +186,6 @@
 		FA2FF7522850FBE40064F16F /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-SemiBold.ttf"; path = "../../app/fonts/Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
 		FA401DAAFFB748159660A81C /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		FEDADAE6E61144D581B35959 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		A2A27EE40B114E089CF22EFD /* Nunito-Light.ttf */ = {isa = PBXFileReference; name = "Nunito-Light.ttf"; path = "../app/fonts/Nunito-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		37A55B054AEB4DB0A6E27624 /* Nunito-Medium.ttf */ = {isa = PBXFileReference; name = "Nunito-Medium.ttf"; path = "../app/fonts/Nunito-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,6 +453,7 @@
 				DC1539FC3F4A3D559659BDB7 /* [CP] Copy Pods Resources */,
 				BBE2DC5B9D31DDE0EFAC0029 /* [CP-User] [RNFB] Core Configuration */,
 				5CF8C15B068614884B8BE3FE /* [CP-User] [RNFB] Crashlytics Configuration */,
+				9ACD25A2BB7F2A94AA496896 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -613,7 +615,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				A21CAD3A236FEC4300C4DF6F /* (null) in Resources */,
+				A21CAD3A236FEC4300C4DF6F /* BuildFile in Resources */,
 				FA2FF74F2850FA9F0064F16F /* Nunito-Bold.ttf in Resources */,
 				FA2FF7532850FBE40064F16F /* Nunito-ExtraBold.ttf in Resources */,
 				A93B7957BBEA45A2951B94A1 /* BebasNeue-Regular.ttf in Resources */,
@@ -724,6 +726,30 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
+		};
+		9ACD25A2BB7F2A94AA496896 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dribble/Pods-Dribble-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignal.framework/OneSignal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalCore/OneSignalCore.framework/OneSignalCore",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalExtension/OneSignalExtension.framework/OneSignalExtension",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalOutcomes/OneSignalOutcomes.framework/OneSignalOutcomes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalOutcomes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dribble/Pods-Dribble-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		A290F666237D6ADB00D1DE45 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1002,7 +1028,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 50;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
@@ -1017,7 +1043,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.0.5;
+				MARKETING_VERSION = 5.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1040,7 +1066,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 50;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1054,7 +1080,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.0.5;
+				MARKETING_VERSION = 5.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

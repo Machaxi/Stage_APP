@@ -32,7 +32,10 @@ import { client } from "../../../App";
 import LoadingIndicator from "../../components/molecules/loadingIndicator";
 import AddGuestUserModal from "../../components/molecules/addGuestUserModal";
 import BeginnerWarningModal from "../../components/molecules/beginnerWarningModal";
-import { getNumericProficiency } from "../util/utilFunctions";
+import {
+  getNumericProficiency,
+  getProficiencyName,
+} from "../util/utilFunctions";
 import CustomButton from "../../components/custom/CustomButton";
 import { deviceHeight, deviceWidth } from "../util/dimens";
 import { commonStyles } from "../util/commonStyles";
@@ -76,6 +79,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [slotApiRes, setSlotApiResponse] = useState(null);
   const [slotBookedRes, setSlotBookedRes] = useState(null);
+  const [levelName, setlevelName] = useState("Basic");
 
   const getNotifications = () => {
     getNotificationCount((count) => {
@@ -333,6 +337,10 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   }
                   console.log(lowerProfFound);
                   console.log(equalProfFound);
+                  const data = getProficiencyName(
+                    val.proficiency[0].toLowerCase()
+                  );
+                  setlevelName(data);
                   // }
                   // });
                 } else {
@@ -669,6 +677,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   //bookSlotCb();
                 }}
                 forBeginner={true}
+                forlevel={levelName}
                 onRequestBookSlot={() => {
                   setBeginnerWarningModalVisibility(false);
                   bookChosenSlotApi(
@@ -697,6 +706,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   );
                 }}
                 forBeginner={false}
+                forlevel={levelName}
                 onRequestBookSlot={() => {}}
                 biggerImg={require("../../images/add_guests_img.png")}
                 modalVisible={showAdvancedWarningModal}

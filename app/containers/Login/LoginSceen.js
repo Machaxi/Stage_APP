@@ -65,14 +65,8 @@ class LoginSceen extends Component {
       isKeyboardOpen: false,
       is_existing_user: false,
     };
-    this.intervalIdRef = React.createRef();
+    this.autoScrollInterval = null;
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.timeRemaining < 1) {
-      clearInterval(this.intervalIdRef.current);
-    }
   }
 
   componentDidMount() {
@@ -81,13 +75,12 @@ class LoginSceen extends Component {
       "hardwareBackPress",
       this.handleBackButtonClick
     );
-    const intervalId = setInterval(() => {
+    this.autoScrollInterval = setInterval(() => {
       this.setState((prevState) => ({
         timeRemaining: prevState.timeRemaining - 1,
       }));
     }, 1000);
     this.setState({
-      intervalIdRef: intervalId,
       displayImage: require("../../images/login_user.png"),
     });
     this.signcheck();
@@ -150,7 +143,9 @@ class LoginSceen extends Component {
     );
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
-    clearInterval(this.intervalIdRef.current);
+    if (this.autoScrollInterval) {
+      clearInterval(this.autoScrollInterval);
+    }
   }
 
   signcheck = async () => {
@@ -422,6 +417,9 @@ class LoginSceen extends Component {
           storeData("userInfo", JSON.stringify(userData));
           this.setState({ userDetails: userData });
           this.getHeader();
+          if (this.autoScrollInterval) {
+            clearInterval(this.autoScrollInterval);
+          }      
           if (this.state.is_existing_user == false) {
             this.setState({ loginsuccess: true });
           } else if (userData["user"].name == null) {

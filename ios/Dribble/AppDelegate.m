@@ -37,18 +37,18 @@
   [self.window makeKeyAndVisible];
   
  
-  [OneSignal initWithLaunchOptions:launchOptions
-                             appId:@"0afba88e-fe31-4da9-9540-412faf6b856b"
-          handleNotificationAction:nil
-                          settings:@{kOSSettingsKeyAutoPrompt: @false}];
-  OneSignal.inFocusDisplayType = OSNotificationDisplayTypeNotification;
-  
-  // Recommend moving the below line to prompt for push after informing the user about
-  // how your app will use them.
-  [OneSignal promptForPushNotificationsWithUserResponse:^(BOOL accepted) {
-    NSLog(@"User accepted notifications: %d", accepted);
-  }];
-  
+//  [OneSignal initWithLaunchOptions:launchOptions
+//                             appId:@"0afba88e-fe31-4da9-9540-412faf6b856b"
+//          handleNotificationAction:nil
+//                          settings:@{kOSSettingsKeyAutoPrompt: @false}];
+//  OneSignal.inFocusDisplayType = CFNotificationCenterPostNotification;
+//
+//  // Recommend moving the below line to prompt for push after informing the user about
+//  // how your app will use them.
+//  [OneSignal promptForPushNotificationsWithUserResponse:^(BOOL accepted) {
+//    NSLog(@"User accepted notifications: %d", accepted);
+//  }];
+//
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   
   return YES;

@@ -26,6 +26,11 @@ const MyRequestCentreDetails = ({ details }) => {
             }}
             style={[styles.centerImgView, styles.centerImg]}
           >
+            {details?.cover_pic == null && (
+              <View style={styles.centerContent}>
+                <Text style={{ color: "white" }}>Basic</Text>
+              </View>
+            )}
             {/* <View style={styles.playCenterView}>
               <View style={styles.playCenterInner}>
                 <Text style={styles.distance}>{details?.distance} away</Text>
@@ -33,7 +38,7 @@ const MyRequestCentreDetails = ({ details }) => {
             </View> */}
           </ImageBackground>
         </View>
-        <View style={{ flexDirection: "column", marginLeft: 12 }}>
+        <View style={{ flexDirection: "column", marginLeft: 12, marginTop: 13 }}>
           <Text style={[styles.centerName, { marginBottom: 4 }]}>
             {/* Machaxi Play9 Sports Centre, Whitefield */}
             {details?.name}
@@ -58,6 +63,15 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_Medium,
     fontWeight: "500",
     fontSize: 14,
+  },
+  centerContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  centerName: {
+    fontSize: 14,
+    color: white,
   },
   centerRow: {
     flexDirection: "row",
@@ -86,7 +100,6 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_Regular,
   },
   centerImg: {
-    alignItems: "baseline",
     overflow: "hidden",
   },
   centerImgView: {

@@ -304,15 +304,15 @@ class App extends BaseComponent {
             })
         });
 
-        OneSignal.init(ONE_SIGNAL_ID, { kOSSettingsKeyAutoPrompt: true });
-        //OneSignal.setLogLevel(0, 6)
+        // OneSignal.init(ONE_SIGNAL_ID, { kOSSettingsKeyAutoPrompt: true });
+        // //OneSignal.setLogLevel(0, 6) 
 
-        OneSignal.addEventListener('received', this.onReceived);
-        OneSignal.addEventListener('opened', this.onOpened);
-        OneSignal.addEventListener('ids', this.onIds);
-        //OneSignal.configure();
-        OneSignal.enableVibrate(true);
-        OneSignal.inFocusDisplaying(2)
+        // OneSignal.addEventListener('received', this.onReceived);
+        // OneSignal.addEventListener('opened', this.onOpened);
+        // OneSignal.addEventListener('ids', this.onIds);
+        // //OneSignal.configure();
+        // OneSignal.enableVibrate(true);
+        // OneSignal.inFocusDisplaying(2)
 
         if (DEBUG_APP){
             //alert('You are running debug app.')
@@ -320,6 +320,32 @@ class App extends BaseComponent {
             
     }
 
+    setupOneSignal = async () => {
+        OneSignal.setAppId(ONE_SIGNAL_ID);
+        OneSignal.promptForPushNotificationsWithUserResponse();
+        OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
+          let notification = notificationReceivedEvent.getNotification();
+          notificationReceivedEvent.complete(notification);
+          this.onReceived(notificationReceivedEvent)
+        });
+        //Method for handling notifications opened
+        OneSignal.setNotificationOpenedHandler(notification => {
+          this.onOpened(notification)
+        });
+        const deviceState = await OneSignal.getDeviceState();
+        if (deviceState) {
+          global.gcm_id = deviceState.userId;
+          if (global.gcm_id === undefined) {
+            this.setupOneSignal();
+          }else {
+            this.onIds(deviceState);
+            this.setState({
+              gcmIdLoaded: true,
+            })
+          }
+        }
+      }
+    
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
         if (Platform.OS === "android" && DeviceInfo.hasNotch()) {
@@ -331,6 +357,7 @@ class App extends BaseComponent {
             .setStatusBarHeight
             (20);
         }
+        this.setupOneSignal();
     }
 
     componentWillMount() {
@@ -353,17 +380,16 @@ class App extends BaseComponent {
         //alert('test===')
         
         console.log("Notification received: ", notification);
-        console.log("Notificatin for:" + notification.payload.additionalData.notification_for);
+        console.log("Notificatin for:" + notification.notification.additionalData.notification_for);
         //notification type->player_added_to_batch
         //user-> is a guest
         try{
-            if(notification.payload.additionalData.notification_for=="player_added_to_batch"){
+            if(notification.notification.additionalData.notification_for=="player_added_to_batch"){
                 console.log("CALLING REFRESH EVENT");
                 Events.publish('PROFILE_REFRESH');
 
             }else{
                 Events.publish('NOTIFICATION_CALL');
-                console.log(notification.payload.additionalData.notification_for);
             }
         }catch(ex){
             console.log(ex);
@@ -372,7 +398,7 @@ class App extends BaseComponent {
 
     onOpened(openResult) {
 
-        global.NOTIFICATION_DATA = openResult.notification.payload.additionalData
+        global.NOTIFICATION_DATA = openResult.notification.notification.additionalData
 
         //alert(JSON.stringify(openResult))
         //console.log('Message: ', openResult.notification.payload.body);
@@ -386,13 +412,16 @@ class App extends BaseComponent {
 
     componentWillUnmount() {
         // AppState.removeEventListener('change', this._handleAppStateChange);
-        OneSignal.removeEventListener('received', this.onReceived);
-        OneSignal.removeEventListener('opened', this.onOpened);
-        OneSignal.removeEventListener('ids', this.onIds);
+        // OneSignal.removeEventListener('received', this.onReceived);
+        // OneSignal.removeEventListener('opened', this.onOpened);
+        // OneSignal.removeEventListener('ids', this.onIds);
+        OneSignal.clearHandlers();
     }
 
 
     onIds(device) {
+        console.log("workingsssss");
+        console.log(device);
         storeData(PUSH_TOKEN, device.pushToken)
         storeData(ONE_SIGNAL_USERID, device.userId)
         global.FCM_DEVICE_ID = device.pushToken

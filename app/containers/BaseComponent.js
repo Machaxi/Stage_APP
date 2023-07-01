@@ -181,6 +181,11 @@ export default class BaseComponent extends React.Component {
           let userType = userData.user["user_type"];
 
           switch (type) {
+            case "court_booking_request_received":
+              if (!userData.is_play_enabled) {
+                 this.props.navigation.navigate("MyRequestsHome");
+              }
+              break;
             case "batch_cancelled":
               this.props.navigation.navigate("Batch");
               break;
