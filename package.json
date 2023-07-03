@@ -20,6 +20,7 @@
     "@react-native-firebase/crashlytics": "^14.11.0",
     "@react-native-firebase/messaging": "^14.11.0",
     "@twotalltotems/react-native-otp-input": "^1.1.2",
+    "appcenter": "4.4.5",
     "axios": "^0.19.0",
     "moment": "^2.29.4",
     "native-echarts": "^0.5.0",

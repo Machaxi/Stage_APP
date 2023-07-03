@@ -123,7 +123,18 @@ const MyBookingsScreen = ({ navigation }) => {
                 const dateB = new Date(
                   b.date.split("T")[0] + "T" + b.startTime
                 );
-                return dateB - dateA;
+                console.log("my bookings");
+                if(dateB - dateA == 0) {
+                  if (a.isCancelled && !b.isCancelled) {
+                    return -1;
+                  } else if (!a.isCancelled && b.isCancelled) {
+                    return 1;
+                  } else {
+                    return 0;
+                  }
+                }else {
+                  return dateB - dateA;
+                }
               });
               setUpcomingBookings(datastore.reverse());
             }

@@ -2,9 +2,9 @@
     <!-- <string name="app_name">Machaxi</string> -->
     <!-- <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">sqIWOpRNQTTlbVxMJxLXoE8syJdM_-E9Yx8Dd</string> -->
     <!-- stag machaxi and -->
-    <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">RXdb7CFT62UbKynF2-2T_1jY2KyCycjSw0RgA</string>
+    <!-- <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">RXdb7CFT62UbKynF2-2T_1jY2KyCycjSw0RgA</string> -->
     <!-- prod -->
-    <!-- <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">bYCRojJqtSuY6kARIfwDeSMGPJvqoqqyGSQmA</string> -->
+    <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">bYCRojJqtSuY6kARIfwDeSMGPJvqoqqyGSQmA</string>
     <!-- stage-debug macaxi-ios<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">FgHE8sZjOJ4s-rwn15H_z_NuecGBhQJMAlO8z</string> -->
     <!-- staging macaxi-ios<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">o7ms8MKcHcjVp3kd7OXiSwkyLiAisocUzHbK9</string> -->
     <!-- production macaxi-ios<string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">wXGw0E65fCUaBkg9lgw5ek3b_Ry8t2JHR8GUp</string> -->

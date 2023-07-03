@@ -1,4 +1,10 @@
 PODS:
+  - appcenter-core (4.4.5):
+    - AppCenterReactNativeShared (~> 4.0)
+    - React-Core
+  - AppCenter/Core (4.4.3)
+  - AppCenterReactNativeShared (4.4.5):
+    - AppCenter/Core (= 4.4.3)
   - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - Branch (0.27.1):
@@ -333,6 +339,7 @@ PODS:
   - YoutubePlayer-in-WKWebView (0.3.8)
 
 DEPENDENCIES:
+  - appcenter-core (from `../node_modules/appcenter`)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - CodePush (from `../node_modules/react-native-code-push`)
   - Crashlytics (~> 3.14.0)
@@ -393,6 +400,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AppCenter
+    - AppCenterReactNativeShared
     - Base64
     - boost-for-react-native
     - Branch
@@ -422,6 +431,8 @@ SPEC REPOS:
     - YoutubePlayer-in-WKWebView
 
 EXTERNAL SOURCES:
+  appcenter-core:
+    :path: "../node_modules/appcenter"
   BVLinearGradient:
     :path: "../node_modules/react-native-linear-gradient"
   CodePush:
@@ -530,6 +541,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppCenter: 3fd04aa1b166e16fdb03ec81dabe488aece83fbd
+  appcenter-core: c593b2e4ac28d6a21b6a217c4a5e6b3de7b0b00f
+  AppCenterReactNativeShared: f395caeabde0dc3a11609dbcb737d0f14cd40e79
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Branch: 4c91bd4d4e061fa4cc788d07283742be978e4257

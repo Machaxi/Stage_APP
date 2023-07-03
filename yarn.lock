@@ -1409,6 +1409,25 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
+appcenter-link-scripts@4.4.5:
+  version "4.4.5"
+  resolved "https://registry.npmjs.org/appcenter-link-scripts/-/appcenter-link-scripts-4.4.5.tgz"
+  integrity sha512-bs++S1eFm2+noAYC7+5lZESg2IvRJ1rl2o41Re3L+dg6UtKrIf/34LgIsnOM7Ufn+pophkmqkO5GRapVDGTO4Q==
+  dependencies:
+    debug "4.1.1"
+    glob "5.0.15"
+    mkdirp "0.5.3"
+    plist "^3.0.2"
+    which "1.2.11"
+    xcode "2.0.0"
+
+appcenter@4.4.5:
+  version "4.4.5"
+  resolved "https://registry.npmjs.org/appcenter/-/appcenter-4.4.5.tgz"
+  integrity sha512-3OPM8yOgwYyd1pBLVxra9+rAscCTEEySyxYhJYwzPw8ZjnGIJNTgDQ+YwuajoYG8vPJRbl8ZmG16wcdcMYk14g==
+  dependencies:
+    appcenter-link-scripts "4.4.5"
+
 aproba@^1.0.3:
   version "1.2.0"
   resolved "https://registry.npmjs.org/aproba/-/aproba-1.2.0.tgz"
@@ -2540,6 +2559,13 @@ debug@2.6.9:
   dependencies:
     ms "2.0.0"
 
+debug@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/debug/-/debug-4.1.1.tgz"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
+  dependencies:
+    ms "^2.1.1"
+
 decamelize@^1.1.1, decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/decamelize/-/decamelize-1.2.0.tgz"
@@ -3563,6 +3589,17 @@ glob@^7.0.0, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@7.1.6:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
+glob@5.0.15:
+  version "5.0.15"
+  resolved "https://registry.npmjs.org/glob/-/glob-5.0.15.tgz"
+  integrity sha512-c9IPMazfRITpmAAKi22dK1VKxGDX9ehhqfABDriL/lzO92xcUKEJPQHrVA/2YHSNFB4iFlykVmWvwo48nr3OxA==
+  dependencies:
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "2 || 3"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
+
 glob@7.0.6:
   version "7.0.6"
   resolved "https://registry.npmjs.org/glob/-/glob-7.0.6.tgz"
@@ -4157,6 +4194,11 @@ isarray@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
   integrity sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=
+
+isexe@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/isexe/-/isexe-1.1.2.tgz"
+  integrity sha512-d2eJzK691yZwPHcv1LbeAOa91yMJ9QmfTgSO1oXB65ezVhXQsxBac2vEB4bMVms9cGzaA99n6V2viHMq82VLDw==
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -5377,10 +5419,10 @@ minimatch@^3.0.2, minimatch@^3.0.4, "minimatch@2 || 3":
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.1.1, minimist@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
-  integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
+minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
+  version "1.2.8"
+  resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
+  integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
 minimist@~0.0.1:
   version "0.0.10"
@@ -5419,12 +5461,19 @@ mixin-object@^2.0.1:
     for-in "^0.1.3"
     is-extendable "^0.1.1"
 
-mkdirp@^0.5.0, mkdirp@^0.5.1:
+mkdirp@^0.5.0:
   version "0.5.1"
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
   dependencies:
     minimist "0.0.8"
+
+mkdirp@^0.5.1, mkdirp@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.3.tgz"
+  integrity sha512-P+2gwrFqx8lhew375MQHHeTlY8AuOJSrGf0R5ddkEndUkmwpgUob/vQuBD1V22/Cw1/lJr4x+EjllSezBThzBg==
+  dependencies:
+    minimist "^1.2.5"
 
 moment@^2.22.0, moment@^2.29.4, moment@>=2.10.3:
   version "2.29.4"
@@ -6080,6 +6129,14 @@ plist@^3.0.0, plist@3.0.1:
     base64-js "^1.2.3"
     xmlbuilder "^9.0.7"
     xmldom "0.1.x"
+
+plist@^3.0.2:
+  version "3.0.6"
+  resolved "https://registry.npmjs.org/plist/-/plist-3.0.6.tgz"
+  integrity sha512-WiIVYyrp8TD4w8yCvyeIr+lkmrGRd5u0VbRnU+tP/aRLxP/YadJUYOMZJ/6hIa3oUyVCsycXvtNRgd5XBJIbiA==
+  dependencies:
+    base64-js "^1.5.1"
+    xmlbuilder "^15.1.1"
 
 plist@^3.0.5:
   version "3.0.5"
@@ -8501,6 +8558,13 @@ which@^1.2.9, which@^1.3.0:
   dependencies:
     isexe "^2.0.0"
 
+which@1.2.11:
+  version "1.2.11"
+  resolved "https://registry.npmjs.org/which/-/which-1.2.11.tgz"
+  integrity sha512-8kWuAZrtPpcfj0UM1rpIJopAawk+Uz+KxNSxk0U0j9fmekidFSRDhyrHOEbD5qePWF6YicG1wSUuFA6BfsE3ig==
+  dependencies:
+    isexe "^1.1.1"
+
 wide-align@^1.1.0:
   version "1.1.3"
   dependencies:
@@ -8596,7 +8660,7 @@ ws@^5.2.0:
   dependencies:
     async-limiter "~1.0.0"
 
-xcode@^2.0.0:
+xcode@^2.0.0, xcode@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/xcode/-/xcode-2.0.0.tgz"
   integrity sha512-5xF6RCjAdDEiEsbbZaS/gBRt3jZ/177otZcpoLCjGN/u1LrfgH7/Sgeeavpr/jELpyDqN2im3AKosl2G2W8hfw==
@@ -8638,6 +8702,11 @@ xmlbuilder@^14.0.0:
   version "14.0.0"
   resolved "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-14.0.0.tgz"
   integrity sha512-ts+B2rSe4fIckR6iquDjsKbQFK2NlUk6iG5nf14mDEyldgoc2nEKZ3jZWMPTxGQwVgToSjt6VGIho1H8/fNFTg==
+
+xmlbuilder@^15.1.1:
+  version "15.1.1"
+  resolved "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-15.1.1.tgz"
+  integrity sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==
 
 xmlbuilder@^9.0.7:
   version "9.0.7"

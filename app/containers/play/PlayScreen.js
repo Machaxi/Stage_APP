@@ -554,6 +554,10 @@ export default (PlayScreen = ({ navigation }) => {
     const expiryDate = expiryD.add(1, "day");
     const presentDate = moment();
     const prestD = presentDate.add(1, "day");
+    console.log("presentDate");
+    console.log(startDate);
+    console.log(presentDate);
+    console.log(expiryDate)
     if (presentDate > startDate && presentDate < expiryDate) {
       navigation.navigate("BookSlotScreen");
     } else {
@@ -854,7 +858,7 @@ export default (PlayScreen = ({ navigation }) => {
               "DD MMMM YYYY"
             )}
             purchasedDate={moment(
-              playerDetailsResponse?.plan?.purchaseDate
+              playerDetailsResponse?.plan?.joiningDate
             ).format("DD MMMM YYYY")}
           />
           <NextSessionList

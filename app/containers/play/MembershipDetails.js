@@ -82,7 +82,7 @@ export const MembershipDetails = ({
             </TouchableOpacity>
           </View>
         )}
-        {(planExpired || slotsExhaused) && !aboutToExpire && (
+        {(planExpired || slotsExhaused) && (
           <View>
             <Text
               style={[styles.title, { color: redVariant4, marginBottom: 7 }]}

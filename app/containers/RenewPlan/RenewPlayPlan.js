@@ -60,7 +60,7 @@ class RenewPlayPlan extends Component {
         const preferredAcademyId = batchData["plan"].preferredAcademyId;
         console.log(userResponce);
         this.apicalling(planId, preferredAcademyId);
-        const targetDate = moment(batchData["plan"].expiryDate).add(1, "days");
+        const targetDate = moment();
         this.setState({ expiryDate: targetDate });
       })
       .catch((error) => {

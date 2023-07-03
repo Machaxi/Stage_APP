@@ -268,9 +268,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   }
                 }
               }
-              console.log(selectedCourtTimingId);
-              console.log(val.courtTimingId);
-              console.log("okkka");
               if (doprocess && selectedCourtTimingId != val.courtTimingId) {
                 courtMatchFound = true;
                 console.log("OTHER COURTS AVAILABLE, CALL API");
@@ -292,26 +289,17 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             var lowerProfData = null;
             var playerSpaceAvailable = false;
             var sameTimeSlotFoundInBookings = false;
-            console.log("olllas");
-            console.log(selectedAcademyData?.bookings);
+            var desplayfull = true
             selectedAcademyData?.bookings?.map((val) => {
               //TODO: api se max 0 and total 1 aa raha hai, backend issue for present data
-              console.log("olllag");
               var bookingTimePeriod = val.startTime + val.endTime;
-              console.log("olllahg");
               var playerTimePeriod = slotStartTime + slotEndTime;
-              console.log("olllahgss");
-              console.log(bookingTimePeriod);
-              console.log(playerTimePeriod);
               if (bookingTimePeriod == playerTimePeriod) {
                 var availablePlayerCount =
                   val.maxPlayersAllowed - val.totalPlayers;
                 if (availablePlayerCount >= totalPlayersCount) {
                   sameTimeSlotFoundInBookings = true;
-                  console.log("PLAYER SPACE AVAILABLE");
                   playerSpaceAvailable = true;
-                  console.log("BOOKED_PLAYER_PROF" + val.proficiency[0]);
-                  console.log("CURRENT_PLAYER_PROF" + proficiency);
                   //there are no other courts available for same time slot in the selected academy
                   // selectedAcademyData?.bookings?.map((VAL) => {
                   // var bookingTimePeriod = VAL.startTime + VAL.endTime;
@@ -323,11 +311,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   var numericCurrentUserProf = getNumericProficiency(
                     proficiency
                   );
-                  console.log("BOOKED_PLAYER_PROF" + val.proficiency[0]);
-                  console.log("CURRENT_PLAYER_PROF" + proficiency);
-                  console.log(val.proficiency);
-                  console.log(bookedPlayerNumericProf);
-                  console.log(numericCurrentUserProf);
                   if (bookedPlayerNumericProf < numericCurrentUserProf) {
                     lowerProfData = val;
                     lowerProfFound = true;
@@ -335,28 +318,32 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   if (bookedPlayerNumericProf == numericCurrentUserProf) {
                     if (!lowerProfFound) equalProfFound = true;
                   }
-                  console.log(lowerProfFound);
-                  console.log(equalProfFound);
                   const data = getProficiencyName(
                     val.proficiency[0].toLowerCase()
                   );
                   setlevelName(data);
+                  desplayfull = false
                   // }
                   // });
-                } else {
-                  console.log("COUNT NOT AVAILABLE, NEED TO RENEW");
-                  ToastAndroid.show(
-                    `Selected court is fully occupied.`,
-                    ToastAndroid.SHORT
-                  );
-                  {
-                    Platform.OS === "ios" &&
-                      this.showToast(`Selected court is fully occupied.`);
-                  }
-                  //TODO: need to verify whether to show toast only or hit bookslotapi
                 }
               }
             });
+            const hasBookingWithMatchingTimePeriod = selectedAcademyData?.bookings?.some((val) => {
+              var bookingTimePeriod = val.startTime + val.endTime;
+              var playerTimePeriod = slotStartTime + slotEndTime;
+               return bookingTimePeriod == playerTimePeriod
+            });
+            if (desplayfull && hasBookingWithMatchingTimePeriod) {
+              console.log("COUNT NOT AVAILABLE, NEED TO RENEW");
+              ToastAndroid.show(
+                `Selected court is fully occupied.`,
+                ToastAndroid.SHORT
+              );
+              {
+                Platform.OS === "ios" &&
+                  this.showToast(`Selected court is fully occupied.`);
+              }
+            }
             if (sameTimeSlotFoundInBookings) {
               if (lowerProfFound && requestAllowed) {
                 console.log(

@@ -4,6 +4,7 @@ import { getData, storeData } from '../components/auth';
 import { GUEST, PLAYER, PARENT, COACH, ACADEMY } from '../components/Constants'
 import events from "./events";
 import BaseComponent, {GO_TO_HOME, defaultStyle} from "../containers/BaseComponent";
+import Events from './events';
 
 class RightMenuToolbar extends BaseComponent {
 
@@ -21,11 +22,19 @@ class RightMenuToolbar extends BaseComponent {
     }
 
     componentDidMount() {
-        this.getNotificationCount((count) => {
-            this.setState({
-              notificationCount: count
-            });
-        });    
+      this.getNotifications()
+      this.refreshEvent = Events.subscribe('NOTIFICATION_CALL', (msg) => {
+        this.getNotifications()
+      });
+    }
+
+    getNotifications() {
+      this.getNotificationCount((count) => {
+        this.setState({
+          notificationCount: count
+        });
+    }); 
+
     }
 
     render() {

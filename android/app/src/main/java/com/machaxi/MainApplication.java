@@ -95,7 +95,7 @@ public class MainApplication extends Application implements ReactApplication {
 
       // packages.add(new MainReactPackage(),
          
-            new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG);
+            // new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG);
            // new RNTextInputMaskPackage(),
             //new SnackbarPackage());
       // packages.add(new SplashScreenReactPackage());

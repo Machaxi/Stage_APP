@@ -29,8 +29,14 @@ class NotificationList extends BaseComponent {
 
         this.selfComponentDidMount()
         Events.publish('NOTIFICATION_CALL');
-
-
+        this.willFocusSubscription = this.props.navigation.addListener(
+            "willFocus",
+            () => {
+              this.setState({ page: 0, notifications: [] }, () => {
+                this.selfComponentDidMount();
+              });
+            }
+          );      
     }
 
     selfComponentDidMount() {
@@ -217,7 +223,7 @@ class NotificationList extends BaseComponent {
         }
     }
 
-}
+} 
 const mapStateToProps = state => {
     return {
         data: state.NotificationReducer,

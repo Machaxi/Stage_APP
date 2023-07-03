@@ -398,7 +398,7 @@ class App extends BaseComponent {
 
     onOpened(openResult) {
 
-        global.NOTIFICATION_DATA = openResult.notification.notification.additionalData
+        global.NOTIFICATION_DATA = openResult.notification.additionalData
 
         //alert(JSON.stringify(openResult))
         //console.log('Message: ', openResult.notification.payload.body);
@@ -587,6 +587,6 @@ class App extends BaseComponent {
 }
 
 // export default App
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_APP_RESUME };
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_APP_RESUME, maxRetryAttempts: 10, };
 export default codePush(codePushOptions)(App);
 

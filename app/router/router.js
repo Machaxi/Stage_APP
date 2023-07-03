@@ -2415,7 +2415,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2427,7 +2427,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2439,7 +2439,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2451,7 +2451,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Edit Profile",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2463,7 +2463,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Image Guidelines",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2499,7 +2499,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Coach Profile",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2535,7 +2535,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "About Us",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2547,7 +2547,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Privacy Policy",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2559,7 +2559,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Blog",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2571,7 +2571,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Delete Account",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2583,7 +2583,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Contact Us",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2595,7 +2595,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2607,7 +2607,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2619,7 +2619,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Other Players",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2631,7 +2631,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Player Detail",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2643,7 +2643,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Coach Listing",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2655,7 +2655,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "My Stats",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2667,7 +2667,7 @@ const LearnStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Give Feedback",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2696,23 +2696,11 @@ const LearnStack = createStackNavigator({
     screen: FaqScreen,
     navigationOptions: ({ navigation }) => ({
       title: "FAQ",
-      headerLeft: (
-        <NavigationDrawerStructure
-          navigationProps={navigation}
-          showBackAction={true}
-          showDrawer={false}
-        />
-      ),
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          navigation={navigation}
-          showHome={false}
-        />
-      ),
-      headerTitleStyle: style.headerStyle,
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
       headerStyle: {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#21202F",
       },
     }),
   },
@@ -2863,7 +2851,7 @@ const HomeStack = createStackNavigator({
         backgroundColor: "#21202F",
       },
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
     }),
   },
   BookLearnTrail: {
@@ -2871,7 +2859,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2883,7 +2871,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Play",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2895,7 +2883,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2907,7 +2895,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Play",
       headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2925,7 +2913,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Edit Profile",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2937,7 +2925,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2949,7 +2937,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Play Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2961,7 +2949,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Learn Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2971,9 +2959,9 @@ const HomeStack = createStackNavigator({
   DisplayPlayTrial: {
     screen: DisplayPlayTrial,
     navigationOptions: ({ navigation }) => ({
-      title: "Learn Trial",
+      title: "Play Trial",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2985,7 +2973,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Delete Account",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -2997,7 +2985,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "About Us",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -3009,7 +2997,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Privacy Policy",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -3021,7 +3009,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Blog",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -3033,7 +3021,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "FAQ",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -3045,7 +3033,7 @@ const HomeStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Image Guidelines",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: <RequestHeaderRight navigation={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.titlestyle,
       headerStyle: {
         backgroundColor: "#21202F",

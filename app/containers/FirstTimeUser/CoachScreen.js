@@ -42,15 +42,14 @@ class CoachScreen extends Component {
 
   componentDidMount() {
     this.getValue();
-    // this.startAutoScroll();
     this.didFocusListener = this.props.navigation.addListener(
       "didFocus",
       this.onScreenFocus
     );
-    // this.didBlurListener = this.props.navigation.addListener(
-    //   "didBlur",
-    //   this.onScreenBlur
-    // );
+    this.didBlurListener = this.props.navigation.addListener(
+      "didBlur",
+      this.onScreenBlur
+    );
   }
 
   onScreenBlur = () => {
@@ -65,7 +64,7 @@ class CoachScreen extends Component {
 
   componentWillUnmount() {
     this.didFocusListener.remove();
-    // this.didBlurListener.remove();
+    this.didBlurListener.remove();
   }
 
   startAutoScroll() {
@@ -101,6 +100,7 @@ class CoachScreen extends Component {
         this.setState({
           learnData: batchData["learn"],
         });
+        this.startAutoScroll();
       })
       .catch((error) => {
         console.log(error);

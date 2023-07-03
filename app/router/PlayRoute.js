@@ -95,8 +95,6 @@ const playModule = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
-          darkThemFlow={true}
-          homeStack={true}
         />
       ),
       headerTitleStyle: style.headerStyle,
@@ -114,8 +112,6 @@ const playModule = createStackNavigator({
         <RightMenuToolbar
           navigationProps={navigation}
           showNotification={true}
-          darkThemFlow={true}
-          homeStack={true}
         />
       ),
       headerTitleStyle: style.headerStyle,
