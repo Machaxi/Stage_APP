@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 const RequestHeaderBg = ({ name }) => {
   return (
@@ -10,12 +10,16 @@ const RequestHeaderBg = ({ name }) => {
     //   }}
     //   source={require("../images/toolbar_bg.png")}
     // />
-    <View
-      style={{ height: "100%", width: "100%", backgroundColor: "#141a2e" }}
-    />
+    <View style={styles.container} />
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#141a2e",
+  },
+});
 
 export default RequestHeaderBg;

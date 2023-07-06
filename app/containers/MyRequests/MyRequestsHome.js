@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   View,
@@ -24,17 +24,17 @@ import { getNotificationCount } from "../util/notificationCount";
 import { client } from "../../../App";
 import EmptyDataContainer from "../../components/molecules/emptyDataContainer";
 const MyRequestsHome = ({ navigation }) => {
- var updateErrorResponse = null;
- var getErrorResponse = null;
- const [refreshing, setRefreshing] = useState(false);
- const [loading, setLoading] = useState(true);
- const [requestResponse, setRequestResponse] = useState(null);
- const [isSent, setSentVal] = useState(true);
- const [allDataFetched, setAllDataFetched] = useState(false);
- const [pageCount, setPageCount] = useState(0);
- const [sentRequestsData, setSentRequestsData] = useState([]);
- const [receivedRequestsData, setReceivedRequestsData] = useState([]);
- 
+  var updateErrorResponse = null;
+  var getErrorResponse = null;
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [requestResponse, setRequestResponse] = useState(null);
+  const [isSent, setSentVal] = useState(true);
+  const [allDataFetched, setAllDataFetched] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
+  const [sentRequestsData, setSentRequestsData] = useState([]);
+  const [receivedRequestsData, setReceivedRequestsData] = useState([]);
+
   const getNotifications = () => {
     getNotificationCount((count) => {
       navigation.setParams({ notification_count: count });
@@ -54,7 +54,7 @@ const MyRequestsHome = ({ navigation }) => {
     }
   };
 
-  const getRequestsData = async ({pageCountVal , isSentRequest}) => {
+  const getRequestsData = async ({ pageCountVal, isSentRequest }) => {
     setLoading(true);
 
     getData("header", (value) => {
@@ -63,7 +63,7 @@ const MyRequestsHome = ({ navigation }) => {
         "Content-Type": "application/json",
         "x-authorization": value,
         //TODO:remove this static logic
-       // "x-authorization": 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg'
+        // "x-authorization": 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg'
       };
       //client.call
       client
@@ -73,7 +73,7 @@ const MyRequestsHome = ({ navigation }) => {
             sent: isSentRequest,
             received: !isSentRequest,
             size: 10,
-            page: pageCountVal
+            page: pageCountVal,
           },
         })
         .then(function(response) {
@@ -85,18 +85,16 @@ const MyRequestsHome = ({ navigation }) => {
           if (success) {
             //*** */
             if (json.data?.received?.length > 0) {
-               var receiveData = json.data?.received;
-               json.data?.received?.map((val) => {
-                 val["expanded"] = false;
-               });
+              var receiveData = json.data?.received;
+              json.data?.received?.map((val) => {
+                val["expanded"] = false;
+              });
               //setRequestReceiveVal(receiveData);
               setReceivedRequestsData([...receiveData]);
             }
-          
+
             if (json.data?.sent?.length > 0) {
-    
               setSentRequestsData([...json.data?.sent]);
-              
             }
 
             if (isSent) {
@@ -110,7 +108,6 @@ const MyRequestsHome = ({ navigation }) => {
             }
             //*** */
             setRequestResponse(json.data);
-           
           } else {
             if (json.code == "1020") {
               Events.publish("LOGOUT");
@@ -121,8 +118,8 @@ const MyRequestsHome = ({ navigation }) => {
         .catch(function(error) {
           setLoading(false);
           ToastAndroid.show(
-            `${getErrorResponse?.response?.response?.data
-              ?.error_message ?? ""}`,
+            `${getErrorResponse?.response?.response?.data?.error_message ??
+              ""}`,
             ToastAndroid.SHORT
           );
           console.log(error);
@@ -130,71 +127,68 @@ const MyRequestsHome = ({ navigation }) => {
     });
   };
 
-  const updateRequestApi = async(id, requestType) => {
-      const data = {
-          requestId: id,
-          status: requestType,
-      };
+  const updateRequestApi = async (id, requestType) => {
+    const data = {
+      requestId: id,
+      status: requestType,
+    };
 
-      setLoading(true);
-      getData("header", (value) => {
-        if (value == "") return;
-        const headers = {
-          "Content-Type": "application/json",
-          "x-authorization": value,
-          //TODO:remove this static logic
-          // "x-authorization":
-          //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
-        };
-        //client.call
-        client
-          .post("court/updated-booking-request", 
-             {data: data},
-             {headers: headers}
-            
-          )
-          .then(function(response) {
-            updateErrorResponse = {response};
-           
-            try {
+    setLoading(true);
+    getData("header", (value) => {
+      if (value == "") return;
+      const headers = {
+        "Content-Type": "application/json",
+        "x-authorization": value,
+        //TODO:remove this static logic
+        // "x-authorization":
+        //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg"
+      };
+      //client.call
+      client
+        .post(
+          "court/updated-booking-request",
+          { data: data },
+          { headers: headers }
+        )
+        .then(function(response) {
+          updateErrorResponse = { response };
+
+          try {
             let json = response?.data;
             let success = json?.success;
             if (success) {
-              setLoading(true)
+              setLoading(true);
               refreshData();
             } else {
-               ToastAndroid.show(
-                 `${updateErrorResponse?.response?.response?.data
-                   ?.error_message ?? ""}`,
-                 ToastAndroid.SHORT
-               );
+              ToastAndroid.show(
+                `${updateErrorResponse?.response?.response?.data
+                  ?.error_message ?? ""}`,
+                ToastAndroid.SHORT
+              );
               if (json.code == "1020") {
                 Events.publish("LOGOUT");
               }
             }
             setLoading(false);
+          } catch (e) {
+            setLoading(false);
+            ToastAndroid.show(
+              `${updateErrorResponse?.response?.response?.data?.error_message ??
+                ""}`,
+              ToastAndroid.SHORT
+            );
           }
-          catch(e){
-             setLoading(false);
-             ToastAndroid.show(
-               `${
-                 updateErrorResponse?.response?.response?.data?.error_message ?? ''
-               }`,
-               ToastAndroid.SHORT
-             );
-          }
-          })
-          .catch(function(error) {
-             setLoading(false);
-             ToastAndroid.show(
-               `${updateErrorResponse?.response?.response?.data
-                 ?.error_message ?? ""}`,
-               ToastAndroid.SHORT
-             );
-          });
-      });
-  
-  }
+        })
+        .catch(function(error) {
+          setLoading(false);
+          ToastAndroid.show(
+            `${updateErrorResponse?.response?.response?.data?.error_message ??
+              ""}`,
+            ToastAndroid.SHORT
+          );
+        });
+    });
+  };
 
   useEffect(() => {
     navigation.setParams({
@@ -211,7 +205,9 @@ const MyRequestsHome = ({ navigation }) => {
       checkNotification();
     });
 
-    
+    if (navigation?.state?.params?.isSentValue != null) {
+      setSentVal(navigation?.state?.params?.isSentValue);
+    }
     getRequestsData({
       pageCountVal: 0,
       isSentRequest: isSent,
@@ -229,7 +225,7 @@ const MyRequestsHome = ({ navigation }) => {
     setSentRequestsData([]);
     setReceivedRequestsData([]);
     setAllDataFetched(false);
-  }
+  };
 
   const refreshData = () => {
     resetData();
@@ -238,55 +234,55 @@ const MyRequestsHome = ({ navigation }) => {
       isSentRequest: isSent,
     });
     // In actual case set refreshing to false when whatever is being refreshed is done!
-    
-  }
+  };
 
   const onRefresh = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     refreshData();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
-    
   };
- const onTabPress = (val) => {
-    setSentVal(val == 'sent' ? true : false)
-    resetData()
-    getRequestsData({pageCountVal : 0, isSentRequest : val == "sent" ? true : false});
- }
+  const onTabPress = (val) => {
+    setSentVal(val == "sent" ? true : false);
+    resetData();
+    getRequestsData({
+      pageCountVal: 0,
+      isSentRequest: val == "sent" ? true : false,
+    });
+  };
 
- const cancelBooking = (id) => {
-  updateRequestApi(id, 'CANCELLED');
- }
+  const cancelBooking = (id) => {
+    updateRequestApi(id, "CANCELLED");
+  };
 
- const acceptRequest = (id) => {
-  updateRequestApi(id, "ACCEPTED");
- }
+  const acceptRequest = (id) => {
+    updateRequestApi(id, "ACCEPTED");
+  };
 
- const declineRequest = (id) => {
-  updateRequestApi(id, "DECLINED");
- }
+  const declineRequest = (id) => {
+    updateRequestApi(id, "DECLINED");
+  };
 
- const showDetails = (passedId) => {
+  const showDetails = (passedId) => {
     var previousData = receivedRequestsData;
     receivedRequestsData.map((val, ind) => {
       if (passedId == val.id) {
         previousData[ind].expanded = !val.expanded;
       }
     });
-    
-    setReceivedRequestsData([...previousData]);
-    
-  }
 
-   const onHitPaginationCb = () => {
-     var pageCountVal = pageCount + 1;
-     setPageCount(pageCountVal);
+    setReceivedRequestsData([...previousData]);
+  };
+
+  const onHitPaginationCb = () => {
+    var pageCountVal = pageCount + 1;
+    setPageCount(pageCountVal);
     getRequestsData({
       pageCountVal: pageCountVal,
       isSentRequest: isSent,
     });
-   };
+  };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -312,9 +308,7 @@ const MyRequestsHome = ({ navigation }) => {
           />
           <MyRequestTabItem
             colors={
-              !isSent
-                ? ["#a975284d", "#a9752880"]
-                : ["#ffffff54", "#ffffff33"]
+              !isSent ? ["#a975284d", "#a9752880"] : ["#ffffff54", "#ffffff33"]
             }
             name={"Received"}
             isLeft={false}

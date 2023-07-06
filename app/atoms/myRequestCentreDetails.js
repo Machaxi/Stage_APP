@@ -38,18 +38,16 @@ const MyRequestCentreDetails = ({ details }) => {
             </View> */}
           </ImageBackground>
         </View>
-        <View style={{ flexDirection: "column", marginLeft: 12, marginTop: 13 }}>
+        <View style={styles.centerview}>
           <Text style={[styles.centerName, { marginBottom: 4 }]}>
-            {/* Machaxi Play9 Sports Centre, Whitefield */}
             {details?.name}
           </Text>
           <Text style={styles.centerAddr}>
-            {/* 68/1, 1, near Parijatha Farm, Whitefield, Siddapura. */}
             {details?.address}
           </Text>
         </View>
       </View>
-      <View style={{ color: borderGrey, width: "100%", height: 1 }} />
+      <View style={styles.line} />
       <Text style={[styles.bookingDetails, { marginVertical: 14 }]}>
         Booking Details
       </Text>
@@ -63,6 +61,16 @@ const styles = StyleSheet.create({
     fontFamily: Nunito_Medium,
     fontWeight: "500",
     fontSize: 14,
+  },
+  centerview: { 
+    flexDirection: "column", 
+    marginLeft: 12, 
+    marginTop: 13 
+  },
+  line: { 
+    color: borderGrey, 
+    width: "100%", 
+    height: 1 
   },
   centerContent: {
     flex: 1,

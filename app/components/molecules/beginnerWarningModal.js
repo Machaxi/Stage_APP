@@ -33,7 +33,7 @@ const BeginnerWarningModal = ({
           setModalVisibility={() => setModalVisibility()}
           onRequestBookSlot={() => onRequestBookSlot()}
           forBeginner={forBeginner}
-          forlevel = {forlevel}
+          forlevel={forlevel}
           onBtnPress={() => onBtnPress()}
         />
       </TouchableOpacity>
@@ -49,12 +49,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   girlImg: {
-    position: "absolute",
-    top: 90,
     zIndex: 4,
     width: 205,
     resizeMode: "contain",
     height: 296,
+    marginBottom: -150,
   },
   cross: {
     height: 25,

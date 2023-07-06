@@ -9,6 +9,7 @@ import moment from "moment";
 import { StatusBar } from "react-native";
 import auth from "@react-native-firebase/auth";
 import Snackbar from "react-native-snackbar";
+import { StackActions } from "react-navigation";
 msg = "GUEST";
 
 colors = {
@@ -181,9 +182,55 @@ export default class BaseComponent extends React.Component {
           let userType = userData.user["user_type"];
 
           switch (type) {
+            case "reward_redeemed":
+              if (!userData.is_play_enabled || !userData.is_learn_enabled) {
+                this.props.navigation.navigate("ShopMainScreen");
+              }
+              break;
+            case "reward_earned":
+              if (!userData.is_play_enabled || !userData.is_learn_enabled) {
+                this.props.navigation.navigate("ShopMainScreen");
+              }
+              break;
+            case "membership_expiring_today":
+              if (!userData.is_play_enabled) {
+                this.props.navigation.dispatch(StackActions.popToTop());
+                this.props.navigation.navigate("PlayingMainScreen", {
+                  screen: "PlayScreen",
+                });
+              }
+              break;
+            case "playing_partner_assigned":
+              if (!userData.is_play_enabled) {
+                this.props.navigation.navigate("MyBookingsScreen");
+              }
+              break;
+            case "past_play_buddy_book_slot":
+              if (!userData.is_play_enabled) {
+                this.props.navigation.dispatch(StackActions.popToTop());
+                this.props.navigation.navigate("PlayingMainScreen", {
+                  screen: "PlayScreen",
+                });
+              }
+              break;
+            case "playing_slot_booking":
+              if (!userData.is_play_enabled) {
+                this.props.navigation.navigate("MyBookingsScreen");
+              }
+              break;
+            case "membership_expiring_soon":
+              if (!userData.is_play_enabled) {
+                this.props.navigation.dispatch(StackActions.popToTop());
+                this.props.navigation.navigate("PlayingMainScreen", {
+                  screen: "PlayScreen",
+                });
+              }
+              break;
             case "court_booking_request_received":
               if (!userData.is_play_enabled) {
-                 this.props.navigation.navigate("MyRequestsHome");
+                this.props.navigation.navigate("MyRequestsHome", {
+                  isSentValue: false,
+                });
               }
               break;
             case "batch_cancelled":
@@ -201,7 +248,6 @@ export default class BaseComponent extends React.Component {
             case "tournament_winner_declared":
               this.props.navigation.navigate("Tournament");
               break;
-
             case "challenge_dispute_resolved":
               this.props.navigation.navigate("Challenge");
               break;
@@ -227,13 +273,11 @@ export default class BaseComponent extends React.Component {
               else if (userType == PARENT)
                 this.props.navigation.navigate("ParentRewards");
               break;
-
             case "coach_job_vacancy":
               this.props.navigation.navigate("AcademyListing", {
                 vacancy: true,
               });
               break;
-
             case "rewards_due_player":
               if (userType == COACH)
                 this.props.navigation.navigate("CoachRewardPoints");

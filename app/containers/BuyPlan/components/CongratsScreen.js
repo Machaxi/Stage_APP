@@ -89,11 +89,7 @@ class CongratsScreen extends Component {
         </LinearGradient>
         <Image
           source={require("../../../images/playing/Congratulations.png")}
-          style={{
-            width: 220,
-            height: 360,
-            marginBottom: -180,
-          }}
+          style={styles.mainImage}
         />
       </View>
     );
@@ -105,6 +101,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column-reverse",
     alignItems: "center",
+  },
+  mainImage: {
+    width: 220,
+    height: 360,
+    marginBottom: -180,
   },
   subcontainer: {
     width: "100%",

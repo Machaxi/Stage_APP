@@ -2412,15 +2412,6 @@ const tabBarControllerBookParent = createBottomTabNavigator({
 const LearnStack = createStackNavigator({
   Play: {
     screen: ParentHome,
-    navigationOptions: ({ navigation }) => ({
-      title: "Learn",
-      headerLeft: <RequestHeaderLeft navigation={navigation} />,
-      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
-      headerTitleStyle: style.titlestyle,
-      headerStyle: {
-        backgroundColor: "#21202F",
-      },
-    }),
   },
   BookLearnTrail: {
     screen: TrialBook,
@@ -2704,6 +2695,84 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  ParentRewards: {
+    screen: ParentRewards,
+    navigationOptions: ({ navigation }) => ({
+      title: "Reward points",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  AcademyListing: {
+    screen: AcademyListing,
+    navigationOptions: ({ navigation }) => ({
+      title: "Browse Academies",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  WriteFeedback: {
+    screen: WriteFeedback,
+    navigationOptions: ({ navigation }) => ({
+      title: "Write Feedbacks",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  AcademyFilter: {
+    screen: AcademyFilter,
+  },
+  TournamentGallerySlider: {
+    screen: TournamentGallerySlider,
+    navigationOptions: ({ navigation }) => ({
+      title: "Gallery",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  TournamentGallerySliderZoom: {
+    screen: TournamentGallerySliderZoom,
+    navigationOptions: ({ navigation }) => ({
+      title: "Gallery",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  AcademyBatch: {
+    screen: AcademyBatch,
+    navigationOptions: ({ navigation }) => ({
+      title: "View Batches",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  DietPlan: {
+    screen: DietPlan,
+  },
 });
 
 const tabBarControllerLearn = createBottomTabNavigator(
@@ -2747,7 +2816,7 @@ const tabBarControllerLearn = createBottomTabNavigator(
         ),
       },
     },
-    Tournament: {
+    ShopTabMainScreen: {
       screen: ShopTabRoute,
       navigationOptions: {
         tabBarLabel: "Shop",

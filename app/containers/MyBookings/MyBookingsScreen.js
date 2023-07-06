@@ -116,27 +116,33 @@ const MyBookingsScreen = ({ navigation }) => {
           if (success) {
             if (json.data?.upcoming?.length > 0) {
               var datastore = [...json.data?.upcoming];
-              datastore.sort((a, b) => {
+              const cancelledArray = datastore.filter(
+                (item) => item.isCancelled
+              );
+              const notCancelledArray = datastore.filter(
+                (item) => !item.isCancelled
+              );
+
+              notCancelledArray.sort((a, b) => {
                 const dateA = new Date(
                   a.date.split("T")[0] + "T" + a.startTime
                 );
                 const dateB = new Date(
                   b.date.split("T")[0] + "T" + b.startTime
                 );
-                console.log("my bookings");
-                if(dateB - dateA == 0) {
-                  if (a.isCancelled && !b.isCancelled) {
-                    return -1;
-                  } else if (!a.isCancelled && b.isCancelled) {
-                    return 1;
-                  } else {
-                    return 0;
-                  }
-                }else {
-                  return dateB - dateA;
-                }
+                return dateA - dateB;
               });
-              setUpcomingBookings(datastore.reverse());
+              cancelledArray.sort((a, b) => {
+                const dateA = new Date(
+                  a.date.split("T")[0] + "T" + a.startTime
+                );
+                const dateB = new Date(
+                  b.date.split("T")[0] + "T" + b.startTime
+                );
+                return dateA - dateB;
+              });
+              var datasort = [...notCancelledArray, ...cancelledArray];
+              setUpcomingBookings(datasort);
             }
             if (json.data?.past?.length > 0) {
               const datastorepast = [...json.data?.past];
@@ -401,11 +407,11 @@ const MyBookingsScreen = ({ navigation }) => {
           upcomingBookings?.length > 0 ? (
             <FlatList
               data={upcomingBookings}
-              onEndReachedThreshold={0.3}
-              onEndReached={({ distanceFromEnd }) => {
-                console.log("on end reached ", distanceFromEnd);
-                if (allDataFetched == false) onHitPaginationCb();
-              }}
+              // onEndReachedThreshold={0.3}
+              // onEndReached={({ distanceFromEnd }) => {
+              //   console.log("on end reached ", distanceFromEnd);
+              //   if (allDataFetched == false) onHitPaginationCb();
+              // }}
               renderItem={({ item }) => {
                 return (
                   <MyBookingsView
@@ -526,11 +532,11 @@ const MyBookingsScreen = ({ navigation }) => {
             {filteredData.length > 0 ? (
               <FlatList
                 data={filteredData}
-                onEndReachedThreshold={0.3}
-                onEndReached={({ distanceFromEnd }) => {
-                  console.log("on end reached ", distanceFromEnd);
-                  if (allDataFetched == false) onHitPaginationCb();
-                }}
+                // onEndReachedThreshold={0.3}
+                // onEndReached={({ distanceFromEnd }) => {
+                //   console.log("on end reached ", distanceFromEnd);
+                //   if (allDataFetched == false) onHitPaginationCb();
+                // }}
                 renderItem={({ item }) => {
                   return (
                     <MyBookingsView

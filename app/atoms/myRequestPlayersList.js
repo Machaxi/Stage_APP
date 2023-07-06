@@ -8,12 +8,7 @@ import { getProficiencyName } from "../containers/util/utilFunctions";
 
 const MyRequestPlayersList = ({ item }) => {
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        marginBottom: 15,
-      }}
-    >
+    <View style={styles.container}>
       <Text style={[styles.detailsTxt, { marginRight: 8 }]}>
         {item?.name} {item?.guestCount > 0 && " + "+ item?.guestCount + " Guests"}
       </Text>
@@ -28,6 +23,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: white,
     fontFamily: Nunito_Regular,
+  },
+  container: {
+    flexDirection: "row",
+    marginBottom: 15,
   },
 });
 

@@ -71,13 +71,7 @@ class CenterDetails extends Component {
             </View>
           </View>
           {isExpanded && this.props.isExpanded ? (
-            <View
-              style={{
-                marginTop: 30,
-                marginBottom: 15,
-                marginHorizontal: 7,
-              }}
-            >
+            <View style={styles.subcontai}>
               <Text style={styles.setTime}>{"Select Time Slot"}</Text>
               <View style={{ flexDirection: "row" }}>
                 <TimingsTab
@@ -147,6 +141,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     paddingHorizontal: 5,
+  },
+  subcontai: {
+    marginTop: 30,
+    marginBottom: 15,
+    marginHorizontal: 7,
   },
   image: {
     width: 100,

@@ -445,10 +445,18 @@ class App extends BaseComponent {
     render() {
         let is_show_alert = this.state.is_show_alert
         let show_must_update_alert = this.state.show_must_update_alert
-        let info_msg = this.state.info_msg
+        var info_msg = this.state.info_msg
+        if (!info_msg || info_msg == '') {
+            info_msg = "Something went wrong"
+        }
+        var iospadding = 20
+        deviceModel = DeviceInfo.getModel()
+        if (deviceModel == 'iPhone SE' || deviceModel == 'iPhone 7' || deviceModel == 'iPhone 8' || deviceModel === 'iPhone 6' || deviceModel === 'iPhone 6s' ) {
+            iospadding = 0
+        }
         return (
 
-              <SafeAreaView forceInset={{ top: 'always'}} style={{ flex: 1, backgroundColor: "#141A2E", marginTop: 0, paddingBottom: Platform.OS == 'ios' ? 20: 0 }}>
+              <SafeAreaView forceInset={{ top: 'always'}} style={{ flex: 1, backgroundColor: "#141A2E", marginTop: 0, paddingBottom: Platform.OS == 'ios' ? iospadding: 0 }}>
 
 
             <PaperProvider theme={ModifiedDefaultTheme}>

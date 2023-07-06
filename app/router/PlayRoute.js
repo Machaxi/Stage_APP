@@ -91,12 +91,7 @@ const playModule = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "My Requests",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-        />
-      ),
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.headerStyle,
       headerStyle: {
         backgroundColor: "#21202F",
@@ -108,12 +103,7 @@ const playModule = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "My Bookings",
       headerLeft: <RequestHeaderBack navigationProps={navigation} />,
-      headerRight: (
-        <RightMenuToolbar
-          navigationProps={navigation}
-          showNotification={true}
-        />
-      ),
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
       headerTitleStyle: style.headerStyle,
       headerStyle: {
         backgroundColor: "#21202F",

@@ -8,7 +8,7 @@ class CoachProcess extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ alignItems: "center", zIndex: 1 }}
+          style={styles.subView}
           onPress={() => {
             const { onPress, number } = this.props;
             onPress(1, number);
@@ -28,7 +28,7 @@ class CoachProcess extends Component {
         />
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ alignItems: "center", zIndex: 1 }}
+          style={styles.subView}
           onPress={() => {
             const { onPress, number } = this.props;
             onPress(2, number);
@@ -59,7 +59,7 @@ class CoachProcess extends Component {
         />
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ alignItems: "center", zIndex: 1 }}
+          style={styles.subView}
           onPress={() => {
             const { onPress, number } = this.props;
             onPress(3, number);
@@ -88,7 +88,7 @@ class CoachProcess extends Component {
             this.props.number > 3 && { backgroundColor: "#00D78F" },
           ]}
         />
-        <View style={{ alignItems: "center", zIndex: 1 }}>
+        <View style={styles.subView}>
           <Image
             source={
               this.props.number > 3
@@ -118,6 +118,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  subView: {
+    alignItems: "center",
+    zIndex: 1,
   },
   viewline: {
     width: 87,

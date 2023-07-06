@@ -24,7 +24,7 @@
 		7C18C45A930B94D3E591BF8D /* libPods-DribbleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE01E04CED7A014757AC0FA0 /* libPods-DribbleTests.a */; };
 		80967E324F494EFC9FE474C4 /* Nunito-300.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C103EDA398E54FEBB149EBC5 /* Nunito-300.ttf */; };
 		8AC408560EFA44328A6991BB /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2A27EE40B114E089CF22EFD /* Nunito-Light.ttf */; };
-		A21CAD3A236FEC4300C4DF6F /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		A21CAD3A236FEC4300C4DF6F /* (null) in Resources */ = {isa = PBXBuildFile; };
 		A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A251647523DF2372005F3FB2 /* GoogleService-Info.plist */; };
 		A2695805233B9B2F00AF8563 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2695804233B9B2F00AF8563 /* NotificationService.swift */; };
 		A2695809233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A2695802233B9B2F00AF8563 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -615,7 +615,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A251647623DF2372005F3FB2 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				A21CAD3A236FEC4300C4DF6F /* BuildFile in Resources */,
+				A21CAD3A236FEC4300C4DF6F /* (null) in Resources */,
 				FA2FF74F2850FA9F0064F16F /* Nunito-Bold.ttf in Resources */,
 				FA2FF7532850FBE40064F16F /* Nunito-ExtraBold.ttf in Resources */,
 				A93B7957BBEA45A2951B94A1 /* BebasNeue-Regular.ttf in Resources */,
@@ -1028,7 +1028,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
@@ -1043,7 +1043,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 5.0.0;
+				MARKETING_VERSION = 5.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1066,7 +1066,7 @@
 				CODE_SIGN_ENTITLEMENTS = Dribble/Dribble.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = T8DLD62Q6U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1080,7 +1080,7 @@
 				INFOPLIST_FILE = Dribble/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 5.0.0;
+				MARKETING_VERSION = 5.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

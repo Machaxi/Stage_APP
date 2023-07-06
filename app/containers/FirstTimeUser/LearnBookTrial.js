@@ -142,14 +142,14 @@ class LearnBookTrial extends Component {
     return (
       <View>
         <GetBack title={this.state.title} onPress={this.hadleBackPress} />
-        <View style={{ height: 60, margin: 20 }}>
+        <View style={{ height: 60, margin: 20, marginTop: 0 }}>
           <CoachProcess
             number={this.state.currentPage}
             onPress={this.onPress}
             title="Playing Trial"
           />
         </View>
-        <View style={{ height: 1, backgroundColor: "gray", marginTop: 10 }} />
+        <View style={{ height: 1, backgroundColor: "gray", marginTop: 5 }} />
       </View>
     );
   };

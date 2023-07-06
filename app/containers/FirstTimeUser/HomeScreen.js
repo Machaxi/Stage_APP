@@ -6,7 +6,10 @@ import PlayerScreen from "./PlayerScreen";
 import ShopScreen from "./ShopScreen";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
-import BaseComponent, { getBaseUrl, getNotificationCount } from "../BaseComponent";
+import BaseComponent, {
+  getBaseUrl,
+  getNotificationCount,
+} from "../BaseComponent";
 import { Nunito_Bold, Nunito_SemiBold } from "../util/fonts";
 import RequestHeaderRight from "../../atoms/requestHeaderRight";
 import Events from "../../router/events";
@@ -25,10 +28,10 @@ class HomeScreen extends BaseComponent {
 
   componentDidMount() {
     this.getData();
-    // this.props.navigation.setParams({ title: "Learn" });
     this.props.navigation.addListener("didFocus", this.onScreenFocus);
     this.willFocusSubscription = this.props.navigation.addListener(
-      "willFocus", () => {
+      "willFocus",
+      () => {
         this.getNotifications();
       }
     );

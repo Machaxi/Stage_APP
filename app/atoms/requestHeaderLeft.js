@@ -4,7 +4,7 @@ import { Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 const RequestHeaderLeft = ({ navigation }) => {
   return (
     <TouchableOpacity
-      style={{ marginRight: 8, padding: 7 }}
+      style={styles.container}
       onPress={() => {
         navigation.toggleDrawer();
       }}
@@ -13,14 +13,22 @@ const RequestHeaderLeft = ({ navigation }) => {
       <Image
         resizeMode="contain"
         source={require("../images/hamburger_white.png")}
-        style={{ width: 20, height: 16, marginLeft: 12 }}
+        style={styles.image}
       />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  
+  container: {
+    marginRight: 8,
+    padding: 7,
+  },
+  image: {
+    width: 20,
+    height: 16,
+    marginLeft: 12,
+  },
 });
 
 export default RequestHeaderLeft;

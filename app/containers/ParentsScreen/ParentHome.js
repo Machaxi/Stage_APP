@@ -432,7 +432,7 @@ class ParentHome extends BaseComponent {
       this.props.navigation.setParams({ notification_count: count });
       notification_count = count;
       this.props.navigation.setParams({
-        headerRight: <RequestHeaderRight navigation={navigation} />,
+        headerRight: <RequestHeaderRight navigation={this.props.navigation} />,
       });
     });
   }
@@ -450,7 +450,7 @@ class ParentHome extends BaseComponent {
 
       let academy_name = userData.academy_name;
       if (academy_name == undefined) academy_name = "";
-      this.props.navigation.setParams({ Title: academy_name });
+      //       this.props.navigation.setParams({ Title: academy_name });
 
       this.setState({
         userData: JSON.parse(value),
@@ -524,7 +524,7 @@ class ParentHome extends BaseComponent {
                 Events.publish(RATING_UPDATE, obj);
               });
 
-              this.props.navigation.setParams({ Title: name });
+              // this.props.navigation.setParams({ Title: name });
             }
           }
         })
@@ -684,7 +684,7 @@ class ParentHome extends BaseComponent {
             });
 
             let acedemy_name = user1.data["player_profile"].academy_name;
-            this.props.navigation.setParams({ Title: acedemy_name });
+            // this.props.navigation.setParams({ Title: acedemy_name });
 
             getData("userInfo", (value) => {
               userData = JSON.parse(value);
