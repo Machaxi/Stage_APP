@@ -146,7 +146,7 @@ const MyBookingsScreen = ({ navigation }) => {
             }
             if (json.data?.past?.length > 0) {
               const datastorepast = [...json.data?.past];
-              setPastBookings(datastorepast.reverse());
+              setPastBookings(datastorepast);
             }
 
             setBookingsApiResponse(json.data);

@@ -111,8 +111,10 @@ const ShopScreen = ({ navigation }) => {
             if (json.code == "1020") {
               Events.publish("LOGOUT");
             }
-          }
-          setLoading(false);
+          }         
+          setTimeout(() => {
+            setLoading(false);
+          }, 3000);
         })
         .catch(function(error) {
           setLoading(false);

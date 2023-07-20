@@ -134,13 +134,17 @@ class PlayerDetails extends Component {
       if (this.state.procednext) {
         name = this.state.related_players[this.state.currentChild].name;
       }
+      var childDetail = this.state.childDetails;
       if (this.state.currentIndex == 2) {
         parent = "Child";
+        if (this.state.related_players.length < this.state.currentChild + 1) {
+          childDetail = null;
+        }
       } else {
         name = this.state.userDetails.name;
         gend = this.state.userDetails.genderType;
       }
-      this.props.onPress(name, gend, parent, this.state.childDetails);
+      this.props.onPress(name, gend, parent, childDetail);
     };
 
     if (this.state.userDetails == null) {

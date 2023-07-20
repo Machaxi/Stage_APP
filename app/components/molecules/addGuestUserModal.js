@@ -30,7 +30,7 @@ const AddGuestUserModal = ({
         <AddGuestUserModalInnerView
           playHoursRemaining={playHoursRemaining}
           onBtnPress={() => onBtnPress()}
-          onExplorePlansPressed={() => onExplorePlansPressed}
+          onExplorePlansPressed={() => onExplorePlansPressed()}
         />
       </TouchableOpacity>
     </Modal>
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     top: 40,
     zIndex: 4,
     width: 205,
-    resizeMode:'contain',
+    resizeMode: "contain",
     height: 296,
   },
   cross: {

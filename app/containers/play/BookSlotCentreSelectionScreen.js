@@ -194,6 +194,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       playHoursRemaining,
       guestCount,
       proficiency,
+      entirecourt,
     } = navigation?.state?.params;
     var guestCountVal =
       guestCount == null || typeof guestCount == undefined ? 0 : guestCount;
@@ -212,14 +213,21 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       const diffInHours = diffInMillisec / (1000 * 60 * 60);
       console.log("hrs diff" + diffInHours);
 
-      finalDifference = diffInHours;
+      if (guestCountVal > 0) {
+        finalDifference = diffInHours * (guestCountVal + 1);
+      } else {
+        if (entirecourt) {
+          finalDifference = diffInHours * 2;
+        } else {
+          finalDifference = diffInHours;
+        }
+      }
       // Math.floor(diffInHours);
     }
     console.log("playHoursRemaining" + playHoursRemaining);
     console.log("finalDifference" + finalDifference);
-    if (playHoursRemaining > finalDifference) {
+    if (playHoursRemaining >= finalDifference) {
       //after verifying that player has sufficient hours to play proceed to check other contrainsts below
-      //bookChosenSlotApi()
 
       if (selectedAcademyData != null) {
         if (
@@ -289,7 +297,8 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
             var lowerProfData = null;
             var playerSpaceAvailable = false;
             var sameTimeSlotFoundInBookings = false;
-            var desplayfull = true
+            var desplayfull = true;
+            var allleveldata = [];
             selectedAcademyData?.bookings?.map((val) => {
               //TODO: api se max 0 and total 1 aa raha hai, backend issue for present data
               var bookingTimePeriod = val.startTime + val.endTime;
@@ -321,18 +330,21 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   const data = getProficiencyName(
                     val.proficiency[0].toLowerCase()
                   );
+                  allleveldata = [...allleveldata, val.proficiency[0]];
                   setlevelName(data);
-                  desplayfull = false
+                  desplayfull = false;
                   // }
                   // });
                 }
               }
             });
-            const hasBookingWithMatchingTimePeriod = selectedAcademyData?.bookings?.some((val) => {
-              var bookingTimePeriod = val.startTime + val.endTime;
-              var playerTimePeriod = slotStartTime + slotEndTime;
-               return bookingTimePeriod == playerTimePeriod
-            });
+            const hasBookingWithMatchingTimePeriod = selectedAcademyData?.bookings?.some(
+              (val) => {
+                var bookingTimePeriod = val.startTime + val.endTime;
+                var playerTimePeriod = slotStartTime + slotEndTime;
+                return bookingTimePeriod == playerTimePeriod;
+              }
+            );
             if (desplayfull && hasBookingWithMatchingTimePeriod) {
               console.log("COUNT NOT AVAILABLE, NEED TO RENEW");
               ToastAndroid.show(
@@ -345,15 +357,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
               }
             }
             if (sameTimeSlotFoundInBookings) {
-              if (lowerProfFound && requestAllowed) {
-                console.log(
-                  "lowerProfFound setAdvancedWarningModalVisibility called" +
-                    lowerProfFound
-                );
-                if (lowerProfData != null) {
-                  setAdvancedWarningModalVisibility(true);
-                }
-              } else if (equalProfFound || !requestAllowed) {
+              if (equalProfFound || !requestAllowed) {
                 console.log("EQUAL PROF FOUND, calling API");
                 bookChosenSlotApi(
                   selectedEveningTime != null
@@ -361,28 +365,73 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                     : selectedMorningTime,
                   false
                 );
+              } else if (lowerProfFound && requestAllowed) {
+                console.log(
+                  "lowerProfFound setAdvancedWarningModalVisibility called" +
+                    lowerProfFound
+                );
+                if (lowerProfData != null) {
+                  if (allleveldata.length > 0) {
+                    const priorityOrder = [
+                      "PROFESSIONAL",
+                      "ADVANCED",
+                      "INTERMEDIATE",
+                      "BASIC",
+                    ];
+
+                    const filteredData = allleveldata.filter(
+                      (level) =>
+                        priorityOrder.indexOf(level) >=
+                        priorityOrder.indexOf(proficiency)
+                    );
+                    filteredData.sort((a, b) => {
+                      const priorityA = priorityOrder.indexOf(a);
+                      const priorityB = priorityOrder.indexOf(b);
+                      return priorityA - priorityB;
+                    });
+                    var data = getProficiencyName(
+                      allleveldata[0].toLowerCase()
+                    );
+                    if (filteredData.length > 0) {
+                      data = getProficiencyName(filteredData[0].toLowerCase());
+                    }
+                    setlevelName(data);
+                  }
+                  setAdvancedWarningModalVisibility(true);
+                }
               } else {
                 console.log(
                   "lowerProfFound not found setBeginnerWarningModalVisibility called0" +
                     lowerProfFound
                 );
 
-                //if (playerSpaceAvailable) {
                 console.log(
                   "playerSpaceAvailable lowerProfFound not found setBeginnerWarningModalVisibility called1" +
                     lowerProfFound
                 );
+                console.log("allleveldata");
+                if (allleveldata.length > 0) {
+                  const priorityOrder = [
+                    "PROFESSIONAL",
+                    "ADVANCED",
+                    "INTERMEDIATE",
+                    "BASIC",
+                  ];
+                  allleveldata.sort((a, b) => {
+                    const priorityA = priorityOrder.indexOf(a);
+                    const priorityB = priorityOrder.indexOf(b);
+                    return priorityB - priorityA;
+                  });
+                  console.log(allleveldata);
+                  const data = getProficiencyName(
+                    allleveldata[0].toLowerCase()
+                  );
+                  setlevelName(data);
+                }
                 setBeginnerWarningModalVisibility(true);
-                // } else {
-                //   console.log(
-                //     "space unavailable and lower not found"
-                //   );
-                //TODO: need to verify whether to show toast only or hit bookslotapi
-                //}
               }
             } else {
               console.log("timeslot not matched in bookings array");
-              //same timeslot not found in bookings so we can call api to book the slot
               bookChosenSlotApi(
                 selectedEveningTime != null
                   ? selectedEveningTime
@@ -410,14 +459,6 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       console.log("setModalVisibilityRenewPlan need to renew");
       setModalVisibilityRenewPlan(true);
     }
-    //bookChosenSlotApi()
-  };
-
-  const bookSlotCb = (isRequestType) => {
-    bookChosenSlotApi(
-      selectedEveningTime != null ? selectedEveningTime : selectedMorningTime,
-      isRequestType
-    );
   };
 
   const showToast = (message) => {
@@ -453,11 +494,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
       const headers = {
         "Content-Type": "application/json",
         "x-authorization": value,
-        //TODO:remove this static logic
-        // "x-authorization":
-        //   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MjciLCJzY29wZXMiOlsiUExBWUVSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC8iLCJpYXQiOjE2ODA4NjAxNDUsImV4cCI6NTIyNTY0MDA4NjAxNDV9.gVyDUz8uFURw10TuCKMGBcx0WRwGltXS7nDWBzOgoFTq2uyib-6vUbFCeZrhYeno5pIF5dMLupNrczL_G-IhKg",
       };
-      //client.call
       client
         .post(
           isBookingRequestType ? "court/booking-request" : "court/book-court",
@@ -645,7 +682,7 @@ const BookSlotCentreSelectionScreen = ({ navigation }) => {
                   navigation.navigate("RenewPlan");
                   //TODO: add renew plan logic
                 }}
-                remainingHours={playHoursRemaining}
+                playHoursRemaining={playHoursRemaining}
                 onExplorePlansPressed={() => {
                   const selectPlan = 100;
                   setModalVisibilityRenewPlan(false);

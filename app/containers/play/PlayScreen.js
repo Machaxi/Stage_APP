@@ -437,7 +437,7 @@ export default (PlayScreen = ({ navigation }) => {
           );
           {
             Platform.OS === "ios" &&
-              this.showToast(
+              showToast(
                 cancelBookingError?.response?.data?.error_message ?? ""
               );
           }
@@ -446,7 +446,7 @@ export default (PlayScreen = ({ navigation }) => {
     });
   };
 
-  showToast = (message) => {
+  const showToast = (message) => {
     const options = ["Cancel"];
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -553,18 +553,25 @@ export default (PlayScreen = ({ navigation }) => {
     const expiryD = moment(playerDetailsResponse?.plan?.expiryDate);
     const expiryDate = expiryD.add(1, "day");
     const presentDate = moment();
-    const prestD = presentDate.add(1, "day");
     console.log("presentDate");
-    console.log(startDate);
+    console.log(expiryDate);
+    console.log(playerDetailsResponse?.plan?.expiryDate);
     console.log(presentDate);
-    console.log(expiryDate)
-    if (presentDate > startDate && presentDate < expiryDate) {
+    if (
+      presentDate > startDate &&
+      presentDate < expiryDate &&
+      remainingHrsApiRes > 0
+    ) {
       navigation.navigate("BookSlotScreen");
     } else {
       ToastAndroid.show(
         `Your current plan doesn't allow you to book a slot.`,
         ToastAndroid.SHORT
       );
+      {
+        Platform.OS === "ios" &&
+          showToast("Your current plan doesn't allow you to book a slot.");
+      }
     }
   };
 

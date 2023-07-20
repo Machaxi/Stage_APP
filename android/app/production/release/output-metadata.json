@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.machaxi",
+  "variantName": "productionRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 51,
+      "versionName": "5.0.1",
+      "enabled": true,
+      "outputFile": "app-production-release.apk"
+    }
+  ]
+}
