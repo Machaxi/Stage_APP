@@ -137,7 +137,10 @@ class PlayerDetails extends Component {
       var childDetail = this.state.childDetails;
       if (this.state.currentIndex == 2) {
         parent = "Child";
-        if (this.state.related_players.length < this.state.currentChild + 1) {
+        if (
+          this.state.related_players &&
+          this.state.related_players.length < this.state.currentChild + 1
+        ) {
           childDetail = null;
         }
       } else {
