@@ -461,18 +461,6 @@ class LoginSceen extends Component {
       });
   };
 
-  showToast = (message) => {
-    const options = ["Cancel"];
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        title: message,
-        options: options,
-        cancelButtonIndex: options.length - 1,
-      },
-      (buttonIndex) => {}
-    );
-  };
-
   getHeader = async () => {
     const header = await AsyncStorage.getItem("header");
     this.setState({ header: header });
