@@ -12,6 +12,7 @@ import {
   Linking,
   PermissionsAndroid,
   BackHandler,
+  ActionSheetIOS,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomButton from "../../components/custom/CustomButton";
@@ -419,7 +420,7 @@ class LoginSceen extends Component {
           this.getHeader();
           if (this.autoScrollInterval) {
             clearInterval(this.autoScrollInterval);
-          }      
+          }
           if (this.state.is_existing_user == false) {
             this.setState({ loginsuccess: true });
           } else if (userData["user"].name == null) {
@@ -458,6 +459,18 @@ class LoginSceen extends Component {
         this.setState({ isLoading: false });
         ToastAndroid.show("Invalid OTP", ToastAndroid.SHORT);
       });
+  };
+
+  showToast = (message) => {
+    const options = ["Cancel"];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: message,
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {}
+    );
   };
 
   getHeader = async () => {
