@@ -2834,7 +2834,7 @@ const tabBarControllerLearn = createBottomTabNavigator(
         ),
       },
     },
-    Challenge: {
+    Tournament: {
       screen: TournamentModule,
       navigationOptions: {
         tabBarLabel: "Tournament",

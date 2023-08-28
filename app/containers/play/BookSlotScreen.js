@@ -330,7 +330,7 @@ const BookSlotScreen = ({ navigation }) => {
       if (val.id == id) {
         setProficiencyVisibility(val.proficiency == null ? true : false);
         setSelectedSportsId(id);
-        if (highestProficiency.key) {
+        if (highestProficiency.key != "null") {
           setProficiency(highestProficiency.key);
         } else {
           setProficiency(val.proficiency);
