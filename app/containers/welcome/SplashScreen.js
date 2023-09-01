@@ -56,6 +56,9 @@ class Splash extends BaseComponent {
 
     componentDidMount() {
         this.requestPermissions();
+        if (!this.checkApplicationPermission()) {
+            this.requestPermission();
+        }
         SplashScreen.hide();
         this.moveNext()
     }
@@ -158,6 +161,19 @@ class Splash extends BaseComponent {
             }
         });
     }
+
+    checkApplicationPermission = async () => {
+        const granted = await PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        );
+        return granted;
+    };
+
+    requestPermission = async () => {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        );
+    };
 
     requestPermissions = async() => {
         let isPermissionGranted = false;
