@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker';
@@ -119,6 +119,7 @@ export const LeaveRequestPage = ({navigation}) => {
         "end_date" : endDate,
         "planType" : selectUserPlan == "Coaching Plan" ? "PLAYSUBSCRIPTION" : "SUBSCRIPTION",
         "additionalDate": additionalData,
+        // "name" : selectedUser,
         }
     
       // let response  = await axios.post('https://admin.stage.machaxi.com/node-api/leave-request-checker', (dataToSend));
@@ -131,6 +132,7 @@ export const LeaveRequestPage = ({navigation}) => {
       } catch (error) {
         // Handle errors
       }
+      // Alert.alert(selectedUser);
       setLoading(false);
       // Alert.alert(
       //   'Leave Request Submitted',
@@ -240,51 +242,8 @@ export const LeaveRequestPage = ({navigation}) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, minHeight: '100%' , width: '100%'}}
       
         showsVerticalScrollIndicator={false}>
-          {/* <Loader visible={loading} /> */}
-          {loading && (        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: 20,
-          }}
-        >
-          <LinearGradient
-            colors={["#141C32", "#141A2E"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: 10,
-              padding: 20,
-              paddingHorizontal: 30,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5,
-            }}
-          >
-            <ActivityIndicator size="large" color="#E2E2E2" />
-            <Text
-              style={{
-                fontSize: 14,
-                fontFamily: Nunito_Regular,
-                color: "#E2E2E2",
-                marginLeft: 10,
-                marginTop: 5,
-              }}
-            >
-              Loading...
-            </Text>
-          </LinearGradient>
-        </View>
-)}
-
+          {/* {Platform.OS == "android" && <Loader visible={loading} /> } */}
+          <Loader visible={loading} />
         <View style={styles.content}>
           <Text style={styles.subtext}>Select User</Text>
           <UserSelectionForSlot
