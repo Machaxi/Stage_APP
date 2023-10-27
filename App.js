@@ -37,6 +37,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import messaging from '@react-native-firebase/messaging';
 import { darkBlueVariant } from './app/containers/util/colors';
 import { deviceHeight, deviceWidth } from './app/containers/util/dimens';
+import NetInfo from "@react-native-community/netinfo";
 
 export const client = axios.create({
     baseURL: getBaseUrl(),
@@ -273,7 +274,8 @@ class App extends BaseComponent {
             is_show_alert: false,
             info_msg: '',
             show_must_update_alert: false,
-            navigation: null
+            navigation: null,
+            isConnected: true
         }
         console.disableYellowBox = true;
         console.reportErrorsAsExceptions = false;
@@ -358,6 +360,9 @@ class App extends BaseComponent {
             (20);
         }
         this.setupOneSignal();
+        this.unsubscribe = NetInfo.addEventListener(state => {
+            this.setState({isConnected:state.isConnected})
+        })
     }
 
     componentWillMount() {
@@ -471,6 +476,13 @@ class App extends BaseComponent {
                         }}
                         message={info_msg}
                         visible={is_show_alert} />
+
+                    <InfoDialog
+                        touchOutside={() => {
+                            this.setState({isConnected: false})
+                        }}
+                        message={"Internet Connection is lost"}
+                        visible={!this.state.isConnected} />
 
                     <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
 

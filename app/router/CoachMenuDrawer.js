@@ -24,7 +24,7 @@ import BaseComponent, {
 } from "../containers/BaseComponent";
 import { getRelationsDetails, logout } from "../redux/reducers/RelationReducer";
 import { connect } from "react-redux";
-import Events from "../router/events";
+import Events from "./events";
 import { Rating } from "react-native-ratings";
 import { RateViewBorder } from "../components/Home/RateViewBorder";
 import { SkyFilledButton } from "../components/Home/SkyFilledButton";
@@ -508,7 +508,6 @@ class CoachMenuDrawer extends BaseComponent {
           </>
         ) : null}
         <View style={[defaultStyle.line_style, styles.greyLine]} />
-
         <DrawerItemBtn
           itemImage={require("../images/share_icon.png")}
           onPress={() => {
@@ -1513,6 +1512,16 @@ class CoachMenuDrawer extends BaseComponent {
             />
           </>
         ) : null}
+        <View style={[defaultStyle.line_style, styles.greyLine]} />
+        <DrawerItemBtn
+          itemImage={require("../images/double2.png")}
+          onPress={() => {
+            this.props.navigation.navigate("ApplyLeave", {
+              relations: this.state.related_players,
+            });
+          }}
+          title={" Pause Membership"}
+        />
         <View style={[defaultStyle.line_style, styles.greyLine]} />
 
         <DrawerItemBtn

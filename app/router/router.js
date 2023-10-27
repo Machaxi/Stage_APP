@@ -134,6 +134,7 @@ import RequestHeaderRight from "../atoms/requestHeaderRight";
 import PrivacyPolicy from "../containers/util/PrivacyPolicy";
 import BlogScreen from "../containers/util/BlogScreen";
 import DeleteAccount from "../containers/util/DeleteAccount";
+import { LeaveRequestPage } from "../containers/Leave/LeaveRequestPage";
 
 const deviceModel = DeviceInfo.getModel();
 
@@ -2593,6 +2594,19 @@ const LearnStack = createStackNavigator({
       },
     }),
   },
+  ApplyLeave: {
+    screen: LeaveRequestPage,
+    navigationOptions: ({ navigation }) => ({
+      title: " Pause Membership",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
+    }),
+  },
+  
   DisplayLearnTrial: {
     screen: DisplayLearnTrial,
     navigationOptions: ({ navigation }) => ({
@@ -2975,6 +2989,18 @@ const HomeStack = createStackNavigator({
     screen: NotificationsScreen,
     navigationOptions: ({ navigation }) => ({
       headerShown: false,
+    }),
+  },
+  ApplyLeave: {
+    screen: LeaveRequestPage,
+    navigationOptions: ({ navigation }) => ({
+      title: " Pause Membership",
+      headerLeft: <RequestHeaderBack navigationProps={navigation} />,
+      headerRight: <RightMenuToolbar navigationProps={navigation} showNotification={true} darkThemFlow={true}/>,
+      headerTitleStyle: style.titlestyle,
+      headerStyle: {
+        backgroundColor: "#21202F",
+      },
     }),
   },
   EditProfile: {
